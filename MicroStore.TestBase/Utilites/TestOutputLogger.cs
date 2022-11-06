@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using NUnit.Framework.Internal;
 using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.Catalog.Domain.Tests.Utilites
 {
-    [ExposeServices(typeof(ILogger),IncludeSelf = true)]
     public class TestOutputLogger :
         Microsoft.Extensions.Logging.ILogger , ITransientDependency
     {
