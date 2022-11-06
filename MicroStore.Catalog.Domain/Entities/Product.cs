@@ -1,7 +1,6 @@
 ﻿
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Domain.Events;
-using MicroStore.Catalog.Domain.Events.Product;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Catalog.Domain.Entities
