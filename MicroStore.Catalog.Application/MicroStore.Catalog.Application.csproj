@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ImportGroup>
-    <InternalsVisibleTo Include ="MicroStore.Catalog.Application.Tests">
+    <InternalsVisibleTo Include ="MicroStore.Catalog.Application.Tests" />
   </ImportGroup>
   
 </Project>
