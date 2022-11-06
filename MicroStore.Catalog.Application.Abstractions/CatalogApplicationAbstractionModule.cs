@@ -2,6 +2,7 @@
 using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.EventBus;
 using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
 
