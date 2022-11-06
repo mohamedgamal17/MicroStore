@@ -45,6 +45,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Applicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Domain", "MicroStore.ShoppingCart.Domain\MicroStore.ShoppingCart.Domain.csproj", "{897D0602-5B08-4BF2-8E79-331AA383E685}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Application", "MicroStore.ShoppingCart.Application\MicroStore.ShoppingCart.Application.csproj", "{1DED6B20-A5D6-407B-AA44-8405D65929A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Application.Abstraction", "MicroStore.ShoppingCart.Application.Abstraction\MicroStore.ShoppingCart.Application.Abstraction.csproj", "{829B7F55-14E3-4D93-9BFD-70ED9400DF94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +107,14 @@ Global
 		{897D0602-5B08-4BF2-8E79-331AA383E685}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{897D0602-5B08-4BF2-8E79-331AA383E685}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{897D0602-5B08-4BF2-8E79-331AA383E685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DED6B20-A5D6-407B-AA44-8405D65929A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DED6B20-A5D6-407B-AA44-8405D65929A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DED6B20-A5D6-407B-AA44-8405D65929A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DED6B20-A5D6-407B-AA44-8405D65929A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{829B7F55-14E3-4D93-9BFD-70ED9400DF94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{829B7F55-14E3-4D93-9BFD-70ED9400DF94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{829B7F55-14E3-4D93-9BFD-70ED9400DF94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{829B7F55-14E3-4D93-9BFD-70ED9400DF94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,6 +139,8 @@ Global
 		{0EE7A107-341D-40C2-BC5D-2F2F9EA32CA5} = {F55B89D5-EE0F-4893-8A7F-549260F7A36F}
 		{96A77114-0091-4E6B-A60C-7984CD6EA3DF} = {F55B89D5-EE0F-4893-8A7F-549260F7A36F}
 		{897D0602-5B08-4BF2-8E79-331AA383E685} = {AE496456-9B24-4591-8F24-92C5868455F7}
+		{1DED6B20-A5D6-407B-AA44-8405D65929A5} = {AE496456-9B24-4591-8F24-92C5868455F7}
+		{829B7F55-14E3-4D93-9BFD-70ED9400DF94} = {AE496456-9B24-4591-8F24-92C5868455F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
