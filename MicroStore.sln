@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Catalog.Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Catalog.Infrastructure", "MicroStore.Catalog.Infrastructure\MicroStore.Catalog.Infrastructure.csproj", "{B00EF95A-845C-4797-8434-5ACA8FE3812D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Catalog.Api", "MicroStore.Catalog.Api\MicroStore.Catalog.Api.csproj", "{2EF24FB8-0673-426E-BC08-05CDDB9E77E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{B00EF95A-845C-4797-8434-5ACA8FE3812D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B00EF95A-845C-4797-8434-5ACA8FE3812D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B00EF95A-845C-4797-8434-5ACA8FE3812D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EF24FB8-0673-426E-BC08-05CDDB9E77E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EF24FB8-0673-426E-BC08-05CDDB9E77E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EF24FB8-0673-426E-BC08-05CDDB9E77E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EF24FB8-0673-426E-BC08-05CDDB9E77E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{0C7B43F8-0A8C-4663-9646-49C5F1488109} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{EDF83FA4-2AD9-4075-9025-BD26696DFED3} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{B00EF95A-845C-4797-8434-5ACA8FE3812D} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
+		{2EF24FB8-0673-426E-BC08-05CDDB9E77E4} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
