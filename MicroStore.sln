@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.TestBase", "Micr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Catalog.Domain.Tests", "MicroStore.Catalog.Domain.Tests\MicroStore.Catalog.Domain.Tests.csproj", "{0EE7A107-341D-40C2-BC5D-2F2F9EA32CA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Catalog.Application.Tests", "MicroStore.Catalog.Application.Tests\MicroStore.Catalog.Application.Tests.csproj", "{964863E0-06CD-4157-BF10-9F28AC2EBF7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{0EE7A107-341D-40C2-BC5D-2F2F9EA32CA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EE7A107-341D-40C2-BC5D-2F2F9EA32CA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EE7A107-341D-40C2-BC5D-2F2F9EA32CA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{964863E0-06CD-4157-BF10-9F28AC2EBF7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{964863E0-06CD-4157-BF10-9F28AC2EBF7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{964863E0-06CD-4157-BF10-9F28AC2EBF7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{964863E0-06CD-4157-BF10-9F28AC2EBF7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{F55B89D5-EE0F-4893-8A7F-549260F7A36F} = {7107956E-BC05-4060-8D9C-563805110605}
 		{04E9463B-B9C8-46F2-A3C9-764E576BEDF6} = {7107956E-BC05-4060-8D9C-563805110605}
 		{0EE7A107-341D-40C2-BC5D-2F2F9EA32CA5} = {F55B89D5-EE0F-4893-8A7F-549260F7A36F}
+		{964863E0-06CD-4157-BF10-9F28AC2EBF7A} = {F55B89D5-EE0F-4893-8A7F-549260F7A36F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
