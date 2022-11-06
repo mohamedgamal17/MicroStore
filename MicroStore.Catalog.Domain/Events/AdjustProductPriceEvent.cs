@@ -1,4 +1,4 @@
-﻿namespace MicroStore.Catalog.Domain.Events.Product
+﻿namespace MicroStore.Catalog.Domain.Events
 {
     public class AdjustProductPriceEvent
     {
