@@ -17,4 +17,8 @@
     <ProjectReference Include="..\MicroStore.BuildingBlocks.InMemoryBus\MicroStore.BuildingBlocks.InMemoryBus.csproj" />
     <ProjectReference Include="..\MicroStore.Catalog.Domain\MicroStore.Catalog.Domain.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include ="MicroStore.Catalog.Application.Tests" />
+  </ItemGroup>
 </Project>
