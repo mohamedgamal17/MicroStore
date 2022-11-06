@@ -11,7 +11,6 @@ using System.Data;
 using MicroStore.TestBase.Extensions;
 using Castle.Core.Logging;
 using MicroStore.Catalog.Domain.Tests.Utilites;
-using Autofac.Core;
 
 namespace MicroStore.TestBase
 {
@@ -101,9 +100,6 @@ namespace MicroStore.TestBase
 
             services.Remove<ICurrentPrincipalAccessor>()
                 .AddSingleton<ICurrentPrincipalAccessor, FakeCurrentPrincipalAccessor>();
-
-            services.AddSingleton<Microsoft.Extensions.Logging.ILoggerFactory>(provider => new TestOutputLoggerFactory(true));
-  
 
         }
 
