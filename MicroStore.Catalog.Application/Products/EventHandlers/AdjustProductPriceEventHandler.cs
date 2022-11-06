@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Logging;
-using MicroStore.Catalog.Domain.Events.Product;
+using MicroStore.Catalog.Domain.Events;
 using MicroStore.Catalog.IntegrationEvents;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
