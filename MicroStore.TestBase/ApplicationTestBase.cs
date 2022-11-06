@@ -16,6 +16,7 @@ using MicroStore.TestBase.Fakes;
 
 namespace MicroStore.TestBase
 {
+    [Obsolete]
     public abstract class ApplicationTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
            where TStartupModule : AbpModule
     {
