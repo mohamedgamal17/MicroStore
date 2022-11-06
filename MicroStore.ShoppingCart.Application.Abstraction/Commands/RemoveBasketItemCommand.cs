@@ -1,11 +1,10 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.ShoppingCart.Application.Abstraction.Dtos;
-
-
-namespace MicroStore.ShoppingCart.Application.Abstraction.Queries
+namespace MicroStore.ShoppingCart.Application.Abstraction.Commands
 {
-    public class GetBasketQuery : IQuery<BasketDto>
+    public class RemoveBasketItemCommand : ICommand<BasketDto>
     {
         public Guid BasketId { get; set; }
+        public Guid BasketItemId { get; set; }
     }
 }
