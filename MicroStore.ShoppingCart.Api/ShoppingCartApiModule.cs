@@ -16,7 +16,7 @@ namespace MicroStore.ShoppingCart.Api
             typeof(AbpAspNetCoreSerilogModule),
             typeof(MediatorModule))]
     [DependsOn(typeof(ShoppingCartApplicationModule))]
-    [DependsOn(typeof(ShoppingCartInfrastructure))]
+    [DependsOn(typeof(ShoppingCartInfrastructureModule))]
     public class ShoppingCartApiModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

@@ -8,7 +8,7 @@ namespace MicroStore.ShoppingCart.Infrastructure
 {
     [DependsOn(typeof(AbpEntityFrameworkCoreModule),
         typeof(ShoppingCartApplicationAbstractionModule))]
-    public class ShoppingCartInfrastructure : AbpModule
+    public class ShoppingCartInfrastructureModule : AbpModule
     {
 
         public override void ConfigureServices(ServiceConfigurationContext context)
