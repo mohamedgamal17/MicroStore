@@ -1,5 +1,4 @@
 ﻿using MicroStore.Ordering.IntegrationEvents.Models;
-
 namespace MicroStore.Ordering.IntegrationEvents
 {
     public class SubmitOrderIntegrationEvent
