@@ -7,9 +7,7 @@ using Volo.Abp.Uow;
 namespace MicroStore.ShoppingCart.Application.Consumers
 {
     public class AdjustProductNameEventConsumer : IConsumer<AdjustProductNameIntegrationEvent>
-         , IUnitOfWorkEnabled
     {
-
         private readonly IRepository<Product> _productRepository;
 
         public AdjustProductNameEventConsumer(IRepository<Product> productRepository)
@@ -17,6 +15,7 @@ namespace MicroStore.ShoppingCart.Application.Consumers
             _productRepository = productRepository;
         }
 
+        [UnitOfWork]
         public async Task Consume(ConsumeContext<AdjustProductNameIntegrationEvent> context)
         {
             Product product = await _productRepository.SingleAsync(x => x.Id == context.Message.ProductId);
@@ -24,7 +23,6 @@ namespace MicroStore.ShoppingCart.Application.Consumers
             product.Name = context.Message.Name;
 
             await _productRepository.UpdateAsync(product);
-
         }
     }
 }

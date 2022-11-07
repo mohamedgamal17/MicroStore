@@ -7,7 +7,6 @@ using Volo.Abp.Uow;
 namespace MicroStore.ShoppingCart.Application.Consumers
 {
     public class AdjustProductSkuEventConsumer : IConsumer<AdjustProductSkuIntegrationEvent>
-        , IUnitOfWorkEnabled
     {
         private readonly IRepository<Product> _productRepository;
 

@@ -13,7 +13,8 @@ namespace MicroStore.ShoppingCart.Application
 {
     [DependsOn(typeof(ShoppingCartApplicationAbstractionModule),
         typeof(AbpEventBusModule),
-        typeof(MicroStoreSecurityModule))]
+        typeof(MicroStoreSecurityModule),
+        typeof(AbpUnitOfWorkModule))]
 
     public class ShoppingCartApplicationModule : AbpModule
     {
@@ -33,10 +34,13 @@ namespace MicroStore.ShoppingCart.Application
             {
                 busRegisterConfig.AddConsumers(Assembly.GetExecutingAssembly());
 
+               
+
                 busRegisterConfig.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("div", false));
 
                 busRegisterConfig.UsingRabbitMq((ctx, rabbitMqConfig) =>
                 {
+                    rabbitMqConfig.UseConsumeFilter(typeof(ConsumerUnitOfWorkFilter<>),ctx);
 
                     rabbitMqConfig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
                     {

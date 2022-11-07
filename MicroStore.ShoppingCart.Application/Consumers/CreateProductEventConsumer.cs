@@ -8,7 +8,6 @@ using Volo.Abp.Uow;
 namespace MicroStore.ShoppingCart.Application.Consumers
 {
     public class CreateProductEventConsumer : IConsumer<CreateProductIntegrationEvent>
-          , IUnitOfWorkEnabled
     {
 
 
