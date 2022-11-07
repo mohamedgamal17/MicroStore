@@ -9,4 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Domain" Version="6.0.1" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.Results\MicroStore.BuildingBlocks.Results.csproj" />
+  </ItemGroup>
 </Project>

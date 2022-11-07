@@ -43,19 +43,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Domain.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Tests", "MicroStore.Catalog.Application.Tests\MicroStore.Catalog.Application.Tests.csproj", "{96A77114-0091-4E6B-A60C-7984CD6EA3DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Domain", "MicroStore.ShoppingCart.Domain\MicroStore.ShoppingCart.Domain.csproj", "{897D0602-5B08-4BF2-8E79-331AA383E685}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingCart.Domain", "MicroStore.ShoppingCart.Domain\MicroStore.ShoppingCart.Domain.csproj", "{897D0602-5B08-4BF2-8E79-331AA383E685}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Application", "MicroStore.ShoppingCart.Application\MicroStore.ShoppingCart.Application.csproj", "{1DED6B20-A5D6-407B-AA44-8405D65929A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingCart.Application", "MicroStore.ShoppingCart.Application\MicroStore.ShoppingCart.Application.csproj", "{1DED6B20-A5D6-407B-AA44-8405D65929A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Application.Abstraction", "MicroStore.ShoppingCart.Application.Abstraction\MicroStore.ShoppingCart.Application.Abstraction.csproj", "{829B7F55-14E3-4D93-9BFD-70ED9400DF94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingCart.Application.Abstraction", "MicroStore.ShoppingCart.Application.Abstraction\MicroStore.ShoppingCart.Application.Abstraction.csproj", "{829B7F55-14E3-4D93-9BFD-70ED9400DF94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.BuildingBlocks.Security", "MicroStore.BuildingBlocks.Security\MicroStore.BuildingBlocks.Security.csproj", "{3CB0DCEA-39E0-45CA-AE63-B156ABF14173}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.Security", "MicroStore.BuildingBlocks.Security\MicroStore.BuildingBlocks.Security.csproj", "{3CB0DCEA-39E0-45CA-AE63-B156ABF14173}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Ordering.IntegrationEvents", "MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj", "{1AE892A5-F10E-49BE-9160-809BA2BC1DE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.IntegrationEvents", "MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj", "{1AE892A5-F10E-49BE-9160-809BA2BC1DE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Infrastructure", "MicroStore.ShoppingCart.Infrastructure\MicroStore.ShoppingCart.Infrastructure.csproj", "{414B28B1-15E1-4D60-9950-4AE4EB1DC8A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingCart.Infrastructure", "MicroStore.ShoppingCart.Infrastructure\MicroStore.ShoppingCart.Infrastructure.csproj", "{414B28B1-15E1-4D60-9950-4AE4EB1DC8A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Api", "MicroStore.ShoppingCart.Api\MicroStore.ShoppingCart.Api.csproj", "{ABE9A0E7-0AA4-4B53-8B55-90635A80EBE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingCart.Api", "MicroStore.ShoppingCart.Api\MicroStore.ShoppingCart.Api.csproj", "{ABE9A0E7-0AA4-4B53-8B55-90635A80EBE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{E179FD5D-1B5F-4868-9A24-134D53C93E34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.ShoppingCart.Domain.Tests", "MicroStore.ShoppingCart.Domain.Tests\MicroStore.ShoppingCart.Domain.Tests.csproj", "{CD837265-3929-408A-9E70-96EB62AD258B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +143,10 @@ Global
 		{ABE9A0E7-0AA4-4B53-8B55-90635A80EBE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE9A0E7-0AA4-4B53-8B55-90635A80EBE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE9A0E7-0AA4-4B53-8B55-90635A80EBE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD837265-3929-408A-9E70-96EB62AD258B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD837265-3929-408A-9E70-96EB62AD258B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD837265-3929-408A-9E70-96EB62AD258B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD837265-3929-408A-9E70-96EB62AD258B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -169,6 +177,8 @@ Global
 		{1AE892A5-F10E-49BE-9160-809BA2BC1DE7} = {835597DE-A82C-42FA-93DC-09CAC36D7D4B}
 		{414B28B1-15E1-4D60-9950-4AE4EB1DC8A7} = {AE496456-9B24-4591-8F24-92C5868455F7}
 		{ABE9A0E7-0AA4-4B53-8B55-90635A80EBE6} = {AE496456-9B24-4591-8F24-92C5868455F7}
+		{E179FD5D-1B5F-4868-9A24-134D53C93E34} = {7107956E-BC05-4060-8D9C-563805110605}
+		{CD837265-3929-408A-9E70-96EB62AD258B} = {E179FD5D-1B5F-4868-9A24-134D53C93E34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}

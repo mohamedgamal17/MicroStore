@@ -1,4 +1,5 @@
 ﻿
+using MicroStore.BuildingBlocks.Results;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.ShoppingCart.Domain.Entities
@@ -63,7 +64,7 @@ namespace MicroStore.ShoppingCart.Domain.Entities
 
 
 
-
+        [Obsolete("Use removeitem with basket id instead")]
         public void RemoveItem(Product product)
         {
             RemoveItem(product.Id);
