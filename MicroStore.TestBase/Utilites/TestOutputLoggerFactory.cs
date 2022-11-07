@@ -4,9 +4,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.Catalog.Domain.Tests.Utilites
 {
-    [ExposeServices(typeof(ILoggerFactory), IncludeSelf = true)]
+
     public class TestOutputLoggerFactory :
-            ILoggerFactory , ITransientDependency
+            ILoggerFactory
     {
         readonly bool _enabled;
 

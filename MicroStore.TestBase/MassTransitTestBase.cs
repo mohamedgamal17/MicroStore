@@ -9,8 +9,8 @@ using Volo.Abp.Uow;
 using Volo.Abp;
 using System.Data;
 using MicroStore.TestBase.Extensions;
-using Castle.Core.Logging;
 using MicroStore.Catalog.Domain.Tests.Utilites;
+using Microsoft.Extensions.Logging;
 
 namespace MicroStore.TestBase
 {
@@ -100,6 +100,8 @@ namespace MicroStore.TestBase
 
             services.Remove<ICurrentPrincipalAccessor>()
                 .AddSingleton<ICurrentPrincipalAccessor, FakeCurrentPrincipalAccessor>();
+           services.AddSingleton<ILoggerFactory>(provider => new TestOutputLoggerFactory(true));
+
 
         }
 
