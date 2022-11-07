@@ -10,6 +10,14 @@ namespace MicroStore.ShoppingCart.Application.Abstraction
         typeof(AbpFluentValidationModule))]
     public class ShoppingCartApplicationAbstractionModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(opt =>
+            {
+                opt.AddProfile<BasketProfile>(false);
 
+            });
+
+        }
     }
 }
