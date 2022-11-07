@@ -81,6 +81,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Shipping.Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Ordering.Application.Abstractions", "MicroStore.Ordering.Application.Abstractions\MicroStore.Ordering.Application.Abstractions.csproj", "{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Ordering.Infrastructure", "MicroStore.Ordering.Infrastructure\MicroStore.Ordering.Infrastructure.csproj", "{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -195,6 +197,10 @@ Global
 		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -237,6 +243,7 @@ Global
 		{67054396-7FC9-4BBF-BCA1-4574BAD83492} = {BE82F71D-DA9C-46FC-A017-01F36EEF8AA4}
 		{A16A8692-7BAA-4433-9FB2-EE83C8D24AEA} = {626E10B7-9EB2-42B7-BDB4-05D98E68E1A7}
 		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA} = {835597DE-A82C-42FA-93DC-09CAC36D7D4B}
+		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA} = {835597DE-A82C-42FA-93DC-09CAC36D7D4B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
