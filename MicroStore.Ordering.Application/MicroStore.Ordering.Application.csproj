@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+ <ItemGroup>
+  <PackageReference Include="MassTransit" Version="8.0.7" />
+  <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.10" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
+  <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+  <PackageReference Include="Volo.Abp.Authorization" Version="6.0.1" />
+  <PackageReference Include="Volo.Abp.Core" Version="6.0.1" />
+  <PackageReference Include="Volo.Abp.Ddd.Domain" Version="6.0.1" />
+  </ItemGroup>
+  
+ <ItemGroup>
+   <ProjectReference Include="..\MicroStore.BuildingBlocks.InMemoryBus\MicroStore.BuildingBlocks.InMemoryBus.csproj" />
+   <ProjectReference Include="..\MicroStore.BuildingBlocks.Security\MicroStore.BuildingBlocks.Security.csproj" />
+   <ProjectReference Include="..\MicroStore.Inventory.IntegrationEvents\MicroStore.Inventory.IntegrationEvents.csproj" />
+   <ProjectReference Include="..\MicroStore.Ordering.Application.Abstractions\MicroStore.Ordering.Application.Abstractions.csproj" />
+   <ProjectReference Include="..\MicroStore.Ordering.Events\MicroStore.Ordering.Events.csproj" />
+   <ProjectReference Include="..\MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj" />
+   <ProjectReference Include="..\MicroStore.Payment.IntegrationEvents\MicroStore.Payment.IntegrationEvents.csproj" />
+   <ProjectReference Include="..\MicroStore.Shipping.IntegrationEvent\MicroStore.Shipping.IntegrationEvent.csproj" />
+ </ItemGroup>
+
+</Project>
