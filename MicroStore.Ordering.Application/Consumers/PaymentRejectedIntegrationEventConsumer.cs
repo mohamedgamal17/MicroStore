@@ -3,7 +3,7 @@ using MicroStore.Ordering.Events;
 using MicroStore.Payment.IntegrationEvents;
 namespace MicroStore.Ordering.Application.Consumers
 {
-    internal class PaymentRejectedIntegrationEventConsumer : IConsumer<PaymentRejectedIntegrationEvent>
+    public class PaymentRejectedIntegrationEventConsumer : IConsumer<PaymentRejectedIntegrationEvent>
     {
         public Task Consume(ConsumeContext<PaymentRejectedIntegrationEvent> context)
         {

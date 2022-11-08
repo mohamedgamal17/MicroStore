@@ -4,7 +4,7 @@ using MicroStore.Payment.IntegrationEvents;
 
 namespace MicroStore.Ordering.Application.Consumers
 {
-    internal class PaymentAcceptedIntegrationEventConsumer : IConsumer<PaymentAccepetedIntegrationEvent>
+    public class PaymentAcceptedIntegrationEventConsumer : IConsumer<PaymentAccepetedIntegrationEvent>
     {
 
         public async Task Consume(ConsumeContext<PaymentAccepetedIntegrationEvent> context)

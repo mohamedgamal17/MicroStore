@@ -3,7 +3,7 @@ using MicroStore.Ordering.Events;
 using MicroStore.Shipping.IntegrationEvent;
 namespace MicroStore.Ordering.Application.Consumers
 {
-    internal class ShippmentCompletedIntegrationEventConsumer : IConsumer<ShippmentCompletedIntegrationEvent>
+    public class ShippmentCompletedIntegrationEventConsumer : IConsumer<ShippmentCompletedIntegrationEvent>
     {
         public Task Consume(ConsumeContext<ShippmentCompletedIntegrationEvent> context)
         {
