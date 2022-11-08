@@ -8,12 +8,15 @@ using MicroStore.Ordering.Infrastructure;
 using MicroStore.Ordering.Infrastructure.EntityFramework;
 using System.Reflection;
 using Volo.Abp;
+using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
 namespace MicroStore.Ordering.Application.Tests
 {
-    [DependsOn(typeof(OrderInfrastructureModule),
+    [DependsOn(typeof(OrderApplicationModule),
+        typeof(OrderInfrastructureModule),
         typeof(MediatorModule))]
+    [DependsOn(typeof(AbpAutofacModule))]
     public class StartupModule : AbpModule
     {
        
