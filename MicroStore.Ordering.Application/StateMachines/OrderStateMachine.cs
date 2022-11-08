@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using MicroStore.Ordering.Application.StateMachines.Activities;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
 

@@ -7,6 +7,8 @@ using MicroStore.Ordering.Events;
 using MicroStore.Payment.IntegrationEvents;
 using Volo.Abp.Domain.Entities;
 using MicroStore.Ordering.Application.Abstractions.Commands;
+using MicroStore.Payment.IntegrationEvents.Responses;
+
 namespace MicroStore.Ordering.Application.Commands
 {
     public class PayOrderCommandHandler : CommandHandler<PayOrderCommand, PaymentDto>
