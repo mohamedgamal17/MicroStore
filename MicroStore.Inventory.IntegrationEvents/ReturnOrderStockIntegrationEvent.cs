@@ -2,7 +2,7 @@
 
 namespace MicroStore.Inventory.IntegrationEvents
 {
-    public class ConfirmStockIntegrationEvent
+    public class ReturnOrderStockIntegrationEvent
     {
         public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }

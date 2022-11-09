@@ -89,9 +89,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Applica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Ordering.Api", "MicroStore.Ordering.Api\MicroStore.Ordering.Api.csproj", "{C3674191-4AE0-4481-AA61-5BEF1D8D7787}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Payment.Api", "MicroStore.Payment.Api\MicroStore.Payment.Api.csproj", "{83CEB5A8-0711-4E7C-B369-73D63B3B7B55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Api", "MicroStore.Payment.Api\MicroStore.Payment.Api.csproj", "{83CEB5A8-0711-4E7C-B369-73D63B3B7B55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Payment.Api.Tests", "MicroStore.Payment.Api.Tests\MicroStore.Payment.Api.Tests.csproj", "{57C1BA85-577D-434F-A1DB-16E4E2DB6561}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Api.Tests", "MicroStore.Payment.Api.Tests\MicroStore.Payment.Api.Tests.csproj", "{57C1BA85-577D-434F-A1DB-16E4E2DB6561}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{FE55EE22-4121-4575-AB3C-70E454F24B44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Application.Tests", "MicroStore.Inventory.Application.Tests\MicroStore.Inventory.Application.Tests.csproj", "{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Events", "MicroStore.Inventory.Events\MicroStore.Inventory.Events.csproj", "{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Application", "MicroStore.Inventory.Application\MicroStore.Inventory.Application.csproj", "{4244706E-C640-4838-A38C-42B2187855CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,6 +235,18 @@ Global
 		{57C1BA85-577D-434F-A1DB-16E4E2DB6561}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57C1BA85-577D-434F-A1DB-16E4E2DB6561}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57C1BA85-577D-434F-A1DB-16E4E2DB6561}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4244706E-C640-4838-A38C-42B2187855CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4244706E-C640-4838-A38C-42B2187855CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4244706E-C640-4838-A38C-42B2187855CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4244706E-C640-4838-A38C-42B2187855CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -275,6 +295,10 @@ Global
 		{C3674191-4AE0-4481-AA61-5BEF1D8D7787} = {835597DE-A82C-42FA-93DC-09CAC36D7D4B}
 		{83CEB5A8-0711-4E7C-B369-73D63B3B7B55} = {BE82F71D-DA9C-46FC-A017-01F36EEF8AA4}
 		{57C1BA85-577D-434F-A1DB-16E4E2DB6561} = {7107956E-BC05-4060-8D9C-563805110605}
+		{FE55EE22-4121-4575-AB3C-70E454F24B44} = {7107956E-BC05-4060-8D9C-563805110605}
+		{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D} = {FE55EE22-4121-4575-AB3C-70E454F24B44}
+		{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
+		{4244706E-C640-4838-A38C-42B2187855CC} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
