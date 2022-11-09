@@ -26,7 +26,7 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
         {
             _logger.LogDebug("Executing Order Confirmed Activity");
 
-            ConfirmStockIntegrationEvent integrationEvent = new ConfirmStockIntegrationEvent
+            AllocateOrderStockIntegrationEvent integrationEvent = new AllocateOrderStockIntegrationEvent
             {
                 OrderId = context.Saga.CorrelationId,
                 OrderNumber = context.Saga.OrderNumber,

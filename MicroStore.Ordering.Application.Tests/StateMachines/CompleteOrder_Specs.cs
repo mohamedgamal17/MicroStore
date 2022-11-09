@@ -139,7 +139,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
             instance.Should().NotBeNull();
 
 
-            Assert.That(await TestHarness.Published.Any<ConfirmStockIntegrationEvent>());
+            Assert.That(await TestHarness.Published.Any<AllocateOrderStockIntegrationEvent>());
             Assert.That(await TestHarness.Published.Any<AcceptPaymentIntegationEvent>());
             Assert.That(await TestHarness.Published.Any<CreateShippmentIntegrationEvent>());
         }
