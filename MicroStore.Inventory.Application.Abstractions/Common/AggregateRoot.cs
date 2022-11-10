@@ -1,6 +1,6 @@
 ﻿using MicroStore.Inventory.Events.Contracts;
 
-namespace MicroStore.Inventory.Application.Common
+namespace MicroStore.Inventory.Application.Abstractions.Common
 {
     public abstract class AggregateRoot : IAggregateRoot
     {
@@ -47,15 +47,5 @@ namespace MicroStore.Inventory.Application.Common
         protected abstract void ApplyEvent(IEvent domainEvent);
 
      
-    }
-
-
-    public interface IAggregateRoot
-    {
-        public Guid CorrelationId { get; }
-        void Recive(IEvent domainEvent);
-        IReadOnlyList<IEvent> GetUncomittedEvents();
-        IReadOnlyList<IEvent> GetEvents();
-
     }
 }

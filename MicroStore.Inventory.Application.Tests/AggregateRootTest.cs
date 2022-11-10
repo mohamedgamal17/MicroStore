@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using MicroStore.Inventory.Application.Common;
+using MicroStore.Inventory.Application.Abstractions.Common;
 using MicroStore.Inventory.Events.Contracts;
 
 namespace MicroStore.Inventory.Application.Tests

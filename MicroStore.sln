@@ -95,11 +95,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Api.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{FE55EE22-4121-4575-AB3C-70E454F24B44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Application.Tests", "MicroStore.Inventory.Application.Tests\MicroStore.Inventory.Application.Tests.csproj", "{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Application.Tests", "MicroStore.Inventory.Application.Tests\MicroStore.Inventory.Application.Tests.csproj", "{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Events", "MicroStore.Inventory.Events\MicroStore.Inventory.Events.csproj", "{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Events", "MicroStore.Inventory.Events\MicroStore.Inventory.Events.csproj", "{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Application", "MicroStore.Inventory.Application\MicroStore.Inventory.Application.csproj", "{4244706E-C640-4838-A38C-42B2187855CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Application", "MicroStore.Inventory.Application\MicroStore.Inventory.Application.csproj", "{4244706E-C640-4838-A38C-42B2187855CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Application.Abstractions", "MicroStore.Inventory.Application.Abstractions\MicroStore.Inventory.Application.Abstractions.csproj", "{94067BF5-03FF-433E-B1CD-0A218EE1A57D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -247,6 +249,10 @@ Global
 		{4244706E-C640-4838-A38C-42B2187855CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4244706E-C640-4838-A38C-42B2187855CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4244706E-C640-4838-A38C-42B2187855CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94067BF5-03FF-433E-B1CD-0A218EE1A57D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94067BF5-03FF-433E-B1CD-0A218EE1A57D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94067BF5-03FF-433E-B1CD-0A218EE1A57D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94067BF5-03FF-433E-B1CD-0A218EE1A57D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -299,6 +305,7 @@ Global
 		{BE9D0B0D-AADA-4B4F-95B0-53F77B9F340D} = {FE55EE22-4121-4575-AB3C-70E454F24B44}
 		{1D03AA4B-994C-4EF5-9AA3-61B9EF0F8A61} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
 		{4244706E-C640-4838-A38C-42B2187855CC} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
+		{94067BF5-03FF-433E-B1CD-0A218EE1A57D} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}

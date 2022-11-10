@@ -1,5 +1,5 @@
 ﻿using MicroStore.BuildingBlocks.Results;
-using MicroStore.Inventory.Application.Common;
+using MicroStore.Inventory.Application.Abstractions.Common;
 using MicroStore.Inventory.Application.ProductAggregate.Exceptions;
 using MicroStore.Inventory.Events;
 using MicroStore.Inventory.Events.Contracts;
@@ -167,5 +167,6 @@ namespace MicroStore.Inventory.Application.ProductAggregate
             _currentState.StockOnHand += productReturned.ReturnedQuantity;
         }
 
+      
     }
 }

@@ -8,7 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.Results\MicroStore.BuildingBlocks.Results.csproj" />
+    <ProjectReference Include="..\MicroStore.Inventory.Application.Abstractions\MicroStore.Inventory.Application.Abstractions.csproj" />
     <ProjectReference Include="..\MicroStore.Inventory.Events\MicroStore.Inventory.Events.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\" />
   </ItemGroup>
 
 </Project>
