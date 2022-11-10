@@ -10,12 +10,12 @@ namespace MicroStore.Inventory.Application.ProductAggregate
     public class Product : AggregateRoot
     {
 
-        private readonly CurrentState _currentState;
+        private CurrentState _currentState;
 
-        public Product(Guid correlationId , CurrentState currentState) 
+        public Product(Guid correlationId) 
             : base(correlationId)
         {
-            _currentState = currentState;
+            _currentState = new CurrentState();
         }
 
         protected override void ApplyEvent(IEvent domainEvent)
@@ -49,7 +49,10 @@ namespace MicroStore.Inventory.Application.ProductAggregate
         }
 
        
-
+        public override ICurrentState GetCurrentState()
+        {
+            return _currentState.DeepCopy();
+        }
 
         public void Dispatch(string name ,string sku)
         {
@@ -128,7 +131,16 @@ namespace MicroStore.Inventory.Application.ProductAggregate
             Append(new ProductRecivedEvent(stock, recivedDate));
         }
 
-      
+        public override void Recive(ICurrentState currentState)
+        {
+            if(currentState.GetType() != typeof(CurrentState))
+            {
+                throw new InvalidOperationException($"Invalid Product Current State : {currentState.GetType().AssemblyQualifiedName}");
+            }
+
+            _currentState = (CurrentState) currentState;
+        }
+
         public void ReturnStock(int stock , DateTime returnedDate)
         {
             Append(new ProductReturnedEvent(stock, returnedDate));
@@ -167,6 +179,23 @@ namespace MicroStore.Inventory.Application.ProductAggregate
             _currentState.StockOnHand += productReturned.ReturnedQuantity;
         }
 
-      
+
+        private class CurrentState : ICurrentState
+        {
+            public int StockOnHand { get; set; }
+            public int AllocatedStock { get; set; }
+
+
+            public ICurrentState DeepCopy()
+            {
+                return new CurrentState
+                {
+                    StockOnHand = StockOnHand,
+                    AllocatedStock = AllocatedStock
+                };
+            }
+
+        }
+
     }
 }
