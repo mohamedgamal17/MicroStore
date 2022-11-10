@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.FluentValidation" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.InMemoryBus\MicroStore.BuildingBlocks.InMemoryBus.csproj" />
+    <ProjectReference Include="..\MicroStore.Inventory.Events\MicroStore.Inventory.Events.csproj" />
+  </ItemGroup>
+
+</Project>
