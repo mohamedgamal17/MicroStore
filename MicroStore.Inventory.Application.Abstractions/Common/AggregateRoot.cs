@@ -46,6 +46,11 @@ namespace MicroStore.Inventory.Application.Abstractions.Common
 
         protected abstract void ApplyEvent(IEvent domainEvent);
 
-     
+        public abstract ICurrentState GetCurrentState();
+
+        public abstract void Recive(ICurrentState currentState);
+
+
+
     }
 }
