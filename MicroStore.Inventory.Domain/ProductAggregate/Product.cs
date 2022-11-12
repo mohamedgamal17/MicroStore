@@ -9,14 +9,20 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
     public class Product : AggregateRoot<Guid>
     {
 
+        public string Name { get; set; }
+
+        public string Sku { get; set; }
         public int Stock { get; private set; }
         public int AllocatedStock { get; private set; }
 
 
-        public Product(int stock)
+        public Product(string name , string sku,int stock)
             : base(Guid.NewGuid())
         {
+            Name = Guard.Against.NullOrWhiteSpace(name, nameof(name));
+            Sku = Guard.Against.NullOrWhiteSpace(sku, nameof(sku));
             Stock = Guard.Against.Negative(stock, nameof(stock));
+            
         }
 
 
