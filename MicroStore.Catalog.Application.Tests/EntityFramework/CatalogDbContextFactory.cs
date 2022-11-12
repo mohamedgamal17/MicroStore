@@ -25,7 +25,7 @@ namespace MicroStore.Catalog.Application.Tests.EntityFramework
         private IConfigurationRoot BuildConfiguration()
         {
             return new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../MicroStore.Ordering.Application.Tests/"))
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../MicroStore.Catalog.Application.Tests/"))
                 .AddJsonFile("appsettings.json", false)
                 .Build();
         }
