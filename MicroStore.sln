@@ -105,6 +105,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Application.Abstractions", "MicroStore.Inventory.Application.Abstractions\MicroStore.Inventory.Application.Abstractions.csproj", "{535552AB-6350-41F4-B775-D004AB64C710}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Application.Tests", "MicroStore.Inventory.Application.Tests\MicroStore.Inventory.Application.Tests.csproj", "{B68877CC-1044-40AC-A69A-E40020E6E080}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -259,6 +261,10 @@ Global
 		{535552AB-6350-41F4-B775-D004AB64C710}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{535552AB-6350-41F4-B775-D004AB64C710}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{535552AB-6350-41F4-B775-D004AB64C710}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B68877CC-1044-40AC-A69A-E40020E6E080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B68877CC-1044-40AC-A69A-E40020E6E080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B68877CC-1044-40AC-A69A-E40020E6E080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B68877CC-1044-40AC-A69A-E40020E6E080}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,6 +319,7 @@ Global
 		{2C6DB45D-D80A-40A5-8809-D3F21AEC4147} = {FE55EE22-4121-4575-AB3C-70E454F24B44}
 		{B3857DA6-52B2-48C2-B1CC-D600D900BB58} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
 		{535552AB-6350-41F4-B775-D004AB64C710} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
+		{B68877CC-1044-40AC-A69A-E40020E6E080} = {FE55EE22-4121-4575-AB3C-70E454F24B44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
