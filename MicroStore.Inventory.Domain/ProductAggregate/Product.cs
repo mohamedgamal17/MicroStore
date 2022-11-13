@@ -62,7 +62,7 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
         {
             Guard.Against.NegativeOrZero(quantity, nameof(quantity));
 
-            return Result.FailureIf(() => Stock < quantity, "Current product stock is less than requested allocated quantity");
+            return Result.FailureIf(() => Stock < quantity, $"Current product : {Name} \n \t stock is less than requested allocated quantity");
         }
 
 
