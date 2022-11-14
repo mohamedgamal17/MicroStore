@@ -3,22 +3,23 @@ using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Payment.Api.Domain
 {
-    public class PaymenRequest : AggregateRoot<Guid>
+    public class PaymentRequest : AggregateRoot<Guid>
     {
         public Guid OrderId { get;private set; }
         public string OrderNumber { get; private set; }
         public string CustomerId { get; private set; }
-        public decimal TotalPrice { get; private set; }
+        public decimal Amount { get; private set; }
         public PaymentStatus State { get;private set; }
         public string?  TransctionId { get;private set; }
-        public string? PaymentGateway { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? CapturedAt { get; set; }
-        public DateTime? FaultAt { get; set; }
-        public string? FaultReason { get; set; }
+        public string? PaymentGateway { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+        public DateTime? OpenedAt { get; private set; }
+        public DateTime? CapturedAt { get; private set; }
+        public DateTime? FaultAt { get; private set; }
+        public string? FaultReason { get; private set; }
 
 
-        public PaymenRequest(Guid orderId, string orderNumber,string customerId  ,decimal totalPrice)
+        public PaymentRequest(Guid orderId, string orderNumber,string customerId  ,decimal amoun)
             : base (Guid.NewGuid())
         {
             OrderId = orderId;
@@ -27,7 +28,7 @@ namespace MicroStore.Payment.Api.Domain
 
             CustomerId = customerId;
 
-            TotalPrice = totalPrice;
+            Amount = amoun;
 
             State = PaymentStatus.Created;
 
@@ -41,12 +42,13 @@ namespace MicroStore.Payment.Api.Domain
         }
 
 
-        public void SetPaymentOpened(string transactionId , string paymentGateway)
+        public void SetPaymentOpened(string transactionId, DateTime openedAt , string paymentGateway)
         {
             if (State == PaymentStatus.Created)
             {
                 State = PaymentStatus.Created;
                 TransctionId = transactionId;
+                OpenedAt = openedAt;
                 PaymentGateway = paymentGateway;
             }
         }
@@ -101,16 +103,5 @@ namespace MicroStore.Payment.Api.Domain
         }
     }
 
-    public enum PaymentStatus
-    {
-        Created ,
-
-        Opened,
-
-        Completed,
-
-        Faild,
-
-        Void
-    }
+ 
 }
