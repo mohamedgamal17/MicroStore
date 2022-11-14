@@ -3,7 +3,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Payment.Api.Domain
 {
-    public class Payment : AggregateRoot<Guid>
+    public class PaymenRequest : AggregateRoot<Guid>
     {
         public Guid OrderId { get;private set; }
         public string OrderNumber { get; private set; }
@@ -18,7 +18,7 @@ namespace MicroStore.Payment.Api.Domain
         public string? FaultReason { get; set; }
 
 
-        public Payment(Guid orderId, string orderNumber,string customerId  ,decimal totalPrice)
+        public PaymenRequest(Guid orderId, string orderNumber,string customerId  ,decimal totalPrice)
             : base (Guid.NewGuid())
         {
             OrderId = orderId;
