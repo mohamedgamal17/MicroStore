@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Domain.Entities;
+﻿using MicroStore.Payment.Api.Domain.Events;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Payment.Api.Domain
 {
@@ -11,7 +12,9 @@ namespace MicroStore.Payment.Api.Domain
         public PaymentStatus State { get;private set; }
         public string?  TransctionId { get;private set; }
         public string? PaymentGateway { get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime? CapturedAt { get; set; }
+        public DateTime? FaultAt { get; set; }
         public string? FaultReason { get; set; }
 
 
@@ -27,6 +30,14 @@ namespace MicroStore.Payment.Api.Domain
             TotalPrice = totalPrice;
 
             State = PaymentStatus.Created;
+
+            AddLocalEvent(new PaymentCreatedEvent
+            {
+                PaymentId = Id,
+                OrderId = OrderId,
+                OrderNumber = OrderNumber,
+                CustomerId = CustomerId
+            });
         }
 
 
@@ -48,25 +59,45 @@ namespace MicroStore.Payment.Api.Domain
                 State = PaymentStatus.Completed;
 
                 CapturedAt = capturedAt;
+
+                AddLocalEvent(new PaymentCompletedEvent
+                {
+                    PaymentId = Id,
+                    OrderId = OrderId,
+                    OrderNumber = OrderNumber,
+                    CapturedAt = capturedAt
+                });
             }
         }
 
 
-        public void SetPaymentFaild(string faultReason)
+        public void SetPaymentFaild(string faultReason , DateTime faultAt)
         {
             if(State == PaymentStatus.Opened)
             {
                 State = PaymentStatus.Faild;
                 FaultReason = faultReason;
+                FaultAt  = faultAt;
+
+
+                AddLocalEvent(new PaymentFaildEvent
+                {
+                    PaymentId = Id,
+                    OrderId = OrderId,
+                    OrderNumber = OrderNumber,
+                    CustomerId = CustomerId
+                });
             }
         }
 
-        public void VoidPayment()
+        public void VoidPayment(DateTime faultAt)
         {
             if(State != PaymentStatus.Completed)
             {
                 State = PaymentStatus.Void;
+                FaultAt = faultAt;
             }
+
         }
     }
 
