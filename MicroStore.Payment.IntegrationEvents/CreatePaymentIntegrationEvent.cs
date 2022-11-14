@@ -6,5 +6,7 @@
         public string OrderNumber { get; set; }
         public decimal TotalPrice { get; set; }
 
+        public string CustomerId { get; set; }
+
     }
 }
