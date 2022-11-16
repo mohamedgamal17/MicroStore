@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="Fakes\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
