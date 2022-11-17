@@ -4,7 +4,7 @@ namespace MicroStore.BuildingBlocks.Results
 {
     public partial class Result
     {
-        public static Result Try(Action action, Func<Exception, string> errorHandler)
+        public static Result Try(Action action, Func<Exception, object> errorHandler)
         {
             try
             {
@@ -13,13 +13,13 @@ namespace MicroStore.BuildingBlocks.Results
             }
             catch (Exception ex)
             {
-                string error = errorHandler(ex);
+                object error = errorHandler(ex);
 
                 return Failure(error);
             }
         }
 
-        public static async Task<Result> TryAsync(Func<Task> func, Func<Exception, string> errorHandler)
+        public static async Task<Result> TryAsync(Func<Task> func, Func<Exception, object> errorHandler)
         {
             try
             {
@@ -29,13 +29,13 @@ namespace MicroStore.BuildingBlocks.Results
             }
             catch (Exception ex)
             {
-                string error = errorHandler(ex);
+                object error = errorHandler(ex);
 
                 return Failure(error);
             }
         }
 
-        public static Result<T> TryAsync<T>(Func<T> func, Func<Exception, string> errorHandler)
+        public static Result<T> TryAsync<T>(Func<T> func, Func<Exception, object> errorHandler)
         {
             try
             {
@@ -44,13 +44,13 @@ namespace MicroStore.BuildingBlocks.Results
             }
             catch (Exception ex)
             {
-                string error = errorHandler(ex);
+                object error = errorHandler(ex);
 
                 return Failure<T>(error);
             }
         }
 
-        public static async Task<Result<T>> TryAsync<T>(Func<Task<T>> func, Func<Exception, string> errorHandler)
+        public static async Task<Result<T>> TryAsync<T>(Func<Task<T>> func, Func<Exception, object> errorHandler)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace MicroStore.BuildingBlocks.Results
             }
             catch (Exception ex)
             {
-                string error = errorHandler(ex);
+                object error = errorHandler(ex);
 
                 return Failure<T>(error);
             }

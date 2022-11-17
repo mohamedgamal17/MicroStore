@@ -5,17 +5,17 @@ namespace MicroStore.BuildingBlocks.Results
     {
 
         private bool _isSucess;
-        private string? _error;
+        private object? _error;
         public bool IsSuccess => _isSucess;
         public bool IsFailure => !_isSucess;
 
-        public string Error
+        public object Error
         {
             get
             {
                 if (IsFailure)
                 {
-                    return _error;
+                    return _error!;
                 }
 
                 throw new InvalidOperationException("result is already succeeded");
@@ -24,7 +24,7 @@ namespace MicroStore.BuildingBlocks.Results
         }
 
 
-        internal Result(bool isSucess, string? error)
+        internal Result(bool isSucess, object? error)
         {
             _isSucess = isSucess;
             _error = error;
@@ -41,12 +41,12 @@ namespace MicroStore.BuildingBlocks.Results
             return new Result<TValue>(true, value, string.Empty);
         }
 
-        public static Result Failure(string error)
+        public static Result Failure(object error)
         {
             return new Result(false, error);
         }
 
-        public static Result<TValue> Failure<TValue>(string error)
+        public static Result<TValue> Failure<TValue>(object error)
         {
             return new Result<TValue>(false, default(TValue), error);
         }
@@ -66,10 +66,10 @@ namespace MicroStore.BuildingBlocks.Results
                     throw new InvalidOperationException("result is already failured");
                 }
 
-                return _value;
+                return _value!;
             }
         }
-        internal Result(bool isSucess, TValue? value, string? error) :
+        internal Result(bool isSucess, TValue? value, object? error) :
             base(isSucess, error)
         {
             _value = value;

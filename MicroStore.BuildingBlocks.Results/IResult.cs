@@ -5,9 +5,7 @@
         bool IsSuccess { get; }
 
         bool IsFailure { get; }
-
-        string Error { get; }
-
+        object Error { get; }
 
     }
 
