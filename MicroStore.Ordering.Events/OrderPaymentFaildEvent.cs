@@ -1,9 +1,12 @@
 ﻿namespace MicroStore.Ordering.Events
 {
-    public class OrderPaymentRejectedEvent
+    public class OrderPaymentFaildEvent // will modifiy name later
     {
         public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
+        public string FaultReason { get; set; }  
         public DateTime FaultDate { get; set; }
+
+
     }
 }
