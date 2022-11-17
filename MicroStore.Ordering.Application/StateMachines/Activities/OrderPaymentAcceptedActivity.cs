@@ -4,14 +4,14 @@ using MicroStore.Shipping.IntegrationEvent;
 
 namespace MicroStore.Ordering.Application.StateMachines.Activities
 {
-    public class OrderPaymentAcceptedActivity : IStateMachineActivity<OrderStateEntity, OrderPaymentAcceptedEvent>
+    public class OrderPaymentAcceptedActivity : IStateMachineActivity<OrderStateEntity, OrderPaymentCompletedEvent>
     {
         public void Accept(StateMachineVisitor visitor)
         {
             visitor.Visit(this);
         }
 
-        public async Task Execute(BehaviorContext<OrderStateEntity, OrderPaymentAcceptedEvent> context, IBehavior<OrderStateEntity, OrderPaymentAcceptedEvent> next)
+        public async Task Execute(BehaviorContext<OrderStateEntity, OrderPaymentCompletedEvent> context, IBehavior<OrderStateEntity, OrderPaymentCompletedEvent> next)
         {
             var createShippmentIntegrationEvent = new CreateShippmentIntegrationEvent
             {
@@ -22,7 +22,7 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
             await context.Publish(createShippmentIntegrationEvent);
         }
 
-        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateEntity, OrderPaymentAcceptedEvent, TException> context, IBehavior<OrderStateEntity, OrderPaymentAcceptedEvent> next) where TException : Exception
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateEntity, OrderPaymentCompletedEvent, TException> context, IBehavior<OrderStateEntity, OrderPaymentCompletedEvent> next) where TException : Exception
         {
             return next.Execute(context);
         }

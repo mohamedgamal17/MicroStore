@@ -8,7 +8,7 @@ namespace MicroStore.Ordering.Application.Consumers
 
         public Task Consume(ConsumeContext<StockConfirmedIntegrationEvent> context)
         {
-            return context.Publish(new OrderValidatedEvent
+            return context.Publish(new OrderApprovedEvent
             {
                 OrderId = context.Message.OrderId,
                 OrderNumber = context.Message.OrderNumber

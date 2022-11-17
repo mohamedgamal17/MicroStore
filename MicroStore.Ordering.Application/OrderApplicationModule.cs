@@ -11,7 +11,6 @@ namespace MicroStore.Ordering.Application
 
     [DependsOn(typeof(MicroStoreSecurityModule),
         typeof(AbpAuthorizationModule),
-        typeof(OrderApplicationAbstractionModule),
         typeof(AbpUnitOfWorkModule),
         typeof(InMemoryBusModule))]
     public class OrderApplicationModule : AbpModule

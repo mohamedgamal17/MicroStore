@@ -4,6 +4,7 @@ using MicroStore.Payment.IntegrationEvents;
 
 namespace MicroStore.Ordering.Application.StateMachines.Activities
 {
+    [Obsolete]
     public class OrderStockRejectedActivity : IStateMachineActivity<OrderStateEntity, OrderStockRejectedEvent>
     {
         public void Accept(StateMachineVisitor visitor)
@@ -15,7 +16,7 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
         {
             return context.Publish(new RefundUserIntegrationEvent
             {
-                TransactionId = context.Saga.TransactionId
+                TransactionId = context.Saga.PaymentId
             });
         }
 

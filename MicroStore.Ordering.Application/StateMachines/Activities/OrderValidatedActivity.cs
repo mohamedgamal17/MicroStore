@@ -6,7 +6,8 @@ using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.Ordering.Application.StateMachines.Activities
 {
-    public class OrderValidatedActivity : IStateMachineActivity<OrderStateEntity, OrderValidatedEvent>, ITransientDependency
+    [Obsolete]
+    public class OrderValidatedActivity : IStateMachineActivity<OrderStateEntity, OrderApprovedEvent>, ITransientDependency
     {
         private readonly ILogger<OrderValidatedActivity> _logger;
 
@@ -20,19 +21,19 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
             visitor.Visit(this);
         }
 
-        public Task Execute(BehaviorContext<OrderStateEntity, OrderValidatedEvent> context, IBehavior<OrderStateEntity, OrderValidatedEvent> next)
+        public Task Execute(BehaviorContext<OrderStateEntity, OrderApprovedEvent> context, IBehavior<OrderStateEntity, OrderApprovedEvent> next)
         {
             _logger.LogDebug("Executing Order Validated Activity");
 
             AcceptPaymentIntegationEvent integrationEvent = new AcceptPaymentIntegationEvent
             {
-                TransactionId = context.Saga.TransactionId
+                TransactionId = context.Saga.PaymentId
             };
 
             return context.Publish(integrationEvent);
         }
 
-        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateEntity, OrderValidatedEvent, TException> context, IBehavior<OrderStateEntity, OrderValidatedEvent> next) where TException : Exception
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateEntity, OrderApprovedEvent, TException> context, IBehavior<OrderStateEntity, OrderApprovedEvent> next) where TException : Exception
         {
             return next.Execute(context);
         }

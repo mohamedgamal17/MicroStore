@@ -7,34 +7,29 @@ namespace MicroStore.Ordering.Application.StateMachines
 {
     public class OrderStateMachine : MassTransitStateMachine<OrderStateEntity>
     {
+        //will introduce new state pendingpayment
         public State Submitted { get; private set; }
-        public State Opened { get; private set; }
-        public State Accepted { get; private set; }
-        public State Confirmed { get; private set; }
-        public State Validated { get; private set; }
-        public State Paid { get; private set; }
+        public State Approved { get; private set; } 
+        public State PendingPayment { get; set; }
+        public State Paid { get; private set; } 
         public State Shipping { get; private set; }
         public State Completed { get; private set; }
-        public State Rejected { get; private set; }
         public State Faulted { get; private set; }
         public State Cancelled { get; private set; }
 
         public Event<OrderSubmitedEvent> OrderSubmitted { get; private set; }
-        public Event<OrderOpenedEvent> OrderOpened { get; private set; }
-        public Event<OrderAcceptedEvent> OrderAccepted { get; private set; }
-        public Event<OrderConfirmedEvent> OrderConfirmed { get; set; }
-        public Event<OrderValidatedEvent> OrderValidated { get; private set; }
-        public Event<OrderPaymentAcceptedEvent> OrderPaid { get; private set; }
+        public Event<OrderApprovedEvent> OrderApproved { get; private set; }
+        public Event<OrderPaymentCreatedEvent> OrderPaymentCreated { get; set; }
+        public Event<OrderPaymentCompletedEvent> OrderPaid { get; private set; }
         public Event<OrderShippmentCreatedEvent> OrderShippmentCreated { get; private set; }
         public Event<OrderShippedEvent> OrderShipped { get; private set; }
-        public Event<OrderRejectedEvent> OrderRejected { get; private set; }
         public Event<OrderStockRejectedEvent> OrderStockRejected { get; private set; }
-        public Event<OrderPaymentRejectedEvent> OrderPaymentRejected { get; private set; }
+        public Event<OrderPaymentFaildEvent> OrderPaymentFaild { get; private set; }
         public Event<OrderShippmentFailedEvent> OrderShippmentFaild { get; private set; }
         public Event<OrderCancelledEvent> OrderCancelled { get; private set; }
 
         public Event<CheckOrderRequest> CheckOrder { get; set; }
-
+      
 
         public OrderStateMachine()
         {
@@ -44,17 +39,23 @@ namespace MicroStore.Ordering.Application.StateMachines
 
                 // x.InsertOnInitial = true;
             });
-            Event(() => OrderOpened, x => x.CorrelateById(c => c.Message.OrderId));
-            Event(() => OrderAccepted, x => x.CorrelateById(c => c.Message.OrderId));
-            Event(() => OrderConfirmed, x => x.CorrelateById(c => c.Message.OrderId));
-            Event(() => OrderValidated, x => x.CorrelateById(c => c.Message.OrderId));
+
+            Event(() => OrderApproved, x=> x.CorrelateById(c=> c.Message.OrderId));
+
+            Event(() => OrderPaymentCreated, x => x.CorrelateById(c => c.Message.OrderId));
+
             Event(() => OrderPaid, x => x.CorrelateById(c => c.Message.OrderId));
+
             Event(() => OrderShippmentCreated, x => x.CorrelateById(c => c.Message.OrderId));
+
             Event(() => OrderShipped, x => x.CorrelateById(c => c.Message.OrderId));
-            Event(() => OrderRejected, x => x.CorrelateById(c => c.Message.OrderId));
+
             Event(() => OrderStockRejected, x => x.CorrelateById(c => c.Message.OrderId));
-            Event(() => OrderPaymentRejected, x => x.CorrelateById(c => c.Message.OrderId));
+
+            Event(() => OrderPaymentFaild, x => x.CorrelateById(c => c.Message.OrderId));
+
             Event(() => OrderShippmentFaild, x => x.CorrelateById(c => c.Message.OrderId));
+
             Event(() => OrderCancelled, x => x.CorrelateById(c => c.Message.OrderId));
 
             Event(() => CheckOrder, x =>
@@ -77,6 +78,7 @@ namespace MicroStore.Ordering.Application.StateMachines
                     When(OrderSubmitted)
                         .CopyDataToInstance()
                         .TransitionTo(Submitted)
+                        .Activity(x => x.OfType<OrderSubmitedActivity>())
                         .Respond((context) => new OrderSubmitedResponse()
                         {
                             OrderId = context.Saga.CorrelationId,
@@ -89,58 +91,15 @@ namespace MicroStore.Ordering.Application.StateMachines
                             SubmissionDate = context.Saga.SubmissionDate,
                             Items = context.Saga.OrderItems.MapOrderItemsToModel(),
                         })
+                        
                 );
 
-
-
+         
             During(Submitted,
-                    When(OrderOpened)
-                        .Then((context) =>
-                        {
-                            context.Saga.TransactionId = context.Message.TransactionId;
-                        })
-                        .TransitionTo(Opened)
-
-                );
-
-
-            During(Opened,
-                   When(OrderAccepted)
-                    .Then((context) =>
-                    {
-                        context.Saga.AcceptenceDate = context.Message.AcceptedDate;
-                    })
-                    .TransitionTo(Accepted)
-
-                );
-
-            During(Accepted,
-                     When(OrderConfirmed)
-                        .Then((context) =>
-                        {
-                            context.Saga.ConfirmationDate = context.Message.ConfirmationDate;
-                        })
-
-                        .TransitionTo(Confirmed)
-                        .Activity(x => x.OfType<OrderConfirmedActivity>()),
-
-                      When(OrderRejected)
-                        .Then((context) =>
-                        {
-                            context.Saga.RejectionReason = context.Message.RejectReason;
-                            context.Saga.RejectionDate = context.Message.RejectedDate;
-                            context.Saga.RejectedBy = context.Message.RejectedBy;
-
-                        })
-                        .TransitionTo(Rejected)
-                        .Activity(x => x.OfType<OrderRejectedActivity>())
-                    );
-
-            During(Confirmed,
-                    When(OrderValidated)
-                        .TransitionTo(Validated)
-                        .Activity(x => x.OfType<OrderValidatedActivity>()),
-
+                    When(OrderApproved)
+                        .TransitionTo(Approved)
+                        .Activity(x=> x.OfType<OrderApprovedActivity>()),
+                  
                     When(OrderStockRejected)
                         .Then((context) =>
                         {
@@ -148,23 +107,42 @@ namespace MicroStore.Ordering.Application.StateMachines
                             context.Saga.FaultReason = context.Message.Details;
                         })
                         .TransitionTo(Faulted)
-                        .Activity(x => x.OfType<OrderStockRejectedActivity>())
-
                 );
 
 
-            During(Validated,
-                    When(OrderPaid)
-                        .TransitionTo(Paid)
-                        .Activity(x => x.OfType<OrderPaymentAcceptedActivity>()),
+            During(Approved,
+                    When(OrderPaymentCreated)
+                        .Then((context) =>
+                        {
+                            context.Saga.PaymentId = context.Message.PaymentId;
+                        })
+                        .TransitionTo(PendingPayment),
 
-                    When(OrderPaymentRejected)
+                    When(OrderPaymentFaild)
                         .Then((context) =>
                         {
                             context.Saga.FaultDate = context.Message.FaultDate;
                         })
                         .TransitionTo(Faulted)
                 );
+
+            During(PendingPayment,
+                    When(OrderPaid)
+                        .Then((context) =>
+                        {
+                            context.Saga.PaymentAcceptedDate = context.Message.PaymentAcceptedDate;
+                        })
+                        .TransitionTo(Paid)
+                        .Activity(x => x.OfType<OrderPaymentAcceptedActivity>()),
+
+                    When(OrderPaymentFaild)
+                        .Then((context) =>
+                        {
+                            context.Saga.FaultDate = context.Message.FaultDate;
+                            context.Saga.FaultReason = context.Message.FaultReason;
+                        })
+                        .TransitionTo(Faulted)
+               );
 
             During(Paid,
                     When(OrderShippmentCreated)
@@ -173,6 +151,7 @@ namespace MicroStore.Ordering.Application.StateMachines
                             context.Saga.ShippmentId = context.Message.ShippmentId;
                         })
                         .TransitionTo(Shipping)
+                       
                     );
 
 
@@ -216,7 +195,7 @@ namespace MicroStore.Ordering.Application.StateMachines
                             OrderNumber = context.Saga.OrderNumber,
                             BillingAddressId = context.Saga.BillingAddressId,
                             ShippingAddressId = context.Saga.ShippingAddressId,
-                            TransactionId = context.Saga.TransactionId,
+                            PaymentId = context.Saga.PaymentId,
                             ShippmentId = context.Saga.ShippmentId,
                             UserId = context.Saga.UserId,
                             SubTotal = context.Saga.SubTotal,
@@ -224,7 +203,7 @@ namespace MicroStore.Ordering.Application.StateMachines
                             OrderItems = context.Saga.OrderItems.MapOrderItemsToModel(),
                             Status = context.Saga.CurrentState,
                             SubmissionDate = context.Saga.SubmissionDate,
-                            AcceptenceDate = context.Saga.AcceptenceDate,
+                            PaymentAcceptedDate = context.Saga.PaymentAcceptedDate,
                             ConfirmationDate = context.Saga.ConfirmationDate,
                             ShippedDate = context.Saga.ShippedDate,
                             CancellationDate = context.Saga.CancellationDate,
@@ -232,19 +211,10 @@ namespace MicroStore.Ordering.Application.StateMachines
                             CancellationReason = context.Saga.CancellationReason,
                             FaultDate = context.Saga.FaultDate,
                             FaultReason = context.Saga.FaultReason,
-                            RejectionDate = context.Saga.RejectionDate,
-                            RejectedBy = context.Saga.RejectedBy,
-                            RejectionReason = context.Saga.RejectionReason,
+
                         })
                     );
-
-
         }
-
-
-
-
-
 
     }
 

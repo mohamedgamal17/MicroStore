@@ -7,11 +7,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.Ordering.Application.StateMachines.Activities
 {
-    public class OrderConfirmedActivity : IStateMachineActivity<OrderStateEntity, OrderConfirmedEvent>, ITransientDependency
+    public class OrderSubmitedActivity : IStateMachineActivity<OrderStateEntity, OrderSubmitedEvent>, ITransientDependency
     {
-        private readonly ILogger<OrderConfirmedActivity> _logger;
+        private readonly ILogger<OrderSubmitedActivity> _logger;
 
-        public OrderConfirmedActivity(ILogger<OrderConfirmedActivity> logger)
+        public OrderSubmitedActivity(ILogger<OrderSubmitedActivity> logger)
         {
             _logger = logger;
         }
@@ -22,7 +22,7 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
             visitor.Visit(this);
         }
 
-        public Task Execute(BehaviorContext<OrderStateEntity, OrderConfirmedEvent> context, IBehavior<OrderStateEntity, OrderConfirmedEvent> next)
+        public Task Execute(BehaviorContext<OrderStateEntity, OrderSubmitedEvent> context, IBehavior<OrderStateEntity, OrderSubmitedEvent> next)
         {
             _logger.LogDebug("Executing Order Confirmed Activity");
 
@@ -36,14 +36,14 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
             return context.Publish(integrationEvent);
         }
 
-        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateEntity, OrderConfirmedEvent, TException> context, IBehavior<OrderStateEntity, OrderConfirmedEvent> next) where TException : Exception
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateEntity, OrderSubmitedEvent, TException> context, IBehavior<OrderStateEntity, OrderSubmitedEvent> next) where TException : Exception
         {
             return next.Faulted(context);
         }
 
         public void Probe(ProbeContext context)
         {
-            context.CreateScope("confirmed-order");
+            context.CreateScope("submited-order");
         }
 
 
