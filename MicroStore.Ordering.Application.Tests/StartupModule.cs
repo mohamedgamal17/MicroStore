@@ -46,12 +46,13 @@ namespace MicroStore.Ordering.Application.Tests
         }
 
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var loggerFactory = context.ServiceProvider.GetRequiredService<ILoggerFactory>();
+        //public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+        //{
 
-            LogContext.ConfigureCurrentLogContext(loggerFactory);
-        }
+        //    var loggerFactory = context.ServiceProvider.GetRequiredService<ILoggerFactory>();
+
+        //    LogContext.ConfigureCurrentLogContext(loggerFactory);
+        //}
 
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

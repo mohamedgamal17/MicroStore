@@ -13,7 +13,7 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
                 OrderNumber = Guid.NewGuid().ToString()
             });
 
-            Assert.That(await TestHarness.Published.Any<OrderValidatedEvent>());
+            Assert.That(await TestHarness.Published.Any<OrderApprovedEvent>());
         }
 
     }

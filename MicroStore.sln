@@ -79,8 +79,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Integrat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.IntegrationEvent", "MicroStore.Shipping.IntegrationEvent\MicroStore.Shipping.IntegrationEvent.csproj", "{A16A8692-7BAA-4433-9FB2-EE83C8D24AEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Application.Abstractions", "MicroStore.Ordering.Application.Abstractions\MicroStore.Ordering.Application.Abstractions.csproj", "{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Infrastructure", "MicroStore.Ordering.Infrastructure\MicroStore.Ordering.Infrastructure.csproj", "{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ordering", "Ordering", "{5AB36143-A0FF-4821-8110-5DE09809C365}"
@@ -115,11 +113,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Api.Host", "MicroStore.Payment.Api.Host\MicroStore.Payment.Api.Host.csproj", "{8A34A6F1-74CC-43E4-AF14-FBC9742B91D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Payment.Api", "MicroStore.Payment.Api\MicroStore.Payment.Api.csproj", "{2BED3AA1-D149-4F8D-B13A-345B654B7EEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Api", "MicroStore.Payment.Api\MicroStore.Payment.Api.csproj", "{2BED3AA1-D149-4F8D-B13A-345B654B7EEE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{A3C8A58C-1E7B-478D-9104-85613A663C75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Payment.Plugin.StripeGateway", "MicroStore.Payment.Plugin.StripeGateway\MicroStore.Payment.Plugin.StripeGateway.csproj", "{ECC19BFD-7E36-4A04-8C3E-CFF3C9F0A1AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Plugin.StripeGateway", "MicroStore.Payment.Plugin.StripeGateway\MicroStore.Payment.Plugin.StripeGateway.csproj", "{ECC19BFD-7E36-4A04-8C3E-CFF3C9F0A1AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -231,10 +229,6 @@ Global
 		{A16A8692-7BAA-4433-9FB2-EE83C8D24AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A16A8692-7BAA-4433-9FB2-EE83C8D24AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A16A8692-7BAA-4433-9FB2-EE83C8D24AEA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -340,7 +334,6 @@ Global
 		{5D608908-B571-45E0-8151-D5C125D51502} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
 		{67054396-7FC9-4BBF-BCA1-4574BAD83492} = {BE82F71D-DA9C-46FC-A017-01F36EEF8AA4}
 		{A16A8692-7BAA-4433-9FB2-EE83C8D24AEA} = {626E10B7-9EB2-42B7-BDB4-05D98E68E1A7}
-		{DAEEABCE-602A-4122-9084-80C2BF4CA5DA} = {835597DE-A82C-42FA-93DC-09CAC36D7D4B}
 		{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA} = {835597DE-A82C-42FA-93DC-09CAC36D7D4B}
 		{5AB36143-A0FF-4821-8110-5DE09809C365} = {7107956E-BC05-4060-8D9C-563805110605}
 		{E97936E3-4A9E-4681-AAE3-64B78EFAC525} = {5AB36143-A0FF-4821-8110-5DE09809C365}

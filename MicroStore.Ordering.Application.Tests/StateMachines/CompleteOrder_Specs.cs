@@ -16,7 +16,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
 
         private readonly string _orderNumber = Guid.NewGuid().ToString();
 
-        private readonly string _transctionId = Guid.NewGuid().ToString();
+        private readonly string _paymentId = Guid.NewGuid().ToString();
 
         private readonly string _shippmentId = Guid.NewGuid().ToString();
 
@@ -46,65 +46,36 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
 
 
             await TestHarness.Bus.Publish(
-                   new OrderOpenedEvent
-                   {
-                       OrderId = _fakeOrderId,
-                       OrderNumber = _orderNumber,
-                       TransactionId = _transctionId
-                   }
-                );
-
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Opened, TestHarness.TestTimeout);
-
-            instance.Should().NotBeNull();
-
-
-            await TestHarness.Bus.Publish(
-                    new OrderAcceptedEvent
-                    {
-                        OrderId = _fakeOrderId,
-                        OrderNumber = _orderNumber,
-                        AcceptedDate = DateTime.UtcNow
-                    }
-                );
-
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Accepted, TestHarness.TestTimeout);
-
-            instance.Should().NotBeNull();
-
-
-            await TestHarness.Bus.Publish(
-                    new OrderConfirmedEvent
-                    {
-                        OrderId = _fakeOrderId,
-
-                        ConfirmationDate = DateTime.UtcNow
-                    }
-                );
-
-
-
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Confirmed, TestHarness.TestTimeout);
-
-            instance.Should().NotBeNull();
-
-            await TestHarness.Bus.Publish(
-                    new OrderValidatedEvent
+                    new OrderApprovedEvent
                     {
                         OrderId = _fakeOrderId,
                         OrderNumber = _orderNumber
                     }
                 );
 
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Validated, TestHarness.TestTimeout);
+            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Approved, TestHarness.TestTimeout);
 
             instance.Should().NotBeNull();
 
-            await TestHarness.Bus.Publish(new OrderPaymentAcceptedEvent
+
+            await TestHarness.Bus.Publish(new OrderPaymentCreatedEvent
+            {
+                OrderId = _fakeOrderId,
+                OrderNumber = _orderNumber,
+                CustomerId = _fakeUserId,
+                PaymentId = _paymentId
+            });
+
+            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.PendingPayment, TestHarness.TestTimeout);
+
+            instance.Should().NotBeNull();
+
+
+            await TestHarness.Bus.Publish(new OrderPaymentCompletedEvent
             {
                 OrderId = _fakeOrderId,
                 OrderNubmer = _orderNumber,
-                TransactionId = _transctionId,
+                TransactionId = _paymentId,
                 PaymentAcceptedDate = DateTime.UtcNow
             });
 
@@ -140,7 +111,9 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
 
 
             Assert.That(await TestHarness.Published.Any<AllocateOrderStockIntegrationEvent>());
-            Assert.That(await TestHarness.Published.Any<AcceptPaymentIntegationEvent>());
+
+            Assert.That(await TestHarness.Published.Any<CreatePaymentIntegrationEvent>());
+
             Assert.That(await TestHarness.Published.Any<CreateShippmentIntegrationEvent>());
         }
 
