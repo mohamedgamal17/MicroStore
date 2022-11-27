@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.Payment.Application.EntityFramework;
+using MicroStore.Payment.Domain.Shared;
+using MicroStore.Payment.Domain.Shared.Domain;
 using System.Reflection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus;
@@ -13,7 +15,8 @@ namespace MicroStore.Payment.Application
 
     [DependsOn(typeof(InMemoryBusModule),
         typeof(AbpEntityFrameworkCoreModule),
-        typeof(AbpEventBusModule))]
+        typeof(AbpEventBusModule),
+        typeof(PaymentDomainSharedModule))]
     public class PaymentApplicationModule : AbpModule
     {
 
@@ -33,6 +36,9 @@ namespace MicroStore.Payment.Application
             services.AddAbpDbContext<PaymentDbContext>(opt =>
             {
                 opt.AddDefaultRepositories(true);
+
+                opt.AddRepository<PaymentRequest, PaymentRequestRepository > ();
+
             });
 
             Configure<AbpDbContextOptions>(opt =>

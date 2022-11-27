@@ -32,7 +32,7 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             if (result.IsFailure)
             {
-                throw new UserFriendlyException(result.Error);
+                throw new UserFriendlyException(result.ToString());
             }
 
             product.RemoveProductCategory(request.CategoryId);

@@ -9,16 +9,15 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
         [Test]
         public async Task Should_publish_order_payment_accepted_event()
         {
-            await TestHarness.Bus.Publish(new PaymentCompletedIntegrationEvent
+            await TestHarness.Bus.Publish(new PaymentAccepetedIntegrationEvent
             {
-                OrderId = Guid.NewGuid(),
+                OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
                 PaymentId = Guid.NewGuid().ToString(),
-                PaymentCompletionDate = DateTime.Now
             });
 
 
-            Assert.That(await TestHarness.Published.Any<OrderPaymentCompletedEvent>());
+            Assert.That(await TestHarness.Published.Any<OrderPaymentAcceptedEvent>());
         }
 
     }

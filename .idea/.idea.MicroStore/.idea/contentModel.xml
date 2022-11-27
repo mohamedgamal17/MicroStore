@@ -1,0 +1,1316 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\PC\.nuget\packages\microsoft.net.test.sdk\17.1.0\build\netcoreapp2.1" t="Include">
+      <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
+    </e>
+    <e p="C:\Users\PC\.nuget\packages\microsoft.testplatform.testhost\17.1.0\build\netcoreapp2.1\x64\Microsoft.TestPlatform.PlatformAbstractions.dll" t="Include" />
+    <e p="C:\Users\PC\.nuget\packages\microsoft.testplatform.testhost\17.1.0\build\netcoreapp2.1\x64\testhost.dll" t="Include" />
+    <e p="C:\Users\PC\.nuget\packages\microsoft.testplatform.testhost\17.1.0\build\netcoreapp2.1\x64\testhost.exe" t="Include" />
+    <e p="C:\Users\PC\.nuget\packages\nunit3testadapter\4.2.1\build\netcoreapp2.1\nunit.engine.api.dll" t="Include" />
+    <e p="C:\Users\PC\.nuget\packages\nunit3testadapter\4.2.1\build\netcoreapp2.1\nunit.engine.core.dll" t="Include" />
+    <e p="C:\Users\PC\.nuget\packages\nunit3testadapter\4.2.1\build\netcoreapp2.1\nunit.engine.dll" t="Include" />
+    <e p="C:\Users\PC\.nuget\packages\nunit3testadapter\4.2.1\build\netcoreapp2.1\NUnit3.TestAdapter.dll" t="Include" />
+    <e p="C:\Users\PC\.nuget\packages\nunit3testadapter\4.2.1\build\netcoreapp2.1\NUnit3.TestAdapter.pdb" t="Include" />
+    <e p="C:\Users\PC\.nuget\packages\nunit3testadapter\4.2.1\build\netcoreapp2.1\testcentric.engine.metadata.dll" t="Include" />
+    <e p="C:\Users\PC\.Rider2018.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\PC\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_MicroStore.1818732661.00" t="ExcludeRecursive" />
+    <e p="D:\repos\MicroStore" t="IncludeFlat">
+      <e p="MicroStore.BuildingBlocks.InMemoryBus" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CommandHandler.cs" t="Include" />
+        <e p="Contracts" t="Include">
+          <e p="ICommand.cs" t="Include" />
+          <e p="ILocalMessageBus.cs" t="Include" />
+          <e p="IQuery.cs" t="Include" />
+          <e p="IRequest.cs" t="Include" />
+          <e p="IRequestHandler.cs" t="Include" />
+          <e p="IRequestMiddleware.cs" t="Include" />
+          <e p="IRequestPostProcess.cs" t="Include" />
+          <e p="IRequestPreProcessor.cs" t="Include" />
+        </e>
+        <e p="InMemoryBusConventionalRegistar.cs" t="Include" />
+        <e p="InMemoryBusModule.cs" t="Include" />
+        <e p="MicroStore.BuildingBlocks.InMemoryBus.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.BuildingBlocks.InMemoryBus.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.BuildingBlocks.InMemoryBus.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Piplines" t="Include">
+          <e p="RequestPostProcessorBehaviour.cs" t="Include" />
+          <e p="RequestPreProcessorBehavior.cs" t="Include" />
+        </e>
+        <e p="QueryHandler.cs" t="Include" />
+        <e p="RequestHandler.cs" t="Include" />
+        <e p="RequestMiddleware.cs" t="Include" />
+        <e p="RequestPostProcess.cs" t="Include" />
+        <e p="RequestPreProcess.cs" t="Include" />
+        <e p="Unit.cs" t="Include" />
+        <e p="Wrappers" t="Include">
+          <e p="RequestHandlerBase.cs" t="Include" />
+        </e>
+      </e>
+      <e p="MicroStore.BuildingBlocks.Mediator" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Internals" t="Include">
+          <e p="IRequestAdapter.cs" t="Include" />
+        </e>
+        <e p="LocalMessageBus.cs" t="Include" />
+        <e p="MediatorModule.cs" t="Include" />
+        <e p="MicroStore.BuildingBlocks.Mediator.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.BuildingBlocks.Mediator.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.BuildingBlocks.Mediator.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ReqeustHandlerAdapter.cs" t="Include" />
+        <e p="RequestAdapter.cs" t="Include" />
+      </e>
+      <e p="MicroStore.BuildingBlocks.Results" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="IResponseResult.cs" t="Include" />
+        <e p="IResult.cs" t="Include" />
+        <e p="Methods" t="Include">
+          <e p="ResultFailureIf.cs" t="Include" />
+          <e p="ResultSuccessIf.cs" t="Include" />
+          <e p="ResultTry.cs" t="Include" />
+        </e>
+        <e p="MicroStore.BuildingBlocks.Results.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.BuildingBlocks.Results.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.BuildingBlocks.Results.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ResponseResult.cs" t="Include" />
+        <e p="ResponseResultCodeConst.cs" t="Include" />
+        <e p="Result.cs" t="Include" />
+      </e>
+      <e p="MicroStore.BuildingBlocks.Security" t="IncludeRecursive">
+        <e p="ApplicationCurrentClinet.cs" t="Include" />
+        <e p="ApplicationCurrentUser.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="MicroStore.BuildingBlocks.Security.csproj" t="IncludeRecursive" />
+        <e p="MicroStoreSecurityModule.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.BuildingBlocks.Security.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.BuildingBlocks.Security.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Catalog.Api" t="IncludeRecursive">
+        <e p="Administration" t="Include">
+          <e p="Controllers" t="Include">
+            <e p="CategoryController.cs" t="Include" />
+            <e p="ProductController.cs" t="Include" />
+          </e>
+          <e p="Models" t="Include">
+            <e p="CreateCategoryModel.cs" t="Include" />
+            <e p="CreateProductCategoryModel.cs" t="Include" />
+            <e p="CreateProductModel.cs" t="Include" />
+            <e p="UpdateCategoryModel.cs" t="Include" />
+            <e p="UpdateProductCategoryModel.cs" t="Include" />
+            <e p="UpdateProductModel.cs" t="Include" />
+          </e>
+        </e>
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CatalogApiModule.cs" t="Include" />
+        <e p="Controllers" t="Include">
+          <e p="CatalogController.cs" t="Include" />
+          <e p="WeatherForecastController.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Catalog.Api.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Catalog.Api.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Catalog.Api.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="WeatherForecast.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Catalog.Application" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CatalogApplicationModule.cs" t="Include" />
+        <e p="Categories" t="Include">
+          <e p="Commands" t="Include">
+            <e p="CreateCategoryCommandHandler.cs" t="Include" />
+            <e p="UpdateCategoryCommandHandler.cs" t="Include" />
+          </e>
+          <e p="Queries" t="Include">
+            <e p="GetCategoryListQueryHandler.cs" t="Include" />
+            <e p="GetCategoryQueryHandler.cs" t="Include" />
+          </e>
+        </e>
+        <e p="MicroStore.Catalog.Application.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Catalog.Application.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Catalog.Application.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Products" t="Include">
+          <e p="Commands" t="Include">
+            <e p="CreateProductCommandHandler.cs" t="Include" />
+            <e p="RemoveProductCategoryCommandHandler.cs" t="Include" />
+            <e p="UpdateProductCommandHandler.cs" t="Include" />
+          </e>
+          <e p="EventHandlers" t="Include">
+            <e p="AdjustProductNameEventHandler.cs" t="Include" />
+            <e p="AdjustProductPriceEventHandler.cs" t="Include" />
+            <e p="AdjustProductSkuEventHandler.cs" t="Include" />
+            <e p="CreateProductEventHandler.cs" t="Include" />
+            <e p="UpdateProductEvent.cs" t="Include" />
+          </e>
+          <e p="Queries" t="Include">
+            <e p="GetProductListQueryHandler.cs" t="Include" />
+            <e p="GetProductQueryHandler.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Catalog.Application.Abstractions" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CatalogApplicationAbstractionModule.cs" t="Include" />
+        <e p="Categories" t="Include">
+          <e p="Commands" t="Include">
+            <e p="CategoryCommandBase.cs" t="Include" />
+            <e p="CreateCategoryCommand.cs" t="Include" />
+            <e p="UpdateCategoryCommand.cs" t="Include" />
+          </e>
+          <e p="Dtos" t="Include">
+            <e p="CatalogCategoryListDto.cs" t="Include" />
+            <e p="CategoryDto.cs" t="Include" />
+            <e p="CategoryListDto.cs" t="Include" />
+            <e p="CategoryProfile.cs" t="Include" />
+            <e p="ProductByCategoryDto.cs" t="Include" />
+            <e p="PublicCategoryDto.cs" t="Include" />
+            <e p="PublicProductByCategoryDto.cs" t="Include" />
+          </e>
+          <e p="Queries" t="Include">
+            <e p="GetCategoryListQuery.cs" t="Include" />
+            <e p="GetCategoryQuery.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Common" t="Include">
+          <e p="ICatalogDbContext.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Catalog.Application.Abstractions.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Catalog.Application.Abstractions.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Catalog.Application.Abstractions.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Products" t="Include">
+          <e p="Commands" t="Include">
+            <e p="CreateProductCommand.cs" t="Include" />
+            <e p="DeleteProductCommand.cs" t="Include" />
+            <e p="ProductCommandBase.cs" t="Include" />
+            <e p="RemoveProductCategoryCommand.cs" t="Include" />
+            <e p="UpdateProductCommand.cs" t="Include" />
+          </e>
+          <e p="Dtos" t="Include">
+            <e p="ProductCategoryDto.cs" t="Include" />
+            <e p="ProductDto.cs" t="Include" />
+            <e p="ProductProfile.cs" t="Include" />
+          </e>
+          <e p="Models" t="Include">
+            <e p="ProductCategoryModel.cs" t="Include" />
+          </e>
+          <e p="Queries" t="Include">
+            <e p="GetProductListQuery.cs" t="Include" />
+            <e p="GetProductQuery.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Catalog.Application.Tests" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="BaseTestFixture.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Categories" t="Include">
+          <e p="CreateCategoryCommandHandlerTest.cs" t="Include" />
+          <e p="UpdateCategoryCommandHandlerTest.cs" t="Include" />
+          <e p="Validation" t="Include">
+            <e p="CategoryCommandValidationTest.cs" t="Include" />
+            <e p="CreateCategoryCommandValidationTest.cs" t="Include" />
+            <e p="UpdateCategoryCommandValidationTest.cs" t="Include" />
+          </e>
+        </e>
+        <e p="EntityFramework" t="Include">
+          <e p="CatalogDbContextFactory.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Catalog.Application.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Catalog.Application.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Catalog.Application.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Products" t="Include">
+          <e p="CreateProductCommandHandlerTest.cs" t="Include" />
+          <e p="UpdateProductCommandHandlerTests.cs" t="Include" />
+          <e p="Validation" t="Include">
+            <e p="CreateProductCommandValidationTest.cs" t="Include" />
+            <e p="ProductCategoryModelValidationTest.cs" t="Include" />
+            <e p="ProductCommandValidationTest.cs" t="Include" />
+            <e p="UpdateProductCommandValidationTest.cs" t="Include" />
+          </e>
+        </e>
+        <e p="StartupModule.cs" t="Include" />
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Catalog.Domain" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Entities" t="Include">
+          <e p="Category.cs" t="Include" />
+          <e p="Product.cs" t="Include" />
+          <e p="ProductCategory.cs" t="Include" />
+          <e p="ProductImage.cs" t="Include" />
+          <e p="TrackingMethod.cs" t="Include" />
+        </e>
+        <e p="Events" t="Include">
+          <e p="AdjustProductNameEvent.cs" t="Include" />
+          <e p="AdjustProductPriceEvent.cs" t="Include" />
+          <e p="AdjustProductSkuEvent.cs" t="Include" />
+          <e p="CreateProductEvent.cs" t="Include" />
+          <e p="UpdateProductEvent.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Catalog.Domain.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Catalog.Domain.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Catalog.Domain.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Catalog.Domain.Tests" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="MicroStore.Catalog.Domain.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Catalog.Domain.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Catalog.Domain.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ProductTests.cs" t="Include" />
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Catalog.Infrastructure" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CatalogInfrastructureModule.cs" t="Include" />
+        <e p="EntityFramework" t="Include">
+          <e p="CatalogDbContext.cs" t="Include" />
+          <e p="EntityTypeConfigurations" t="Include">
+            <e p="CategoryEntityTypeConfiguration.cs" t="Include" />
+            <e p="ProductCategoryEntityTypeConfiguration.cs" t="Include" />
+            <e p="ProductEntityTypeConfiguration.cs" t="Include" />
+          </e>
+        </e>
+        <e p="MicroStore.Catalog.Infrastructure.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Catalog.Infrastructure.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Catalog.Infrastructure.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Catalog.IntegrationEvents" t="IncludeRecursive">
+        <e p="AdjustProductNameIntegrationEvent.cs" t="Include" />
+        <e p="AdjustProductPriceIntegrationEvent.cs" t="Include" />
+        <e p="AdjustProductSkuIntegrationEvent.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CreateProductIntegrationEvent.cs" t="Include" />
+        <e p="MicroStore.Catalog.IntegrationEvents.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Catalog.IntegrationEvents.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Catalog.IntegrationEvents.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Inventory.Application" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="AdjustProductInventoryCommandHandler.cs" t="Include" />
+          <e p="ReciveProductCommandHandler.cs" t="Include" />
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="AllocateOrderStockIntegrationEventConsumer.cs" t="Include" />
+          <e p="ReleaseOrderStockIntegrationEventConsumer.cs" t="Include" />
+        </e>
+        <e p="ConsumerUnitOfWorkFilter.cs" t="Include" />
+        <e p="InventoryApplicationModule.cs" t="Include" />
+        <e p="MicroStore.Inventory.Application.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Inventory.Application.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Inventory.Application.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Inventory.Application.Abstractions" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="AdjustProductInventoryCommand.cs" t="Include" />
+          <e p="ReciveProductCommand.cs" t="Include" />
+        </e>
+        <e p="Common" t="Include">
+          <e p="IInventoyDbContext.cs" t="Include" />
+        </e>
+        <e p="Dtos" t="Include">
+          <e p="ProductAdjustedInventoryDto.cs" t="Include" />
+          <e p="ProductRecivedDto.cs" t="Include" />
+        </e>
+        <e p="InventoryAbstractionModule.cs" t="Include" />
+        <e p="MicroStore.Inventory.Application.Abstractions.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Inventory.Application.Abstractions.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Inventory.Application.Abstractions.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Inventory.Application.Tests" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="BaseTestFixture.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="AdjustProductInventoryCommandHandler_Specs.cs" t="Include" />
+          <e p="ReciveProductCommandHandler_Specs.cs" t="Include" />
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="AllocateOrderStockIntegrationEventConsumer_Specs.cs" t="Include" />
+          <e p="ReleaseOrderStockIntegrationEventConsumer_Specs.cs" t="Include" />
+        </e>
+        <e p="EntityFramework" t="Include">
+          <e p="InventoryDbContextFactory.cs" t="Include" />
+        </e>
+        <e p="Extensions" t="Include">
+          <e p="EnumerableExtensions.cs" t="Include" />
+        </e>
+        <e p="InventoryApplicationTestModule.cs" t="Include" />
+        <e p="MicroStore.Inventory.Application.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Inventory.Application.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Inventory.Application.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Inventory.Domain" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Events" t="Include">
+          <e p="InventoryAdjustedEvent.cs" t="Include" />
+          <e p="ProductAllocatedEvent.cs" t="Include" />
+          <e p="ProductEvent.cs" t="Include" />
+          <e p="ProductRecivedEvent.cs" t="Include" />
+          <e p="ProductReleasedEvent.cs" t="Include" />
+          <e p="ProductReturnedEvent.cs" t="Include" />
+          <e p="ProductShippedEvent.cs" t="Include" />
+        </e>
+        <e p="Extensions" t="Include">
+          <e p="GuardClausesResultExtensions.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Inventory.Domain.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Inventory.Domain.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Inventory.Domain.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ProductAggregate" t="Include">
+          <e p="Product.cs" t="Include" />
+        </e>
+      </e>
+      <e p="MicroStore.Inventory.Domain.Tests" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="MicroStore.Inventory.Domain.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Inventory.Domain.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Inventory.Domain.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Product_Tests.cs" t="Include" />
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Inventory.Events" t="IncludeRecursive">
+        <e p="Abstractions" t="Include">
+          <e p="Event.cs" t="Include" />
+        </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Contracts" t="Include">
+          <e p="IEvent.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Inventory.Events.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Inventory.Events.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Inventory.Events.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ProductAdjustedEvent.cs" t="Include" />
+        <e p="ProductAllocatedEvent.cs" t="Include" />
+        <e p="ProductDispatchedEvent.cs" t="Include" />
+        <e p="ProductRecivedEvent.cs" t="Include" />
+        <e p="ProductReleasedEvent.cs" t="Include" />
+        <e p="ProductReturnedEvent.cs" t="Include" />
+        <e p="ProductShippedEvent.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Inventory.Infrastructure" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="EntityFramework" t="Include">
+          <e p="EntityTypeConfigurations" t="Include">
+            <e p="ProductEntityTypeConfiguration.cs" t="Include" />
+          </e>
+          <e p="InventoyDbContext.cs" t="Include" />
+        </e>
+        <e p="InventoryInfrastructureModule.cs" t="Include" />
+        <e p="MicroStore.Inventory.Infrastructure.csproj" t="IncludeRecursive" />
+        <e p="Migrations" t="Include">
+          <e p="20221113195342_InitialMigration.cs" t="Include" />
+          <e p="20221113195342_InitialMigration.Designer.cs" t="Include" />
+          <e p="InventoyDbContextModelSnapshot.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Inventory.Infrastructure.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Inventory.Infrastructure.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Inventory.IntegrationEvents" t="IncludeRecursive">
+        <e p="AllocateOrderStockIntegrationEvent.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="MicroStore.Inventory.IntegrationEvents.csproj" t="IncludeRecursive" />
+        <e p="Models" t="Include">
+          <e p="ProductModel.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Inventory.IntegrationEvents.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Inventory.IntegrationEvents.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ReleaseOrderStockIntegrationEvent.cs" t="Include" />
+        <e p="ReturnOrderStockIntegrationEvent.cs" t="Include" />
+        <e p="ShipProductIntegationEvent.cs" t="Include" />
+        <e p="StockConfirmedIntegrationEvent.cs" t="Include" />
+        <e p="StockRejectedIntegrationEvent.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Ordering.Api" t="IncludeRecursive">
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Controllers" t="Include">
+          <e p="OrderController.cs" t="Include" />
+        </e>
+        <e p="Logs" t="Include">
+          <e p="logs.txt" t="Include" />
+        </e>
+        <e p="MicroStore.Ordering.Api.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Ordering.Api.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Ordering.Api.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="OrderApiModule.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+      </e>
+      <e p="MicroStore.Ordering.Application" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Common" t="Include">
+          <e p="IOrderDbContext.cs" t="Include" />
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="PaymentCompletedIntegrationEventConsumer.cs" t="Include" />
+          <e p="PaymentFaildIntegrationEventConsumer.cs" t="Include" />
+          <e p="ShippmentCompletedIntegrationEventConsumer.cs" t="Include" />
+          <e p="ShippmentCreatedIntegrationEventConsumer.cs" t="Include" />
+          <e p="ShippmentFaildIntegrationEventConsumer.cs" t="Include" />
+          <e p="StockConfirmedIntegrationEventConsumer.cs" t="Include" />
+          <e p="StockRejectedIntegrationEventConsumer.cs" t="Include" />
+          <e p="SubmitOrderIntegrationEventConsumer.cs" t="Include" />
+        </e>
+        <e p="Dtos" t="Include">
+          <e p="PaymentDto.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Ordering.Application.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Ordering.Application.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Ordering.Application.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="OrderApplicationModule.cs" t="Include" />
+        <e p="StateMachines" t="Include">
+          <e p="Activities" t="Include">
+            <e p="OrderApprovedActivity.cs" t="Include" />
+            <e p="OrderPaymentAcceptedActivity.cs" t="Include" />
+            <e p="OrderShippmentFaildActivity.cs" t="Include" />
+            <e p="OrderStockRejectedActivity.cs" t="Include" />
+            <e p="OrderSubmitedActivity.cs" t="Include" />
+            <e p="OrderValidatedActivity.cs" t="Include" />
+          </e>
+          <e p="OrderItemEntity.cs" t="Include" />
+          <e p="OrderStateEntity.cs" t="Include" />
+          <e p="OrderStateMachine.cs" t="Include" />
+        </e>
+      </e>
+      <e p="MicroStore.Ordering.Application.Tests" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Consumers" t="Include">
+          <e p="PaymentCompletedIntegrationEventConsumer_Specs.cs" t="Include" />
+          <e p="PaymentFaultedIntegrationEventConsumer_Specs.cs" t="Include" />
+          <e p="ShippmentCompletedIntegrationEventConsumer_Specs.cs" t="Include" />
+          <e p="ShippmentCreatedIntegrationEventConsumer_Specs.cs" t="Include" />
+          <e p="ShippmentFaildIntegationEventConsumer_Specs.cs" t="Include" />
+          <e p="StockConfirmedIntegrationEventConsumer_Specs.cs" t="Include" />
+          <e p="StockRejectedIntegrationEventConsumer_Specs.cs" t="Include" />
+          <e p="SubmitedOrderIntegartionEventConsumer_Specs.cs" t="Include" />
+        </e>
+        <e p="EntityFramework" t="Include">
+          <e p="OrderDbContextFactory.cs" t="Include" />
+        </e>
+        <e p="Fakes" t="Include">
+          <e p="CreatePaymentRequestFakeConsumer.cs" t="Include" />
+        </e>
+        <e p="MassTransitTestFixture.cs" t="Include" />
+        <e p="MicroStore.Ordering.Application.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Ordering.Application.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Ordering.Application.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="StartupModule.cs" t="Include" />
+        <e p="StateMachines" t="Include">
+          <e p="CheckOrder_Specs.cs" t="Include" />
+          <e p="CompleteOrder_Specs.cs" t="Include" />
+          <e p="FaultOrder_Specs.cs" t="Include" />
+          <e p="RejectionOrder_Specs.cs" t="Include" />
+        </e>
+        <e p="StateMachineTestFixture.cs" t="Include" />
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Ordering.Events" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CheckOrderRequest.cs" t="Include" />
+        <e p="MicroStore.Ordering.Events.csproj" t="IncludeRecursive" />
+        <e p="Models" t="Include">
+          <e p="OrderItemModel.cs" t="Include" />
+          <e p="OrderNotFound.cs" t="Include" />
+          <e p="OrderResponse.cs" t="Include" />
+          <e p="OrderSubmitedResponse.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Ordering.Events.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Ordering.Events.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="OrderApprovedEvent.cs" t="Include" />
+        <e p="OrderCancelledEvent.cs" t="Include" />
+        <e p="OrderPaymentCompletedEvent.cs" t="Include" />
+        <e p="OrderPaymentCreatedEvent.cs" t="Include" />
+        <e p="OrderPaymentFaildEvent.cs" t="Include" />
+        <e p="OrderShippedEvent.cs" t="Include" />
+        <e p="OrderShippmentCreatedEvent.cs" t="Include" />
+        <e p="OrderShippmentFailedEvent.cs" t="Include" />
+        <e p="OrderStockRejectedEvent.cs" t="Include" />
+        <e p="OrderSubmitedEvent.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Ordering.Infrastructure" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="EntityFramework" t="Include">
+          <e p="EntityTypeConfigurations" t="Include">
+            <e p="OrderItemEntityTypeConfiguration.cs" t="Include" />
+            <e p="OrderStateEntityTypeConfiguration.cs" t="Include" />
+          </e>
+          <e p="OrderDbContext.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Ordering.Infrastructure.csproj" t="IncludeRecursive" />
+        <e p="Migrations" t="Include">
+          <e p="20221108184858_InitialMigration.cs" t="Include" />
+          <e p="20221108184858_InitialMigration.Designer.cs" t="Include" />
+          <e p="20221117011726_RefactorOrderStateMigration.cs" t="Include" />
+          <e p="20221117011726_RefactorOrderStateMigration.Designer.cs" t="Include" />
+          <e p="OrderDbContextModelSnapshot.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Ordering.Infrastructure.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Ordering.Infrastructure.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="OrderInfrastructureModule.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Ordering.IntegrationEvents" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ConfirmOrderIntegrationEvent.cs" t="Include" />
+        <e p="MicroStore.Ordering.IntegrationEvents.csproj" t="IncludeRecursive" />
+        <e p="Models" t="Include">
+          <e p="OrderItemModel.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Ordering.IntegrationEvents.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Ordering.IntegrationEvents.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Responses" t="Include">
+          <e p="OrderSubmitedResponse.cs" t="Include" />
+        </e>
+        <e p="SubmitOrderIntegrationEvent.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Payment.Api" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Controllers" t="Include" />
+        <e p="MicroStore.Payment.Api.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Payment.Api.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Payment.Api.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="PaymentApiModule.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Payment.Api.Host" t="IncludeRecursive">
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="MicroStore.Payment.Api.Host.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Payment.Api.Host.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Payment.Api.Host.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="PaymentApiHostModule.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="WeatherForecast.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Payment.Application" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="CreatePaymentRequestCommandHandler.cs" t="Include" />
+          <e p="Requests" t="Include">
+            <e p="CreatePaymentRequestCommand.cs" t="Include" />
+            <e p="VoidPaymentCommand.cs" t="Include" />
+          </e>
+          <e p="VoidPaymentCommandHandler.cs" t="Include" />
+        </e>
+        <e p="Common" t="Include">
+          <e p="IPaymentDbContext.cs" t="Include" />
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="CreatePaymentIntegrationEventConsumer.cs" t="Include" />
+          <e p="VoidPaymentIntegrationEventConsumer.cs" t="Include" />
+        </e>
+        <e p="Domain" t="Include">
+          <e p="Events" t="Include">
+            <e p="PaymentCompletedEvent.cs" t="Include" />
+            <e p="PaymentCreatedEvent.cs" t="Include" />
+            <e p="PaymentFaildEvent.cs" t="Include" />
+          </e>
+          <e p="PaymentRequest.cs" t="Include" />
+          <e p="PaymentStatus.cs" t="Include" />
+        </e>
+        <e p="Dtos" t="Include">
+          <e p="PaymentCreatedDto.cs" t="Include" />
+        </e>
+        <e p="EntityFramework" t="Include">
+          <e p="EntityTypeConfigurations" t="Include">
+            <e p="PaymentRequestEntityTypeConfiguration.cs" t="Include" />
+          </e>
+          <e p="PaymentDbContext.cs" t="Include" />
+        </e>
+        <e p="EventHandlers" t="Include">
+          <e p="PaymentCompletedEventHandler.cs" t="Include" />
+          <e p="PaymentCreatedEventHandler.cs" t="Include" />
+          <e p="PaymentFaildEventHandler.cs" t="Include" />
+        </e>
+        <e p="Extensions" t="Include">
+          <e p="GuardClausesResultExtensions.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Payment.Application.csproj" t="IncludeRecursive" />
+        <e p="Migrations" t="Include">
+          <e p="20221116213021_InitialMigration.cs" t="Include" />
+          <e p="20221116213021_InitialMigration.Designer.cs" t="Include" />
+          <e p="PaymentDbContextModelSnapshot.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Payment.Application.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Payment.Application.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="PaymentApplicationModule.cs" t="Include" />
+        <e p="Services" t="Include">
+          <e p="PaymentRequestService.cs" t="Include" />
+        </e>
+      </e>
+      <e p="MicroStore.Payment.Application.Tests" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="BaseTestFixture.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="CreatePaymentRequestCommandHandler_Specs.cs" t="Include" />
+          <e p="VoidPaymentRequestCommandHandler_Specs.cs" t="Include" />
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="CreatePaymentIntegrationEventConsumer_Specs.cs" t="Include" />
+          <e p="VoidPaymentIntegrationEventConsumer_Specs.cs" t="Include" />
+        </e>
+        <e p="Domain" t="Include">
+          <e p="PaymentRequest_Tests.cs" t="Include" />
+        </e>
+        <e p="EntityFramework" t="Include">
+          <e p="PaymentDbContextFactory.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Payment.Application.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Payment.Application.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Payment.Application.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="PaymentApplicationTestModule.cs" t="Include" />
+        <e p="Services" t="Include">
+          <e p="PaymentRequestService_Specs.cs" t="Include" />
+        </e>
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Payment.Domain.Shared" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Dtos" t="Include">
+          <e p="PaymentCompletedDto.cs" t="Include" />
+          <e p="PaymentDto.cs" t="Include" />
+          <e p="PaymentFaildDto.cs" t="Include" />
+          <e p="PaymentStartedDto.cs" t="Include" />
+        </e>
+        <e p="Events" t="Include">
+          <e p="PaymentVoidedEvent.cs" t="Include" />
+        </e>
+        <e p="IPaymentRequestService.cs" t="Include" />
+        <e p="MicroStore.Payment.Domain.Shared.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Payment.Domain.Shared.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Payment.Domain.Shared.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Payment.IntegrationEvents" t="IncludeRecursive">
+        <e p="AcceptPaymentIntegationEvent.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CreatePaymentIntegrationEvent.cs" t="Include" />
+        <e p="CreatePaymentRequest.cs" t="Include" />
+        <e p="MicroStore.Payment.IntegrationEvents.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Payment.IntegrationEvents.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Payment.IntegrationEvents.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="PaymentAccepetedIntegrationEvent.cs" t="Include" />
+        <e p="PaymentCompletedIntegrationEvent.cs" t="Include" />
+        <e p="PaymentCreatedIntegrationEvent.cs" t="Include" />
+        <e p="PaymentFaildIntegrationEvent.cs" t="Include" />
+        <e p="PaymentRejectedIntegrationEvent.cs" t="Include" />
+        <e p="RefundUserIntegrationEvent.cs" t="Include" />
+        <e p="Responses" t="Include">
+          <e p="PaymentCreatedResponse.cs" t="Include" />
+        </e>
+        <e p="VoidPaymentIntegrationEvent.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Payment.Plugin.StripeGateway" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Config" t="Include">
+          <e p="StripePaymentOption.cs" t="Include" />
+        </e>
+        <e p="Consts" t="Include">
+          <e p="StripePaymentDefault.cs" t="Include" />
+        </e>
+        <e p="Controller" t="Include">
+          <e p="StripePaymentController.cs" t="Include" />
+        </e>
+        <e p="EventHandlers" t="Include">
+          <e p="PaymentVoidedEventHandelr.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Payment.Plugin.StripeGateway.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Payment.Plugin.StripeGateway.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Payment.Plugin.StripeGateway.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="StripeGatewayPluginModule.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Shipping.Application" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="CompleteShipmentCommandHandler.cs" t="Include" />
+          <e p="CreateShipmentCommandHandler.cs" t="Include" />
+          <e p="DeliverShipmentCommandHandler.cs" t="Include" />
+          <e p="StartShipmentCommandHandler.cs" t="Include" />
+        </e>
+        <e p="Common" t="Include">
+          <e p="IShippingDbContext.cs" t="Include" />
+          <e p="Profiles" t="Include">
+            <e p="ShipmentItemMappingProfile.cs" t="Include" />
+            <e p="ShipmentMappingProfile.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="CreateShippmentIntegrationEventConsumer.cs" t="Include" />
+        </e>
+        <e p="Domain" t="Include">
+          <e p="Events" t="Include">
+            <e p="ShipmentCompletedEvent.cs" t="Include" />
+            <e p="ShipmentDeliveredEvent.cs" t="Include" />
+            <e p="ShipmentStartedEvent.cs" t="Include" />
+          </e>
+          <e p="Shipment.cs" t="Include" />
+          <e p="ShipmentItem.cs" t="Include" />
+          <e p="ShipmentStatus.cs" t="Include" />
+        </e>
+        <e p="EntityFramework" t="Include">
+          <e p="EntityTypeConfigurations" t="Include">
+            <e p="ShipmentEntityTypeConfiguration.cs" t="Include" />
+            <e p="ShipmentItemEntityTypeConfiguration.cs" t="Include" />
+          </e>
+          <e p="ShippingDbContext.cs" t="Include" />
+        </e>
+        <e p="EventHandlers" t="Include">
+          <e p="ShipmentCompletedEventHandler.cs" t="Include" />
+          <e p="ShipmentDeliveredEventHandler.cs" t="Include" />
+          <e p="ShipmentStartedEventHandler.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Shipping.Application.csproj" t="IncludeRecursive" />
+        <e p="Migrations" t="Include">
+          <e p="20221121015354_InitialMigration.cs" t="Include" />
+          <e p="20221121015354_InitialMigration.Designer.cs" t="Include" />
+          <e p="ShippingDbContextModelSnapshot.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Shipping.Application.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Shipping.Application.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ShippingApplicationModule.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Shipping.Application.Tests" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="BaseTestFixture.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="CompleteShipmentComandHandler_Tests.cs" t="Include" />
+          <e p="CreateShipmentCommandHandler_Tests.cs" t="Include" />
+          <e p="DeliverShipmentCommandHandler_Tests.cs" t="Include" />
+          <e p="StartShipmentCommandHandler_Tests.cs" t="Include" />
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="CreateShipmentIntegrationEventConsumer_Specs.cs" t="Include" />
+        </e>
+        <e p="EntityFramework" t="Include">
+          <e p="ShippingDbContextFactory.cs" t="Include" />
+        </e>
+        <e p="Extensions" t="Include">
+          <e p="ShipmentAssertionsExtensions.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Shipping.Application.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Shipping.Application.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Shipping.Application.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ShippingApplicationTestModule.cs" t="Include" />
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Shipping.Domain.Shared" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="CancelShipmentCommand.cs" t="Include" />
+          <e p="CompleteShipmentCommand.cs" t="Include" />
+          <e p="CreateShipmentCommand.cs" t="Include" />
+          <e p="DeliverShipmentCommand.cs" t="Include" />
+          <e p="ShipmentFaultedComand.cs" t="Include" />
+          <e p="StartShipmmentCommand.cs" t="Include" />
+          <e p="UpdateShipmmentCommand.cs" t="Include" />
+        </e>
+        <e p="Dtos" t="Include">
+          <e p="ShipmentDto.cs" t="Include" />
+          <e p="ShipmentItemDto.cs" t="Include" />
+        </e>
+        <e p="MicroStore.Shipping.Domain.Shared.csproj" t="IncludeRecursive" />
+        <e p="Models" t="Include">
+          <e p="ShipmentItemModel.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Shipping.Domain.Shared.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Shipping.Domain.Shared.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.Shipping.IntegrationEvent" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CreateShippmentIntegrationEvent.cs" t="Include" />
+        <e p="MicroStore.Shipping.IntegrationEvent.csproj" t="IncludeRecursive" />
+        <e p="Models" t="Include">
+          <e p="ShipmentItemModel.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Shipping.IntegrationEvent.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Shipping.IntegrationEvent.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ShipmentDeliveredIntegrationEvent.cs" t="Include" />
+        <e p="ShipmentStartedIntegrationEvent.cs" t="Include" />
+        <e p="ShippmentCompletedIntegrationEvent.cs" t="Include" />
+        <e p="ShippmentCreatedIntegrationEvent.cs" t="Include" />
+        <e p="ShippmentFaildIntegrationEvent.cs" t="Include" />
+      </e>
+      <e p="MicroStore.Shipping.Plugin.Shippo" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Class1.cs" t="Include" />
+        <e p="MicroStore.Shipping.Plugin.Shippo.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.Shipping.Plugin.Shippo.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.Shipping.Plugin.Shippo.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.ShoppingCart.Api" t="IncludeRecursive">
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Controllers" t="Include">
+          <e p="BasketController.cs" t="Include" />
+        </e>
+        <e p="MicroStore.ShoppingCart.Api.csproj" t="IncludeRecursive" />
+        <e p="Models" t="Include">
+          <e p="CheckoutModel.cs" t="Include" />
+          <e p="CreateBasketItemModel.cs" t="Include" />
+          <e p="UpdateBasketItemModel.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.ShoppingCart.Api.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.ShoppingCart.Api.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="ShoppingCartApiModule.cs" t="Include" />
+        <e p="WeatherForecast.cs" t="Include" />
+      </e>
+      <e p="MicroStore.ShoppingCart.Application" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="AddBasketItemCommandHandler.cs" t="Include" />
+          <e p="ChekoutCommandHandler.cs" t="Include" />
+          <e p="CreateBaskeCommandHandler.cs" t="Include" />
+          <e p="RemoveBasketItemCommandhandler.cs" t="Include" />
+          <e p="UpdateBasketItemQuantityCommandHandler.cs" t="Include" />
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="AdjustProductNameEventConsumer.cs" t="Include" />
+          <e p="AdjustProductPriceEventConsumer.cs" t="Include" />
+          <e p="AdjustProductSkuEventConsumer.cs" t="Include" />
+          <e p="CreateProductEventConsumer.cs" t="Include" />
+        </e>
+        <e p="ConsumerUnitOfWorkFilter.cs" t="Include" />
+        <e p="MicroStore.ShoppingCart.Application.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.ShoppingCart.Application.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.ShoppingCart.Application.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Queries" t="Include">
+          <e p="GetBasketQueryHandler.cs" t="Include" />
+        </e>
+        <e p="ShoppingCartApplicationModule.cs" t="Include" />
+      </e>
+      <e p="MicroStore.ShoppingCart.Application.Abstraction" t="IncludeRecursive">
+        <e p="BasketProfile.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="AddBasketItemCommand.cs" t="Include" />
+          <e p="CheckoutCommand.cs" t="Include" />
+          <e p="CreateBasketCommand.cs" t="Include" />
+          <e p="RemoveBasketItemCommand.cs" t="Include" />
+          <e p="UpdateBasketItemQuantityCommand.cs" t="Include" />
+        </e>
+        <e p="Dtos" t="Include">
+          <e p="BasketDto.cs" t="Include" />
+          <e p="BasketItemDto.cs" t="Include" />
+          <e p="OrderDto.cs" t="Include" />
+          <e p="OrderItemDto.cs" t="Include" />
+          <e p="ProductDto.cs" t="Include" />
+        </e>
+        <e p="IBasketDbContext.cs" t="Include" />
+        <e p="MicroStore.ShoppingCart.Application.Abstraction.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.ShoppingCart.Application.Abstraction.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.ShoppingCart.Application.Abstraction.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Queries" t="Include">
+          <e p="GetBasketQuery.cs" t="Include" />
+        </e>
+        <e p="ShoppingCartApplicationAbstractionModule.cs" t="Include" />
+      </e>
+      <e p="MicroStore.ShoppingCart.Application.Tests" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="BaseTestBase.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="AddBasketItemCommandHandler_Specs.cs" t="Include" />
+          <e p="CheckoutCommandHandler_Specs.cs" t="Include" />
+          <e p="RemoveBasketItemCommandHandler_Specs.cs" t="Include" />
+          <e p="UpdateBasketItemQuantityCommandHandler_Specs.cs" t="Include" />
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="AdjustProductNameEventConsumerTests.cs" t="Include" />
+          <e p="AdjustProductPriceEventConsumerTests.cs" t="Include" />
+          <e p="AdjustProductSkuEventConsumerTests.cs" t="Include" />
+          <e p="CreateProductEventConsumerTests.cs" t="Include" />
+        </e>
+        <e p="EntityFramework" t="Include">
+          <e p="BasketDbContextFactory.cs" t="Include" />
+        </e>
+        <e p="Fakes" t="Include">
+          <e p="FakeSubmitOrderIntegrationEventConsumer.cs" t="Include" />
+        </e>
+        <e p="MicroStore.ShoppingCart.Application.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.ShoppingCart.Application.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.ShoppingCart.Application.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ShoppingCartApplicationTestModule.cs" t="Include" />
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.ShoppingCart.Domain" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Entities" t="Include">
+          <e p="Basket.cs" t="Include" />
+          <e p="BasketItem.cs" t="Include" />
+          <e p="Product.cs" t="Include" />
+        </e>
+        <e p="MicroStore.ShoppingCart.Domain.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.ShoppingCart.Domain.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.ShoppingCart.Domain.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="MicroStore.ShoppingCart.Domain.Tests" t="IncludeRecursive">
+        <e p="BasketTests.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="MicroStore.ShoppingCart.Domain.Tests.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.ShoppingCart.Domain.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.ShoppingCart.Domain.Tests.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Usings.cs" t="Include" />
+      </e>
+      <e p="MicroStore.ShoppingCart.Infrastructure" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="EntityFramework" t="Include">
+          <e p="BasketDbContext.cs" t="Include" />
+          <e p="EntityTypeConfigurations" t="Include">
+            <e p="BasketEntityTypeConfiguration.cs" t="Include" />
+            <e p="BasketItemEntityTypeConfiguration.cs" t="Include" />
+            <e p="ProductEntityTypeConfiguration.cs" t="Include" />
+          </e>
+        </e>
+        <e p="MicroStore.ShoppingCart.Infrastructure.csproj" t="IncludeRecursive" />
+        <e p="Migrations" t="Include">
+          <e p="20221107183541_InitialMigration.cs" t="Include" />
+          <e p="20221107183541_InitialMigration.Designer.cs" t="Include" />
+          <e p="BasketDbContextModelSnapshot.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.ShoppingCart.Infrastructure.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.ShoppingCart.Infrastructure.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ShoppingCartInfrastructure.cs" t="Include" />
+      </e>
+      <e p="MicroStore.sln" t="IncludeFlat" />
+      <e p="MicroStore.TestBase" t="IncludeRecursive">
+        <e p="ApplicationTestBase.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Extensions" t="Include">
+          <e p="ServiceCollectionExtensions.cs" t="Include" />
+        </e>
+        <e p="Fakes" t="Include">
+          <e p="FakeCurrentPrincipalAccessor.cs" t="Include" />
+        </e>
+        <e p="MassTransitTestBase.cs" t="Include" />
+        <e p="MicroStore.TestBase.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net6.0" t="Include">
+              <e p="MicroStore.TestBase.AssemblyInfo.cs" t="Include" />
+              <e p="MicroStore.TestBase.GlobalUsings.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="StateMachineTestBase.cs" t="Include" />
+        <e p="Utilites" t="Include">
+          <e p="TestOutputLogger.cs" t="Include" />
+          <e p="TestOutputLoggerFactory.cs" t="Include" />
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="src" t="Include">
+        <e p="buildingblocks" t="Include" />
+        <e p="Services" t="Include">
+          <e p="Basket" t="Include" />
+          <e p="Catalog" t="Include" />
+          <e p="Inventory" t="Include" />
+          <e p="Ordering" t="Include" />
+          <e p="Payment" t="Include">
+            <e p="Plugins" t="Include" />
+          </e>
+          <e p="Shipping" t="Include">
+            <e p="Plugins" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="test" t="Include">
+        <e p="Basket" t="Include" />
+        <e p="Catalog" t="Include" />
+        <e p="Inventory" t="Include" />
+        <e p="Ordering" t="Include" />
+        <e p="Payment" t="Include" />
+        <e p="Shipping" t="Include" />
+      </e>
+    </e>
+  </component>
+</project>

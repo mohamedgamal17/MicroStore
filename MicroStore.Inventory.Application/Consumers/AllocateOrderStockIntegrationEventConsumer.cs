@@ -49,7 +49,7 @@ namespace MicroStore.Inventory.Application.Consumers
                 {
                     OrderId = context.Message.OrderId,
                     OrderNubmer =context.Message.OrderNumber,
-                    Details = failureResults.Select(x=> x.Error)
+                    Details = failureResults.Select(x=> x.ToString())
                         .Aggregate((t1,t2)=> t1 + "\n" + t2)
                 });
 

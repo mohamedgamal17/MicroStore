@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MicroStore.Payment.Application.Domain;
+using MicroStore.Payment.Domain.Shared.Domain;
 
 namespace MicroStore.Payment.Application.Common
 {

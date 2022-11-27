@@ -12,7 +12,7 @@ namespace MicroStore.Inventory.Domain.Extensions
         {
             if (result.IsFailure)
             {
-                throw new InvalidOperationException(result.Error);
+                throw new InvalidOperationException(result.Error.ToString());
             }
 
             return result;

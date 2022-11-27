@@ -4,17 +4,16 @@ using MicroStore.Payment.IntegrationEvents;
 
 namespace MicroStore.Ordering.Application.Consumers
 {
-    public class PaymentCompletedIntegrationEventConsumer : IConsumer<PaymentCompletedIntegrationEvent>
+    public class PaymentCompletedIntegrationEventConsumer : IConsumer<PaymentAccepetedIntegrationEvent>
     {
 
-        public async Task Consume(ConsumeContext<PaymentCompletedIntegrationEvent> context)
+        public async Task Consume(ConsumeContext<PaymentAccepetedIntegrationEvent> context)
         {
-            await context.Publish(new OrderPaymentCompletedEvent
+            await context.Publish(new OrderPaymentAcceptedEvent
             {
-                OrderId = context.Message.OrderId,
+                OrderId = Guid.Parse(context.Message.OrderId),
                 OrderNubmer = context.Message.OrderNumber,
                 TransactionId = context.Message.PaymentId,
-                PaymentAcceptedDate = context.Message.PaymentCompletionDate
             });
         }
     }

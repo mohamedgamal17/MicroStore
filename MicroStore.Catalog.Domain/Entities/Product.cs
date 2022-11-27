@@ -139,7 +139,7 @@ namespace MicroStore.Catalog.Domain.Entities
 
             if (result.IsFailure)
             {
-                throw new InvalidOperationException(result.Error); // Fail fast princible
+                throw new InvalidOperationException(result.ToString()); // Fail fast princible
             }
 
 

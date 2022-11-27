@@ -68,29 +68,15 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("CancelledBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
                     b.Property<DateTime?>("ConfirmationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CurrentState")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("FaultDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FaultReason")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("OrderNumber")
                         .HasMaxLength(265)
                         .HasColumnType("nvarchar(265)");
-
-                    b.Property<DateTime?>("PaymentAcceptedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentId")
                         .HasMaxLength(256)
@@ -102,6 +88,9 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                     b.Property<Guid>("ShippingAddressId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("ShippingCost")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ShippmentId")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -111,6 +100,9 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TaxCost")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
@@ -122,8 +114,6 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                     b.HasKey("CorrelationId");
 
                     b.HasIndex("BillingAddressId");
-
-                    b.HasIndex("CancelledBy");
 
                     b.HasIndex("OrderNumber")
                         .IsUnique()

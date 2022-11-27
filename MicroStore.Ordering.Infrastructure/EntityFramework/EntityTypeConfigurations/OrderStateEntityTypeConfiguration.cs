@@ -14,8 +14,6 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigura
             entity.Property(x => x.OrderNumber).HasMaxLength(265);
             entity.Property(x => x.PaymentId).IsRequired(false).HasMaxLength(256);
             entity.Property(x => x.ShippmentId).HasMaxLength(256);
-            entity.Property(x => x.CancelledBy).HasMaxLength(256);
-            entity.Property(x => x.FaultReason).HasMaxLength(500);
             entity.Property(x => x.CancellationReason).HasMaxLength(500);
             entity.HasMany(x => x.OrderItems).WithOne();
             entity.HasIndex(x => x.UserId);
@@ -23,7 +21,6 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigura
             entity.HasIndex(x => x.ShippingAddressId);
             entity.HasIndex(x => x.BillingAddressId);
             entity.HasIndex(x => x.ShippmentId);
-            entity.HasIndex(x => x.CancelledBy);
             entity.Navigation(x => x.OrderItems).AutoInclude();
         }
     }

@@ -23,7 +23,6 @@
    <ProjectReference Include="..\MicroStore.Ordering.Events\MicroStore.Ordering.Events.csproj" />
    <ProjectReference Include="..\MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj" />
    <ProjectReference Include="..\MicroStore.Payment.IntegrationEvents\MicroStore.Payment.IntegrationEvents.csproj" />
-   <ProjectReference Include="..\MicroStore.Shipping.IntegrationEvent\MicroStore.Shipping.IntegrationEvent.csproj" />
  </ItemGroup>
 
 </Project>

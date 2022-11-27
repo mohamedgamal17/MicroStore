@@ -7,30 +7,23 @@ namespace MicroStore.Ordering.Application.StateMachines
 {
     public class OrderStateMachine : MassTransitStateMachine<OrderStateEntity>
     {
-        //will introduce new state pendingpayment
         public State Submitted { get; private set; }
         public State Approved { get; private set; } 
-        public State PendingPayment { get; set; }
-        public State Paid { get; private set; } 
-        public State Shipping { get; private set; }
+        public State Pending { get; set; }
+        public State Processing { get; private set; } 
         public State Completed { get; private set; }
-        public State Faulted { get; private set; }
         public State Cancelled { get; private set; }
 
         public Event<OrderSubmitedEvent> OrderSubmitted { get; private set; }
         public Event<OrderApprovedEvent> OrderApproved { get; private set; }
         public Event<OrderPaymentCreatedEvent> OrderPaymentCreated { get; set; }
-        public Event<OrderPaymentCompletedEvent> OrderPaid { get; private set; }
-        public Event<OrderShippmentCreatedEvent> OrderShippmentCreated { get; private set; }
-        public Event<OrderShippedEvent> OrderShipped { get; private set; }
+        public Event<OrderPaymentAcceptedEvent> OrderPaymentAccepted { get; private set; }
+        public Event<OrderCompletedEvent> OrderCompleted { get; private set; }
         public Event<OrderStockRejectedEvent> OrderStockRejected { get; private set; }
         public Event<OrderPaymentFaildEvent> OrderPaymentFaild { get; private set; }
         public Event<OrderShippmentFailedEvent> OrderShippmentFaild { get; private set; }
         public Event<OrderCancelledEvent> OrderCancelled { get; private set; }
-
-        public Event<CheckOrderRequest> CheckOrder { get; set; }
       
-
         public OrderStateMachine()
         {
             Event(() => OrderSubmitted, x =>
@@ -44,11 +37,9 @@ namespace MicroStore.Ordering.Application.StateMachines
 
             Event(() => OrderPaymentCreated, x => x.CorrelateById(c => c.Message.OrderId));
 
-            Event(() => OrderPaid, x => x.CorrelateById(c => c.Message.OrderId));
+            Event(() => OrderPaymentAccepted, x => x.CorrelateById(c => c.Message.OrderId));
 
-            Event(() => OrderShippmentCreated, x => x.CorrelateById(c => c.Message.OrderId));
-
-            Event(() => OrderShipped, x => x.CorrelateById(c => c.Message.OrderId));
+            Event(() => OrderCompleted, x => x.CorrelateById(c => c.Message.OrderId));
 
             Event(() => OrderStockRejected, x => x.CorrelateById(c => c.Message.OrderId));
 
@@ -58,20 +49,7 @@ namespace MicroStore.Ordering.Application.StateMachines
 
             Event(() => OrderCancelled, x => x.CorrelateById(c => c.Message.OrderId));
 
-            Event(() => CheckOrder, x =>
-            {
-                x.CorrelateById(c => c.Message.OrderId);
-                x.ReadOnly = true;
-                x.OnMissingInstance(behaviour =>
-                {
-                    return behaviour.ExecuteAsync((consumerContext) => consumerContext.RespondAsync(new OrderNotFound
-                    {
-                        OrderId = consumerContext.Message.OrderId
-                    }));
-
-                });
-            });
-
+           
             InstanceState(x => x.CurrentState);
 
             Initially(
@@ -103,10 +81,10 @@ namespace MicroStore.Ordering.Application.StateMachines
                     When(OrderStockRejected)
                         .Then((context) =>
                         {
-                            context.Saga.FaultDate = DateTime.UtcNow;
-                            context.Saga.FaultReason = context.Message.Details;
+                            context.Saga.CancellationDate = DateTime.UtcNow;
+                            context.Saga.CancellationReason = context.Message.Details;
                         })
-                        .TransitionTo(Faulted)
+                        .TransitionTo(Cancelled)
                 );
 
 
@@ -116,60 +94,45 @@ namespace MicroStore.Ordering.Application.StateMachines
                         {
                             context.Saga.PaymentId = context.Message.PaymentId;
                         })
-                        .TransitionTo(PendingPayment),
+                        .TransitionTo(Pending),
 
                     When(OrderPaymentFaild)
                         .Then((context) =>
                         {
-                            context.Saga.FaultDate = context.Message.FaultDate;
+                            context.Saga.CancellationDate = context.Message.FaultDate;
                         })
-                        .TransitionTo(Faulted)
+                        .TransitionTo(Cancelled)
                 );
 
-            During(PendingPayment,
-                    When(OrderPaid)
-                        .Then((context) =>
-                        {
-                            context.Saga.PaymentAcceptedDate = context.Message.PaymentAcceptedDate;
-                        })
-                        .TransitionTo(Paid)
-                        .Activity(x => x.OfType<OrderPaymentAcceptedActivity>()),
+            During(Pending,
+                    When(OrderPaymentAccepted)                       
+                        .TransitionTo(Processing),
 
                     When(OrderPaymentFaild)
                         .Then((context) =>
                         {
-                            context.Saga.FaultDate = context.Message.FaultDate;
-                            context.Saga.FaultReason = context.Message.FaultReason;
+                            context.Saga.CancellationDate = context.Message.FaultDate;
+                            context.Saga.CancellationReason = context.Message.FaultReason;
                         })
-                        .TransitionTo(Faulted)
+                        .TransitionTo(Cancelled)
                );
 
-            During(Paid,
-                    When(OrderShippmentCreated)
-                        .Then((context) =>
-                        {
-                            context.Saga.ShippmentId = context.Message.ShippmentId;
-                        })
-                        .TransitionTo(Shipping)
-                       
-                    );
-
-
-            During(Shipping,
-                   When(OrderShipped)
+            During(Processing,
+                    When(OrderCompleted)
                         .Then((context) =>
                         {
                             context.Saga.ShippedDate = context.Message.ShippedDate;
                         })
                         .TransitionTo(Completed),
 
+
                    When(OrderShippmentFaild)
                         .Then((context) =>
                         {
-                            context.Saga.FaultReason = context.Message.Reason;
-                            context.Saga.FaultDate = context.Message.FaultDate;
+                            context.Saga.CancellationReason = context.Message.Reason;
+                            context.Saga.CancellationDate = context.Message.FaultDate;
                         })
-                        .TransitionTo(Faulted)
+                        .TransitionTo(Cancelled)
                         .Activity(x => x.OfType<OrderShippmentFaildActivity>())
                     );
 
@@ -180,40 +143,9 @@ namespace MicroStore.Ordering.Application.StateMachines
                         {
                             context.Saga.CancellationDate = context.Message.CancellationDate;
                             context.Saga.CancellationReason = context.Message.Reason;
-                            context.Saga.CancelledBy = context.Message.CancelledBy;
                         }).TransitionTo(Cancelled)
                     );
 
-
-
-            DuringAny(
-                    When(CheckOrder)
-                        .Respond((context) => new OrderResponse
-                        {
-
-                            OrderId = context.Saga.CorrelationId,
-                            OrderNumber = context.Saga.OrderNumber,
-                            BillingAddressId = context.Saga.BillingAddressId,
-                            ShippingAddressId = context.Saga.ShippingAddressId,
-                            PaymentId = context.Saga.PaymentId,
-                            ShippmentId = context.Saga.ShippmentId,
-                            UserId = context.Saga.UserId,
-                            SubTotal = context.Saga.SubTotal,
-                            Total = context.Saga.Total,
-                            OrderItems = context.Saga.OrderItems.MapOrderItemsToModel(),
-                            Status = context.Saga.CurrentState,
-                            SubmissionDate = context.Saga.SubmissionDate,
-                            PaymentAcceptedDate = context.Saga.PaymentAcceptedDate,
-                            ConfirmationDate = context.Saga.ConfirmationDate,
-                            ShippedDate = context.Saga.ShippedDate,
-                            CancellationDate = context.Saga.CancellationDate,
-                            CancelledBy = context.Saga.CancelledBy,
-                            CancellationReason = context.Saga.CancellationReason,
-                            FaultDate = context.Saga.FaultDate,
-                            FaultReason = context.Saga.FaultReason,
-
-                        })
-                    );
         }
 
     }

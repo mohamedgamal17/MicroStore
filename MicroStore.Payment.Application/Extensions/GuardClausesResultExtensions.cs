@@ -10,7 +10,7 @@ namespace MicroStore.Payment.Application.Extensions
         {
             if (result.IsFailure)
             {
-                throw new InvalidOperationException(result.Error);
+                throw new InvalidOperationException(result.Error.ToString());
             }
 
             return result;

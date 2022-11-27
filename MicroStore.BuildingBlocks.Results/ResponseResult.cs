@@ -10,26 +10,7 @@
             Code = code;
         }
 
-        public ResponseResult Success(string code)
-        {
-            return new ResponseResult(true, code, string.Empty);
-        }
-
-
-        public ResponseResult Failure(string code, object error)
-        {
-            return new ResponseResult(false, code, error);
-        }
-
-        public ResponseResult<T> Success<T>(T value , string code)
-        {
-            return new ResponseResult<T>(true,value, code,string.Empty);
-        }
-
-        public ResponseResult<T> Failure<T> (string code, object error)
-        {
-            return new ResponseResult<T>(false, default(T), code, error);
-        }
+       
 
     }
 

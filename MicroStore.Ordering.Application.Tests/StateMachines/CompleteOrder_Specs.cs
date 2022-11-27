@@ -5,8 +5,6 @@ using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
 using MicroStore.Payment.IntegrationEvents;
-using MicroStore.Shipping.IntegrationEvent;
-
 namespace MicroStore.Ordering.Application.Tests.StateMachines
 {
     public class CompleteOrder_Specs : StateMachineTestFixture<OrderStateMachine, OrderStateEntity>
@@ -66,12 +64,12 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                 PaymentId = _paymentId
             });
 
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.PendingPayment, TestHarness.TestTimeout);
+            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Pending, TestHarness.TestTimeout);
 
             instance.Should().NotBeNull();
 
 
-            await TestHarness.Bus.Publish(new OrderPaymentCompletedEvent
+            await TestHarness.Bus.Publish(new OrderPaymentAcceptedEvent
             {
                 OrderId = _fakeOrderId,
                 OrderNubmer = _orderNumber,
@@ -79,26 +77,12 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                 PaymentAcceptedDate = DateTime.UtcNow
             });
 
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Paid, TestHarness.TestTimeout);
+            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Processing, TestHarness.TestTimeout);
 
             instance.Should().NotBeNull();
 
 
-
-            await TestHarness.Bus.Publish(new OrderShippmentCreatedEvent
-            {
-                OrderId = _fakeOrderId,
-                ShippmentId = _shippmentId,
-                OrderNumber = _orderNumber
-
-            });
-
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Shipping, TestHarness.TestTimeout);
-
-            instance.Should().NotBeNull();
-
-
-            await TestHarness.Bus.Publish(new OrderShippedEvent
+            await TestHarness.Bus.Publish(new OrderCompletedEvent
             {
                 OrderId = _fakeOrderId,
                 ShippmentId = _shippmentId,
@@ -112,9 +96,8 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
 
             Assert.That(await TestHarness.Published.Any<AllocateOrderStockIntegrationEvent>());
 
-            Assert.That(await TestHarness.Published.Any<CreatePaymentIntegrationEvent>());
+            Assert.That(await TestHarness.Published.Any<CreatePaymentRequestIntegrationEvent>());
 
-            Assert.That(await TestHarness.Published.Any<CreateShippmentIntegrationEvent>());
         }
 
 

@@ -24,36 +24,48 @@ namespace MicroStore.Payment.Application.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("MicroStore.Payment.Application.Domain.PaymentRequest", b =>
+            modelBuilder.Entity("MicroStore.Payment.Domain.Shared.Domain.PaymentRequest", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime?>("CapturedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
 
                     b.Property<string>("CustomerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(265)
+                        .HasColumnType("nvarchar(265)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<DateTime?>("FaultAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FaultReason")
-                        .HasMaxLength(265)
-                        .HasColumnType("nvarchar(265)");
-
-                    b.Property<DateTime?>("OpenedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("OrderNumber")
                         .IsRequired()
@@ -63,14 +75,31 @@ namespace MicroStore.Payment.Application.Migrations
                     b.Property<string>("PaymentGateway")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("RefundedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ShippingCost")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("State")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TaxCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalCost")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TransctionId")
                         .HasMaxLength(265)
                         .HasColumnType("nvarchar(265)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
@@ -81,6 +110,63 @@ namespace MicroStore.Payment.Application.Migrations
                     b.HasIndex("TransctionId");
 
                     b.ToTable("PaymentRequests");
+                });
+
+            modelBuilder.Entity("MicroStore.Payment.Domain.Shared.Domain.PaymentRequestProduct", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(800)
+                        .HasColumnType("nvarchar(800)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid?>("PaymentRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sku")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("PaymentRequestId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("Sku");
+
+                    b.ToTable("PaymentRequestProduct");
+                });
+
+            modelBuilder.Entity("MicroStore.Payment.Domain.Shared.Domain.PaymentRequestProduct", b =>
+                {
+                    b.HasOne("MicroStore.Payment.Domain.Shared.Domain.PaymentRequest", null)
+                        .WithMany("Items")
+                        .HasForeignKey("PaymentRequestId");
+                });
+
+            modelBuilder.Entity("MicroStore.Payment.Domain.Shared.Domain.PaymentRequest", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

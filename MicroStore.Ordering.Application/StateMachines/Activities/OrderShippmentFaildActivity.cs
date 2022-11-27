@@ -13,13 +13,12 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
 
         public Task Execute(BehaviorContext<OrderStateEntity, OrderShippmentFailedEvent> context, IBehavior<OrderStateEntity, OrderShippmentFailedEvent> next)
         {
-            return context.Publish(new VoidPaymentIntegrationEvent
+            return context.Publish(new RefundPaymentIntegrationEvent
             {
-                OrderId = context.Saga.CorrelationId,
+                OrderId = context.Saga.CorrelationId.ToString(),
                 OrderNumber = context.Saga.OrderNumber,
                 CustomerId = context.Saga.UserId,
                 PaymentId = context.Saga.PaymentId,
-                FaultDate = context.Saga.FaultDate!.Value
             });
         }
 

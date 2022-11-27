@@ -50,7 +50,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                     }
                 );
 
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Faulted, TestHarness.TestTimeout);
+            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Cancelled, TestHarness.TestTimeout);
 
             instance.Should().NotBeNull();
 
@@ -121,7 +121,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
             });
 
 
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Faulted, TestHarness.TestTimeout);
+            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Cancelled, TestHarness.TestTimeout);
 
             instance.Should().NotBeNull();
 
@@ -129,110 +129,110 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
     }
 
 
-    public class When_order_shippment_is_failed : StateMachineTestFixture<OrderStateMachine, OrderStateEntity>
-    {
-        private readonly FakeOrderData _fakeOrderData = new FakeOrderData();
+    //public class When_order_shippment_is_failed : StateMachineTestFixture<OrderStateMachine, OrderStateEntity>
+    //{
+    //    private readonly FakeOrderData _fakeOrderData = new FakeOrderData();
 
 
-        [Test]
-        public async Task Should_order_fail_when_shippment_is_failed()
-        {
-            await TestHarness.Bus.Publish(
-                  new OrderSubmitedEvent
-                  {
-                      OrderId = _fakeOrderData.OrderId,
-                      OrderNumber = _fakeOrderData.OrderNumber,
+    //    [Test]
+    //    public async Task Should_order_fail_when_shippment_is_failed()
+    //    {
+    //        await TestHarness.Bus.Publish(
+    //              new OrderSubmitedEvent
+    //              {
+    //                  OrderId = _fakeOrderData.OrderId,
+    //                  OrderNumber = _fakeOrderData.OrderNumber,
 
-                      BillingAddressId = Guid.NewGuid(),
-                      ShippingAddressId = Guid.NewGuid(),
-                      UserId = _fakeOrderData.UserId,
-                      SubmissionDate = DateTime.UtcNow,
-                      OrderItems = new List<OrderItemModel>
-                      {
-                            new OrderItemModel
-                            {
-                                ItemName = "FakeName",
-                                ProductId = Guid.NewGuid(),
-                                Quantity = 5,
-                                UnitPrice = 50
-                            }
-                      }
-                  }
-              );
+    //                  BillingAddressId = Guid.NewGuid(),
+    //                  ShippingAddressId = Guid.NewGuid(),
+    //                  UserId = _fakeOrderData.UserId,
+    //                  SubmissionDate = DateTime.UtcNow,
+    //                  OrderItems = new List<OrderItemModel>
+    //                  {
+    //                        new OrderItemModel
+    //                        {
+    //                            ItemName = "FakeName",
+    //                            ProductId = Guid.NewGuid(),
+    //                            Quantity = 5,
+    //                            UnitPrice = 50
+    //                        }
+    //                  }
+    //              }
+    //          );
 
-            var instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Submitted, TestHarness.TestTimeout);
+    //        var instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Submitted, TestHarness.TestTimeout);
 
-            instance.Should().NotBeNull();
-
-
-            await TestHarness.Bus.Publish(
-                 new OrderApprovedEvent
-                 {
-                     OrderId = _fakeOrderData.OrderId,
-                     OrderNumber = _fakeOrderData.OrderNumber
-                 }
-            );
-
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Approved, TestHarness.TestTimeout);
-
-            instance.Should().NotBeNull();
-
-            await TestHarness.Bus.Publish(new OrderPaymentCreatedEvent
-            {
-                OrderId = _fakeOrderData.OrderId,
-                CustomerId = _fakeOrderData.UserId,
-                OrderNumber = _fakeOrderData.OrderNumber,
-                PaymentId = _fakeOrderData.PaymentId
-            });
-
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.PendingPayment, TestHarness.TestTimeout);
-
-            instance.Should().NotBeNull();
-
-            await TestHarness.Bus.Publish(new OrderPaymentCompletedEvent
-            {
-                OrderId = _fakeOrderData.OrderId,
-                OrderNubmer = _fakeOrderData.OrderNumber,
-                TransactionId = _fakeOrderData.PaymentId,
-                PaymentAcceptedDate = DateTime.UtcNow
-            });
-
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Paid, TestHarness.TestTimeout);
-
-            instance.Should().NotBeNull();
+    //        instance.Should().NotBeNull();
 
 
+    //        await TestHarness.Bus.Publish(
+    //             new OrderApprovedEvent
+    //             {
+    //                 OrderId = _fakeOrderData.OrderId,
+    //                 OrderNumber = _fakeOrderData.OrderNumber
+    //             }
+    //        );
 
-            await TestHarness.Bus.Publish(new OrderShippmentCreatedEvent
-            {
-                OrderId = _fakeOrderData.OrderId,
-                ShippmentId = _fakeOrderData.ShippmentId,
-                OrderNumber = _fakeOrderData.OrderNumber
+    //        instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Approved, TestHarness.TestTimeout);
 
-            });
+    //        instance.Should().NotBeNull();
 
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Shipping, TestHarness.TestTimeout);
+    //        await TestHarness.Bus.Publish(new OrderPaymentCreatedEvent
+    //        {
+    //            OrderId = _fakeOrderData.OrderId,
+    //            CustomerId = _fakeOrderData.UserId,
+    //            OrderNumber = _fakeOrderData.OrderNumber,
+    //            PaymentId = _fakeOrderData.PaymentId
+    //        });
 
-            instance.Should().NotBeNull();
+    //        instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Pending, TestHarness.TestTimeout);
+
+    //        instance.Should().NotBeNull();
+
+    //        await TestHarness.Bus.Publish(new OrderPaymentAcceptedEvent
+    //        {
+    //            OrderId = _fakeOrderData.OrderId,
+    //            OrderNubmer = _fakeOrderData.OrderNumber,
+    //            TransactionId = _fakeOrderData.PaymentId,
+    //            PaymentAcceptedDate = DateTime.UtcNow
+    //        });
+
+    //        instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Processing, TestHarness.TestTimeout);
+
+    //        instance.Should().NotBeNull();
 
 
-            await TestHarness.Bus.Publish(new OrderShippmentFailedEvent
-            {
-                OrderId = _fakeOrderData.OrderId,
-                ShippmentId = _fakeOrderData.ShippmentId,
-                OrderNumber = _fakeOrderData.OrderNumber,
-                FaultDate = DateTime.UtcNow,
-                Reason = "FakeReason"
-            });
 
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Faulted, TestHarness.TestTimeout);
+    //        await TestHarness.Bus.Publish(new OrderShippmentCreatedEvent
+    //        {
+    //            OrderId = _fakeOrderData.OrderId,
+    //            ShippmentId = _fakeOrderData.ShippmentId,
+    //            OrderNumber = _fakeOrderData.OrderNumber
 
-            instance.Should().NotBeNull();
+    //        });
+
+    //        instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Shipping, TestHarness.TestTimeout);
+
+    //        instance.Should().NotBeNull();
 
 
-            Assert.That(await TestHarness.Published.Any<VoidPaymentIntegrationEvent>());
-        }
-    }
+    //        await TestHarness.Bus.Publish(new OrderShippmentFailedEvent
+    //        {
+    //            OrderId = _fakeOrderData.OrderId,
+    //            ShippmentId = _fakeOrderData.ShippmentId,
+    //            OrderNumber = _fakeOrderData.OrderNumber,
+    //            FaultDate = DateTime.UtcNow,
+    //            Reason = "FakeReason"
+    //        });
+
+    //        instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Faulted, TestHarness.TestTimeout);
+
+    //        instance.Should().NotBeNull();
+
+
+    //        Assert.That(await TestHarness.Published.Any<RefundPaymentIntegrationEvent>());
+    //    }
+    //}
 
 
     internal  class FakeOrderData

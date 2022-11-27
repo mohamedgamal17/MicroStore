@@ -1,36 +1,54 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.Payment.Application.Commands.Requests;
-using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Application.Dtos;
+using MicroStore.Payment.Domain.Shared.Domain;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Payment.Application.Commands
 {
-    public class CreatePaymentRequestCommandHandler : CommandHandler<CreatePaymentRequestCommand, PaymentCreatedDto>
+    public class CreatePaymentRequestCommandHandler : CommandHandler<CreatePaymentRequestCommand, PaymentRequestCreatedDto>
     {
 
-        private readonly IRepository<PaymentRequest> _paymentRequestRepository;
+        private readonly IRepository<PaymentRequest> _paymentRepository;
 
-        public CreatePaymentRequestCommandHandler(IRepository<PaymentRequest> paymentRequestRepository)
+        public CreatePaymentRequestCommandHandler(IRepository<PaymentRequest> paymentRepository)
         {
-            _paymentRequestRepository = paymentRequestRepository;
+            _paymentRepository = paymentRepository;
         }
 
-        public override async Task<PaymentCreatedDto> Handle(CreatePaymentRequestCommand request, CancellationToken cancellationToken)
+        public override async Task<PaymentRequestCreatedDto> Handle(CreatePaymentRequestCommand request, CancellationToken cancellationToken)
         {
-            PaymentRequest paymentRequest = new PaymentRequest(request.OrderId, request.OrderNumber, request.CustomerId, request.Amount);
-
-            await _paymentRequestRepository.InsertAsync(paymentRequest);
-
-            return new PaymentCreatedDto
+            PaymentRequest paymentRequest = new PaymentRequest
             {
-                PaymentId = paymentRequest.Id,
-                OrderId = paymentRequest.OrderId,
-                OrderNumber = paymentRequest.OrderNumber,
-                CustomerId = paymentRequest.CustomerId,
-                Amount = paymentRequest.Amount,
-                CreatedAt = paymentRequest.CreatedAt
+                OrderId = request.OrderId,
+                OrderNumber = request.OrderNubmer,
+                CustomerId = request.UserId,
+                ShippingCost = request.ShippingCost,
+                TaxCost = request.TaxCost,
+                SubTotal = request.SubtTotal,
+                TotalCost = request.TotalCost,
+                Items = MapOrderItems(request.Items)
             };
+
+            await _paymentRepository.InsertAsync(paymentRequest);
+
+
+            return ObjectMapper.Map<PaymentRequest, PaymentRequestCreatedDto>(paymentRequest);
+        }
+
+
+
+        private List<PaymentRequestProduct> MapOrderItems(List<OrderItemModel> items)
+        {
+            return items.Select(x => new PaymentRequestProduct
+            {
+                ProductId = x.ProductId,
+                Sku = x.Sku,
+                Name = x.Name,
+                Image = x.Image,
+                Quantity = x.Quantity,
+                UnitPrice = x.UnitPrice
+            }).ToList();
         }
     }
 }

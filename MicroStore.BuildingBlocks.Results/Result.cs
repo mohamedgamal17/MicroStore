@@ -50,6 +50,27 @@ namespace MicroStore.BuildingBlocks.Results
         {
             return new Result<TValue>(false, default(TValue), error);
         }
+
+        public static ResponseResult Success(string code)
+        {
+            return new ResponseResult(true, code, string.Empty);
+        }
+
+
+        public static ResponseResult Failure(object error, string code)
+        {
+            return new ResponseResult(false, code, error);
+        }
+
+        public static ResponseResult<T> Success<T>(T value, string code)
+        {
+            return new ResponseResult<T>(true, value, code, string.Empty);
+        }
+
+        public static ResponseResult<T> Failure<T>(object error, string code)
+        {
+            return new ResponseResult<T>(false, default(T), code, error);
+        }
     }
 
 
