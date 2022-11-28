@@ -23,7 +23,7 @@ namespace MicroStore.Payment.Api.Host
 
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureAuthentication(context.Services);
+            ConfigureAuthentication(context.Services, configuration);
             ConfigureSwagger(context.Services);
 
             Configure<AbpExceptionHandlingOptions>(options =>
@@ -39,18 +39,19 @@ namespace MicroStore.Payment.Api.Host
 
         }
 
-        private void ConfigureAuthentication(IServiceCollection services)
+        private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
 
 
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
-                {
-                    opt.Authority = "https://localhost:5001/";
-                    opt.Audience = "CatalogApi";
-
-                });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
+                options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -97,6 +98,8 @@ namespace MicroStore.Payment.Api.Host
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog Api", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
+
+
             });
         }
 

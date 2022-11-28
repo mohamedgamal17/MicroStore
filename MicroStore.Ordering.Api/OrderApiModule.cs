@@ -50,14 +50,17 @@ namespace MicroStore.Ordering.Api
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
 
-            
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
-                {
-                    opt.Authority = configuration.GetValue<string>("Identity:Authority");
-                    opt.Audience = configuration.GetValue<string>("Identity:Audience");
-                    opt.MapInboundClaims = true;
-                });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
+                options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+            });
         }
 
 

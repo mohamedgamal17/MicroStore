@@ -27,7 +27,7 @@ namespace MicroStore.Catalog.Api
 
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureAuthentication(context.Services);
+            ConfigureAuthentication(context.Services,configuration);
             ConfigureSwagger(context.Services);
 
             Configure<AbpExceptionHandlingOptions>(options =>
@@ -43,66 +43,69 @@ namespace MicroStore.Catalog.Api
         }
 
 
-        private void ConfigureAuthentication(IServiceCollection services)
+        private void ConfigureAuthentication(IServiceCollection services , IConfiguration configuration)
         {
 
 
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
-                {
-                    opt.Authority = "https://localhost:5001/";
-                    opt.Audience = "CatalogApi";
-
-                });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var app = context.GetApplicationBuilder();
-            var env = context.GetEnvironment();
-
-            if (env.IsDevelopment())
+            services.AddAuthentication(options =>
             {
-
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");
-                });
-
-
-                app.UseHsts();
-
-            }
-
-
-            app.UseAbpRequestLocalization();
-
-            app.UseCorrelationId();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseAbpSerilogEnrichers();
-            app.UseConfiguredEndpoints();
-
-            //app.MapControllers();
-        }
-
-
-
-
-
-        private void ConfigureSwagger(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSwaggerGen((options) =>
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog Api", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
+                options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
+                options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
             });
+
         }
 
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        if (env.IsDevelopment())
+        {
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");
+            });
+
+
+            app.UseHsts();
+
+        }
+
+
+        app.UseAbpRequestLocalization();
+
+        app.UseCorrelationId();
+        app.UseStaticFiles();
+        app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseAbpSerilogEnrichers();
+        app.UseConfiguredEndpoints();
+
+        //app.MapControllers();
     }
+
+
+
+
+
+    private void ConfigureSwagger(IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddSwaggerGen((options) =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog Api", Version = "v1" });
+            options.DocInclusionPredicate((docName, description) => true);
+            options.CustomSchemaIds(type => type.FullName);
+        });
+    }
+
+}
 }

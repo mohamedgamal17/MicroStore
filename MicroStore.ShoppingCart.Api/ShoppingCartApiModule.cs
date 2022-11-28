@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using MicroStore.ShoppingCart.Api.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
@@ -37,26 +41,51 @@ namespace MicroStore.ShoppingCart.Api
 
             ConfigureAuthentication(context.Services, configuration);
 
-            ConfigureSwagger(context.Services);
+            ConfigureSwagger(context.Services,configuration);
         }
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
-                    {
-                        opt.Authority = "https://localhost:5001";
-                        opt.Audience = "ShoppingCartApi";
-                    });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
+                options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+            });
         }
 
-        private void ConfigureSwagger(IServiceCollection services)
+        private void ConfigureSwagger(IServiceCollection services , IConfiguration configuration)
         {
             services.AddSwaggerGen((options) =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket Api", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
+
+
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        ClientCredentials = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")),
+                            TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")),
+                            
+                        },
+                        
+                    }
+                    
+
+                    
+                });
             });
         }
 
@@ -66,6 +95,8 @@ namespace MicroStore.ShoppingCart.Api
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            var config = context.GetConfiguration();
+
             if (env.IsDevelopment())
             {
 
@@ -73,6 +104,12 @@ namespace MicroStore.ShoppingCart.Api
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Basket API");
+                    options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
+                    options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
+                    options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
+                    options.OAuthScopeSeparator(",");
+                    options.OAuthScopes("basket.fullaccess");
+
                 });
 
 
@@ -80,7 +117,7 @@ namespace MicroStore.ShoppingCart.Api
 
             }
 
-
+  
             app.UseAbpRequestLocalization();
 
             app.UseCorrelationId();
@@ -91,5 +128,7 @@ namespace MicroStore.ShoppingCart.Api
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
         }
+
+       
     }
 }

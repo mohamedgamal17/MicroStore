@@ -12,6 +12,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
     [RemoteService(Name = "Basket")]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BasketController : ControllerBase
     {
         private readonly IDistributedCache<Basket> _distributedCache;
