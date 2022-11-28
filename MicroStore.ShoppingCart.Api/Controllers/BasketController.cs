@@ -1,122 +1,102 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.ShoppingCart.Api.Infrastructure;
 using MicroStore.ShoppingCart.Api.Models;
-using MicroStore.ShoppingCart.Application.Abstraction.Commands;
-using MicroStore.ShoppingCart.Application.Abstraction.Dtos;
-using MicroStore.ShoppingCart.Application.Abstraction.Queries;
-using System.Net;
+using Volo.Abp;
+using Volo.Abp.Caching;
+using Volo.Abp.ObjectMapping;
 
 namespace MicroStore.ShoppingCart.Api.Controllers
 {
-    [Authorize]
+
+    [RemoteService(Name = "Basket")]
     [Route("api/[controller]")]
     [ApiController]
     public class BasketController : ControllerBase
     {
-        private readonly ILocalMessageBus _localMessageBus;
+        private readonly IDistributedCache<Basket> _distributedCache;
 
-        public BasketController(ILocalMessageBus localMessageBus)
+        private readonly IBasketRepository _basketRepository;
+
+        private readonly IObjectMapper _objectMapper;
+
+        public BasketController(IDistributedCache<Basket> distributedCache, IObjectMapper objectMapper, IBasketRepository basketRepository)
         {
+            _distributedCache = distributedCache;
+            _objectMapper = objectMapper;
+            _basketRepository = basketRepository;
+        }
 
-            _localMessageBus = localMessageBus;
+        [HttpGet("{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
+        public async Task<IActionResult> GetUserBasket(string userId)
+        {
+            var basket = await _basketRepository.GetAsync(userId);
+
+            return Ok(_objectMapper.Map<Basket, BasketDto>(basket));
         }
 
 
-        [Route("")]
-        [HttpGet]
-
-        public async Task<IActionResult> Get()
+        [HttpPut("update")]
+        [ProducesResponseType(StatusCodes.Status202Accepted,Type=  typeof(BasketDto))]
+        public async Task<IActionResult> Update(Basket basket)
         {
+            basket =  await _basketRepository.UpdateAsync(basket);
 
-            GetBasketQuery query = new GetBasketQuery();
-
-
-            var result = await _localMessageBus.Send(query);
-
-            return Ok(result);
-
+            return Accepted(_objectMapper.Map<Basket, BasketDto>(basket));
         }
 
-        [Route("")]
-        [HttpPost]
-        public async Task<BasketDto> CreateBasket()
+        [HttpPost("add-item")]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(BasketDto))]
+        public async Task<IActionResult> AddProduct(AddProductDto model)
         {
-            CreateBasketCommand createBasketCommand = new CreateBasketCommand();
+            var basket = await _basketRepository.GetAsync(model.UserId);
 
-            var result = await _localMessageBus.Send(createBasketCommand);
+            basket.AddProduct(model.ProductId, model.Quantity);
 
-            return result;
+            basket =  await _basketRepository.UpdateAsync(basket);
+
+            return Ok(_objectMapper.Map<Basket, BasketDto>(basket));
         }
 
-
-        [Route("{basketId}/AddBasketItem")]
-        [HttpPost]
-        public async Task<IActionResult> Post(Guid basketId,[FromBody] CreateBasketItemModel model)
+        [HttpDelete("remove-item")]
+        [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(BasketDto))]
+        public async Task<IActionResult> RemoveProduct(RemoveProductDto model)
         {
+            var basket = await _basketRepository.GetAsync(model.UserId);
 
-            AddBasketItemCommand command = new AddBasketItemCommand
+            var result =  basket.RemoveProduct(model.ProductId);
+
+            if (result.IsFailure)
             {
-                BasketId = basketId,
-                ProductId = model.ProductId,
-                Quantity = model.Quantity
-            };
+                return NotFound(result.Error);
+            }
 
-            var result = await _localMessageBus.Send(command);
+            basket = await _basketRepository.UpdateAsync(basket);
 
-            return Ok(result);
+            return Accepted(_objectMapper.Map<Basket, BasketDto>(basket));
         }
 
 
-        [Route("{basketId}/UpdateBasketItem/{basketItemId}")]
-        [HttpPut]
-        public async Task<IActionResult> Put(Guid basketId,Guid basketItemId, [FromBody] UpdateBasketItemModel model)
+        [HttpPut("migrate")]
+        [ProducesResponseType(StatusCodes.Status202Accepted,Type =  typeof(BasketDto))]
+        public async Task<IActionResult> Migrate(MigrateDto model)
         {
+            var basketFrom = await _basketRepository.GetAsync(model.FromUserId);
 
-            UpdateBasketItemQuantityCommand command = new UpdateBasketItemQuantityCommand
-            {
-                BasketId = basketId,
-                BasketItemId = basketItemId,
-                Quantity = model.Quantity
-            };
+            var basketTo = await _basketRepository.GetAsync(model.ToUserId);
 
-            var result = await _localMessageBus.Send(command);
+            basketTo.Migrate(basketFrom);
 
-            return Accepted(result);
+            await _basketRepository.RemoveAsync(model.FromUserId);
+
+            await _basketRepository.UpdateAsync(basketTo);
+
+            return Accepted(_objectMapper.Map<Basket, BasketDto>(basketTo));
+
         }
 
 
-        [Route("RemoveBasketItem/{basketItemId}")]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid basketItemId)
-        {
-            RemoveBasketItemCommand command = new RemoveBasketItemCommand
-            {
-                BasketItemId = basketItemId
-            };
-
-            await _localMessageBus.Send(command);
-
-            return StatusCode((int)HttpStatusCode.NoContent);
-        }
-
-        [Route("Checkout")]
-        [HttpPost]
-        public async Task<IActionResult> Checkout(CheckoutModel model)
-        {
-
-
-            CheckoutCommand command = new CheckoutCommand
-            {
-                ShippingAddressId = model.ShippingAddressId,
-                BillingAddressId = model.BillingAddressId,
-
-            };
-
-            var result = await _localMessageBus.Send(command);
-
-            return Accepted(result);
-        }
 
     }
 }
