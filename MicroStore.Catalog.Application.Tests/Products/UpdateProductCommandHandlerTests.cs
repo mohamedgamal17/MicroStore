@@ -1,9 +1,10 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
-using MicroStore.Catalog.Application.Abstractions.Products.Models;
+using MicroStore.Catalog.Application.Tests.Utilites;
 using MicroStore.Catalog.Domain.Entities;
-using Moq;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.Products
@@ -12,32 +13,25 @@ namespace MicroStore.Catalog.Application.Tests.Products
     {
 
         [Test]
-        public async Task ShouldUpdateProduct()
+        public async Task Should_update_product()
         {
-
-            var fakeCategory = await CreateFakeCategory();
             var fakeProduct = await CreateFakeProduct();
+
             var command = new UpdateProductCommand
             {
                 ProductId = fakeProduct.Id,
-                Sku = "NewSku",
-                Name = "NewName",
-                ShortDescription = "NewShortDescription",
-                LongDescription = "NewLongDescription",
+                Sku = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString(),
+                ShortDescription = Guid.NewGuid().ToString(),
+                LongDescription = Guid.NewGuid().ToString(),
                 Price = 120,
                 OldPrice = 150,
-
-                ProductCategories = new List<ProductCategoryModel>
-                {
-                    new ProductCategoryModel{CategoryId = fakeCategory.Id, IsFeatured = false}
-                }
-
             };
 
 
             await Send(command);
 
-            var product = await GetProductById(fakeProduct.Id);
+            var product = await Find<Product>(x=> x.Id == fakeProduct.Id);
 
 
             product.Sku.Should().Be(command.Sku);
@@ -46,24 +40,66 @@ namespace MicroStore.Catalog.Application.Tests.Products
             product.LongDescription.Should().Be(command.LongDescription);
             product.Price.Should().Be(command.Price);
             product.OldPrice.Should().Be(command.OldPrice);
-            product.ProductCategories.First().CategoryId.Should().Be(fakeCategory.Id);
-            product.ProductCategories.First().IsFeaturedProduct.Should().BeFalse();
+        }
 
+        [Test]
+        public async Task Should_update_product_thumbnail_while_image_model_is_not_null()
+        {
+            var fakeProduct = await CreateFakeProduct();
 
+            var command = new UpdateProductCommand
+            {
+                ProductId = fakeProduct.Id,
+                Sku = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString(),
+                ShortDescription = Guid.NewGuid().ToString(),
+                LongDescription = Guid.NewGuid().ToString(),
+                Price = 120,
+                OldPrice = 150,
 
+                ImageModel =  new ImageModel
+                {
+                    FileName = $"{Guid.NewGuid()}.png",
+                    Type = "png",
+                    Data = ImageGenerator.GetBitmapData()
+                },
+            };
+
+            await Send(command);
+
+            var product = await Find<Product>(x => x.Id == fakeProduct.Id);
+
+            product.Thumbnail.Should().EndWith(command.ImageModel.FileName);
 
         }
 
 
+        [Test]
+        public async Task Should_throw_entity_not_found_exception_while_product_is_not_exist()
+        {
+            var command = new UpdateProductCommand
+            {
+                ProductId = Guid.NewGuid(),
+                Sku = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString(),
+                ShortDescription = Guid.NewGuid().ToString(),
+                LongDescription = Guid.NewGuid().ToString(),
+                Price = 120,
+                OldPrice = 150,
+            };
 
-     
+            Func<Task> func = ()=> Send(command);
+
+            await func.Should().ThrowExactlyAsync<EntityNotFoundException>();
+        }
+
 
 
         private  Task<Product> CreateFakeProduct()
         {
             return WithUnitOfWork(async (sp) =>
             {
-                var fakeProduct = new Product("FakeSku", "FakeName", 50);
+                var fakeProduct = new Product("FakeSku", "FakeName", 50, Guid.NewGuid().ToString());
                 var repository = sp.GetRequiredService<IRepository<Product>>();
                 await repository.InsertAsync(fakeProduct);
                 return fakeProduct;
@@ -81,24 +117,5 @@ namespace MicroStore.Catalog.Application.Tests.Products
             });
         }
 
-        private Task<int> GetProductsCount()
-        {
-            return WithUnitOfWork(sp =>
-            {
-                var repository = sp.GetRequiredService<IRepository<Product>>();
-
-                return repository.CountAsync();
-            });
-        }
-
-        private Task<Product> GetProductById(Guid id)
-        {
-            return WithUnitOfWork(sp =>
-            {
-                var repository = sp.GetRequiredService<IRepository<Product>>();
-
-                return repository.SingleAsync(x => x.Id == id);
-            });
-        }
     }
 }

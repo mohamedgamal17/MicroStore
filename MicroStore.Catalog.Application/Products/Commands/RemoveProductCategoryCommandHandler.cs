@@ -1,12 +1,9 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
-using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp;
-
 namespace MicroStore.Catalog.Application.Products.Commands
 {
     public class RemoveProductCategoryCommandHandler : CommandHandler<RemoveProductCategoryCommand, ProductDto>
@@ -28,11 +25,9 @@ namespace MicroStore.Catalog.Application.Products.Commands
                 throw new EntityNotFoundException(typeof(Product), request.ProductId);
             }
 
-            Result result = product.CanRemoveProductCategory(request.CategoryId);
-
-            if (result.IsFailure)
+            if (!product.ProductCategories.Any(x=> x.CategoryId == request.CategoryId))
             {
-                throw new UserFriendlyException(result.ToString());
+                throw new EntityNotFoundException(typeof(ProductCategory), request.CategoryId);
             }
 
             product.RemoveProductCategory(request.CategoryId);

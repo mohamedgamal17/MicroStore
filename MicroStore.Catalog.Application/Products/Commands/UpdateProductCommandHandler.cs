@@ -1,10 +1,10 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Catalog.Application.Products.Commands
 {
     public class UpdateProductCommandHandler : CommandHandler<UpdateProductCommand, ProductDto>
@@ -12,10 +12,12 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
         private readonly IRepository<Product> _productRepository;
 
-        public UpdateProductCommandHandler(IRepository<Product> productRepository)
+        private readonly IImageService _imageService;
+
+        public UpdateProductCommandHandler(IRepository<Product> productRepository, IImageService imageService)
         {
             _productRepository = productRepository;
-
+            _imageService = imageService;
         }
 
         public override async Task<ProductDto> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
@@ -28,22 +30,24 @@ namespace MicroStore.Catalog.Application.Products.Commands
                 throw new EntityNotFoundException(typeof(Product), request.ProductId);
             }
 
-            product.AdjustProductSku(request.Sku);
+            product.Sku = request.Sku;
 
-            product.AdjustProductName(request.Name);
+            product.Name = request.Name;
 
-            product.AdjustProductPrice(request.Price);
+            product.Price = request.Price;
 
-            product.SetProductShortDescription(request.ShortDescription);
+            product.ShortDescription = request.ShortDescription;
 
-            product.SetProductLongDescription(request.LongDescription);
+            product.LongDescription = request.LongDescription;
 
-            product.SetProductOldPrice(request.OldPrice);
+            product.OldPrice = request.OldPrice;
 
-            request.ProductCategories.ForEach((productCategory) =>
+            if(request.ImageModel != null)
             {
-                product.AddOrUpdateProductCategory(productCategory.CategoryId, productCategory.IsFeatured);
-            });
+                var imageResult = await _imageService.SaveAsync(request.ImageModel,cancellationToken);
+
+                product.Thumbnail = imageResult.ImageLink;
+            }
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 

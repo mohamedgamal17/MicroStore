@@ -11,15 +11,11 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Name)
-                .IsRequired()
-                .HasMaxLength(250);
+            builder.Property(x => x.Name).IsRequired().HasMaxLength(250);
 
-            builder.Property(x => x.Description)
-                .HasMaxLength(600);
+            builder.Property(x => x.Description).HasMaxLength(600);
 
-            builder.HasIndex(x => x.Name)
-                .IsUnique();
+            builder.HasIndex(x => x.Name).IsUnique();
 
         }
     }

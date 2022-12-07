@@ -1,30 +1,23 @@
-﻿
-
-
-using Volo.Abp.Domain.Entities;
-
-
+﻿using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Domain.Entities
 {
     public class ProductImage : Entity<Guid>
     {
-        public Guid ProductId { get; set; }
         public string ImagePath { get; set; }
-        public bool IsDefault { get; set; }
+        public int DisplayOrder { get; set; }
 
 
-        public ProductImage(Guid productId, string imagePath, bool isDefault)
-           : this(Guid.NewGuid(), productId, imagePath, isDefault)
+        private ProductImage()
         {
 
         }
 
-        public ProductImage(Guid id, Guid productId, string imagePath, bool isDefault)
+        public ProductImage(string imagePath, int displayOrder)
         {
-            Id = id;
-            ProductId = productId;
             ImagePath = imagePath;
-            IsDefault = isDefault;
+
+            DisplayOrder = displayOrder;
+
         }
     }
 }

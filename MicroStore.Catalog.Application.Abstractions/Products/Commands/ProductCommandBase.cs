@@ -1,10 +1,7 @@
-﻿
-
-using FluentValidation;
+﻿using FluentValidation;
 using MicroStore.Catalog.Application.Abstractions.Products.Models;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
     public abstract class ProductCommandBase
@@ -15,7 +12,6 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
         public string LongDescription { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public decimal OldPrice { get; set; }
-        public List<ProductCategoryModel> ProductCategories { get; set; } = new List<ProductCategoryModel>();
     }
 
     internal abstract class ProductCommandValidatorBase<TCommand> : AbstractValidator<TCommand>
@@ -62,10 +58,6 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
             RuleFor(x => x.OldPrice)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Product old price can not be negative");
-
-            RuleForEach(x => x.ProductCategories)
-                .SetValidator(new ProductCategoryModelValidator(CategoryRepository))
-                .When(x => x.ProductCategories.Count() > 0);
 
         }
     }

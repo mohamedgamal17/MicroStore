@@ -26,9 +26,9 @@ namespace MicroStore.Catalog.Application.Categories.Commands
                 throw new EntityNotFoundException(typeof(Category), request.CategoryId);
             }
 
-            category.UpdateCategoryName(request.Name);
+            category.Name = request.Name;
 
-            category.SetCategoryDescription(request.Description);
+            category.Description = request.Description;
 
             await _categoryRepository.UpdateAsync(category, cancellationToken: cancellationToken);
 

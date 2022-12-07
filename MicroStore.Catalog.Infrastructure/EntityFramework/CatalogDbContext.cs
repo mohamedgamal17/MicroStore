@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Domain.Entities;
 using System.Reflection;
@@ -14,14 +13,13 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework
     public class CatalogDbContext : AbpDbContext<CatalogDbContext>, ICatalogDbContext
     {
 
-        public DbSet<Product> Products { get; set; } = null!;
-        public DbSet<Category> Categories { get; set; } = null!;
-        public DbSet<ProductCategory> ProductCategories { get; set; } = null!;
-
+        public DbSet<Product> Products { get; set; } 
+        public DbSet<Category> Categories { get; set; } 
 
         public CatalogDbContext(DbContextOptions<CatalogDbContext> dbContextOptions)
         : base(dbContextOptions)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

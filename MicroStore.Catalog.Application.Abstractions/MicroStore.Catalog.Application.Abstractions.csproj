@@ -19,6 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include ="MicroStore.Catalog.Application.Tests" />
+    <InternalsVisibleTo Include="MicroStore.Catalog.Application.Tests" />
   </ItemGroup>
 </Project>

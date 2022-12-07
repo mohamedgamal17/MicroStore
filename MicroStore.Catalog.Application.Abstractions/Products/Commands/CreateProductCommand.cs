@@ -1,13 +1,15 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
     public class CreateProductCommand : ProductCommandBase, ICommand<ProductDto>
     {
+        public ImageModel ImageModel { get; set; }
+
     }
     internal class CreateProductCommandValidation : ProductCommandValidatorBase<CreateProductCommand>
     {

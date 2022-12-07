@@ -1,9 +1,4 @@
-﻿
-
-
-using System.Diagnostics.CodeAnalysis;
-using Volo.Abp.Domain.Entities;
-
+﻿using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Domain.Entities
 {
     public class ProductCategory : Entity<Guid>

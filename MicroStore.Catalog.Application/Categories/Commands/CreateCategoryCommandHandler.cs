@@ -23,7 +23,7 @@ namespace MicroStore.Catalog.Application.Categories.Commands
         {
             Category category = new Category(request.Name);
 
-            category.SetCategoryDescription(request.Description);
+            category.Description = request.Description;
 
             await _categoryRepository.InsertAsync(category, cancellationToken: cancellationToken);
 

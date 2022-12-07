@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Models;
+using MicroStore.Catalog.Application.Tests.Utilites;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
@@ -18,17 +20,20 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             var request = new CreateProductCommand
             {
-                Sku = "FakeSku",
-                Name = "FakeName",
-                ShortDescription = "FakeShortDescription",
-                LongDescription = "FakeLongDesccription",
+                Sku = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString(),
+                ImageModel = new ImageModel
+                {
+                    FileName = $"{Guid.NewGuid()}.png",
+                    Type = "png",
+                    Data = ImageGenerator.GetBitmapData()
+                },
+                ShortDescription = Guid.NewGuid().ToString(),
+                LongDescription = Guid.NewGuid().ToString(),
                 Price = 50,
                 OldPrice = 150,
 
             };
-
-            request.ProductCategories
-                .Add(new ProductCategoryModel { CategoryId = fakeCategory.Id, IsFeatured = false });
 
             var result = await Send(request);
 
@@ -43,11 +48,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
             product.LongDescription.Should().Be(request.LongDescription);
             product.Price.Should().Be(request.Price);
             product.OldPrice.Should().Be(request.OldPrice);
-            product.ProductCategories.First().CategoryId.Should().Be(fakeCategory.Id);
-            product.ProductCategories.First().IsFeaturedProduct.Should().BeFalse();
-
-            
-
+            product.Thumbnail.Should().EndWith(request.ImageModel.FileName);
         }
 
 
@@ -55,7 +56,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
         {
             return WithUnitOfWork(async (sp) =>
             {
-                var fakeCategory = new Category("FakeCategory");
+                var fakeCategory = new Category(Guid.NewGuid().ToString());
                 var repository = sp.GetRequiredService<IRepository<Category>>();
                 await repository.InsertAsync(fakeCategory);
                 return fakeCategory;

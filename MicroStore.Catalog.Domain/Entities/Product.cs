@@ -1,5 +1,4 @@
-﻿
-using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Domain.Events;
 using Volo.Abp.Domain.Entities;
 
@@ -7,15 +6,19 @@ namespace MicroStore.Catalog.Domain.Entities
 {
     public class Product : BasicAggregateRoot<Guid>
     {
-        public string Name { get; private set; }
-        public string Sku { get; private set; }
-        public string ShortDescription { get; set; } = string.Empty;
-        public string LongDescription { get; private set; } = string.Empty;
+        public string Name { get;  set; }
+        public string Sku { get;  set; }
+        public string Thumbnail { get; set; } 
+        public string ShortDescription { get;set; } = string.Empty;
+        public string LongDescription { get;set; } = string.Empty;
         public decimal Price { get; set; }
         public decimal OldPrice { get; set; }
 
         private List<ProductCategory> _productCategories = new List<ProductCategory>();
+
+        private List<ProductImage> _productImages = new List<ProductImage>();
         public IReadOnlyList<ProductCategory> ProductCategories => _productCategories.AsReadOnly();
+        public IReadOnlyList<ProductImage> ProductImages => _productImages.AsReadOnly();
 
         public Product(string sku, string name, decimal price)
             : base(Guid.NewGuid())
@@ -26,87 +29,19 @@ namespace MicroStore.Catalog.Domain.Entities
             AddLocalEvent(new CreateProductEvent(Id, Name, Sku, price));
         }
 
+        public Product(string sku ,string name,decimal price, string thumbnail)
+        {
+            Sku = sku;
+            Name = name;
+            Price = price;
+            Thumbnail = thumbnail;
+        }
+
         protected Product() // Require For EFCore
         {
 
         }
-
-        public void AdjustProductName(string name)
-        {
-            if (Name == name || string.IsNullOrWhiteSpace(name))
-            {
-                return;
-            }
-
-            Name = name;
-
-            AddLocalEvent(new AdjustProductNameEvent(Id, Name));
-        }
-
-
-        public void AdjustProductSku(string sku)
-        {
-            if (Sku == sku || string.IsNullOrWhiteSpace(sku))
-            {
-                return;
-            }
-
-            Sku = sku;
-
-            AddLocalEvent(new AdjustProductSkuEvent(Id, Sku));
-        }
-
-
-        public void AdjustProductPrice(decimal price)
-        {
-            if (Price == price)
-            {
-                return;
-            }
-
-            Price = price;
-
-            AddLocalEvent(new AdjustProductPriceEvent(Id, Price));
-        }
-
-        public void SetProductShortDescription(string shortDescription)
-        {
-            if (shortDescription.IsNullOrEmpty() ||
-                ShortDescription == shortDescription)
-            {
-                return;
-            }
-
-            ShortDescription = shortDescription;
-        }
-
-
-        public void SetProductLongDescription(string longDescription)
-        {
-            if (longDescription.IsNullOrEmpty() ||
-                LongDescription == longDescription)
-            {
-                return;
-            }
-
-
-            LongDescription = longDescription;
-        }
-
-
-
-        public void SetProductOldPrice(decimal oldPrice)
-        {
-
-            if (OldPrice == oldPrice)
-            {
-                return;
-            }
-
-            OldPrice = oldPrice;
-        }
-
-
+     
         public void AddOrUpdateProductCategory(Category category, bool isFeatured)
         {
             AddOrUpdateProductCategory(category.Id, isFeatured);
@@ -135,28 +70,28 @@ namespace MicroStore.Catalog.Domain.Entities
 
         public void RemoveProductCategory(Guid categoryId)
         {
-            Result result = CanRemoveProductCategory(categoryId);
-
-            if (result.IsFailure)
-            {
-                throw new InvalidOperationException(result.ToString()); // Fail fast princible
-            }
-
-
-            ProductCategory productCategory = _productCategories.Single(x => x.Id == categoryId);
+            ProductCategory productCategory = _productCategories.Single(x => x.CategoryId == categoryId);
 
             _productCategories.Remove(productCategory);
         }
 
-
-
-
-        public Result CanRemoveProductCategory(Guid categoryId)
+        public void AssignProductImage(string imageUrl , int displayorder)
         {
-            bool isProductCategoryExist = _productCategories.Any(x => x.CategoryId == categoryId);
+            _productImages.Add(new ProductImage(imageUrl, displayorder));
+        }
 
-            return isProductCategoryExist ? Result.Success()
-                : Result.Failure("Current product is not mapped to specified category");
+        public void UpdateProductImage(Guid productImageId , int displayorder)
+        {
+            ProductImage productImage =  _productImages.Single(x => x.Id == productImageId);
+
+            productImage.DisplayOrder = displayorder;
+        }
+
+        public void RemoveProductImage(Guid productImageid)
+        {
+            ProductImage productImage = _productImages.Single(x => x.Id == productImageid);
+
+            _productImages.Remove(productImage);         
         }
 
 

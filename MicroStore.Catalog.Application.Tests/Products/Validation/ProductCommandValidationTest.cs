@@ -124,26 +124,6 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
 
         }
 
-        [Test]
-        public async Task ShouldFailIfProductCategoriesIsNotValid()
-        {
-            await WithUnitOfWork(async (sp) =>
-            {
-                var sut = (FakeProductCommandValidator)ServiceProvider.GetRequiredService<IValidator<FakeProductCommand>>();
-                var command = CreateProductCommand();
-
-                command.ProductCategories
-                .Add(new ProductCategoryModel { CategoryId = Guid.NewGuid(), IsFeatured = false });
-
-                var result = await sut.ValidateAsync(command);
-
-
-                result.IsValid.Should().BeFalse();
-
-                result.Errors.Count().Should().Be(1);
-            });
-        }
-
 
 
         private FakeProductCommand CreateProductCommand()
