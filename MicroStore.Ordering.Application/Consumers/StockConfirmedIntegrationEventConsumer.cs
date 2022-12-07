@@ -11,7 +11,6 @@ namespace MicroStore.Ordering.Application.Consumers
             return context.Publish(new OrderApprovedEvent
             {
                 OrderId = context.Message.OrderId,
-                OrderNumber = context.Message.OrderNumber
             });
         }
     }

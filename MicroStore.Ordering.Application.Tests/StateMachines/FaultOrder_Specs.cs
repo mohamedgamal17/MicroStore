@@ -42,10 +42,23 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
 
 
             await TestHarness.Bus.Publish(
+              new OrderPaymentAcceptedEvent
+              {
+                  OrderId = _fakeOrderData.OrderId,
+                  PaymentAcceptedDate = DateTime.UtcNow,
+                  PaymentId = Guid.NewGuid().ToString(),
+              }
+          );
+
+            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Accepted, TestHarness.TestTimeout);
+
+            instance.Should().NotBeNull();
+
+
+            await TestHarness.Bus.Publish(
                     new OrderStockRejectedEvent
                     {
                         OrderId = _fakeOrderData.OrderId,
-                        OrderNumber = _fakeOrderData.OrderNumber,
                         Details = "FakeFaultReason"
                     }
                 );
@@ -54,7 +67,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
 
             instance.Should().NotBeNull();
 
-           // Assert.That(await TestHarness.Published.Any<RefundUserIntegrationEvent>());
+            Assert.That(await TestHarness.Published.Any<RefundPaymentIntegrationEvent>());
 
         }
 
@@ -97,24 +110,9 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
 
             instance.Should().NotBeNull();
 
-
-            await TestHarness.Bus.Publish(
-                 new OrderApprovedEvent
-                 {
-                     OrderId = _fakeOrderData.OrderId,
-                     OrderNumber = _fakeOrderData.OrderNumber
-                 }
-            );
-
-            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Approved, TestHarness.TestTimeout);
-
-            instance.Should().NotBeNull();
-
-
             await TestHarness.Bus.Publish(new OrderPaymentFaildEvent
             {
                 OrderId = _fakeOrderData.OrderId,
-                OrderNumber = _fakeOrderData.OrderNumber,
                 FaultDate = DateTime.UtcNow,
                 FaultReason = "FakeReason"
 
@@ -125,6 +123,59 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
 
             instance.Should().NotBeNull();
 
+        }
+    }
+
+
+
+    public class When_order_is_cancelled : StateMachineTestFixture<OrderStateMachine, OrderStateEntity>
+    {
+        private readonly FakeOrderData _fakeOrderData = new FakeOrderData();
+
+        [Test]
+        public async Task Should_cancel_order_and_publish_refund_payment_integration_event()
+        {
+            await TestHarness.Bus.Publish(
+                 new OrderSubmitedEvent
+                 {
+                     OrderId = _fakeOrderData.OrderId,
+                     OrderNumber = _fakeOrderData.OrderNumber,
+
+                     BillingAddressId = Guid.NewGuid(),
+                     ShippingAddressId = Guid.NewGuid(),
+                     UserId = _fakeOrderData.UserId,
+                     SubmissionDate = DateTime.UtcNow,
+                     OrderItems = new List<OrderItemModel>
+                     {
+                            new OrderItemModel
+                            {
+                                ItemName = "FakeName",
+                                ProductId = Guid.NewGuid(),
+                                Quantity = 5,
+                                UnitPrice = 50
+                            }
+                     }
+                 }
+             );
+
+            var instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Submitted, TestHarness.TestTimeout);
+
+            instance.Should().NotBeNull();
+
+            await TestHarness.Bus.Publish(
+                    new OrderCancelledEvent
+                    {
+                        OrderId = _fakeOrderData.OrderId,
+                        CancellationDate = DateTime.UtcNow,
+                        Reason = Guid.NewGuid().ToString()
+                    }
+                );
+
+            instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Cancelled, TestHarness.TestTimeout);
+
+            instance.Should().NotBeNull();
+
+            Assert.That(await TestHarness.Published.Any<RefundPaymentIntegrationEvent>());
         }
     }
 

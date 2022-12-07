@@ -10,9 +10,8 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigura
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.ItemName).HasMaxLength(500);
-
+            builder.Property(x => x.ProductImage).HasMaxLength(600);
             builder.HasIndex(x => x.ProductId);
-
         }
     }
 }

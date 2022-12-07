@@ -10,7 +10,6 @@ namespace MicroStore.Ordering.Application.Consumers
             return context.Publish(new OrderPaymentFaildEvent
             {
                 OrderId = context.Message.OrderId,
-                OrderNumber = context.Message.OrderNumber,
                 FaultDate = context.Message.FaultDate,
                 FaultReason = context.Message.FaultReason
                 

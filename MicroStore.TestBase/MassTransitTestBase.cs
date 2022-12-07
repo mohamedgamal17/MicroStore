@@ -9,8 +9,8 @@ using Volo.Abp.Uow;
 using Volo.Abp;
 using System.Data;
 using MicroStore.TestBase.Extensions;
-using MicroStore.Catalog.Domain.Tests.Utilites;
 using Microsoft.Extensions.Logging;
+using MicroStore.TestBase.Utilites;
 
 namespace MicroStore.TestBase
 {

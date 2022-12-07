@@ -7,6 +7,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Testing;
 using Volo.Abp;
 using MicroStore.TestBase.Extensions;
+using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 
 namespace MicroStore.TestBase
 {
@@ -32,6 +33,14 @@ namespace MicroStore.TestBase
         }
 
 
+        public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
+        {
+            using var scope = ServiceProvider.CreateScope();
+
+            var messageBus = scope.ServiceProvider.GetRequiredService<ILocalMessageBus>();
+
+            return await messageBus.Send(request);
+        }
         public async Task SetupBeforeAnyTest()
         {
             await TestHarness.Start();

@@ -1,35 +1,34 @@
 ﻿using MassTransit;
 using MicroStore.Ordering.Events;
 using MicroStore.Payment.IntegrationEvents;
-
+using Volo.Abp.DependencyInjection;
 namespace MicroStore.Ordering.Application.StateMachines.Activities
 {
-    public class OrderShippmentFaildActivity : IStateMachineActivity<OrderStateEntity, OrderShippmentFailedEvent>
+    public class OrderStockRejectedActivity : IStateMachineActivity<OrderStateEntity, OrderStockRejectedEvent>, ITransientDependency
     {
         public void Accept(StateMachineVisitor visitor)
         {
             visitor.Visit(this);
         }
 
-        public Task Execute(BehaviorContext<OrderStateEntity, OrderShippmentFailedEvent> context, IBehavior<OrderStateEntity, OrderShippmentFailedEvent> next)
+        public Task Execute(BehaviorContext<OrderStateEntity, OrderStockRejectedEvent> context, IBehavior<OrderStateEntity, OrderStockRejectedEvent> next)
         {
             return context.Publish(new RefundPaymentIntegrationEvent
             {
                 OrderId = context.Saga.CorrelationId.ToString(),
-                OrderNumber = context.Saga.OrderNumber,
                 CustomerId = context.Saga.UserId,
-                PaymentId = context.Saga.PaymentId,
+                PaymentId = context.Saga.PaymentId
             });
         }
 
-        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateEntity, OrderShippmentFailedEvent, TException> context, IBehavior<OrderStateEntity, OrderShippmentFailedEvent> next) where TException : Exception
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateEntity, OrderStockRejectedEvent, TException> context, IBehavior<OrderStateEntity, OrderStockRejectedEvent> next) where TException : Exception
         {
             return next.Execute(context);
         }
 
         public void Probe(ProbeContext context)
         {
-            throw new NotImplementedException();
+            context.CreateScope("order-stock-rejected");
         }
     }
 }

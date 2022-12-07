@@ -13,12 +13,12 @@ namespace MicroStore.Ordering.Application.StateMachines
         public decimal ShippingCost { get; set; }
         public decimal TaxCost { get; set; }
         public decimal SubTotal { get; set; }
-        public decimal Total { get; set; }
+        public decimal TotalPrice { get; set; }
         public string UserId { get; set; }
         public string PaymentId { get; set; }
-        public string ShippmentId { get; set; }
+        public string ShipmentId { get; set; }
+        public string ShipmentSystem { get; set; }
         public DateTime SubmissionDate { get; set; }
-        public DateTime? ConfirmationDate { get; set; }
         public DateTime? ShippedDate { get; set; }
         public List<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
         public string CancellationReason { get; set; }

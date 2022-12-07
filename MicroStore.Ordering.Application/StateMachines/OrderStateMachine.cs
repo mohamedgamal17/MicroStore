@@ -1,29 +1,33 @@
 ﻿using MassTransit;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.StateMachines.Activities;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
+using MicroStore.Ordering.Events.Responses;
 
 namespace MicroStore.Ordering.Application.StateMachines
 {
     public class OrderStateMachine : MassTransitStateMachine<OrderStateEntity>
     {
-        public State Submitted { get; private set; }
-        public State Approved { get; private set; } 
-        public State Pending { get; set; }
-        public State Processing { get; private set; } 
+        public State Submitted { get; private set; }     
+        public State Accepted { get; set; }
+        public State Approved { get; private set; }
+        public State Fullfilled { get; private set; } 
         public State Completed { get; private set; }
         public State Cancelled { get; private set; }
 
         public Event<OrderSubmitedEvent> OrderSubmitted { get; private set; }
-        public Event<OrderApprovedEvent> OrderApproved { get; private set; }
-        public Event<OrderPaymentCreatedEvent> OrderPaymentCreated { get; set; }
         public Event<OrderPaymentAcceptedEvent> OrderPaymentAccepted { get; private set; }
+        public Event<OrderApprovedEvent> OrderApproved { get; private set; }     
+        public Event<OrderFulfillmentCompletedEvent> OrderFullfilled { get; set; }
         public Event<OrderCompletedEvent> OrderCompleted { get; private set; }
         public Event<OrderStockRejectedEvent> OrderStockRejected { get; private set; }
         public Event<OrderPaymentFaildEvent> OrderPaymentFaild { get; private set; }
         public Event<OrderShippmentFailedEvent> OrderShippmentFaild { get; private set; }
         public Event<OrderCancelledEvent> OrderCancelled { get; private set; }
-      
+
+        public Event<CheckOrderStatusEvent> CheckOrderStatus { get; set; }
+
         public OrderStateMachine()
         {
             Event(() => OrderSubmitted, x =>
@@ -33,14 +37,14 @@ namespace MicroStore.Ordering.Application.StateMachines
                 // x.InsertOnInitial = true;
             });
 
-            Event(() => OrderApproved, x=> x.CorrelateById(c=> c.Message.OrderId));
-
-            Event(() => OrderPaymentCreated, x => x.CorrelateById(c => c.Message.OrderId));
-
             Event(() => OrderPaymentAccepted, x => x.CorrelateById(c => c.Message.OrderId));
 
-            Event(() => OrderCompleted, x => x.CorrelateById(c => c.Message.OrderId));
+            Event(() => OrderApproved, x=> x.CorrelateById(c=> c.Message.OrderId));
 
+            Event(() => OrderFullfilled, x => x.CorrelateById(c => c.Message.OrderId));
+            
+            Event(() => OrderCompleted, x => x.CorrelateById(c => c.Message.OrderId));
+         
             Event(() => OrderStockRejected, x => x.CorrelateById(c => c.Message.OrderId));
 
             Event(() => OrderPaymentFaild, x => x.CorrelateById(c => c.Message.OrderId));
@@ -49,6 +53,18 @@ namespace MicroStore.Ordering.Application.StateMachines
 
             Event(() => OrderCancelled, x => x.CorrelateById(c => c.Message.OrderId));
 
+
+            Event(() => CheckOrderStatus , x =>
+            {
+                x.CorrelateById(c => c.Message.OrderId);
+
+                x.OnMissingInstance((m) => m.Execute(async context =>
+                {
+                    await context.RespondAsync(StateMachineResult.Failure<OrderResponse>("order is not exist"));
+                }));
+
+            });
+
            
             InstanceState(x => x.CurrentState);
 
@@ -56,27 +72,35 @@ namespace MicroStore.Ordering.Application.StateMachines
                     When(OrderSubmitted)
                         .CopyDataToInstance()
                         .TransitionTo(Submitted)
-                        .Activity(x => x.OfType<OrderSubmitedActivity>())
-                        .Respond((context) => new OrderSubmitedResponse()
-                        {
-                            OrderId = context.Saga.CorrelationId,
-                            OrderNumber = context.Saga.OrderNumber,
-                            UserId = context.Saga.UserId,
-                            ShippingAddressId = context.Saga.ShippingAddressId,
-                            BillingAddressId = context.Saga.BillingAddressId,
-                            Total = context.Saga.Total,
-                            SubTotal = context.Saga.SubTotal,
-                            SubmissionDate = context.Saga.SubmissionDate,
-                            Items = context.Saga.OrderItems.MapOrderItemsToModel(),
-                        })
-                        
+                        .Respond((context) => context.Saga.MapOrderSubmitedResponse())
                 );
 
-         
+
+
             During(Submitted,
+                    When(OrderPaymentAccepted)
+                        .Then((context) =>
+                        {
+                            context.Saga.PaymentId = context.Message.PaymentId;
+                        })
+                        .TransitionTo(Accepted)
+                        .Activity(x => x.OfType<OrderAcceptedActivity>()),
+
+                    When(OrderPaymentFaild)
+                        .Then((context) =>
+                        {
+                            context.Saga.CancellationDate = context.Message.FaultDate;
+                        })
+                        .TransitionTo(Cancelled)
+
+                );
+
+
+            
+
+            During(Accepted,
                     When(OrderApproved)
-                        .TransitionTo(Approved)
-                        .Activity(x=> x.OfType<OrderApprovedActivity>()),
+                        .TransitionTo(Approved),
                   
                     When(OrderStockRejected)
                         .Then((context) =>
@@ -85,55 +109,30 @@ namespace MicroStore.Ordering.Application.StateMachines
                             context.Saga.CancellationReason = context.Message.Details;
                         })
                         .TransitionTo(Cancelled)
+                        .Activity(x => x.OfType<OrderStockRejectedActivity>())             
                 );
 
 
+      
             During(Approved,
-                    When(OrderPaymentCreated)
-                        .Then((context) =>
-                        {
-                            context.Saga.PaymentId = context.Message.PaymentId;
-                        })
-                        .TransitionTo(Pending),
+                    When(OrderFullfilled)
+                         .Then((context) =>
+                         {
+                             context.Saga.ShipmentId = context.Message.ShipmentId;
+                             context.Saga.ShipmentSystem = context.Message.ShipmentSystem;
+                         })                     
+                        .TransitionTo(Fullfilled)
+                        .RespondAsync((context)=> Task.FromResult(StateMachineResult.Success(context.Saga.MapOrderFullfilledResponse())))
+                  );
 
-                    When(OrderPaymentFaild)
-                        .Then((context) =>
-                        {
-                            context.Saga.CancellationDate = context.Message.FaultDate;
-                        })
-                        .TransitionTo(Cancelled)
-                );
 
-            During(Pending,
-                    When(OrderPaymentAccepted)                       
-                        .TransitionTo(Processing),
-
-                    When(OrderPaymentFaild)
-                        .Then((context) =>
-                        {
-                            context.Saga.CancellationDate = context.Message.FaultDate;
-                            context.Saga.CancellationReason = context.Message.FaultReason;
-                        })
-                        .TransitionTo(Cancelled)
-               );
-
-            During(Processing,
+            During(Fullfilled,
                     When(OrderCompleted)
                         .Then((context) =>
                         {
                             context.Saga.ShippedDate = context.Message.ShippedDate;
                         })
-                        .TransitionTo(Completed),
-
-
-                   When(OrderShippmentFaild)
-                        .Then((context) =>
-                        {
-                            context.Saga.CancellationReason = context.Message.Reason;
-                            context.Saga.CancellationDate = context.Message.FaultDate;
-                        })
-                        .TransitionTo(Cancelled)
-                        .Activity(x => x.OfType<OrderShippmentFaildActivity>())
+                        .TransitionTo(Completed)
                     );
 
 
@@ -143,7 +142,12 @@ namespace MicroStore.Ordering.Application.StateMachines
                         {
                             context.Saga.CancellationDate = context.Message.CancellationDate;
                             context.Saga.CancellationReason = context.Message.Reason;
+
                         }).TransitionTo(Cancelled)
+                        .Activity(x=>x.OfType<OrderCancelledActivity>()),
+
+                     When(CheckOrderStatus)
+                        .RespondAsync((context) => Task.FromResult(StateMachineResult.Success(context.Saga.MapOrderResponse())))
                     );
 
         }
@@ -161,8 +165,10 @@ namespace MicroStore.Ordering.Application.StateMachines
                 x.Saga.UserId = x.Message.UserId;
                 x.Saga.BillingAddressId = x.Message.BillingAddressId;
                 x.Saga.ShippingAddressId = x.Message.ShippingAddressId;
+                x.Saga.ShippingCost = x.Message.ShippingCost;
+                x.Saga.TaxCost = x.Message.TaxCost;
                 x.Saga.SubTotal = x.Message.SubTotal;
-                x.Saga.Total = x.Message.Total;
+                x.Saga.TotalPrice = x.Message.Total;
                 x.Saga.SubmissionDate = x.Message.SubmissionDate;
                 x.Saga.OrderItems = x.Message.OrderItems.Select(item => new OrderItemEntity
                 {
@@ -182,13 +188,115 @@ namespace MicroStore.Ordering.Application.StateMachines
             new OrderItemModel
             {
                 ItemName = item.ItemName,
+                ProductImage = item.ProductImage,
                 Quantity = item.Quantity,
                 ProductId = item.ProductId,
                 UnitPrice = item.UnitPrice
             }).ToList();
         }
 
+        public static OrderSubmitedResponse MapOrderSubmitedResponse(this OrderStateEntity orderStateEntity)
+        {
+
+            return new OrderSubmitedResponse
+            {
+                OrderId = orderStateEntity.CorrelationId,
+                OrderNumber = orderStateEntity.OrderNumber,
+                UserId = orderStateEntity.UserId,
+                ShippingAddressId = orderStateEntity.ShippingAddressId,
+                BillingAddressId = orderStateEntity.BillingAddressId,
+                ShippingCost = orderStateEntity.ShippingCost,
+                TaxCost = orderStateEntity.TaxCost,
+                SubTotal = orderStateEntity.SubTotal,
+                TotalPrice = orderStateEntity.TotalPrice,
+                SubmissionDate = orderStateEntity.SubmissionDate,
+                CurrentState = orderStateEntity.CurrentState,
+                OrderItems = MapOrderItemResponse(orderStateEntity.OrderItems)
+            };
+        }
 
 
+        public static OrderFullfilledResponse MapOrderFullfilledResponse(this OrderStateEntity orderStateEntity)
+        {
+            return new OrderFullfilledResponse
+            {
+                OrderId = orderStateEntity.CorrelationId,
+                OrderNumber = orderStateEntity.OrderNumber,
+                UserId = orderStateEntity.UserId,
+                ShippingAddressId = orderStateEntity.ShippingAddressId,
+                BillingAddressId = orderStateEntity.BillingAddressId,
+                PaymentId = orderStateEntity.PaymentId,
+                ShipmentId = orderStateEntity.ShipmentId,
+                ShipmentSystem = orderStateEntity.ShipmentSystem,
+                ShippingCost = orderStateEntity.ShippingCost,
+                TaxCost = orderStateEntity.TaxCost,
+                SubTotal = orderStateEntity.SubTotal,
+                TotalPrice = orderStateEntity.TotalPrice,
+                SubmissionDate = orderStateEntity.SubmissionDate,
+                CurrentState = orderStateEntity.CurrentState,
+                OrderItems = MapOrderItemResponse(orderStateEntity.OrderItems)
+            };
+        }
+
+
+        public static OrderCompletedResponse MapOrderCompletedResponse(this OrderStateEntity orderStateEntity)
+        {
+            return new OrderCompletedResponse
+            {
+                OrderId = orderStateEntity.CorrelationId,
+                OrderNumber = orderStateEntity.OrderNumber,
+                UserId = orderStateEntity.UserId,
+                ShippingAddressId = orderStateEntity.ShippingAddressId,
+                BillingAddressId = orderStateEntity.BillingAddressId,
+                PaymentId = orderStateEntity.PaymentId,
+                ShipmentId = orderStateEntity.ShipmentId,
+                ShipmentSystem = orderStateEntity.ShipmentSystem,
+                ShippingCost = orderStateEntity.ShippingCost,
+                TaxCost = orderStateEntity.TaxCost,
+                SubTotal = orderStateEntity.SubTotal,
+                TotalPrice = orderStateEntity.TotalPrice,
+                SubmissionDate = orderStateEntity.SubmissionDate,
+                ShippedDate = orderStateEntity.ShippedDate,
+                CurrentState = orderStateEntity.CurrentState,
+                OrderItems = MapOrderItemResponse(orderStateEntity.OrderItems)
+            };
+        }
+
+
+        public static OrderResponse MapOrderResponse(this OrderStateEntity orderStateEntity)
+        {
+            return new OrderResponse
+            {
+                OrderId = orderStateEntity.CorrelationId,
+                OrderNumber = orderStateEntity.OrderNumber,
+                UserId = orderStateEntity.UserId,
+                ShippingAddressId = orderStateEntity.ShippingAddressId,
+                BillingAddressId = orderStateEntity.BillingAddressId,
+                PaymentId = orderStateEntity.PaymentId,
+                ShipmentId = orderStateEntity.ShipmentId,
+                ShipmentSystem = orderStateEntity.ShipmentSystem,
+                ShippingCost = orderStateEntity.ShippingCost,
+                TaxCost = orderStateEntity.TaxCost,
+                SubTotal = orderStateEntity.SubTotal,
+                TotalPrice = orderStateEntity.TotalPrice,
+                SubmissionDate = orderStateEntity.SubmissionDate,
+                ShippedDate = orderStateEntity.ShippedDate,
+                CurrentState = orderStateEntity.CurrentState,
+                OrderItems = MapOrderItemResponse(orderStateEntity.OrderItems)
+            };
+        }
+
+        private static List<OrderItemResponseModel> MapOrderItemResponse(List<OrderItemEntity> orderItems)
+        {
+            return orderItems.Select(item => new OrderItemResponseModel
+            {
+
+                 ItemName = item.ItemName,
+                 ProductImage = item.ProductImage,
+                 Quantity = item.Quantity,
+                 ProductId = item.ProductId,
+                 UnitPrice = item.UnitPrice,              
+             }).ToList();
+        }
     }
 }

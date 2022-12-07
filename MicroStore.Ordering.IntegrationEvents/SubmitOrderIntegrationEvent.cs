@@ -8,6 +8,8 @@ namespace MicroStore.Ordering.IntegrationEvents
         public Guid ShippingAddressId { get; set; }
         public Guid BillingAddressId { get; set; }
         public string UserId { get; set; }
+        public decimal ShippingCost { get; set; }
+        public decimal TaxCost { get; set; }
         public decimal SubTotal { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime SubmissionDate { get; set; }

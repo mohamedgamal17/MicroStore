@@ -1,19 +1,22 @@
 ﻿using MassTransit;
 using MicroStore.Ordering.Events;
+using MicroStore.Ordering.Events.Models;
 using MicroStore.Ordering.IntegrationEvents;
 namespace MicroStore.Ordering.Application.Consumers
 {
     public class SubmitOrderIntegrationEventConsumer : IConsumer<SubmitOrderIntegrationEvent>
     {
-        public Task Consume(ConsumeContext<SubmitOrderIntegrationEvent> context)
+        public async Task Consume(ConsumeContext<SubmitOrderIntegrationEvent> context)
         {
-            return context.Publish(new OrderSubmitedEvent
+            await context.Publish(new OrderSubmitedEvent
             {
                 OrderId = context.Message.OrderId,
                 OrderNumber = context.Message.OrderNumber,
                 ShippingAddressId = context.Message.ShippingAddressId,
                 BillingAddressId = context.Message.BillingAddressId,
                 UserId = context.Message.UserId,
+                ShippingCost = context.Message.ShippingCost,
+                TaxCost = context.Message.TaxCost,
                 SubTotal = context.Message.SubTotal,
                 Total = context.Message.TotalPrice,
                 SubmissionDate = context.Message.SubmissionDate,
@@ -31,9 +34,25 @@ namespace MicroStore.Ordering.Application.Consumers
             {
                 ProductId = x.ProductId,
                 ItemName = x.ItemName,
+                ProductImage = x.ProductImage,
                 Quantity = x.Quantity,
                 UnitPrice = x.UnitPrice
 
+            }).ToList();
+        }
+
+
+
+        public static List<OrderItemResponseModel> MapOrderItemResponse( this List<MicroStore.Ordering.IntegrationEvents.Models.OrderItemModel> items)
+        {
+            return items.Select(x => new OrderItemResponseModel
+            {
+                ProductId = x.ProductId,
+                ItemName = x.ItemName,
+                ProductImage = x.ProductImage,
+                Quantity = x.Quantity,
+                UnitPrice = x.UnitPrice
+                
             }).ToList();
         }
     }

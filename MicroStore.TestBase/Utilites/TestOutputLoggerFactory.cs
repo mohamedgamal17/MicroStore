@@ -2,7 +2,7 @@
 using NUnit.Framework.Internal;
 using Volo.Abp.DependencyInjection;
 
-namespace MicroStore.Catalog.Domain.Tests.Utilites
+namespace MicroStore.TestBase.Utilites
 {
 
     public class TestOutputLoggerFactory :

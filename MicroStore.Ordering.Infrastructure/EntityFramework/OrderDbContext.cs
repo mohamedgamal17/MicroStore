@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.Ordering.Application.Abstractions.Common;
 using MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigurations;
-
 namespace MicroStore.Ordering.Infrastructure.EntityFramework
 {
     public class OrderDbContext : SagaDbContext, IOrderDbContext

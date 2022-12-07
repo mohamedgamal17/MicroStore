@@ -38,6 +38,10 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ProductImage")
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -68,17 +72,23 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime?>("ConfirmationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CurrentState")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("OrderNumber")
                         .HasMaxLength(265)
                         .HasColumnType("nvarchar(265)");
 
                     b.Property<string>("PaymentId")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ShipmentId")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ShipmentSystem")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -91,10 +101,6 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                     b.Property<decimal>("ShippingCost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ShippmentId")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(18,2)");
 
@@ -104,7 +110,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                     b.Property<decimal>("TaxCost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Total")
+                    b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
@@ -119,9 +125,9 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[OrderNumber] IS NOT NULL");
 
-                    b.HasIndex("ShippingAddressId");
+                    b.HasIndex("ShipmentId");
 
-                    b.HasIndex("ShippmentId");
+                    b.HasIndex("ShippingAddressId");
 
                     b.HasIndex("UserId");
 

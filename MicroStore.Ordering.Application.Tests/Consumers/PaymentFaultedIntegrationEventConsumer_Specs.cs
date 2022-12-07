@@ -12,7 +12,6 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
             await TestHarness.Bus.Publish(new PaymentFaildIntegrationEvent
             {
                 OrderId = Guid.NewGuid(),
-                OrderNumber = Guid.NewGuid().ToString(),
                 PaymentId = Guid.NewGuid().ToString(),
                 FaultDate = DateTime.UtcNow,
                 FaultReason ="FakeReason"

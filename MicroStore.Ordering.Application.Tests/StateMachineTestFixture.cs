@@ -1,9 +1,12 @@
 ﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Ordering.Infrastructure.EntityFramework;
 using MicroStore.TestBase;
 using Respawn;
 using Respawn.Graph;
+using System.Linq.Expressions;
 
 namespace MicroStore.Ordering.Application.Tests
 {
@@ -35,6 +38,16 @@ namespace MicroStore.Ordering.Application.Tests
         public async Task OnAllTestsTearDown()
         {
             await OnTearDown();
+        }
+
+
+        public Task<TInstance> Find(Expression<Func<TInstance,bool>> expression)
+        {
+            using var scope = ServiceProvider.CreateScope();
+
+            var db = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
+
+            return db.Set<TInstance>().SingleAsync(expression);
         }
     }
 }

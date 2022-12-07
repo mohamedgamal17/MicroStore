@@ -12,7 +12,6 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
             await TestHarness.Bus.Publish(new PaymentAccepetedIntegrationEvent
             {
                 OrderId = Guid.NewGuid().ToString(),
-                OrderNumber = Guid.NewGuid().ToString(),
                 PaymentId = Guid.NewGuid().ToString(),
             });
 

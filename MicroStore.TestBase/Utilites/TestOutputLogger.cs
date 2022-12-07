@@ -2,10 +2,10 @@
 using NUnit.Framework.Internal;
 using Volo.Abp.DependencyInjection;
 
-namespace MicroStore.Catalog.Domain.Tests.Utilites
+namespace MicroStore.TestBase.Utilites
 {
     public class TestOutputLogger :
-        Microsoft.Extensions.Logging.ILogger , ITransientDependency
+        Microsoft.Extensions.Logging.ILogger, ITransientDependency
     {
         readonly TestOutputLoggerFactory _factory;
 
