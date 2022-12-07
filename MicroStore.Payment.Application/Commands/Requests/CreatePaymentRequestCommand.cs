@@ -6,11 +6,11 @@ namespace MicroStore.Payment.Application.Commands.Requests
     public class CreatePaymentRequestCommand: ICommand<PaymentRequestCreatedDto>
     {
         public string OrderId { get; set; }
-        public string OrderNubmer { get; set; }
+        public string OrderNumber { get; set; }
         public string  UserId { get; set; }
         public decimal ShippingCost { get; set; }
         public decimal TaxCost { get; set; }
-        public decimal SubtTotal { get; set; }
+        public decimal SubTotal { get; set; }
         public decimal TotalCost { get; set; }
         public List<OrderItemModel> Items { get; set; }
     }

@@ -18,7 +18,6 @@ namespace MicroStore.Payment.Application.Tests.Consumers
                 PaymentId = fakepaymentRequest.Id.ToString(),
                 OrderId = fakepaymentRequest.OrderId,
                 CustomerId = fakepaymentRequest.CustomerId,
-                OrderNumber = fakepaymentRequest.OrderNumber,
             };
 
             await TestHarness.Bus.Publish(voidPaymentIntegarationEvent);

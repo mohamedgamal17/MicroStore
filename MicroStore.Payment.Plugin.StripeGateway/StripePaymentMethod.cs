@@ -91,6 +91,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     },
                 },
 
+      
                 Mode = "payment"
             };
 

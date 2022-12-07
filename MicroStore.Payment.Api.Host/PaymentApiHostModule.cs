@@ -24,7 +24,8 @@ namespace MicroStore.Payment.Api.Host
             var configuration = context.Services.GetConfiguration();
 
             ConfigureAuthentication(context.Services, configuration);
-            ConfigureSwagger(context.Services);
+
+            ConfigureSwagger(context.Services,configuration);
 
             Configure<AbpExceptionHandlingOptions>(options =>
             {
@@ -58,18 +59,24 @@ namespace MicroStore.Payment.Api.Host
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
+            var config = context.GetConfiguration();
 
             if (env.IsDevelopment())
             {
 
+
                 app.UseSwagger();
+
                 app.UseSwaggerUI(options =>
                 {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Payment API");
+                    options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
+                    options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
+                    options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
+                    options.OAuthScopeSeparator(",");
+
                 });
 
-
-                app.UseHsts();
 
             }
 
@@ -91,15 +98,30 @@ namespace MicroStore.Payment.Api.Host
 
 
 
-        private void ConfigureSwagger(IServiceCollection serviceCollection)
+        private void ConfigureSwagger(IServiceCollection serviceCollection , IConfiguration configuration)
         {
             serviceCollection.AddSwaggerGen((options) =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog Api", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Payment Api", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
 
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
 
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        ClientCredentials = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")),
+                            TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")),
+
+                        },
+
+                    }
+
+                });
             });
         }
 

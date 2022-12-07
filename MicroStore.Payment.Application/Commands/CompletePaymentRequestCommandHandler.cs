@@ -1,4 +1,5 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.Payment.Application.Commands.Requests;
 using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;

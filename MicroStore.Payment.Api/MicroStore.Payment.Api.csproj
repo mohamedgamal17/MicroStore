@@ -17,8 +17,4 @@
     <ProjectReference Include="..\MicroStore.Payment.Application\MicroStore.Payment.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

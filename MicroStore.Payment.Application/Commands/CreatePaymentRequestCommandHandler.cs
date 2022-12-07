@@ -21,11 +21,11 @@ namespace MicroStore.Payment.Application.Commands
             PaymentRequest paymentRequest = new PaymentRequest
             {
                 OrderId = request.OrderId,
-                OrderNumber = request.OrderNubmer,
+                OrderNumber = request.OrderNumber,
                 CustomerId = request.UserId,
                 ShippingCost = request.ShippingCost,
                 TaxCost = request.TaxCost,
-                SubTotal = request.SubtTotal,
+                SubTotal = request.SubTotal,
                 TotalCost = request.TotalCost,
                 Items = MapOrderItems(request.Items)
             };

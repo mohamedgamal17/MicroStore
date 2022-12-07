@@ -22,10 +22,10 @@ namespace MicroStore.Payment.Application.Consumers
             CreatePaymentRequestCommand createPaymentCommand = new CreatePaymentRequestCommand
             {
                 OrderId = context.Message.OrderId,
-                OrderNubmer = context.Message.OrderNumber,
+                OrderNumber = context.Message.OrderNumber,
                 ShippingCost = context.Message.ShippingCost,
                 TaxCost = context.Message.TaxCost,
-                SubtTotal= context.Message.SubTotal,
+                SubTotal= context.Message.SubTotal,
                 TotalCost = context.Message.TotalCost,
                 UserId = context.Message.UserId,
                 Items = MapOrderItems(context.Message.Items)
@@ -39,7 +39,7 @@ namespace MicroStore.Payment.Application.Consumers
                 PaymentId = result.PaymentId.ToString(),
                 CustomerId = result.CustomerId,
                 OrderId = result.OrderId,
-                OrderNubmer = result.OrderNumber,
+
             };
 
             await context.Publish(paymentCreatedIntegrationEvent,context.CancellationToken);
