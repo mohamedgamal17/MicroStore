@@ -2,9 +2,10 @@
 using MicroStore.Inventory.Domain.ProductAggregate;
 using MicroStore.Inventory.IntegrationEvents;
 using MicroStore.Inventory.IntegrationEvents.Models;
-
 namespace MicroStore.Inventory.Application.Tests.Consumers
 {
+
+ 
     public class When_allocate_order_stock_integration_event_consumed : BaseTestFixture
     {
 

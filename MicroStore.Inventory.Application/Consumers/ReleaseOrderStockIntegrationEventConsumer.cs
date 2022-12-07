@@ -1,31 +1,36 @@
 ﻿using MassTransit;
-using MicroStore.Inventory.Domain.ProductAggregate;
+using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Inventory.Application.Abstractions.Commands;
+using MicroStore.Inventory.Application.Abstractions.Common;
 using MicroStore.Inventory.IntegrationEvents;
-using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Inventory.Application.Consumers
 {
     public class ReleaseOrderStockIntegrationEventConsumer : IConsumer<ReleaseOrderStockIntegrationEvent>
     {
 
-        private readonly IRepository<Product> _productRepository;
+        private readonly ILocalMessageBus _localMessageBus;
 
-        public ReleaseOrderStockIntegrationEventConsumer(IRepository<Product> productRepository)
+        public ReleaseOrderStockIntegrationEventConsumer(ILocalMessageBus localMessageBus)
         {
-            _productRepository = productRepository;
+            _localMessageBus = localMessageBus;
         }
-
         public async Task Consume(ConsumeContext<ReleaseOrderStockIntegrationEvent> context)
         {
-            foreach (var orderItem in context.Message.Products)
+            await _localMessageBus.Send(new ReleaseOrderStockCommand
             {
-                Product product = await _productRepository.SingleAsync(x => x.Id == orderItem.ProductId);
+                OrderId = context.Message.OrderId,
+                OrderNumber = context.Message.OrderNumber,
+                Products = MapeProducts(context.Message.Products)
+            });
+        }
 
-                product.ReleaseStock(orderItem.Quantity);
-
-                await _productRepository.UpdateAsync(product);
-            }
-
+        private List<ProductModel> MapeProducts(List<MicroStore.Inventory.IntegrationEvents.Models.ProductModel> products)
+        {
+            return products.Select(x => new ProductModel
+            {
+                ProductId = x.ProductId,
+                Quantity = x.Quantity
+            }).ToList();
         }
     }
 }

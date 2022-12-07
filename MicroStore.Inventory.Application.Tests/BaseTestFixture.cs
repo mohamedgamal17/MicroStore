@@ -61,7 +61,7 @@ namespace MicroStore.Inventory.Application.Tests
         }
 
 
-        public Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class, IEntity 
+        public Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>
             {
@@ -71,7 +71,7 @@ namespace MicroStore.Inventory.Application.Tests
             });
         }
 
-        public Task<TEntity> Find<TEntity>(Expression<Func<TEntity,bool>> expression) where TEntity : class, IEntity
+        public Task<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>
             {

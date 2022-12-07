@@ -37,7 +37,7 @@ namespace MicroStore.Inventory.Application.Tests.Commands
                 RecivedQuantity = 5
             });
 
-           await action.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            await action.Should().ThrowExactlyAsync<EntityNotFoundException>();
         }
 
 

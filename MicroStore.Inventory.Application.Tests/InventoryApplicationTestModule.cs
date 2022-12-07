@@ -18,19 +18,16 @@ namespace MicroStore.Inventory.Application.Tests
         typeof(InventoryInfrastructureModule),
         typeof(MediatorModule),
         typeof(AbpAutofacModule))]
-
     public class InventoryApplicationTestModule : AbpModule
     {
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-          
             context.Services.AddMassTransitTestHarness(busRegisterConfig =>
             {
                 busRegisterConfig.AddConsumers(typeof(InventoryApplicationModule).Assembly);
 
                 busRegisterConfig.UsingInMemory((context, inMemorybusConfig) =>
                 {
-                    inMemorybusConfig.UseConsumeFilter(typeof(ConsumerUnitOfWorkFilter<>), context);
                     inMemorybusConfig.ConfigureEndpoints(context);
                 });
             });
@@ -42,20 +39,6 @@ namespace MicroStore.Inventory.Application.Tests
             var loggerFactory = context.ServiceProvider.GetRequiredService<ILoggerFactory>();
 
             LogContext.ConfigureCurrentLogContext(loggerFactory);
-        }
-
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<InventoyDbContext>();
-
-                if (dbContext.Database.EnsureCreated())
-                {
-                    dbContext.Database.Migrate();
-                }
-            }
         }
 
     }

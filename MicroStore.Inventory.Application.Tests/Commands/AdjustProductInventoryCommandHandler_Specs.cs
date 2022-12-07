@@ -24,11 +24,11 @@ namespace MicroStore.Inventory.Application.Tests.Commands
 
             product.Stock.Should().Be(10);
 
-            result.Stock.Should().Be(10);   
+            result.Stock.Should().Be(10);
         }
 
         [Test]
-        public  async Task Should_throw_entity_not_found_exception_when_product_is_not_exist()
+        public async Task Should_throw_entity_not_found_exception_when_product_is_not_exist()
         {
 
 
@@ -38,7 +38,7 @@ namespace MicroStore.Inventory.Application.Tests.Commands
                 Stock = 10
             });
 
-           await  action.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            await action.Should().ThrowExactlyAsync<EntityNotFoundException>();
 
         }
 

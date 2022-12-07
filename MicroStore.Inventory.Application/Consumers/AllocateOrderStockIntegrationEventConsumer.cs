@@ -1,24 +1,26 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Logging;
-using MicroStore.BuildingBlocks.Results;
-using MicroStore.Inventory.Domain.ProductAggregate;
+using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Inventory.Application.Abstractions.Commands;
+using MicroStore.Inventory.Application.Abstractions.Common;
 using MicroStore.Inventory.IntegrationEvents;
-using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Inventory.Application.Consumers
 {
     public class AllocateOrderStockIntegrationEventConsumer : IConsumer<AllocateOrderStockIntegrationEvent>
     {
 
+
         private readonly ILogger<AllocateOrderStockIntegrationEventConsumer> _logger;
 
-        private readonly IRepository<Product> _productRepository;
+        private readonly ILocalMessageBus _localMessageBus;
 
-        public AllocateOrderStockIntegrationEventConsumer(IRepository<Product> productRepository, ILogger<AllocateOrderStockIntegrationEventConsumer> logger)
+        public AllocateOrderStockIntegrationEventConsumer(ILocalMessageBus localMessageBus, ILogger<AllocateOrderStockIntegrationEventConsumer> logger)
         {
-            _productRepository = productRepository;
+            _localMessageBus = localMessageBus;
             _logger = logger;
         }
+
+
 
         public async Task Consume(ConsumeContext<AllocateOrderStockIntegrationEvent> context)
         {
@@ -27,53 +29,43 @@ namespace MicroStore.Inventory.Application.Consumers
                 _logger.LogDebug("Consuming {EventName} : For Order : {OrderId}", nameof(AllocateOrderStockIntegrationEvent), context.Message.OrderId);
             }
 
-            List<Result> failureResults = new List<Result>();
-
-            foreach (var orderItem in context.Message.Products)
+          
+            var result = await _localMessageBus.Send(new AllocateOrderStockCommand
             {
-                Product product = await _productRepository.SingleAsync(x => x.Id == orderItem.ProductId);
+                OrderId = context.Message.OrderId,
+                OrderNumber = context.Message.OrderNumber,
+                Products = MapeProducts(context.Message.Products)
+            });
 
-                var result = product.CanAllocateQuantity(orderItem.Quantity);
-
-                if (result.IsFailure)
-                {
-                    failureResults.Add(result);
-                }
-
-            }
-
-            if (failureResults.Any())
+            if (result.IsFailure)
             {
 
                 await context.Publish(new StockRejectedIntegrationEvent
                 {
                     OrderId = context.Message.OrderId,
-                    OrderNubmer =context.Message.OrderNumber,
-                    Details = failureResults.Select(x=> x.ToString())
-                        .Aggregate((t1,t2)=> t1 + "\n" + t2)
+                    OrderNubmer = context.Message.OrderNumber,
+                    Details = result.Error.ToString()
                 });
 
-
-                return;
+            }
+            else
+            {
+                await context.Publish(new StockConfirmedIntegrationEvent
+                {
+                    OrderId = context.Message.OrderId,
+                    OrderNumber = context.Message.OrderNumber
+                });
             }
 
+        }
 
-            foreach (var orderItem in context.Message.Products)
+        private List<ProductModel> MapeProducts(List<MicroStore.Inventory.IntegrationEvents.Models.ProductModel> products)
+        {
+            return products.Select(x => new ProductModel
             {
-                Product product = await _productRepository.SingleOrDefaultAsync(x => x.Id == orderItem.ProductId);
-
-                product.AllocateStock(orderItem.Quantity);
-
-                await _productRepository.UpdateAsync(product);
-            }
-
-
-            await context.Publish(new StockConfirmedIntegrationEvent
-            {
-                OrderId = context.Message.OrderId,
-                OrderNumber = context.Message.OrderNumber
-            });
-           
+                ProductId = x.ProductId,
+                Quantity = x.Quantity
+            }).ToList();
         }
     }
 }

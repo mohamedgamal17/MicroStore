@@ -4,6 +4,7 @@ using MicroStore.Inventory.Infrastructure.EntityFramework;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 
 namespace MicroStore.Inventory.Infrastructure
 {
@@ -26,7 +27,13 @@ namespace MicroStore.Inventory.Infrastructure
             {
                 opt.UseSqlServer(builder => builder.MigrationsAssembly(typeof(InventoyDbContext).Assembly.FullName));
             });
-           
+
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
+            {
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
+                options.IsolationLevel = System.Data.IsolationLevel.ReadCommitted;
+            });
+
         }
     }
 }
