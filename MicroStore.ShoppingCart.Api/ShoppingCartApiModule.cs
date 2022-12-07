@@ -101,6 +101,7 @@ namespace MicroStore.ShoppingCart.Api
             {
 
                 app.UseSwagger();
+
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Basket API");
