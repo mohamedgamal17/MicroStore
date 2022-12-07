@@ -4,7 +4,7 @@
     {
         public static string Ok => "ok";
         public static string Created => "created";
-        public static string Updated => "updated";
+        public static string Accepted => "accepted";
         public static string Deleted => "deleted";
         public static string NotFound => "not-found";
         public static string ValidationError => "validation-error";
