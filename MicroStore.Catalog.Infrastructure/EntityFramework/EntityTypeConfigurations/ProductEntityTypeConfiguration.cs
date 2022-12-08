@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MicroStore.Catalog.Domain.Const;
 using MicroStore.Catalog.Domain.Entities;
-
+using MicroStore.Catalog.Domain.ValueObjects;
 namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurations
 {
     internal class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product>
@@ -23,6 +24,74 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
             builder.Property(x => x.Price);
 
             builder.Property(x => x.OldPrice);
+
+            builder.OwnsOne(x => x.Weight, weightNavigationBuilder =>
+            {
+                weightNavigationBuilder
+                    .Property(x => x.Value)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(WeightConst.Value)
+                    .HasDefaultValue(Weight.Empty.Value);
+
+                weightNavigationBuilder
+                    .Property(x => x.Unit)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(WeightConst.Unit)
+                    .HasMaxLength(WeightConst.UnitLenght)
+                    .HasDefaultValue(Weight.Empty.Unit);
+            });
+
+            builder.OwnsOne(x => x.Height, heighNavigationBuilder =>
+            {
+                heighNavigationBuilder
+                    .Property(x => x.Value)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(HeightColumnConst.Value)
+                    .HasDefaultValue(Dimension.Empty.Value);
+
+                heighNavigationBuilder
+                    .Property(x => x.Unit)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(HeightColumnConst.Unit)
+                    .HasMaxLength(DimensionConst.UnitLenght)
+                    .HasDefaultValue(Dimension.Empty.Unit);
+            });
+
+            builder.OwnsOne(x => x.Length, lenghtNavigationBuilder =>
+            {
+
+                lenghtNavigationBuilder
+                    .Property(x => x.Value)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(LenghtColumnConst.Value)
+                    .HasDefaultValue(Dimension.Empty.Value);
+
+                lenghtNavigationBuilder
+                    .Property(x => x.Unit)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(LenghtColumnConst.Unit)
+                    .HasMaxLength(DimensionConst.UnitLenght)
+                    .HasDefaultValue(Dimension.Empty.Unit);
+
+            });
+
+            builder.OwnsOne(x => x.Width, widthNavigationBuilder =>
+            {   
+                widthNavigationBuilder
+                    .Property(x => x.Value)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(WidthColumnConst.Value)
+                    .HasDefaultValue(Dimension.Empty.Value);
+
+                widthNavigationBuilder
+                    .Property(x => x.Unit)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(WidthColumnConst.Unit)
+                    .HasMaxLength(DimensionConst.UnitLenght)
+                    .HasDefaultValue(Dimension.Empty.Unit);
+
+            });
+
 
             builder.HasMany(x => x.ProductCategories).WithOne();
 
