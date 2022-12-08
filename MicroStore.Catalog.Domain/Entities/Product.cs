@@ -1,7 +1,6 @@
-﻿using MicroStore.BuildingBlocks.Results;
-using MicroStore.Catalog.Domain.Events;
+﻿using MicroStore.Catalog.Domain.Events;
+using MicroStore.Catalog.Domain.ValueObjects;
 using Volo.Abp.Domain.Entities;
-
 namespace MicroStore.Catalog.Domain.Entities
 {
     public class Product : BasicAggregateRoot<Guid>
@@ -13,6 +12,10 @@ namespace MicroStore.Catalog.Domain.Entities
         public string LongDescription { get;set; } = string.Empty;
         public decimal Price { get; set; }
         public decimal OldPrice { get; set; }
+        public Weight Weight { get; set; }
+        public Dimension Length { get; set; }
+        public Dimension Width { get; set; }
+        public Dimension Height { get; set; }
 
         private List<ProductCategory> _productCategories = new List<ProductCategory>();
 
