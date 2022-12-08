@@ -3,6 +3,7 @@ using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Domain.ValueObjects;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
@@ -42,7 +43,15 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             product.OldPrice = request.OldPrice;
 
-            if(request.ImageModel != null)
+            product.Weight = request.Weight?.AsWeight() ?? Weight.Empty;
+
+            product.Length = request.Length?.AsDimension() ?? Dimension.Empty;
+
+            product.Width = request.Length?.AsDimension() ?? Dimension.Empty;
+
+            product.Height = request.Height?.AsDimension() ?? Dimension.Empty;
+
+            if (request.ImageModel != null)
             {
                 var imageResult = await _imageService.SaveAsync(request.ImageModel,cancellationToken);
 

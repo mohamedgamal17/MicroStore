@@ -32,7 +32,28 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 LongDescription = Guid.NewGuid().ToString(),
                 Price = 50,
                 OldPrice = 150,
+                Weight = new WeightModel
+                {
+                    Value = 50,
+                    Unit = "g"
+                },
+                Length = new DimensionModel
+                {
+                    Value = 50,
+                    Unit = "cm",
+                },
 
+                Width = new DimensionModel
+                {
+                    Value = 50,
+                    Unit = "cm",
+                },
+
+                Height = new DimensionModel
+                {
+                    Value = 50,
+                    Unit = "cm",
+                },
             };
 
             var result = await Send(request);
@@ -49,6 +70,10 @@ namespace MicroStore.Catalog.Application.Tests.Products
             product.Price.Should().Be(request.Price);
             product.OldPrice.Should().Be(request.OldPrice);
             product.Thumbnail.Should().EndWith(request.ImageModel.FileName);
+            product.Weight.Should().Be(request.Weight.AsWeight());
+            product.Height.Should().Be(request.Height.AsDimension());
+            product.Length.Should().Be(request.Length.AsDimension());
+            product.Width.Should().Be(request.Width.AsDimension());
         }
 
 

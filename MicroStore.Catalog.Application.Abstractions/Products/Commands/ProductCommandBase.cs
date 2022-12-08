@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using MicroStore.Catalog.Application.Abstractions.Products.Models;
+using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
@@ -12,6 +12,11 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
         public string LongDescription { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public decimal OldPrice { get; set; }
+        public WeightModel Weight { get; set; }
+        public DimensionModel Length { get; set; }
+        public DimensionModel Width { get; set; }
+        public DimensionModel Height { get; set; }
+
     }
 
     internal abstract class ProductCommandValidatorBase<TCommand> : AbstractValidator<TCommand>

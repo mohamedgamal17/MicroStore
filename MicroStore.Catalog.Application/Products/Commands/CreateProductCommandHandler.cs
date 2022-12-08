@@ -3,6 +3,7 @@ using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Domain.ValueObjects;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
@@ -29,6 +30,14 @@ namespace MicroStore.Catalog.Application.Products.Commands
             product.LongDescription = request.LongDescription;
 
             product.OldPrice = request.OldPrice;
+
+            product.Weight = request.Weight?.AsWeight() ?? Weight.Empty;
+
+            product.Length = request.Length?.AsDimension() ?? Dimension.Empty;
+
+            product.Width = request.Length?.AsDimension() ?? Dimension.Empty;
+
+            product.Height = request.Height?.AsDimension() ?? Dimension.Empty;
 
             await _productRepository.InsertAsync(product, cancellationToken: cancellationToken);
 

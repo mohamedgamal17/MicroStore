@@ -26,6 +26,28 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 LongDescription = Guid.NewGuid().ToString(),
                 Price = 120,
                 OldPrice = 150,
+                Weight = new WeightModel
+                {
+                    Value = 50,
+                    Unit = "g"
+                },
+                Length = new DimensionModel
+                {
+                    Value = 50,
+                    Unit = "cm",
+                },
+
+                Width = new DimensionModel
+                {
+                    Value = 50,
+                    Unit = "cm",
+                },
+
+                Height = new DimensionModel
+                {
+                    Value = 50,
+                    Unit = "cm",
+                },
             };
 
 
@@ -40,6 +62,10 @@ namespace MicroStore.Catalog.Application.Tests.Products
             product.LongDescription.Should().Be(command.LongDescription);
             product.Price.Should().Be(command.Price);
             product.OldPrice.Should().Be(command.OldPrice);
+            product.Weight.Should().Be(command.Weight.AsWeight());
+            product.Height.Should().Be(command.Height.AsDimension());
+            product.Length.Should().Be(command.Length.AsDimension());
+            product.Width.Should().Be(command.Width.AsDimension());
         }
 
         [Test]
