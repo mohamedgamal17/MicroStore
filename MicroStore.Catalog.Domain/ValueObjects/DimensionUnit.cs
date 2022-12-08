@@ -12,5 +12,17 @@
 
         public static readonly string None = "none";
 
+
+        public static List<string> AsList()
+        {
+            return new List<string>
+            {
+                CentiMeter,
+                Meter,
+                Inch,
+                Feet
+            };
+        }
+
     }
 }

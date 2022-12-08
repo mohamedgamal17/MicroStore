@@ -4,6 +4,8 @@ namespace MicroStore.Catalog.Domain.ValueObjects
 {
     public class Dimension : ValueObject<Dimension>
     {
+        public static readonly Dimension Empty = new Dimension(0, DimensionUnit.None);
+
         private readonly double _value;
 
         private readonly string _unit;
