@@ -1,78 +1,81 @@
-﻿//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-//using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
-//using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
-//using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
-//using MicroStore.Catalog.Application.Abstractions.Products.Queries;
-//using System.Xml.Linq;
-//using Volo.Abp.AspNetCore.Mvc;
-//using Volo.Abp;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
+using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
+using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
+using MicroStore.Catalog.Application.Abstractions.Products.Queries;
+using Volo.Abp;
+using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.Results.Http;
 
-//namespace MicroStore.Catalog.Api.Controllers
-//{
-//    [RemoteService(Name = "Catalog")]
-//    [Route("api/[controller]")]
+namespace MicroStore.Catalog.Api.Controllers
+{
+    [RemoteService(Name = "Catalog")]
+    [Route("api/[controller]")]
 
-//    public class CatalogController : AbpControllerBase
-//    {
-
-//        private readonly ILocalMessageBus _localMessageBus;
-//        public CatalogController(ILocalMessageBus localMessageBus)
-//        {
-//            _localMessageBus = localMessageBus;
-//        }
-
-//        [Route("category")]
-//        [HttpGet]
-//        public async Task<List<CategoryDto>> GetCatalogCategoryList()
-//        {
-//            var request = new GetCategoryListQuery();
-//            var result = await _localMessageBus.Send(request);
-//            return result;
-//        }
+    public class CatalogController : MicroStoreApiController
+    {
 
 
-//        [Route("category/{id}")]
-//        [HttpGet]
-//        public async Task<CategoryDto> GetCatalogCategory(Guid id)
-//        {
-//            var request = new GetCategoryQuery()
-//            {
-//                Id = id
-//            };
+        [Route("category")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<List<CategoryListDto>>)))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        public async Task<IActionResult> GetCatalogCategoryList()
+        {
+            var request = new GetCategoryListQuery();
+
+            var result = await Send(request);
+
+            return FromResult(result);
+        }
 
 
-//            var result = await _localMessageBus.Send(request);
+        [Route("category/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<CategoryDto>)))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        public async Task<IActionResult> GetCatalogCategory(Guid id)
+        {
+            var request = new GetCategoryQuery()
+            {
+                Id = id
+            };
 
-//            return result;
-//        }
+            var result = await Send(request);
 
-//        [Authorize]
-//        [Route("product")]
-//        [HttpGet]
-//        [ProducesResponseType(StatusCodes.Status200OK)]
-//        public async Task<List<ProductDto>> GetCatalogProductList()
-//        {
-//            var request = new GetProductListQuery();
+            return FromResult(result);
+        }
 
-//            var result = await _localMessageBus.Send(request);
+        [Authorize]
+        [Route("product")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<List<ProductDto>>))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCatalogProductList()
+        {
+            var request = new GetProductListQuery();
 
-//            return result;
-//        }
+            var result = await Send(request);
+
+            return FromResult(result);
+        }
 
 
-//        [Route("product/{id}")]
-//        [HttpGet]
-//        [ProducesResponseType(StatusCodes.Status200OK)]
-//        [ProducesResponseType(StatusCodes.Status404NotFound)]
-//        public async Task<ProductDto> GetCatalogProduct(Guid id)
-//        {
-//            var query = new GetProductQuery() { Id = id };
+        [Route("product/{id}")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = (typeof(Envelope<ProductDto>)))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCatalogProduct(Guid id)
+        {
+            var query = new GetProductQuery() { Id = id };
 
-//            var result = await _localMessageBus.Send(query);
+            var result = await Send(query);
 
-//            return result;
-//        }
-//    }
-//}
+            return FromResult(result);
+        }
+    }
+}

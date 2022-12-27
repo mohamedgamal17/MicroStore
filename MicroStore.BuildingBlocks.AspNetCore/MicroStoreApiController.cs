@@ -14,11 +14,11 @@ namespace MicroStore.BuildingBlocks.AspNetCore
             return StatusCode(result.StatusCode, result.Envelope);
         }
 
-
-        protected Task<ResponseResult> Send<TCommand>(TCommand command)
-            where TCommand : ICommand
+        protected Task<ResponseResult> Send<TRequest>(TRequest request)
+            where TRequest : IRequest<ResponseResult>
         {
-            return LocalMessageBus.Send(command);
+            return LocalMessageBus.Send(request);
         }
+
     }
 }

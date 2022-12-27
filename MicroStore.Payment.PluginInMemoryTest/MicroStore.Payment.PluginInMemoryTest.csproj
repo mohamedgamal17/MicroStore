@@ -9,9 +9,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
     <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="6.0.1" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="6.0.1" />
-    <PackageReference Include="Volo.Abp.TestBase" Version="6.0.1" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="6.0.2" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="6.0.2" />
+    <PackageReference Include="Volo.Abp.TestBase" Version="6.0.2" />
   
   </ItemGroup>
 
