@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.ShoppingCart.Api.Infrastructure;
 using MicroStore.ShoppingCart.Api.Models;
 using Volo.Abp;
@@ -8,8 +9,6 @@ using Volo.Abp.ObjectMapping;
 
 namespace MicroStore.ShoppingCart.Api.Controllers
 {
-
-    [RemoteService(Name = "Basket")]
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -29,26 +28,27 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         }
 
         [HttpGet("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
         public async Task<IActionResult> GetUserBasket(string userId)
         {
             var basket = await _basketRepository.GetAsync(userId);
 
-            return Ok(_objectMapper.Map<Basket, BasketDto>(basket));
+            return Success(StatusCodes.Status200OK, _objectMapper.Map<Basket, BasketDto>(basket));
         }
 
 
         [HttpPut("update")]
-        [ProducesResponseType(StatusCodes.Status202Accepted,Type=  typeof(BasketDto))]
+        [ProducesResponseType(StatusCodes.Status202Accepted,Type=  typeof(Envelope<BasketDto>))]
         public async Task<IActionResult> Update(Basket basket)
         {
             basket =  await _basketRepository.UpdateAsync(basket);
 
-            return Accepted(_objectMapper.Map<Basket, BasketDto>(basket));
+            return Success(StatusCodes.Status202Accepted, _objectMapper.Map<Basket, BasketDto>(basket));
+
         }
 
         [HttpPost("add-item")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(BasketDto))]
+        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<BasketDto>))]
         public async Task<IActionResult> AddProduct(AddProductDto model)
         {
             var basket = await _basketRepository.GetAsync(model.UserId);
@@ -57,11 +57,12 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
             basket =  await _basketRepository.UpdateAsync(basket);
 
-            return Ok(_objectMapper.Map<Basket, BasketDto>(basket));
+            return Success(StatusCodes.Status202Accepted, _objectMapper.Map<Basket, BasketDto>(basket));
+
         }
 
         [HttpDelete("remove-item")]
-        [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(BasketDto))]
+        [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(Envelope<BasketDto>))]
         public async Task<IActionResult> RemoveProduct(RemoveProductDto model)
         {
             var basket = await _basketRepository.GetAsync(model.UserId);
@@ -70,17 +71,21 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
             if (result.IsFailure)
             {
-                return NotFound(result.Error);
+                return Failure(StatusCodes.Status404NotFound, new ErrorInfo
+                {
+                    Message = result.Error
+                });
             }
 
             basket = await _basketRepository.UpdateAsync(basket);
 
-            return Accepted(_objectMapper.Map<Basket, BasketDto>(basket));
+            return Success(StatusCodes.Status202Accepted, _objectMapper.Map<Basket, BasketDto>(basket));
+
         }
 
 
         [HttpPut("migrate")]
-        [ProducesResponseType(StatusCodes.Status202Accepted,Type =  typeof(BasketDto))]
+        [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(Envelope<BasketDto>))]
         public async Task<IActionResult> Migrate(MigrateDto model)
         {
             var basketFrom = await _basketRepository.GetAsync(model.FromUserId);
@@ -93,11 +98,28 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
             await _basketRepository.UpdateAsync(basketTo);
 
-            return Accepted(_objectMapper.Map<Basket, BasketDto>(basketTo));
 
+            return Success(StatusCodes.Status202Accepted, _objectMapper.Map<Basket, BasketDto>(basketTo));
         }
 
 
+        [NonAction]
+        protected IActionResult Success<TResult>(int statusCode,TResult result)
+        {
+            return StatusCode(statusCode, Envelope.Success(result));
+        }
+
+        [NonAction]
+        protected IActionResult Success(int statusCode)
+        {
+            return StatusCode(statusCode, Envelope.Success());
+        }
+
+        [NonAction]
+        protected IActionResult Failure(int statusCode , ErrorInfo error)
+        {
+            return StatusCode(statusCode, Envelope.Failure(error));
+        }
 
     }
 }
