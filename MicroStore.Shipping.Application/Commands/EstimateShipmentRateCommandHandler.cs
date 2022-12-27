@@ -9,7 +9,7 @@ using MicroStore.Shipping.Domain.Entities;
 using System.Net;
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class EstimateShipmentRateCommandHandler : CommandHandlerV1<EstimateShipmentRateCommand>
+    public class EstimateShipmentRateCommandHandler : CommandHandler<EstimateShipmentRateCommand>
     {
         private readonly IShipmentSystemResolver _shipmentSystemResolver;
 

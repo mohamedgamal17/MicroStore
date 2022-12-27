@@ -4,7 +4,7 @@ using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Events.Models;
 namespace MicroStore.Ordering.Application.Abstractions.Commands
 {
-    public class SubmitOrderCommand : ICommandV1
+    public class SubmitOrderCommand : ICommand
     {
         public AddressModel ShippingAddress { get; set; }
         public AddressModel BillingAddress { get; set; }

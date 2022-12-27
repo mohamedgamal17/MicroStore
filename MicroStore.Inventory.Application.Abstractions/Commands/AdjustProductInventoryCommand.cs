@@ -3,7 +3,7 @@ using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Inventory.Application.Abstractions.Dtos;
 namespace MicroStore.Inventory.Application.Abstractions.Commands
 {
-    public class AdjustProductInventoryCommand : ICommandV1
+    public class AdjustProductInventoryCommand : ICommand
     {
         public string Sku { get; set; }
 

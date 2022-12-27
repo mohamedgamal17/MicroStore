@@ -9,7 +9,7 @@ using System.Net;
 
 namespace MicroStore.Ordering.Application.Commands
 {
-    public class SubmitOrderCommandHandler : CommandHandlerV1<SubmitOrderCommand>
+    public class SubmitOrderCommandHandler : CommandHandler<SubmitOrderCommand>
     {
         private readonly IRequestClient<CheckOrderStatusEvent> _checkOrderRequestClinet;
 

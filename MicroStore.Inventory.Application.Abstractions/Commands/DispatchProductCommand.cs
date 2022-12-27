@@ -2,7 +2,7 @@
 
 namespace MicroStore.Inventory.Application.Abstractions.Commands
 {
-    public class DispatchProductCommand : ICommandV1
+    public class DispatchProductCommand : ICommand
     {
         public string ExternalProductId { get; set; }
         public string Sku { get; set; }

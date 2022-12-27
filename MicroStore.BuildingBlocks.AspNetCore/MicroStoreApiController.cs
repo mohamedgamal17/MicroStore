@@ -16,7 +16,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore
 
 
         protected Task<ResponseResult> Send<TCommand>(TCommand command)
-            where TCommand : ICommandV1
+            where TCommand : ICommand
         {
             return LocalMessageBus.Send(command);
         }

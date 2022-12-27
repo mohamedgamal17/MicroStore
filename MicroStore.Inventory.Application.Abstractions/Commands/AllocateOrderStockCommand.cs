@@ -3,7 +3,7 @@ using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Inventory.Application.Abstractions.Common;
 namespace MicroStore.Inventory.Application.Abstractions.Commands
 {
-    public class AllocateOrderStockCommand : ICommandV1
+    public class AllocateOrderStockCommand : ICommand
     {
         public string ExternalOrderId { get; set; }
         public string OrderNumber { get; set; }

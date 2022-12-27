@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class UpdateShippingSystemCommandHandler : CommandHandlerV1<UpdateShippingSystemCommand>
+    public class UpdateShippingSystemCommandHandler : CommandHandler<UpdateShippingSystemCommand>
     {
         private readonly IRepository<ShippingSystem> _shippingSystemRepository;
 

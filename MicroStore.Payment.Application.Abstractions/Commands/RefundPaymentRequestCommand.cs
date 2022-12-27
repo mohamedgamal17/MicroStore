@@ -2,7 +2,7 @@
 
 namespace MicroStore.Payment.Application.Abstractions.Commands
 {
-    public class RefundPaymentRequestCommand : ICommandV1
+    public class RefundPaymentRequestCommand : ICommand
     {
         public Guid PaymentId { get; set; }
     }

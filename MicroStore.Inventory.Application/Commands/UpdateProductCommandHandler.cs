@@ -1,6 +1,8 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Inventory.Application.Abstractions.Commands;
 using MicroStore.Inventory.Domain.ProductAggregate;
+using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Inventory.Application.Commands
 {
@@ -13,7 +15,7 @@ namespace MicroStore.Inventory.Application.Commands
             _productRepository = productRepository;
         }
 
-        public override async Task<Unit> Handle(UpdateProdutCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(UpdateProdutCommand request, CancellationToken cancellationToken)
         {
             Product product = await _productRepository.SingleAsync(x => x.ExternalProductId == request.ExternalProductId);
             product.Sku = request.Sku;
@@ -22,7 +24,7 @@ namespace MicroStore.Inventory.Application.Commands
 
             await _productRepository.UpdateAsync(product);
 
-            return Unit.Value;
+            return ResponseResult.Success((int) HttpStatusCode.Created);
         }
     }
 }

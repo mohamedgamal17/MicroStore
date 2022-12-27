@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Results.Http;
+using System.Net;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Validation;
@@ -24,5 +22,29 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
 
         public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
 
+
+        protected ResponseResult Success(HttpStatusCode statusCode)
+        {
+            return ResponseResult.Success((int)statusCode);
+        }
+
+        protected ResponseResult Success<T>(HttpStatusCode statusCode , T result)
+        {
+            return ResponseResult.Success<T>((int)statusCode, result);
+        }
+
+        protected ResponseResult Failure(HttpStatusCode stausCode , string errorMessage , string? details = null)
+        {
+            return ResponseResult.Failure((int)stausCode, new ErrorInfo
+            {
+                Message = errorMessage,
+                Details = details
+            });
+        }
+
+        protected ResponseResult Failure(HttpStatusCode stausCode , ErrorInfo errorInfo)
+        {
+            return ResponseResult.Failure((int)stausCode, errorInfo);
+        }
     }
 }

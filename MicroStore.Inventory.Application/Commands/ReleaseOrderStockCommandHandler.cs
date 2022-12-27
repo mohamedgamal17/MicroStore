@@ -8,7 +8,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Inventory.Application.Commands
 {
-    public class ReleaseOrderStockCommandHandler : CommandHandlerV1<ReleaseOrderStockCommand>
+    public class ReleaseOrderStockCommandHandler : CommandHandler<ReleaseOrderStockCommand>
     {
         private readonly IRepository<Product> _productRepository;
 

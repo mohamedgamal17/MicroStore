@@ -6,7 +6,7 @@ using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
-    public class UpdateProductCommand : ProductCommandBase, ICommandV1
+    public class UpdateProductCommand : ProductCommandBase, ICommand
     {
         public Guid ProductId { get; set; }
 

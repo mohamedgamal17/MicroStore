@@ -2,7 +2,7 @@
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
-    public class AssignProductImageCommand : ICommandV1
+    public class AssignProductImageCommand : ICommand
     {
         public Guid ProductId { get; set; }
         public ImageModel ImageModel { get; set; }

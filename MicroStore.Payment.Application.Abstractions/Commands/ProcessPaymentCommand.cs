@@ -2,7 +2,7 @@
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 namespace MicroStore.Payment.Application.Abstractions.Commands
 {
-    public class ProcessPaymentRequestCommand : ICommandV1
+    public class ProcessPaymentRequestCommand : ICommand
     {
         public Guid PaymentId { get; set; }
         public string PaymentGatewayName { get; set; }

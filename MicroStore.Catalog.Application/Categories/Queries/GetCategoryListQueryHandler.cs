@@ -1,13 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper.Internal.Mappers;
+using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Domain.Entities;
+using System.Net;
+using Volo.Abp.ObjectMapping;
 
 namespace MicroStore.Catalog.Application.Categories.Queries
 {
-    internal class GetCategoryListQueryHandler : QueryHandler<GetCategoryListQuery, List<CategoryDto>>
+    internal class GetCategoryListQueryHandler : QueryHandler<GetCategoryListQuery>
     {
         private readonly ICatalogDbContext _catalogDbContext;
 
@@ -18,12 +22,14 @@ namespace MicroStore.Catalog.Application.Categories.Queries
 
         }
 
-        public override async Task<List<CategoryDto>> Handle(GetCategoryListQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(GetCategoryListQuery request, CancellationToken cancellationToken)
         {
             var result = await _catalogDbContext.Categories
-                .ToListAsync();
+            .ToListAsync();
 
-            return ObjectMapper.Map<List<Category>, List<CategoryDto>>(result);
+            var mapping = ObjectMapper.Map<List<Category>, List<CategoryDto>>(result);
+
+            return ResponseResult.Success((int)HttpStatusCode.OK, mapping);
         }
 
 

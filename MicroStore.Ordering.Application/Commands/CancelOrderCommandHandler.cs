@@ -9,7 +9,7 @@ using MicroStore.Ordering.Events;
 using System.Net;
 namespace MicroStore.Ordering.Application.Commands
 {
-    public class CancelOrderCommandHandler : CommandHandlerV1<CancelOrderCommand>
+    public class CancelOrderCommandHandler : CommandHandler<CancelOrderCommand>
     {
         private readonly IPublishEndpoint _publishEndPoint;
 

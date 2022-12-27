@@ -7,7 +7,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Categories.Commands
 {
-    public class CreateCategoryCommandHandler : CommandHandlerV1<CreateCategoryCommand>
+    public class CreateCategoryCommandHandler : CommandHandler<CreateCategoryCommand>
     {
         private readonly IRepository<Category> _categoryRepository;
 

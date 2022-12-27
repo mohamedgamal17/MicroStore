@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class RemoveProductImageCommandHandler : CommandHandlerV1<RemoveProductImageCommand>
+    public class RemoveProductImageCommandHandler : CommandHandler<RemoveProductImageCommand>
     {
         private readonly IRepository<Product> _productRepository;
 

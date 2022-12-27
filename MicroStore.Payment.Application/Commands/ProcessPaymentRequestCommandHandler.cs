@@ -13,7 +13,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Payment.Application.Commands
 {
-    public class ProcessPaymentRequestCommandHandler : CommandHandlerV1<ProcessPaymentRequestCommand>
+    public class ProcessPaymentRequestCommandHandler : CommandHandler<ProcessPaymentRequestCommand>
     {
         private readonly IPaymentMethodResolver _paymentMethodResolver;
 

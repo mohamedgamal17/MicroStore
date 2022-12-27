@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Abstractions.Categories.Commands
 {
-    public class CreateCategoryCommand : CategoryCommandBase,ICommandV1
+    public class CreateCategoryCommand : CategoryCommandBase,ICommand
     {
     }
 

@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class UpdateProductImageCommandHandler : CommandHandlerV1<UpdateProductImageCommand>
+    public class UpdateProductImageCommandHandler : CommandHandler<UpdateProductImageCommand>
     {
         private readonly IRepository<Product> _productRepository;
 

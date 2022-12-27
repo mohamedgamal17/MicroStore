@@ -10,7 +10,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Categories.Commands
 {
-    internal class UpdateCategoryCommandHandler : CommandHandlerV1<UpdateCategoryCommand>
+    internal class UpdateCategoryCommandHandler : CommandHandler<UpdateCategoryCommand>
     {
 
         private readonly IRepository<Category> _categoryRepository;

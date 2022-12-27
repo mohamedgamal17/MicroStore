@@ -4,7 +4,7 @@ using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Domain.ValueObjects;
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class CreateShipmentCommand : ICommandV1
+    public class CreateShipmentCommand : ICommand
     {
         public string OrderId { get; set; }
         public string UserId { get; set; }

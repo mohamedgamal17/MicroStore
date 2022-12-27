@@ -12,7 +12,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class FullfillShipmentCommandHandler : CommandHandlerV1<FullfillShipmentCommand>
+    public class FullfillShipmentCommandHandler : CommandHandler<FullfillShipmentCommand>
     {
         private readonly IShipmentSystemResolver _shipmentSystemResolver;
 

@@ -9,7 +9,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class CreateProductCommandHandler : CommandHandlerV1<CreateProductCommand>
+    public class CreateProductCommandHandler : CommandHandler<CreateProductCommand>
     {
         private readonly IRepository<Product> _productRepository;
 

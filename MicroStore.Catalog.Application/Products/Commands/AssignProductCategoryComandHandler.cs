@@ -8,7 +8,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class AssignProductCategoryComandHandler : CommandHandlerV1<AssignProductCategoryCommand>
+    public class AssignProductCategoryComandHandler : CommandHandler<AssignProductCategoryCommand>
     {
         private readonly IRepository<Product> _productRepository;
 

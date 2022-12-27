@@ -12,7 +12,7 @@ using MicroStore.BuildingBlocks.Results.Http;
 
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class AssignProductImageCommandHandler : CommandHandlerV1<AssignProductImageCommand>
+    public class AssignProductImageCommandHandler : CommandHandler<AssignProductImageCommand>
     {
         private readonly IRepository<Product> _productRepository;
 

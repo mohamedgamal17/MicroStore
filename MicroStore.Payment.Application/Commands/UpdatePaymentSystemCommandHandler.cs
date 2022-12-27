@@ -8,7 +8,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Payment.Application.Commands
 {
-    public class UpdatePaymentSystemCommandHandler : CommandHandlerV1<UpdatePaymentSystemCommand>
+    public class UpdatePaymentSystemCommandHandler : CommandHandler<UpdatePaymentSystemCommand>
     {
         private readonly IRepository<PaymentSystem> _paymentSystemRepository;
 

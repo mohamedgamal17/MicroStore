@@ -4,21 +4,8 @@ using Volo.Abp.Uow;
 
 namespace MicroStore.BuildingBlocks.InMemoryBus
 {
-    public abstract class CommandHandler<TCommand, TResponse> : RequestHandler<TCommand, TResponse>
-        , IUnitOfWorkEnabled where TCommand : ICommand<TResponse>
-    {
-
-    }
-
-
-    public abstract class CommandHandler<TCommand> : CommandHandler<TCommand, Unit>
+    public abstract class CommandHandler<TCommand> : RequestHandler<TCommand,ResponseResult> , IUnitOfWorkEnabled
         where TCommand : ICommand
-    {
-
-    }
-
-    public abstract class CommandHandlerV1<TCommand> : RequestHandler<TCommand,ResponseResult> , IUnitOfWorkEnabled
-        where TCommand : ICommandV1
     {
 
     }

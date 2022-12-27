@@ -3,7 +3,7 @@ using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Payment.Application.Abstractions.Dtos;
 namespace MicroStore.Payment.Application.Abstractions.Commands
 {
-    public class CreatePaymentRequestCommand : ICommandV1
+    public class CreatePaymentRequestCommand : ICommand
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }

@@ -2,7 +2,7 @@
 
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class UpdateShippingLocationCommand : ICommandV1
+    public class UpdateShippingLocationCommand : ICommand
     {
         public string Name { get; set; }
         public string CountryCode { get; set; }

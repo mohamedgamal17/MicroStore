@@ -8,7 +8,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class CreateShipmentCommandHandler : CommandHandlerV1<CreateShipmentCommand>
+    public class CreateShipmentCommandHandler : CommandHandler<CreateShipmentCommand>
     {
         private readonly IRepository<Shipment> _shipmentRepository;
 

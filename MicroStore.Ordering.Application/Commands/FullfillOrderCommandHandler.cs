@@ -9,7 +9,7 @@ using MicroStore.Ordering.Events;
 using System.Net;
 namespace MicroStore.Ordering.Application.Commands
 {
-    public class FullfillOrderCommandHandler : CommandHandlerV1<FullfillOrderCommand>
+    public class FullfillOrderCommandHandler : CommandHandler<FullfillOrderCommand>
     {
 
         private readonly IPublishEndpoint _publishEndPoint;

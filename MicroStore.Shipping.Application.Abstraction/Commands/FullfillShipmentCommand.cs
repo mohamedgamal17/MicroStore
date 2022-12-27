@@ -3,7 +3,7 @@ using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class FullfillShipmentCommand : ICommandV1
+    public class FullfillShipmentCommand : ICommand
     {
         public Guid ShipmentId { get; set; }
         public string SystemName { get; set; }

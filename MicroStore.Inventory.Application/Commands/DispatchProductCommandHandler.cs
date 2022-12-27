@@ -6,7 +6,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Inventory.Application.Commands
 {
-    public class DispatchProductCommandHandler : CommandHandlerV1<DispatchProductCommand>
+    public class DispatchProductCommandHandler : CommandHandler<DispatchProductCommand>
     {
         private readonly IRepository<Product> _productRepository;
 

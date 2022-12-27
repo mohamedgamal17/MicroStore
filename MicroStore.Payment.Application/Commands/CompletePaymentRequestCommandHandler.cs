@@ -9,7 +9,7 @@ using System.Net;
 
 namespace MicroStore.Payment.Application.Commands
 {
-    public class CompletePaymentRequestCommandHandler : CommandHandlerV1<CompletePaymentRequestCommand>
+    public class CompletePaymentRequestCommandHandler : CommandHandler<CompletePaymentRequestCommand>
     {
 
         private readonly IPaymentMethodResolver _paymentResolver;

@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Payment.Application.Commands
 {
-    public class CreatePaymentRequestCommandHandler : CommandHandlerV1<CreatePaymentRequestCommand>
+    public class CreatePaymentRequestCommandHandler : CommandHandler<CreatePaymentRequestCommand>
     {
 
         private readonly IRepository<PaymentRequest> _paymentRepository;

@@ -2,7 +2,7 @@
 
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class UpdateShippingSystemCommand : ICommandV1
+    public class UpdateShippingSystemCommand : ICommand
     {
         public string SystemName { get; set; }
 

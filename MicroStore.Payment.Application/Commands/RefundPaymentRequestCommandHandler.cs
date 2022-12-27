@@ -10,7 +10,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Payment.Application.Commands
 {
-    public class RefundPaymentRequestCommandHandler : CommandHandlerV1<RefundPaymentRequestCommand>
+    public class RefundPaymentRequestCommandHandler : CommandHandler<RefundPaymentRequestCommand>
     {
         private readonly IRepository<PaymentRequest> _paymentRequestRepository;
 

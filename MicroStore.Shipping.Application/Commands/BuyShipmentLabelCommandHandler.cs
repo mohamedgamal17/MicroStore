@@ -9,7 +9,7 @@ using MicroStore.Shipping.Application.Extensions;
 using System.Net;
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class BuyShipmentLabelCommandHandler : CommandHandlerV1<BuyShipmentLabelCommand>
+    public class BuyShipmentLabelCommandHandler : CommandHandler<BuyShipmentLabelCommand>
     {
         private readonly IShipmentSystemResolver _shipmentSystemResolver;
 

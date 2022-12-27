@@ -2,7 +2,7 @@
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 namespace MicroStore.Ordering.Application.Abstractions.Commands
 {
-    public class CancelOrderCommand : ICommandV1
+    public class CancelOrderCommand : ICommand
     {
         public Guid OrderId { get; set; }
         public string Reason { get; set; }

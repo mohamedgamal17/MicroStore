@@ -9,7 +9,7 @@ using System.Net;
 using MicroStore.BuildingBlocks.Results.Http;
 namespace MicroStore.Ordering.Application.Commands
 {
-    public class CompleteOrderCommandHandler : CommandHandlerV1<CompleteOrderCommand>
+    public class CompleteOrderCommandHandler : CommandHandler<CompleteOrderCommand>
     {
 
         private readonly IPublishEndpoint _publishEndpoint;

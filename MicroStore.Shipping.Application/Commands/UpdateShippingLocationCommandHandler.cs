@@ -8,7 +8,7 @@ using System.Net;
 
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class UpdateShippingLocationCommandHandler : CommandHandlerV1<UpdateShippingLocationCommand>
+    public class UpdateShippingLocationCommandHandler : CommandHandler<UpdateShippingLocationCommand>
     {
 
         private readonly ISettingsRepository _settingsRepository;
