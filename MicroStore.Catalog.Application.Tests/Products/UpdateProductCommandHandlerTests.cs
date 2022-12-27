@@ -4,6 +4,8 @@ using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Tests.Utilites;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.IntegrationEvents;
+using System.Net;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
@@ -26,32 +28,33 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 LongDescription = Guid.NewGuid().ToString(),
                 Price = 120,
                 OldPrice = 150,
+                ImageModel = new ImageModel
+                {
+                    FileName = $"{Guid.NewGuid()}.png",
+                    Type = "png",
+                    Data = ImageGenerator.GetBitmapData()
+                },
                 Weight = new WeightModel
                 {
                     Value = 50,
                     Unit = "g"
                 },
-                Length = new DimensionModel
-                {
-                    Value = 50,
-                    Unit = "cm",
-                },
 
-                Width = new DimensionModel
+                Dimensions = new DimensionModel
                 {
-                    Value = 50,
-                    Unit = "cm",
-                },
-
-                Height = new DimensionModel
-                {
-                    Value = 50,
-                    Unit = "cm",
-                },
+                    Height = 5,
+                    Width = 5,
+                    Lenght = 5,
+                    Unit = "inch"
+                }
             };
 
 
-            await Send(command);
+            var result = await Send(command);
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+
+            result.IsSuccess.Should().BeTrue();
 
             var product = await Find<Product>(x=> x.Id == fakeProduct.Id);
 
@@ -63,45 +66,17 @@ namespace MicroStore.Catalog.Application.Tests.Products
             product.Price.Should().Be(command.Price);
             product.OldPrice.Should().Be(command.OldPrice);
             product.Weight.Should().Be(command.Weight.AsWeight());
-            product.Height.Should().Be(command.Height.AsDimension());
-            product.Length.Should().Be(command.Length.AsDimension());
-            product.Width.Should().Be(command.Width.AsDimension());
-        }
-
-        [Test]
-        public async Task Should_update_product_thumbnail_while_image_model_is_not_null()
-        {
-            var fakeProduct = await CreateFakeProduct();
-
-            var command = new UpdateProductCommand
-            {
-                ProductId = fakeProduct.Id,
-                Sku = Guid.NewGuid().ToString(),
-                Name = Guid.NewGuid().ToString(),
-                ShortDescription = Guid.NewGuid().ToString(),
-                LongDescription = Guid.NewGuid().ToString(),
-                Price = 120,
-                OldPrice = 150,
-
-                ImageModel =  new ImageModel
-                {
-                    FileName = $"{Guid.NewGuid()}.png",
-                    Type = "png",
-                    Data = ImageGenerator.GetBitmapData()
-                },
-            };
-
-            await Send(command);
-
-            var product = await Find<Product>(x => x.Id == fakeProduct.Id);
-
+            product.Dimensions.Should().Be(command.Dimensions.AsDimension());
             product.Thumbnail.Should().EndWith(command.ImageModel.FileName);
 
+            Assert.That(await TestHarness.Published.Any<ProductCreatedIntegrationEvent>());
         }
+
+   
 
 
         [Test]
-        public async Task Should_throw_entity_not_found_exception_while_product_is_not_exist()
+        public async Task Should_return_error_result_with_404_status_code_exception_while_product_is_not_exist()
         {
             var command = new UpdateProductCommand
             {
@@ -114,9 +89,11 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 OldPrice = 150,
             };
 
-            Func<Task> func = ()=> Send(command);
+            var result = await Send(command);
 
-            await func.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
 

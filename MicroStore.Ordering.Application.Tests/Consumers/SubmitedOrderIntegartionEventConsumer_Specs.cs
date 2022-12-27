@@ -1,7 +1,10 @@
 ﻿using MicroStore.Ordering.Events;
 using MicroStore.Ordering.IntegrationEvents;
+using MicroStore.Ordering.IntegrationEvents.Models;
+
 namespace MicroStore.Ordering.Application.Tests.Consumers
 {
+    [NonParallelizable]
     public class When_submited_order_integration_event_consumed : MassTransitTestFixture
     {
         [Test]
@@ -11,16 +14,17 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
             {
                 OrderId = Guid.NewGuid(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                ShippingAddressId = Guid.NewGuid(),
-                BillingAddressId = Guid.NewGuid(),
+                ShippingAddress = new AddressModel(),
+                BillingAddress = new AddressModel(),
                 SubmissionDate = DateTime.UtcNow,
                 UserId = Guid.NewGuid().ToString(),
-                OrderItems = new List<IntegrationEvents.Models.OrderItemModel>
+                OrderItems = new List<OrderItemModel>
                 {
-                    new IntegrationEvents.Models.OrderItemModel
+                    new OrderItemModel
                     {
-                        ItemName = "fakeitem",
-                        ProductId = Guid.NewGuid(),
+                        Name = Guid.NewGuid().ToString(),
+                        Sku = Guid.NewGuid().ToString(),
+                        ExternalProductId =Guid.NewGuid().ToString(),
                         Quantity = 50,
                         UnitPrice = 50
                     }

@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using MicroStore.Inventory.IntegrationEvents;
 using MicroStore.Ordering.Events;
 using MicroStore.Payment.IntegrationEvents;
 using Volo.Abp.DependencyInjection;
@@ -11,13 +12,22 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
             visitor.Visit(this);
         }
 
-        public Task Execute(BehaviorContext<OrderStateEntity, OrderCancelledEvent> context, IBehavior<OrderStateEntity, OrderCancelledEvent> next)
+        public async Task Execute(BehaviorContext<OrderStateEntity, OrderCancelledEvent> context, IBehavior<OrderStateEntity, OrderCancelledEvent> next)
         {
-            return context.Publish(new RefundPaymentIntegrationEvent
+            await context.Publish(new RefundPaymentIntegrationEvent
             {
                 OrderId = context.Saga.CorrelationId.ToString(),
                 CustomerId  =context.Saga.UserId,
                 PaymentId = context.Saga.PaymentId
+            });
+
+            await context.Publish(new ReleaseOrderStockIntegrationEvent
+            {
+                ExternalOrderId = context.Saga.CorrelationId.ToString(),
+                OrderNumber = context.Saga.OrderNumber,
+                ExternalPaymentId = context.Saga.PaymentId,
+                UserId = context.Saga.UserId
+
             });
         }
 

@@ -1,9 +1,5 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MicroStore.BuildingBlocks.Results;
 using Volo.Abp.Uow;
 
 namespace MicroStore.BuildingBlocks.InMemoryBus
@@ -17,6 +13,12 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
 
     public abstract class CommandHandler<TCommand> : CommandHandler<TCommand, Unit>
         where TCommand : ICommand
+    {
+
+    }
+
+    public abstract class CommandHandlerV1<TCommand> : RequestHandler<TCommand,ResponseResult> , IUnitOfWorkEnabled
+        where TCommand : ICommandV1
     {
 
     }

@@ -18,7 +18,7 @@ namespace MicroStore.Inventory.Application.Tests
         public Respawner Respawner { get; set; }
 
         [OneTimeSetUp]
-        protected async Task SetupBeforeAllTests()
+        protected  async Task SetupBeforeAllTests()
         {
 
             var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
@@ -31,16 +31,19 @@ namespace MicroStore.Inventory.Application.Tests
                 }
             });
 
+            TestHarness.TestInactivityTimeout = TimeSpan.FromSeconds(60);
 
             await StartMassTransit();
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         protected async Task SetupAfterRunAnyTest()
         {
             var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
 
             await Respawner.ResetAsync(configuration.GetConnectionString("DefaultConnection")!);
+
+            await StopMassTransit();
         }
 
 

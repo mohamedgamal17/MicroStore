@@ -4,21 +4,20 @@ using MicroStore.Ordering.Application.StateMachines.Activities;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
 using MicroStore.Ordering.Events.Responses;
-
 namespace MicroStore.Ordering.Application.StateMachines
 {
     public class OrderStateMachine : MassTransitStateMachine<OrderStateEntity>
     {
-        public State Submitted { get; private set; }     
+        public State Submitted { get; private set; }
         public State Accepted { get; set; }
         public State Approved { get; private set; }
-        public State Fullfilled { get; private set; } 
+        public State Fullfilled { get; private set; }
         public State Completed { get; private set; }
         public State Cancelled { get; private set; }
 
         public Event<OrderSubmitedEvent> OrderSubmitted { get; private set; }
         public Event<OrderPaymentAcceptedEvent> OrderPaymentAccepted { get; private set; }
-        public Event<OrderApprovedEvent> OrderApproved { get; private set; }     
+        public Event<OrderApprovedEvent> OrderApproved { get; private set; }
         public Event<OrderFulfillmentCompletedEvent> OrderFullfilled { get; set; }
         public Event<OrderCompletedEvent> OrderCompleted { get; private set; }
         public Event<OrderStockRejectedEvent> OrderStockRejected { get; private set; }
@@ -39,12 +38,12 @@ namespace MicroStore.Ordering.Application.StateMachines
 
             Event(() => OrderPaymentAccepted, x => x.CorrelateById(c => c.Message.OrderId));
 
-            Event(() => OrderApproved, x=> x.CorrelateById(c=> c.Message.OrderId));
+            Event(() => OrderApproved, x => x.CorrelateById(c => c.Message.OrderId));
 
             Event(() => OrderFullfilled, x => x.CorrelateById(c => c.Message.OrderId));
-            
+
             Event(() => OrderCompleted, x => x.CorrelateById(c => c.Message.OrderId));
-         
+
             Event(() => OrderStockRejected, x => x.CorrelateById(c => c.Message.OrderId));
 
             Event(() => OrderPaymentFaild, x => x.CorrelateById(c => c.Message.OrderId));
@@ -54,7 +53,7 @@ namespace MicroStore.Ordering.Application.StateMachines
             Event(() => OrderCancelled, x => x.CorrelateById(c => c.Message.OrderId));
 
 
-            Event(() => CheckOrderStatus , x =>
+            Event(() => CheckOrderStatus, x =>
             {
                 x.CorrelateById(c => c.Message.OrderId);
 
@@ -65,14 +64,14 @@ namespace MicroStore.Ordering.Application.StateMachines
 
             });
 
-           
+
             InstanceState(x => x.CurrentState);
 
             Initially(
                     When(OrderSubmitted)
                         .CopyDataToInstance()
                         .TransitionTo(Submitted)
-                        .Respond((context) => context.Saga.MapOrderSubmitedResponse())
+                        .Respond((context) => context.Saga.MapOrderResponse())
                 );
 
 
@@ -96,12 +95,12 @@ namespace MicroStore.Ordering.Application.StateMachines
                 );
 
 
-            
+
 
             During(Accepted,
                     When(OrderApproved)
                         .TransitionTo(Approved),
-                  
+
                     When(OrderStockRejected)
                         .Then((context) =>
                         {
@@ -109,20 +108,19 @@ namespace MicroStore.Ordering.Application.StateMachines
                             context.Saga.CancellationReason = context.Message.Details;
                         })
                         .TransitionTo(Cancelled)
-                        .Activity(x => x.OfType<OrderStockRejectedActivity>())             
+                        .Activity(x => x.OfType<OrderStockRejectedActivity>())
                 );
 
 
-      
+
             During(Approved,
                     When(OrderFullfilled)
                          .Then((context) =>
                          {
                              context.Saga.ShipmentId = context.Message.ShipmentId;
-                             context.Saga.ShipmentSystem = context.Message.ShipmentSystem;
-                         })                     
+                         })
                         .TransitionTo(Fullfilled)
-                        .RespondAsync((context)=> Task.FromResult(StateMachineResult.Success(context.Saga.MapOrderFullfilledResponse())))
+                        .RespondAsync((context) => Task.FromResult(StateMachineResult.Success(context.Saga.MapOrderResponse())))
                   );
 
 
@@ -135,8 +133,8 @@ namespace MicroStore.Ordering.Application.StateMachines
                         .TransitionTo(Completed)
                     );
 
-
-            DuringAny(
+ 
+            DuringAny(            
                     When(OrderCancelled)
                         .Then((context) =>
                         {
@@ -144,7 +142,7 @@ namespace MicroStore.Ordering.Application.StateMachines
                             context.Saga.CancellationReason = context.Message.Reason;
 
                         }).TransitionTo(Cancelled)
-                        .Activity(x=>x.OfType<OrderCancelledActivity>()),
+                        .Activity(x => x.OfType<OrderCancelledActivity>()),
 
                      When(CheckOrderStatus)
                         .RespondAsync((context) => Task.FromResult(StateMachineResult.Success(context.Saga.MapOrderResponse())))
@@ -163,8 +161,8 @@ namespace MicroStore.Ordering.Application.StateMachines
                 x.Saga.CorrelationId = x.Message.OrderId;
                 x.Saga.OrderNumber = x.Message.OrderNumber;
                 x.Saga.UserId = x.Message.UserId;
-                x.Saga.BillingAddressId = x.Message.BillingAddressId;
-                x.Saga.ShippingAddressId = x.Message.ShippingAddressId;
+                x.Saga.BillingAddress = MapAddress(x.Message.BillingAddress);
+                x.Saga.ShippingAddress = MapAddress(x.Message.ShippingAddress);
                 x.Saga.ShippingCost = x.Message.ShippingCost;
                 x.Saga.TaxCost = x.Message.TaxCost;
                 x.Saga.SubTotal = x.Message.SubTotal;
@@ -173,10 +171,12 @@ namespace MicroStore.Ordering.Application.StateMachines
                 x.Saga.OrderItems = x.Message.OrderItems.Select(item => new OrderItemEntity
                 {
                     Id = Guid.NewGuid(),
-                    ProductId = item.ProductId,
-                    ItemName = item.ItemName,
+                    ExternalProductId = item.ExternalProductId,
+                    Sku = item.Sku,
+                    Name = item.Name,
+                    Thumbnail = item.Thumbnail,
                     Quantity = item.Quantity,
-                    UnitPrice = item.UnitPrice
+                    UnitPrice = item.UnitPrice,
                 }).ToList();
 
             });
@@ -187,82 +187,28 @@ namespace MicroStore.Ordering.Application.StateMachines
             return orderItems.Select(item =>
             new OrderItemModel
             {
-                ItemName = item.ItemName,
-                ProductImage = item.ProductImage,
+                ExternalProductId = item.ExternalProductId,
+                Sku = item.Sku,
+                Name = item.Name,
+                Thumbnail = item.Thumbnail,
                 Quantity = item.Quantity,
-                ProductId = item.ProductId,
-                UnitPrice = item.UnitPrice
+                UnitPrice = item.UnitPrice,
             }).ToList();
         }
 
-        public static OrderSubmitedResponse MapOrderSubmitedResponse(this OrderStateEntity orderStateEntity)
+        public static Address MapAddress(AddressModel addressModel)
         {
-
-            return new OrderSubmitedResponse
-            {
-                OrderId = orderStateEntity.CorrelationId,
-                OrderNumber = orderStateEntity.OrderNumber,
-                UserId = orderStateEntity.UserId,
-                ShippingAddressId = orderStateEntity.ShippingAddressId,
-                BillingAddressId = orderStateEntity.BillingAddressId,
-                ShippingCost = orderStateEntity.ShippingCost,
-                TaxCost = orderStateEntity.TaxCost,
-                SubTotal = orderStateEntity.SubTotal,
-                TotalPrice = orderStateEntity.TotalPrice,
-                SubmissionDate = orderStateEntity.SubmissionDate,
-                CurrentState = orderStateEntity.CurrentState,
-                OrderItems = MapOrderItemResponse(orderStateEntity.OrderItems)
-            };
+            return new AddressBuilder()
+                      .WithCountryCode(addressModel.CountryCode)
+                      .WithCity(addressModel.City)
+                      .WithState(addressModel.State)
+                      .WithPostalCode(addressModel.PostalCode)
+                      .WithAddressLine(addressModel.AddressLine1, addressModel.AddressLine2)
+                      .WithName(addressModel.Name)
+                      .WithPhone(addressModel.Phone)
+                      .WithZip(addressModel.Zip)
+                      .Build();
         }
-
-
-        public static OrderFullfilledResponse MapOrderFullfilledResponse(this OrderStateEntity orderStateEntity)
-        {
-            return new OrderFullfilledResponse
-            {
-                OrderId = orderStateEntity.CorrelationId,
-                OrderNumber = orderStateEntity.OrderNumber,
-                UserId = orderStateEntity.UserId,
-                ShippingAddressId = orderStateEntity.ShippingAddressId,
-                BillingAddressId = orderStateEntity.BillingAddressId,
-                PaymentId = orderStateEntity.PaymentId,
-                ShipmentId = orderStateEntity.ShipmentId,
-                ShipmentSystem = orderStateEntity.ShipmentSystem,
-                ShippingCost = orderStateEntity.ShippingCost,
-                TaxCost = orderStateEntity.TaxCost,
-                SubTotal = orderStateEntity.SubTotal,
-                TotalPrice = orderStateEntity.TotalPrice,
-                SubmissionDate = orderStateEntity.SubmissionDate,
-                CurrentState = orderStateEntity.CurrentState,
-                OrderItems = MapOrderItemResponse(orderStateEntity.OrderItems)
-            };
-        }
-
-
-        public static OrderCompletedResponse MapOrderCompletedResponse(this OrderStateEntity orderStateEntity)
-        {
-            return new OrderCompletedResponse
-            {
-                OrderId = orderStateEntity.CorrelationId,
-                OrderNumber = orderStateEntity.OrderNumber,
-                UserId = orderStateEntity.UserId,
-                ShippingAddressId = orderStateEntity.ShippingAddressId,
-                BillingAddressId = orderStateEntity.BillingAddressId,
-                PaymentId = orderStateEntity.PaymentId,
-                ShipmentId = orderStateEntity.ShipmentId,
-                ShipmentSystem = orderStateEntity.ShipmentSystem,
-                ShippingCost = orderStateEntity.ShippingCost,
-                TaxCost = orderStateEntity.TaxCost,
-                SubTotal = orderStateEntity.SubTotal,
-                TotalPrice = orderStateEntity.TotalPrice,
-                SubmissionDate = orderStateEntity.SubmissionDate,
-                ShippedDate = orderStateEntity.ShippedDate,
-                CurrentState = orderStateEntity.CurrentState,
-                OrderItems = MapOrderItemResponse(orderStateEntity.OrderItems)
-            };
-        }
-
-
         public static OrderResponse MapOrderResponse(this OrderStateEntity orderStateEntity)
         {
             return new OrderResponse
@@ -270,11 +216,10 @@ namespace MicroStore.Ordering.Application.StateMachines
                 OrderId = orderStateEntity.CorrelationId,
                 OrderNumber = orderStateEntity.OrderNumber,
                 UserId = orderStateEntity.UserId,
-                ShippingAddressId = orderStateEntity.ShippingAddressId,
-                BillingAddressId = orderStateEntity.BillingAddressId,
+                ShippingAddress = MapAddressModel(orderStateEntity.ShippingAddress),
+                BillingAddress = MapAddressModel(orderStateEntity.BillingAddress),
                 PaymentId = orderStateEntity.PaymentId,
                 ShipmentId = orderStateEntity.ShipmentId,
-                ShipmentSystem = orderStateEntity.ShipmentSystem,
                 ShippingCost = orderStateEntity.ShippingCost,
                 TaxCost = orderStateEntity.TaxCost,
                 SubTotal = orderStateEntity.SubTotal,
@@ -286,17 +231,34 @@ namespace MicroStore.Ordering.Application.StateMachines
             };
         }
 
+        public static AddressModel MapAddressModel(Address address)
+        {
+            return new AddressModel
+            {
+                CountryCode = address.CountryCode,
+                City = address.City,
+                State = address.State,
+                PostalCode = address.PostalCode,
+                AddressLine1 = address.AddressLine1,
+                AddressLine2 = address.AddressLine2,
+                Zip = address.Zip,
+                Name = address.Name,
+                Phone = address.Phone
+
+            };
+        }
+
         private static List<OrderItemResponseModel> MapOrderItemResponse(List<OrderItemEntity> orderItems)
         {
             return orderItems.Select(item => new OrderItemResponseModel
             {
-
-                 ItemName = item.ItemName,
-                 ProductImage = item.ProductImage,
-                 Quantity = item.Quantity,
-                 ProductId = item.ProductId,
-                 UnitPrice = item.UnitPrice,              
-             }).ToList();
+                ExternalProductId = item.ExternalProductId,
+                Sku  = item.Sku,
+                Name = item.Name,
+                Thumbnail = item.Thumbnail,
+                Quantity = item.Quantity,
+                UnitPrice = item.UnitPrice,
+            }).ToList();
         }
     }
 }

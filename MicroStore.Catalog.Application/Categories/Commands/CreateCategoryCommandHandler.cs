@@ -1,25 +1,22 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Abstractions.Categories.Commands;
 using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.Catalog.Domain.Entities;
+using System.Net;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Catalog.Application.Categories.Commands
 {
-    public class CreateCategoryCommandHandler : CommandHandler<CreateCategoryCommand, CategoryDto>
+    public class CreateCategoryCommandHandler : CommandHandlerV1<CreateCategoryCommand>
     {
         private readonly IRepository<Category> _categoryRepository;
 
         public CreateCategoryCommandHandler(IRepository<Category> categoryRepository)
         {
-
-
-
             _categoryRepository = categoryRepository;
-
         }
 
-        public override async Task<CategoryDto> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             Category category = new Category(request.Name);
 
@@ -27,9 +24,7 @@ namespace MicroStore.Catalog.Application.Categories.Commands
 
             await _categoryRepository.InsertAsync(category, cancellationToken: cancellationToken);
 
-            return ObjectMapper.Map<Category, CategoryDto>(category);
+            return ResponseResult.Success((int)HttpStatusCode.Created  ,ObjectMapper.Map<Category, CategoryDto>(category));
         }
-
-
     }
 }

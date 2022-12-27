@@ -39,21 +39,21 @@ namespace MicroStore.ShoppingCart.Api.Models
         }
 
 
-        public Result RemoveProduct(string productId)
+        public UnitResult RemoveProduct(string productId)
         {
 
             BasketItem? basketItem = Items.SingleOrDefault(x => x.ProductId == productId);
 
             if(basketItem == null)
             {
-                return Result.Failure("Basket item not found");
+                return UnitResult.Failure(string.Empty,"Basket item not found");
             }
 
 
             Items!.Remove(basketItem);
 
 
-            return Result.Success();
+            return UnitResult.Success();
         }
 
 

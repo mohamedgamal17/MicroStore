@@ -1,29 +1,46 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
-using MicroStore.Payment.Application.Commands.Requests;
-using MicroStore.Payment.Domain.Shared;
-using MicroStore.Payment.Domain.Shared.Dtos;
-using MicroStore.Payment.Domain.Shared.Models;
+using MicroStore.BuildingBlocks.Results;
+using MicroStore.Payment.Application.Abstractions;
+using MicroStore.Payment.Application.Abstractions.Commands;
+using MicroStore.Payment.Application.Abstractions.Dtos;
+using MicroStore.Payment.Application.Abstractions.Models;
+using MicroStore.Payment.Application.Extensions;
+using System.Net;
 
 namespace MicroStore.Payment.Application.Commands
 {
-    public class CompletePaymentRequestCommandHandler : CommandHandler<CompletePaymentRequestCommand, PaymentRequestCompletedDto>
+    public class CompletePaymentRequestCommandHandler : CommandHandlerV1<CompletePaymentRequestCommand>
     {
 
         private readonly IPaymentMethodResolver _paymentResolver;
 
-        public CompletePaymentRequestCommandHandler(IPaymentMethodResolver paymentResolver)
+        private readonly IPaymentRequestRepository _paymentRequestRepository;
+        public CompletePaymentRequestCommandHandler(IPaymentMethodResolver paymentResolver, IPaymentRequestRepository paymentRequestRepository)
         {
             _paymentResolver = paymentResolver;
+            _paymentRequestRepository = paymentRequestRepository;
         }
 
-        public override Task<PaymentRequestCompletedDto> Handle(CompletePaymentRequestCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(CompletePaymentRequestCommand request, CancellationToken cancellationToken)
         {
-            var paymentMethod = _paymentResolver.Resolve(request.PaymentGatewayName);
+ 
+            var unitResult  = await _paymentResolver.Resolve(request.PaymentGatewayName);
 
-            return paymentMethod.Complete(new CompletePaymentModel
+            if (unitResult.IsFailure)
+            {
+                return unitResult.ConvertFaildUnitResult();
+            }
+
+            var paymentMethod = unitResult.Value;
+
+            var result =  await paymentMethod.Complete(new CompletePaymentModel
             {
                 Token = request.Token,
+
             },cancellationToken);
+
+
+            return ResponseResult.Success((int)HttpStatusCode.Accepted);
         }
     }
 }

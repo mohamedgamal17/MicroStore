@@ -12,14 +12,13 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.8" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="7.0.0" />
     <PackageReference Include="Stripe.net" Version="40.16.0" />
-    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="6.0.1" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.InMemoryBus\MicroStore.BuildingBlocks.InMemoryBus.csproj" />
-    <ProjectReference Include="..\MicroStore.Payment.Domain.Shared\MicroStore.Payment.Domain.Shared.csproj" />
+    <ProjectReference Include="..\MicroStore.Payment.Application.Abstractions\MicroStore.Payment.Application.Abstractions.csproj" />
     <ProjectReference Include="..\MicroStore.Payment.IntegrationEvents\MicroStore.Payment.IntegrationEvents.csproj" />
   </ItemGroup>
 

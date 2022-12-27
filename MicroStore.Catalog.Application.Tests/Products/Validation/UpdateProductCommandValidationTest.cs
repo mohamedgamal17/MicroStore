@@ -12,7 +12,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
         [Test]
         public async Task ShouldWhenProductNameIsAlreadyExistInDatabase()
         {
-            Product fakeProduct = await CreateFakeProduct(new Product("FakeSku", "FakeName", 50));
+            Product fakeProduct = await CreateFakeProduct(new Product("FakeSku", "FakeName", 50, Guid.NewGuid().ToString()));
 
 
             await WithUnitOfWork(async (sp) =>
@@ -43,7 +43,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
         public async Task ShouldWhenProductSkuIsAlreadyExistInDatabase()
         {
 
-            Product fakeProduct = await CreateFakeProduct(new Product("FakeSku", "FakeName", 50));
+            Product fakeProduct = await CreateFakeProduct(new Product("FakeSku", "FakeName", 50, Guid.NewGuid().ToString()));
 
 
             await WithUnitOfWork(async (sp) =>
@@ -95,7 +95,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
         [SetUp]
         protected async Task SetupBeforRunAnyTest()
         {
-            await CreateFakeProduct(new Product("DublicateSku", "DublicateName", 50));
+            await CreateFakeProduct(new Product("DublicateSku", "DublicateName", 50, Guid.NewGuid().ToString()));
         }
     }
 }

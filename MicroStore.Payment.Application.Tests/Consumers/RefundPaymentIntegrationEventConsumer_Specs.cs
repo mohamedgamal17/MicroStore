@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
 using MicroStore.Payment.Application.Tests.Consts;
-using MicroStore.Payment.Domain.Shared.Domain;
+using MicroStore.Payment.Domain;
 using MicroStore.Payment.IntegrationEvents;
-
 namespace MicroStore.Payment.Application.Tests.Consumers
 {
     public class While_consuming_void_payment_integration_event : BaseTestFixture

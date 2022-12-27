@@ -4,7 +4,6 @@ using MicroStore.Inventory.IntegrationEvents;
 using MicroStore.Inventory.IntegrationEvents.Models;
 using MicroStore.Ordering.Events;
 using Volo.Abp.DependencyInjection;
-
 namespace MicroStore.Ordering.Application.StateMachines.Activities
 {
     public class OrderAcceptedActivity : IStateMachineActivity<OrderStateEntity, OrderPaymentAcceptedEvent>, ITransientDependency
@@ -28,9 +27,17 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
 
             AllocateOrderStockIntegrationEvent integrationEvent = new AllocateOrderStockIntegrationEvent
             {
-                OrderId = context.Saga.CorrelationId,
+                ExternalOrderId = context.Saga.CorrelationId.ToString(),
                 OrderNumber = context.Saga.OrderNumber,
-                Products = MapStockItems(context.Saga.OrderItems)
+                ExternalPaymentId  = context.Saga.PaymentId,
+                UserId = context.Saga.UserId,
+                ShippingAddress = MapAddressModel(context.Saga.ShippingAddress),
+                BillingAddres = MapAddressModel(context.Saga.BillingAddress),
+                ShippingCost = context.Saga.ShippingCost,
+                TaxCost = context.Saga.TaxCost,
+                SubTotal = context.Saga.SubTotal,
+                TotalPrice = context.Saga.TotalPrice,               
+                Items = MapStockItems(context.Saga.OrderItems)
             };
 
             return context.Publish(integrationEvent);
@@ -47,13 +54,36 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
         }
 
 
-        private List<ProductModel> MapStockItems(List<OrderItemEntity> stockItems)
+        private List<OrderItemModel> MapStockItems(List<OrderItemEntity> stockItems)
         {
-            return stockItems.Select(x => new ProductModel
+            return stockItems.Select(x => new OrderItemModel
             {
-                ProductId = x.ProductId,
+                ExternalItemId = x.Id.ToString(),
+                ExternalProductId = x.ExternalProductId,
+                Sku = x.Sku,
+                Name = x.Name,
+                Thumbnail = x.Thumbnail,
+                UnitPrice = x.UnitPrice,
                 Quantity = x.Quantity
             }).ToList();
+        }
+
+
+        private AddressModel MapAddressModel(Address address)
+        {
+            return new AddressModel
+            {
+                CountryCode = address.CountryCode,
+                City = address.City,
+                State = address.State,
+                PostalCode = address.PostalCode,
+                AddressLine1 = address.AddressLine1,
+                AddressLine2 = address.AddressLine2,
+                Zip = address.Zip,
+                Name = address.Name,
+                Phone = address.Phone
+
+            };
         }
     }
 }

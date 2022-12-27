@@ -27,8 +27,9 @@ namespace MicroStore.Catalog.Application.Tests
                    "__EFMigrationsHistory"
                 }
             });
-        }
 
+            await StartMassTransit();
+        }
 
 
 

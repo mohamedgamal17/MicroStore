@@ -2,9 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
+using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Application.Abstractions.Products.Models;
 using MicroStore.Catalog.Application.Tests.Utilites;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.IntegrationEvents;
+using System.Net;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.Products
@@ -37,31 +40,26 @@ namespace MicroStore.Catalog.Application.Tests.Products
                     Value = 50,
                     Unit = "g"
                 },
-                Length = new DimensionModel
-                {
-                    Value = 50,
-                    Unit = "cm",
-                },
 
-                Width = new DimensionModel
+                Dimensions = new DimensionModel
                 {
-                    Value = 50,
-                    Unit = "cm",
-                },
-
-                Height = new DimensionModel
-                {
-                    Value = 50,
-                    Unit = "cm",
-                },
+                    Height = 5,
+                    Width = 5,
+                    Lenght = 5,
+                    Unit = "inch"
+                }
             };
 
             var result = await Send(request);
 
+            result.IsSuccess.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.Created);
+
 
             var productsConut = await GetProductsCount();
 
-            var product = await GetProductById(result.ProductId);
+            var product = await GetProductById(result.GetEnvelopeResult<ProductDto>().Result.ProductId);
 
             productsConut.Should().Be(1);
             product.Name.Should().Be(request.Name);
@@ -71,9 +69,10 @@ namespace MicroStore.Catalog.Application.Tests.Products
             product.OldPrice.Should().Be(request.OldPrice);
             product.Thumbnail.Should().EndWith(request.ImageModel.FileName);
             product.Weight.Should().Be(request.Weight.AsWeight());
-            product.Height.Should().Be(request.Height.AsDimension());
-            product.Length.Should().Be(request.Length.AsDimension());
-            product.Width.Should().Be(request.Width.AsDimension());
+            product.Dimensions.Should().Be(request.Dimensions.AsDimension());
+
+            Assert.That(await TestHarness.Published.Any<ProductCreatedIntegrationEvent>());
+ 
         }
 
 

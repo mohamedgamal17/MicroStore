@@ -1,7 +1,7 @@
 ﻿#nullable disable
 using Microsoft.EntityFrameworkCore;
-using MicroStore.Payment.Application.Common;
-using MicroStore.Payment.Domain.Shared.Domain;
+using MicroStore.Payment.Application.Abstractions.Common;
+using MicroStore.Payment.Domain;
 using System.Reflection;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,6 +12,7 @@ namespace MicroStore.Payment.Application.EntityFramework
     public class PaymentDbContext : AbpDbContext<PaymentDbContext> , IPaymentDbContext
     {
         public DbSet<PaymentRequest> PaymentRequests { get; set; }
+        public DbSet<PaymentSystem> PaymentSystems { get ; set ; }
 
         public PaymentDbContext(DbContextOptions<PaymentDbContext> options)
             : base(options)

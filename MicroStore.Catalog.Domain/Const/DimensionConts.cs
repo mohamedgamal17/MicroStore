@@ -3,26 +3,14 @@
 
     public static class DimensionConst
     {
+        public readonly static string Lenght = "Dimension_Lenght";
+
+        public readonly static string Width = "Dimension_Width";
+
+        public readonly static string Height = "Height_Width";
+
+        public readonly static string Unit = "Dimension_Unit";
         public static int UnitLenght => 50;
-    }
-
-    public static class LenghtColumnConst
-    {
-        public static string Value => "Lenght_Value";
-        public static string Unit => "Lenght_Unit";
-      
-    }
-
-    public static class WidthColumnConst
-    {
-        public static string Value => "Width_Value";
-        public static string Unit => "Width_Unit";
-    }
-
-    public class HeightColumnConst
-    {
-        public static string Value => "Height_Value";
-        public static string Unit => "Height_Unit";
     }
 
 }

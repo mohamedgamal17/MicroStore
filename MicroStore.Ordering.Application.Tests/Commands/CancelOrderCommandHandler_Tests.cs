@@ -5,6 +5,7 @@ using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
 using MicroStore.Ordering.IntegrationEvents;
+using System.Net;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
@@ -27,15 +28,19 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                 Reason = Guid.NewGuid().ToString()
             };
 
-            await Send(command);
+            var result = await Send(command);
 
-            Assert.That(await TestHarness.Published.Any<CancelOrderIntegrationEvent>());
+            result.IsSuccess.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.Processing);
+
+            Assert.That(await TestHarness.Published.Any<OrderCancelledEvent>());
 
         }
 
 
         [Test]
-        public async Task Should_throw_entity_not_found_exception_while_order_is_not_exist()
+        public async Task Should_return_error_result_with_status_code_404_while_order_is_not_exist()
         {
             CancelOrderCommand command = new CancelOrderCommand
             {
@@ -44,15 +49,17 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                 Reason = Guid.NewGuid().ToString()
             };
 
-            Func<Task> action = () => Send(command);
+            var result = await Send(command);
 
-            await action.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
 
 
         [Test]
-        public async Task Should_throw_user_frindely_exception_while_order_is_already_cancelled()
+        public async Task Should_return_error_result_with_status_code_401_while_order_is_already_cancelled()
         {
             Guid orderId = Guid.NewGuid();
 
@@ -65,13 +72,12 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                 Reason = Guid.NewGuid().ToString()
             };
 
+            var result = await Send(command);
 
-            Func<Task> action = () => Send(command);
+            result.IsFailure.Should().BeTrue();
 
-
-            await action.Should().ThrowExactlyAsync<UserFriendlyException>();
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         }
-
         private async Task GenerateFakeSubmitedOrder(Guid orderId)
         {
             await TestHarness.Bus.Publish(
@@ -79,8 +85,8 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                   {
                       OrderId = orderId,
                       OrderNumber = Guid.NewGuid().ToString(),
-                      BillingAddressId = Guid.NewGuid(),
-                      ShippingAddressId = Guid.NewGuid(),
+                      BillingAddress = new AddressModel(),
+                      ShippingAddress = new AddressModel(),
                       TaxCost = 0,
                       ShippingCost = 0,
                       SubTotal = 50,
@@ -91,20 +97,20 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                       {
                              new OrderItemModel
                              {
-                                  ItemName = Guid.NewGuid().ToString(),
-                                  ProductId = Guid.NewGuid(),
+                                  Name = Guid.NewGuid().ToString(),
+                                  ExternalProductId = Guid.NewGuid().ToString(),
+                                  Sku =Guid.NewGuid().ToString(),
                                   Quantity = 5,
-                                 UnitPrice = 50
+                                  UnitPrice = 50
                              }
                       }
                   }
-            );
+              );
 
             var instance = await Repository.ShouldContainSagaInState(orderId, Machine, x => x.Submitted, TestHarness.TestTimeout);
 
             instance.Should().NotBeNull();
         }
-
 
         private async Task GenerateFakeCancelledOrder(Guid orderId)
         {

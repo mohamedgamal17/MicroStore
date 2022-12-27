@@ -84,7 +84,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
         [Test]
         [TestCase(-5, TestName = "ShouldFailWhenProductPriceIsNegativeValue")]
         [TestCase(0, TestName = "ShouldFailWhenProductPriceIsZero")]
-        public async Task ShouldFailIfPriceValidationIsNotCorrect(decimal price)
+        public async Task ShouldFailIfPriceValidationIsNotCorrect(double price)
         {
             await WithUnitOfWork(async (sp) =>
             {

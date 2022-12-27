@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MicroStore.Payment.Domain.Shared.Domain;
+using MicroStore.Payment.Domain;
 
 namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfigurations
 {
@@ -10,13 +10,13 @@ namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfiguration
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.ProductId).HasMaxLength(500);
+            builder.Property(x => x.ProductId).HasMaxLength(256);
 
-            builder.Property(x => x.Sku).HasMaxLength(500);
+            builder.Property(x => x.Sku).HasMaxLength(256);
 
-            builder.Property(x => x.Name).HasMaxLength(500);
+            builder.Property(x => x.Name).HasMaxLength(300);
 
-            builder.Property(x => x.Image).HasMaxLength(800);
+            builder.Property(x => x.Thumbnail).HasMaxLength(500);
 
             builder.HasIndex(x => x.ProductId);
 

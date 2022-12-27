@@ -1,5 +1,6 @@
 ﻿namespace MicroStore.Catalog.IntegrationEvents
 {
+    [Obsolete]
     public class AdjustProductNameIntegrationEvent
     {
         public Guid ProductId { get; }

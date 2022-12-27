@@ -28,7 +28,6 @@ namespace MicroStore.Inventory.Application
              
                 busRegisterConfig.UsingRabbitMq((context, rabbitMqbusConig) =>
                 {
-                   // rabbitMqbusConig.UseConsumeFilter(typeof(ConsumerUnitOfWorkFilter<>), context);
 
                     rabbitMqbusConig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
                     {

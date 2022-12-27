@@ -12,8 +12,8 @@ namespace MicroStore.Ordering.Application.Consumers
             {
                 OrderId = context.Message.OrderId,
                 OrderNumber = context.Message.OrderNumber,
-                ShippingAddressId = context.Message.ShippingAddressId,
-                BillingAddressId = context.Message.BillingAddressId,
+                ShippingAddress = context.Message.ShippingAddress.MapAddress(),
+                BillingAddress = context.Message.BillingAddress.MapAddress(),
                 UserId = context.Message.UserId,
                 ShippingCost = context.Message.ShippingCost,
                 TaxCost = context.Message.TaxCost,
@@ -32,9 +32,10 @@ namespace MicroStore.Ordering.Application.Consumers
         {
             return items.Select(x => new MicroStore.Ordering.Events.Models.OrderItemModel
             {
-                ProductId = x.ProductId,
-                ItemName = x.ItemName,
-                ProductImage = x.ProductImage,
+                ExternalProductId = x.ExternalProductId,
+                Sku  = x.Sku,
+                Name = x.Name,
+                Thumbnail = x.Thumbnail,
                 Quantity = x.Quantity,
                 UnitPrice = x.UnitPrice
 
@@ -42,14 +43,28 @@ namespace MicroStore.Ordering.Application.Consumers
         }
 
 
-
+        public static MicroStore.Ordering.Events.Models.AddressModel MapAddress(this MicroStore.Ordering.IntegrationEvents.Models.AddressModel address)
+        {
+            return new MicroStore.Ordering.Events.Models.AddressModel
+            {
+                CountryCode = address.CountryCode,
+                City = address.City,
+                State = address.State,
+                PostalCode = address.PostalCode,
+                AddressLine1 = address.AddressLine1,
+                AddressLine2 = address.AddressLine2,
+                Zip = address.Zip,
+                Name = address.Name,
+                Phone = address.Phone
+            };
+        }
         public static List<OrderItemResponseModel> MapOrderItemResponse( this List<MicroStore.Ordering.IntegrationEvents.Models.OrderItemModel> items)
         {
             return items.Select(x => new OrderItemResponseModel
             {
-                ProductId = x.ProductId,
-                ItemName = x.ItemName,
-                ProductImage = x.ProductImage,
+                ExternalProductId = x.ExternalProductId,
+                Name = x.Name,
+                Thumbnail = x.Thumbnail,
                 Quantity = x.Quantity,
                 UnitPrice = x.UnitPrice
                 

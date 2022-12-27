@@ -12,8 +12,7 @@ namespace MicroStore.Ordering.Application.Consumers
             {
                 OrderId = context.Message.OrderId,
                 ShipmentId = context.Message.ShipmentId,
-                ShipmentSystem = context.Message.ShipmentSystem
-            });
+              });
         }
     }
 }

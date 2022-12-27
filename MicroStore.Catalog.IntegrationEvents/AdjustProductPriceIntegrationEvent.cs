@@ -2,6 +2,7 @@
 
 namespace MicroStore.Catalog.IntegrationEvents
 {
+    [Obsolete]
     public class AdjustProductPriceIntegrationEvent
     {
         public Guid ProductId { get; }

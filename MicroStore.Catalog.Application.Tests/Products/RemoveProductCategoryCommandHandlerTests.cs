@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Domain.Entities;
+using System.Net;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -24,7 +25,11 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 CategoryId = fakeCategory.Id
             };
 
-            await Send(command);
+            var result =   await Send(command);
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+
+            result.IsSuccess.Should().BeTrue();
 
             var product = await Find<Product>(x => x.Id == fakeProduct.Id);
 
@@ -32,7 +37,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
         }
 
         [Test]
-        public async Task Should_throw_entity_not_found_exception_while_product_is_not_exist()
+        public async Task Should_return_error_result_with_404_status_code_exception_while_product_is_not_exist()
         {
             var command = new RemoveProductCategoryCommand
             {
@@ -40,13 +45,15 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 CategoryId = Guid.NewGuid(),
             };
 
-            Func<Task> func = () => Send(command);
+            var result = await Send(command);
 
-            await func.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
         [Test]
-        public async Task Should_throw_user_friendly_exception_while_category_is_not_assigned_to_product()
+        public async Task Should_return_error_result_with_404_status_code_exception_while_category_is_not_assigned_to_product()
         {
             var fakeCategory = await GenerateFakeCategory();
 
@@ -58,9 +65,11 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 CategoryId = Guid.NewGuid(),
             };
 
-            Func<Task> func = () => Send(command);
+            var result = await Send(command);
 
-            await func.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
 
         }
 
@@ -68,7 +77,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
         {
             return WithUnitOfWork((sp) =>
             {
-                var product = new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 50);
+                var product = new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 50,Guid.NewGuid().ToString());
 
                 product.AddOrUpdateProductCategory(category, false);
 

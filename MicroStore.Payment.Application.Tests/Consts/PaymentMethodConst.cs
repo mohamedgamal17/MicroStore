@@ -4,6 +4,8 @@
     {
         public static string PaymentGatewayName => "Fake";
 
+        public static string NonActiveGateway => "NonActive";
+
         public static string CheckoutUrl => "FakeUrl";
     }
 }

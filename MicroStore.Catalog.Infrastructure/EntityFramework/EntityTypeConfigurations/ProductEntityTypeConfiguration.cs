@@ -25,6 +25,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.OldPrice);
 
+
             builder.OwnsOne(x => x.Weight, weightNavigationBuilder =>
             {
                 weightNavigationBuilder
@@ -37,59 +38,36 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
                     .Property(x => x.Unit)
                     .UsePropertyAccessMode(PropertyAccessMode.Field)
                     .HasColumnName(WeightConst.Unit)
-                    .HasMaxLength(WeightConst.UnitLenght)
                     .HasDefaultValue(Weight.Empty.Unit);
             });
 
-            builder.OwnsOne(x => x.Height, heighNavigationBuilder =>
+            builder.OwnsOne(x => x.Dimensions, dimensionNavigationBuilder =>
             {
-                heighNavigationBuilder
-                    .Property(x => x.Value)
+                dimensionNavigationBuilder
+                    .Property(x => x.Length)
                     .UsePropertyAccessMode(PropertyAccessMode.Field)
-                    .HasColumnName(HeightColumnConst.Value)
-                    .HasDefaultValue(Dimension.Empty.Value);
+                    .HasColumnName(DimensionConst.Lenght)
+                    .HasDefaultValue(Dimension.Empty.Length);
 
-                heighNavigationBuilder
+                dimensionNavigationBuilder
+                    .Property(x => x.Width)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(DimensionConst.Width)
+                    .HasDefaultValue(Dimension.Empty.Width);
+
+
+                dimensionNavigationBuilder
+                    .Property(x => x.Height)
+                    .UsePropertyAccessMode(PropertyAccessMode.Field)
+                    .HasColumnName(DimensionConst.Height)
+                    .HasDefaultValue(Dimension.Empty.Height);
+
+
+                dimensionNavigationBuilder
                     .Property(x => x.Unit)
                     .UsePropertyAccessMode(PropertyAccessMode.Field)
-                    .HasColumnName(HeightColumnConst.Unit)
-                    .HasMaxLength(DimensionConst.UnitLenght)
+                    .HasColumnName(DimensionConst.Unit)
                     .HasDefaultValue(Dimension.Empty.Unit);
-            });
-
-            builder.OwnsOne(x => x.Length, lenghtNavigationBuilder =>
-            {
-
-                lenghtNavigationBuilder
-                    .Property(x => x.Value)
-                    .UsePropertyAccessMode(PropertyAccessMode.Field)
-                    .HasColumnName(LenghtColumnConst.Value)
-                    .HasDefaultValue(Dimension.Empty.Value);
-
-                lenghtNavigationBuilder
-                    .Property(x => x.Unit)
-                    .UsePropertyAccessMode(PropertyAccessMode.Field)
-                    .HasColumnName(LenghtColumnConst.Unit)
-                    .HasMaxLength(DimensionConst.UnitLenght)
-                    .HasDefaultValue(Dimension.Empty.Unit);
-
-            });
-
-            builder.OwnsOne(x => x.Width, widthNavigationBuilder =>
-            {   
-                widthNavigationBuilder
-                    .Property(x => x.Value)
-                    .UsePropertyAccessMode(PropertyAccessMode.Field)
-                    .HasColumnName(WidthColumnConst.Value)
-                    .HasDefaultValue(Dimension.Empty.Value);
-
-                widthNavigationBuilder
-                    .Property(x => x.Unit)
-                    .UsePropertyAccessMode(PropertyAccessMode.Field)
-                    .HasColumnName(WidthColumnConst.Unit)
-                    .HasMaxLength(DimensionConst.UnitLenght)
-                    .HasDefaultValue(Dimension.Empty.Unit);
-
             });
 
 

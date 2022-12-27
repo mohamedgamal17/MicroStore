@@ -1,5 +1,6 @@
 ﻿#nullable disable
-using MicroStore.Payment.Application.Commands.Requests;
+using MicroStore.Payment.Application.Abstractions.Commands;
+
 namespace MicroStore.Payment.Api.Models
 {
     public class CreatePaymentRequestModel
@@ -7,10 +8,10 @@ namespace MicroStore.Payment.Api.Models
         public string OrderId { get; set; }
         public string OrderNubmer { get; set; }
         public string UserId { get; set; }
-        public decimal ShippingCost { get; set; }
-        public decimal TaxCost { get; set; }
-        public decimal SubtTotal { get; set; }
-        public decimal TotalCost { get; set; }
+        public double ShippingCost { get; set; }
+        public double TaxCost { get; set; }
+        public double SubtTotal { get; set; }
+        public double TotalCost { get; set; }
         public List<OrderItemModel> Items { get; set; }
 
     }

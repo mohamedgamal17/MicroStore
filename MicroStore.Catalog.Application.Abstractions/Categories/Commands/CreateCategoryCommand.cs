@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Abstractions.Categories.Commands
 {
-    public class CreateCategoryCommand : CategoryCommandBase, ICommand<CategoryDto>
+    public class CreateCategoryCommand : CategoryCommandBase,ICommandV1
     {
     }
 

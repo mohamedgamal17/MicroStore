@@ -10,13 +10,15 @@ namespace MicroStore.Inventory.Infrastructure.EntityFramework.EntityTypeConfigur
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.ExternalProductId).HasMaxLength(256);
+
+            builder.Property(x=> x.Sku).HasMaxLength(256);
+
+            builder.Property(x => x.Thumbnail).HasMaxLength(500);
+
             builder.Property(x => x.Name)
                  .IsRequired()
-                 .HasMaxLength(600);
-
-            builder.Property(x => x.Sku)
-                .IsRequired()
-                .HasMaxLength(256);
+                 .HasMaxLength(300);
 
             builder.Property(x => x.Stock);
 
@@ -25,6 +27,8 @@ namespace MicroStore.Inventory.Infrastructure.EntityFramework.EntityTypeConfigur
             builder.HasIndex(x => x.Name).IsUnique();
 
             builder.HasIndex(x => x.Sku).IsUnique();
+
+            builder.HasIndex(x => x.ExternalProductId).IsUnique();
         }
     }
 }

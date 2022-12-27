@@ -4,19 +4,11 @@ namespace MicroStore.Catalog.Application.Abstractions.Common.Models
 {
     public class DimensionModel
     {
-        public double Value { get; set; }
+        public double Width { get; set; }
+        public double Lenght { get; set; }
+        public double Height { get; set; }
         public string Unit { get; set; }
 
-        public Dimension AsDimension()
-        {
-            return Unit.ToLower() switch
-            {
-               "cm" => Dimension.FromCentiMeter(Value),
-               "m" => Dimension.FromMeter(Value),
-               "inch"=> Dimension.FromInc(Value),
-               "ft" => Dimension.FromFeet(Value),
-               _ => Dimension.Empty
-            };
-        }
+        public Dimension AsDimension() => Dimension.FromUnit(Width, Lenght, Height, Unit);
     }
 }

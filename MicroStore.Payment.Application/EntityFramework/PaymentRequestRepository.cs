@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MicroStore.Payment.Domain.Shared;
-using MicroStore.Payment.Domain.Shared.Domain;
+using MicroStore.Payment.Application.Abstractions;
+using MicroStore.Payment.Domain;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-
 namespace MicroStore.Payment.Application.EntityFramework
 {
     public class PaymentRequestRepository : EfCoreRepository<PaymentDbContext, PaymentRequest, Guid>, IPaymentRequestRepository

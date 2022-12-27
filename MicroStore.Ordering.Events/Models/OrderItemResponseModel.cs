@@ -2,10 +2,12 @@
 {
     public class OrderItemResponseModel
     {
-        public Guid ProductId { get; set; }
-        public string ItemName { get; set; }
-        public string ProductImage { get; set; }
-        public decimal UnitPrice { get; set; }
+        public Guid Id { get; set; }
+        public string ExternalProductId { get; set; }
+        public string Sku { get; set; }
+        public string Name { get; set; }
+        public string Thumbnail { get; set; }
+        public double UnitPrice { get; set; }
         public int Quantity { get; set; }
     }
 }

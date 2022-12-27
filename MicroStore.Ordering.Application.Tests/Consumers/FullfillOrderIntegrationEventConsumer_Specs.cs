@@ -3,6 +3,7 @@ using MicroStore.Ordering.IntegrationEvents;
 
 namespace MicroStore.Ordering.Application.Tests.Consumers
 {
+    [NonParallelizable]
     public class When_fullfill_order_integration_event_consumed : MassTransitTestFixture
     {
         [Test]
@@ -12,7 +13,7 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
             {
                 OrderId = Guid.NewGuid(),
                 ShipmentId = Guid.NewGuid().ToString(),
-                ShipmentSystem = Guid.NewGuid().ToString(),
+ 
             });
 
             Assert.That(await TestHarness.Consumed.Any<FullfillOrderIntegrationEvent>());   

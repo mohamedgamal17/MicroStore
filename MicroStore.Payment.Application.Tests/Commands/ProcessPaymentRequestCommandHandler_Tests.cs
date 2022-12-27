@@ -1,9 +1,10 @@
 ﻿using FluentAssertions;
-using MicroStore.Payment.Application.Commands.Requests;
+using MicroStore.Payment.Application.Abstractions.Commands;
+using MicroStore.Payment.Application.Abstractions.Dtos;
 using MicroStore.Payment.Application.Tests.Consts;
-using MicroStore.Payment.Domain.Shared.Domain;
+using MicroStore.Payment.Domain;
+using System.Net;
 using Volo.Abp.Domain.Entities;
-
 namespace MicroStore.Payment.Application.Tests.Commands
 {
     public class ProcessPaymentRequestCommandHandler_Tests : BaseTestFixture
@@ -22,23 +23,73 @@ namespace MicroStore.Payment.Application.Tests.Commands
                 ReturnUrl = Guid.NewGuid().ToString()
             });
 
-            result.CheckoutLink.Should().Be(PaymentMethodConst.CheckoutUrl);
+            result.IsSuccess.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+
+            result.GetEnvelopeResult<PaymentProcessResultDto>().Result.CheckoutLink.Should().Be(PaymentMethodConst.CheckoutUrl);
         }
 
 
-        [Test]
-        public async Task Should_throw_entity_not_found_exception_while_payment_gateway_is_not_exist()
-        {
+    
 
-            Func<Task> action = () => Send(new ProcessPaymentRequestCommand
+        [Test]
+        public async Task Should__return_error_result_with_status_code_404_while_payment_gateway_is_not_exist()
+        {
+            PaymentRequest paymentRequest = await CreateFakePaymentRequest();
+
+            var result = await Send(new ProcessPaymentRequestCommand
             {
                 PaymentGatewayName = "NA",
-                PaymentId = Guid.NewGuid(),
+                PaymentId = paymentRequest.Id,
                 CancelUrl = Guid.NewGuid().ToString(),
                 ReturnUrl = Guid.NewGuid().ToString()
             });
 
-            await action.Should().ThrowExactlyAsync<EntityNotFoundException>();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+
+            result.IsFailure.Should().BeTrue();
+
+
+        }
+
+        [Test]
+        public async Task Shoud_return_error_result_with_status_code_400_while_payment_gateway_is_not_active()
+        {
+            PaymentRequest paymentRequest = await CreateFakePaymentRequest();
+
+            var result = await Send(new ProcessPaymentRequestCommand
+            {
+                PaymentGatewayName = PaymentMethodConst.NonActiveGateway,
+                PaymentId = paymentRequest.Id,
+                CancelUrl = Guid.NewGuid().ToString(),
+                ReturnUrl = Guid.NewGuid().ToString()
+            });
+
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+
+            result.IsFailure.Should().BeTrue();
+        }
+
+
+        [Test]
+
+        public async Task Should_return_error_result_with_status_code_400_while_payment_state_is_not_waiting()
+        {
+            PaymentRequest paymentRequest = await CreateFakeCompletedPaymentRequest();
+            var result = await Send(new ProcessPaymentRequestCommand
+            {
+                PaymentGatewayName = PaymentMethodConst.PaymentGatewayName,
+                PaymentId = paymentRequest.Id,
+                CancelUrl = Guid.NewGuid().ToString(),
+                ReturnUrl = Guid.NewGuid().ToString()
+            });
+
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         }
 
 
@@ -55,6 +106,17 @@ namespace MicroStore.Payment.Application.Tests.Commands
 
 
             return Insert(paymentRequest);
+        }
+
+
+        private async Task<PaymentRequest> CreateFakeCompletedPaymentRequest()
+        {
+            var fakePaymentRequest = await CreateFakePaymentRequest();
+
+            fakePaymentRequest.Complete(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), DateTime.UtcNow);
+
+            return await Update(fakePaymentRequest);
+
         }
     }
 }

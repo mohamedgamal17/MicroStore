@@ -1,20 +1,15 @@
 ﻿using MassTransit;
 using MicroStore.BuildingBlocks.InMemoryBus;
-using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Abstractions.Commands;
 using MicroStore.Ordering.Application.Abstractions.Consts;
-using MicroStore.Ordering.Application.StateMachines;
-using MicroStore.Ordering.Events;
-using MicroStore.Ordering.Events.Models;
-using MicroStore.Ordering.Events.Responses;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp;
 using MicroStore.Ordering.Application.Abstractions.Interfaces;
-using MicroStore.Ordering.IntegrationEvents;
-
+using MicroStore.Ordering.Events;
+using MicroStore.BuildingBlocks.Results;
+using System.Net;
+using MicroStore.BuildingBlocks.Results.Http;
 namespace MicroStore.Ordering.Application.Commands
 {
-    public class CompleteOrderCommandHandler : CommandHandler<CompleteOrderCommand>
+    public class CompleteOrderCommandHandler : CommandHandlerV1<CompleteOrderCommand>
     {
 
         private readonly IPublishEndpoint _publishEndpoint;
@@ -26,22 +21,27 @@ namespace MicroStore.Ordering.Application.Commands
             _orderRepository = orderRepository;
         }
 
-        public override async Task<Unit> Handle(CompleteOrderCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(CompleteOrderCommand request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetOrder(request.OrderId);
 
-            if(order == null)
+            if (order == null)
             {
-                throw new EntityNotFoundException(typeof(OrderStateEntity), request.OrderId);
+                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                {
+                    Message = $"Order entity with id {request.OrderId} is not exist"
+                });
             }
-
             if (order.CurrentState != OrderStatusConst.Fullfilled)
             {
-                throw new UserFriendlyException($"invalid order status. " +
-                    $"please make sure that order is in {OrderStatusConst.Fullfilled} status to be able to complete the order");
+                var errorInfo = new ErrorInfo {
+                    Message = $"invalid order status. " + $"please make sure that order is in {OrderStatusConst.Fullfilled} status to be able to complete the order"
+                };
+
+                return ResponseResult.Failure((int)(HttpStatusCode.BadRequest), errorInfo);
             }
 
-            CompleteOrderIntegrationEvent orderCompletedEvent = new CompleteOrderIntegrationEvent
+            var orderCompletedEvent = new OrderCompletedEvent
             {
                 OrderId = request.OrderId,
                 ShippedDate = request.ShipedDate
@@ -49,7 +49,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndpoint.Publish(orderCompletedEvent, cancellationToken);
 
-            return Unit.Value;
+            return ResponseResult.Success((int)(HttpStatusCode.Processing));
         }
     }
 }

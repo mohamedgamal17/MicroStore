@@ -62,11 +62,11 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                         .HasMaxLength(600)
                         .HasColumnType("nvarchar(600)");
 
-                    b.Property<decimal>("OldPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("OldPrice")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<string>("ShortDescription")
                         .IsRequired()
@@ -144,78 +144,34 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.Product", b =>
                 {
-                    b.OwnsOne("MicroStore.Catalog.Domain.ValueObjects.Dimension", "Height", b1 =>
+                    b.OwnsOne("MicroStore.Catalog.Domain.ValueObjects.Dimension", "Dimensions", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Unit")
-                                .IsRequired()
-                                .ValueGeneratedOnAdd()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasDefaultValue("none")
-                                .HasColumnName("Height_Unit");
-
-                            b1.Property<double>("Value")
+                            b1.Property<double>("Height")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("float")
                                 .HasDefaultValue(0.0)
-                                .HasColumnName("Height_Value");
+                                .HasColumnName("Height_Width");
 
-                            b1.HasKey("ProductId");
-
-                            b1.ToTable("Products");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductId");
-                        });
-
-                    b.OwnsOne("MicroStore.Catalog.Domain.ValueObjects.Dimension", "Length", b1 =>
-                        {
-                            b1.Property<Guid>("ProductId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Unit")
-                                .IsRequired()
-                                .ValueGeneratedOnAdd()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasDefaultValue("none")
-                                .HasColumnName("Lenght_Unit");
-
-                            b1.Property<double>("Value")
+                            b1.Property<double>("Length")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("float")
                                 .HasDefaultValue(0.0)
-                                .HasColumnName("Lenght_Value");
+                                .HasColumnName("Dimension_Lenght");
 
-                            b1.HasKey("ProductId");
-
-                            b1.ToTable("Products");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductId");
-                        });
-
-                    b.OwnsOne("MicroStore.Catalog.Domain.ValueObjects.Dimension", "Width", b1 =>
-                        {
-                            b1.Property<Guid>("ProductId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Unit")
-                                .IsRequired()
+                            b1.Property<int>("Unit")
                                 .ValueGeneratedOnAdd()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasDefaultValue("none")
-                                .HasColumnName("Width_Unit");
+                                .HasColumnType("int")
+                                .HasDefaultValue(0)
+                                .HasColumnName("Dimension_Unit");
 
-                            b1.Property<double>("Value")
+                            b1.Property<double>("Width")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("float")
                                 .HasDefaultValue(0.0)
-                                .HasColumnName("Width_Value");
+                                .HasColumnName("Dimension_Width");
 
                             b1.HasKey("ProductId");
 
@@ -230,12 +186,10 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                             b1.Property<Guid>("ProductId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Unit")
-                                .IsRequired()
+                            b1.Property<int>("Unit")
                                 .ValueGeneratedOnAdd()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasDefaultValue("none")
+                                .HasColumnType("int")
+                                .HasDefaultValue(0)
                                 .HasColumnName("Weight_Unit");
 
                             b1.Property<double>("Value")
@@ -252,16 +206,10 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                                 .HasForeignKey("ProductId");
                         });
 
-                    b.Navigation("Height")
-                        .IsRequired();
-
-                    b.Navigation("Length")
+                    b.Navigation("Dimensions")
                         .IsRequired();
 
                     b.Navigation("Weight")
-                        .IsRequired();
-
-                    b.Navigation("Width")
                         .IsRequired();
                 });
 

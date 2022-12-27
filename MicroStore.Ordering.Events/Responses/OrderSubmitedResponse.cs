@@ -6,8 +6,8 @@ namespace MicroStore.Ordering.Events.Responses
     {
         public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
-        public Guid ShippingAddressId { get; set; }
-        public Guid BillingAddressId { get; set; }
+        public AddressModel ShippingAddress { get; set; }
+        public AddressModel BillingAddressId { get; set; }
         public string UserId { get; set; }
         public decimal ShippingCost { get; set; }
         public decimal TaxCost { get; set; }

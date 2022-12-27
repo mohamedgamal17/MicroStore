@@ -4,9 +4,9 @@ using MicroStore.Inventory.IntegrationEvents;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
-using MicroStore.Payment.IntegrationEvents;
 namespace MicroStore.Ordering.Application.Tests.StateMachines
 {
+    [NonParallelizable]
     public class CompleteOrder_Specs : StateMachineTestFixture<OrderStateMachine, OrderStateEntity>
     {
 
@@ -30,8 +30,8 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                     {
                         OrderId = _fakeOrderId,
                         OrderNumber = _orderNumber,
-                        BillingAddressId = Guid.NewGuid(),
-                        ShippingAddressId = Guid.NewGuid(),
+                        BillingAddress = GenerateFakeAddress(),
+                        ShippingAddress = GenerateFakeAddress(),
                         TaxCost= 0,
                         ShippingCost = 0,
                         SubTotal = 50,
@@ -64,6 +64,8 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                     new OrderApprovedEvent
                     {
                         OrderId = _fakeOrderId,
+                        OrderNumber = _orderNumber,
+                       
                     }
                 );
 
@@ -77,7 +79,6 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
             {
                 OrderId = _fakeOrderId,
                 ShipmentId = Guid.NewGuid().ToString(),
-                ShipmentSystem = Guid.NewGuid().ToString()
             });
 
             instance = await Repository.ShouldContainSagaInState(_fakeOrderId, Machine, x => x.Fullfilled, TestHarness.TestTimeout);
@@ -104,14 +105,29 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
         {
             return new List<OrderItemModel>
             {
-
                  new OrderItemModel
                  {
-                      ItemName = "FakeName",
-                       ProductId = Guid.NewGuid(),
+                       Name = Guid.NewGuid().ToString(),
+                       ExternalProductId = Guid.NewGuid().ToString(),
+                       Sku = Guid.NewGuid().ToString(),
                        Quantity = 5,
                        UnitPrice = 50
                  }
+            };
+        }
+        private AddressModel GenerateFakeAddress()
+        {
+            return new AddressModel
+            {
+                CountryCode = Guid.NewGuid().ToString(),
+                City = Guid.NewGuid().ToString(),
+                State = Guid.NewGuid().ToString(),
+                AddressLine1 = Guid.NewGuid().ToString(),
+                AddressLine2 = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString(),
+                Phone = Guid.NewGuid().ToString(),
+                PostalCode = Guid.NewGuid().ToString(),
+                Zip = Guid.NewGuid().ToString(),
             };
         }
 

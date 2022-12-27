@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.Categories.Commands;
+using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.Catalog.Domain.Entities;
+using System.Net;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.Categories
@@ -20,8 +22,15 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 
 
             var result = await Send(request);
+
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.Created);
+
+            result.IsSuccess.Should().BeTrue();
+
             var categoriesCount = await GetCategoriesCount();
-            var category = await GetCategoryById(result.CategoryId);
+
+            var category = await GetCategoryById(result.GetEnvelopeResult<CategoryDto>().Result.CategoryId);
 
             category.Name.Should().Be(request.Name);
             category.Description.Should().Be(request.Description);

@@ -1,5 +1,4 @@
-﻿#nullable disable
-namespace MicroStore.BuildingBlocks.Results
+﻿namespace MicroStore.BuildingBlocks.Results
 {
     public class StateMachineResult
     {
@@ -29,8 +28,6 @@ namespace MicroStore.BuildingBlocks.Results
         {
             return new StateMachineResult<TValue> { IsSuccess = false, Error =error };
         }
-
-
     }
 
 

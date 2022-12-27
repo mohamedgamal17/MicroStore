@@ -3,7 +3,7 @@ using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Ordering.Events.Models;
 namespace MicroStore.Ordering.Application.Abstractions.Commands
 {
-    public class FullfillOrderCommand : ICommand
+    public class FullfillOrderCommand : ICommandV1
     {
         public Guid OrderId { get; set; }
         public string ShipmentId { get; set; }

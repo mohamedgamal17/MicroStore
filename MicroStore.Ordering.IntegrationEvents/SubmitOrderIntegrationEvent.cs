@@ -5,13 +5,13 @@ namespace MicroStore.Ordering.IntegrationEvents
     {
         public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
-        public Guid ShippingAddressId { get; set; }
-        public Guid BillingAddressId { get; set; }
+        public AddressModel ShippingAddress { get; set; }
+        public AddressModel BillingAddress { get; set; }
         public string UserId { get; set; }
-        public decimal ShippingCost { get; set; }
-        public decimal TaxCost { get; set; }
-        public decimal SubTotal { get; set; }
-        public decimal TotalPrice { get; set; }
+        public double ShippingCost { get; set; }
+        public double TaxCost { get; set; }
+        public double SubTotal { get; set; }
+        public double TotalPrice { get; set; }
         public DateTime SubmissionDate { get; set; }
         public List<OrderItemModel> OrderItems { get; set; } = new List<OrderItemModel>();
     }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.Categories.Commands;
 using MicroStore.Catalog.Domain.Entities;
+using System.Net;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.Categories
@@ -25,12 +26,18 @@ namespace MicroStore.Catalog.Application.Tests.Categories
                 Description = "NewDescription"
             };
 
-            await Send(command);
+
+            var result = await Send(command);
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+
+            result.IsSuccess.Should().BeTrue();
 
 
             Category category = await GetCategoryById(fakeCategory.Id);
 
             category.Name.Should().Be(command.Name);
+
             category.Description.Should().Be(command.Description);
 
         }

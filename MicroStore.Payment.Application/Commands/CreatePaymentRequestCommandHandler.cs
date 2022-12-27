@@ -1,12 +1,15 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
-using MicroStore.Payment.Application.Commands.Requests;
-using MicroStore.Payment.Application.Dtos;
-using MicroStore.Payment.Domain.Shared.Domain;
+using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Results.Http;
+using MicroStore.Payment.Application.Abstractions.Commands;
+using MicroStore.Payment.Application.Abstractions.Dtos;
+using MicroStore.Payment.Domain;
+using System.Net;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Payment.Application.Commands
 {
-    public class CreatePaymentRequestCommandHandler : CommandHandler<CreatePaymentRequestCommand, PaymentRequestCreatedDto>
+    public class CreatePaymentRequestCommandHandler : CommandHandlerV1<CreatePaymentRequestCommand>
     {
 
         private readonly IRepository<PaymentRequest> _paymentRepository;
@@ -16,8 +19,20 @@ namespace MicroStore.Payment.Application.Commands
             _paymentRepository = paymentRepository;
         }
 
-        public override async Task<PaymentRequestCreatedDto> Handle(CreatePaymentRequestCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(CreatePaymentRequestCommand request, CancellationToken cancellationToken)
         {
+            bool isOrderPaymentCreated = await _paymentRepository.AnyAsync(x=> x.OrderId == request.OrderId
+              || x.OrderNumber == request.OrderNumber);
+
+            if (isOrderPaymentCreated)
+            {
+
+                return ResponseResult.Failure((int)HttpStatusCode.BadRequest,new ErrorInfo {
+                    Message = $"Order payment request for order id : {request.OrderId} , with number : {request.OrderNumber} is already created" 
+                });
+            }
+
+
             PaymentRequest paymentRequest = new PaymentRequest
             {
                 OrderId = request.OrderId,
@@ -32,8 +47,9 @@ namespace MicroStore.Payment.Application.Commands
 
             await _paymentRepository.InsertAsync(paymentRequest);
 
+            var result = ObjectMapper.Map<PaymentRequest, PaymentRequestCreatedDto>(paymentRequest);
 
-            return ObjectMapper.Map<PaymentRequest, PaymentRequestCreatedDto>(paymentRequest);
+            return ResponseResult.Success((int) HttpStatusCode.Created, result);
         }
 
 
@@ -45,7 +61,7 @@ namespace MicroStore.Payment.Application.Commands
                 ProductId = x.ProductId,
                 Sku = x.Sku,
                 Name = x.Name,
-                Image = x.Image,
+                Thumbnail = x.Image,
                 Quantity = x.Quantity,
                 UnitPrice = x.UnitPrice
             }).ToList();

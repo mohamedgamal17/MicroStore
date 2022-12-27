@@ -6,6 +6,6 @@ namespace MicroStore.Inventory.IntegrationEvents
     {
         public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
-        public List<ProductModel> Products { get; set; }
+        public List<OrderItemModel> Products { get; set; }
     }
 }

@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Inventory.Application.Abstractions.Dtos;
-
 namespace MicroStore.Inventory.Application.Abstractions.Commands
 {
-    public class AdjustProductInventoryCommand : ICommand<ProductAdjustedInventoryDto>
+    public class AdjustProductInventoryCommand : ICommandV1
     {
-        public Guid ProductId { get; init; }
+        public string Sku { get; set; }
 
         public int Stock { get; init; }
 

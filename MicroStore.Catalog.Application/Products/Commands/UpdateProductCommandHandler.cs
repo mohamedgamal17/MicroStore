@@ -1,14 +1,16 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
-using MicroStore.Catalog.Domain.ValueObjects;
+using System.Net;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class UpdateProductCommandHandler : CommandHandler<UpdateProductCommand, ProductDto>
+    public class UpdateProductCommandHandler : CommandHandlerV1<UpdateProductCommand>
     {
 
         private readonly IRepository<Product> _productRepository;
@@ -21,14 +23,17 @@ namespace MicroStore.Catalog.Application.Products.Commands
             _imageService = imageService;
         }
 
-        public override async Task<ProductDto> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             Product? product = await _productRepository
             .SingleOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
 
             if (product == null)
             {
-                throw new EntityNotFoundException(typeof(Product), request.ProductId);
+                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                {
+                    Message = $"Product entity with id : {request.ProductId} is not found"
+                });
             }
 
             product.Sku = request.Sku;
@@ -42,14 +47,17 @@ namespace MicroStore.Catalog.Application.Products.Commands
             product.LongDescription = request.LongDescription;
 
             product.OldPrice = request.OldPrice;
+   
+            if(request.Weight != null)
+            {
 
-            product.Weight = request.Weight?.AsWeight() ?? Weight.Empty;
+                product.Weight = request.Weight.AsWeight();
+            }
 
-            product.Length = request.Length?.AsDimension() ?? Dimension.Empty;
-
-            product.Width = request.Length?.AsDimension() ?? Dimension.Empty;
-
-            product.Height = request.Height?.AsDimension() ?? Dimension.Empty;
+            if (request.Dimensions != null)
+            {
+                product.Dimensions = request.Dimensions.AsDimension();
+            }
 
             if (request.ImageModel != null)
             {
@@ -60,7 +68,7 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 
-            return ObjectMapper.Map<Product, ProductDto>(product);
+            return ResponseResult.Success((int) HttpStatusCode.Accepted , ObjectMapper.Map<Product, ProductDto>(product)) ;
         }
 
     }

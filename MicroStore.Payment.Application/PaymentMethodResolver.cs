@@ -1,6 +1,7 @@
-﻿using MicroStore.Payment.Domain.Shared;
+﻿using MicroStore.BuildingBlocks.Results;
+using MicroStore.Payment.Application.Abstractions;
+using MicroStore.Payment.Application.Abstractions.Consts;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Entities;
 namespace MicroStore.Payment.Application
 {
     public class PaymentMethodResolver : IPaymentMethodResolver , ITransientDependency
@@ -12,16 +13,23 @@ namespace MicroStore.Payment.Application
             _paymentMethods = paymentMethods;
         }
 
-        public IPaymentMethod Resolve(string paymentGatewayName)
+        public async Task<UnitResult<IPaymentMethod>> Resolve(string paymentGatewayName, CancellationToken cancellationToken = default)
         {
             var paymentMethod = _paymentMethods.SingleOrDefault(x => x.PaymentGatewayName == paymentGatewayName);
             
             if(paymentMethod == null)
             {
-                throw new EntityNotFoundException(typeof(IPaymentMethod));
+                 return UnitResult.Failure<IPaymentMethod>(PaymentMethodErrorType.NotExist,  $"Payment system with name :{paymentGatewayName}, is not exist" );
             }
 
-            return paymentMethod;
+            bool isEnabled = await paymentMethod.IsEnabled();
+
+            if (!isEnabled)
+            {
+                return  UnitResult.Failure<IPaymentMethod>(PaymentMethodErrorType.BusinessLogicError, $"Payment system : {paymentGatewayName} is disabled"); ;
+            }
+
+            return UnitResult.Success(paymentMethod);
         }
     }
 }

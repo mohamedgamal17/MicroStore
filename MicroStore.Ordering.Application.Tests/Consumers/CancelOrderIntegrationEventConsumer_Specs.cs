@@ -2,6 +2,7 @@
 using MicroStore.Ordering.IntegrationEvents;
 namespace MicroStore.Ordering.Application.Tests.Consumers
 {
+    [NonParallelizable]
     public class When_cancel_order_integration_event_consumed : MassTransitTestFixture
     {
         [Test]

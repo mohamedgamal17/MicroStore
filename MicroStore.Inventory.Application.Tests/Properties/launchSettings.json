@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MicroStore.Inventory.Application.Tests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:55091;http://localhost:55096"
+    }
+  }
+}

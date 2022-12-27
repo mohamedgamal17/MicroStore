@@ -10,7 +10,8 @@ namespace MicroStore.Ordering.Application.Consumers
         {
             return context.Publish(new OrderApprovedEvent
             {
-                OrderId = context.Message.OrderId,
+                OrderId = Guid.Parse(context.Message.ExternalOrderId),
+                OrderNumber = context.Message.OrderNumber
             });
         }
     }

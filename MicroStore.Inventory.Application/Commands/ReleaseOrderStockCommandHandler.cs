@@ -1,31 +1,46 @@
-﻿using MicroStore.BuildingBlocks.InMemoryBus;
+﻿using Microsoft.EntityFrameworkCore;
+using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Inventory.Application.Abstractions.Commands;
+using MicroStore.Inventory.Domain.OrderAggregate;
 using MicroStore.Inventory.Domain.ProductAggregate;
+using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Inventory.Application.Commands
 {
-    public class ReleaseOrderStockCommandHandler : CommandHandler<ReleaseOrderStockCommand>
+    public class ReleaseOrderStockCommandHandler : CommandHandlerV1<ReleaseOrderStockCommand>
     {
         private readonly IRepository<Product> _productRepository;
 
-        public ReleaseOrderStockCommandHandler(IRepository<Product> productRepository)
+        private readonly IRepository<Order> _orderRepository;
+
+        public ReleaseOrderStockCommandHandler(IRepository<Product> productRepository, IRepository<Order> orderRepository)
         {
             _productRepository = productRepository;
+            _orderRepository = orderRepository;
         }
 
-        public override async Task<Unit> Handle(ReleaseOrderStockCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(ReleaseOrderStockCommand request, CancellationToken cancellationToken)
         {
-            foreach (var orderItem in request.Products)
+
+            var query = await _orderRepository.WithDetailsAsync(x=> x.Items);
+
+            var order = await query.SingleAsync(x => x.ExternalOrderId == request.ExternalOrderId);
+
+            foreach (var orderItem in order.Items)
             {
-                Product product = await _productRepository.SingleAsync(x => x.Id == orderItem.ProductId);
+                Product product = await _productRepository.SingleAsync(x => x.ExternalProductId == orderItem.ExternalProductId);
 
                 product.ReleaseStock(orderItem.Quantity);
 
                 await _productRepository.UpdateAsync(product);
             }
 
+            order.IsCancelled = true;
 
-            return Unit.Value;
+            await _orderRepository.UpdateAsync(order);
+
+            return ResponseResult.Success((int) HttpStatusCode.Accepted);
         }
     }
 }

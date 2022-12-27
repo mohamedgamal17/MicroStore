@@ -10,12 +10,10 @@ namespace MicroStore.Catalog.Domain.Entities
         public string Thumbnail { get; set; } 
         public string ShortDescription { get;set; } = string.Empty;
         public string LongDescription { get;set; } = string.Empty;
-        public decimal Price { get; set; }
-        public decimal OldPrice { get; set; }
+        public double Price { get; set; }
+        public double OldPrice { get; set; }
         public Weight Weight { get; set; }
-        public Dimension Length { get; set; }
-        public Dimension Width { get; set; }
-        public Dimension Height { get; set; }
+        public Dimension Dimensions { get; set; }
 
         private List<ProductCategory> _productCategories = new List<ProductCategory>();
 
@@ -23,16 +21,8 @@ namespace MicroStore.Catalog.Domain.Entities
         public IReadOnlyList<ProductCategory> ProductCategories => _productCategories.AsReadOnly();
         public IReadOnlyList<ProductImage> ProductImages => _productImages.AsReadOnly();
 
-        public Product(string sku, string name, decimal price)
-            : base(Guid.NewGuid())
-        {
-            Sku = sku;
-            Name = name;
-            Price = price;
-            AddLocalEvent(new CreateProductEvent(Id, Name, Sku, price));
-        }
-
-        public Product(string sku ,string name,decimal price, string thumbnail)
+    
+        public Product(string sku ,string name,double price, string thumbnail)
         {
             Sku = sku;
             Name = name;

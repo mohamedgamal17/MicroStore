@@ -74,7 +74,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
         {
             return WithUnitOfWork(async (sp) =>
             {
-                var fakeProduct = new Product("DublicateSku", "DublicateName", 50);
+                var fakeProduct = new Product("DublicateSku", "DublicateName", 50, Guid.NewGuid().ToString());
                 var repository = sp.GetRequiredService<IRepository<Product>>();
                 await repository.InsertAsync(fakeProduct);
                 return fakeProduct;

@@ -10,12 +10,10 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
         public string Sku { get; set; } = null!;
         public string ShortDescription { get; set; } = string.Empty;
         public string LongDescription { get; set; } = string.Empty;
-        public decimal Price { get; set; }
-        public decimal OldPrice { get; set; }
+        public double Price { get; set; }
+        public double OldPrice { get; set; }
         public WeightModel Weight { get; set; }
-        public DimensionModel Length { get; set; }
-        public DimensionModel Width { get; set; }
-        public DimensionModel Height { get; set; }
+        public DimensionModel Dimensions { get; set; }
 
     }
 

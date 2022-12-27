@@ -1,8 +1,8 @@
-﻿using MicroStore.Payment.Application.Tests.Consts;
-using MicroStore.Payment.Domain.Shared;
-using MicroStore.Payment.Domain.Shared.Domain;
-using MicroStore.Payment.Domain.Shared.Dtos;
-using MicroStore.Payment.Domain.Shared.Models;
+﻿using MicroStore.Payment.Application.Abstractions;
+using MicroStore.Payment.Application.Abstractions.Dtos;
+using MicroStore.Payment.Application.Abstractions.Models;
+using MicroStore.Payment.Application.Tests.Consts;
+using MicroStore.Payment.Domain;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
@@ -53,6 +53,37 @@ namespace MicroStore.Payment.Application.Tests.Fakes
 
             await _paymentRequestRepository.UpdateAsync(paymentRequest);
           
+        }
+
+        public Task<bool> IsEnabled()
+        {
+            return Task.FromResult(true);
+        }
+    }
+
+    [ExposeServices(typeof(IPaymentMethod))]
+    public class FakeNotActivePaymentMethod : IPaymentMethod , ITransientDependency
+    {
+        public string PaymentGatewayName => PaymentMethodConst.NonActiveGateway;
+
+        public Task<PaymentRequestCompletedDto> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsEnabled()
+        {
+            return Task.FromResult(false);
+        }
+
+        public Task<PaymentProcessResultDto> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Refund(Guid paymentId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }

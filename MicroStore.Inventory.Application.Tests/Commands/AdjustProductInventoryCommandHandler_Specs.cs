@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using MicroStore.Inventory.Application.Abstractions.Commands;
+using MicroStore.Inventory.Application.Abstractions.Dtos;
 using MicroStore.Inventory.Domain.ProductAggregate;
+using System.Net;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Inventory.Application.Tests.Commands
@@ -12,11 +14,14 @@ namespace MicroStore.Inventory.Application.Tests.Commands
         public async Task Should_adjust_product_inventory()
         {
 
-            Product fakeProduct = await Insert(new Product("fakename", "fakesku", 0));
+            Product fakeProduct = await Insert(new Product(Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(), 
+                Guid.NewGuid().ToString(), 
+                Guid.NewGuid().ToString(), 0));
 
             var result = await Send(new AdjustProductInventoryCommand
             {
-                ProductId = fakeProduct.Id,
+                Sku = fakeProduct.Sku,
                 Stock = 10
             });
 
@@ -24,7 +29,7 @@ namespace MicroStore.Inventory.Application.Tests.Commands
 
             product.Stock.Should().Be(10);
 
-            result.Stock.Should().Be(10);
+            result.GetEnvelopeResult<ProductAdjustedInventoryDto>().Result.AdjustedStock.Should().Be(10);
         }
 
         [Test]
@@ -32,13 +37,15 @@ namespace MicroStore.Inventory.Application.Tests.Commands
         {
 
 
-            Func<Task> action = () => Send(new AdjustProductInventoryCommand
+            var result = await  Send(new AdjustProductInventoryCommand
             {
-                ProductId = Guid.NewGuid(),
+                Sku = Guid.NewGuid().ToString(),
                 Stock = 10
             });
 
-            await action.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
 
         }
 

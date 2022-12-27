@@ -6,12 +6,12 @@ namespace MicroStore.Ordering.Events
     {
         public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
-        public Guid ShippingAddressId { get; set; }
-        public Guid BillingAddressId { get; set; }
-        public decimal ShippingCost { get; set; }
-        public decimal TaxCost { get; set; }
-        public decimal SubTotal { get; set; }
-        public decimal Total { get; set; }
+        public AddressModel ShippingAddress { get; set; }
+        public AddressModel BillingAddress { get; set; }
+        public double ShippingCost { get; set; }
+        public double TaxCost { get; set; }
+        public double SubTotal { get; set; }
+        public double Total { get; set; }
         public string UserId { get; set; }
         public DateTime SubmissionDate { get; set; }
         public List<OrderItemModel> OrderItems { get; set; } = new List<OrderItemModel>();

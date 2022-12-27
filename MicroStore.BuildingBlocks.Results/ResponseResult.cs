@@ -1,47 +1,38 @@
-﻿namespace MicroStore.BuildingBlocks.Results
+﻿using MicroStore.BuildingBlocks.Results.Http;
+
+namespace MicroStore.BuildingBlocks.Results
 {
-    public  class ResponseResult : Result, IResponseResult
+    public  class ResponseResult 
     {
-        public string Code { get; }
+        public int StatusCode { get; }
+        public bool IsSuccess { get;  }
+        public bool IsFailure => !IsSuccess;
+        public Envelope Envelope { get; }
 
-        internal ResponseResult(bool isSucces, string code ,object? error)
-            :base(isSucces , error)
+        public ResponseResult(bool success,  int statusCode, Envelope envelope)
         {
-            Code = code;
+            IsSuccess = success;
+            StatusCode = statusCode;
+            Envelope = envelope;
+        }
+        public Envelope<T> GetEnvelopeResult<T>()
+        {
+            return (Envelope<T>)Envelope ?? throw new InvalidOperationException($"Unable to cast envelope result to {typeof(Envelope<T>)}");
         }
 
-       
-
-    }
-
-
-    public class ResponseResult<T> : ResponseResult, IResponseResult<T>
-    {
-
-        public string Code { get; private set; }
-
-        private T? _value;
-
-        
-
-        public T Value
+        public static ResponseResult Success(int code)
         {
-            get
-            {
-                if (IsFailure)
-                {
-                    throw new InvalidOperationException("result is already failured");
-                }
-
-                return _value!;
-            }
+            return new ResponseResult(true,code, Envelope.Success());
         }
 
-        internal ResponseResult(bool isSucces,T? value ,string code, object? error) 
-            : base(isSucces, code, error)
+        public static ResponseResult Failure(int code , ErrorInfo error)
         {
-            _value = value;
-            Code = code;
+            return new ResponseResult(false,code , Envelope.Failure(error));
         }
+
+        public static ResponseResult Success<T>(int code , T value)
+        {
+            return new ResponseResult(true,code, Envelope.Success(value));
+        }    
     }
 }

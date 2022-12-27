@@ -3,32 +3,33 @@ using Ardalis.GuardClauses;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Inventory.Domain.Events;
 using MicroStore.Inventory.Domain.Extensions;
-
 namespace MicroStore.Inventory.Domain.ProductAggregate
 {
-    public class Product : AggregateRoot<Guid>
+    public class Product : BasicAggregateRoot<Guid>
     {
-
-        public string Name { get; set; }
-
+        public string ExternalProductId { get; set; }
         public string Sku { get; set; }
+        public string Name { get; set; }
+        public string Thumbnail { get; set; }
         public int Stock { get; private set; }
         public int AllocatedStock { get; private set; }
 
-
-        public Product(string name , string sku,int stock)
-            : base(Guid.NewGuid())
+        public Product(string externalProductId,  string name, string sku, string thumbnail,int stock)
         {
+            ExternalProductId = Guard.Against.NullOrWhiteSpace(externalProductId, nameof(externalProductId));
             Name = Guard.Against.NullOrWhiteSpace(name, nameof(name));
             Sku = Guard.Against.NullOrWhiteSpace(sku, nameof(sku));
             Stock = Guard.Against.Negative(stock, nameof(stock));
-            
+            Thumbnail = thumbnail;   
         }
 
+        private Product() { }
 
-        public void AdjustInventory(int adjustedStock, string reason)
+        public UnitResult AdjustInventory(int adjustedStock, string reason)
         {
-            Guard.Against.Negative(adjustedStock, nameof(adjustedStock));
+            Guard.Against.InvalidResult(CanAdjustQauntity(adjustedStock, reason),typeof(Product));
+
+            Stock += adjustedStock;
 
             AddLocalEvent(new InventoryAdjustedEvent
             {
@@ -38,37 +39,56 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
                 Reason = reason
             });
 
-            Stock = adjustedStock;
+            return UnitResult.Success();
+        }
+
+        public UnitResult CanAdjustQauntity(int adjustedStock, string reason)
+        {
+            int adjustedQuantity = Stock + adjustedStock;
+
+            if (adjustedQuantity < 0)
+            {
+                return UnitResult.Failure(ProductAggregateErrorType.ProductAdjustingQuantityError, "product stock cannot be adjusted to negative number");
+            }
+
+
+            return UnitResult.Success();
         }
 
 
-        public void AllocateStock(int allocatedQuantity)
+        public UnitResult AllocateStock(int quantity)
         {
-            Guard.Against.InvalidResult(CanAllocateQuantity(allocatedQuantity));
+            Guard.Against.InvalidResult(CanAllocateStock(quantity),typeof(Product));
 
             AddLocalEvent(new ProductAllocatedEvent
             {
                 ProductId = Id,
-                AllocatedQuantity = allocatedQuantity,
+                AllocatedQuantity = quantity,
                 AllocationDate = DateTime.UtcNow
             });
 
-            AllocatedStock += allocatedQuantity;
+            AllocatedStock += quantity;
 
-            Stock -= allocatedQuantity;
+            Stock -= quantity;
+
+            return UnitResult.Success();
         }
 
-        public Result CanAllocateQuantity(int quantity)
+        public UnitResult CanAllocateStock(int quantity)
         {
-            Guard.Against.NegativeOrZero(quantity, nameof(quantity));
+            if (Stock < quantity)
+            {
+                return UnitResult.Failure(ProductAggregateErrorType.ProductAllocationError,
+                    $"Current product : {Name} \n \t stock is less than requested allocated quantity");
+            }
 
-            return Result.FailureIf(() => Stock < quantity, $"Current product : {Name} \n \t stock is less than requested allocated quantity");
+            return UnitResult.Success();
         }
 
-
-        public void ReleaseStock(int quantity)
-        {
-            Guard.Against.InvalidResult(CanReleaseStock(quantity));
+   
+        public UnitResult ReleaseStock(int quantity)
+        {        
+            Guard.Against.InvalidResult(CanReleaseStock(quantity),typeof(Product));
 
             AddLocalEvent(new ProductReleasedEvent
             {
@@ -78,68 +98,23 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             });
 
             AllocatedStock -= quantity;
-            Stock += quantity; 
-        }
-
-        public Result CanReleaseStock(int quantity)
-        {
-            Guard.Against.NegativeOrZero(quantity, nameof(quantity));
-
-            return Result.FailureIf(() => AllocatedStock < quantity, "Current allocated quantity is less than requested release quantity");
-        }
-
-        public void ShipProduct(int quantity)
-        {
-            Guard.Against.InvalidResult(CanShipProduct(quantity));
-
-            AllocatedStock -= quantity;
-
-            AddLocalEvent(new ProductShippedEvent
-            {
-                ProductId = Id,
-                ShippedQuantity = quantity,
-                ShippedDate = DateTime.UtcNow
-            });
-        }
-
-        public Result CanShipProduct(int quantity)
-        {
-            Guard.Against.NegativeOrZero(quantity, nameof(quantity));
-
-            return Result.FailureIf(() => AllocatedStock < quantity, "Current allocated quantity is less than requested ship quantity");
-        }
-
-
-        public void ReciveQuantity(int quantity)
-        {
-            Guard.Against.NegativeOrZero(quantity,nameof(quantity));
-
 
             Stock += quantity;
 
-            AddLocalEvent(new ProductRecivedEvent
-            {
-                ProductId = Id,
-                RecivedQuantity = quantity,
-                RecivedDate = DateTime.UtcNow
-            });
+            return UnitResult.Success();
         }
 
 
-
-        public void ReturnQuantity(int quantity)
+        public UnitResult CanReleaseStock(int quantity)
         {
-            Guard.Against.NegativeOrZero(quantity, nameof(quantity));
-
-            Stock += quantity;
-
-            AddLocalEvent(new ProductReturnedEvent
+            if (AllocatedStock < quantity)
             {
-                ProductId = Id,
-                ReturnedQuantity = quantity,
-                ReturnedDate = DateTime.UtcNow
-            });
-        }
+                return UnitResult.Failure(ProductAggregateErrorType.ProductReleasingStockError,
+                   "Current allocated quantity is less than requested release quantity");
+            }
 
+            return UnitResult.Success();
+        }
+       
     }
 }

@@ -5,6 +5,7 @@ using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
 using MicroStore.Ordering.IntegrationEvents;
+using System.Net;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
@@ -30,12 +31,12 @@ namespace MicroStore.Ordering.Application.Tests.Commands
 
             await Send(command);
 
-            Assert.That(await TestHarness.Published.Any<FullfillOrderIntegrationEvent>());
+            Assert.That(await TestHarness.Published.Any<OrderFulfillmentCompletedEvent>());
 
         }
 
         [Test]
-        public async Task Should_throw_entity_not_found_exception_while_order_is_not_exist()
+        public async Task Should_return_error_result_with_status_code_404_while_order_is_not_exist()
         {
             TestHarness.TestTimeout = TimeSpan.FromSeconds(1);
 
@@ -46,13 +47,15 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                 ShipmentSystem = Guid.NewGuid().ToString()
             };
 
-            Func<Task> action = () => Send(command);
+            var result = await Send(command);
 
-            await action.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
         [Test]
-        public async Task Should_throw_user_friendly_exception_while_order_state_is_not_in_approved_state()
+        public async Task Should_return_error_result_with_status_code_400_while_order_state_is_not_in_approved_state()
         {
             TestHarness.TestTimeout = TimeSpan.FromSeconds(1);
 
@@ -67,9 +70,11 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                 ShipmentSystem = Guid.NewGuid().ToString()
             };
 
-            Func<Task> action = () => Send(command);
+            var result = await Send(command);
 
-            await action.Should().ThrowExactlyAsync<UserFriendlyException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         }
 
 
@@ -80,8 +85,8 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                   {
                       OrderId = orderId,
                       OrderNumber = Guid.NewGuid().ToString(),
-                      BillingAddressId = Guid.NewGuid(),
-                      ShippingAddressId = Guid.NewGuid(),
+                      BillingAddress = new AddressModel(),
+                      ShippingAddress = new AddressModel(),
                       TaxCost = 0,
                       ShippingCost = 0,
                       SubTotal = 50,
@@ -92,8 +97,9 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                       {
                              new OrderItemModel
                              {
-                                  ItemName = Guid.NewGuid().ToString(),
-                                  ProductId = Guid.NewGuid(),
+                                  Name = Guid.NewGuid().ToString(),
+                                  ExternalProductId = Guid.NewGuid().ToString(),
+                                  Sku =Guid.NewGuid().ToString(),
                                   Quantity = 5,
                                   UnitPrice = 50
                              }

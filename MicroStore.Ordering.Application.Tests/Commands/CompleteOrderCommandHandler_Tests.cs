@@ -4,9 +4,7 @@ using MicroStore.Ordering.Application.Abstractions.Commands;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
-using MicroStore.Ordering.IntegrationEvents;
-using Volo.Abp;
-using Volo.Abp.Domain.Entities;
+using System.Net;
 namespace MicroStore.Ordering.Application.Tests.Commands
 {
     public class CompleteOrderCommandHandler_Tests : StateMachineTestFixture<OrderStateMachine, OrderStateEntity>
@@ -25,16 +23,19 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                 ShipedDate = DateTime.UtcNow,
             };
 
-            await Send(command);
+            var result =  await Send(command);
 
+            result.IsSuccess.Should().BeTrue();
 
-            Assert.That(await TestHarness.Published.Any<CompleteOrderIntegrationEvent>());
+            result.StatusCode.Should().Be((int)HttpStatusCode.Processing);
+
+            Assert.That(await TestHarness.Published.Any<OrderCompletedEvent>());
             
         }
 
 
         [Test]
-        public async Task Should_throw_entity_not_found_exception_while_order_is_not_exist()
+        public async Task Should_return_error_result_with_status_code_404_while_is_not_exist()
         {
 
             CompleteOrderCommand command = new CompleteOrderCommand
@@ -43,14 +44,16 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                 ShipedDate = DateTime.UtcNow,
             };
 
-            Func<Task> action = () => Send(command);
+            var result = await Send(command);
 
-            await action.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
 
         [Test]
-        public async Task Should_throw_user_friendly_exception_while_order_state_is_not_in_fullfilled_state()
+        public async Task Should_return_error_result_with_status_code_401_while_order_state_is_not_in_fullfilled_state()
         {
 
             Guid orderId = Guid.NewGuid();
@@ -63,9 +66,11 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                 ShipedDate = DateTime.UtcNow,
             };
 
-            Func<Task> action = () => Send(command);
+            var result = await Send(command);
 
-            await action.Should().ThrowExactlyAsync<UserFriendlyException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         }
 
         private async Task GenerateFakeSubmitedOrder(Guid orderId)
@@ -75,8 +80,8 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                   {
                       OrderId = orderId,
                       OrderNumber = Guid.NewGuid().ToString(),
-                      BillingAddressId = Guid.NewGuid(),
-                      ShippingAddressId = Guid.NewGuid(),
+                      BillingAddress = new AddressModel(),
+                      ShippingAddress = new AddressModel(),
                       TaxCost = 0,
                       ShippingCost = 0,
                       SubTotal = 50,
@@ -87,19 +92,21 @@ namespace MicroStore.Ordering.Application.Tests.Commands
                       {
                              new OrderItemModel
                              {
-                                  ItemName = Guid.NewGuid().ToString(),
-                                  ProductId = Guid.NewGuid(),
+                                  Name = Guid.NewGuid().ToString(),
+                                  ExternalProductId = Guid.NewGuid().ToString(),
+                                  Sku =Guid.NewGuid().ToString(),
                                   Quantity = 5,
-                                 UnitPrice = 50
+                                  UnitPrice = 50
                              }
                       }
                   }
-            );
+              );
 
             var instance = await Repository.ShouldContainSagaInState(orderId, Machine, x => x.Submitted, TestHarness.TestTimeout);
 
             instance.Should().NotBeNull();
         }
+
 
         private async Task GenerateFakeFullfilledOrder(Guid orderId)
         {
@@ -135,7 +142,6 @@ namespace MicroStore.Ordering.Application.Tests.Commands
             {
                 OrderId = orderId,
                 ShipmentId = Guid.NewGuid().ToString(),
-                ShipmentSystem = Guid.NewGuid().ToString()
             });
 
             instance = await Repository.ShouldContainSagaInState(orderId, Machine, x => x.Fullfilled, TestHarness.TestTimeout);

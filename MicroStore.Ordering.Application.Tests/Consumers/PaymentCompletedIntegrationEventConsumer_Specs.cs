@@ -3,6 +3,7 @@ using MicroStore.Payment.IntegrationEvents;
 
 namespace MicroStore.Ordering.Application.Tests.Consumers
 {
+    [NonParallelizable]
     public class When_payment_accepted_integration_event_consumed : MassTransitTestFixture
     {
 

@@ -1,51 +1,66 @@
-﻿using Microsoft.Extensions.Options;
-using MicroStore.Payment.Domain.Shared;
-using MicroStore.Payment.Domain.Shared.Domain;
-using MicroStore.Payment.Domain.Shared.Dtos;
-using MicroStore.Payment.Domain.Shared.Models;
+﻿using MicroStore.Payment.Application.Abstractions;
+using MicroStore.Payment.Application.Abstractions.Common;
+using MicroStore.Payment.Application.Abstractions.Dtos;
+using MicroStore.Payment.Application.Abstractions.Models;
+using MicroStore.Payment.Domain;
 using MicroStore.Payment.Plugin.StripeGateway.Config;
 using MicroStore.Payment.Plugin.StripeGateway.Consts;
 using Stripe;
 using Stripe.Checkout;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
-
 namespace MicroStore.Payment.Plugin.StripeGateway
 {
-    public class StripePaymentMethod : IPaymentMethod , IUnitOfWorkEnabled
+    [ExposeServices(typeof(IPaymentMethod),IncludeDefaults = true, IncludeSelf = true)]
+    public class StripePaymentMethod : IPaymentMethod , IUnitOfWorkEnabled , ITransientDependency
     {
 
         private readonly SessionService _sessionService;
 
         private readonly PaymentIntentService _paymentIntentService;
 
+        private readonly RefundService _refundService;
+
         private readonly IPaymentRequestRepository _paymentRequestRepository;
 
-        private readonly StripePaymentOption _options;
+        private readonly ISettingsRepository _settingsRepository;
 
         private readonly IObjectMapper _objectMapper;
 
-        public StripePaymentMethod(SessionService sessionService, PaymentIntentService paymentIntentService , IPaymentRequestRepository paymentRequestRepository, IOptions<StripePaymentOption> options, IObjectMapper objectMapper)
+        private readonly IRepository<PaymentSystem> _paymentSystemRepository;
+
+        public StripePaymentMethod(SessionService sessionService, PaymentIntentService paymentIntentService, IPaymentRequestRepository paymentRequestRepository, IObjectMapper objectMapper, IRepository<PaymentSystem> paymentSystemRepository, ISettingsRepository settingsRepository, RefundService refundService)
         {
             _sessionService = sessionService;
             _paymentIntentService = paymentIntentService;
             _paymentRequestRepository = paymentRequestRepository;
-            _options = options.Value;
             _objectMapper = objectMapper;
+            _paymentSystemRepository = paymentSystemRepository;
+            _settingsRepository = settingsRepository;
+            _refundService = refundService;
         }
-        public string PaymentGatewayName => StripePaymentDefault.Provider;
+        public string PaymentGatewayName => StripePaymentConst.Provider;
 
         public async Task<PaymentRequestCompletedDto> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default)
         {
             try
             {
+                var requestOptions = await PrepareStripeRequest(cancellationToken);
+
                 var session = await _sessionService
-                    .GetAsync(completePaymentModel.Token, new SessionGetOptions(), PrepareStripeRequest(), cancellationToken);
+                    .GetAsync(completePaymentModel.Token, new SessionGetOptions(), requestOptions, cancellationToken);
+
+                if(session.Status != "unpaid")
+                {
+                    throw new BusinessException("your payment session is uncompleted");
+                }
 
                 PaymentRequest paymentRequest = await _paymentRequestRepository.SingleAsync( x=> x.Id == Guid.Parse(session.ClientReferenceId));
 
+              
                 paymentRequest.Complete(PaymentGatewayName, session.PaymentIntentId, DateTime.UtcNow);
 
                 await  _paymentRequestRepository.UpdateAsync(paymentRequest);
@@ -61,19 +76,18 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         public async Task<PaymentProcessResultDto> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
         {
-            PaymentRequest? paymentRequest = await _paymentRequestRepository.GetPaymentRequest(paymentId);
+            var paymentRequest = await _paymentRequestRepository.GetPaymentRequest(paymentId);
 
-            if(paymentRequest == null)
-            {
-                throw new EntityNotFoundException(typeof(PaymentRequest), paymentId);
-            }
+            
 
             var options = new SessionCreateOptions
             {
                 SuccessUrl = processPaymentModel.ReturnUrl,
                 CancelUrl = processPaymentModel.CancelUrl,
                 ClientReferenceId = paymentId.ToString(),
-                LineItems = PrepareStripeLineItems(paymentRequest.Items),
+                LineItems = PrepareStripeLineItems(paymentRequest!.Items),
+                
+             
                 ShippingOptions = new List<SessionShippingOptionOptions>
                 {
                     new SessionShippingOptionOptions
@@ -82,10 +96,12 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                         {
                             FixedAmount = new SessionShippingOptionShippingRateDataFixedAmountOptions
                             {
-                               Amount = Convert.ToInt64(paymentRequest.ShippingCost * 100),
+                               Amount = Convert.ToInt64((paymentRequest.ShippingCost + paymentRequest.TaxCost)  * 100),
                                Currency = "usd"
                             },
 
+                            DisplayName = "Shipping Cost",
+                            Type = "fixed_amount"
                         }
 
                     },
@@ -93,12 +109,24 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
       
                 Mode = "payment"
+
+                
             };
 
-            var  session = await _sessionService.CreateAsync(options, PrepareStripeRequest(), cancellationToken);
+            
+
+            var requestOptions = await PrepareStripeRequest(cancellationToken);
+
+            var  session = await _sessionService.CreateAsync(options, requestOptions, cancellationToken);
 
             return new PaymentProcessResultDto
             {
+                SessionId = session.Id,
+                TransactionId=  session.PaymentIntentId,
+                AmountSubTotal=  (session.AmountSubtotal / 100 ?? 0 ),
+                AmountTotal=  (session.AmountTotal / 100  ?? 0 ),
+                SuccessUrl = session.SuccessUrl+ $"?token{session.Id}" + $"?gate={StripePaymentConst.Provider}",
+                CancelUrl = session.CancelUrl + $"?token{session.Id}" + $"?gate={StripePaymentConst.Provider}",              
                 CheckoutLink = session.Url
             };
         }
@@ -115,38 +143,54 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
                         Name = x.Name,
-                        Images = new List<string> { x.Image ?? string.Empty},
+                        Images = new List<string> { x.Thumbnail ?? string.Empty},
                         
                     },
 
-                    UnitAmountDecimal = x.UnitPrice
+                    UnitAmountDecimal = Convert.ToDecimal(x.UnitPrice * 100),
+                    Currency = "usd"
                 }
                
             }).ToList();
         }
 
-        private RequestOptions PrepareStripeRequest()
+        private async Task<RequestOptions> PrepareStripeRequest(CancellationToken cancellationToken = default)
         {
+            var settings = await _settingsRepository.TryToGetSettings<StripePaymentSettings>(StripePaymentConst.Provider, cancellationToken);
+
             return new RequestOptions
             {
-                ApiKey = _options.ApiKey
+                ApiKey = settings?.ApiKey ?? StripeConfiguration.ApiKey
             };
         }
 
         public async Task Refund(Guid paymentId, CancellationToken cancellationToken = default)
         {
 
-            PaymentRequest paymentRequest = await _paymentRequestRepository
-                .SingleAsync(x => x.Id == paymentId);
+            PaymentRequest paymentRequest = (await _paymentRequestRepository
+                .GetPaymentRequest(paymentId))!;
+     
+            var requestOptions = await PrepareStripeRequest();
 
+            var refundOptions = new RefundCreateOptions
+            {
+                PaymentIntent = paymentRequest.TransctionId
+            };
+
+            var refundObject =  await _refundService.CreateAsync(refundOptions, requestOptions, cancellationToken);
  
-            await  _paymentIntentService.
-                CancelAsync(paymentRequest.TransctionId, new PaymentIntentCancelOptions(), PrepareStripeRequest(), cancellationToken);
-
             paymentRequest.MarkAsRefunded(DateTime.UtcNow, string.Empty);
 
             await _paymentRequestRepository.UpdateAsync(paymentRequest);
 
+        }
+
+
+        public async Task<bool> IsEnabled()
+        {
+            var paymentSystem = await _paymentSystemRepository.SingleAsync(x => x.Name == StripePaymentConst.Provider);
+
+            return paymentSystem.IsEnabled;
         }
 
 

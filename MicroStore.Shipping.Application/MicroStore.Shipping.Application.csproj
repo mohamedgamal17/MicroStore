@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\MicroStore.Shipping.Application.Abstraction\MicroStore.Shipping.Application.Abstraction.csproj" />
+    <ProjectReference Include="..\MicroStore.Shipping.IntegrationEvents\MicroStore.Shipping.IntegrationEvents.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.9" />
+  </ItemGroup>
+
+</Project>

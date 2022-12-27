@@ -1,12 +1,16 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
-using MicroStore.Payment.Application.Commands.Requests;
-using MicroStore.Payment.Domain.Shared;
-using MicroStore.Payment.Domain.Shared.Domain;
+using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Results.Http;
+using MicroStore.Payment.Application.Abstractions;
+using MicroStore.Payment.Application.Abstractions.Commands;
+using MicroStore.Payment.Domain;
+using System.Net;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Payment.Application.Commands
 {
-    public class RefundPaymentRequestCommandHandler : CommandHandler<RefundPaymentRequestCommand>
+    public class RefundPaymentRequestCommandHandler : CommandHandlerV1<RefundPaymentRequestCommand>
     {
         private readonly IRepository<PaymentRequest> _paymentRequestRepository;
 
@@ -17,16 +21,35 @@ namespace MicroStore.Payment.Application.Commands
             _paymentMethodResolver = paymentMethodResolver;
         }
 
-        public override async Task<Unit> Handle(RefundPaymentRequestCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(RefundPaymentRequestCommand request, CancellationToken cancellationToken)
         {
             PaymentRequest paymentRequest = await _paymentRequestRepository
-                .SingleAsync(x => x.Id == request.PaymentId);
+                .SingleOrDefaultAsync(x => x.Id == request.PaymentId);
 
-            var paymentMethod = _paymentMethodResolver.Resolve(paymentRequest.PaymentGateway!);
+            if(paymentRequest == null)
+            {
+                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo { Message = $"Payment request with id :{request.PaymentId}, is not exist" });
+            }
+
+            if(paymentRequest.State != PaymentStatus.Payed)
+            {
+                var errorInfo = new ErrorInfo
+                {
+                    Message = $"Invalid payment request state {paymentRequest.State}.Payment request state should be" +
+                 $"in  {PaymentStatus.Payed}"
+                };
+
+                return ResponseResult.Failure((int)HttpStatusCode.BadRequest, errorInfo);
+            }
+
+
+            var unitResult = await _paymentMethodResolver.Resolve(paymentRequest.PaymentGateway!);
+
+            var paymentMethod = unitResult.Value;
 
             await paymentMethod.Refund(request.PaymentId, cancellationToken);
 
-            return Unit.Value;
+            return ResponseResult.Success((int) HttpStatusCode.Accepted);
         }
     }
 }

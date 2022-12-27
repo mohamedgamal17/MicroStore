@@ -1,19 +1,15 @@
 ﻿using MassTransit;
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Ordering.Application.Abstractions.Commands;
 using MicroStore.Ordering.Application.Abstractions.Consts;
 using MicroStore.Ordering.Application.Abstractions.Interfaces;
-using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Events;
-using MicroStore.Ordering.Events.Models;
-using MicroStore.Ordering.IntegrationEvents;
-using Volo.Abp;
-using Volo.Abp.Domain.Entities;
-
+using System.Net;
 namespace MicroStore.Ordering.Application.Commands
 {
-    public class CancelOrderCommandHandler : CommandHandler<CancelOrderCommand>
+    public class CancelOrderCommandHandler : CommandHandlerV1<CancelOrderCommand>
     {
         private readonly IPublishEndpoint _publishEndPoint;
 
@@ -24,22 +20,28 @@ namespace MicroStore.Ordering.Application.Commands
             _orderRepository = orderRepository;
         }
 
-        public override async Task<Unit> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
 
             var order = await _orderRepository.GetOrder(request.OrderId);
 
             if(order == null)
             {
-                throw new EntityNotFoundException(typeof(OrderStateEntity), request.OrderId);
+                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                {
+                    Message = $"Order entity with id {request.OrderId} is not exist"
+                });
             }
 
             if(order.CurrentState == OrderStatusConst.Cancelled)
             {
-                throw new UserFriendlyException("order state is already canceled");
+                return ResponseResult.Failure((int)HttpStatusCode.BadRequest, new ErrorInfo
+                {
+                    Message = "order state is already canceled"
+                });
             }
 
-            CancelOrderIntegrationEvent orderCancelledEvent = new CancelOrderIntegrationEvent
+            var orderCancelledEvent = new OrderCancelledEvent
             {
                 OrderId = request.OrderId,
                 Reason = request.Reason,
@@ -48,7 +50,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndPoint.Publish(orderCancelledEvent, cancellationToken);
 
-            return Unit.Value;
+            return ResponseResult.Success((int)(HttpStatusCode.Processing));
         }
     }
 }

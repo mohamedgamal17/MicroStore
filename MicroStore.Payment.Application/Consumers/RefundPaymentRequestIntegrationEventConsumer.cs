@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.Payment.Application.Commands.Requests;
+using MicroStore.Payment.Application.Abstractions.Commands;
 using MicroStore.Payment.IntegrationEvents;
 
 
@@ -19,12 +19,12 @@ namespace MicroStore.Payment.Application.Consumers
 
         public Task Consume(ConsumeContext<RefundPaymentIntegrationEvent> context)
         {
-            RefundPaymentRequestCommand voidPaymentCommand = new RefundPaymentRequestCommand
+            RefundPaymentRequestCommand command = new RefundPaymentRequestCommand
             {
                 PaymentId = Guid.Parse(context.Message.PaymentId),
             };
 
-            return _localMessageBus.Send(voidPaymentCommand);
+            return _localMessageBus.Send(command);
         }
     }
 }

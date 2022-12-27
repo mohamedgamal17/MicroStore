@@ -2,21 +2,20 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.Payment.Application.Abstractions;
 using MicroStore.Payment.Application.EntityFramework;
-using MicroStore.Payment.Domain.Shared;
-using MicroStore.Payment.Domain.Shared.Domain;
+using MicroStore.Payment.Domain;
 using System.Reflection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
-
 namespace MicroStore.Payment.Application
 {
 
     [DependsOn(typeof(InMemoryBusModule),
         typeof(AbpEntityFrameworkCoreModule),
         typeof(AbpEventBusModule),
-        typeof(PaymentDomainSharedModule))]
+        typeof(PaymentApplicationAbstractionModule))]
     public class PaymentApplicationModule : AbpModule
     {
 

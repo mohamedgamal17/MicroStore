@@ -11,17 +11,121 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigura
         protected override void Configure(EntityTypeBuilder<OrderStateEntity> entity, ModelBuilder model)
         {
             entity.Property(x => x.UserId).HasMaxLength(256);
+
             entity.Property(x => x.OrderNumber).HasMaxLength(265);
+
             entity.Property(x => x.PaymentId).IsRequired(false).HasMaxLength(256);
+
             entity.Property(x => x.ShipmentId).HasMaxLength(256);
-            entity.Property(x => x.ShipmentSystem).HasMaxLength(256);
+
+            entity.OwnsOne(x => x.ShippingAddress, navigationBuilder =>
+            {
+                navigationBuilder
+                  .Property(x => x.CountryCode)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(50);
+
+                navigationBuilder
+                  .Property(x => x.City)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(50);
+
+
+                navigationBuilder
+                .Property(x => x.State)
+                .HasDefaultValue(string.Empty)
+                .HasMaxLength(50);
+
+
+                navigationBuilder
+                .Property(x => x.PostalCode)
+                .HasDefaultValue(string.Empty)
+                .HasMaxLength(50);
+
+                navigationBuilder
+                 .Property(x => x.Zip)
+                 .HasDefaultValue(string.Empty)
+                 .HasMaxLength(50);
+
+
+                navigationBuilder
+                  .Property(x => x.AddressLine1)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(300);
+
+
+                navigationBuilder
+                  .Property(x => x.AddressLine2)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(300);
+
+                navigationBuilder
+                  .Property(x => x.Name)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(300);
+
+                navigationBuilder
+                  .Property(x => x.Phone)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(100);
+            });
+
+            entity.OwnsOne(x => x.BillingAddress, navigationBuilder =>
+            {
+                navigationBuilder
+                  .Property(x => x.CountryCode)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(50);
+
+                navigationBuilder
+                  .Property(x => x.City)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(50);
+
+
+                navigationBuilder
+                .Property(x => x.State)
+                .HasDefaultValue(string.Empty)
+                .HasMaxLength(50);
+
+
+                navigationBuilder
+                .Property(x => x.PostalCode)
+                .HasDefaultValue(string.Empty)
+                .HasMaxLength(50);
+
+                navigationBuilder
+                 .Property(x => x.Zip)
+                 .HasDefaultValue(string.Empty)
+                 .HasMaxLength(50);
+
+
+                navigationBuilder
+                  .Property(x => x.AddressLine1)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(300);
+
+
+                navigationBuilder
+                  .Property(x => x.AddressLine2)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(300);
+
+                navigationBuilder
+                  .Property(x => x.Name)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(300);
+
+                navigationBuilder
+                  .Property(x => x.Phone)
+                  .HasDefaultValue(string.Empty)
+                  .HasMaxLength(100);
+            });
             entity.Property(x => x.CancellationReason).HasMaxLength(500);
             entity.Property(x => x.CurrentState).HasMaxLength(256);
             entity.HasMany(x => x.OrderItems).WithOne();
             entity.HasIndex(x => x.UserId);
             entity.HasIndex(x => x.OrderNumber).IsUnique();
-            entity.HasIndex(x => x.ShippingAddressId);
-            entity.HasIndex(x => x.BillingAddressId);
             entity.HasIndex(x => x.ShipmentId);
             entity.Navigation(x => x.OrderItems).AutoInclude();
         }

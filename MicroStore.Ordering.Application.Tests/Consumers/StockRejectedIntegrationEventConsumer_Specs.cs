@@ -2,6 +2,7 @@
 using MicroStore.Ordering.Events;
 namespace MicroStore.Ordering.Application.Tests.Consumers
 {
+    [NonParallelizable]
     public class When_stock_rejected_integration_event_consumed : MassTransitTestFixture
     {
 
@@ -10,9 +11,9 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
         {
             await TestHarness.Bus.Publish(new StockRejectedIntegrationEvent
             {
-                OrderId = Guid.NewGuid(),
-                OrderNubmer = Guid.NewGuid().ToString(),
-                Details = "FakeDetails"
+                ExternalOrderId = Guid.NewGuid().ToString(),
+                OrderNumber = Guid.NewGuid().ToString(),
+                Details = Guid.NewGuid().ToString(),
             });
 
             Assert.That(await TestHarness.Published.Any<OrderStockRejectedEvent>());

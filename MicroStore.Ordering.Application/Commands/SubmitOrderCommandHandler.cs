@@ -5,12 +5,11 @@ using MicroStore.Ordering.Application.Abstractions.Commands;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
-using MicroStore.Ordering.Events.Responses;
-using MicroStore.Ordering.IntegrationEvents;
+using System.Net;
 
 namespace MicroStore.Ordering.Application.Commands
 {
-    public class SubmitOrderCommandHandler : CommandHandler<SubmitOrderCommand, OrderSubmitedDto>
+    public class SubmitOrderCommandHandler : CommandHandlerV1<SubmitOrderCommand>
     {
         private readonly IRequestClient<CheckOrderStatusEvent> _checkOrderRequestClinet;
 
@@ -22,68 +21,65 @@ namespace MicroStore.Ordering.Application.Commands
             _publishEndPoint = publishEndPoint;
         }
 
-        public override async Task<OrderSubmitedDto> Handle(SubmitOrderCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(SubmitOrderCommand request, CancellationToken cancellationToken)
         {
-            SubmitOrderIntegrationEvent orderSubmitedEvent = new SubmitOrderIntegrationEvent
+            var orderSubmitedEvent = new OrderSubmitedEvent
             {
                 OrderId = Guid.NewGuid(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                ShippingAddressId = request.ShippingAddressId,
-                BillingAddressId = request.BillingAddressId,
+                ShippingAddress = request.ShippingAddress,
+                BillingAddress = request.BillingAddress,
                 UserId = request.UserId,
                 ShippingCost = request.ShippingCost,
                 TaxCost = request.TaxCost,
                 SubTotal = request.SubTotal,
-                TotalPrice = request.TotalPrice,
+                Total = request.TotalPrice,
                 SubmissionDate = request.SubmissionDate,
-                OrderItems = request.OrderItems.Select(x=> new IntegrationEvents.Models.OrderItemModel
-                {
-                    ItemName =x.ItemName,
-                    ProductId =x.ProductId,
-                    ProductImage = x.ProductImage,
-                    Quantity =  x.Quantity,
-                    UnitPrice = x.UnitPrice,
-                }).ToList(),
+                OrderItems = request.OrderItems,
             };
 
 
             await _publishEndPoint.Publish(orderSubmitedEvent, cancellationToken);
 
-            return PrepareSubmitOrderResponse(orderSubmitedEvent);
+            return ResponseResult.Success((int) HttpStatusCode.Processing, PrepareSubmitOrderResponse(orderSubmitedEvent));
+        }
+
+        private AddressModel PrepareAddressModel(MicroStore.Ordering.IntegrationEvents.Models.AddressModel address)
+        {
+            return new AddressModel
+            {
+                CountryCode = address.CountryCode,
+                City = address.City,
+                State = address.State,
+                PostalCode = address.PostalCode,
+                AddressLine1 = address.AddressLine1,
+                AddressLine2 = address.AddressLine2,
+                Zip = address.Zip,
+                Name = address.Name,
+                Phone = address.Phone
+
+            };
         }
 
 
-        private OrderSubmitedDto PrepareSubmitOrderResponse(SubmitOrderIntegrationEvent orderSubmitedEvent)
+        private OrderSubmitedDto PrepareSubmitOrderResponse(OrderSubmitedEvent orderSubmitedEvent)
         {
             return new OrderSubmitedDto
             {
 
                 OrderId = orderSubmitedEvent.OrderId,
                 OrderNumber = orderSubmitedEvent.OrderNumber,
-                ShippingAddressId = orderSubmitedEvent.ShippingAddressId,
-                BillingAddressId = orderSubmitedEvent.BillingAddressId,
+                ShippingAddress = orderSubmitedEvent.ShippingAddress,
+                BillingAddress = orderSubmitedEvent.BillingAddress,
                 UserId = orderSubmitedEvent.UserId,
                 ShippingCost = orderSubmitedEvent.ShippingCost,
                 TaxCost = orderSubmitedEvent.TaxCost,
                 SubTotal = orderSubmitedEvent.SubTotal,
-                Total = orderSubmitedEvent.TotalPrice,
+                Total = orderSubmitedEvent.Total,
                 SubmissionDate = orderSubmitedEvent.SubmissionDate,
-                OrderItems = PreapreOrderItems(orderSubmitedEvent.OrderItems)
+                OrderItems = orderSubmitedEvent.OrderItems
             };
         }
-
-
-        private List<OrderItemDto> PreapreOrderItems(List<IntegrationEvents.Models.OrderItemModel> orderItems)
-        {
-            return orderItems.Select(x => new OrderItemDto
-            {
-                ProductId = x.ProductId,
-                ItemName = x.ItemName,
-                ProductImage = x.ProductImage,
-                Quantity =  x.Quantity,
-                UnitPrice = x.UnitPrice,
-
-            }).ToList();
-        }
+     
     }
 }

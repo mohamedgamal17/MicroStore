@@ -4,13 +4,15 @@ using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
-using System.Drawing;
 using Volo.Abp.Domain.Entities;
 using MicroStore.Catalog.Application.Abstractions.Common;
+using MicroStore.BuildingBlocks.Results;
+using System.Net;
+using MicroStore.BuildingBlocks.Results.Http;
 
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class AssignProductImageCommandHandler : CommandHandler<AssignProductImageCommand, ProductDto>
+    public class AssignProductImageCommandHandler : CommandHandlerV1<AssignProductImageCommand>
     {
         private readonly IRepository<Product> _productRepository;
 
@@ -25,13 +27,16 @@ namespace MicroStore.Catalog.Application.Products.Commands
             _imageService = imageService;
         }
 
-        public override async Task<ProductDto> Handle(AssignProductImageCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(AssignProductImageCommand request, CancellationToken cancellationToken)
         {
             Product? product = await _productRepository.SingleOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
 
             if(product == null)
             {
-                throw new EntityNotFoundException(typeof(Product), request.ProductId);
+                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                {
+                    Message = $"Product entity with id : {request.ProductId} is not found"
+                });
             }
 
             var imageResult = await _imageService.SaveAsync(request.ImageModel);
@@ -40,7 +45,8 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             await _productRepository.UpdateAsync(product);
 
-            return ObjectMapper.Map<Product, ProductDto>(product);
+            return ResponseResult.Success((int)HttpStatusCode.Created, ObjectMapper.Map<Product, ProductDto>(product));
+
         }
     }
 }

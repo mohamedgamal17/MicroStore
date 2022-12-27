@@ -30,6 +30,7 @@ namespace MicroStore.Inventory.Application.Tests
                 {
                     inMemorybusConfig.ConfigureEndpoints(context);
                 });
+              
             });
         }
 

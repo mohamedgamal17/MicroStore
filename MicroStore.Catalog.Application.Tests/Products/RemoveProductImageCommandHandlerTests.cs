@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Domain.Entities;
+using System.Net;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Tests.Products
@@ -20,8 +21,11 @@ namespace MicroStore.Catalog.Application.Tests.Products
             };
 
 
-            await Send(command);
+            var result  =  await Send(command);
 
+            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+
+            result.IsSuccess.Should().BeTrue();
 
             Product product = await Find<Product>(x => x.Id == fakeProduct.Id);
 
@@ -29,7 +33,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
         }
 
         [Test]
-        public async Task Should_throw_entity_not_found_exception_while_product_is_not_exist()
+        public async Task Should_return_error_result_with_404_status_code_exception_while_product_is_not_exist()
         {
             var command = new RemoveProductImageCommand
             {
@@ -37,13 +41,15 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 ProductImageId = Guid.NewGuid()
             };
 
-            Func<Task> func = () => Send(command);
+            var result = await Send(command);
 
-            await func.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
         [Test]
-        public async Task Should_throw_entity_not_found_exception_while_product_image_is_not_exist()
+        public async Task Should_return_error_result_with_404_status_code_exception_while_product_image_is_not_exist()
         {
             var fakeProduct = await GenerateFakeProduct();
 
@@ -52,10 +58,11 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 ProductId = fakeProduct.Id,
                 ProductImageId = Guid.NewGuid()
             };
+            var result = await Send(command);
 
-            Func<Task> func = () =>  Send(command);
+            result.IsFailure.Should().BeTrue();
 
-            await func.Should().ThrowExactlyAsync<EntityNotFoundException>();
+            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
 
@@ -64,7 +71,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
         {
             return WithUnitOfWork((sp) =>
             {
-                Product product = new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 50);
+                Product product = new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 50, Guid.NewGuid().ToString());
 
                 product.AssignProductImage(Guid.NewGuid().ToString(), 5);
 

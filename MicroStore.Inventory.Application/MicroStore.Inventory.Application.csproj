@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MicroStore.Catalog.IntegrationEvents\MicroStore.Catalog.IntegrationEvents.csproj" />
     <ProjectReference Include="..\MicroStore.Inventory.Application.Abstractions\MicroStore.Inventory.Application.Abstractions.csproj" />
     <ProjectReference Include="..\MicroStore.Inventory.IntegrationEvents\MicroStore.Inventory.IntegrationEvents.csproj" />
   </ItemGroup>

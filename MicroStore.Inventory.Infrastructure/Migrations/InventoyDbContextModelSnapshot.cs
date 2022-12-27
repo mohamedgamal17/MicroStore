@@ -24,6 +24,117 @@ namespace MicroStore.Inventory.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("MicroStore.Inventory.Domain.OrderAggregate.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExternalOrderId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ExternalPaymentId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsCancelled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<double>("ShippingCost")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SubTotal")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TaxCost")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExternalOrderId")
+                        .IsUnique();
+
+                    b.HasIndex("ExternalPaymentId")
+                        .IsUnique();
+
+                    b.HasIndex("OrderNumber")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("MicroStore.Inventory.Domain.OrderAggregate.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExternalItemId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ExternalProductId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Thumbnail")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExternalItemId")
+                        .IsUnique();
+
+                    b.HasIndex("ExternalProductId");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("Sku");
+
+                    b.ToTable("OrderItem");
+                });
+
             modelBuilder.Entity("MicroStore.Inventory.Domain.ProductAggregate.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -32,20 +143,15 @@ namespace MicroStore.Inventory.Infrastructure.Migrations
                     b.Property<int>("AllocatedStock")
                         .HasColumnType("int");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
+                    b.Property<string>("ExternalProductId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(600)
-                        .HasColumnType("nvarchar(600)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("Sku")
                         .IsRequired()
@@ -55,7 +161,15 @@ namespace MicroStore.Inventory.Infrastructure.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
+                    b.Property<string>("Thumbnail")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ExternalProductId")
+                        .IsUnique();
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -64,6 +178,179 @@ namespace MicroStore.Inventory.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("MicroStore.Inventory.Domain.OrderAggregate.Order", b =>
+                {
+                    b.OwnsOne("MicroStore.Inventory.Domain.ValueObjects.Address", "BillingAddres", b1 =>
+                        {
+                            b1.Property<Guid>("OrderId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("AddressLine1")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(300)
+                                .HasColumnType("nvarchar(300)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("AddressLine2")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(300)
+                                .HasColumnType("nvarchar(300)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("CountryCode")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(300)
+                                .HasColumnType("nvarchar(300)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("Phone")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("Zip")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.HasKey("OrderId");
+
+                            b1.ToTable("Orders");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OrderId");
+                        });
+
+                    b.OwnsOne("MicroStore.Inventory.Domain.ValueObjects.Address", "ShippingAddress", b1 =>
+                        {
+                            b1.Property<Guid>("OrderId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("AddressLine1")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(300)
+                                .HasColumnType("nvarchar(300)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("AddressLine2")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(300)
+                                .HasColumnType("nvarchar(300)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("CountryCode")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(300)
+                                .HasColumnType("nvarchar(300)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("Phone")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.Property<string>("Zip")
+                                .IsRequired()
+                                .ValueGeneratedOnAdd()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasDefaultValue("");
+
+                            b1.HasKey("OrderId");
+
+                            b1.ToTable("Orders");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OrderId");
+                        });
+
+                    b.Navigation("BillingAddres")
+                        .IsRequired();
+
+                    b.Navigation("ShippingAddress")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MicroStore.Inventory.Domain.OrderAggregate.OrderItem", b =>
+                {
+                    b.HasOne("MicroStore.Inventory.Domain.OrderAggregate.Order", null)
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId");
+                });
+
+            modelBuilder.Entity("MicroStore.Inventory.Domain.OrderAggregate.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

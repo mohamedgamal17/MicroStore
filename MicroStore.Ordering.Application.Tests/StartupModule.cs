@@ -25,11 +25,11 @@ namespace MicroStore.Ordering.Application.Tests
             context.Services.AddMassTransitTestHarness(busRegisterConfig =>
             {
 
-                busRegisterConfig.AddConsumers(Assembly.Load("MicroStore.Ordering.Application"));
+                busRegisterConfig.AddConsumers(typeof(OrderApplicationModule).Assembly);
 
                 busRegisterConfig.AddConsumers(Assembly.GetExecutingAssembly());
 
-                busRegisterConfig.AddActivities(Assembly.Load("MicroStore.Ordering.Application"));
+                busRegisterConfig.AddActivities(typeof(OrderApplicationModule).Assembly);
 
                 busRegisterConfig.AddSagaStateMachine<OrderStateMachine, OrderStateEntity>()
                     .EntityFrameworkRepository(efConfig =>
@@ -44,16 +44,6 @@ namespace MicroStore.Ordering.Application.Tests
                 });
             });
         }
-
-
-        //public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        //{
-
-        //    var loggerFactory = context.ServiceProvider.GetRequiredService<ILoggerFactory>();
-
-        //    LogContext.ConfigureCurrentLogContext(loggerFactory);
-        //}
-
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
