@@ -23,7 +23,7 @@ namespace MicroStore.Catalog.Api.Administration.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post([FromBody] CreateProductModel model)
+        public async Task<IActionResult> Post([FromForm] CreateProductModel model)
         {
             CreateProductCommand command = new CreateProductCommand
             {
@@ -62,7 +62,7 @@ namespace MicroStore.Catalog.Api.Administration.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateProductModel model)
+        public async Task<IActionResult> Put(Guid id, [FromForm] UpdateProductModel model)
         {
 
             UpdateProductCommand command = new UpdateProductCommand

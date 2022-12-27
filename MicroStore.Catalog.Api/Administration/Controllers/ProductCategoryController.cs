@@ -3,7 +3,6 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Api.Administration.Models.Products;
-using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 namespace MicroStore.Catalog.Api.Administration.Controllers
@@ -41,7 +40,7 @@ namespace MicroStore.Catalog.Api.Administration.Controllers
             return FromResult(result);
         }
 
-        [Route("{productId/update/{categoryId}}")]
+        [Route("{productId}/update/{categoryId}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
@@ -63,7 +62,8 @@ namespace MicroStore.Catalog.Api.Administration.Controllers
             return FromResult(result);
         }
 
-        [Route("{productId/delete/{categoryId}}")]
+        [Route("{productId}/delete/{categoryId}")]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<ProductDto>))]

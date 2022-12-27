@@ -18,10 +18,11 @@ namespace MicroStore.Catalog.Api.Controllers
 
 
         [Route("category")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<List<CategoryListDto>>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet]
+        
         public async Task<IActionResult> GetCatalogCategoryList()
         {
             var request = new GetCategoryListQuery();
@@ -33,10 +34,11 @@ namespace MicroStore.Catalog.Api.Controllers
 
 
         [Route("category/{id}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<CategoryDto>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet]
+      
         public async Task<IActionResult> GetCatalogCategory(Guid id)
         {
             var request = new GetCategoryQuery()
@@ -49,7 +51,6 @@ namespace MicroStore.Catalog.Api.Controllers
             return FromResult(result);
         }
 
-        [Authorize]
         [Route("product")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<List<ProductDto>>))]

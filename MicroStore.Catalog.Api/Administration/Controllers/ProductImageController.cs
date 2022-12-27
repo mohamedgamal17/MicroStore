@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Api.Administration.Models.Products;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
