@@ -1,12 +1,15 @@
 ﻿
 
+using MicroStore.BuildingBlocks.Results;
+
 namespace MicroStore.BuildingBlocks.InMemoryBus.Contracts
 {
-    public delegate Task<TResponse> RequestHandlerDelegate<TResponse>();
+    public delegate Task<ResponseResult> RequestHandlerDelegate();
 
-    public interface IRequestMiddleware<in TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public interface IRequestMiddleware<in TRequest> where TRequest : IRequest
+
     {
-        Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken);
+        Task<ResponseResult> Handle(TRequest request, RequestHandlerDelegate next, CancellationToken cancellationToken);
+
     }
 }

@@ -1,21 +1,21 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-
+using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.InMemoryBus.Piplines
 {
-    public class RequestPostProcessorBehaviour<TRequest, TResponse> : RequestMiddleware<TRequest, TResponse>
-     where TRequest : IRequest<TResponse>
+    public class RequestPostProcessorBehaviour<TRequest> : RequestMiddleware<TRequest>
+     where TRequest : IRequest
     {
 
 
-        private readonly IEnumerable<IRequestPostProcess<TRequest, TResponse>> _postProcessors;
+        private readonly IEnumerable<IRequestPostProcess<TRequest>> _postProcessors;
 
-        public RequestPostProcessorBehaviour(IEnumerable<IRequestPostProcess<TRequest, TResponse>> postProcessors)
+        public RequestPostProcessorBehaviour(IEnumerable<IRequestPostProcess<TRequest>> postProcessors)
         {
             _postProcessors = postProcessors;
         }
 
-        public override async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(TRequest request, RequestHandlerDelegate next, CancellationToken cancellationToken)
         {
             var result = await next();
 

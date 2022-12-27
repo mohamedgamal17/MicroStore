@@ -6,8 +6,8 @@ using System.Net;
 using Volo.Abp.Validation;
 namespace MicroStore.BuildingBlocks.InMemoryBus.Behaviours
 {
-    public class ValidationBehaviour<TRequest> : RequestMiddleware<TRequest, ResponseResult>
-        where TRequest : IRequest<ResponseResult>
+    public class ValidationBehaviour<TRequest> : RequestMiddleware<TRequest>
+        where TRequest : IRequest
     {
 
         private readonly IObjectValidator _objectValidator;
@@ -17,7 +17,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus.Behaviours
             _objectValidator = objectValidator;
         }
 
-        public override async Task<ResponseResult> Handle(TRequest request, RequestHandlerDelegate<ResponseResult> next, CancellationToken cancellationToken)
+        public override async Task<ResponseResult> Handle(TRequest request, RequestHandlerDelegate next, CancellationToken cancellationToken)
         {
             var validationErrors = await _objectValidator.GetErrorsAsync(request, typeof(TRequest).Name);
 

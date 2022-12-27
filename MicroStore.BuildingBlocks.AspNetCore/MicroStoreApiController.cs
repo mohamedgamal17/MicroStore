@@ -7,15 +7,17 @@ namespace MicroStore.BuildingBlocks.AspNetCore
 {
     public class MicroStoreApiController : AbpControllerBase
     {
-        public ILocalMessageBus LocalMessageBus { get; set; } 
+        public ILocalMessageBus LocalMessageBus { get; set; }
 
+        [NonAction]
         public IActionResult FromResult(ResponseResult result)
         {
             return StatusCode(result.StatusCode, result.Envelope);
         }
 
+        [NonAction]
         protected Task<ResponseResult> Send<TRequest>(TRequest request)
-            where TRequest : IRequest<ResponseResult>
+            where TRequest : IRequest
         {
             return LocalMessageBus.Send(request);
         }

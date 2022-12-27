@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using MicroStore.BuildingBlocks.Results;
 namespace MicroStore.BuildingBlocks.InMemoryBus.Contracts
 {
-    public interface IRequestPostProcess<in TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public interface IRequestPostProcess<in TRequest> where TRequest : IRequest
     {
-        Task Process(TRequest request, TResponse response, CancellationToken cancellationToken);
+        Task Process(TRequest request, ResponseResult response, CancellationToken cancellationToken);
 
     }
 }

@@ -6,11 +6,11 @@ using System.Net;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Validation;
-
 namespace MicroStore.BuildingBlocks.InMemoryBus
 {
-    public abstract class RequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>, IValidationEnabled
-      where TRequest : IRequest<TResponse>
+    [DisableValidation]
+    public abstract class RequestHandler<TRequest> : IRequestHandler<TRequest>, IValidationEnabled
+      where TRequest : IRequest
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = null!;
         protected Type? ObjectMapperContext { get; set; }
@@ -20,7 +20,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
                 : (IObjectMapper)provider.GetRequiredService(typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext)));
 
 
-        public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
+        public abstract Task<ResponseResult> Handle(TRequest request, CancellationToken cancellationToken);
 
 
         protected ResponseResult Success(HttpStatusCode statusCode)

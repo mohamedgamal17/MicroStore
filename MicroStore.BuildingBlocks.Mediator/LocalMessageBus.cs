@@ -1,4 +1,5 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.Mediator
 {
@@ -11,10 +12,10 @@ namespace MicroStore.BuildingBlocks.Mediator
             _mediator = mediator;
         }
 
-        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public Task<ResponseResult> Send(IRequest request, CancellationToken cancellationToken = default)
 
         {
-            return _mediator.Send(new RequestAdapter<TResponse>(request), cancellationToken);
+            return _mediator.Send(new RequestAdapter(request), cancellationToken);
         }
     }
 }

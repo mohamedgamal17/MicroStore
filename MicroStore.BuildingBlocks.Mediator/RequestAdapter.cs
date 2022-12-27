@@ -1,11 +1,12 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.BuildingBlocks.Mediator.Internals;
+using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.Mediator
 {
-    public class RequestAdapter<TResponse> : IRequestAdapter<TResponse>
+    public class RequestAdapter : IRequestAdapter
     {
-        public IRequest<TResponse> Request { get; }
+        public IRequest Request { get; }
 
         public Type RequestType { get; }
 
@@ -13,13 +14,13 @@ namespace MicroStore.BuildingBlocks.Mediator
         public Type ResponseType { get; }
 
 
-        public RequestAdapter(IRequest<TResponse> request)
+        public RequestAdapter(IRequest request)
         {
             Request = request;
 
             RequestType = request.GetType();
 
-            ResponseType = typeof(TResponse);
+            ResponseType = typeof(ResponseResult);
         }
     }
 }

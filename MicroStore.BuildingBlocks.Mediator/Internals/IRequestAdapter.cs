@@ -1,11 +1,12 @@
 ﻿
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.Mediator.Internals
 {
-    public interface IRequestAdapter<TResponse> : MediatR.IRequest<TResponse>
+    public interface IRequestAdapter : MediatR.IRequest<ResponseResult>
     {
-         IRequest<TResponse> Request { get; }
+         IRequest Request { get; }
 
          Type RequestType { get; }
 

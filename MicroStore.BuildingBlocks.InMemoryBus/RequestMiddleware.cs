@@ -1,12 +1,11 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-
+using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.InMemoryBus
 {
-    public abstract class RequestMiddleware<TRequest, TResponse> : IRequestMiddleware<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public abstract class RequestMiddleware<TRequest> :  IRequestMiddleware<TRequest>
+        where TRequest : IRequest
     {
-        public abstract Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken);
-
+        public abstract Task<ResponseResult> Handle(TRequest request, RequestHandlerDelegate next, CancellationToken cancellationToken);
     }
 }

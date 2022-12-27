@@ -1,10 +1,12 @@
 ﻿
 
+using MicroStore.BuildingBlocks.Results;
+
 namespace MicroStore.BuildingBlocks.InMemoryBus.Contracts
 {
-    public interface IRequestHandler<in TRequest, TResponse> where TRequest : IRequest<TResponse>
+ 
+    public interface IRequestHandler<TRequest>  where TRequest : IRequest
     {
-        Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
-
+        Task<ResponseResult> Handle(TRequest request, CancellationToken cancellationToken);
     }
 }

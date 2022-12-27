@@ -8,6 +8,7 @@ using Volo.Abp.Testing;
 using Volo.Abp;
 using MicroStore.TestBase.Extensions;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.TestBase
 {
@@ -33,7 +34,7 @@ namespace MicroStore.TestBase
         }
 
 
-        public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
+        public async Task<ResponseResult> Send(IRequest request)
         {
             using var scope = ServiceProvider.CreateScope();
 

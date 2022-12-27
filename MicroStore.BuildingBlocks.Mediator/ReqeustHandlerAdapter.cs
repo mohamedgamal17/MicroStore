@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.InMemoryBus.Wrappers;
 using MicroStore.BuildingBlocks.Mediator.Internals;
+using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.Mediator
 {
-    public class ReqeustHandlerAdapter<TRequest, TResponse> : MediatR.IRequestHandler<TRequest, TResponse>
-    where TRequest : IRequestAdapter<TResponse>
+    public class ReqeustHandlerAdapter<TRequest> : MediatR.IRequestHandler<TRequest, ResponseResult>
+    where TRequest : IRequestAdapter
     {
 
         private readonly IServiceProvider _serviceProvider;
@@ -15,7 +16,7 @@ namespace MicroStore.BuildingBlocks.Mediator
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
+        public async Task<ResponseResult> Handle(TRequest request, CancellationToken cancellationToken)
         {
 
             var requestHandlerWrapperType = typeof(RequestHandlerWrapperImpl<,>)
@@ -23,7 +24,7 @@ namespace MicroStore.BuildingBlocks.Mediator
 
             var handler = (RequestHandlerBase)_serviceProvider.GetRequiredService(requestHandlerWrapperType);
 
-            return (TResponse)await handler.Handle(request.Request, cancellationToken);
+            return (ResponseResult)await handler.Handle(request.Request, cancellationToken);
 
         }
     }
