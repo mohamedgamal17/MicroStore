@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Volo.Abp" Version="6.0.2" />
     <PackageReference Include="Volo.Abp.AspNetCore" Version="6.0.2" />
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
     <ProjectReference Include="..\MicroStore.BuildingBlocks.Mediator\MicroStore.BuildingBlocks.Mediator.csproj" />
     <ProjectReference Include="..\MicroStore.Payment.Application\MicroStore.Payment.Application.csproj" />
   </ItemGroup>
