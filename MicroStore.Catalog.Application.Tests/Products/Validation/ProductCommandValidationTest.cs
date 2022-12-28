@@ -143,11 +143,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
 
         private class FakeProductCommandValidator : ProductCommandValidatorBase<FakeProductCommand>
         {
-            public FakeProductCommandValidator(IRepository<Category> categoryRepository)
-                : base(categoryRepository)
-            {
-
-            }
+            
         }
 
     }

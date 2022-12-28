@@ -13,22 +13,18 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
     internal class CreateProductCommandValidation : ProductCommandValidatorBase<CreateProductCommand>
     {
 
-        private readonly IRepository<Product> _productRepository;
 
-
-
-        public CreateProductCommandValidation(IRepository<Product> productRepository, IRepository<Category> categoryRepository) : base(categoryRepository)
+        public CreateProductCommandValidation(IRepository<Product> productRepository) 
         {
 
-            _productRepository = productRepository;
 
             RuleFor(x => x.Name)
-                .MustAsync(CheckProductName)
+                .MustAsync((x,ct) => CheckProductName(productRepository,x,ct))
                 .WithMessage("Product name must be unique");
 
 
             RuleFor(x => x.Sku)
-                .MustAsync(CheckProductSku)
+                .MustAsync((x,ct)=>CheckProductSku(productRepository,x,ct))
                 .WithMessage("Product sku must be unique");
 
 
@@ -37,15 +33,15 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 
 
 
-        private async Task<bool> CheckProductName(string name, CancellationToken cancellationToken)
+        private  Task<bool> CheckProductName(IRepository<Product> productRepository, string name, CancellationToken cancellationToken)
         {
-            return await _productRepository
+            return productRepository
                 .AllAsync(x => x.Name != name);
         }
 
-        private async Task<bool> CheckProductSku(string sku, CancellationToken cancellationToken)
+        private  Task<bool> CheckProductSku(IRepository<Product> productRepository, string sku, CancellationToken cancellationToken)
         {
-            return await _productRepository
+            return productRepository
                 .AllAsync(x => x.Sku != sku);
         }
 

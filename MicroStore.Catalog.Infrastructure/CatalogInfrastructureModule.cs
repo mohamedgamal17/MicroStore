@@ -36,33 +36,18 @@ namespace MicroStore.Catalog.Infrastructure
 
         private void ConfigureMinio(IConfiguration configuration)
         {
-            //Configure<AbpBlobStoringOptions>(options =>
-            //{
-            //    options.Containers.ConfigureDefault(container =>
-            //    {
-            //        container.UseMinio(minio =>
-            //        {
-            //            minio.EndPoint = configuration.GetValue<string>("Minio:EndPoint");
-            //            minio.AccessKey = configuration.GetValue<string>("Minio:AccessKey");
-            //            minio.SecretKey = configuration.GetValue<string>("Minio:SecretKey");
-            //            minio.BucketName = configuration.GetValue<string>("Minio:Bucket");
-            //            minio.CreateBucketIfNotExists = true;
-            //        });
-            //    });
-            //});
-            
             Configure<AbpBlobStoringOptions>(options =>
             {
                 options.Containers.ConfigureDefault(container =>
                 {
                     container.UseMinio(minio =>
                     {
-                        minio.EndPoint = "localhost:9000";
-                        minio.AccessKey = "lcTx1milctOS1BoJ";
-                        minio.SecretKey = "78q8T617AAU4aUzALCMzQIECLWdmedKw";
-                        minio.BucketName = "test-catalog-product-image";
+                        minio.EndPoint = configuration.GetValue<string>("Minio:EndPoint");
+                        minio.AccessKey = configuration.GetValue<string>("Minio:AccessKey");
+                        minio.SecretKey = configuration.GetValue<string>("Minio:SecretKey");
+                        minio.BucketName = configuration.GetValue<string>("Minio:Bucket");
                         minio.CreateBucketIfNotExists = true;
-                        minio.WithSSL = false;
+                        minio.WithSSL = configuration.GetValue<bool>("Minio:UseSsl");
                        
                     });
                 });

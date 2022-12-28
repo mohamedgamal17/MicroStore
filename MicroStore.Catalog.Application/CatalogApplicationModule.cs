@@ -49,6 +49,8 @@ namespace MicroStore.Catalog.Application
 
                     });
 
+                    rabbitConfig.ConfigureEndpoints(ctx);
+
                 });
 
             });

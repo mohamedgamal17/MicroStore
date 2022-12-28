@@ -20,11 +20,8 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
     internal abstract class ProductCommandValidatorBase<TCommand> : AbstractValidator<TCommand>
          where TCommand : ProductCommandBase
     {
-        protected readonly IRepository<Category> CategoryRepository;
-        public ProductCommandValidatorBase(IRepository<Category> categoryRepository)
+        public ProductCommandValidatorBase()
         {
-
-            CategoryRepository = categoryRepository;
 
             RuleFor(x => x.Name)
                 .NotEmpty()

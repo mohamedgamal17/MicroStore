@@ -23,7 +23,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 
 
 
-        public UpdateProductCommandCommandValidation(IRepository<Product> productRepository, IRepository<Category> categoryRepository) : base(categoryRepository)
+        public UpdateProductCommandCommandValidation(IRepository<Product> productRepository)
         {
             _productRepository = productRepository;
 

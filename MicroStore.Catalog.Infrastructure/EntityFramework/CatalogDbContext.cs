@@ -10,7 +10,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework
 {
     [ConnectionStringName("DefaultConnection")]
     [ExposeServices(typeof(ICatalogDbContext), IncludeSelf = true)]
-    public class CatalogDbContext : AbpDbContext<CatalogDbContext>, ICatalogDbContext
+    public class CatalogDbContext : AbpDbContext<CatalogDbContext>, ICatalogDbContext ,ITransientDependency
     {
 
         public DbSet<Product> Products { get; set; } 
