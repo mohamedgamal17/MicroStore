@@ -17,14 +17,14 @@ namespace MicroStore.BuildingBlocks.InMemoryBus.Piplines
 
         public override async Task<ResponseResult> Handle(TRequest request, RequestHandlerDelegate next, CancellationToken cancellationToken)
         {
-           /* var result = */return await next().ConfigureAwait(false);
+            var result = await next().ConfigureAwait(false);
 
-            //foreach (var processor in _postProcessors)
-            //{
-            //    await processor.Process(request, result, cancellationToken);
-            //}
+            foreach (var processor in _postProcessors)
+            {
+                await processor.Process(request, result, cancellationToken);
+            }
 
-            //return result;
+            return result;
         }
     }
 }
