@@ -15,7 +15,7 @@ namespace MicroStore.BuildingBlocks.Mediator
         public Task<ResponseResult> Send(IRequest request, CancellationToken cancellationToken = default)
 
         {
-            return _mediator.Send(new RequestAdapter(request), cancellationToken);
+            return _mediator.Send(new RequestAdapter<ResponseResult>(request), cancellationToken);
         }
     }
 }

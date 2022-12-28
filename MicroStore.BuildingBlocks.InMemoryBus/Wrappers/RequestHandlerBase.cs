@@ -39,7 +39,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus.Wrappers
                 .Handle((TRequest)request, cancellationToken);
 
 
-            return _serviceProvider.GetServices<IRequestMiddleware<TRequest>>()
+            return  _serviceProvider.GetServices<IRequestMiddleware<TRequest>>()
                 .Reverse()
                 .Aggregate((RequestHandlerDelegate)handler, (next, pipeline) =>
                     () => pipeline.Handle((TRequest)request, next, cancellationToken))();

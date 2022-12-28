@@ -6,11 +6,13 @@ using MicroStore.BuildingBlocks.InMemoryBus.Wrappers;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
+using Volo.Abp.Validation;
 
 namespace MicroStore.BuildingBlocks.InMemoryBus
 {
     [DependsOn(typeof(AbpUnitOfWorkModule),
-    typeof(AbpAutoMapperModule))]
+    typeof(AbpAutoMapperModule),
+        typeof(AbpValidationModule))]
     public class InMemoryBusModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -24,6 +26,24 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
             context.Services.AddTransient(typeof(IRequestMiddleware<>), typeof(RequestPreProcessorBehavior<>));
             context.Services.AddTransient(typeof(IRequestMiddleware<>), typeof(RequestPostProcessorBehaviour<>));
             context.Services.AddTransient(typeof(IRequestMiddleware<>), typeof(ValidationBehaviour<>));
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+          
+                var contributorTypes = new List<Type>();
+
+                context.Services.OnRegistred(context =>
+                {
+                    var validationInterceptor=  context.Interceptors
+                        .SingleOrDefault(x => x == typeof(ValidationInterceptor));
+
+                    if(validationInterceptor != null)
+                    {
+                        context.Interceptors.Remove(validationInterceptor);
+                    }
+                });
+
         }
     }
 }

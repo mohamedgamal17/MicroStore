@@ -19,7 +19,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus.Behaviours
 
         public override async Task<ResponseResult> Handle(TRequest request, RequestHandlerDelegate next, CancellationToken cancellationToken)
         {
-            var validationErrors = await _objectValidator.GetErrorsAsync(request, typeof(TRequest).Name);
+            var validationErrors = await _objectValidator.GetErrorsAsync(request, typeof(TRequest).Name).ConfigureAwait(false);
 
             if (validationErrors.Any())
             {

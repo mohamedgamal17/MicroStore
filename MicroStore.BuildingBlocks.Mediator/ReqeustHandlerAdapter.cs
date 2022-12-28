@@ -5,8 +5,8 @@ using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.Mediator
 {
-    public class ReqeustHandlerAdapter<TRequest> : MediatR.IRequestHandler<TRequest, ResponseResult>
-    where TRequest : IRequestAdapter
+    public class ReqeustHandlerAdapter<TRequest,TResponse> : MediatR.IRequestHandler<TRequest, TResponse>
+    where TRequest : IRequestAdapter<TResponse>
     {
 
         private readonly IServiceProvider _serviceProvider;
@@ -16,7 +16,7 @@ namespace MicroStore.BuildingBlocks.Mediator
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<ResponseResult> Handle(TRequest request, CancellationToken cancellationToken)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
         {
 
             var requestHandlerWrapperType = typeof(RequestHandlerWrapperImpl<,>)
@@ -24,7 +24,7 @@ namespace MicroStore.BuildingBlocks.Mediator
 
             var handler = (RequestHandlerBase)_serviceProvider.GetRequiredService(requestHandlerWrapperType);
 
-            return (ResponseResult)await handler.Handle(request.Request, cancellationToken);
+            return (TResponse) await handler.Handle(request.Request, cancellationToken).ConfigureAwait(false);
 
         }
     }

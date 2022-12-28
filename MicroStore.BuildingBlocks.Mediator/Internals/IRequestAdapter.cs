@@ -1,10 +1,7 @@
-﻿
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.BuildingBlocks.Results;
-
+﻿using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 namespace MicroStore.BuildingBlocks.Mediator.Internals
 {
-    public interface IRequestAdapter : MediatR.IRequest<ResponseResult>
+    public interface IRequestAdapter<TResponse> : MediatR.IRequest<TResponse>
     {
          IRequest Request { get; }
 

@@ -4,7 +4,7 @@ using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.Mediator
 {
-    public class RequestAdapter : IRequestAdapter
+    public class RequestAdapter<TResponse> : IRequestAdapter<TResponse>
     {
         public IRequest Request { get; }
 
@@ -20,7 +20,7 @@ namespace MicroStore.BuildingBlocks.Mediator
 
             RequestType = request.GetType();
 
-            ResponseType = typeof(ResponseResult);
+            ResponseType = typeof(TResponse);
         }
     }
 }

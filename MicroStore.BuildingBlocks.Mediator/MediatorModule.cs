@@ -13,7 +13,7 @@ namespace MicroStore.BuildingBlocks.Mediator
         {
             context.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            context.Services.AddTransient(typeof(MediatR.IRequestHandler<,>), typeof(ReqeustHandlerAdapter<>));
+            context.Services.AddTransient(typeof(MediatR.IRequestHandler<,>), typeof(ReqeustHandlerAdapter<,>));
 
             context.Services.AddTransient<ILocalMessageBus, LocalMessageBus>();
         }
