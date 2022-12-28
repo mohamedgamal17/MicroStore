@@ -7,7 +7,7 @@ using Volo.Abp.Modularity;
 
 namespace MicroStore.Inventory.Application
 {
-    [DependsOn(typeof(InventoryAbstractionModule))]
+    [DependsOn(typeof(InventoryApplicationAbstractionModule))]
     public class InventoryApplicationModule  : AbpModule
     {
 
@@ -31,8 +31,8 @@ namespace MicroStore.Inventory.Application
 
                     rabbitMqbusConig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
                     {
-                        cfg.Username("MassTransitConfig:UserName");
-                        cfg.Password("MassTransitConfig:Password");
+                        cfg.Username(configuration.GetValue<string>("MassTransitConfig:UserName"));
+                        cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
                     });
 
                     rabbitMqbusConig.ConfigureEndpoints(context);

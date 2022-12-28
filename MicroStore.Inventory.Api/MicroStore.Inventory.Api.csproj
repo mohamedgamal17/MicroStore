@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.Mediator\MicroStore.BuildingBlocks.Mediator.csproj" />
+    <ProjectReference Include="..\MicroStore.Inventory.Application\MicroStore.Inventory.Application.csproj" />
+    <ProjectReference Include="..\MicroStore.Inventory.Infrastructure\MicroStore.Inventory.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

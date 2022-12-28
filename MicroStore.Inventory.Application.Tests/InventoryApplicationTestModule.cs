@@ -14,7 +14,7 @@ namespace MicroStore.Inventory.Application.Tests
 {
 
     [DependsOn(typeof(InventoryApplicationModule),
-        typeof(InventoryAbstractionModule),
+        typeof(InventoryApplicationAbstractionModule),
         typeof(InventoryInfrastructureModule),
         typeof(MediatorModule),
         typeof(AbpAutofacModule))]

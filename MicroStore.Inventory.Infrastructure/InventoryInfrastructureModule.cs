@@ -9,7 +9,7 @@ using Volo.Abp.Uow;
 namespace MicroStore.Inventory.Infrastructure
 {
 
-    [DependsOn(typeof(InventoryAbstractionModule),
+    [DependsOn(typeof(InventoryApplicationAbstractionModule),
         typeof(AbpEntityFrameworkCoreModule),
         typeof(AbpEventBusModule))]
     public  class InventoryInfrastructureModule : AbpModule

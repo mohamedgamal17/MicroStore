@@ -7,7 +7,7 @@ namespace MicroStore.Inventory.Application.Abstractions
     [DependsOn(typeof(InMemoryBusModule),
         typeof(AbpValidationModule),
         typeof(AbpAutoMapperModule))]
-    public class InventoryAbstractionModule : AbpModule
+    public class InventoryApplicationAbstractionModule : AbpModule
     {
 
     }
