@@ -1,15 +1,18 @@
-﻿using MicroStore.Shipping.Plugin.ShipEngineGateway.Profiles;
-using MicroStore.Shipping.Plugin.ShipEngineGateway.Settings;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Shipping.Plugin.ShipEngineGateway.Profiles;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 {
     public class ShipEngineSystemModule : AbpModule
     {
+   
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-
-            ConfigureShipEngine();
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(ShipEngineSystemModule).Assembly);
+            });
 
             Configure<AbpAutoMapperOptions>(opt =>
             {
@@ -17,26 +20,6 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                 opt.AddProfile<ShipmentItemMappingProfile>();
             });
         }
-
-
-        private void ConfigureShipEngine()
-        {
-            Configure<ShipEngineSettings>(cfg =>
-            {
-                cfg.ApiKey = "TEST_sM8K2oczFz2bPZ5IcSQDGR3w1z5PuD7Cl6E5+hYxNM8";
-                cfg.Carriers = new List<ShipEngineCarrierSettings>
-                {
-                    new ShipEngineCarrierSettings
-                    {
-                        CarrierId = "se-3687966",
-                        DisplayName ="FeedEx",
-                        Image ="none",
-                        Name = "FeedEX",
-                        IsEnabled =true
-                    }
-                };
-            });
-
-        }
+   
     }
 }

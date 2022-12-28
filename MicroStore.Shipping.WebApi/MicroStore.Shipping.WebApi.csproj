@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.Mediator\MicroStore.BuildingBlocks.Mediator.csproj" />
+    <ProjectReference Include="..\MicroStore.Shipping.Application\MicroStore.Shipping.Application.csproj" />
+    <ProjectReference Include="..\MicroStore.Shipping.Infrastructure\MicroStore.Shipping.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

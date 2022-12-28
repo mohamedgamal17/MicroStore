@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Shipping.Infrastructure.Migrations
 {
     [DbContext(typeof(ShippingDbContext))]
-    [Migration("20221220002717_InitialMigration")]
+    [Migration("20221228031106_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,6 +149,37 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
                     b.HasIndex("Sku");
 
                     b.ToTable("ShipmentItem");
+                });
+
+            modelBuilder.Entity("MicroStore.Shipping.Domain.Entities.ShippingSystem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("ShippingSystems");
                 });
 
             modelBuilder.Entity("MicroStore.Shipping.Domain.Entities.Shipment", b =>

@@ -8,6 +8,7 @@ using MicroStore.Shipping.Plugin.ShipEngineGateway.Settings;
 using ShipEngineSDK.Common;
 using ShipEngineSDK.Common.Enums;
 using ShipEngineSDK.GetRatesWithShipmentDetails;
+using System.Threading;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway
@@ -16,27 +17,30 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
     {
         public string SystemName => ShipEngineConst.SystemName;
 
-        private readonly ShipEngineClinet _shipEngineClinet;
-
         private readonly IShipmentRepository _shipmentRepository;
 
         private readonly IMapper _mapper;
 
         private readonly ShipEngineSettings _settings;
 
-        public ShipEngineSystemProvider(ShipEngineClinet shipEngineClinet, IShipmentRepository shipmentRepository, IMapper mapper, ShipEngineSettings settings)
+        private readonly ISettingsRepository _settingsRepository;
+
+        public ShipEngineSystemProvider( IShipmentRepository shipmentRepository, IMapper mapper, ShipEngineSettings settings, ISettingsRepository settingsRepository)
         {
-            _shipEngineClinet = shipEngineClinet;
             _shipmentRepository = shipmentRepository;
             _mapper = mapper;
             _settings = settings;
+            _settingsRepository = settingsRepository;
         }
 
         public async Task<ShipmentDto> BuyShipmentLabel(string externalShipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
         {
+
+            var clinet = await GetShipEngineClinet(cancellationToken);
+
             var shipment = await _shipmentRepository.RetriveShipmentByExternalId(externalShipmentId, cancellationToken);
 
-            var label = await _shipEngineClinet.CreateLabelFromRate(new ShipEngineSDK.CreateLabelFromRate.Params
+            var label = await clinet.CreateLabelFromRate(new ShipEngineSDK.CreateLabelFromRate.Params
             {
                 RateId = model.ShipmentRateId,
                 LabelDownloadType = ShipEngineSDK.CreateLabelFromRate.LabelDownloadType.Url,
@@ -52,13 +56,17 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
         public async Task<List<EstimatedRateDto>> EstimateShipmentRate(EstimatedRateModel model)
         {
-            var result  = await _shipEngineClinet.EstimateRate(PrepareEstimateRate(model));
+            var clinet = await GetShipEngineClinet();
+
+            var result  = await clinet.EstimateRate(PrepareEstimateRate(model));
 
             return PrepareEstimateRateDto(result.Rates.ToList());
         }
 
         public async Task<ShipmentFullfilledDto> Fullfill(Guid shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
         {
+            var clinet = await GetShipEngineClinet();
+
             var shipment = await _shipmentRepository.RetriveShipment(shipmentId, cancellationToken);
 
             if (shipment == null)
@@ -87,7 +95,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                 },
             };
 
-            var result = await _shipEngineClinet.CreateShipment(shipEngineShipment);
+            var result = await clinet.CreateShipment(shipEngineShipment);
 
             shipment.Fullfill(SystemName, result.ShipmentId);
 
@@ -110,7 +118,9 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
         public async Task<List<ShipmentRateDto>> RetriveShipmentRates(string externalShipmentId)
         {
-            var result = await _shipEngineClinet.GetRatesWithShipmentDetails(new Params { ShipmentId = externalShipmentId });
+            var clinet = await GetShipEngineClinet();
+
+            var result = await clinet.GetRatesWithShipmentDetails(new Params { ShipmentId = externalShipmentId });
 
             return result.RateResponse.Rates.Select(x => new ShipmentRateDto
             {
@@ -248,6 +258,14 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                 }
 
             }).ToList();
+        }
+
+
+        private async Task<ShipEngineClinet> GetShipEngineClinet(CancellationToken cancellationToken = default)
+        {
+            var settings = await _settingsRepository.TryToGetSettings<ShipEngineSettings>(ShipEngineConst.SystemName, cancellationToken) ?? new ShipEngineSettings();
+
+            return new ShipEngineClinet(settings);
         }
     }
 }

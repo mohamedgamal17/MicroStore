@@ -50,6 +50,21 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ShippingSystems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsEnabled = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShippingSystems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ShipmentItem",
                 columns: table => new
                 {
@@ -129,6 +144,12 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
                 name: "IX_Shipments_UserId",
                 table: "Shipments",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShippingSystems_Name",
+                table: "ShippingSystems",
+                column: "Name",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -138,6 +159,9 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ShipmentItem");
+
+            migrationBuilder.DropTable(
+                name: "ShippingSystems");
 
             migrationBuilder.DropTable(
                 name: "Shipments");

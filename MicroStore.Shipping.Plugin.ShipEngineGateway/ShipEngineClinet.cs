@@ -1,19 +1,17 @@
-﻿using Microsoft.Extensions.Options;
-using MicroStore.Shipping.Plugin.ShipEngineGateway.Domain;
+﻿using MicroStore.Shipping.Plugin.ShipEngineGateway.Domain;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Settings;
 using Newtonsoft.Json;
 using ShipEngineSDK;
 using ShipEngineSDK.GetRatesWithShipmentDetails;
-using Volo.Abp.DependencyInjection;
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 {
-    public class ShipEngineClinet : ShipEngine , IShipEngineClinet , ITransientDependency
+    public class ShipEngineClinet : ShipEngine , IShipEngineClinet 
     {
         private readonly ShipEngineSettings _settings;
 
-        public ShipEngineClinet(IOptions<ShipEngineSettings> options) : base(options.Value.ApiKey)
+        public ShipEngineClinet(ShipEngineSettings settings) : base(settings.ApiKey)
         {
-            _settings = options.Value;
+            _settings = settings;
         }
 
         public async Task<ShipmentRateResult> EstimateRate(EstimateRate estimateRate)
@@ -40,6 +38,12 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
             string path = $"v1/shipments/{shipmentId}/rates";
 
             return await SendHttpRequestAsync<ShipmentRateResult>(HttpMethod.Get,path,string.Empty, _client, _config);
+        }
+
+
+        public static ShipEngineClient Create(ShipEngineSettings settings)
+        {
+            return new ShipEngineClinet(settings);
         }
 
     }

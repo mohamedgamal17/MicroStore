@@ -53,8 +53,9 @@ namespace MicroStore.Shipping.Application
                     {
                         cfg.Username(configuration.GetValue<string>("MassTransitConfig:UserName"));
                         cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
-
                     });
+
+                    rabbitConfig.ConfigureEndpoints(ctx);
 
                 });
 
