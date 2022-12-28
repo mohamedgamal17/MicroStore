@@ -62,6 +62,8 @@ namespace MicroStore.Payment.Application
                         cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
                     });
 
+                    rabbitMqConfig.ConfigureEndpoints(context);
+
                 });
             });
         }

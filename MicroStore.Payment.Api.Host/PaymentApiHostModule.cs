@@ -53,6 +53,7 @@ namespace MicroStore.Payment.Api.Host
                 options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
             });
+            services.AddAuthorization();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
