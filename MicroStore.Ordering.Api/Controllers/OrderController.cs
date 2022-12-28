@@ -1,16 +1,18 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MicroStore.Ordering.Application.Abstractions.Interfaces;
-using Volo.Abp;
+using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.Results.Http;
+using MicroStore.Ordering.Api.Models;
+using MicroStore.Ordering.Application.Abstractions.Commands;
+using MicroStore.Ordering.Application.Dtos;
 
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    [RemoteService(Name = "Order")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : MicroStoreApiController
     {
 
         private readonly IPublishEndpoint _publishEndPoint;
@@ -20,40 +22,88 @@ namespace MicroStore.Ordering.Api.Controllers
             _publishEndPoint = publishEndPoint;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-
+        
         [HttpPost("submit")]
-        public async Task<IActionResult> SubmitOrder()
+        [ProducesResponseType(StatusCodes.Status102Processing, Type = typeof(OrderSubmitedDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SubmitOrder([FromBody]SubmitOrderModel model)
         {
-            throw new NotImplementedException();
+            var command = new SubmitOrderCommand
+            {
+                UserId = model.UserId,
+                ShippingAddress = model.ShippingAddress,
+                BillingAddress = model.BillingAddress,
+                ShippingCost = model.ShippingCost,
+                SubTotal = model.SubTotal,
+                TaxCost = model.TaxCost,
+                TotalPrice = model.TotalPrice,
+                OrderItems = model.OrderItems,
+                SubmissionDate = DateTime.UtcNow
+            };
+
+            var result = await Send(command);
+
+            return FromResult(result);
         }
 
 
 
         [HttpPost("fullfill/{orderId}")]
-        public Task<IActionResult> FullfillOrder(Guid orderId)
+        [ProducesResponseType(StatusCodes.Status102Processing, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> FullfillOrder(Guid orderId,[FromBody] FullfillOrderModel model)
         {
-            throw new NotImplementedException();
+            var command = new FullfillOrderCommand
+            {
+                OrderId = orderId,
+                ShipmentId = model.ShipmentId
+            };
+
+            var result = await Send(command);
+
+            return FromResult(result);
         }
 
 
         [HttpPost("complete/{orderId}")]
+
+        [ProducesResponseType(StatusCodes.Status102Processing, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CompleteOrder(Guid orderId)
         {
-            throw new NotImplementedException();
+            var command = new CompleteOrderCommand
+            {
+                OrderId = orderId,
+                ShipedDate = DateTime.UtcNow
+            };
+
+            var result = await Send(command);
+
+            return FromResult(result);
         }
 
 
 
         [HttpPost("cancel/{orderId}")]
-        public async Task<IActionResult> CancelOrder(Guid orderId)
+        [ProducesResponseType(StatusCodes.Status102Processing, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CancelOrder(Guid orderId, CancelOrderModel model)
         {
-            throw new NotImplementedException();
+            var command = new CancelOrderCommand
+            {
+                OrderId = orderId,
+                Reason = model.Reason,
+                CancellationDate = DateTime.UtcNow
+            };
+
+            var result = await Send(command);
+
+            return FromResult(result);
+
         }
 
 

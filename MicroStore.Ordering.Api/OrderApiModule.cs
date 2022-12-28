@@ -110,18 +110,6 @@ namespace MicroStore.Ordering.Api
         }
 
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
-
-                if (dbContext.Database.EnsureCreated())
-                {
-                    dbContext.Database.Migrate();
-                }
-
-            }
-        }
+        
     }
 }

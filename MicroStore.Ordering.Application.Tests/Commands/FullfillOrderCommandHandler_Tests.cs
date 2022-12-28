@@ -26,7 +26,6 @@ namespace MicroStore.Ordering.Application.Tests.Commands
             {
                 OrderId = orderId,
                 ShipmentId = Guid.NewGuid().ToString(),
-                ShipmentSystem = Guid.NewGuid().ToString()
             };
 
             await Send(command);
@@ -44,7 +43,6 @@ namespace MicroStore.Ordering.Application.Tests.Commands
             {
                 OrderId = Guid.NewGuid(),
                 ShipmentId = Guid.NewGuid().ToString(),
-                ShipmentSystem = Guid.NewGuid().ToString()
             };
 
             var result = await Send(command);
@@ -67,7 +65,7 @@ namespace MicroStore.Ordering.Application.Tests.Commands
             {
                 OrderId = orderId,
                 ShipmentId = Guid.NewGuid().ToString(),
-                ShipmentSystem = Guid.NewGuid().ToString()
+
             };
 
             var result = await Send(command);

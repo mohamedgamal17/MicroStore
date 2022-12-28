@@ -13,6 +13,7 @@ using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using System.Data;
 using MicroStore.TestBase.Extensions;
 using MicroStore.TestBase.Fakes;
+using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.TestBase
 {
@@ -79,7 +80,7 @@ namespace MicroStore.TestBase
             Principal = new ClaimsPrincipal();
         }
 
-        public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
+        public async Task<ResponseResult> Send(IRequest request)
         {
             using var scope = ServiceProvider.CreateScope();
 

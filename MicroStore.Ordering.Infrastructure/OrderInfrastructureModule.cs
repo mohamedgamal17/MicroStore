@@ -53,10 +53,11 @@ namespace MicroStore.Ordering.Infrastructure
 
                 busRegisterConfig.UsingRabbitMq((context, rabbitmqConfig) =>
                 {
-                    rabbitmqConfig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), hostConfig =>
+                    rabbitmqConfig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
                     {
-                        hostConfig.Username("MassTransitConfig:UserName");
-                        hostConfig.Password("MassTransitConfig:Password");
+                        cfg.Username(configuration.GetValue<string>("MassTransitConfig:UserName"));
+                        cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
+
                     });
 
                     rabbitmqConfig.ConfigureEndpoints(context);
