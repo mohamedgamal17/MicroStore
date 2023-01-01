@@ -10,7 +10,7 @@ using MicroStore.Ordering.Application.Dtos;
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/orders")]
     [ApiController]
     public class OrderController : MicroStoreApiController
     {
