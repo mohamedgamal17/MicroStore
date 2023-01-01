@@ -8,7 +8,7 @@ using MicroStore.Payment.Application.Abstractions.Commands;
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/systems")]
     public class SystemController : MicroStoreApiController
     {
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Abstractions.Common;
 using MicroStore.Payment.Plugin.StripeGateway.Config;
@@ -9,7 +8,7 @@ using MicroStore.Payment.Plugin.StripeGateway.Model;
 namespace MicroStore.Payment.Plugin.StripeGateway.Controller
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/plugins/stripesettings")]
     public class StripeSettingsController : ControllerBase
     {
         private readonly ISettingsRepository _settingsRepository;

@@ -9,7 +9,7 @@ using MicroStore.Payment.Application.Abstractions.Dtos;
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/payments")]
     public class PaymentRequestController : MicroStoreApiController
     {
 
