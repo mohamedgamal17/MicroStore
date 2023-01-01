@@ -1,36 +1,48 @@
-﻿using MicroStore.Shipping.Plugin.ShipEngineGateway.Domain;
+﻿using AutoMapper.Internal.Mappers;
+using MicroStore.Shipping.Plugin.ShipEngineGateway.Common;
+using MicroStore.Shipping.Plugin.ShipEngineGateway.Domain;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Settings;
 using Newtonsoft.Json;
 using ShipEngineSDK;
-using ShipEngineSDK.GetRatesWithShipmentDetails;
+using ShipEngineSDK.Common;
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 {
     public class ShipEngineClinet : ShipEngine , IShipEngineClinet 
     {
         private readonly ShipEngineSettings _settings;
 
-        public ShipEngineClinet(ShipEngineSettings settings) : base(settings.ApiKey)
+        public ShipEngineClinet(ShipEngineSettings settings) 
+            : base(new Config(settings.ApiKey, TimeSpan.FromSeconds(60),3 ))
         {
             _settings = settings;
+         
         }
 
-        public async Task<ShipmentRateResult> EstimateRate(EstimateRate estimateRate)
+        public async Task<List<EstimatedRateResult>> EstimateRate(EstimateRate estimateRate)
         {
             string path = "/v1/rates/estimate";
 
             var json = JsonConvert.SerializeObject(estimateRate, JsonSerializerSettings);
 
-            return await SendHttpRequestAsync<ShipmentRateResult>(HttpMethod.Post, path, json, _client, _config);
+            return await SendHttpRequestAsync<List<EstimatedRateResult>>(HttpMethod.Post, path, json, _client, _config);
         }
 
-        public async Task<ShipEngineShipment> CreateShipment(Shipment shipment)
+        public async Task<ShipEngineShipment> CreateShipment(ShipEngineShipment shipment)
         {
 
             string path = $"v1/shipments";
 
-            var json = JsonConvert.SerializeObject(shipment, JsonSerializerSettings);
 
-            return await SendHttpRequestAsync<ShipEngineShipment>(HttpMethod.Post, path, json, _client, _config);
+            var shipmentList = new ShipEngineShipmentList
+            {
+                Shipments = new ShipEngineShipment[] { shipment }
+            };
+
+            var json = JsonConvert.SerializeObject(shipmentList, JsonSerializerSettings);
+
+            var result = await SendHttpRequestAsync<ShipEngineShipmentCreationResult>(HttpMethod.Post, path, json, _client, _config);
+
+            return result.Shipments.First();
         }
 
         public  async Task<ShipmentRateResult> EstimateShipment(string shipmentId)
@@ -46,6 +58,23 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
             return new ShipEngineClinet(settings);
         }
 
+
+        public async Task<List<ShipEngineAddressValidationResult>> ValidateAddresses(List<ShipEngineAddress> addresses)
+        {
+            string jsonContent = JsonConvert.SerializeObject(addresses, JsonSerializerSettings);
+
+            string path = "v1/addresses/validate";
+
+            return await SendHttpRequestAsync<List<ShipEngineAddressValidationResult>>(HttpMethod.Post, path, jsonContent, _client, _config);
+        }
+
+
+    }
+
+
+    public class ShipEngineShipmentList
+    {
+        public ShipEngineShipment[] Shipments { get; set; }
     }
 
 

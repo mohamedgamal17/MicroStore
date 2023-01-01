@@ -123,7 +123,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Domain",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Application.Abstractions", "MicroStore.Payment.Application.Abstractions\MicroStore.Payment.Application.Abstractions.csproj", "{CD27C423-F9BA-4C65-A198-97BB583FC8A2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugin", "Plugin", "{94AC52FC-19FC-4B48-A83B-7FB0DB244808}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{94AC52FC-19FC-4B48-A83B-7FB0DB244808}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.PluginInMemoryTest", "MicroStore.Payment.PluginInMemoryTest\MicroStore.Payment.PluginInMemoryTest.csproj", "{CF5F8C24-5E60-4178-B529-C3C96DF9E2D2}"
 EndProject
@@ -131,11 +131,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Plugin.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.AspNetCore", "MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj", "{C5FF3F31-7A0C-47D5-AFAF-7EF4929AE204}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Host", "MicroStore.Inventory.Host\MicroStore.Inventory.Host.csproj", "{A0F4BACF-A331-4810-9D9F-79FA727C9E75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Host", "MicroStore.Inventory.Host\MicroStore.Inventory.Host.csproj", "{A0F4BACF-A331-4810-9D9F-79FA727C9E75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Inventory.Api", "MicroStore.Inventory.Api\MicroStore.Inventory.Api.csproj", "{6CEA2A08-2A77-44AC-9603-B8267B77BC9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Api", "MicroStore.Inventory.Api\MicroStore.Inventory.Api.csproj", "{6CEA2A08-2A77-44AC-9603-B8267B77BC9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Shipping.Host", "MicroStore.Shipping.Host\MicroStore.Shipping.Host.csproj", "{CFD4D86C-AD15-4D8C-A020-D080A67F11F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Host", "MicroStore.Shipping.Host\MicroStore.Shipping.Host.csproj", "{CFD4D86C-AD15-4D8C-A020-D080A67F11F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{97A8A6B4-DAAD-4FB5-8743-0529A62EAA6C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.PluginInMemoryTest", "MicroStore.Shipping.PluginInMemoryTest\MicroStore.Shipping.PluginInMemoryTest.csproj", "{5C3CEDED-F925-4BD7-BA6A-EFB318C8DB09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Shipping.Plugin.ShipEngineGateway.Tests", "MicroStore.Shipping.Plugin.ShipEngineGateway.Tests\MicroStore.Shipping.Plugin.ShipEngineGateway.Tests.csproj", "{94E55F8E-07AC-4889-B6E8-8C1918FB7B96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -339,6 +345,14 @@ Global
 		{CFD4D86C-AD15-4D8C-A020-D080A67F11F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFD4D86C-AD15-4D8C-A020-D080A67F11F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFD4D86C-AD15-4D8C-A020-D080A67F11F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C3CEDED-F925-4BD7-BA6A-EFB318C8DB09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C3CEDED-F925-4BD7-BA6A-EFB318C8DB09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C3CEDED-F925-4BD7-BA6A-EFB318C8DB09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C3CEDED-F925-4BD7-BA6A-EFB318C8DB09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94E55F8E-07AC-4889-B6E8-8C1918FB7B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94E55F8E-07AC-4889-B6E8-8C1918FB7B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94E55F8E-07AC-4889-B6E8-8C1918FB7B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94E55F8E-07AC-4889-B6E8-8C1918FB7B96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -409,6 +423,9 @@ Global
 		{A0F4BACF-A331-4810-9D9F-79FA727C9E75} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
 		{6CEA2A08-2A77-44AC-9603-B8267B77BC9C} = {ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}
 		{CFD4D86C-AD15-4D8C-A020-D080A67F11F1} = {B123002B-B59F-4949-9BD4-6647DF5CB284}
+		{97A8A6B4-DAAD-4FB5-8743-0529A62EAA6C} = {BAFCA1F4-B57F-4D90-A82C-6D20724EA5DC}
+		{5C3CEDED-F925-4BD7-BA6A-EFB318C8DB09} = {97A8A6B4-DAAD-4FB5-8743-0529A62EAA6C}
+		{94E55F8E-07AC-4889-B6E8-8C1918FB7B96} = {97A8A6B4-DAAD-4FB5-8743-0529A62EAA6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}

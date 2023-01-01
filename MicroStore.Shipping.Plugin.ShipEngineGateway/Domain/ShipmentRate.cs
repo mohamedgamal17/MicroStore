@@ -11,6 +11,8 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Domain
         public MonetaryValue ConfirmationAmount { get; set; }
         public MonetaryValue OtherAmount { get; set; }
         public MonetaryValue TaxAmount { get; set; }
+
+        public MonetaryValue ShippingAmount { get; set; }
         public int Zone { get; set; }
         public string PacakgeType { get; set; }
         public int DeliveryDays { get; set; }
@@ -26,8 +28,8 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Domain
         public string CarrierNickname { get; set; }
         public string CarrierFriendlyName { get; set; }
         public string ValidationStatus { get; set; }
-        public string WarningMessages { get; set; }
-        public string ErrorMessages { get; set; }
+        public string[] WarningMessages { get; set; }
+        public string[] ErrorMessages { get; set; }
     }
 
     public class ShipmentRateResult
