@@ -33,14 +33,11 @@ namespace MicroStore.Payment.Application.Commands
 
             var paymentMethod = unitResult.Value;
 
-            var result =  await paymentMethod.Complete(new CompletePaymentModel
+            return  await paymentMethod.Complete(new CompletePaymentModel
             {
                 Token = request.Token,
 
             },cancellationToken);
-
-
-            return ResponseResult.Success((int)HttpStatusCode.Accepted);
         }
     }
 }

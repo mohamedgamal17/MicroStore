@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using MicroStore.Payment.Application.Abstractions.Dtos;
 using MicroStore.Payment.Application.Abstractions.Models;
 using MicroStore.Payment.Domain;
 using Stripe;
+using System.Net;
 using Volo.Abp;
 namespace MicroStore.Payment.Plugin.StripeGateway.Tests
 {
@@ -25,12 +27,17 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Tests
 
             var result = await sut.Process(paymentRequest.Id, model);
 
-            result.AmountTotal.Should().Be(paymentRequest.TotalCost);
-            result.AmountSubTotal.Should().Be(paymentRequest.SubTotal);
-            result.CancelUrl.Should().StartWith(model.CancelUrl);
-            result.SuccessUrl.Should().StartWith(model.ReturnUrl);
+            result.IsSuccess.Should().BeTrue();
+            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
 
-            var session = await StripeSessionService.GetAsync(result.SessionId);
+            var response = result.GetEnvelopeResult<PaymentProcessResultDto>().Result;
+
+            response.AmountTotal.Should().Be(paymentRequest.TotalCost);
+            response.AmountSubTotal.Should().Be(paymentRequest.SubTotal);
+            response.CancelUrl.Should().StartWith(model.CancelUrl);
+            response.SuccessUrl.Should().StartWith(model.ReturnUrl);
+
+            var session = await StripeSessionService.GetAsync(response.SessionId);
 
             session.Should().NotBeNull();
 
@@ -40,7 +47,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Tests
       
 
         [Test]
-        public async Task Should_rethrow_stripe_exceptio_if_session_is_not_exist_while_completing_payment_request()
+        public async Task Should_return_failure_result_if_session_is_not_exist_while_completing_payment_request()
         {
             var model = new CompletePaymentModel
             {
@@ -49,9 +56,11 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Tests
 
             var sut = GetRequiredService<StripePaymentMethod>();
 
-            Func<Task> func = () => sut.Complete(model);
+            var result = await sut.Complete(model);
 
-            await func.Should().ThrowExactlyAsync<StripeException>();
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         }
 
         [Test]

@@ -1,4 +1,5 @@
-﻿using MicroStore.Payment.Application.Abstractions.Dtos;
+﻿using MicroStore.BuildingBlocks.Results;
+using MicroStore.Payment.Application.Abstractions.Dtos;
 using MicroStore.Payment.Application.Abstractions.Models;
 
 namespace MicroStore.Payment.Application.Abstractions
@@ -7,11 +8,11 @@ namespace MicroStore.Payment.Application.Abstractions
     {
         string PaymentGatewayName { get; }
 
-        Task<PaymentProcessResultDto> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default);
+        Task<ResponseResult> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default);
 
-        Task<PaymentRequestCompletedDto> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default);
+        Task<ResponseResult> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default);
 
-        Task Refund(Guid paymentId, CancellationToken cancellationToken = default);
+        Task<ResponseResult> Refund(Guid paymentId, CancellationToken cancellationToken = default);
 
         Task<bool> IsEnabled();
 

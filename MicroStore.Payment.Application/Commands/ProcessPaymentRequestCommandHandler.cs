@@ -56,13 +56,12 @@ namespace MicroStore.Payment.Application.Commands
 
             var paymentMethod = unitResult.Value;
 
-            var result =  await  paymentMethod.Process(request.PaymentId, new ProcessPaymentModel
+            return  await  paymentMethod.Process(request.PaymentId, new ProcessPaymentModel
             {
                 ReturnUrl = request.ReturnUrl,
                 CancelUrl = request.CancelUrl
             },cancellationToken);
 
-            return ResponseResult.Success((int)HttpStatusCode.Accepted, result);
         }
     }
 }

@@ -47,9 +47,8 @@ namespace MicroStore.Payment.Application.Commands
 
             var paymentMethod = unitResult.Value;
 
-            await paymentMethod.Refund(request.PaymentId, cancellationToken);
+            return await paymentMethod.Refund(request.PaymentId, cancellationToken);
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted);
         }
     }
 }
