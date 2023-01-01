@@ -9,12 +9,12 @@ using MicroStore.Inventory.Application.Abstractions.Dtos;
 namespace MicroStore.Inventory.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class InventoryController : MicroStoreApiController
+    [Route("api/inventory/products")]
+    public class InventoryItemController : MicroStoreApiController
     {
 
         [HttpPut]
-        [Route("adjustQuantity/{productsku}")]
+        [Route("adjustquantity/{productsku}")]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductAdjustedInventoryDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
