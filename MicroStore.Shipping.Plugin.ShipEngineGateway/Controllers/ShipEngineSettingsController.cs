@@ -8,7 +8,7 @@ using MicroStore.Shipping.Plugin.ShipEngineGateway.Settings;
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/plugins/shipenginesettings")]
     public class ShipEngineSettingsController : ControllerBase
     {
         private readonly ISettingsRepository _settingsRepository;

@@ -8,7 +8,7 @@ using MicroStore.Shipping.WebApi.Models;
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/shipments")]
     public class ShipmentController : MicroStoreApiController
     {
 
@@ -53,21 +53,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         }
 
 
-        [HttpPost]
-        [Route("estimate")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AggregateEstimatedRateCollection))]
-        public async Task<IActionResult> EstimateShipmentRate(EstimateShipmentRateModel model)
-        {
-            var command = new EstimateShipmentRateCommand
-            {
-                Address = model.Address,
-                Items = model.Items
-            };
-
-            var result = await Send(command);
-
-            return FromResult(result);
-        }
-
+     
     }
 }

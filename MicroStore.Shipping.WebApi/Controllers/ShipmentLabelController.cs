@@ -9,28 +9,11 @@ using MicroStore.Shipping.WebApi.Models;
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/labels")]
     public class ShipmentLabelController : MicroStoreApiController
     {
       
 
-        [HttpPost]
-        [Route("rates")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<List<ShipmentRateDto>>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status404NotFound,Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveShipmentRates([FromBody] RetriveShipmentRateModel model)
-        {
-            var command = new RetriveShipmentRateCommand
-            {
-                SystemName = model.SystemName,
-                ExternalShipmentId = model.ExternalShipmentId
-            };
-
-            var result= await Send(command);
-
-            return FromResult(result);
-        }
 
         [HttpPost]
         [Route("buylabel")]

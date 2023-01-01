@@ -8,7 +8,7 @@ using MicroStore.Shipping.WebApi.Models;
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/systems")]
     public class ShipmentSystemController : MicroStoreApiController
     {
 
