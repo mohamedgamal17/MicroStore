@@ -17,7 +17,9 @@ namespace MicroStore.BuildingBlocks.Results
         }
         public Envelope<T> GetEnvelopeResult<T>()
         {
-            return (Envelope<T>)Envelope ?? throw new InvalidOperationException($"Unable to cast envelope result to {typeof(Envelope<T>)}");
+            var cast = Envelope as Envelope<T>;
+
+            return cast ?? throw new InvalidOperationException($"Unable to cast envelope result from {Envelope.GetType().AssemblyQualifiedName}, to {(typeof(Envelope<T>).AssemblyQualifiedName)}");
         }
 
         public static ResponseResult Success(int code)

@@ -24,7 +24,6 @@
             };
         }
 
-
         public static  Envelope Success<T>(T result) 
         {
             return new Envelope<T>

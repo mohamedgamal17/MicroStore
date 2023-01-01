@@ -2,8 +2,9 @@
 {
     public class ErrorInfo
     {
-        public string Message { get; set; }
-
+        public string Type { get; set; }
+        public string Source { get; set; }
+        public string Message { get; set; }     
         public string Details { get; set; }
         public ValidationErrorInfo[] ValidationErrors { get; set; }
 
