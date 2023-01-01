@@ -3,13 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.ShoppingCart.Api.Infrastructure;
 using MicroStore.ShoppingCart.Api.Models;
-using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.ObjectMapping;
 
 namespace MicroStore.ShoppingCart.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/baskets")]
     [ApiController]
     [Authorize]
     public class BasketController : ControllerBase
@@ -47,7 +46,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
         }
 
-        [HttpPost("add-item")]
+        [HttpPost("additem")]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<BasketDto>))]
         public async Task<IActionResult> AddProduct(AddProductDto model)
         {
@@ -61,7 +60,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
         }
 
-        [HttpDelete("remove-item")]
+        [HttpDelete("removeitem")]
         [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(Envelope<BasketDto>))]
         public async Task<IActionResult> RemoveProduct(RemoveProductDto model)
         {
