@@ -1,12 +1,9 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Common;
-using MicroStore.Shipping.Application.Abstraction.Const;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Extensions;
-using System.Net;
 namespace MicroStore.Shipping.Application.Commands
 {
     public class BuyShipmentLabelCommandHandler : CommandHandler<BuyShipmentLabelCommand>
@@ -37,7 +34,7 @@ namespace MicroStore.Shipping.Application.Commands
 
             var result =  await system.BuyShipmentLabel(request.ExternalShipmentId, model);
 
-            return ResponseResult.Success((int)HttpStatusCode.Accepted, result);
+            return result;
         }
 
        

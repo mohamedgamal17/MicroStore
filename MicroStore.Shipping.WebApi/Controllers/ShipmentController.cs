@@ -34,7 +34,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("fullfill/{shipmentId}")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<ShipmentFullfilledDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ShipmentFullfilledDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> FullfillShipment(Guid shipmentId, [FromBody] FullfillShipmentModel model)
@@ -45,6 +45,23 @@ namespace MicroStore.Shipping.WebApi.Controllers
                 SystemName = model.SystemName,
                 AddressFrom = model.AddressFrom,
                 Pacakge = model.Pacakge
+            };
+
+            var result = await Send(command);
+
+            return FromResult(result);
+        }
+
+
+        [HttpPost]
+        [Route("estimate")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AggregateEstimatedRateCollection))]
+        public async Task<IActionResult> EstimateShipmentRate(EstimateShipmentRateModel model)
+        {
+            var command = new EstimateShipmentRateCommand
+            {
+                Address = model.Address,
+                Items = model.Items
             };
 
             var result = await Send(command);

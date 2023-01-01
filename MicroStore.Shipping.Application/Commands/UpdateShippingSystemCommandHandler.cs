@@ -4,9 +4,7 @@ using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Domain.Entities;
 using System.Net;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Shipping.Application.Commands
 {
     public class UpdateShippingSystemCommandHandler : CommandHandler<UpdateShippingSystemCommand>
@@ -36,7 +34,7 @@ namespace MicroStore.Shipping.Application.Commands
             await _shippingSystemRepository.UpdateAsync(system);
 
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted);
+            return Success(HttpStatusCode.Accepted);
         }
     }
 }

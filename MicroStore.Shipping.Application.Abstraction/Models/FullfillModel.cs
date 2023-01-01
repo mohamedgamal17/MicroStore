@@ -6,7 +6,6 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
     {
         public AddressModel AddressFrom { get; set; }
         public PackageModel Package {get; set;}
-
-        public string CarrierId { get; set; }
+       
     }
 }

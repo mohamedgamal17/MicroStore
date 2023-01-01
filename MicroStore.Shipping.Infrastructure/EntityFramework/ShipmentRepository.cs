@@ -21,9 +21,12 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework
 
         }
 
-        public Task<Shipment> RetriveShipmentByExternalId(string externalShipmentId, CancellationToken cancellationToken = default)
+        public async Task<Shipment?> RetriveShipmentByExternalId(string externalShipmentId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var query = await GetQueryableAsync();
+
+            return await query.Include(x => x.Items)
+                .SingleOrDefaultAsync(x => x.ShipmentExternalId == externalShipmentId, cancellationToken);
         }
     }
 }

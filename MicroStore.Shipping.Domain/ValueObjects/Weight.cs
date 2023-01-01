@@ -15,6 +15,8 @@ namespace MicroStore.Shipping.Domain.ValueObjects
         public WeightUnit Unit => _unit;
 
         public bool IsEmpty => this == Empty;
+
+        private Weight() { }
         private Weight(double value, WeightUnit unit)
         {
             Guard.Against.Negative(value, nameof(value));

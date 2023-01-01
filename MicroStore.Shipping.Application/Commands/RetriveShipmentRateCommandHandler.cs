@@ -29,9 +29,7 @@ namespace MicroStore.Shipping.Application.Commands
 
             var system = unitresult.Value;
 
-            var rates = await system.RetriveShipmentRates(request.ExternalShipmentId);
-
-            return ResponseResult.Success((int)HttpStatusCode.OK, rates);
+            return await system.RetriveShipmentRates(request.ExternalShipmentId);
         }
 
 

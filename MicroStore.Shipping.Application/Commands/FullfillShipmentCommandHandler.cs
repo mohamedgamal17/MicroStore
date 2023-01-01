@@ -35,7 +35,6 @@ namespace MicroStore.Shipping.Application.Commands
                     Message = $"Shipment entity with id : {request.ShipmentId} is not exist"
                 });
 
-                throw new EntityNotFoundException(typeof(Shipment), request.ShipmentId);
             }
 
             var unitresult = await _shipmentSystemResolver.Resolve(request.SystemName, cancellationToken);
@@ -53,9 +52,9 @@ namespace MicroStore.Shipping.Application.Commands
                 Package = request.Pacakge,
             };
 
-            var result = await system.Fullfill(request.ShipmentId, model);
 
-            return ResponseResult.Success((int)HttpStatusCode.Accepted, result);
+
+            return await system.Fullfill(request.ShipmentId, model);
         }
 
         

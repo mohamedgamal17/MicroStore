@@ -22,27 +22,23 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
 
         [HttpPut]
-        [Route("updatelocation")]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type= typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type= typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type= typeof(Envelope))]
-        public async Task<IActionResult> UpdateShipmentLocation(UpdateShippingLocationModel model)
+        [Route("update")]
+        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        public async Task<IActionResult> UpdateShipppingSettings(UpdateShippingSettingsModel model)
         {
-            var command = new UpdateShippingLocationCommand
+            var command = new UpdateShippingSettingsCommand
             {
-                Name = model.Name,
-                CountryCode = model.CountryCode,
-                State = model.State,
-                City = model.City,
-                AddressLine1 = model.AddressLine1,
-                AddressLine2 = model.AddressLine2,
-                PostalCode = model.PostalCode,
-                Zip = model.Zip
+                DefaultShippingSystem = model.DefaultShippingSystem,
+                Location = model.Location
             };
 
             var result = await Send(command);
 
             return FromResult(result);
+
         }
+
     }
 }

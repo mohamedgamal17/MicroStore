@@ -5,10 +5,9 @@ namespace MicroStore.Shipping.Domain.Entities
 {
     public class ShippingSettings : ISettings
     {
-
         public string ProviderKey { get; private set; } = SettingsConst.ProviderKey;
-
-        public AddressSettings Location { get; set; } = new AddressSettings();
+        public string? DefaultShippingSystem { get; set; }
+        public AddressSettings? Location { get; set; } 
         public bool ProductionMode { get; set; }
         
     }
@@ -16,6 +15,8 @@ namespace MicroStore.Shipping.Domain.Entities
     public class AddressSettings
     {
         public string Name { get; set; }
+
+        public string Phone { get; set; }
         public string CountryCode { get; set; }
         public string City { get; set; }
         public string State { get; set; }

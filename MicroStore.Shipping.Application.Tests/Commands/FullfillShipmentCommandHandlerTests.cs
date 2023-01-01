@@ -91,7 +91,7 @@ namespace MicroStore.Shipping.Application.Tests.Commands
             return new FullfillShipmentCommand
             {
                 ShipmentId = fakeShipment.Id,
-                SystemName = FakeConst.SystemName,
+                SystemName = FakeConst.ActiveSystem,
                 AddressFrom = new AddressModel
                 {
                     CountryCode = Guid.NewGuid().ToString(),

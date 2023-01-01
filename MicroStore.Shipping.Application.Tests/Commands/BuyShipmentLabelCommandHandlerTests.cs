@@ -20,7 +20,7 @@ namespace MicroStore.Shipping.Application.Tests.Commands
 
             var command = new BuyShipmentLabelCommand
             {
-                SystemName = FakeConst.SystemName,
+                SystemName = FakeConst.ActiveSystem,
                 ExternalShipmentId = fakeShipment.ShipmentExternalId,
                 RateId = Guid.NewGuid().ToString()
             };
