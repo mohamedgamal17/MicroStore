@@ -1,7 +1,7 @@
 ﻿#nullable disable
 using MicroStore;
 
-namespace MicroStore.Catalog.Api.Administration.Models.Products
+namespace MicroStore.Catalog.Api.Models.Products
 {
     public class UpdateProductCategoryModel
     {

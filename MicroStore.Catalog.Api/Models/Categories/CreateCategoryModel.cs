@@ -1,5 +1,7 @@
 ﻿#nullable disable
-namespace MicroStore.Catalog.Api.Administration.Models
+using MicroStore;
+
+namespace MicroStore.Catalog.Api.Models.Categories
 {
     public class CreateCategoryModel
     {

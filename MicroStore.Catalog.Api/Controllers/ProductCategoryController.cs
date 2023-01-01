@@ -1,16 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Catalog.Api.Administration.Models.Products;
-using MicroStore.Catalog.Application.Abstractions.Common.Models;
+using MicroStore.Catalog.Api.Models.Products;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
-namespace MicroStore.Catalog.Api.Administration.Controllers
+namespace MicroStore.Catalog.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/productcategories")]
     [ApiController]
-    public class ProductImageController : MicroStoreApiController
+    public class ProductCategoryController : MicroStoreApiController
     {
+        private readonly ILocalMessageBus _localMessageBus;
+
+        public ProductCategoryController(ILocalMessageBus localMessageBus)
+        {
+            _localMessageBus = localMessageBus;
+        }
 
         [Route("{productId}")]
         [HttpPost]
@@ -20,27 +26,21 @@ namespace MicroStore.Catalog.Api.Administration.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(Guid productId, [FromBody] AssignProductImageModel model)
+        public async Task<IActionResult> Post(Guid productId, [FromBody] AssignProductCategoryModel model)
         {
-            var command = new AssignProductImageCommand
+            var command = new AssignProductCategoryCommand
             {
-
                 ProductId = productId,
-                ImageModel = new ImageModel
-                {
-                    FileName = model.Image.FileName,
-                    Type = model.Image.FileName.Split(".")[1],
-                    Data = model.Image.GetAllBytes(),
-                },
-                DisplayOrder = model.DisplayOrder
+                CategoryId = model.CategoryId,
+                IsFeatured = model.IsFeatured,
             };
 
-            var result = await Send(command);
+            var result = await _localMessageBus.Send(command);
 
             return FromResult(result);
         }
 
-        [Route("{productId}/{productImageId}")]
+        [Route("{productId}/update/{categoryId}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
@@ -48,21 +48,21 @@ namespace MicroStore.Catalog.Api.Administration.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(Guid productId, Guid productImageId, [FromBody] UpdateProductImageModel model)
+        public async Task<IActionResult> Put(Guid productId, Guid categoryId, [FromBody] UpdateProductCategoryModel model)
         {
-            var command = new UpdateProductImageCommand
+            var command = new UpdateProductCategoryCommand
             {
                 ProductId = productId,
-                ProductImageId = productImageId,
-                DisplayOrder = model.DisplayOrder
+                CategoryId = categoryId,
+                IsFeatured = model.IsFeatured
             };
 
-            var result = await Send(command);
+            var result = await _localMessageBus.Send(command);
 
             return FromResult(result);
         }
 
-        [Route("{productId}/{productImageId}")]
+        [Route("{productId}/delete/{categoryId}")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
@@ -70,15 +70,15 @@ namespace MicroStore.Catalog.Api.Administration.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(Guid productId, Guid productImageId)
+        public async Task<IActionResult> Delete(Guid productId, Guid categoryId)
         {
-            var command = new RemoveProductImageCommand
+            var command = new RemoveProductCategoryCommand
             {
-                ProductId = productId,
-                ProductImageId = productImageId
+                CategoryId = categoryId,
+                ProductId = productId
             };
 
-            var result = await Send(command);
+            var result = await _localMessageBus.Send(command);
 
             return FromResult(result);
         }

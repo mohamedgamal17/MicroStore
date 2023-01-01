@@ -1,20 +1,46 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Catalog.Api.Administration.Models.Products;
+using MicroStore.Catalog.Api.Models.Products;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
-using Volo.Abp;
-namespace MicroStore.Catalog.Api.Administration.Controllers
-{
-    [RemoteService(Name = "Product")]
-    [Area("Administration")]
-    [Route("api/[Area]/[Controller]")]
-    [ApiController]
+using MicroStore.Catalog.Application.Abstractions.Products.Queries;
 
+namespace MicroStore.Catalog.Api.Controllers
+{
+    [Route("api/products")]
+    [ApiController]
     public class ProductController : MicroStoreApiController
     {
+        [Route("")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<List<ProductDto>>))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCatalogProductList()
+        {
+            var request = new GetProductListQuery();
+
+            var result = await Send(request);
+
+            return FromResult(result);
+        }
+
+
+        [Route("{id}")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<ProductDto>)))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCatalogProduct(Guid id)
+        {
+            var query = new GetProductQuery() { Id = id };
+
+            var result = await Send(query);
+
+            return FromResult(result);
+        }
 
         [Route("")]
         [HttpPost]
@@ -87,6 +113,6 @@ namespace MicroStore.Catalog.Api.Administration.Controllers
 
             return FromResult(result);
         }
-    }
 
+    }
 }

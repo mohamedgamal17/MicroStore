@@ -1,21 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Catalog.Application.Abstractions.Categories.Commands;
 using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp;
-using MicroStore.Catalog.Api.Administration.Models.Categories;
-using MicroStore.Catalog.Api.Administration.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Results.Http;
+using MicroStore.Catalog.Api.Models.Categories;
+using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
 
-namespace MicroStore.Catalog.Api.Administration.Controllers
+namespace MicroStore.Catalog.Api.Controllers
 {
-    [RemoteService(Name = "Category")]
+    [RemoteService(Name = "Categories")]
     [Area("Administration")]
-    [Route("api/[Area]/[Controller]")]
+    [Route("api/categories")]
     public class CategoryController : MicroStoreApiController
     {
+
+
+        [Route("")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<List<CategoryListDto>>)))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        public async Task<IActionResult> GetCatalogCategoryList()
+        {
+            var request = new GetCategoryListQuery();
+
+            var result = await Send(request);
+
+            return FromResult(result);
+        }
+
+
+        [Route("category/{id}")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<CategoryDto>)))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        public async Task<IActionResult> GetCatalogCategory(Guid id)
+        {
+            var request = new GetCategoryQuery()
+            {
+                Id = id
+            };
+
+            var result = await Send(request);
+
+            return FromResult(result);
+        }
+
 
         [Route("")]
         [HttpPost]

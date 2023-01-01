@@ -2,7 +2,7 @@
 using MicroStore;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
 
-namespace MicroStore.Catalog.Api.Administration.Models.Products
+namespace MicroStore.Catalog.Api.Models.Products
 {
     public class UpdateProductModel
     {
