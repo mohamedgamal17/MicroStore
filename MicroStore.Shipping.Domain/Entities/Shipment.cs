@@ -1,5 +1,7 @@
 ﻿using MicroStore.Shipping.Domain.ValueObjects;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Events;
+
 namespace MicroStore.Shipping.Domain.Entities
 {
     public class Shipment :BasicAggregateRoot<Guid>
@@ -19,6 +21,8 @@ namespace MicroStore.Shipping.Domain.Entities
             OrderId = orderId;
             UserId = userId;
             Address = address;
+
+            AddLocalEvent(new EntityCreatedEventData<Shipment>(this));
         }
 
 
@@ -29,6 +33,7 @@ namespace MicroStore.Shipping.Domain.Entities
                 SystemName = systemName;
                 ShipmentExternalId = shipmentExternalId;
                 Status = ShipmentStatus.Fullfilled;
+                AddLocalEvent(new EntityChangedEventData<Shipment>(this));
             }
         }
 
@@ -40,6 +45,7 @@ namespace MicroStore.Shipping.Domain.Entities
                 ShipmentLabelExternalId = labelId;
                 TrackingNumber = trackingNumber;
                 Status = ShipmentStatus.Shipping;
+                AddLocalEvent(new EntityChangedEventData<Shipment>(this));
             }
         }
 
@@ -49,6 +55,7 @@ namespace MicroStore.Shipping.Domain.Entities
             if(Status == ShipmentStatus.Shipping)
             {
                 Status = ShipmentStatus.Completed;
+                AddLocalEvent(new EntityChangedEventData<Shipment>(this));
             }
         }
     }

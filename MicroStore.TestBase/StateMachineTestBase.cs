@@ -42,13 +42,13 @@ namespace MicroStore.TestBase
 
             return await messageBus.Send(request);
         }
-        public async Task SetupBeforeAnyTest()
+        public async Task StartMassTransit()
         {
             await TestHarness.Start();
         }
 
 
-        public async Task OnTearDown()
+        public async Task StopMassTransit()
         {
             await TestHarness.Stop();
         }

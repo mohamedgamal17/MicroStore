@@ -10,7 +10,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 {
     [Route("api/baskets")]
     [ApiController]
-    [Authorize]
     public class BasketController : ControllerBase
     {
         private readonly IDistributedCache<Basket> _distributedCache;

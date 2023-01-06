@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using MicroStore.Ordering.Application.Abstractions.Commands;
+using MicroStore.Ordering.Application.Abstractions.StateMachines;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
@@ -42,7 +43,7 @@ namespace MicroStore.Ordering.Application.Tests.Commands
 
             result.IsSuccess.Should().BeTrue();
 
-            result.StatusCode.Should().Be((int)HttpStatusCode.Processing);
+            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
 
             Assert.That(await TestHarness.Published.Any<OrderSubmitedEvent>());
            

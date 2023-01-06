@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "id": "159b39f4-d03d-48df-9c89-ef5aaba7ef52",
+      "name": "clothes",
+      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+    },
+
+    {
+      "id": "08216f0a-d0a1-44cd-a1f7-173f7c48c725",
+      "name": "food",
+      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+    },
+
+    {
+      "id": "5573fc8b-e221-4d91-88ee-b8b772e0ddab",
+      "name": "mobiles",
+      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+    },
+    {
+      "id": "6aae7a3c-a633-4096-8440-6d8cf3b65483",
+      "name": "toys",
+      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+    },
+
+    {
+      "id": "80d49166-defd-4bd5-ac2b-7fabdc56d884",
+      "name": "computers",
+      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+    }
+  ]
+}

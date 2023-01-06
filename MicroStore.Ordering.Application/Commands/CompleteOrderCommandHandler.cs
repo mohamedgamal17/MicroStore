@@ -2,11 +2,12 @@
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.Ordering.Application.Abstractions.Commands;
 using MicroStore.Ordering.Application.Abstractions.Consts;
-using MicroStore.Ordering.Application.Abstractions.Interfaces;
 using MicroStore.Ordering.Events;
 using MicroStore.BuildingBlocks.Results;
 using System.Net;
 using MicroStore.BuildingBlocks.Results.Http;
+using MicroStore.Ordering.Application.Abstractions.Abstractions.Common;
+
 namespace MicroStore.Ordering.Application.Commands
 {
     public class CompleteOrderCommandHandler : CommandHandler<CompleteOrderCommand>
@@ -49,7 +50,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndpoint.Publish(orderCompletedEvent, cancellationToken);
 
-            return ResponseResult.Success((int)(HttpStatusCode.Processing));
+            return ResponseResult.Success((int)(HttpStatusCode.Accepted));
         }
     }
 }

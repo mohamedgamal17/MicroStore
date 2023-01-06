@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Api.Models.Products;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
@@ -16,11 +18,17 @@ namespace MicroStore.Catalog.Api.Controllers
     {
         [Route("")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<List<ProductDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ProductListDto>>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetCatalogProductList()
+        public async Task<IActionResult> GetCatalogProductList(PagingAndSortingQueryParams @params)
         {
-            var request = new GetProductListQuery();
+            var request = new GetProductListQuery
+            {
+                SortBy = @params.SortBy,
+                Desc = @params.Desc,
+                PageSize = @params.PageSize,
+                PageNumber = @params.PageNumber,
+            };
 
             var result = await Send(request);
 

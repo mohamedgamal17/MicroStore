@@ -1,4 +1,5 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
+using System.Reflection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
@@ -8,6 +9,13 @@ namespace MicroStore.Ordering.Application.Abstractions
         typeof(InMemoryBusModule))]
     public class OrderApplicationAbstractionModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
 
+            Configure<AbpAutoMapperOptions>(opt =>
+            {
+                opt.AddMaps<OrderApplicationAbstractionModule>();
+            });
+        }
     }
 }

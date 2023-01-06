@@ -32,7 +32,7 @@ namespace MicroStore.Payment.Application.Commands
 
 
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted ,ObjectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem));
+            return ResponseResult.Success((int) HttpStatusCode.OK, ObjectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem));
         }
     }
 }

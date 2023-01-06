@@ -2,9 +2,9 @@
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
+using MicroStore.Ordering.Application.Abstractions.Abstractions.Common;
 using MicroStore.Ordering.Application.Abstractions.Commands;
 using MicroStore.Ordering.Application.Abstractions.Consts;
-using MicroStore.Ordering.Application.Abstractions.Interfaces;
 using MicroStore.Ordering.Events;
 using System.Net;
 namespace MicroStore.Ordering.Application.Commands
@@ -53,7 +53,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndPoint.Publish(orderFulfillmentCompletedEvent);
 
-            return ResponseResult.Success((int) HttpStatusCode.Processing);
+            return ResponseResult.Success((int) HttpStatusCode.Accepted);
         }
     }
 }

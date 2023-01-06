@@ -7,7 +7,8 @@ namespace MicroStore.Payment.Application.Abstractions.Profiles
     {
         public PaymentSystemProfile()
         {
-            CreateMap<PaymentSystem, PaymentSystemDto>();
+            CreateMap<PaymentSystem, PaymentSystemDto>()
+                .ForMember(x => x.SystemId, opt => opt.MapFrom(c => c.Id));
 
         }
     }

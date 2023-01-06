@@ -4,10 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Ordering.Infrastructure.EntityFramework;
 using MicroStore.TestBase;
-using Respawn;
-using Respawn.Graph;
 using System.Linq.Expressions;
-
 namespace MicroStore.Ordering.Application.Tests
 {
     [TestFixture]
@@ -16,28 +13,16 @@ namespace MicroStore.Ordering.Application.Tests
            where TInstance : class, SagaStateMachineInstance
     {
 
-        public Respawner Respawner { get; private set; }
-
         [OneTimeSetUp]
         public async Task SetupBeforeAllTests()
         {
-            var config = ServiceProvider.GetRequiredService<IConfiguration>();
-
-            Respawner = await Respawner.CreateAsync(config.GetConnectionString("DefaultConnection"), new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                    "__EFMigrationsHistory"
-                } 
-            });
-
-            await SetupBeforeAnyTest();
+            await StartMassTransit();
         }
 
         [OneTimeTearDown]
         public async Task OnAllTestsTearDown()
         {
-            await OnTearDown();
+            await StopMassTransit();
         }
 
 

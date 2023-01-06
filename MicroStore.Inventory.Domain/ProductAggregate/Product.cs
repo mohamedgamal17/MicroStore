@@ -23,7 +23,7 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             Thumbnail = thumbnail;   
         }
 
-        private Product() { }
+        protected Product() { }
 
         public UnitResult AdjustInventory(int adjustedStock, string reason)
         {

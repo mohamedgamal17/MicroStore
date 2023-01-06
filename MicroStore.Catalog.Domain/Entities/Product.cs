@@ -1,5 +1,6 @@
 ﻿using MicroStore.Catalog.Domain.Events;
 using MicroStore.Catalog.Domain.ValueObjects;
+using Newtonsoft.Json;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Domain.Entities
 {

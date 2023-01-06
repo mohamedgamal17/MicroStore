@@ -3,7 +3,7 @@ namespace MicroStore.Catalog.Domain.Entities
 {
     public class ProductCategory : Entity<Guid>
     {
-        public Category Category { get; private set; }
+        public Category Category { get;  set; }
         public Guid CategoryId { get; set; }
         public bool IsFeaturedProduct { get; private set; }
 
@@ -14,7 +14,7 @@ namespace MicroStore.Catalog.Domain.Entities
             CategoryId = categoryId;
         }
 
-        protected ProductCategory() // Require For EFCore
+        public ProductCategory()
         {
 
         }

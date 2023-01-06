@@ -1,0 +1,47 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/systems",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7092
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/paymentsystems",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "SwaggerKey": "Payment"
+    },
+
+
+    {
+      "DownstreamPathTemplate": "/api/payments",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7092
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/payments",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "SwaggerKey": "Payment"
+    },
+    {
+      "DownstreamPathTemplate": "/api/plugins/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7092
+        }
+      ],
+      "UpstreamPathTemplate": "/mvcgateway/payment/plugins",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH" ],
+      "SwaggerKey": "Payment"
+    }
+  ]
+}

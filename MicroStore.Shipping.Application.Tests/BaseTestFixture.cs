@@ -5,6 +5,7 @@ using MicroStore.Shipping.Application.Tests.Fakes;
 using MicroStore.Shipping.Domain.Const;
 using MicroStore.Shipping.Domain.Entities;
 using MicroStore.TestBase;
+using NUnit.Framework;
 using Respawn;
 using Respawn.Graph;
 using System.Linq.Expressions;
@@ -30,20 +31,6 @@ namespace MicroStore.Shipping.Application.Tests
                 }
             });
 
-            await StartMassTransit();
-        }
-
-        [TearDown]
-        protected async Task SetupAfterRunAnyTests()
-        {
-            var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
-
-            await Respawner.ResetAsync(configuration.GetConnectionString("DefaultConnection"));
-        }
-
-        [SetUp]
-        protected async Task SetupBeforeAnyTest()
-        {
             await Insert(new ShippingSystem
             {
                 Name = FakeConst.ActiveSystem,
@@ -59,7 +46,6 @@ namespace MicroStore.Shipping.Application.Tests
                 Image = Guid.NewGuid().ToString(),
                 IsEnabled = false
             });
-
 
             var settings = new ShippingSettings
             {
@@ -79,8 +65,15 @@ namespace MicroStore.Shipping.Application.Tests
             };
 
             await UpdateSettings(settings);
+
+            await StartMassTransit();
         }
 
+        [OneTimeTearDown]
+        protected async Task SetupAfterAllTests()
+        {
+            await StopMassTransit();
+        }
         public Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>

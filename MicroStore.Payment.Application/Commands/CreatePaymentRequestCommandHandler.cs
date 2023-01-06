@@ -49,7 +49,7 @@ namespace MicroStore.Payment.Application.Commands
 
             var result = ObjectMapper.Map<PaymentRequest, PaymentRequestCreatedDto>(paymentRequest);
 
-            return ResponseResult.Success((int) HttpStatusCode.Created, result);
+            return ResponseResult.Success((int) HttpStatusCode.OK, result);
         }
 
 

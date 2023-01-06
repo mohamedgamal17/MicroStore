@@ -3,6 +3,8 @@ using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using System.Net;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Validation;
@@ -14,6 +16,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = null!;
         protected Type? ObjectMapperContext { get; set; }
+        protected IMapperAccessor MapperAccessor => LazyServiceProvider.LazyGetRequiredService<IMapperAccessor>();
         protected IObjectMapper ObjectMapper => LazyServiceProvider.LazyGetService<IObjectMapper>(provider =>
             ObjectMapperContext == null
                 ? provider.GetRequiredService<IObjectMapper>()
@@ -31,6 +34,11 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
         protected ResponseResult Success<T>(HttpStatusCode statusCode , T result)
         {
             return ResponseResult.Success<T>((int)statusCode, result);
+        }
+
+        protected ResponseResult Success<T>(HttpStatusCode statusCode, List<T> result)
+        {
+            return ResponseResult.Success((int)statusCode, new ListResultDto<T>(result));
         }
 
         protected ResponseResult Failure(HttpStatusCode stausCode , string errorMessage , string? details = null)

@@ -2,20 +2,99 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Payment.Api.Models;
+using MicroStore.Payment.Api.Models.PaymentRequests;
 using MicroStore.Payment.Application.Abstractions.Commands;
 using MicroStore.Payment.Application.Abstractions.Dtos;
+using MicroStore.Payment.Application.Abstractions.Queries;
+
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
     [Route("api/payments")]
     public class PaymentRequestController : MicroStoreApiController
     {
+        [HttpGet]
+        [Route("")]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<PaymentRequestListDto>>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
+        public async Task<IActionResult> RetrivePaymentRequestList(PagingAndSortingQueryParams @params)
+        {
+            var query = new GetPaymentRequestListQuery
+            {
+                SortBy = @params.SortBy,
+                Desc = @params.Desc,
+                PageSize = @params.PageSize,
+                PageNumber = @params.PageNumber,
+            };
+
+            var result = await Send(query);
+
+            return FromResult(result);
+        }
+
+        [HttpGet]
+        [Route("user/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<PaymentRequestListDto>>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        public async Task<IActionResult> RetriveUserPaymentRequestList(string userId,PagingAndSortingQueryParams @params)
+        {
+            var query = new GetUserPaymentRequestListQuery
+            {
+                UserId = userId,
+                SortBy = @params.SortBy,
+                Desc = @params.Desc,
+                PageSize = @params.PageSize,
+                PageNumber = @params.PageNumber,
+            };
+
+            var result = await Send(query);
+
+            return FromResult(result);
+        }
+
+
+        [HttpGet]
+        [Route("order_id/{orderId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        public async Task<IActionResult> RetrivePaymentRequestWithOrderId(string orderId)
+        {
+            var query = new GetPaymentRequestWithOrderIdQuery
+            {
+                OrderId = orderId
+            };
+
+            var result = await Send(query);
+
+            return FromResult(result);
+        }
+
+        [HttpGet]
+        [Route("{paymentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        public async Task<IActionResult> RetrivePaymentRequest(Guid paymentId)
+        {
+            var query = new GetPaymentRequestQuery
+            {
+                PaymentRequestId = paymentId
+            };
+
+            var result = await Send(query);
+
+            return FromResult(result);
+        }
 
         [HttpPost]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<PaymentRequestCreatedDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestCreatedDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> CreatePaymentRequest(CreatePaymentRequestModel model)
@@ -39,7 +118,7 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPost]
         [Route("process/{paymentId}")]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(PaymentProcessResultDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentProcessResultDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<PaymentProcessResultDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
@@ -63,8 +142,8 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpPost]
         [Route("complete")]
 
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(PaymentDto))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<PaymentDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestCompletedDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<PaymentRequestCompletedDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> CompletePaymentRequest(CompletePaymentRequestModel model)

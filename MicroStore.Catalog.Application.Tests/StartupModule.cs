@@ -1,6 +1,12 @@
 ﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Catalog.Infrastructure;
+using MicroStore.Catalog.Infrastructure.EntityFramework;
+using Respawn;
+using Respawn.Graph;
 using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Autofac;
@@ -19,7 +25,7 @@ namespace MicroStore.Catalog.Application.Tests
         {
             context.Services.AddMassTransitTestHarness(busRegisterConfig =>
             {
-                busRegisterConfig.AddConsumers(Assembly.Load("MicroStore.Catalog.Application"));
+                busRegisterConfig.AddConsumers(typeof(CatalogApplicationModule).Assembly);
 
                 busRegisterConfig.UsingInMemory((context, inMemoryBusConfig) =>
                 {
@@ -29,15 +35,34 @@ namespace MicroStore.Catalog.Application.Tests
             });
         }
 
-
-        public override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            return base.OnApplicationInitializationAsync(context);
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
+
+                dbContext.Database.Migrate();
+            }
         }
 
-        public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            return base.OnApplicationShutdownAsync(context);
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
+
+                var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
+                {
+                    TablesToIgnore = new Table[]
+                    {
+                    "__EFMigrationsHistory"
+                    }
+                }).Result;
+
+                respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
+
+            }
         }
+       
     }
 }

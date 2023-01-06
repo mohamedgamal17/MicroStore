@@ -1,5 +1,7 @@
 ﻿#nullable disable
-namespace MicroStore.Ordering.Application.Abstractions.Dtos
+using MicroStore;
+
+namespace MicroStore.Ordering.Application.Dtos
 {
     public class PaymentDto
     {

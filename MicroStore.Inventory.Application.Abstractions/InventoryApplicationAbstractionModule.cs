@@ -1,8 +1,8 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.Inventory.Application.Abstractions.Profiles;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
-using Volo.Abp.Validation;
 namespace MicroStore.Inventory.Application.Abstractions
 {
     [DependsOn(typeof(InMemoryBusModule),
@@ -10,6 +10,13 @@ namespace MicroStore.Inventory.Application.Abstractions
         typeof(AbpAutoMapperModule))]
     public class InventoryApplicationAbstractionModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(opt =>
+            {
+                opt.AddProfile<OrderProfile>();
+                opt.AddProfile<ProductProfile>();
+            });
+        }
     }
 }

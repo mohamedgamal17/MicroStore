@@ -36,6 +36,8 @@ namespace MicroStore.Shipping.Application.Commands
           
             await _shipmentRepository.InsertAsync(shipment);
 
+
+
             return  ResponseResult.Success((int) HttpStatusCode.Created, ObjectMapper.Map<Shipment, ShipmentDto>(shipment));
         }
     }

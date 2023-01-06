@@ -1,4 +1,5 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using Microsoft.Extensions.Logging;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Abstractions;
 using MicroStore.Payment.Application.Abstractions.Common;
@@ -35,7 +36,9 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         private readonly IRepository<PaymentSystem> _paymentSystemRepository;
 
-        public StripePaymentMethod(SessionService sessionService, PaymentIntentService paymentIntentService, IPaymentRequestRepository paymentRequestRepository, IObjectMapper objectMapper, IRepository<PaymentSystem> paymentSystemRepository, ISettingsRepository settingsRepository, RefundService refundService)
+        private readonly ILogger<StripePaymentMethod> _logger;
+
+        public StripePaymentMethod(SessionService sessionService, PaymentIntentService paymentIntentService, IPaymentRequestRepository paymentRequestRepository, IObjectMapper objectMapper, IRepository<PaymentSystem> paymentSystemRepository, ISettingsRepository settingsRepository, RefundService refundService, ILogger<StripePaymentMethod> logger)
         {
             _sessionService = sessionService;
             _paymentIntentService = paymentIntentService;
@@ -44,21 +47,33 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             _paymentSystemRepository = paymentSystemRepository;
             _settingsRepository = settingsRepository;
             _refundService = refundService;
+            _logger = logger;
         }
         public string PaymentGatewayName => StripePaymentConst.Provider;
 
         public async Task<ResponseResult> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default)
         {
-            return await WrappResponseResult(HttpStatusCode.Accepted, async () =>
+            return await WrappResponseResult( async () =>
             {
                 var requestOptions = await PrepareStripeRequest(cancellationToken);
 
                 var session = await _sessionService
                     .GetAsync(completePaymentModel.Token, new SessionGetOptions(), requestOptions, cancellationToken);
 
-                if (session.Status != "unpaid")
+                if (_logger.IsEnabled(LogLevel.Debug))
                 {
-                    throw new BusinessException("your payment session is uncompleted");
+                    _logger.LogDebug("Stripe payment session {session}", session);
+                }
+
+                if (session.Status != "complete")
+                {
+                    var error = new ErrorInfo
+                    {
+                        Message = $"checkout session with id : {session.Id} is not completed yet"
+                    };
+
+                    return Failure(HttpStatusCode.BadRequest, error);
+   
                 }
 
                 PaymentRequest paymentRequest = await _paymentRequestRepository.SingleAsync(x => x.Id == Guid.Parse(session.ClientReferenceId));
@@ -68,14 +83,16 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
                 await _paymentRequestRepository.UpdateAsync(paymentRequest);
 
-                return _objectMapper.Map<PaymentRequest, PaymentRequestCompletedDto>(paymentRequest);
+                var result = _objectMapper.Map<PaymentRequest, PaymentRequestCompletedDto>(paymentRequest);
+
+                return Success(HttpStatusCode.OK, result);
             });
             
         }
 
         public async Task<ResponseResult> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
         {
-            return await WrappResponseResult(HttpStatusCode.Accepted, async () =>
+            return await WrappResponseResult(HttpStatusCode.OK, async () =>
             {
                 var paymentRequest = await _paymentRequestRepository.GetPaymentRequest(paymentId);
 
@@ -166,7 +183,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         public async Task<ResponseResult> Refund(Guid paymentId, CancellationToken cancellationToken = default)
         {
-            return await  WrappResponseResult(HttpStatusCode.Accepted, async () =>
+            return await  WrappResponseResult(HttpStatusCode.OK, async () =>
             {
                 PaymentRequest paymentRequest = (await _paymentRequestRepository.GetPaymentRequest(paymentId))!;
 
@@ -197,32 +214,20 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         private async Task<ResponseResult> WrappResponseResult<T>(HttpStatusCode statusCode ,Func<Task<T>> func)
         {
+            return await WrappResponseResult(async () =>
+            {
+                var result = await func();
+                return Success(statusCode, result);
+            });          
+        }
+
+        private async Task<ResponseResult> WrappResponseResult(Func<Task<ResponseResult>> func)
+        {
             try
             {
                 var result = await func();
 
-                return Success(statusCode, result);
-
-            }catch(StripeException ex)
-            {
-                return Failure(HttpStatusCode.BadRequest, ConvertStripeError(ex.StripeError));
-
-            }catch(Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException )
-            {
-                return Failure(HttpStatusCode.BadRequest, new ErrorInfo
-                {
-                    Message = "Stripe gateway is not available now"
-                });
-            }
-        }
-
-        private async Task<ResponseResult> WrappResponseResult(HttpStatusCode statusCode , Func<Task> func)
-        {
-            try
-            {
-                await func();
-
-                return Success(statusCode);
+                return result;
 
             }
             catch (StripeException ex)
@@ -237,6 +242,17 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     Message = "Stripe gateway is not available now"
                 });
             }
+        }
+
+        private async Task<ResponseResult> WrappResponseResult(HttpStatusCode statusCode , Func<Task> func)
+        {
+            return await WrappResponseResult(async () =>
+            {
+                await func();
+
+                return Success(statusCode);
+
+            });       
         }
 
         private ResponseResult Success<T>(HttpStatusCode statusCode, T result)

@@ -1,13 +1,13 @@
-﻿using AutoMapper.Internal.Mappers;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
 using MicroStore.Catalog.Application.Abstractions.Common;
-using MicroStore.Catalog.Domain.Entities;
 using System.Net;
-using Volo.Abp.ObjectMapping;
+using Volo.Abp.AutoMapper;
 
 namespace MicroStore.Catalog.Application.Categories.Queries
 {
@@ -15,21 +15,39 @@ namespace MicroStore.Catalog.Application.Categories.Queries
     {
         private readonly ICatalogDbContext _catalogDbContext;
 
-
-        public GetCategoryListQueryHandler(ICatalogDbContext catalogDbContext)
+        private readonly IMapperAccessor _mapperAccessor;
+        public GetCategoryListQueryHandler(ICatalogDbContext catalogDbContext,  IMapperAccessor mapperAccessor)
         {
             _catalogDbContext = catalogDbContext;
-
+            _mapperAccessor = mapperAccessor;
         }
 
         public override async Task<ResponseResult> Handle(GetCategoryListQuery request, CancellationToken cancellationToken)
         {
-            var result = await _catalogDbContext.Categories
-            .ToListAsync();
 
-            var mapping = ObjectMapper.Map<List<Category>, List<CategoryDto>>(result);
+            var query = _catalogDbContext.Categories
+                .AsNoTracking()
+                .ProjectTo<CategoryListDto>(_mapperAccessor.Mapper.ConfigurationProvider);
 
-            return ResponseResult.Success((int)HttpStatusCode.OK, mapping);
+            if(request.SortBy != null)
+            {
+                query = TryToSort(query,request.SortBy,request.Desc);
+            }
+
+            var result = await query.ToListAsync(cancellationToken);
+
+            return Success(HttpStatusCode.OK, result);
+
+        }
+
+
+        private IQueryable<CategoryListDto> TryToSort(IQueryable<CategoryListDto> query , string sortBy , bool desc)
+        {
+            return sortBy.ToLower() switch
+            {
+                "name" => desc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
+                _ => query
+            };
         }
 
 

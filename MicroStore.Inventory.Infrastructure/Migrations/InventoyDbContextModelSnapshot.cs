@@ -11,7 +11,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace MicroStore.Inventory.Infrastructure.Migrations
 {
-    [DbContext(typeof(InventoyDbContext))]
+    [DbContext(typeof(InventoryDbContext))]
     partial class InventoyDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

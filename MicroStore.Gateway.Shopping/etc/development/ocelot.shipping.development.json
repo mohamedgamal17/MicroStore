@@ -1,0 +1,73 @@
+{
+  "Routes": [
+
+    {
+      "DownstreamPathTemplate": "/api/shipments",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7162
+        }
+      ],
+      "UpstreamPathTemplate": "/mvcgateway/shipments",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "SwaggerKey": "Shipping"
+    },
+    {
+      "DownstreamPathTemplate": "/api/labels",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7162
+        }
+      ],
+      "UpstreamPathTemplate": "/mvcgateway/labels",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "SwaggerKey": "Shipping"
+    },
+    {
+      "DownstreamPathTemplate": "/api/rates",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7162
+        }
+      ],
+      "UpstreamPathTemplate": "/mvcgateway/rates",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "SwaggerKey": "Shipping"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/shipmentsettings",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7162
+        }
+      ],
+      "UpstreamPathTemplate": "/mvcgateway/shipmentsettings",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "SwaggerKey": "/Shipping"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/plugins/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7162
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/shipping/plugins/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "SwaggerKey": "Shipping"
+    }
+  ]
+}

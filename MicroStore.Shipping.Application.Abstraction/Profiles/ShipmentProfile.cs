@@ -17,6 +17,17 @@ namespace MicroStore.Shipping.Application.Abstraction.Profiles
                 .ForMember(x => x.Address, opt => opt.MapFrom(c => c.Address))
                 .ForMember(x => x.Items, opt => opt.MapFrom(c => c.Items))
                 .ForMember(x => x.Status, opt => opt.MapFrom(c => c.Status));
+
+            CreateMap<Shipment , ShipmentListDto>()
+                .ForMember(x => x.ShipmentId, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.OrderId, opt => opt.MapFrom(c => c.OrderId))
+                .ForMember(x => x.ShipmentExternalId, opt => opt.MapFrom(c => c.ShipmentExternalId))
+                .ForMember(x => x.ShipmentLabelExternalId, opt => opt.MapFrom(c => c.ShipmentLabelExternalId))
+                .ForMember(x => x.TrackingNumber, opt => opt.MapFrom(c => c.TrackingNumber))
+                .ForMember(x => x.UserId, opt => opt.MapFrom(c => c.UserId))
+                .ForMember(x => x.Address, opt => opt.MapFrom(c => c.Address))
+                .ForMember(x => x.Status, opt => opt.MapFrom(c => c.Status));
+
         }
     }
 }

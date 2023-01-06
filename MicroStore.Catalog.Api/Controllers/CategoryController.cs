@@ -6,6 +6,8 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Api.Models.Categories;
 using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
+using MicroStore.BuildingBlocks.Paging.Params;
+using Volo.Abp.Application.Dtos;
 
 namespace MicroStore.Catalog.Api.Controllers
 {
@@ -18,13 +20,17 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<List<CategoryListDto>>)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<ListResultDto<CategoryListDto>>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public async Task<IActionResult> GetCatalogCategoryList()
+        public async Task<IActionResult> GetCatalogCategoryList(SortingQueryParams @params)
         {
-            var request = new GetCategoryListQuery();
+            var request = new GetCategoryListQuery
+            {
+                SortBy = @params.SortBy,
+                Desc = @params.Desc,
+            };
 
             var result = await Send(request);
 

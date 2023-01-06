@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using MicroStore.BuildingBlocks.Results;
+using MicroStore.Ordering.Application.Abstractions.StateMachines;
 using MicroStore.Ordering.Application.StateMachines.Activities;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;

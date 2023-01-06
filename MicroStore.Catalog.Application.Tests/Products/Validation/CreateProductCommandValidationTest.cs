@@ -11,15 +11,18 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
     {
 
         [Test]
-        public async Task ShouldWhenProductNameIsAlreadyExistInDatabase()
+        public async Task ShouldFailWhenProductNameIsAlreadyExistInDatabase()
         {
+
+            var fakeProduct = await CreateFakeProduct();
+
             await WithUnitOfWork(async (sp) =>
             {
                 var sut = (CreateProductCommandValidation)ServiceProvider.GetRequiredService<IValidator<CreateProductCommand>>();
 
                 var command = CreateProductCommand();
 
-                command.Name = "DublicateName";
+                command.Name = fakeProduct.Name;
 
                 var result = await sut.ValidateAsync(command);
 
@@ -32,15 +35,17 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
 
 
         [Test]
-        public async Task ShouldWhenProductSkuIsAlreadyExistInDatabase()
+        public async Task ShouldFailWhenProductSkuIsAlreadyExistInDatabase()
         {
+            var fakeProduct = await CreateFakeProduct();
+
             await WithUnitOfWork(async (sp) =>
             {
                 var sut = (CreateProductCommandValidation)ServiceProvider.GetRequiredService<IValidator<CreateProductCommand>>();
 
                 var command = CreateProductCommand();
 
-                command.Sku = "DublicateSku";
+                command.Sku = fakeProduct.Sku;
 
                 var result = await sut.ValidateAsync(command);
 
@@ -64,17 +69,13 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
                 OldPrice = 60
             };
 
-        [SetUp]
-        protected async Task SetupBeforRunAnyTest()
-        {
-            await CreateFakeProduct();
-        }
+     
 
-        private Task CreateFakeProduct()
+        private Task<Product> CreateFakeProduct()
         {
             return WithUnitOfWork(async (sp) =>
             {
-                var fakeProduct = new Product("DublicateSku", "DublicateName", 50, Guid.NewGuid().ToString());
+                var fakeProduct = new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 50, Guid.NewGuid().ToString());
                 var repository = sp.GetRequiredService<IRepository<Product>>();
                 await repository.InsertAsync(fakeProduct);
                 return fakeProduct;

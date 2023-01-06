@@ -12,7 +12,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace MicroStore.Inventory.Infrastructure.Migrations
 {
-    [DbContext(typeof(InventoyDbContext))]
+    [DbContext(typeof(InventoryDbContext))]
     [Migration("20221113195342_InitialMigration")]
     partial class InitialMigration
     {

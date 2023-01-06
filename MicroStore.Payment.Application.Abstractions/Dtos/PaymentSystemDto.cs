@@ -2,7 +2,7 @@
 {
     public class PaymentSystemDto
     {
-        public Guid Id { get; set; }
+        public Guid SystemId { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Image { get; set; }

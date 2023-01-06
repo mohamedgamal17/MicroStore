@@ -1,11 +1,15 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.Mediator;
+using MicroStore.Ordering.Application.Abstractions.StateMachines;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Infrastructure;
 using MicroStore.Ordering.Infrastructure.EntityFramework;
+using Respawn;
+using Respawn.Graph;
 using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Autofac;
@@ -51,14 +55,31 @@ namespace MicroStore.Ordering.Application.Tests
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
 
-                if (dbContext.Database.EnsureCreated())
-                {
-                    dbContext.Database.Migrate();
-                }
+                dbContext.Database.Migrate();
+
             }
         }
 
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
+
+                var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection"), new RespawnerOptions
+                {
+                    TablesToIgnore = new Table[]
+                    {
+                    "__EFMigrationsHistory"
+                    }
+                }).Result;
 
 
+                respawner.ResetAsync(config.GetConnectionString("DefaultConnection")).Wait();
+
+
+            }
+        }
+   
     }
 }

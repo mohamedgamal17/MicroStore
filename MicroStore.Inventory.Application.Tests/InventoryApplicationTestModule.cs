@@ -1,11 +1,14 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Inventory.Application.Abstractions;
 using MicroStore.Inventory.Infrastructure;
 using MicroStore.Inventory.Infrastructure.EntityFramework;
+using Respawn;
+using Respawn.Graph;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
@@ -42,5 +45,35 @@ namespace MicroStore.Inventory.Application.Tests
             LogContext.ConfigureCurrentLogContext(loggerFactory);
         }
 
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<InventoryDbContext>();
+
+                dbContext.Database.Migrate();
+
+            }
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
+
+                var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
+                {
+                    TablesToIgnore = new Table[]
+                    {
+                    "__EFMigrationsHistory"
+                    }
+                }).Result;
+
+                respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
+
+            }
+        }
     }
 }

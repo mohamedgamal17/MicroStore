@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MicroStore.Shipping.Domain": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51467;http://localhost:51468"
+    }
+  }
+}

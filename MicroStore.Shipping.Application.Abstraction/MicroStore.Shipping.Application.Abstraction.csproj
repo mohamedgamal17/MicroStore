@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.InMemoryBus\MicroStore.BuildingBlocks.InMemoryBus.csproj" />
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.Paging\MicroStore.BuildingBlocks.Paging.csproj" />
     <ProjectReference Include="..\MicroStore.Shipping.Domain\MicroStore.Shipping.Domain.csproj" />
   </ItemGroup>
 

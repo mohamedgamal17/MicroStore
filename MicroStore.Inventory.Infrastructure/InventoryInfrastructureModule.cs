@@ -18,14 +18,14 @@ namespace MicroStore.Inventory.Infrastructure
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
 
-            context.Services.AddAbpDbContext<InventoyDbContext>(opt =>
+            context.Services.AddAbpDbContext<InventoryDbContext>(opt =>
             {
                 opt.AddDefaultRepositories(true);
             });
 
             Configure<AbpDbContextOptions>(opt =>
             {
-                opt.UseSqlServer(builder => builder.MigrationsAssembly(typeof(InventoyDbContext).Assembly.FullName));
+                opt.UseSqlServer(builder => builder.MigrationsAssembly(typeof(InventoryDbContext).Assembly.FullName));
             });
 
             Configure<AbpUnitOfWorkDefaultOptions>(options =>

@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.Ordering.Application.Abstractions.Common;
 using MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigurations;
+using Volo.Abp.DependencyInjection;
+
 namespace MicroStore.Ordering.Infrastructure.EntityFramework
 {
-    public class OrderDbContext : SagaDbContext, IOrderDbContext
+    public class OrderDbContext : SagaDbContext, IOrderDbContext, ITransientDependency
     {
         public OrderDbContext(DbContextOptions options) : base(options)
         {

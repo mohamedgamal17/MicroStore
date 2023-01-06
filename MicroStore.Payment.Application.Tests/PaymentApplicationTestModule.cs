@@ -1,9 +1,12 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Payment.Application.EntityFramework;
+using Respawn;
+using Respawn.Graph;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
@@ -44,10 +47,28 @@ namespace MicroStore.Payment.Application.Tests
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
-                if (dbContext.Database.EnsureCreated())
+                dbContext.Database.Migrate();
+            }
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
+
+                var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection"), new RespawnerOptions
                 {
-                    dbContext.Database.Migrate();
-                }
+                    TablesToIgnore = new Table[]
+                    {
+                    "__EFMigrationsHistory"
+                    }
+                }).Result;
+
+
+                respawner.ResetAsync(config.GetConnectionString("DefaultConnection")).Wait();
+
+
             }
         }
 

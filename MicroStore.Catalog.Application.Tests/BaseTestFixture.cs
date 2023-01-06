@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.TestBase;
+using NUnit.Framework;
 using Respawn;
 using Respawn.Graph;
 using System.Linq.Expressions;
@@ -12,35 +13,17 @@ namespace MicroStore.Catalog.Application.Tests
     [TestFixture]
     public abstract class BaseTestFixture : MassTransitTestBase<StartupModule>
     {
-        public Respawner Respawner { get; set; }
 
         [OneTimeSetUp]
         protected async Task SetupBeforeAllTests()
-        {
-
-            var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
-
-            Respawner = await Respawner.CreateAsync(configuration.GetConnectionString("DefaultConnection"), new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                   "__EFMigrationsHistory"
-                }
-            });
-
+        {         
             await StartMassTransit();
         }
 
-
-
-
-
-        [TearDown]
+        [OneTimeTearDown]
         protected async Task SetupAfterRunAnyTest()
         {
-            var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
-
-            await Respawner.ResetAsync(configuration.GetConnectionString("DefaultConnection"));
+            await StopMassTransit();
         }
 
         public Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class, IEntity
@@ -50,6 +33,16 @@ namespace MicroStore.Catalog.Application.Tests
                 var repository = sp.GetRequiredService<IRepository<TEntity>>();
 
                 return repository.InsertAsync(entity);
+            });
+        }
+
+        public Task InsertMany<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, IEntity
+        {
+            return WithUnitOfWork((sp) =>
+            {
+                var repository = sp.GetRequiredService<IRepository<TEntity>>();
+
+                return repository.InsertManyAsync(entities);
             });
         }
 

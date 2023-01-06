@@ -15,34 +15,17 @@ namespace MicroStore.Inventory.Application.Tests
     public abstract class BaseTestFixture : MassTransitTestBase<InventoryApplicationTestModule>
     {
 
-        public Respawner Respawner { get; set; }
+
 
         [OneTimeSetUp]
         protected  async Task SetupBeforeAllTests()
-        {
-
-            var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
-
-            Respawner = await Respawner.CreateAsync(configuration.GetConnectionString("DefaultConnection")!, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                   "__EFMigrationsHistory"
-                }
-            });
-
-            TestHarness.TestInactivityTimeout = TimeSpan.FromSeconds(60);
-
+        {       
             await StartMassTransit();
         }
 
         [OneTimeTearDown]
         protected async Task SetupAfterRunAnyTest()
         {
-            var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
-
-            await Respawner.ResetAsync(configuration.GetConnectionString("DefaultConnection")!);
-
             await StopMassTransit();
         }
 

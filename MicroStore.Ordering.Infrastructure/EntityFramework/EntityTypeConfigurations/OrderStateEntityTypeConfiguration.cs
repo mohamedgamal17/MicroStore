@@ -1,7 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.Ordering.Application.StateMachines;
+using MicroStore.Ordering.Application.Abstractions.StateMachines;
+
 namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigurations
 {
     public class OrderStateEntityTypeConfiguration

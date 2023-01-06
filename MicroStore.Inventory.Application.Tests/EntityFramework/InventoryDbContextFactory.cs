@@ -5,21 +5,21 @@ using MicroStore.Inventory.Infrastructure.EntityFramework;
 
 namespace MicroStore.Inventory.Application.Tests.EntityFramework
 {
-    public class InventoryDbContextFactory : IDesignTimeDbContextFactory<InventoyDbContext>
+    public class InventoryDbContextFactory : IDesignTimeDbContextFactory<InventoryDbContext>
     {
-        public InventoyDbContext CreateDbContext(string[] args)
+        public InventoryDbContext CreateDbContext(string[] args)
         {
             var config = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<InventoyDbContext>()
+            var builder = new DbContextOptionsBuilder<InventoryDbContext>()
                 .UseSqlServer(config.GetConnectionString("DefaultConnection")!, (opt) =>
                 {
                     opt.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                    opt.MigrationsAssembly(typeof(InventoyDbContext).Assembly.FullName);
+                    opt.MigrationsAssembly(typeof(InventoryDbContext).Assembly.FullName);
                 });
 
 
-            return new InventoyDbContext(builder.Options);
+            return new InventoryDbContext(builder.Options);
         }
 
         private IConfigurationRoot BuildConfiguration()

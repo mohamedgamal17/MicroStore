@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
@@ -48,14 +49,18 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 
         private async Task<bool> CheckProductName(UpdateProductCommand command, string name, CancellationToken cancellationToken)
         {
-            return await _productRepository
-                .AllAsync(x => x.Id == command.ProductId || x.Name != name);
+            var query = await _productRepository.GetQueryableAsync();
+
+            return await  query.Where(x => x.Id != command.ProductId)
+                .AllAsync(x => x.Name != name , cancellationToken);
         }
 
         private async Task<bool> CheckProductSku(UpdateProductCommand command, string sku, CancellationToken cancellationToken)
         {
-            return await _productRepository
-                .AllAsync(x => x.Sku != sku || x.Id == command.ProductId);
+            var query = await _productRepository.GetQueryableAsync();
+
+            return await query.Where(x => x.Id != command.ProductId)
+                .AllAsync(x => x.Sku != sku, cancellationToken);
         }
 
 

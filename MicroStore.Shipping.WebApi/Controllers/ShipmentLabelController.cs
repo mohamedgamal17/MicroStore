@@ -4,7 +4,7 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
-using MicroStore.Shipping.WebApi.Models;
+using MicroStore.Shipping.WebApi.Models.Labels;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {
@@ -20,7 +20,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<List<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        public async Task<IActionResult> BuyShipmentLabel([FromBody] MicroStore.Shipping.WebApi.Models.BuyShipmentLabelModel model)
+        public async Task<IActionResult> BuyShipmentLabel([FromBody] BuyShipmentLabelModel model)
         {
             var command = new BuyShipmentLabelCommand
             {

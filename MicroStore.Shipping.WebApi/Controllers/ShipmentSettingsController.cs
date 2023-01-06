@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Commands;
-using MicroStore.Shipping.WebApi.Models;
+using MicroStore.Shipping.WebApi.Models.Settings;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {

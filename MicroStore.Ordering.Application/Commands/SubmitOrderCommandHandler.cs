@@ -41,7 +41,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndPoint.Publish(orderSubmitedEvent, cancellationToken);
 
-            return ResponseResult.Success((int) HttpStatusCode.Processing, PrepareSubmitOrderResponse(orderSubmitedEvent));
+            return ResponseResult.Success((int) HttpStatusCode.Accepted, PrepareSubmitOrderResponse(orderSubmitedEvent));
         }
 
         private AddressModel PrepareAddressModel(MicroStore.Ordering.IntegrationEvents.Models.AddressModel address)

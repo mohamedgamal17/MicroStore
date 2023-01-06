@@ -10,10 +10,11 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
     public class UpdateProductCommandValidationTest : BaseTestFixture
     {
         [Test]
-        public async Task ShouldWhenProductNameIsAlreadyExistInDatabase()
+        public async Task ShouldFailWhenProductNameIsAlreadyExistInDatabase()
         {
-            Product fakeProduct = await CreateFakeProduct(new Product("FakeSku", "FakeName", 50, Guid.NewGuid().ToString()));
+            Product product1 = await CreateFakeProduct();
 
+            Product product2 = await CreateFakeProduct();
 
             await WithUnitOfWork(async (sp) =>
             {
@@ -21,9 +22,9 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
 
                 var command = new UpdateProductCommand
                 {
-                    ProductId = fakeProduct.Id,
+                    ProductId = product1.Id,
                     Sku = Guid.NewGuid().ToString(),
-                    Name = "DublicateName",
+                    Name = product2.Name,
                     Price = 50
                 };
 
@@ -40,10 +41,11 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
 
 
         [Test]
-        public async Task ShouldWhenProductSkuIsAlreadyExistInDatabase()
+        public async Task ShouldFailWhenProductSkuIsAlreadyExistInDatabase()
         {
+            Product product1 = await CreateFakeProduct();
 
-            Product fakeProduct = await CreateFakeProduct(new Product("FakeSku", "FakeName", 50, Guid.NewGuid().ToString()));
+            Product product2 = await CreateFakeProduct();
 
 
             await WithUnitOfWork(async (sp) =>
@@ -52,8 +54,8 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
 
                 var command = new UpdateProductCommand
                 {
-                    ProductId = fakeProduct.Id,
-                    Sku = "DublicateSku",
+                    ProductId = product1.Id,
+                    Sku = product2.Sku,
                     Name = Guid.NewGuid().ToString(),
                     Price = 50
                 };
@@ -70,32 +72,16 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
 
 
 
-        private Task<Product> CreateFakeProduct(Product product)
+        private Task<Product> CreateFakeProduct()
         {
             return WithUnitOfWork(async (sp) =>
             {
+                var product = new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 50, Guid.NewGuid().ToString());
                 var repository = sp.GetRequiredService<IRepository<Product>>();
-                await repository.InsertAsync(product);
+                await repository.InsertAsync(product,true);
                 return product;
             });
         }
 
-
-        private CreateProductCommand CreateProductCommand()
-            => new CreateProductCommand
-            {
-                Name = Guid.NewGuid().ToString(),
-                Sku = Guid.NewGuid().ToString(),
-                ShortDescription = Guid.NewGuid().ToString(),
-                LongDescription = Guid.NewGuid().ToString(),
-                Price = 50,
-                OldPrice = 60
-            };
-
-        [SetUp]
-        protected async Task SetupBeforRunAnyTest()
-        {
-            await CreateFakeProduct(new Product("DublicateSku", "DublicateName", 50, Guid.NewGuid().ToString()));
-        }
     }
 }

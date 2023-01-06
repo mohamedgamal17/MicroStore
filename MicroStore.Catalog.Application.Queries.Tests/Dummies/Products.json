@@ -1,0 +1,94 @@
+{
+  "data": [
+    {
+      "id": "6820be8e-0f4e-4ae2-94dc-e226a0e8f2f7",
+      "name": "T-shirt X Mas",
+      "sku": "T-ShirtXMas",
+      "thumbnail": "NAN",
+      "short_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      "long_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      "price": 50,
+      "old_price": 60,
+      "_product_categories": [
+        {
+          "id": "90275157-f23a-4d88-8135-67791e3c6906",
+          "category_id": "159b39f4-d03d-48df-9c89-ef5aaba7ef52", // clothes category
+          "is_featured": true
+        }
+      ]
+    },
+    {
+      "id": "7f783476-b4a2-4299-b645-59b4ae69c085",
+      "name": "iPhone 9",
+      "Sku": "IPHONE-9",
+      "thumbnail": "NAN",
+      "short_description": "An apple mobile which is nothing like apple",
+      "long_description": "An apple mobile which is nothing like apple",
+      "price": 60,
+      "old_price": 60,
+      "_product_categories": [
+        {
+          "id": "19388ee1-41da-41d3-a9f5-2d26c1f454a4",
+          "category_id": "5573fc8b-e221-4d91-88ee-b8b772e0ddab",
+          "is_featured": true
+        }
+      ]
+    },
+
+    {
+      "id": "f61b509d-55f3-4d18-b34f-a7647a90ad2a",
+      "name": "Baby Wooden Rattle Toys Dummy Clip",
+      "Sku": "babytoy-sk",
+      "thumbnail": "NAN",
+      "short_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      "long_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      "price": 60,
+      "old_price": 60,
+      "_product_categories": [
+        {
+          "id": "cffb5c89-90fc-40f6-88b9-84cc2fb4b104",
+          "category_id": "6aae7a3c-a633-4096-8440-6d8cf3b65483",
+          "is_featured": true
+        }
+      ]
+    },
+
+
+    {
+      "id": "94174b5b-25a8-4c29-9364-3482e9356231",
+      "name": "Apple Apple MacBook Air 13.6 M2 256GB",
+      "Sku": "apple-lab-sk",
+      "thumbnail": "NAN",
+      "short_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      "long_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      "price": 60,
+      "old_price": 60,
+      "_product_categories": [
+        {
+          "id": "28e3f552-4739-4eca-bce8-68377d6e4a4d",
+          "category_id": "80d49166-defd-4bd5-ac2b-7fabdc56d884",
+          "is_featured": true
+        }
+      ]
+    },
+
+    {
+      "id": "2cd94e7f-d80a-41c9-9805-75f1e3b4b925",
+      "name": "Ranch Chicken Pizza",
+      "Sku": "pizza-food-sk",
+      "thumbnail": "NAN",
+      "short_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      "long_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      "price": 60,
+      "old_price": 60,
+      "_product_categories": [
+        {
+          "id": "d4749517-69ed-4105-9183-ede53882c180",
+          "category_id": "08216f0a-d0a1-44cd-a1f7-173f7c48c725",
+          "is_featured": true
+        }
+      ]
+    }
+
+  ]
+}
