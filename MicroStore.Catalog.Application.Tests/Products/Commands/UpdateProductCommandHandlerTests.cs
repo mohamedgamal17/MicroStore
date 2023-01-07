@@ -6,7 +6,6 @@ using MicroStore.Catalog.Application.Tests.Utilites;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.IntegrationEvents;
 using System.Net;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.Products.Commands
@@ -28,10 +27,9 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
                 LongDescription = Guid.NewGuid().ToString(),
                 Price = 120,
                 OldPrice = 150,
-                ImageModel = new ImageModel
+                Thumbnail = new ImageModel
                 {
-                    FileName = $"{Guid.NewGuid()}.png",
-                    Type = "png",
+                    FileName = $"{Guid.NewGuid()}",
                     Data = ImageGenerator.GetBitmapData()
                 },
                 Weight = new WeightModel
@@ -67,7 +65,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
             product.OldPrice.Should().Be(command.OldPrice);
             product.Weight.Should().Be(command.Weight.AsWeight());
             product.Dimensions.Should().Be(command.Dimensions.AsDimension());
-            product.Thumbnail.Should().EndWith(command.ImageModel.FileName);
+            product.Thumbnail.Should().Contain(command.Thumbnail.FileName);
 
             Assert.That(await TestHarness.Published.Any<ProductCreatedIntegrationEvent>());
         }
@@ -76,7 +74,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
 
 
         [Test]
-        public async Task Should_return_error_result_with_404_status_code_exception_while_product_is_not_exist()
+        public async Task Should_return_error_result_with_404_status_code_while_product_is_not_exist()
         {
             var command = new UpdateProductCommand
             {
@@ -94,6 +92,36 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
             result.IsFailure.Should().BeTrue();
 
             result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task Should_return_error_result_with_400_status_code_while_thumbnail_is_not_valid_image()
+        {
+            var fakeProduct = await CreateFakeProduct();
+
+            var command = new UpdateProductCommand
+            {
+                ProductId = fakeProduct.Id,
+                Sku = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString(),
+                ShortDescription = Guid.NewGuid().ToString(),
+                LongDescription = Guid.NewGuid().ToString(),
+                Price = 120,
+                OldPrice = 150,
+                Thumbnail = new ImageModel
+                {
+                    FileName = $"{Guid.NewGuid()}",
+                    Data = new byte[] {54,33,26,24,51,151,45}
+                },
+
+            };
+
+            var result = await Send(command);
+
+          
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         }
 
 

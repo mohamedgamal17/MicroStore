@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -7,14 +8,14 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
     public class CreateProductCommand : ProductCommandBase, ICommand
     {
-        public ImageModel ImageModel { get; set; }
+        public ImageModel Thumbnail { get; set; }
 
     }
     internal class CreateProductCommandValidation : ProductCommandValidatorBase<CreateProductCommand>
     {
 
 
-        public CreateProductCommandValidation(IRepository<Product> productRepository) 
+        public CreateProductCommandValidation(IRepository<Product> productRepository, IImageService imageService) 
         {
 
 
@@ -26,6 +27,8 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
             RuleFor(x => x.Sku)
                 .MustAsync((x,ct)=>CheckProductSku(productRepository,x,ct))
                 .WithMessage("Product sku must be unique");
+
+        
 
 
         }

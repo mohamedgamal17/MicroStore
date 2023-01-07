@@ -12,7 +12,7 @@ namespace MicroStore.Catalog.Api.Models.Products
         public string LongDescription { get; set; }
         public double Price { get; set; }
         public double OldPrice { get; set; }
-        public IFormFile Thumbnail { get; set; }
+        public ImageModel Thumbnail { get; set; }
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
     }

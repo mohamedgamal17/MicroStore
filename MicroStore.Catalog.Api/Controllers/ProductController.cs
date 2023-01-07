@@ -57,7 +57,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post([FromForm] CreateProductModel model)
+        public async Task<IActionResult> Post([FromBody] CreateProductModel model)
         {
             CreateProductCommand command = new CreateProductCommand
             {
@@ -69,12 +69,7 @@ namespace MicroStore.Catalog.Api.Controllers
                 OldPrice = model.OldPrice,
                 Price = model.Price,
 
-                ImageModel = new ImageModel
-                {
-                    FileName = model.Thumbnail?.FileName,
-                    Data = model.Thumbnail?.GetAllBytes(),
-                    Type = model.Thumbnail?.FileName.Split(".")[1]
-                },
+                Thumbnail = model.Thumbnail,
 
                 Dimensions = model.Dimensions,
 
@@ -107,12 +102,7 @@ namespace MicroStore.Catalog.Api.Controllers
                 LongDescription = model.LongDescription,
                 OldPrice = model.OldPrice,
                 Price = model.Price,
-                ImageModel = new ImageModel
-                {
-                    FileName = model.Thumbnail?.FileName,
-                    Data = model.Thumbnail?.GetAllBytes(),
-                    Type = model.Thumbnail?.FileName.Split(".")[1]
-                },
+                Thumbnail = model.Thumbnail,
                 Dimensions = model.Dimensions,
                 Weight = model.Weight
             };

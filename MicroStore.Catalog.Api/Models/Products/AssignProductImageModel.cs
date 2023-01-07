@@ -1,8 +1,10 @@
-﻿namespace MicroStore.Catalog.Api.Models.Products
+﻿using MicroStore.Catalog.Application.Abstractions.Common.Models;
+
+namespace MicroStore.Catalog.Api.Models.Products
 {
     public class AssignProductImageModel
     {
-        public IFormFile Image { get; set; }
+        public ImageModel Image { get; set; }
         public int DisplayOrder { get; set; }
     }
 }

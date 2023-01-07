@@ -4,12 +4,9 @@ using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Domain.Entities;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.BuildingBlocks.Results;
 using System.Net;
-using MicroStore.BuildingBlocks.Results.Http;
-
 namespace MicroStore.Catalog.Application.Products.Commands
 {
     public class AssignProductImageCommandHandler : CommandHandler<AssignProductImageCommand>
@@ -33,19 +30,21 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             if(product == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
-                {
-                    Message = $"Product entity with id : {request.ProductId} is not found"
-                });
+                return Failure(HttpStatusCode.NotFound, $"Product entity with id : {request.ProductId} is not found");
             }
 
             var imageResult = await _imageService.SaveAsync(request.ImageModel);
+
+            if (!imageResult.IsValid)
+            {
+                return Failure(HttpStatusCode.BadRequest, "Invalid image extension");
+            }
 
             product.AssignProductImage(imageResult.ImageLink, request.DisplayOrder);
 
             await _productRepository.UpdateAsync(product);
 
-            return ResponseResult.Success((int)HttpStatusCode.Created, ObjectMapper.Map<Product, ProductDto>(product));
+            return Success(HttpStatusCode.Created, ObjectMapper.Map<Product, ProductDto>(product));
 
         }
     }

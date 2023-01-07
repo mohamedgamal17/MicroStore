@@ -8,6 +8,7 @@ using MicroStore.Catalog.Api.Models.Categories;
 using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
 using MicroStore.BuildingBlocks.Paging.Params;
 using Volo.Abp.Application.Dtos;
+using MicroStore.Catalog.Api.Models;
 
 namespace MicroStore.Catalog.Api.Controllers
 {
@@ -35,6 +36,15 @@ namespace MicroStore.Catalog.Api.Controllers
             var result = await Send(request);
 
             return FromResult(result);
+        }
+
+
+        [HttpPost]
+        [Route("test")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> TestRoute([FromBody]ImageForCr model)
+        {
+            return Ok();
         }
 
 

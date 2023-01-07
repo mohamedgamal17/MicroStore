@@ -23,8 +23,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
 
                 ImageModel = new ImageModel
                 {
-                    FileName = $"{Guid.NewGuid()}.jpg",
-                    Type = "jpg",
+                    FileName = $"{Guid.NewGuid()}",
                     Data = ImageGenerator.GetBitmapData()
                 },
 
@@ -47,15 +46,14 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
         }
 
         [Test]
-        public async Task Should_return_error_result_with_404_status_code_exception_while_product_is_not_exist()
+        public async Task Should_return_error_result_with_404_status_code_while_product_is_not_exist()
         {
             var command = new AssignProductImageCommand
             {
                 ProductId = Guid.NewGuid(),
                 ImageModel = new ImageModel
                 {
-                    FileName = $"{Guid.NewGuid()}.png",
-                    Type = "png",
+                    FileName = $"{Guid.NewGuid()}",
                     Data = ImageGenerator.GetBitmapData()
                 },
                 DisplayOrder = 1
@@ -68,6 +66,32 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
             result.IsFailure.Should().BeTrue();
 
             result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        }
+
+
+        public async Task Should_return_error_result_with_400_status_code_while_thumbnail_is_not_valid_image()
+        {
+            var fakeProduct = await GenerateFakeProduct();
+
+            var command = new AssignProductImageCommand
+            {
+                ProductId = fakeProduct.Id,
+
+                ImageModel = new ImageModel
+                {
+                    FileName = $"{Guid.NewGuid()}",
+                    Data = new byte[] { 54, 33, 26, 24, 51, 151, 45 }
+                },
+
+                DisplayOrder = 1
+            };
+
+            var result = await Send(command);
+
+
+            result.IsFailure.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         }
 
         private Task<Product> GenerateFakeProduct()

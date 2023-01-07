@@ -26,12 +26,7 @@ namespace MicroStore.Catalog.Api.Controllers
             {
 
                 ProductId = productId,
-                ImageModel = new ImageModel
-                {
-                    FileName = model.Image.FileName,
-                    Type = model.Image.FileName.Split(".")[1],
-                    Data = model.Image.GetAllBytes(),
-                },
+                ImageModel = model.Image,
                 DisplayOrder = model.DisplayOrder
             };
 

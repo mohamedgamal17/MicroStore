@@ -1,6 +1,9 @@
 ﻿using FluentValidation;
+using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
+using MicroStore.Catalog.Domain.Const;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Domain.ValueObjects;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
@@ -12,7 +15,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
         public string LongDescription { get; set; } = string.Empty;
         public double Price { get; set; }
         public double OldPrice { get; set; }
-        public WeightModel Weight { get; set; }
+         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
 
     }
@@ -59,6 +62,58 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Product old price can not be negative");
 
+   
+
+
+            RuleFor(x => x.Weight)
+                .ChildRules((weight) =>
+                {
+                    weight.RuleFor(x => x.Value).GreaterThanOrEqualTo(0)
+                        .WithMessage("Product weight cannot be negative value");
+
+                    weight.RuleFor(x => x.Unit)
+                        .NotEmpty()
+                        .WithMessage("Weight unit cannot be null or empty")
+                        .MaximumLength(15)
+                        .WithMessage("Weight unit max lenght is 15")
+                        .Must(x => StandardWeightUnit.GetStandWeightUnit().Contains(x))
+                        .WithMessage("Invalid weight unit");
+
+                })
+                .When(x => x.Weight != null);
+
+
+            RuleFor(x => x.Dimensions)
+                .ChildRules((dim) =>
+                {
+                    dim.RuleFor(x => x.Lenght)
+                        .GreaterThanOrEqualTo(0)
+                        .WithMessage("Product lenght cannot be negative value");
+
+                    dim.RuleFor(x => x.Width)
+                        .GreaterThanOrEqualTo(0)
+                        .WithMessage("Product width cannot be negative value");
+
+                    dim.RuleFor(x => x.Height)
+                       .GreaterThanOrEqualTo(0)
+                       .WithMessage("Product width cannot be negative value");
+
+                    dim.RuleFor(x => x.Unit)
+                        .NotEmpty()
+                        .MaximumLength(15)
+                        .WithMessage("Dimension unit max lenght is 15")
+                        .WithMessage("Dimension unit cannot be null or empty")
+                        .Must(x => StandardDimensionUnit.GetStandardDimensionUnit().Contains(x))
+                        .WithMessage("Invalid dimension unit");
+                })
+                .When(x => x.Dimensions != null);
+
+        }
+
+
+        private List<string> GetWeightUnit()
+        {
+            return Enum.GetNames<WeightUnit>().Select(x=> x.ToLower()).ToList();
         }
     }
 }

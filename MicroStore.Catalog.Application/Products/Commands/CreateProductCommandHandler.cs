@@ -23,7 +23,12 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
         public override async Task<ResponseResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            ImageResult imageResult = await _imageService.SaveAsync(request.ImageModel);
+            ImageResult imageResult = await _imageService.SaveAsync(request.Thumbnail);
+
+            if (!imageResult.IsValid)
+            {
+                return Failure(HttpStatusCode.BadRequest, "Invalid image extension");
+            }
 
             Product product = new Product(request.Sku, request.Name, request.Price,imageResult.ImageLink);
 

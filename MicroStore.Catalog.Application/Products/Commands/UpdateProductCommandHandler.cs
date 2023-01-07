@@ -59,9 +59,14 @@ namespace MicroStore.Catalog.Application.Products.Commands
                 product.Dimensions = request.Dimensions.AsDimension();
             }
 
-            if (request.ImageModel != null)
+            if (request.Thumbnail != null)
             {
-                var imageResult = await _imageService.SaveAsync(request.ImageModel,cancellationToken);
+                var imageResult = await _imageService.SaveAsync(request.Thumbnail,cancellationToken);
+
+                if (!imageResult.IsValid)
+                {
+                    return Failure(HttpStatusCode.BadRequest, "Image extension is not valid");
+                }
 
                 product.Thumbnail = imageResult.ImageLink;
             }
