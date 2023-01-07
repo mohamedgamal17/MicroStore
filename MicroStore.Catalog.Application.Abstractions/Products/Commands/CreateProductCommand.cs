@@ -8,7 +8,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
     public class CreateProductCommand : ProductCommandBase, ICommand
     {
-        public ImageModel Thumbnail { get; set; }
+        
 
     }
     internal class CreateProductCommandValidation : ProductCommandValidatorBase<CreateProductCommand>
@@ -16,6 +16,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 
 
         public CreateProductCommandValidation(IRepository<Product> productRepository, IImageService imageService) 
+            :base(imageService)
         {
 
 
@@ -27,8 +28,6 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
             RuleFor(x => x.Sku)
                 .MustAsync((x,ct)=>CheckProductSku(productRepository,x,ct))
                 .WithMessage("Product sku must be unique");
-
-        
 
 
         }

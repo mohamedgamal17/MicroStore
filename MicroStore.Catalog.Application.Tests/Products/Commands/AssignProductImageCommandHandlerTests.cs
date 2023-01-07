@@ -69,6 +69,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
         }
 
 
+        [Test]
         public async Task Should_return_error_result_with_400_status_code_while_thumbnail_is_not_valid_image()
         {
             var fakeProduct = await GenerateFakeProduct();

@@ -13,7 +13,7 @@ namespace MicroStore.Catalog.Infrastructure.Images
 
         private readonly ILogger<ImageService > _logger;
 
-        private const int ImageMaxLenghtKB = 250;
+        private const int ImageMaxLenghtKB = 900;
         public ImageService(IBlobContainer<ProductImageContainer> blobContainer, ILogger<ImageService> logger)
         {
             _blobContainer = blobContainer;
@@ -65,7 +65,7 @@ namespace MicroStore.Catalog.Infrastructure.Images
 
         public  Task<bool> IsValidLenght(ImageModel model, CancellationToken cancellationToken = default)
         {
-            double lenght = model.Data.Length / 1024;
+            decimal lenght =(decimal) model.Data.Length / 1024 ;
 
             if(lenght > ImageMaxLenghtKB || lenght <= 0)
             {

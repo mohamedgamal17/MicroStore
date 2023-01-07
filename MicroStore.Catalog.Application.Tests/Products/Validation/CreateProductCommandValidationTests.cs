@@ -7,11 +7,11 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.Products.Validation
 {
-    internal class CreateProductCommandValidationTest : BaseTestFixture
+    internal class CreateProductCommandValidationTests : BaseTestFixture
     {
 
         [Test]
-        public async Task ShouldFailWhenProductNameIsAlreadyExistInDatabase()
+        public async Task Should_fail_when_product_name_is_already_exist_in_data_base()
         {
 
             var fakeProduct = await CreateFakeProduct();
@@ -35,7 +35,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Validation
 
 
         [Test]
-        public async Task ShouldFailWhenProductSkuIsAlreadyExistInDatabase()
+        public async Task Should_fail_when_product_sku_is_already_exist_in_data_base()
         {
             var fakeProduct = await CreateFakeProduct();
 

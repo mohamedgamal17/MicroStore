@@ -25,6 +25,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 
 
         public UpdateProductCommandCommandValidation(IRepository<Product> productRepository, IImageService imageService)
+            :base(imageService)
         {
             _productRepository = productRepository;
 

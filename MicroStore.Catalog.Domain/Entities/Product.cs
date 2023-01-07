@@ -23,6 +23,14 @@ namespace MicroStore.Catalog.Domain.Entities
         public IReadOnlyList<ProductImage> ProductImages => _productImages.AsReadOnly();
 
     
+        public Product(string sku ,string name , double price)
+        {
+            Sku = sku;
+            Name = name;
+            Price = price;
+            Thumbnail = string.Empty;
+        }
+
         public Product(string sku ,string name,double price, string thumbnail)
         {
             Sku = sku;

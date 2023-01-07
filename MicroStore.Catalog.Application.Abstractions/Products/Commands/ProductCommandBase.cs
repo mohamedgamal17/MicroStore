@@ -2,9 +2,6 @@
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Domain.Const;
-using MicroStore.Catalog.Domain.Entities;
-using MicroStore.Catalog.Domain.ValueObjects;
-using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
     public abstract class ProductCommandBase
@@ -15,7 +12,8 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
         public string LongDescription { get; set; } = string.Empty;
         public double Price { get; set; }
         public double OldPrice { get; set; }
-         public WeightModel Weight { get; set; }
+        public ImageModel Thumbnail { get; set; }
+        public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
 
     }
@@ -23,7 +21,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
     internal abstract class ProductCommandValidatorBase<TCommand> : AbstractValidator<TCommand>
          where TCommand : ProductCommandBase
     {
-        public ProductCommandValidatorBase()
+        public ProductCommandValidatorBase(IImageService imageService)
         {
 
             RuleFor(x => x.Name)
@@ -62,7 +60,17 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Product old price can not be negative");
 
-   
+
+
+            RuleFor(x => x.Thumbnail)
+                .ChildRules((model) =>
+                {
+                    model.RuleFor(x => x.FileName)
+                        .MaximumLength(500)
+                        .WithMessage("Image name max length is 500");
+                })
+                .MustAsync(imageService.IsValidLenght)
+                .When(x => x.Thumbnail != null);
 
 
             RuleFor(x => x.Weight)
@@ -108,12 +116,6 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
                 })
                 .When(x => x.Dimensions != null);
 
-        }
-
-
-        private List<string> GetWeightUnit()
-        {
-            return Enum.GetNames<WeightUnit>().Select(x=> x.ToLower()).ToList();
         }
     }
 }

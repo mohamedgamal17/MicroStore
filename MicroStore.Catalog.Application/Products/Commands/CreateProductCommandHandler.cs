@@ -23,14 +23,9 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
         public override async Task<ResponseResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            ImageResult imageResult = await _imageService.SaveAsync(request.Thumbnail);
+            
 
-            if (!imageResult.IsValid)
-            {
-                return Failure(HttpStatusCode.BadRequest, "Invalid image extension");
-            }
-
-            Product product = new Product(request.Sku, request.Name, request.Price,imageResult.ImageLink);
+            Product product = new Product(request.Sku, request.Name, request.Price);
 
             product.ShortDescription = request.ShortDescription;
 
@@ -41,6 +36,18 @@ namespace MicroStore.Catalog.Application.Products.Commands
             product.Weight = request.Weight?.AsWeight() ?? Weight.Empty;
 
             product.Dimensions = request.Dimensions?.AsDimension() ?? Dimension.Empty;
+
+            if (request.Thumbnail != null)
+            {
+                ImageResult imageResult = await _imageService.SaveAsync(request.Thumbnail);
+
+                if (!imageResult.IsValid)
+                {
+                    return Failure(HttpStatusCode.BadRequest, "Invalid image extension");
+                }
+
+                product.Thumbnail = imageResult.ImageLink;
+            }
 
             await _productRepository.InsertAsync(product, cancellationToken: cancellationToken);
 

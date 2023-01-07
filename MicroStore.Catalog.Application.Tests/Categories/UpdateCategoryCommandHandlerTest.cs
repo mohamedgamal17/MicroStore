@@ -9,9 +9,6 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 {
     public class UpdateCategoryCommandHandlerTest : BaseTestFixture
     {
-
-
-
         [Test]
         public async Task ShouldUpdateCategory()
         {

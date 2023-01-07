@@ -5,7 +5,7 @@ using MicroStore.Catalog.Application.Abstractions.Products.Models;
 
 namespace MicroStore.Catalog.Application.Tests.Products.Validation
 {
-    public class ProductCategoryModelValidationTest : BaseTestFixture
+    public class ProductCategoryModelValidationTests : BaseTestFixture
     {
 
 
