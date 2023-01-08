@@ -1,6 +1,64 @@
 {
   "Routes": [
     {
+      "DownstreamPathTemplate": "/api/categories",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/categories",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/categories/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/categories",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/categories",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/categories/{id}",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/categories/{id}",
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+
+
+
+    {
       "DownstreamPathTemplate": "/api/products",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -12,12 +70,26 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/products",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "SwaggerKey": "Catalog"
 
+      "UpstreamHttpMethod": [ "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/productcategories",
+      "DownstreamPathTemplate": "/api/products/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/products/{id}",
+
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/products",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -25,13 +97,12 @@
           "Port": 7188
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/productcategories",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "SwaggerKey": "Catalog"
-
+      "UpstreamPathTemplate": "/mvcgateway/products",
+      "UpstreamHttpMethod": [ "POST" ]
     },
+
     {
-      "DownstreamPathTemplate": "/api/productimages",
+      "DownstreamPathTemplate": "/api/products/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -39,35 +110,122 @@
           "Port": 7188
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/productimages",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "SwaggerKey": "Catalog"
+      "UpstreamPathTemplate": "/mvcgateway/products/{id}",
+      "UpstreamHttpMethod": [ "PUT" ]
     },
+
+
     {
-      "DownstreamPathTemplate": "/api/categories",
+      "DownstreamPathTemplate": "/api/products/{productId}/productcategories",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 7188
         }
+
       ],
-      "UpstreamPathTemplate": "/mvcgateway/categories",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "SwaggerKey": "Catalog"
+
+      "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productcategories",
+
+      "UpstreamHttpMethod": [ "GET" ]
     },
 
-   
+    {
+      "DownstreamPathTemplate": "/api/products/{productId}/productcategories}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
 
-   
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productcategories",
+
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/products/{productId}/productcategories/{categoryId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productcategories/{categoryId}",
+
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/products/{productId}/productcategories/{categoryId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productcategories/{categoryId}",
+
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
 
 
+    {
+      "DownstreamPathTemplate": "/api/products/{productId}/productimages",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
 
-   
+      ],
 
+      "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productimages",
 
-   
+      "UpstreamHttpMethod": [ "POST" ]
+    },
 
-  
+    {
+      "DownstreamPathTemplate": "/api/products/{productId}/productimages/{productImageId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productimages/{productImageId}",
+
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/products/{productId}/productimages/{productImageId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productimages/{productImageId}",
+
+      "UpstreamHttpMethod": [ "DELETE" ]
+    }
   ]
 }
