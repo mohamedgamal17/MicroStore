@@ -19,8 +19,8 @@ namespace MicroStore.Payment.Application.Tests.Commands
             {
                 PaymentGatewayName = PaymentMethodConst.PaymentGatewayName,
                 PaymentId = paymentRequest.Id,
-                CancelUrl = Guid.NewGuid().ToString(),
-                ReturnUrl = Guid.NewGuid().ToString()
+                CancelUrl = "http://cancel.com/",
+                ReturnUrl = "http://success.com/",
             });
 
             result.IsSuccess.Should().BeTrue();
@@ -42,8 +42,8 @@ namespace MicroStore.Payment.Application.Tests.Commands
             {
                 PaymentGatewayName = "NA",
                 PaymentId = paymentRequest.Id,
-                CancelUrl = Guid.NewGuid().ToString(),
-                ReturnUrl = Guid.NewGuid().ToString()
+                CancelUrl = "http://cancel.com/",
+                ReturnUrl = "http://success.com/",
             });
 
 
