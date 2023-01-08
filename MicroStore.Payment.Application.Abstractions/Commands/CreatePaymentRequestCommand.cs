@@ -29,7 +29,7 @@ namespace MicroStore.Payment.Application.Abstractions.Commands
 
     internal abstract class CreatePaymentRequestCommandValidator : AbstractValidator<CreatePaymentRequestCommand>
     {
-        public SubmitOrderCommandValidator()
+        public CreatePaymentRequestCommandValidator()
         {
 
             RuleFor(x => x.OrderId)
