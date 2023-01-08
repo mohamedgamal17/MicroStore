@@ -7,7 +7,7 @@ using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 namespace MicroStore.Catalog.Api.Controllers
 {
-    [Route("api/productcategories")]
+    [Route("api/products/{productId}/productcategories")]
     [ApiController]
     public class ProductCategoryController : MicroStoreApiController
     {
@@ -18,7 +18,7 @@ namespace MicroStore.Catalog.Api.Controllers
             _localMessageBus = localMessageBus;
         }
 
-        [Route("{productId}")]
+        [Route("")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
@@ -40,7 +40,7 @@ namespace MicroStore.Catalog.Api.Controllers
             return FromResult(result);
         }
 
-        [Route("{productId}/update/{categoryId}")]
+        [Route("{categoryId}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
@@ -62,7 +62,7 @@ namespace MicroStore.Catalog.Api.Controllers
             return FromResult(result);
         }
 
-        [Route("{productId}/delete/{categoryId}")]
+        [Route("{categoryId}")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
