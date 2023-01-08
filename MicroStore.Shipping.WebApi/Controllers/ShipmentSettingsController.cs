@@ -21,12 +21,12 @@ namespace MicroStore.Shipping.WebApi.Controllers
         }
 
 
-        [HttpPut]
-        [Route("update")]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
+        [HttpPost]
+        [Route("")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> UpdateShipppingSettings(UpdateShippingSettingsModel model)
+        public async Task<IActionResult> UpdateShipppingSettings([FromBody]UpdateShippingSettingsModel model)
         {
             var command = new UpdateShippingSettingsCommand
             {

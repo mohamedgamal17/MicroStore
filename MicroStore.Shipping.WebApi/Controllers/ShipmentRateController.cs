@@ -33,7 +33,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpPost]
         [Route("estimate")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AggregateEstimatedRateCollection))]
-        public async Task<IActionResult> EstimateShipmentRate(EstimateShipmentRateModel model)
+        public async Task<IActionResult> EstimateShipmentRate([FromBody]EstimateShipmentRateModel model)
         {
             var command = new EstimateShipmentRateCommand
             {

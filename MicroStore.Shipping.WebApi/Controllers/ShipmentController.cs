@@ -21,7 +21,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK,Type= typeof(Envelope<PagedResult<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type= typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError,Type= typeof(Envelope))]
-        public async Task<IActionResult> RetriveShipmentList(PagingQueryParams @params)
+        public async Task<IActionResult> RetriveShipmentList([FromQuery]PagingQueryParams @params)
         {
             var query = new GetShipmentListQuery
             {
@@ -39,7 +39,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveUserShipmentList(string userId,PagingQueryParams @params)
+        public async Task<IActionResult> RetriveUserShipmentList(string userId, [FromQuery]  PagingQueryParams @params)
         {
             var query = new GetUserShipmentListQuery
             {

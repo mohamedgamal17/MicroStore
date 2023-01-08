@@ -23,9 +23,9 @@ namespace MicroStore.Shipping.Application.Tests.Commands
                 IsEnabled = true
             };
 
-            await Send(command);
-
-
+            var result= await Send(command);
+            result.IsSuccess.Should().BeTrue();
+            result.StatusCode.Should().Be((int) HttpStatusCode.OK);
             var system = await Get(systemName);
 
             system.IsEnabled.Should().BeTrue();

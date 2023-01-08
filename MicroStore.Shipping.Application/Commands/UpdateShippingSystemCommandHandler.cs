@@ -34,7 +34,7 @@ namespace MicroStore.Shipping.Application.Commands
             await _shippingSystemRepository.UpdateAsync(system);
 
 
-            return Success(HttpStatusCode.Accepted);
+            return Success(HttpStatusCode.OK);
         }
     }
 }
