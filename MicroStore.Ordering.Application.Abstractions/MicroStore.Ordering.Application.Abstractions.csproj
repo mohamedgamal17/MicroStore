@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
     <PackageReference Include="MassTransit" Version="8.0.9" />
+    <PackageReference Include="Volo.Abp.FluentValidation" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
