@@ -10,9 +10,118 @@
         }
       ],
 
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/products",
-      "SwaggerKey": "Inventory"
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/inventory/products/external_product_id/{externalid}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7054
+        }
+      ],
+
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products/external_product_id/{externalid}"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/inventory/products/sku/{productsku}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7054
+        }
+      ],
+
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products/sku/{productsku}"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/inventory/products/{productId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7054
+        }
+      ],
+
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products/{productId}"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/inventory/products/adjustQuantity/{productsku}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7054
+        }
+      ],
+
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products/adjustQuantity/{productsku}"
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/inventory/orders",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7054
+        }
+      ],
+
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/orders"
+    },
+    {
+      "DownstreamPathTemplate": "/api/inventory/orders/user/userId",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7054
+        }
+      ],
+
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/user/userId"
+    },
+    {
+      "DownstreamPathTemplate": "/api/inventory/orders/external_order_id/{externalid}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7054
+        }
+      ],
+
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/external_order_id/{externalid}"
+    },
+    {
+      "DownstreamPathTemplate": "/api/inventory/orders/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7054
+        }
+      ],
+
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/{orderId}"
     }
+
   ]
 }
