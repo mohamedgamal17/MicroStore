@@ -21,7 +21,7 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<PaymentRequestListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
-        public async Task<IActionResult> RetrivePaymentRequestList(PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PagingAndSortingQueryParams @params)
         {
             var query = new GetPaymentRequestListQuery
             {
@@ -41,7 +41,7 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<PaymentRequestListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveUserPaymentRequestList(string userId,PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> RetriveUserPaymentRequestList(string userId, [FromQuery] PagingAndSortingQueryParams @params)
         {
             var query = new GetUserPaymentRequestListQuery
             {
@@ -97,7 +97,7 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestCreatedDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> CreatePaymentRequest(CreatePaymentRequestModel model)
+        public async Task<IActionResult> CreatePaymentRequest([FromBody] CreatePaymentRequestModel model)
         {
             var command = new CreatePaymentRequestCommand
             {
@@ -123,7 +123,7 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
 
-        public async Task<IActionResult> ProcessPaymentRequest(Guid paymentId, ProcessPaymentRequestModel model)
+        public async Task<IActionResult> ProcessPaymentRequest(Guid paymentId, [FromBody] ProcessPaymentRequestModel model)
         {
             var command = new ProcessPaymentRequestCommand
             {
@@ -146,7 +146,7 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<PaymentRequestCompletedDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> CompletePaymentRequest(CompletePaymentRequestModel model)
+        public async Task<IActionResult> CompletePaymentRequest([FromBody] CompletePaymentRequestModel model)
         {
             var command = new CompletePaymentRequestCommand
             {
