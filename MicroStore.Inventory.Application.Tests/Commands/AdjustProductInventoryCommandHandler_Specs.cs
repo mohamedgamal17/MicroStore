@@ -25,6 +25,9 @@ namespace MicroStore.Inventory.Application.Tests.Commands
                 Stock = 10
             });
 
+            result.IsSuccess.Should().BeTrue();
+            result.StatusCode.Should().Be((int) HttpStatusCode.OK);
+
             Product product = await Find<Product>(x => x.Id == fakeProduct.Id);
 
             product.Stock.Should().Be(10);

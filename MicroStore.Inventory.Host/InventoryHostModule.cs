@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MicroStore.Inventory.Api;
 using Volo.Abp.Autofac;
 using Volo.Abp.AspNetCore.Serilog;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace MicroStore.Inventory.Host
 {
     [DependsOn(typeof(InventoryApiModule),
         typeof(AbpAutofacModule),
-    typeof(AbpAspNetCoreSerilogModule))]
+    typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpAspNetCoreMvcModule))]
     public class InventoryHostModule :AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -20,8 +22,6 @@ namespace MicroStore.Inventory.Host
             var host = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
-
-            context.Services.AddMvc();
 
             ConfigureAuthentication(context.Services, configuration);
 

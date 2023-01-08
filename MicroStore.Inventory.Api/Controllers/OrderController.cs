@@ -9,7 +9,7 @@ using MicroStore.Inventory.Application.Abstractions.Queries;
 namespace MicroStore.Inventory.Api.Controllers
 {
     [ApiController]
-    [Route("api/inventory/products")]
+    [Route("api/inventory/orders")]
     public class OrderController : MicroStoreApiController
     {
 
@@ -18,7 +18,7 @@ namespace MicroStore.Inventory.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<OrderListDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrderList(PagingQueryParams @params)
+        public async Task<IActionResult> RetirveOrderList([FromQuery] PagingQueryParams @params)
         {
             var query = new GetOrderListQuery
             {
@@ -36,7 +36,7 @@ namespace MicroStore.Inventory.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<OrderListDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveUserOrderList(string userId,PagingQueryParams @params)
+        public async Task<IActionResult> RetirveUserOrderList(string userId, [FromQuery]  PagingQueryParams @params)
         {
             var query = new GetUserOrderListQuery
             {

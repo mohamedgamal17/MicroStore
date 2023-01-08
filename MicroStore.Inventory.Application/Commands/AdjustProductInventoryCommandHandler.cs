@@ -47,7 +47,7 @@ namespace MicroStore.Inventory.Application.Commands
                 AdjustedStock = product.Stock
             };
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted, result);
+            return ResponseResult.Success((int) HttpStatusCode.OK, result);
         }
     }
 }

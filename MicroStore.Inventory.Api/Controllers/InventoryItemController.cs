@@ -14,13 +14,12 @@ namespace MicroStore.Inventory.Api.Controllers
     [Route("api/inventory/products")]
     public class InventoryItemController : MicroStoreApiController
     {
-
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<ProductDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveProductList(PagingQueryParams @params)
+        public async Task<IActionResult> RetriveProductList([FromQuery] PagingQueryParams @params)
         {
             var query = new GetProductListQuery
             {
@@ -84,13 +83,13 @@ namespace MicroStore.Inventory.Api.Controllers
             return FromResult(result);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("adjustquantity/{productsku}")]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductAdjustedInventoryDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductAdjustedInventoryDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> AdjustProductInventory(string productsku, AdjustProductInventoryModel model)
+        public async Task<IActionResult> AdjustProductInventory(string productsku, [FromBody] AdjustProductInventoryModel model)
         {
             var command = new AdjustProductInventoryCommand
             {
