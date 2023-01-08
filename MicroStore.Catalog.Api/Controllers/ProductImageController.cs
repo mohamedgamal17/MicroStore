@@ -2,17 +2,16 @@
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Api.Models.Products;
-using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 namespace MicroStore.Catalog.Api.Controllers
 {
-    [Route("api/productimages")]
+    [Route("api/products/{productId}/productimages")]
     [ApiController]
     public class ProductImageController : MicroStoreApiController
     {
 
-        [Route("{productId}")]
+        [Route("")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
@@ -35,7 +34,7 @@ namespace MicroStore.Catalog.Api.Controllers
             return FromResult(result);
         }
 
-        [Route("{productId}/{productImageId}")]
+        [Route("{productImageId}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
@@ -57,7 +56,7 @@ namespace MicroStore.Catalog.Api.Controllers
             return FromResult(result);
         }
 
-        [Route("{productId}/{productImageId}")]
+        [Route("{productImageId}")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
