@@ -94,15 +94,15 @@ namespace MicroStore.Shipping.Application.Tests.Commands
                 SystemName = FakeConst.ActiveSystem,
                 AddressFrom = new AddressModel
                 {
-                    CountryCode = Guid.NewGuid().ToString(),
-                    City = Guid.NewGuid().ToString(),
-                    State = Guid.NewGuid().ToString(),
-                    PostalCode = Guid.NewGuid().ToString(),
-                    Zip = Guid.NewGuid().ToString(),
-                    Phone = Guid.NewGuid().ToString(),
-                    AddressLine1 = Guid.NewGuid().ToString(),
-                    AddressLine2 = Guid.NewGuid().ToString(),
-                    Name = Guid.NewGuid().ToString()
+                    CountryCode = "US",
+                    State = "CA",
+                    City = "San Jose",
+                    AddressLine1 = "525 S Winchester Blvd",
+                    AddressLine2 = "525 S Winchester Blvd",
+                    Name = "Jane Doe",
+                    Phone = "555-555-5555",
+                    PostalCode = "95128",
+                    Zip = "90241"
                 },
                 Pacakge = new PackageModel
                 {

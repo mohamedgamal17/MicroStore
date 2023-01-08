@@ -20,6 +20,10 @@ namespace MicroStore.Shipping.Application.Tests.Commands
 
             var result = await Send(command);
 
+            result.IsSuccess.Should().BeTrue();
+
+            result.StatusCode.Should().Be((int)HttpStatusCode.Created);
+
             var shipment = await RetriveShipment(result.GetEnvelopeResult<ShipmentDto>().Result.ShipmentId);
 
             var item = command.Items.First();
@@ -44,24 +48,9 @@ namespace MicroStore.Shipping.Application.Tests.Commands
         {
             var fakeShipment = await CreateFakeShipment();
 
-            var command = new CreateShipmentCommand
-            {
-                UserId = Guid.NewGuid().ToString(),
-                OrderId = fakeShipment.OrderId,
-                Address = new AddressModel
-                {
-                    CountryCode = Guid.NewGuid().ToString(),
-                    City = Guid.NewGuid().ToString(),
-                    State = Guid.NewGuid().ToString(),
-                    PostalCode = Guid.NewGuid().ToString(),
-                    Zip = Guid.NewGuid().ToString(),
-                    Phone = Guid.NewGuid().ToString(),
-                    AddressLine1 = Guid.NewGuid().ToString(),
-                    AddressLine2 = Guid.NewGuid().ToString(),
-                    Name = Guid.NewGuid().ToString()
-                },
-                Items = new List<ShipmentItemModel>()
-            };
+            var command = PrepareCreateShipmentCommand();
+
+            command.OrderId = fakeShipment.OrderId;
 
             var result  =  await Send(command);
 
@@ -78,15 +67,15 @@ namespace MicroStore.Shipping.Application.Tests.Commands
                 UserId = Guid.NewGuid().ToString(),
                 Address = new AddressModel
                 {
-                    CountryCode = Guid.NewGuid().ToString(),
-                    City = Guid.NewGuid().ToString(),
-                    State = Guid.NewGuid().ToString(),
-                    PostalCode = Guid.NewGuid().ToString(),
-                    Zip = Guid.NewGuid().ToString(),
-                    Phone = Guid.NewGuid().ToString(),
-                    AddressLine1 = Guid.NewGuid().ToString(),
-                    AddressLine2 = Guid.NewGuid().ToString(),
-                    Name = Guid.NewGuid().ToString()
+                    CountryCode = "US",
+                    State = "CA",
+                    City = "San Jose",
+                    AddressLine1 = "525 S Winchester Blvd",
+                    AddressLine2 = "525 S Winchester Blvd",
+                    Name = "Jane Doe",
+                    Phone = "555-555-5555",
+                    PostalCode = "95128",
+                    Zip = "90241"
                 },
 
                 Items = new List<ShipmentItemModel>

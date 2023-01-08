@@ -73,12 +73,7 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
 
             return  Success(PrepareShipmentFullfilledDto(model.AddressFrom, shipment));
         }
-
-        public Task<bool> IsActive(CancellationToken cancellationToken = default)
-        {
-            return Task.FromResult(true);
-        }
-
+   
         public Task<ResponseResult> RetriveShipmentRates(string externalShipmentId,CancellationToken cancellationToken= default)
         {
             var result = new List<ShipmentRateDto>

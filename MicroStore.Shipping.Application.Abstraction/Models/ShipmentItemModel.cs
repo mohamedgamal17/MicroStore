@@ -1,4 +1,5 @@
-﻿using MicroStore.Shipping.Domain.Entities;
+﻿using FluentValidation;
+using MicroStore.Shipping.Domain.Entities;
 
 namespace MicroStore.Shipping.Application.Abstraction.Models
 {
@@ -26,5 +27,57 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
                 Dimension = Dimension.AsDimension()
             };
         }
+    }
+
+
+    internal class ShipmentItemModelValidator : AbstractValidator<ShipmentItemModel>
+    {
+
+        public ShipmentItemModelValidator()
+        {
+            RuleFor(x => x.ProductId)
+                .NotNull()
+                .WithMessage("Product id is required")
+                .MaximumLength(265)
+                .WithMessage("Product id maximum characters is 265");
+
+            RuleFor(x => x.Name)
+                .NotNull()
+                .WithMessage("Item name is required")
+                .MaximumLength(265)
+                .WithMessage("Item name maximum characters is 265");
+
+            RuleFor(x => x.Sku)
+                .NotNull()
+                .WithMessage("Item sku is required")
+                .MaximumLength(265)
+                .WithMessage("Item sku maximum characters is 265");
+
+            RuleFor(x => x.Thumbnail)
+                .NotNull()
+                .WithMessage("Item Image is required")
+                .MaximumLength(500)
+                .WithMessage("Item Image maximum characters is 265");
+
+            RuleFor(x => x.Quantity)
+                .GreaterThan(0)
+                .WithMessage("Item quantity should be greater than zero");
+
+            RuleFor(x => x.UnitPrice)
+                .GreaterThan(0)
+                .WithMessage("Item unit price should be greater than zero");
+
+
+            RuleFor(x => x.Weight)
+                .NotNull()
+                .WithMessage("Item weight is required")
+                .SetValidator(new WeightModelValidator());
+
+            RuleFor(x => x.Dimension)
+                .NotNull()
+                .WithMessage("Item dimension is required")
+                .SetValidator(new DimesnsionModelValidator());
+        }
+
     }
 }

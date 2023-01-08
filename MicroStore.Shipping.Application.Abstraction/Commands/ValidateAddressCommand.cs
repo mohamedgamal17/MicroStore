@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using MicroStore.Shipping.Application.Abstraction.Dtos;
-using MicroStore.Shipping.Domain.ValueObjects;
+using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 
-namespace MicroStore.Shipping.Application.Abstraction.Models
+namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class AddressModel
+    public class ValidateAddressCommand : ICommand
     {
         public string Name { get; set; }
         public string Phone { get; set; }
@@ -15,52 +14,17 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
         public string Zip { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
-
-
-        public Address AsAddress()
-        {
-            return new AddressBuilder()
-                      .WithCountryCode(CountryCode)
-                      .WithCity(City)
-                      .WithState(State)
-                      .WithPostalCode(PostalCode)
-                      .WithAddressLine(AddressLine1, AddressLine2)
-                      .WithName(Name)
-                      .WithPhone(Phone)
-                      .WithZip(Zip)
-                      .Build();
-        }
-
-
-        public AddressDto AsAddressDto()
-        {
-            return new AddressDto
-            {
-                Name = Name,
-                Phone = Phone,
-                CountryCode = CountryCode,
-                City = City,
-                State = State,
-                PostalCode = PostalCode,
-                Zip = Zip,
-                AddressLine1 = AddressLine1,
-                AddressLine2 = AddressLine2,
-
-            };
-        }
-
     }
 
-
-    internal class AddressValidator : AbstractValidator<AddressModel>
+    internal class ValidateAddressCommandValidator : AbstractValidator<ValidateAddressCommand>
     {
-        public AddressValidator()
+        public ValidateAddressCommandValidator()
         {
             RuleFor(x => x.Name)
-                .NotNull()
-                .WithMessage("Address Name is required")
-                .MaximumLength(400)
-                .WithMessage("Address name maximum length is 400");
+               .NotNull()
+               .WithMessage("Address Name is required")
+               .MaximumLength(400)
+               .WithMessage("Address name maximum length is 400");
 
             RuleFor(x => x.Phone)
                  .NotNull()
@@ -118,7 +82,6 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
             RuleFor(x => x.AddressLine1)
               .Length(6, 128)
               .WithMessage("Addresses should be between 6 and 128 characters long.");
-
         }
     }
 }

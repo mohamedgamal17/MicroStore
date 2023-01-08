@@ -5,7 +5,6 @@ using MicroStore.Shipping.Application.Tests.Fakes;
 using MicroStore.Shipping.Domain.Const;
 using MicroStore.Shipping.Domain.Entities;
 using MicroStore.TestBase;
-using NUnit.Framework;
 using Respawn;
 using Respawn.Graph;
 using System.Linq.Expressions;
