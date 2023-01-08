@@ -12,8 +12,104 @@
 
       "UpstreamPathTemplate": "/mvcgateway/orders",
 
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "SwaggerKey": "Order"
+      "UpstreamHttpMethod": [ "GET" ]
+
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/orders/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7226
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/orders/user/{orderId}",
+
+      "UpstreamHttpMethod": [ "GET" ]
+
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/orders/user/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7226
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/orders/user/{userId}",
+
+      "UpstreamHttpMethod": [ "GET" ]
+
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/orders/submit",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7226
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/orders/submit",
+
+      "UpstreamHttpMethod": [ "POST" ]
+
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/orders/fullfill/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7226
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/orders/fullfill/{orderId}",
+
+      "UpstreamHttpMethod": [ "POST" ]
+
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/orders/complete/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7226
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/orders/complete/{orderId}",
+
+      "UpstreamHttpMethod": [ "POST" ]
+
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/cancel/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7226
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/orders/cancel/{orderId}",
+
+      "UpstreamHttpMethod": [ "POST" ]
+
     }
+
   ]
 }
