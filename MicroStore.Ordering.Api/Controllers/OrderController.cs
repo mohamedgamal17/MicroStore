@@ -28,7 +28,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<OrderListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrderList(PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> RetirveOrderList([FromQuery]PagingAndSortingQueryParams @params)
         {
             var query = new GetOrderListQuery
             {
@@ -48,7 +48,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<OrderListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveUserOrderList(string userId,PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> RetirveUserOrderList(string userId, [FromQuery]  PagingAndSortingQueryParams @params)
         {
             var query = new GetUserOrderListQuery
             {
@@ -69,7 +69,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<OrderListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrderList(Guid orderId, PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> RetirveOrderList(Guid orderId, [FromQuery] PagingAndSortingQueryParams @params)
         {
             var query = new GetOrderQuery
             {
@@ -150,7 +150,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CancelOrder(Guid orderId, CancelOrderModel model)
+        public async Task<IActionResult> CancelOrder(Guid orderId, [FromBody] CancelOrderModel model)
         {
             var command = new CancelOrderCommand
             {
