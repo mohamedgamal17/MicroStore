@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/baskets",
+      "DownstreamPathTemplate": "/api/baskets/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -10,9 +10,65 @@
         }
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/baskets",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "SwaggerKey": "Basket"
+      "UpstreamPathTemplate": "/mvcgateway/baskets/{userId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+
+    {
+      "DownstreamPathTemplate": "/api/baskets/update",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7268
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/baskets/update",
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/baskets/additem",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7268
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/baskets/additem",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/baskets/removeitem",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7268
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/baskets/removeitem",
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/baskets/migrate",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7268
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/baskets/migrate",
+      "UpstreamHttpMethod": [ "PUT" ]
     }
+
   ]
 }
