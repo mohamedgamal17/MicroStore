@@ -27,9 +27,5 @@
    <ProjectReference Include="..\MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj" />
    <ProjectReference Include="..\MicroStore.Payment.IntegrationEvents\MicroStore.Payment.IntegrationEvents.csproj" />
  </ItemGroup>
-  
- <ItemGroup>
-   <Folder Include="Abstractions\" />
- </ItemGroup>
 
 </Project>
