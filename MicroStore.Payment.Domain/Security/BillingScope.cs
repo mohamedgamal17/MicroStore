@@ -2,28 +2,45 @@
 {
     public static class BillingScope
     {
+
+        public static List<string> List()
+        {
+            return new List<string>
+            {
+                Payment.List,
+                Payment.Read,
+                Payment.Create,
+                Payment.Process,
+                Payment.Complete,
+                Payment.Cancel,
+                System.List,
+                System.Read,
+                System.Update
+            };
+        }
+
         public static class Payment
         {
-            public static readonly string List = "billing.payment.list";
+            public const string List = "billing.payment.list";
 
-            public static readonly string Read = "billing.payment.read";
+            public const string Read = "billing.payment.read";
 
-            public static readonly string Create = "billing.payment.create";
+            public const string Create = "billing.payment.create";
 
-            public static readonly string Process = "billing.payment.process";
+            public const string Process = "billing.payment.process";
 
-            public static readonly string Complete = "billing.payment.complete";
+            public const string Complete = "billing.payment.complete";
 
-            public static readonly string Cancel = "billing.payment.cancel";
+            public const string Cancel = "billing.payment.cancel";
         }
 
         public static class System
         {
-            public static readonly string List = "billing.system.list";
+            public const string List = "billing.system.list";
 
-            public static readonly string Read = "billing.system.read";
+            public const string Read = "billing.system.read";
 
-            public static readonly string Update = "billing.system.update";
+            public const string Update = "billing.system.update";
         }
     }
 }

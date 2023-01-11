@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
+using MicroStore.Payment.Domain.Security;
 using MicroStore.Payment.Plugin.StripeGateway;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
@@ -76,6 +78,8 @@ namespace MicroStore.Payment.Api.Host
                     options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
                     options.OAuthScopeSeparator(",");
 
+                    options.OAuthScopes(BillingScope.List().ToArray());
+
                 });
 
 
@@ -106,7 +110,7 @@ namespace MicroStore.Payment.Api.Host
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Payment Api", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,

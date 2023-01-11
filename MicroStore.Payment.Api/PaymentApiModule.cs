@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Payment.Application;
-using Volo.Abp.AspNetCore;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 namespace MicroStore.Payment.Api
 {
 
     [DependsOn(typeof(PaymentApplicationModule),
-        typeof(AbpAspNetCoreMvcModule),
+        typeof(MicroStoreAspNetCoreModule),
          typeof(MediatorModule))]
     public class PaymentApiModule : AbpModule
     {
