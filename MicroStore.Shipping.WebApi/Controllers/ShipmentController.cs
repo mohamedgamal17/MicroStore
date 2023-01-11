@@ -1,23 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Queries;
+using MicroStore.Shipping.Domain.Security;
 using MicroStore.Shipping.WebApi.Models.Shipments;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/shipments")]
     public class ShipmentController : MicroStoreApiController
     {
 
         [HttpGet]
         [Route("")]
+        [RequiredScope(ShippingScope.Shipment.List)]
         [ProducesResponseType(StatusCodes.Status200OK,Type= typeof(Envelope<PagedResult<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type= typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError,Type= typeof(Envelope))]
@@ -36,6 +41,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpGet]
         [Route("user/{userId}")]
+        [RequiredScope(ShippingScope.Shipment.List)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
@@ -55,6 +61,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpGet]
         [Route("order_id/{orderId}")]
+        [RequiredScope(ShippingScope.Shipment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
@@ -72,6 +79,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpGet]
         [Route("{shipmentId}")]
+        [RequiredScope(ShippingScope.Shipment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
@@ -89,6 +97,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
+        [RequiredScope(ShippingScope.Shipment.Create)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<ShipmentDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
@@ -109,6 +118,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("fullfill/{shipmentId}")]
+        [RequiredScope(ShippingScope.Shipment.Fullfill)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ShipmentFullfilledDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]

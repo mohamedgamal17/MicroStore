@@ -1,17 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Models;
+using MicroStore.Shipping.Domain.Security;
 using MicroStore.Shipping.WebApi.Models.Addresses;
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/addresses")]
     public class AddressController : MicroStoreApiController
     {
         [HttpPost]
+        [RequiredScope(ShippingScope.Address.Validate)]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<AddressValidationResultModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]

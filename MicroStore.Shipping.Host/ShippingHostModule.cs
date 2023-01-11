@@ -9,6 +9,8 @@ using Volo.Abp.Autofac;
 using MicroStore.Shipping.Plugin.ShipEngineGateway;
 using MicroStore.Shipping.WebApi;
 using Volo.Abp.AspNetCore.Mvc;
+using MicroStore.Shipping.Domain.Security;
+using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 
 namespace MicroStore.Shipping.Host
 {
@@ -78,6 +80,7 @@ namespace MicroStore.Shipping.Host
                     options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
                     options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
                     options.OAuthScopeSeparator(",");
+                    options.OAuthScopes(ShippingScope.List().ToArray());
 
                 });
 
@@ -106,10 +109,10 @@ namespace MicroStore.Shipping.Host
         {
             serviceCollection.AddSwaggerGen((options) =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Payment Api", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Shipment Api", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,

@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.JsonPatch.Operations;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.ShoppingCart.Api.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using MicroStore.ShoppingCart.Api.Security;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
@@ -17,7 +14,7 @@ using Volo.Abp.Modularity;
 
 namespace MicroStore.ShoppingCart.Api
 {
-    [DependsOn(typeof(AbpAspNetCoreMvcModule),
+    [DependsOn(typeof(MicroStoreAspNetCoreModule),
             typeof(AbpAutofacModule),
             typeof(AbpAspNetCoreSerilogModule),
             typeof(AbpCachingStackExchangeRedisModule),
@@ -109,7 +106,7 @@ namespace MicroStore.ShoppingCart.Api
                     options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
                     options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
                     options.OAuthScopeSeparator(",");
-                    options.OAuthScopes("basket.fullaccess");
+                    options.OAuthScopes(BasketScope.List().ToArray());
 
                 });
 

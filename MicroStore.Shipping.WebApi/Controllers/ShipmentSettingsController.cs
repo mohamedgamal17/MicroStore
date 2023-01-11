@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Commands;
+using MicroStore.Shipping.Application.Abstraction.Queries;
+using MicroStore.Shipping.Domain.Security;
 using MicroStore.Shipping.WebApi.Models.Settings;
 
 namespace MicroStore.Shipping.WebApi.Controllers
@@ -14,15 +17,21 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpGet]
         [Route("")]
+        [RequiredScope(ShippingScope.Settings.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(Envelope))]
-        public Task<IActionResult> GetShipmentSettings()
+        public async Task<IActionResult> GetShipmentSettings()
         {
-            throw new NotImplementedException();
+            var query = new GetShippingSettingsQuery();
+
+            var result = await Send(query);
+
+            return FromResult(result);
         }
 
 
         [HttpPost]
         [Route("")]
+        [RequiredScope(ShippingScope.Settings.Update)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]

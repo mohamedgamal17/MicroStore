@@ -3,10 +3,21 @@
     public static class BasketScope
     {
 
-        public static readonly string Read = "basket.read";
+        public const string Read = "basket.read";
 
-        public static readonly string Update = "basket.update";
+        public const string Update = "basket.update";
 
-        public static readonly string Migrate = "baske.migrate";
+        public const string Migrate = "basket.migrate";
+
+
+        public static List<string> List()
+        {
+            return new List<string>()
+            {
+                Read,
+                Update,
+                Migrate
+            };
+        }
     }
 }
