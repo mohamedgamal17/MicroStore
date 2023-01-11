@@ -1,6 +1,8 @@
 ﻿using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
@@ -8,11 +10,13 @@ using MicroStore.Ordering.Api.Models;
 using MicroStore.Ordering.Application.Abstractions.Commands;
 using MicroStore.Ordering.Application.Abstractions.Dtos;
 using MicroStore.Ordering.Application.Abstractions.Queries;
+using MicroStore.Ordering.Application.Abstractions.Security;
 using MicroStore.Ordering.Application.Dtos;
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/orders")]
     [ApiController]
+    [Authorize]
     public class OrderController : MicroStoreApiController
     {
 
@@ -25,9 +29,12 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("")]
+        [RequiredScope(OrderingScope.Order.List)]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<OrderListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> RetirveOrderList([FromQuery]PagingAndSortingQueryParams @params)
         {
             var query = new GetOrderListQuery
@@ -45,9 +52,12 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("user/{userId}")]
+        [RequiredScope(OrderingScope.Order.List)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<OrderListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> RetirveUserOrderList(string userId, [FromQuery]  PagingAndSortingQueryParams @params)
         {
             var query = new GetUserOrderListQuery
@@ -66,10 +76,13 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("{orderId}")]
+        [RequiredScope(OrderingScope.Order.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<OrderListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrderList(Guid orderId, [FromQuery] PagingAndSortingQueryParams @params)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        public async Task<IActionResult> RetirveOrder(Guid orderId, [FromQuery] PagingAndSortingQueryParams @params)
         {
             var query = new GetOrderQuery
             {
@@ -83,9 +96,12 @@ namespace MicroStore.Ordering.Api.Controllers
 
 
         [HttpPost("submit")]
+        [RequiredScope(OrderingScope.Order.Submit)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(OrderSubmitedDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> SubmitOrder([FromBody]SubmitOrderModel model)
         {
             var command = new SubmitOrderCommand
@@ -109,9 +125,12 @@ namespace MicroStore.Ordering.Api.Controllers
 
 
         [HttpPost("fullfill/{orderId}")]
+        [RequiredScope(OrderingScope.Order.Fullfill)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> FullfillOrder(Guid orderId,[FromBody] FullfillOrderModel model)
         {
             var command = new FullfillOrderCommand
@@ -127,10 +146,12 @@ namespace MicroStore.Ordering.Api.Controllers
 
 
         [HttpPost("complete/{orderId}")]
-
+        [RequiredScope(OrderingScope.Order.Complete)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> CompleteOrder(Guid orderId)
         {
             var command = new CompleteOrderCommand
@@ -147,9 +168,12 @@ namespace MicroStore.Ordering.Api.Controllers
 
 
         [HttpPost("cancel/{orderId}")]
+        [RequiredScope(OrderingScope.Order.Cancel)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> CancelOrder(Guid orderId, [FromBody] CancelOrderModel model)
         {
             var command = new CancelOrderCommand

@@ -3,19 +3,32 @@
     public static class OrderingScope
     {
 
+        public static List<string> List()
+        {
+            return new List<string>
+            {
+                Order.List,
+                Order.Read,
+                Order.Submit,
+                Order.Fullfill,
+                Order.Complete,
+                Order.Cancel
+            };
+        }
+
         public static class Order
         {
-            public static readonly string List = "ordering.order.list";
+            public const string List = "ordering.order.list";
 
-            public static readonly string Read = "ordering.order.read";
+            public const string Read = "ordering.order.read";
 
-            public static readonly string Submit = "ordering.order.submit";
+            public const string Submit = "ordering.order.submit";
 
-            public static readonly string Fullfill = "ordering.order.fullfill";
+            public const string Fullfill = "ordering.order.fullfill";
 
-            public static readonly string Complete = "ordering.order.complete";
+            public const string Complete = "ordering.order.complete";
 
-            public static readonly string Cancel = "ordering.order.cancel";
+            public const string Cancel = "ordering.order.cancel";
         }
     }
 }
