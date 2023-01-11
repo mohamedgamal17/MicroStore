@@ -1,26 +1,29 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Api.Models.Products;
-using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using MicroStore.Catalog.Application.Abstractions.Products.Commands;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Application.Abstractions.Products.Queries;
+using MicroStore.Catalog.Domain.Security;
 
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/products")]
     [ApiController]
+    [Authorize]
     public class ProductController : MicroStoreApiController
     {
         [Route("")]
         [HttpGet]
+        [RequiredScope(CatalogScope.Product.List)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ProductListDto>>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetCatalogProductList(PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> GetCatalogProductList([FromQuery] PagingAndSortingQueryParams @params)
         {
             var request = new GetProductListQuery
             {
@@ -38,6 +41,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{id}")]
         [HttpGet]
+        [RequiredScope(CatalogScope.Product.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<ProductDto>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -52,10 +56,9 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("")]
         [HttpPost]
+        [RequiredScope(CatalogScope.Product.Create)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Post([FromBody] CreateProductModel model)
         {
@@ -85,11 +88,10 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{id}")]
         [HttpPut]
+        [RequiredScope(CatalogScope.Product.Update)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put(Guid id, [FromForm] UpdateProductModel model)
         {

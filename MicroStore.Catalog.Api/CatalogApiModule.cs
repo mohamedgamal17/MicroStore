@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Catalog.Application;
+using MicroStore.Catalog.Domain.Security;
 using MicroStore.Catalog.Infrastructure;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
@@ -15,7 +17,7 @@ namespace MicroStore.Catalog.Api
 {
     [DependsOn(typeof(CatalogApplicationModule),
         typeof(CatalogInfrastructureModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcModule),
+    [DependsOn(typeof(MicroStoreAspNetCoreModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(MediatorModule))]
@@ -28,7 +30,7 @@ namespace MicroStore.Catalog.Api
             var configuration = context.Services.GetConfiguration();
 
             ConfigureAuthentication(context.Services,configuration);
-            ConfigureSwagger(context.Services);
+            ConfigureSwagger(context.Services, configuration);
 
             Configure<AbpExceptionHandlingOptions>(options =>
             {
@@ -56,6 +58,8 @@ namespace MicroStore.Catalog.Api
             {
                 options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                options.MapInboundClaims = true;
+ 
             });
 
         }
@@ -64,14 +68,20 @@ namespace MicroStore.Catalog.Api
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
+        var config = context.GetConfiguration();
 
-        if (env.IsDevelopment())
+            if (env.IsDevelopment())
         {
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
+                options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
+                options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");
+                options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
+
+                options.OAuthScopes(CatalogScope.List().ToArray());
             });
 
 
@@ -81,7 +91,6 @@ namespace MicroStore.Catalog.Api
 
 
         app.UseAbpRequestLocalization();
-
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
@@ -97,13 +106,28 @@ namespace MicroStore.Catalog.Api
 
 
 
-    private void ConfigureSwagger(IServiceCollection serviceCollection)
+    private void ConfigureSwagger(IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.AddSwaggerGen((options) =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog Api", Version = "v1" });
             options.DocInclusionPredicate((docName, description) => true);
             options.CustomSchemaIds(type => type.FullName);
+            options.OperationFilter<AuthorizeCheckOperationFilter>();
+            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+
+                Flows = new OpenApiOAuthFlows
+                {
+                    ClientCredentials = new OpenApiOAuthFlow
+                    {
+                        AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")),
+                        TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")),
+                    }           
+                }
+            });
+
         });
     }
 
