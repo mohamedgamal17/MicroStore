@@ -37,4 +37,20 @@ namespace MicroStore.BuildingBlocks.Results
             return new ResponseResult(true,code, Envelope.Success(value));
         }    
     }
+
+    public class ResponseResult<T>
+    {
+        public int StatusCode { get; }
+        public bool IsSuccess { get; }
+        public bool IsFailure => !IsSuccess;
+
+        public Envelope<T> Envelope { get; }
+
+        public ResponseResult(bool success, int statusCode, Envelope<T> envelope)
+        {
+            IsSuccess = success;
+            StatusCode = statusCode;
+            Envelope = envelope;
+        }
+    } 
 }
