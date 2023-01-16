@@ -40,7 +40,7 @@ namespace MicroStore.Payment.Application.Queries
         {
             return sortBy.ToLower() switch
             {
-                "creation" => desc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
+                "creation" => desc ? query.OrderByDescending(x => x.CreationTime) : query.OrderBy(x => x.CreationTime),
                 _ => query
             };
         }

@@ -52,11 +52,11 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
 
             if (desc)
             {
-                result.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+                result.Items.Should().BeInDescendingOrder(x => x.CreationTime);
             }
             else
             {
-                result.Items.Should().BeInAscendingOrder(x => x.CreatedAt);
+                result.Items.Should().BeInAscendingOrder(x => x.CreationTime);
             }
         }
     }
