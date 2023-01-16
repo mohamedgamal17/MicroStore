@@ -24,7 +24,7 @@ namespace MicroStore.Shipping.Application.Queries
                .AsNoTracking()
                .ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            var result = await query.SingleOrDefaultAsync(x => x.ShipmentId == request.ShipmentId, cancellationToken);
+            var result = await query.SingleOrDefaultAsync(x => x.Id == request.ShipmentId, cancellationToken);
 
             if (result == null)
             {

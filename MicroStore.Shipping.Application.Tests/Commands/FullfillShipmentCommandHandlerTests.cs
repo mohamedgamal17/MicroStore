@@ -28,7 +28,7 @@ namespace MicroStore.Shipping.Application.Tests.Commands
 
             shipment.Should().NotBeNull();
 
-            shipment?.ShipmentExternalId.Should().Be(result.GetEnvelopeResult<ShipmentFullfilledDto>().Result.ExternalShipmentId);
+            shipment?.ShipmentExternalId.Should().Be(result.GetEnvelopeResult<ShipmentDto>().Result.ShipmentExternalId);
 
             shipment?.Status.Should().Be(ShipmentStatus.Fullfilled);
 

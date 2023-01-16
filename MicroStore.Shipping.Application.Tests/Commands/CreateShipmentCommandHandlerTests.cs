@@ -24,7 +24,7 @@ namespace MicroStore.Shipping.Application.Tests.Commands
 
             result.StatusCode.Should().Be((int)HttpStatusCode.Created);
 
-            var shipment = await RetriveShipment(result.GetEnvelopeResult<ShipmentDto>().Result.ShipmentId);
+            var shipment = await RetriveShipment(result.GetEnvelopeResult<ShipmentDto>().Result.Id);
 
             var item = command.Items.First();
 

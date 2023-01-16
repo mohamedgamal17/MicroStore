@@ -1,8 +1,9 @@
-﻿namespace MicroStore.Shipping.Application.Abstraction.Dtos
+﻿using Volo.Abp.Application.Dtos;
+
+namespace MicroStore.Shipping.Application.Abstraction.Dtos
 {
-    public class ShipmentItemDto
+    public class ShipmentItemDto : EntityDto<Guid>
     {
-        public Guid ItemId { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
         public string ProductId { get; set; }

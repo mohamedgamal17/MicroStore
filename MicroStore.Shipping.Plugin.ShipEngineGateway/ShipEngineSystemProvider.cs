@@ -121,14 +121,8 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
                 await _shipmentRepository.UpdateAsync(shipment);
 
-                return new ShipmentFullfilledDto
-                {
-                    ShipmentId = shipment.Id,
-                    ExternalShipmentId = shipment.ShipmentExternalId,
-                    Items = _objectMapper.Map<List<MicroStore.Shipping.Domain.Entities.ShipmentItem>, List<ShipmentItemDto>>(shipment.Items),
-                    AddressFrom = _objectMapper.Map<ShipEngineAddress, AddressDto>(result.ShipFrom),
-                    AddressTo = _objectMapper.Map<ShipEngineAddress, AddressDto>(result.ShipTo)
-                };
+
+                return _objectMapper.Map<MicroStore.Shipping.Domain.Entities.Shipment, ShipmentDto>(shipment);
             });
                      
         }
@@ -154,12 +148,12 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
                 return result.RateResponse.Rates.Select(x => new ShipmentRateDto
                 {
-                    RateId = x.RateId,
+                    Id = x.RateId,
 
                     Amount = new MoneyDto
                     {
                         Currency = x.ShippingAmount.Currency.ToString(),
-                        Value = (double)(x.ShippingAmount.Amount + x.InsuranceAmount.Amount + x.OtherAmount.Amount),
+                        Value = (double)((x.ShippingAmount?.Amount + x.InsuranceAmount?.Amount + x.OtherAmount?.Amount) ?? 0),
                     },
 
                     CarrierId = x.CarrierId,
@@ -338,7 +332,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                 ShippingDate = x.ShipDate,
                 Money = new MoneyDto
                 {
-                    Value =  (x.InsuranceAmount.Amount!.Value + x.OtherAmount.Amount!.Value + x.ShippingAmount.Amount!.Value),  
+                    Value =  (x.InsuranceAmount?.Amount + x.OtherAmount?.Amount + x.ShippingAmount?.Amount) ?? 0,  
                     Currency = x.ShippingAmount?.Currency.ToString(),
                 }
 

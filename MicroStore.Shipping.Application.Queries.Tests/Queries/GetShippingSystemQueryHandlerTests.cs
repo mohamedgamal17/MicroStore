@@ -20,7 +20,7 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
 
             var result = response.GetEnvelopeResult<ShipmentSystemDto>().Result;
 
-            result.SystemId.Should().Be(query.SystemId);
+            result.Id.Should().Be(query.SystemId);
         }
 
         [Test]

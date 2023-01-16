@@ -9,7 +9,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Profiles
         public ShipmentItemProfile()
         {
             CreateMap<ShipmentItem, ShipmentItemDto>()
-                .ForMember(x => x.ItemId, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.Name, opt => opt.MapFrom(c => c.Name))
                 .ForMember(x => x.Sku, opt => opt.MapFrom(c => c.Sku))
                 .ForMember(x => x.ProductId, opt => opt.MapFrom(c => c.ProductId))

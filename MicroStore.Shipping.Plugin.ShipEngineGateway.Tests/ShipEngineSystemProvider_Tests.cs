@@ -59,11 +59,11 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             responseResult.StatusCode.Should().Be((int) HttpStatusCode.OK);
 
-            var result = responseResult.GetEnvelopeResult<ShipmentFullfilledDto>().Result;
+            var result = responseResult.GetEnvelopeResult<ShipmentDto>().Result;
 
-            var shipment = await SingleAsync<Shipment>(x=> x.Id == result.ShipmentId);
+            var shipment = await SingleAsync<Shipment>(x=> x.Id == result.Id);
 
-            shipment.ShipmentExternalId.Should().Be(result.ExternalShipmentId);
+            shipment.ShipmentExternalId.Should().Be(result.ShipmentExternalId);
 
             shipment.SystemName.Should().Be(ShipEngineConst.SystemName);
 
@@ -86,7 +86,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             result.Count.Should().NotBe(0);
             var rate = result.First();
-            rate.RateId.Should().NotBeNull();
+            rate.Id.Should().NotBeNull();
             rate.CarrierId.Should().NotBeNull();
             rate.Amount.Should().NotBeNull();
             rate.Amount.Value.Should().NotBe(0);
@@ -110,7 +110,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             var model = new BuyShipmentLabelModel
             {
-                ShipmentRateId = rates.First().RateId
+                ShipmentRateId = rates.First().Id
             };
 
             var responseResult = await sut.BuyShipmentLabel(fakeShipment.ShipmentExternalId!, model);

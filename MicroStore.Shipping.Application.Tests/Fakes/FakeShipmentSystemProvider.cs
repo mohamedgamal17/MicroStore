@@ -71,7 +71,7 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
 
             await _shipmentRepsoitory.UpdateAsync(shipment);
 
-            return  Success(PrepareShipmentFullfilledDto(model.AddressFrom, shipment));
+            return  Success(_objectMapper.Map<Shipment,ShipmentDto>(shipment));
         }
    
         public Task<ResponseResult> RetriveShipmentRates(string externalShipmentId,CancellationToken cancellationToken= default)
@@ -80,7 +80,7 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
             {
                 new ShipmentRateDto
                 {
-                    RateId = Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid().ToString(),
                     ServiceLevel = new ServiceLevelDto
                     {
                         Code ="NAN",
@@ -100,42 +100,7 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
             return Task.FromResult(Success(result));
         }
 
-        private ShipmentFullfilledDto PrepareShipmentFullfilledDto(AddressModel addresFrom ,Shipment shipment)
-        {
-            return new ShipmentFullfilledDto
-            {
-                ShipmentId = shipment.Id,
-                ExternalShipmentId = shipment.ShipmentExternalId,
-                AddressFrom = new AddressDto
-                {
-                    Name = addresFrom.Name,
-                    Phone = addresFrom.Phone,
-                    CountryCode = addresFrom.CountryCode,
-                    City = addresFrom.City,
-                    State = addresFrom.State,
-                    PostalCode = addresFrom.PostalCode,
-                    Zip = addresFrom.Zip,
-                    AddressLine1 = addresFrom.AddressLine1,
-                    AddressLine2 = addresFrom.AddressLine2
-
-                },
-
-                AddressTo = new AddressDto
-                {
-                    Name = shipment.Address.Name,
-                    Phone = shipment.Address.Phone,
-                    CountryCode = shipment.Address.CountryCode,
-                    City = shipment.Address.City,
-                    State = shipment.Address.State,
-                    PostalCode = shipment.Address.PostalCode,
-                    Zip = shipment.Address.Zip,
-                    AddressLine1 = shipment.Address.AddressLine1,
-                    AddressLine2 = shipment.Address.AddressLine2
-                },
-                Items = new List<ShipmentItemDto>()
-            };
-        }
-
+ 
         public Task<List<CarrierModel>> ListCarriers(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();

@@ -29,7 +29,7 @@ namespace MicroStore.Shipping.Application.Tests.Commands
 
 
 
-            var shipment = await RetriveShipment(result.GetEnvelopeResult<ShipmentDto>().Result.ShipmentId);
+            var shipment = await RetriveShipment(result.GetEnvelopeResult<ShipmentDto>().Result.Id);
 
             shipment.Should().NotBeNull();
 

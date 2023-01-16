@@ -8,7 +8,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Profiles
         public ShipmentProfile()
         {
             CreateMap<Shipment, ShipmentDto>()
-                .ForMember(x => x.ShipmentId, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.OrderId, opt => opt.MapFrom(c => c.OrderId))
                 .ForMember(x => x.ShipmentExternalId, opt => opt.MapFrom(c => c.ShipmentExternalId))
                 .ForMember(x => x.ShipmentLabelExternalId, opt => opt.MapFrom(c => c.ShipmentLabelExternalId))
@@ -19,7 +19,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Profiles
                 .ForMember(x => x.Status, opt => opt.MapFrom(c => c.Status));
 
             CreateMap<Shipment , ShipmentListDto>()
-                .ForMember(x => x.ShipmentId, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.OrderId, opt => opt.MapFrom(c => c.OrderId))
                 .ForMember(x => x.ShipmentExternalId, opt => opt.MapFrom(c => c.ShipmentExternalId))
                 .ForMember(x => x.ShipmentLabelExternalId, opt => opt.MapFrom(c => c.ShipmentLabelExternalId))

@@ -119,7 +119,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpPost]
         [Route("fullfill/{shipmentId}")]
         [RequiredScope(ShippingScope.Shipment.Fullfill)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ShipmentFullfilledDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ShipmentDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> FullfillShipment(Guid shipmentId, [FromBody] FullfillShipmentModel model)

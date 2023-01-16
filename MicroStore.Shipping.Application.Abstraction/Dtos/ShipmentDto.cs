@@ -1,8 +1,9 @@
-﻿namespace MicroStore.Shipping.Application.Abstraction.Dtos
+﻿using Volo.Abp.Application.Dtos;
+
+namespace MicroStore.Shipping.Application.Abstraction.Dtos
 {
-    public class ShipmentDto
+    public class ShipmentDto : EntityDto<Guid>
     {
-        public Guid ShipmentId { get; set; }
         public string OrderId { get; set; }
         public string UserId { get; set; }
         public AddressDto Address { get; set; }
