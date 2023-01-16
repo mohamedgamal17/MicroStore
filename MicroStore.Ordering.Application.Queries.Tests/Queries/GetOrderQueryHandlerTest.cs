@@ -21,7 +21,7 @@ namespace MicroStore.Ordering.Application.Queries.Tests.Queries
 
             var result = response.GetEnvelopeResult<OrderDto>().Result;
 
-            result.OrderId.Should().Be(query.OrderId);
+            result.Id.Should().Be(query.OrderId);
         }
 
         [Test]

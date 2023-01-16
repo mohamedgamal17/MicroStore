@@ -1,9 +1,10 @@
 ﻿using MicroStore.Ordering.Events.Models;
+using Volo.Abp.Application.Dtos;
+
 namespace MicroStore.Ordering.Application.Abstractions.Dtos
 {
-    public class OrderDto
+    public class OrderDto : EntityDto<Guid>
     {
-        public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
         public AddressDto ShippingAddress { get; set; }
         public AddressDto BillingAddress { get; set; }

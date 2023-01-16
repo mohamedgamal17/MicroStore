@@ -1,8 +1,9 @@
-﻿namespace MicroStore.Ordering.Application.Abstractions.Dtos
+﻿using Volo.Abp.Application.Dtos;
+
+namespace MicroStore.Ordering.Application.Abstractions.Dtos
 {
-    public class OrderListDto
+    public class OrderListDto : EntityDto<Guid>
     {
-        public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
         public AddressDto ShippingAddress { get; set; }
         public AddressDto BillingAddress { get; set; }
