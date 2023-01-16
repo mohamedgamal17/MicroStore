@@ -1,3 +1,4 @@
+using MicroStore.Gateway.Shopping.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ocelot.DependencyInjection;
@@ -27,21 +28,16 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
         .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
         .AddJsonFile("appsettings.json", true, true)
         .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
-          .AddOcelot($"etc/{hostingContext.HostingEnvironment.EnvironmentName.ToLower()}",hostingContext.HostingEnvironment)
+         .AddOcelot($"etc/{hostingContext.HostingEnvironment.EnvironmentName.ToLower()}",hostingContext.HostingEnvironment)
         .AddEnvironmentVariables();
 
    
 });
 
 
-builder.Services.AddOcelot();
-
-builder.Services.AddSwaggerForOcelot(builder.Configuration, swagg =>
-{
-    swagg.GenerateDocsForGatewayItSelf = true;
 
 
-});
+builder.Services.ConfigureCoreServices(builder.Configuration);
 
 builder.Services.AddMvc();
 
@@ -49,18 +45,8 @@ builder.Host.UseSerilog();
 
 var app = builder.Build();
 
+app.UseAuthentication();
 
-app.UseSwaggerForOcelotUI(opt =>
-{
-    opt.PathToSwaggerGenerator = "/swagger/docs";
-
-    opt.ReConfigureUpstreamSwaggerJson = (_, swaggerJson) =>
-    {
-        var swagger = JObject.Parse(swaggerJson);
-        // ... alter upstream json
-        return swagger.ToString(Formatting.Indented);
-    };
-});
 app.UseOcelot().Wait();
 
 app.MapGet("/", () => "Hello World!");

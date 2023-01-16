@@ -11,7 +11,14 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipments",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.shipment.list" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/shipments/user/{userId}",
@@ -23,7 +30,14 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipments/user/{userId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.shipment.list" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/shipments/order_id/{orderId}",
@@ -35,7 +49,14 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipments/order_id/{orderId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.shipment.read" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/shipments/{shipmentId}",
@@ -47,7 +68,14 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipments/{shipmentId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.shipment.read" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -60,7 +88,14 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipments",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.shipment.create" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -73,7 +108,14 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipments/fullfill/{shipmentId}",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.shipment.fullfill" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -87,7 +129,13 @@
       ],
       "UpstreamPathTemplate": "/mvcgateway/labels/buylabel",
       "UpstreamHttpMethod": [ "POST" ],
-      "SwaggerKey": "Shipping"
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.label.buy" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -101,7 +149,13 @@
       ],
       "UpstreamPathTemplate": "/mvcgateway/rates/retrive",
       "UpstreamHttpMethod": [ "POST" ],
-      "SwaggerKey": "Shipping"
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.rate.retrive" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -115,7 +169,13 @@
       ],
       "UpstreamPathTemplate": "/mvcgateway/rates/estimate",
       "UpstreamHttpMethod": [ "POST" ],
-      "SwaggerKey": "Shipping"
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.rate.estimate" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
 
 
@@ -131,7 +191,13 @@
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipmentsettings",
       "UpstreamHttpMethod": [ "GET" ],
-      "SwaggerKey": "/Shipping"
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.settings.read" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -145,7 +211,13 @@
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipmentsettings",
       "UpstreamHttpMethod": [ "POST" ],
-      "SwaggerKey": "/Shipping"
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.shipping.settings.update" ]
+      },
+      "DelegatingHandlers": [
+        "ShippingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {

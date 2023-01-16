@@ -11,7 +11,15 @@
       ],
 
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/products"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.product.list" ]
+      },
+
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -25,7 +33,14 @@
       ],
 
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/products/external_product_id/{externalid}"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products/external_product_id/{externalid}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.product.read" ]
+      },
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -39,7 +54,14 @@
       ],
 
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/products/sku/{productsku}"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products/sku/{productsku}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.product.read" ]
+      },
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -53,7 +75,14 @@
       ],
 
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/products/{productId}"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products/{productId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.product.read" ]
+      },
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -67,7 +96,14 @@
       ],
 
       "UpstreamHttpMethod": [ "POST" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/products/adjustQuantity/{productsku}"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/products/adjustQuantity/{productsku}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.product.adjustquantity" ]
+      },
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -81,7 +117,14 @@
       ],
 
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/orders"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/orders",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.order.list" ]
+      },
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/inventory/orders/user/userId",
@@ -94,7 +137,14 @@
       ],
 
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/user/userId"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/user/userId",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.order.list" ]
+      },
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/inventory/orders/external_order_id/{externalid}",
@@ -107,7 +157,14 @@
       ],
 
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/external_order_id/{externalid}"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/external_order_id/{externalid}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.order.read" ]
+      },
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/inventory/orders/{orderId}",
@@ -120,7 +177,14 @@
       ],
 
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/{orderId}"
+      "UpstreamPathTemplate": "/mvcgateway/inventory/orders/{orderId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.inventory.order.read" ]
+      },
+      "DelegatingHandlers": [
+        "InventoryTokenExchangeDelegatingHandler"
+      ]
     }
 
   ]

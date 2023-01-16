@@ -12,7 +12,15 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/payments",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.payment.list" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/payments/user/{userId}",
@@ -25,7 +33,15 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/payments/user/{userId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.payment.list" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -39,7 +55,15 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/payments/{paymentId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.payment.read" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -53,7 +77,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/payments/order_id/{orderId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.payment.read" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -67,7 +98,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/payments",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.payment.create" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/payments/process/{paymentId}",
@@ -80,7 +118,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/payments/process/{paymentId}",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.payment.process" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -94,7 +139,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/payments/complete",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.payment.complete" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
 
@@ -112,7 +164,13 @@
 
       "UpstreamPathTemplate": "/mvcgateway/paymentsystems",
       "UpstreamHttpMethod": [ "GET" ],
-      "SwaggerKey": "Payment"
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.system.list" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -126,7 +184,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/paymentsystems/{systemId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.system.read" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -140,7 +205,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/paymentsystems/system_name/{systemName}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.system.read" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -155,6 +227,13 @@
 
       "UpstreamPathTemplate": "/mvcgateway/paymentsystems/{systemName}",
       "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.billing.system.update" ]
+      },
+      "DelegatingHandlers": [
+        "BillingTokenExchangeDelegatingHandler"
+      ]
     },
 
 
@@ -170,6 +249,7 @@
       ],
       "UpstreamPathTemplate": "/mvcgateway/payment/plugins",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH" ],
+
     }
   ]
 }

@@ -11,7 +11,15 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/baskets/{userId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.basket.read" ]
+      },
+
+      "DelegatingHandlers": [
+        "BasketTokenExchangeDelegatingHandler"
+      ]
     },
 
 
@@ -26,7 +34,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/baskets/update",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.basket.update" ]
+      },
+      "DelegatingHandlers": [
+        "BasketTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -40,7 +55,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/baskets/additem",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.basket.update" ]
+      },
+      "DelegatingHandlers": [
+        "BasketTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/baskets/removeitem",
@@ -53,7 +75,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/baskets/removeitem",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.basket.update" ]
+      },
+      "DelegatingHandlers": [
+        "BasketTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -67,7 +96,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/baskets/migrate",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.basket.migrate" ]
+      },
+      "DelegatingHandlers": [
+        "BasketTokenExchangeDelegatingHandler"
+      ]
     }
 
   ]

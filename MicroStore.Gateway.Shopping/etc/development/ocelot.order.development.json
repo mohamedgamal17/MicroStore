@@ -12,7 +12,15 @@
 
       "UpstreamPathTemplate": "/mvcgateway/orders",
 
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.ordering.order.list" ]
+      },
+
+      "DelegatingHandlers": [
+        "OrderingTokenExchangeDelegatingHandler"
+      ]
 
     },
 
@@ -24,11 +32,19 @@
           "Host": "localhost",
           "Port": 7226
         }
+
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/orders/user/{orderId}",
 
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.ordering.order.read" ]
+      },
+      "DelegatingHandlers": [
+        "OrderingTokenExchangeDelegatingHandler"
+      ]
 
     },
 
@@ -44,7 +60,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/orders/user/{userId}",
 
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.ordering.order.list" ]
+      },
+      "DelegatingHandlers": [
+        "OrderingTokenExchangeDelegatingHandler"
+      ]
 
     },
 
@@ -60,7 +83,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/orders/submit",
 
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.ordering.order.submit" ]
+      },
+      "DelegatingHandlers": [
+        "OrderingTokenExchangeDelegatingHandler"
+      ]
 
     },
 
@@ -76,7 +106,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/orders/fullfill/{orderId}",
 
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.ordering.order.fullfill" ]
+      },
+      "DelegatingHandlers": [
+        "OrderingTokenExchangeDelegatingHandler"
+      ]
 
     },
 
@@ -92,7 +129,15 @@
 
       "UpstreamPathTemplate": "/mvcgateway/orders/complete/{orderId}",
 
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.ordering.order.complete" ]
+      },
+      "DelegatingHandlers": [
+        "OrderingTokenExchangeDelegatingHandler"
+      ]
 
     },
     {
@@ -107,7 +152,15 @@
 
       "UpstreamPathTemplate": "/mvcgateway/orders/cancel/{orderId}",
 
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.ordering.order.cancel" ]
+      },
+      "DelegatingHandlers": [
+        "OrderingTokenExchangeDelegatingHandler"
+      ]
 
     }
 

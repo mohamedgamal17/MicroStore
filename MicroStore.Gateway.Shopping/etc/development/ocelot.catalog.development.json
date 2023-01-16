@@ -11,7 +11,15 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/categories",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.category.list" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -22,10 +30,19 @@
           "Host": "localhost",
           "Port": 7188
         }
+
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/categories/{id}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.category.read" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -39,7 +56,15 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/categories",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.category.create" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -53,7 +78,14 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/categories/{id}",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.category.update" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
 
@@ -71,7 +103,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products",
 
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.product.list" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/products/{id}",
@@ -86,7 +125,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products/{id}",
 
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.product.read" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/products",
@@ -98,7 +144,14 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/products",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.product.create" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -111,7 +164,14 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/products/{id}",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.product.update" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
 
@@ -128,7 +188,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productcategories",
 
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.productcategory.list" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -144,7 +211,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productcategories",
 
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.productcategory.create" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -160,7 +234,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productcategories/{categoryId}",
 
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.productcategory.update" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -176,7 +257,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productcategories/{categoryId}",
 
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.productcategory.delete" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
 
@@ -193,7 +281,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productimages",
 
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.productimage.create" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -209,7 +304,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productimages/{productImageId}",
 
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.productimage.update" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     },
 
     {
@@ -225,7 +327,14 @@
 
       "UpstreamPathTemplate": "/mvcgateway/products/{productId}/productimages/{productImageId}",
 
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "mvcgateway.catalog.productimage.delete" ]
+      },
+      "DelegatingHandlers": [
+        "CatalogTokenExchangeDelegatingHandler"
+      ]
     }
   ]
 }
