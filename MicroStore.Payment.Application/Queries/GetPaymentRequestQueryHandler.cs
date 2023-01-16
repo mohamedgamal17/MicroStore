@@ -25,7 +25,7 @@ namespace MicroStore.Payment.Application.Queries
                 .AsNoTracking()
                 .ProjectTo<PaymentRequestDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            var result = await query.SingleOrDefaultAsync(x => x.PaymentId == request.PaymentRequestId, cancellationToken);
+            var result = await query.SingleOrDefaultAsync(x => x.Id == request.PaymentRequestId, cancellationToken);
 
             if(result == null)
             {

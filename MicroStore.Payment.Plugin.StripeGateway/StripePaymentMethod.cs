@@ -83,7 +83,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
                 await _paymentRequestRepository.UpdateAsync(paymentRequest);
 
-                var result = _objectMapper.Map<PaymentRequest, PaymentRequestCompletedDto>(paymentRequest);
+                var result = _objectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
 
                 return Success(HttpStatusCode.OK, result);
             });

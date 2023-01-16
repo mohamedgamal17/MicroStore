@@ -21,7 +21,7 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
 
             var result = response.GetEnvelopeResult<PaymentRequestDto>().Result;
 
-            result.PaymentId.Should().Be(query.PaymentRequestId);
+            result.Id.Should().Be(query.PaymentRequestId);
         }
 
         [Test]

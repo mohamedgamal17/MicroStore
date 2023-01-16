@@ -1,8 +1,9 @@
-﻿namespace MicroStore.Payment.Application.Abstractions.Dtos
+﻿using Volo.Abp.Application.Dtos;
+
+namespace MicroStore.Payment.Application.Abstractions.Dtos
 {
-    public class PaymentSystemDto
+    public class PaymentSystemDto : EntityDto<Guid>
     {
-        public Guid SystemId { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Image { get; set; }

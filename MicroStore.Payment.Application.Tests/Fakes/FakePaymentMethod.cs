@@ -47,7 +47,7 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             await _paymentRequestRepository.UpdateAsync(paymentRequest);
 
 
-            return Success(HttpStatusCode.Accepted, _objectMapper.Map<PaymentRequest, PaymentRequestCompletedDto>(paymentRequest));
+            return Success(HttpStatusCode.Accepted, _objectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest));
 
         }
 

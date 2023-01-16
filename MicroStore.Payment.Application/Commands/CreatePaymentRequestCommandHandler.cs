@@ -47,7 +47,7 @@ namespace MicroStore.Payment.Application.Commands
 
             await _paymentRepository.InsertAsync(paymentRequest);
 
-            var result = ObjectMapper.Map<PaymentRequest, PaymentRequestCreatedDto>(paymentRequest);
+            var result = ObjectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
 
             return ResponseResult.Success((int) HttpStatusCode.OK, result);
         }
