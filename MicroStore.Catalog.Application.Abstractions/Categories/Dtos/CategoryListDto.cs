@@ -1,10 +1,10 @@
-﻿
+﻿using Volo.Abp.Application.Dtos;
 
 namespace MicroStore.Catalog.Application.Abstractions.Categories.Dtos
 {
-    public class CategoryListDto
+    public class CategoryListDto : EntityDto<Guid>
     {
-        public Guid CategoryId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

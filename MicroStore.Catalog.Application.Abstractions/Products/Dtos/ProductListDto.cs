@@ -1,10 +1,10 @@
 ﻿using MicroStore.Catalog.Domain.ValueObjects;
+using Volo.Abp.Application.Dtos;
 
 namespace MicroStore.Catalog.Application.Abstractions.Products.Dtos
 {
-    public class ProductListDto
+    public class ProductListDto : EntityDto<Guid>
     {
-        public Guid ProductId { get; set; }
         public string Name { get; set; } = null!;
         public string Sku { get; set; }
         public string ShortDescription { get; set; }

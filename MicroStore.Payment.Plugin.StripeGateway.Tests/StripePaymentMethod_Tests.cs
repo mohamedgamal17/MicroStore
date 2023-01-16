@@ -28,7 +28,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Tests
             var result = await sut.Process(paymentRequest.Id, model);
 
             result.IsSuccess.Should().BeTrue();
-            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+            result.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
             var response = result.GetEnvelopeResult<PaymentProcessResultDto>().Result;
 
@@ -64,7 +64,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Tests
         }
 
         [Test]
-        public async Task Should_throw_business_exception_while_checkout_session_is_not_payed()
+        public async Task Should_return_failure_result_while_checkout_session_is_not_payed()
         {
             var fakePaymentRequest = await GenerateWaitingPaymentRequest();
 
@@ -78,9 +78,9 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Tests
                 Token = session.Id,
             };
 
-            Func<Task> func =()=> sut.Complete(model);
-   
-            await  func.Should().ThrowExactlyAsync<BusinessException>();
+            var result  = await sut.Complete(model);
+
+            result.IsFailure.Should().BeTrue();
         }
 
         [Test]

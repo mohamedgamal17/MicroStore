@@ -338,7 +338,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                 ShippingDate = x.ShipDate,
                 Money = new MoneyDto
                 {
-                    Value =  (x.InsuranceAmount.Amount!.Value + x.OtherAmount.Amount!.Value + x.ShippingAmount.Amount!.Value)  + (x.TaxAmount?.Amount ?? 0),
+                    Value =  (x.InsuranceAmount.Amount!.Value + x.OtherAmount.Amount!.Value + x.ShippingAmount.Amount!.Value),  
                     Currency = x.ShippingAmount?.Currency.ToString(),
                 }
 

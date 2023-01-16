@@ -10,7 +10,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Dtos
         public ProductProfile()
         {
             CreateMap<Product, ProductDto>()
-                .ForMember(x => x.ProductId, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.Sku, opt => opt.MapFrom(c => c.Sku))
                 .ForMember(x => x.Name, opt => opt.MapFrom(c => c.Name))
                 .ForMember(x => x.ShortDescription, opt => opt.MapFrom(c => c.ShortDescription))
@@ -23,7 +23,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Dtos
 
 
             CreateMap<Product,ProductListDto>()
-                .ForMember(x => x.ProductId, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.Sku, opt => opt.MapFrom(c => c.Sku))
                 .ForMember(x => x.Name, opt => opt.MapFrom(c => c.Name))
                 .ForMember(x => x.ShortDescription, opt => opt.MapFrom(c => c.ShortDescription))
@@ -41,7 +41,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Dtos
 
 
             CreateMap<ProductImage, ProductImageDto>()
-                .ForMember(x => x.ProductImageId, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.DisplayOrder, opt => opt.MapFrom(c => c.DisplayOrder))
                 .ForMember(x => x.Image, opt => opt.MapFrom(c => c.ImagePath));
 

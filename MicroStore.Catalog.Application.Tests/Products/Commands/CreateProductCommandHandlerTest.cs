@@ -51,7 +51,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
 
             result.StatusCode.Should().Be((int)HttpStatusCode.Created);
 
-            var product = await GetProductById(result.GetEnvelopeResult<ProductDto>().Result.ProductId);
+            var product = await GetProductById(result.GetEnvelopeResult<ProductDto>().Result.Id);
 
             product.Name.Should().Be(request.Name);
             product.ShortDescription.Should().Be(request.ShortDescription);

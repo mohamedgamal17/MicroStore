@@ -20,7 +20,7 @@ namespace MicroStore.Catalog.Application.Queries.Tests.Queries
 
             var result = response.GetEnvelopeResult<CategoryDto>().Result;
 
-            result.CategoryId.Should().Be(query.Id);
+            result.Id.Should().Be(query.Id);
         }
 
         [Test]

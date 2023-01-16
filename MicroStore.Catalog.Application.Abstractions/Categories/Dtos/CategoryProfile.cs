@@ -11,10 +11,10 @@ namespace MicroStore.Catalog.Application.Abstractions.Categories.Dtos
         {
 
             CreateMap<Category, CategoryDto>()
-                .ForMember(x => x.CategoryId, opt => opt.MapFrom(c => c.Id));
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id));
 
             CreateMap<Category, CategoryListDto>()
-                .ForMember(x => x.CategoryId, opt => opt.MapFrom(c => c.Id));
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id));
 
         }
 
