@@ -37,17 +37,9 @@ namespace MicroStore.Inventory.Application.Commands
 
             await _productRepository.UpdateAsync(product);
 
-            var result = new ProductAdjustedInventoryDto
-            {
-                ProductId = product.Id,
-                ExternalProductId = product.ExternalProductId,
-                Name = product.Name,
-                Sku = product.Sku,
-                Thumbnail = product.Thumbnail,
-                AdjustedStock = product.Stock
-            };
+         
 
-            return ResponseResult.Success((int) HttpStatusCode.OK, result);
+            return Success(HttpStatusCode.OK, ObjectMapper.Map<Product,ProductDto>(product));
         }
     }
 }

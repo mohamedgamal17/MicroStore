@@ -1,10 +1,8 @@
-﻿using MicroStore.Inventory.Domain.OrderAggregate;
-
+﻿using Volo.Abp.Application.Dtos;
 namespace MicroStore.Inventory.Application.Abstractions.Dtos
 {
-    public class OrderDto
+    public class OrderDto : EntityDto<Guid>
     {
-        public Guid OrderId { get; set; }
         public string ExternalOrderId { get; set; }
         public string OrderNumber { get; set; }
         public string UserId { get; set; }

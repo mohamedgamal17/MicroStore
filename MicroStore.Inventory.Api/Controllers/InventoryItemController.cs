@@ -103,7 +103,7 @@ namespace MicroStore.Inventory.Api.Controllers
         [HttpPost]
         [Route("adjustquantity/{productsku}")]
         [RequiredScope(InventoryScope.Product.AdjustQuantity)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductAdjustedInventoryDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

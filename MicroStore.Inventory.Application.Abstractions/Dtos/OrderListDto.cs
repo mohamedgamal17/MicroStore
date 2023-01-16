@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Volo.Abp.Application.Dtos;
 namespace MicroStore.Inventory.Application.Abstractions.Dtos
 {
-    public class OrderListDto
+    public class OrderListDto : EntityDto<Guid>
     {
-        public Guid OrderId { get; set; }
         public string ExternalOrderId { get; set; }
         public string OrderNumber { get; set; }
         public string UserId { get; set; }

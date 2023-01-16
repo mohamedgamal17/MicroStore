@@ -32,7 +32,7 @@ namespace MicroStore.Inventory.Application.Tests.Commands
 
             product.Stock.Should().Be(10);
 
-            result.GetEnvelopeResult<ProductAdjustedInventoryDto>().Result.AdjustedStock.Should().Be(10);
+            result.GetEnvelopeResult<ProductDto>().Result.Stock.Should().Be(10);
         }
 
         [Test]

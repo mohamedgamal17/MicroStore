@@ -26,7 +26,7 @@ namespace MicroStore.Inventory.Application.Queries
               .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
            
-            var result =  await query.SingleOrDefaultAsync(x=> x.OrderId== request.OrderId);
+            var result =  await query.SingleOrDefaultAsync(x=> x.Id== request.OrderId);
 
             if (result == null)
             {

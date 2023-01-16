@@ -20,7 +20,7 @@ namespace MicroStore.Inventory.Application.Queries.Tests.Queries
 
             var result = response.GetEnvelopeResult<ProductDto>().Result;
 
-            result.ProductId.Should().Be(query.ProductId);
+            result.Id.Should().Be(query.ProductId);
         }
 
         [Test]

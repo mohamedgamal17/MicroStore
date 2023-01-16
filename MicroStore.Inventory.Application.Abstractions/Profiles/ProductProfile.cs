@@ -9,7 +9,7 @@ namespace MicroStore.Inventory.Application.Abstractions.Profiles
         public ProductProfile()
         {
             CreateMap<Product, ProductDto>()
-                .ForMember(x => x.ProductId, opt => opt.MapFrom(c => c.Id));
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id));
         }
     }
 }

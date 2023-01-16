@@ -25,7 +25,7 @@ namespace MicroStore.Inventory.Application.Queries
              .AsNoTracking()
              .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            var result = await query.SingleOrDefaultAsync(x => x.ProductId == request.ProductId);
+            var result = await query.SingleOrDefaultAsync(x => x.Id == request.ProductId);
 
             if (result == null)
             {
