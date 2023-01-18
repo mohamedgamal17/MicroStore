@@ -22,7 +22,7 @@ namespace MicroStore.Catalog.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<PagedResult<ProductListDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.PageSize.Should().Be(query.PageSize);
             result.PageNumber.Should().Be(query.PageNumber);
@@ -45,7 +45,7 @@ namespace MicroStore.Catalog.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<PagedResult<ProductListDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             if (desc)
             {

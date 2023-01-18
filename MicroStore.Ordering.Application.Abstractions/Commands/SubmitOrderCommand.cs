@@ -1,10 +1,11 @@
 ﻿#nullable disable
 using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Ordering.Application.Abstractions.Dtos;
 using MicroStore.Ordering.Events.Models;
 namespace MicroStore.Ordering.Application.Abstractions.Commands
 {
-    public class SubmitOrderCommand : ICommand
+    public class SubmitOrderCommand : ICommand<OrderSubmitedDto>
     {
         public AddressModel ShippingAddress { get; set; }
         public AddressModel BillingAddress { get; set; }

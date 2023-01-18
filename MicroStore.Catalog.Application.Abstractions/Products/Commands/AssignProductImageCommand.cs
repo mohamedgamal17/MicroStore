@@ -2,9 +2,10 @@
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
+using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
-    public abstract class ProductImageCommandBase : ICommand
+    public abstract class ProductImageCommandBase : ICommand<ProductDto>
     {
         public Guid ProductId { get; set; }
         public int DisplayOrder { get; set; }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
@@ -11,7 +10,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace MicroStore.Payment.Application.Queries
 {
-    public class GetPaymentSystemListQueryHandler : QueryHandler<GetPaymentSystemListQuery>
+    public class GetPaymentSystemListQueryHandler : QueryHandler<GetPaymentSystemListQuery,ListResultDto<PaymentSystemDto>>
     {
         private readonly IPaymentDbContext _paymentDbContext;
         public GetPaymentSystemListQueryHandler(IPaymentDbContext paymentDbContext)
@@ -19,7 +18,7 @@ namespace MicroStore.Payment.Application.Queries
             _paymentDbContext = paymentDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetPaymentSystemListQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ListResultDto<PaymentSystemDto>>> Handle(GetPaymentSystemListQuery request, CancellationToken cancellationToken)
         {
             var query = _paymentDbContext.PaymentSystems
                 .AsNoTracking()

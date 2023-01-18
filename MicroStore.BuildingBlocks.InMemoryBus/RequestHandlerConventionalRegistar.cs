@@ -17,7 +17,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
         {
             return type.GetInterfaces()
                 .Where(x => x.IsGenericType)
-                .Where(x => x.GetGenericTypeDefinition() == typeof(IRequestHandler<>)).ToList();
+                .Where(x => x.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)).ToList();
 
         }
 
@@ -28,7 +28,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
 
         private bool IsRequestHandler(Type type)
             => type.GetInterfaces()
-                .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestHandler<>));
+                .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestHandler<,>));
 
 
         protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)

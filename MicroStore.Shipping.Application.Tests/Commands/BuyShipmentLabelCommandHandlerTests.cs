@@ -29,15 +29,15 @@ namespace MicroStore.Shipping.Application.Tests.Commands
 
 
 
-            var shipment = await RetriveShipment(result.GetEnvelopeResult<ShipmentDto>().Result.Id);
+            var shipment = await RetriveShipment(result.EnvelopeResult.Result.Id);
 
             shipment.Should().NotBeNull();
 
-            shipment?.TrackingNumber?.Should().Be(result.GetEnvelopeResult<ShipmentDto>().Result.TrackingNumber);
+            shipment?.TrackingNumber?.Should().Be(result.EnvelopeResult.Result.TrackingNumber);
 
             shipment?.Status.Should().Be(ShipmentStatus.Shipping);
 
-            shipment?.ShipmentLabelExternalId.Should().Be(result.GetEnvelopeResult<ShipmentDto>().Result.ShipmentLabelExternalId);
+            shipment?.ShipmentLabelExternalId.Should().Be(result.EnvelopeResult.Result.ShipmentLabelExternalId);
         }
 
         [Test]

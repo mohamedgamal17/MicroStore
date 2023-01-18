@@ -9,7 +9,7 @@ using MicroStore.Inventory.Application.Abstractions.Queries;
 using System.Net;
 namespace MicroStore.Inventory.Application.Queries
 {
-    public class GetOrderWithExternalIdQueryHandler : QueryHandler<GetOrderWithExternalIdQuery>
+    public class GetOrderWithExternalIdQueryHandler : QueryHandler<GetOrderWithExternalIdQuery,OrderDto>
     {
         private readonly IInventoyDbContext _inventoryDbContext;
 
@@ -18,7 +18,7 @@ namespace MicroStore.Inventory.Application.Queries
             _inventoryDbContext = inventoryDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetOrderWithExternalIdQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<OrderDto>> Handle(GetOrderWithExternalIdQuery request, CancellationToken cancellationToken)
         {
             var query = _inventoryDbContext.Orders
               .AsNoTracking()

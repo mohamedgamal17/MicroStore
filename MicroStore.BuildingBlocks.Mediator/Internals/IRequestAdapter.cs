@@ -3,7 +3,7 @@ namespace MicroStore.BuildingBlocks.Mediator.Internals
 {
     public interface IRequestAdapter<TResponse> : MediatR.IRequest<TResponse>
     {
-         IRequest Request { get; }
+         IBaseRequest Request { get; }
 
          Type RequestType { get; }
 

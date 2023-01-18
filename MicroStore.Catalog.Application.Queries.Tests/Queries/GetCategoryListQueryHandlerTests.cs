@@ -17,7 +17,7 @@ namespace MicroStore.Catalog.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<ListResultDto<CategoryListDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.Items.Count.Should().BeGreaterThan(0);
         }
@@ -37,7 +37,7 @@ namespace MicroStore.Catalog.Application.Queries.Tests.Queries
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
 
-            var result = response.GetEnvelopeResult<ListResultDto<CategoryListDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             if (desc)
             {

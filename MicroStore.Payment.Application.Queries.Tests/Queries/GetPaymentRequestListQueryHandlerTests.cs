@@ -22,7 +22,7 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<PagedResult<PaymentRequestListDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.PageNumber.Should().Be(query.PageNumber);
             result.PageSize.Should().Be(query.PageSize);
@@ -46,7 +46,7 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<PagedResult<PaymentRequestListDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             if (desc)
             {

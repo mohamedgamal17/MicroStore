@@ -18,7 +18,7 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<ShipmentDto>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.OrderId.Should().Be(query.OrderId);
         }

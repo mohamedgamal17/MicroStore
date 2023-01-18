@@ -7,7 +7,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Categories.Commands
 {
-    public class CreateCategoryCommandHandler : CommandHandler<CreateCategoryCommand>
+    public class CreateCategoryCommandHandler : CommandHandler<CreateCategoryCommand,CategoryDto>
     {
         private readonly IRepository<Category> _categoryRepository;
 
@@ -16,7 +16,7 @@ namespace MicroStore.Catalog.Application.Categories.Commands
             _categoryRepository = categoryRepository;
         }
 
-        public override async Task<ResponseResult> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<CategoryDto>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             Category category = new Category(request.Name);
 
@@ -24,7 +24,7 @@ namespace MicroStore.Catalog.Application.Categories.Commands
 
             await _categoryRepository.InsertAsync(category, cancellationToken: cancellationToken);
 
-            return ResponseResult.Success((int)HttpStatusCode.Created  ,ObjectMapper.Map<Category, CategoryDto>(category));
+            return  Success(HttpStatusCode.Created  ,ObjectMapper.Map<Category, CategoryDto>(category));
         }
     }
 }

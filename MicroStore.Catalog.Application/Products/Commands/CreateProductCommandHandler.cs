@@ -9,7 +9,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class CreateProductCommandHandler : CommandHandler<CreateProductCommand>
+    public class CreateProductCommandHandler : CommandHandler<CreateProductCommand,ProductDto>
     {
         private readonly IRepository<Product> _productRepository;
 
@@ -21,7 +21,7 @@ namespace MicroStore.Catalog.Application.Products.Commands
             _imageService = imageService;
         }
 
-        public override async Task<ResponseResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ProductDto>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             
 
@@ -51,7 +51,7 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             await _productRepository.InsertAsync(product, cancellationToken: cancellationToken);
 
-            return ResponseResult.Success((int) HttpStatusCode.Created , ObjectMapper.Map<Product, ProductDto>(product)) ;
+            return Success(HttpStatusCode.Created , ObjectMapper.Map<Product, ProductDto>(product)) ;
         }
 
 

@@ -8,7 +8,7 @@ using System.Net;
 
 namespace MicroStore.Shipping.Application.Queries
 {
-    public class GetShippingSettingsQueryHandler : QueryHandler<GetShippingSettingsQuery>
+    public class GetShippingSettingsQueryHandler : QueryHandler<GetShippingSettingsQuery,ShippingSettings>
     {
         private readonly ISettingsRepository _settingsRepository;
 
@@ -17,7 +17,7 @@ namespace MicroStore.Shipping.Application.Queries
             _settingsRepository = settingsRepository;
         }
 
-        public override async Task<ResponseResult> Handle(GetShippingSettingsQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ShippingSettings>> Handle(GetShippingSettingsQuery request, CancellationToken cancellationToken)
         {
             var settings = await _settingsRepository.TryToGetSettings<ShippingSettings>(SettingsConst.ProviderKey) ?? new ShippingSettings();
 

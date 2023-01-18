@@ -17,7 +17,7 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<ListResultDto<PaymentSystemDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.Items.Count.Should().BeGreaterThan(0);
            

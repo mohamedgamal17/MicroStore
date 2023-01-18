@@ -1,6 +1,4 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.Inventory.Application.Abstractions.Dtos;
 using MicroStore.Inventory.Application.Abstractions.Queries;
 using System.Net;
 namespace MicroStore.Inventory.Application.Queries.Tests.Queries
@@ -21,7 +19,7 @@ namespace MicroStore.Inventory.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<PagedResult<OrderListDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.PageNumber.Should().Be(query.PageNumber);
             result.PageSize.Should().Be(query.PageSize);

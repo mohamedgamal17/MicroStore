@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Shipping.Application.Abstraction.Dtos;
+
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class BuyShipmentLabelCommand : ICommand
+    public class BuyShipmentLabelCommand : ICommand<ShipmentDto>
     {
         public string ExternalShipmentId { get; set; }
         public string SystemName { get; set; }

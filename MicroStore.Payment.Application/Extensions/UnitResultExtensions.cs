@@ -7,7 +7,7 @@ namespace MicroStore.Payment.Application.Extensions
 {
     public static class UnitResultExtensions
     {
-        public static ResponseResult ConvertFaildUnitResult(this UnitResult unitResult)
+        public static ResponseResult<T> ConvertFaildUnitResult<T>(this UnitResult unitResult)
         {
             if (unitResult.IsSuccess)
             {
@@ -24,15 +24,15 @@ namespace MicroStore.Payment.Application.Extensions
             if (unitResult.ErrorType ==
                 PaymentMethodErrorType.ValidationError)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.BadRequest, errorEnfo);
+                return ResponseResult.Failure<T>((int)HttpStatusCode.BadRequest, errorEnfo);
             }
 
             if (unitResult.ErrorType == PaymentMethodErrorType.NotExist)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, errorEnfo);
+                return ResponseResult.Failure<T>((int)HttpStatusCode.NotFound, errorEnfo);
             }
 
-            return ResponseResult.Failure((int)HttpStatusCode.BadRequest, errorEnfo);
+            return ResponseResult.Failure<T>((int)HttpStatusCode.BadRequest, errorEnfo);
         }
     }
 }

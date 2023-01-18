@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
-
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
-    public class RemoveProductCategoryCommand : ICommand
+    public class RemoveProductCategoryCommand : ICommand<ProductDto>
     {
 
         public Guid ProductId { get; set; }

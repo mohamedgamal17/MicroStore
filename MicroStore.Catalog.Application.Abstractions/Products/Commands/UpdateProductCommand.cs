@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Common.Models;
+using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
-    public class UpdateProductCommand : ProductCommandBase, ICommand
+    public class UpdateProductCommand : ProductCommandBase, ICommand<ProductDto>
     {
         public Guid ProductId { get; set; }
 

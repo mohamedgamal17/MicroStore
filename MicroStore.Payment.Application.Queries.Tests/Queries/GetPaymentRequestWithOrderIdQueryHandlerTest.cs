@@ -20,7 +20,7 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<PaymentRequestDto>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.OrderId.Should().Be(query.OrderId);
         }

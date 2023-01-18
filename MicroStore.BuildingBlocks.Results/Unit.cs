@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MicroStore.BuildingBlocks.InMemoryBus
+﻿namespace MicroStore.BuildingBlocks.Results
 {
-    public struct Unit : IEquatable<Unit>, IComparable<Unit>, IComparable
+    public class Unit : IEquatable<Unit>, IComparable<Unit>, IComparable
     {
         private static readonly Unit _value = new();
 
@@ -19,7 +13,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
         public int CompareTo(Unit other) => 0;
 
 
-        int IComparable.CompareTo(object? obj) => 0;
+        int IComparable.CompareTo(object obj) => 0;
 
 
         public override int GetHashCode() => 0;
@@ -28,7 +22,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
         public bool Equals(Unit other) => true;
 
 
-        public override bool Equals(object? obj) => obj is Unit;
+        public override bool Equals(object obj) => obj is Unit;
 
 
         public static bool operator ==(Unit first, Unit second) => true;

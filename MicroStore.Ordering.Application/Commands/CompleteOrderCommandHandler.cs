@@ -6,7 +6,7 @@ using MicroStore.Ordering.Events;
 using MicroStore.BuildingBlocks.Results;
 using System.Net;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Ordering.Application.Abstractions.Abstractions.Common;
+using MicroStore.Ordering.Application.Abstractions.Common;
 
 namespace MicroStore.Ordering.Application.Commands
 {
@@ -22,13 +22,13 @@ namespace MicroStore.Ordering.Application.Commands
             _orderRepository = orderRepository;
         }
 
-        public override async Task<ResponseResult> Handle(CompleteOrderCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<Unit>> Handle(CompleteOrderCommand request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetOrder(request.OrderId);
 
             if (order == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                return Failure(HttpStatusCode.NotFound, new ErrorInfo
                 {
                     Message = $"Order entity with id {request.OrderId} is not exist"
                 });
@@ -39,7 +39,7 @@ namespace MicroStore.Ordering.Application.Commands
                     Message = $"invalid order status. " + $"please make sure that order is in {OrderStatusConst.Fullfilled} status to be able to complete the order"
                 };
 
-                return ResponseResult.Failure((int)(HttpStatusCode.BadRequest), errorInfo);
+                return Failure(HttpStatusCode.BadRequest, errorInfo);
             }
 
             var orderCompletedEvent = new OrderCompletedEvent
@@ -50,7 +50,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndpoint.Publish(orderCompletedEvent, cancellationToken);
 
-            return ResponseResult.Success((int)(HttpStatusCode.Accepted));
+            return Success((HttpStatusCode.Accepted));
         }
     }
 }

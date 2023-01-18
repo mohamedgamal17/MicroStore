@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
@@ -9,7 +8,7 @@ using MicroStore.Shipping.Application.Abstraction.Queries;
 using System.Net;
 namespace MicroStore.Shipping.Application.Queries
 {
-    public class GetShipmentQueryHandler : QueryHandler<GetShipmentQuery>
+    public class GetShipmentQueryHandler : QueryHandler<GetShipmentQuery,ShipmentDto>
     {
         private readonly IShippingDbContext _shippingDbContext;
 
@@ -18,7 +17,7 @@ namespace MicroStore.Shipping.Application.Queries
             _shippingDbContext = shippingDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetShipmentQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ShipmentDto>> Handle(GetShipmentQuery request, CancellationToken cancellationToken)
         {
             var query = _shippingDbContext.Shipments
                .AsNoTracking()

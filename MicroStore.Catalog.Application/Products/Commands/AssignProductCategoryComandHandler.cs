@@ -8,7 +8,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class AssignProductCategoryComandHandler : CommandHandler<AssignProductCategoryCommand>
+    public class AssignProductCategoryComandHandler : CommandHandler<AssignProductCategoryCommand,ProductDto>
     {
         private readonly IRepository<Product> _productRepository;
 
@@ -20,13 +20,13 @@ namespace MicroStore.Catalog.Application.Products.Commands
             _categoryRepository = categoryRepository;
         }
 
-        public override async Task<ResponseResult> Handle(AssignProductCategoryCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ProductDto>> Handle(AssignProductCategoryCommand request, CancellationToken cancellationToken)
         {
             Product? product = await _productRepository.SingleOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
 
             if(product == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                return Failure(HttpStatusCode.NotFound, new ErrorInfo
                 {
                     Message = $"Product entity with id : {request.ProductId} is not found"
                 });
@@ -36,7 +36,7 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             if(category == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                return Failure(HttpStatusCode.NotFound, new ErrorInfo
                 {
                     Message = $"Category entity with id : {request.CategoryId} is not found"
                 });
@@ -46,7 +46,7 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             await _productRepository.UpdateAsync(product);
 
-            return ResponseResult.Success((int) HttpStatusCode.Created, ObjectMapper.Map<Product, ProductDto>(product));
+            return Success(HttpStatusCode.Created, ObjectMapper.Map<Product, ProductDto>(product));
         }
     }
 }

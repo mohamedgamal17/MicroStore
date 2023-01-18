@@ -9,7 +9,7 @@ using MicroStore.BuildingBlocks.Results;
 using System.Net;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class AssignProductImageCommandHandler : CommandHandler<AssignProductImageCommand>
+    public class AssignProductImageCommandHandler : CommandHandler<AssignProductImageCommand,ProductDto>
     {
         private readonly IRepository<Product> _productRepository;
 
@@ -24,7 +24,7 @@ namespace MicroStore.Catalog.Application.Products.Commands
             _imageService = imageService;
         }
 
-        public override async Task<ResponseResult> Handle(AssignProductImageCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ProductDto>> Handle(AssignProductImageCommand request, CancellationToken cancellationToken)
         {
             Product? product = await _productRepository.SingleOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
 

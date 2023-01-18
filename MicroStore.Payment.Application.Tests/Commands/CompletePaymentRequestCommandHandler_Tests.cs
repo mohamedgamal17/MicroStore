@@ -23,7 +23,7 @@ namespace MicroStore.Payment.Application.Tests.Commands
 
             result.IsSuccess.Should().BeTrue();
 
-            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+            result.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
             PaymentRequest paymentRequest = await Find<PaymentRequest>(x => x.Id == fakePaymentRequest.Id);
 

@@ -19,7 +19,7 @@ namespace MicroStore.Inventory.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<ProductDto>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.Sku.Should().Be(query.Sku);
 

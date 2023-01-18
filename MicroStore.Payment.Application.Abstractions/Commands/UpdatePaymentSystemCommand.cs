@@ -4,7 +4,7 @@ using MicroStore.Payment.Application.Abstractions.Dtos;
 
 namespace MicroStore.Payment.Application.Abstractions.Commands
 {
-    public class UpdatePaymentSystemCommand : ICommand
+    public class UpdatePaymentSystemCommand : ICommand<PaymentSystemDto>
     {
         public string Name { get; set; }
 

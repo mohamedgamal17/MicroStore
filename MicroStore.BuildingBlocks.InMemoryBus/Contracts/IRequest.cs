@@ -3,5 +3,10 @@ using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.InMemoryBus.Contracts
 {
-    public interface IRequest { }
+
+    public interface IBaseRequest { }
+
+
+    public interface IRequest<TResponse>  : IBaseRequest{ }
+
 }

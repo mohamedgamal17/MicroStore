@@ -24,15 +24,15 @@ namespace MicroStore.Shipping.Application.Tests.Commands
 
             result.StatusCode.Should().Be((int)HttpStatusCode.Created);
 
-            var shipment = await RetriveShipment(result.GetEnvelopeResult<ShipmentDto>().Result.Id);
+            var shipment = await RetriveShipment(result.EnvelopeResult.Result.Id);
 
             var item = command.Items.First();
 
             var shipmentItem = shipment?.Items.FirstOrDefault();
 
             shipment.Should().NotBeNull();
-            shipment?.OrderId.Should().Be(result.GetEnvelopeResult<ShipmentDto>().Result.OrderId);
-            shipment?.UserId.Should().Be(result.GetEnvelopeResult<ShipmentDto>().Result.UserId);
+            shipment?.OrderId.Should().Be(result.EnvelopeResult.Result.OrderId);
+            shipment?.UserId.Should().Be(result.EnvelopeResult.Result.UserId);
             shipment?.Address.Should().Be(command.Address.AsAddress());
             shipmentItem.Should().NotBeNull();
             shipmentItem?.Name.Should().Be(item.Name);

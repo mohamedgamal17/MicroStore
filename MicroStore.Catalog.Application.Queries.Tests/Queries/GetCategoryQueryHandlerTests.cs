@@ -18,7 +18,7 @@ namespace MicroStore.Catalog.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<CategoryDto>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.Id.Should().Be(query.Id);
         }

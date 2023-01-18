@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
@@ -9,7 +10,7 @@ using MicroStore.Catalog.Application.Abstractions.Products.Queries;
 using System.Net;
 namespace MicroStore.Catalog.Application.Products.Queries
 {
-    internal class GetProductQueryHandler : QueryHandler<GetProductQuery>
+    internal class GetProductQueryHandler : QueryHandler<GetProductQuery,ProductDto>
     {
         private readonly ICatalogDbContext _catalogDbContext;
 
@@ -18,7 +19,7 @@ namespace MicroStore.Catalog.Application.Products.Queries
             _catalogDbContext = catalogDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetProductQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ProductDto>> Handle(GetProductQuery request, CancellationToken cancellationToken)
         {
             var query = _catalogDbContext.Products
                 .AsNoTracking()

@@ -8,11 +8,11 @@ namespace MicroStore.Payment.Application.Abstractions
     {
         string PaymentGatewayName { get; }
 
-        Task<ResponseResult> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default);
+        Task<ResponseResult<PaymentProcessResultDto>> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default);
 
-        Task<ResponseResult> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default);
+        Task<ResponseResult<PaymentRequestDto>> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default);
 
-        Task<ResponseResult> Refund(Guid paymentId, CancellationToken cancellationToken = default);
+        Task<ResponseResult<PaymentRequestDto>> Refund(Guid paymentId, CancellationToken cancellationToken = default);
 
         Task<bool> IsEnabled();
 

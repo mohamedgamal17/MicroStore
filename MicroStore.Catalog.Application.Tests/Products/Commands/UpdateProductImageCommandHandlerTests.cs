@@ -26,7 +26,7 @@ namespace MicroStore.Catalog.Application.Tests.Products.Commands
 
             var result = await Send(command);
 
-            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+            result.StatusCode.Should().Be((int)HttpStatusCode.OK );
 
             result.IsSuccess.Should().BeTrue();
 

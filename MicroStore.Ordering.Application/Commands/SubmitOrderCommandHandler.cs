@@ -2,14 +2,14 @@
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Abstractions.Commands;
-using MicroStore.Ordering.Application.Dtos;
+using MicroStore.Ordering.Application.Abstractions.Dtos;
 using MicroStore.Ordering.Events;
 using MicroStore.Ordering.Events.Models;
 using System.Net;
 
 namespace MicroStore.Ordering.Application.Commands
 {
-    public class SubmitOrderCommandHandler : CommandHandler<SubmitOrderCommand>
+    public class SubmitOrderCommandHandler : CommandHandler<SubmitOrderCommand, OrderSubmitedDto>
     {
         private readonly IRequestClient<CheckOrderStatusEvent> _checkOrderRequestClinet;
 
@@ -21,7 +21,7 @@ namespace MicroStore.Ordering.Application.Commands
             _publishEndPoint = publishEndPoint;
         }
 
-        public override async Task<ResponseResult> Handle(SubmitOrderCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<OrderSubmitedDto>> Handle(SubmitOrderCommand request, CancellationToken cancellationToken)
         {
             var orderSubmitedEvent = new OrderSubmitedEvent
             {
@@ -41,7 +41,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndPoint.Publish(orderSubmitedEvent, cancellationToken);
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted, PrepareSubmitOrderResponse(orderSubmitedEvent));
+            return Success(HttpStatusCode.Accepted, PrepareSubmitOrderResponse(orderSubmitedEvent));
         }
 
         private AddressModel PrepareAddressModel(MicroStore.Ordering.IntegrationEvents.Models.AddressModel address)
@@ -67,7 +67,7 @@ namespace MicroStore.Ordering.Application.Commands
             return new OrderSubmitedDto
             {
 
-                OrderId = orderSubmitedEvent.OrderId,
+                Id = orderSubmitedEvent.OrderId,
                 OrderNumber = orderSubmitedEvent.OrderNumber,
                 ShippingAddress = orderSubmitedEvent.ShippingAddress,
                 BillingAddress = orderSubmitedEvent.BillingAddress,

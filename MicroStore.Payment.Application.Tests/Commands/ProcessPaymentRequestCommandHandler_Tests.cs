@@ -25,9 +25,9 @@ namespace MicroStore.Payment.Application.Tests.Commands
 
             result.IsSuccess.Should().BeTrue();
 
-            result.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+            result.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            result.GetEnvelopeResult<PaymentProcessResultDto>().Result.CheckoutLink.Should().Be(PaymentMethodConst.CheckoutUrl);
+            result.EnvelopeResult.Result.CheckoutLink.Should().Be(PaymentMethodConst.CheckoutUrl);
         }
 
 

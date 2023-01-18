@@ -37,7 +37,7 @@ namespace MicroStore.TestBase
             await TestHarness.Stop();
         }
 
-        public async Task<ResponseResult> Send(IRequest request)
+        public async Task<ResponseResult<TResposne>> Send<TResposne>(IRequest<TResposne> request)
         {
             using var scope = ServiceProvider.CreateScope();
 

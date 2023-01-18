@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Abstractions.Common;
@@ -12,7 +13,7 @@ using System.Net;
 
 namespace MicroStore.Ordering.Application.Queries
 {
-    public class GetOrderListQueryHandler : QueryHandler<GetOrderListQuery>
+    public class GetOrderListQueryHandler : QueryHandler<GetOrderListQuery,PagedResult<OrderListDto>>
     {
 
         private readonly IOrderDbContext _orderDbContext;
@@ -21,7 +22,7 @@ namespace MicroStore.Ordering.Application.Queries
         {
             _orderDbContext = orderDbContext;
         }
-        public override async Task<ResponseResult> Handle(GetOrderListQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PagedResult<OrderListDto>>> Handle(GetOrderListQuery request, CancellationToken cancellationToken)
         {
             var query = _orderDbContext
                 .Query<OrderStateEntity>()

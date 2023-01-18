@@ -1,8 +1,11 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Shipping.Application.Abstraction.Dtos;
+using Volo.Abp.Application.Dtos;
+
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class RetriveShipmentRateCommand : IQuery
+    public class RetriveShipmentRateCommand : IQuery<ListResultDto<ShipmentRateDto>>
     {
         public string SystemName { get; set; }
         public string ExternalShipmentId { get; set; }

@@ -1,6 +1,6 @@
 ﻿using MicroStore.Ordering.Application.Abstractions.StateMachines;
 
-namespace MicroStore.Ordering.Application.Abstractions.Abstractions.Common
+namespace MicroStore.Ordering.Application.Abstractions.Common
 {
     public interface IOrderRepository
     {

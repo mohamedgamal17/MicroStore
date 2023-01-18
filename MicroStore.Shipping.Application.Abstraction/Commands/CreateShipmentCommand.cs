@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class CreateShipmentCommand : ICommand
+    public class CreateShipmentCommand : ICommand<ShipmentDto>
     {
         public string OrderId { get; set; }
         public string UserId { get; set; }

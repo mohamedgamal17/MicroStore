@@ -1,9 +1,11 @@
 ﻿#nullable disable
 using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Payment.Application.Abstractions.Dtos;
+
 namespace MicroStore.Payment.Application.Abstractions.Commands
 {
-    public class CompletePaymentRequestCommand : ICommand
+    public class CompletePaymentRequestCommand : ICommand<PaymentRequestDto>
     {
         public string PaymentGatewayName { get; set; }
         public string Token { get; set; }

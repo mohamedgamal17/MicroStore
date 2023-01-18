@@ -14,7 +14,7 @@ namespace MicroStore.TestBase
 {
     public class QueryTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> where TStartupModule : AbpModule
     {
-        public async Task<ResponseResult> Send(IRequest request)
+        public async Task<ResponseResult<TResposne>> Send<TResposne>(IRequest<TResposne> request)
         {
             using var scope = ServiceProvider.CreateScope();
 

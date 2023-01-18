@@ -10,7 +10,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products.Commands
 {
-    public class UpdateProductCommandHandler : CommandHandler<UpdateProductCommand>
+    public class UpdateProductCommandHandler : CommandHandler<UpdateProductCommand,ProductDto>
     {
 
         private readonly IRepository<Product> _productRepository;
@@ -23,17 +23,15 @@ namespace MicroStore.Catalog.Application.Products.Commands
             _imageService = imageService;
         }
 
-        public override async Task<ResponseResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ProductDto>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             Product? product = await _productRepository
             .SingleOrDefaultAsync(x => x.Id == request.ProductId, cancellationToken);
 
             if (product == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
-                {
-                    Message = $"Product entity with id : {request.ProductId} is not found"
-                });
+                return Failure(HttpStatusCode.NotFound, 
+                    new ErrorInfo { Message = $"Product entity with id : {request.ProductId} is not found" });
             }
 
             product.Sku = request.Sku;
@@ -73,7 +71,7 @@ namespace MicroStore.Catalog.Application.Products.Commands
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted , ObjectMapper.Map<Product, ProductDto>(product)) ;
+            return Success(HttpStatusCode.OK, ObjectMapper.Map<Product, ProductDto>(product)) ;
         }
 
     }

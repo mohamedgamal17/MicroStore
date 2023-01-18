@@ -19,7 +19,7 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
 
             respone.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = respone.GetEnvelopeResult<ShipmentSystemDto>().Result;
+            var result = respone.EnvelopeResult.Result;
 
             result.Name.Should().Be(query.Name);
         }

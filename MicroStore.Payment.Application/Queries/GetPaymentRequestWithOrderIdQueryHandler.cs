@@ -12,7 +12,7 @@ using System.Net;
 namespace MicroStore.Payment.Application.Queries
 {
     public class GetPaymentRequestWithOrderIdQueryHandler
-        : QueryHandler<GetPaymentRequestWithOrderIdQuery>
+        : QueryHandler<GetPaymentRequestWithOrderIdQuery,PaymentRequestDto>
     {
 
         private readonly IPaymentDbContext _paymentDbContext;
@@ -23,7 +23,7 @@ namespace MicroStore.Payment.Application.Queries
             _paymentDbContext = paymentDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetPaymentRequestWithOrderIdQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PaymentRequestDto>> Handle(GetPaymentRequestWithOrderIdQuery request, CancellationToken cancellationToken)
         {
             var query = _paymentDbContext.PaymentRequests
                 .AsNoTracking()

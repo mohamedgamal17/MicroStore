@@ -17,7 +17,7 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
             result.IsSuccess.Should().BeTrue();
             result.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var response =  result.GetEnvelopeResult<ShippingSettings>();
+            var response =  result.EnvelopeResult;
 
             response.Should().NotBeNull();
 

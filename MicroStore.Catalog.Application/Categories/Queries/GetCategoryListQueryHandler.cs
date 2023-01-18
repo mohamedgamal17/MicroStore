@@ -7,11 +7,12 @@ using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using System.Net;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AutoMapper;
 
 namespace MicroStore.Catalog.Application.Categories.Queries
 {
-    internal class GetCategoryListQueryHandler : QueryHandler<GetCategoryListQuery>
+    internal class GetCategoryListQueryHandler : QueryHandler<GetCategoryListQuery,ListResultDto<CategoryListDto>>
     {
         private readonly ICatalogDbContext _catalogDbContext;
 
@@ -22,7 +23,7 @@ namespace MicroStore.Catalog.Application.Categories.Queries
             _mapperAccessor = mapperAccessor;
         }
 
-        public override async Task<ResponseResult> Handle(GetCategoryListQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ListResultDto<CategoryListDto>>> Handle(GetCategoryListQuery request, CancellationToken cancellationToken)
         {
 
             var query = _catalogDbContext.Categories

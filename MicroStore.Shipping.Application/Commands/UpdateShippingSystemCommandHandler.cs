@@ -16,13 +16,13 @@ namespace MicroStore.Shipping.Application.Commands
             _shippingSystemRepository = shippingSystemRepository;
         }
 
-        public override async Task<ResponseResult> Handle(UpdateShippingSystemCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<Unit>> Handle(UpdateShippingSystemCommand request, CancellationToken cancellationToken)
         {
             var system = await _shippingSystemRepository.SingleOrDefaultAsync(x => x.Name == request.SystemName);
 
             if(system == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                return Failure(HttpStatusCode.NotFound, new ErrorInfo
                 {
                     Message = $"Shipping system with name : {request.SystemName} is not exist"
                 });

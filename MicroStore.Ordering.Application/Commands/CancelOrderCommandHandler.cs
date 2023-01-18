@@ -2,8 +2,8 @@
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Ordering.Application.Abstractions.Abstractions.Common;
 using MicroStore.Ordering.Application.Abstractions.Commands;
+using MicroStore.Ordering.Application.Abstractions.Common;
 using MicroStore.Ordering.Application.Abstractions.Consts;
 using MicroStore.Ordering.Events;
 using System.Net;
@@ -20,14 +20,14 @@ namespace MicroStore.Ordering.Application.Commands
             _orderRepository = orderRepository;
         }
 
-        public override async Task<ResponseResult> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<Unit>> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
 
             var order = await _orderRepository.GetOrder(request.OrderId);
 
             if(order == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                return Failure(HttpStatusCode.NotFound, new ErrorInfo
                 {
                     Message = $"Order entity with id {request.OrderId} is not exist"
                 });
@@ -35,7 +35,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             if(order.CurrentState == OrderStatusConst.Cancelled)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.BadRequest, new ErrorInfo
+                return Failure(HttpStatusCode.BadRequest, new ErrorInfo
                 {
                     Message = "order state is already canceled"
                 });
@@ -50,7 +50,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndPoint.Publish(orderCancelledEvent, cancellationToken);
 
-            return ResponseResult.Success((int)(HttpStatusCode.Accepted));
+            return Success((HttpStatusCode.Accepted));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Consts;
@@ -51,7 +52,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Controllers
         [NonAction]
         protected IActionResult Failure(int statusCode, ErrorInfo error)
         {
-            return StatusCode(statusCode, Envelope.Failure(error));
+            return StatusCode(statusCode, Envelope.Failure<Unit>(error));
         }
     }
 }

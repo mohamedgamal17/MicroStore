@@ -4,9 +4,9 @@ using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.BuildingBlocks.Mediator
 {
-    public class RequestAdapter<TResponse> : IRequestAdapter<TResponse>
+    public class RequestAdapter<TResponse> : IRequestAdapter<ResponseResult<TResponse>>
     {
-        public IRequest Request { get; }
+        public IBaseRequest Request { get; }
 
         public Type RequestType { get; }
 
@@ -14,7 +14,7 @@ namespace MicroStore.BuildingBlocks.Mediator
         public Type ResponseType { get; }
 
 
-        public RequestAdapter(IRequest request)
+        public RequestAdapter(IBaseRequest request)
         {
             Request = request;
 

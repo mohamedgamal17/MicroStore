@@ -1,30 +1,22 @@
 ﻿namespace MicroStore.BuildingBlocks.Results.Http
 {
-    public class  Envelope
+    public abstract class  Envelope
     {
         public ErrorInfo Error { get; set; }
         public DateTime TimeGenerated { get; set; }
 
 
-        public static  Envelope Success()
+        public static  Envelope<T> Failure<T>(ErrorInfo error)
         {
-            return new  Envelope()
-            {
-                TimeGenerated = DateTime.UtcNow
-            };
-        }
-
-
-        public static  Envelope Failure(ErrorInfo error)
-        {
-            return new  Envelope
+            return new  Envelope<T>
             {
                 Error = error,
-                TimeGenerated = DateTime.UtcNow
+                TimeGenerated = DateTime.UtcNow,
+                Result = default(T)
             };
         }
 
-        public static  Envelope Success<T>(T result) 
+        public static  Envelope<T> Success<T>(T result) 
         {
             return new Envelope<T>
             {

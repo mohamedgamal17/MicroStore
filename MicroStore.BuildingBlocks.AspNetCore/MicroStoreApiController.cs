@@ -12,12 +12,11 @@ namespace MicroStore.BuildingBlocks.AspNetCore
         [NonAction]
         public IActionResult FromResult(ResponseResult result)
         {
-            return StatusCode(result.StatusCode, result.Envelope);
+            return StatusCode(result.StatusCode, result.EnvelopeResult);
         }
 
         [NonAction]
-        protected Task<ResponseResult> Send<TRequest>(TRequest request)
-            where TRequest : IRequest
+        protected Task<ResponseResult<TResponse>> Send<TResponse>(IRequest<TResponse> request)
         {
             return LocalMessageBus.Send(request);
         }

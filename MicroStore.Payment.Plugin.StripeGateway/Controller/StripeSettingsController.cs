@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Abstractions.Common;
 using MicroStore.Payment.Plugin.StripeGateway.Config;
@@ -32,7 +33,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
 
         [HttpPut]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<StripePaymentSettings>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<StripePaymentSettings>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> UpdateStripeSettings(UpdateStripeSettingsModel model)
@@ -47,7 +48,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
 
             await _settingsRepository.TryToUpdateSettrings(settings);
 
-            return Success(StatusCodes.Status202Accepted, settings);
+            return Success(StatusCodes.Status200OK, settings);
         }
 
 
@@ -60,7 +61,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
         [NonAction]
         protected IActionResult Failure(int statusCode, ErrorInfo error) 
         {
-            return StatusCode(statusCode, Envelope.Failure(error));
+            return StatusCode(statusCode, Envelope.Failure<Unit>(error));
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Shipping.Application.Abstraction.Models;
 
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class ValidateAddressCommand : ICommand
+    public class ValidateAddressCommand : ICommand<AddressValidationResultModel>
     {
         public string Name { get; set; }
         public string Phone { get; set; }

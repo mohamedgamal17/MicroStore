@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Payment.Application.Abstractions.Common;
@@ -10,7 +11,7 @@ using MicroStore.Payment.Application.Abstractions.Queries;
 using System.Net;
 namespace MicroStore.Payment.Application.Queries
 {
-    public class GetPaymentRequestListQueryHandler : QueryHandler<GetPaymentRequestListQuery>
+    public class GetPaymentRequestListQueryHandler : QueryHandler<GetPaymentRequestListQuery,PagedResult<PaymentRequestListDto>>
     {
         private readonly IPaymentDbContext _paymentDbContext;
 
@@ -19,7 +20,7 @@ namespace MicroStore.Payment.Application.Queries
             _paymentDbContext = paymentDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetPaymentRequestListQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PagedResult<PaymentRequestListDto>>> Handle(GetPaymentRequestListQuery request, CancellationToken cancellationToken)
         {
             var query = _paymentDbContext.PaymentRequests
                 .AsNoTracking()

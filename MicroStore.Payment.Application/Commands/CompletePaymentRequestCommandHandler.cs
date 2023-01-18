@@ -9,7 +9,7 @@ using System.Net;
 
 namespace MicroStore.Payment.Application.Commands
 {
-    public class CompletePaymentRequestCommandHandler : CommandHandler<CompletePaymentRequestCommand>
+    public class CompletePaymentRequestCommandHandler : CommandHandler<CompletePaymentRequestCommand, PaymentRequestDto>
     {
 
         private readonly IPaymentMethodResolver _paymentResolver;
@@ -21,14 +21,14 @@ namespace MicroStore.Payment.Application.Commands
             _paymentRequestRepository = paymentRequestRepository;
         }
 
-        public override async Task<ResponseResult> Handle(CompletePaymentRequestCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PaymentRequestDto>> Handle(CompletePaymentRequestCommand request, CancellationToken cancellationToken)
         {
  
             var unitResult  = await _paymentResolver.Resolve(request.PaymentGatewayName);
 
             if (unitResult.IsFailure)
             {
-                return unitResult.ConvertFaildUnitResult();
+                return unitResult.ConvertFaildUnitResult<PaymentRequestDto>();
             }
 
             var paymentMethod = unitResult.Value;

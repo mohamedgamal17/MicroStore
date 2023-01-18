@@ -8,7 +8,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Inventory.Application.Commands
 {
-    public class AdjustProductInventoryCommandHandler : CommandHandler<AdjustProductInventoryCommand>
+    public class AdjustProductInventoryCommandHandler : CommandHandler<AdjustProductInventoryCommand,ProductDto>
     {
 
         private readonly IRepository<Product> _productRepository;
@@ -18,7 +18,7 @@ namespace MicroStore.Inventory.Application.Commands
             _productRepository = productRepository;
         }
 
-        public override async Task<ResponseResult> Handle(AdjustProductInventoryCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ProductDto>> Handle(AdjustProductInventoryCommand request, CancellationToken cancellationToken)
         {
            Product? product  = await  _productRepository.SingleOrDefaultAsync(x => x.Sku == request.Sku);
 
@@ -29,7 +29,7 @@ namespace MicroStore.Inventory.Application.Commands
                     Message = $"Product with sku : {request.Sku} is not exist"
                 };
 
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, erroInfo);
+                return Failure(HttpStatusCode.NotFound, erroInfo);
             }
 
             product.AdjustInventory(request.Stock, request.Reason);

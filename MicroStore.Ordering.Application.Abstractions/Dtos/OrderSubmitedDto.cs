@@ -1,10 +1,11 @@
 ﻿#nullable disable
+using MicroStore;
 using MicroStore.Ordering.Events.Models;
-namespace MicroStore.Ordering.Application.Dtos
+namespace MicroStore.Ordering.Application.Abstractions.Dtos
 {
     public class OrderSubmitedDto
     {
-        public Guid OrderId { get; set; }
+        public Guid Id { get; set; }
         public string OrderNumber { get; set; }
         public AddressModel ShippingAddress { get; set; }
         public AddressModel BillingAddress { get; set; }

@@ -1,11 +1,13 @@
-﻿
-
-using MicroStore.BuildingBlocks.Results;
-
+﻿using MicroStore.BuildingBlocks.Results;
 namespace MicroStore.BuildingBlocks.InMemoryBus.Contracts
 {
-    public interface ICommand : IRequest
+    public interface ICommand<TResponse> : IRequest<TResponse>
     {
 
     }
+
+    public interface ICommand : ICommand<Unit> { }
+
+
+
 }

@@ -10,7 +10,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Categories.Commands
 {
-    internal class UpdateCategoryCommandHandler : CommandHandler<UpdateCategoryCommand>
+    internal class UpdateCategoryCommandHandler : CommandHandler<UpdateCategoryCommand,CategoryDto>
     {
 
         private readonly IRepository<Category> _categoryRepository;
@@ -20,13 +20,13 @@ namespace MicroStore.Catalog.Application.Categories.Commands
             _categoryRepository = categoryRepository;
         }
 
-        public override async Task<ResponseResult> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<CategoryDto>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             Category? category = await _categoryRepository.SingleOrDefaultAsync(x => x.Id == request.CategoryId);
 
             if (category == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                return Failure(HttpStatusCode.NotFound, new ErrorInfo
                 {
                     Message = $"Category entity with id : {request.CategoryId} is not found"
                 });
@@ -38,7 +38,7 @@ namespace MicroStore.Catalog.Application.Categories.Commands
 
             await _categoryRepository.UpdateAsync(category, cancellationToken: cancellationToken);
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted , ObjectMapper.Map<Category, CategoryDto>(category));
+            return Success(HttpStatusCode.OK, ObjectMapper.Map<Category, CategoryDto>(category));
         }
 
 

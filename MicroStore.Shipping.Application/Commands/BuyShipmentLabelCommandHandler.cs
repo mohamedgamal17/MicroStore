@@ -2,11 +2,12 @@
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Common;
+using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Extensions;
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class BuyShipmentLabelCommandHandler : CommandHandler<BuyShipmentLabelCommand>
+    public class BuyShipmentLabelCommandHandler : CommandHandler<BuyShipmentLabelCommand,ShipmentDto>
     {
         private readonly IShipmentSystemResolver _shipmentSystemResolver;
 
@@ -15,13 +16,13 @@ namespace MicroStore.Shipping.Application.Commands
             _shipmentSystemResolver = shipmentSystemResolver;
         }
 
-        public override async Task<ResponseResult> Handle(BuyShipmentLabelCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ShipmentDto>> Handle(BuyShipmentLabelCommand request, CancellationToken cancellationToken)
         {
             var unitresult = await _shipmentSystemResolver.Resolve(request.SystemName, cancellationToken);
 
             if(unitresult.IsFailure)
             {
-                return unitresult.ConvertFaildUnitResult();
+                return unitresult.ConvertFaildUnitResult<ShipmentDto>();
             }
 
             var system = unitresult.Value;

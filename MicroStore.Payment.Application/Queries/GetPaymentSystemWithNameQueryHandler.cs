@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
@@ -10,7 +9,8 @@ using System.Net;
 
 namespace MicroStore.Payment.Application.Queries
 {
-    public class GetPaymentSystemWithNameQueryHandler : QueryHandler<GetPaymentSystemWithNameQuery>
+
+    public class GetPaymentSystemWithNameQueryHandler : QueryHandler<GetPaymentSystemWithNameQuery,PaymentSystemDto>
     {
         private readonly IPaymentDbContext _paymentDbContext;
 
@@ -19,7 +19,8 @@ namespace MicroStore.Payment.Application.Queries
             _paymentDbContext = paymentDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetPaymentSystemWithNameQuery request, CancellationToken cancellationToken)
+
+        public override async Task<ResponseResult<PaymentSystemDto>> Handle(GetPaymentSystemWithNameQuery request, CancellationToken cancellationToken)
         {
             var query = _paymentDbContext.PaymentSystems
                 .AsNoTracking()

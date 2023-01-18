@@ -1,5 +1,4 @@
-﻿
-using MicroStore.BuildingBlocks.InMemoryBus;
+﻿using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
@@ -7,12 +6,11 @@ using MicroStore.Catalog.Application.Abstractions.Products.Queries;
 using System.Net;
 using AutoMapper.QueryableExtensions;
 using MicroStore.BuildingBlocks.Paging.Extensions;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
+using MicroStore.BuildingBlocks.Paging;
 namespace MicroStore.Catalog.Application.Products.Queries
 {
-    internal class GetProductListQueryHandler : QueryHandler<GetProductListQuery>
+    internal class GetProductListQueryHandler : QueryHandler<GetProductListQuery, PagedResult<ProductListDto>>
     {
 
         private readonly ICatalogDbContext _catalogDbContext;
@@ -21,7 +19,7 @@ namespace MicroStore.Catalog.Application.Products.Queries
             _catalogDbContext = catalogDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetProductListQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PagedResult<ProductListDto>>> Handle(GetProductListQuery request, CancellationToken cancellationToken)
         {
             var query =  _catalogDbContext.Products.AsQueryable()
                 .AsNoTracking()

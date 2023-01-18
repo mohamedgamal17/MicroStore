@@ -21,7 +21,7 @@ namespace MicroStore.Inventory.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<PagedResult<ProductDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.PageNumber.Should().Be(query.PageNumber);
             result.PageSize.Should().Be(query.PageSize);

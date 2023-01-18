@@ -10,7 +10,7 @@ using MicroStore.Ordering.Application.Abstractions.StateMachines;
 using System.Net;
 namespace MicroStore.Ordering.Application.Queries
 {
-    public class GetOrderQueryHandler : QueryHandler<GetOrderQuery>
+    public class GetOrderQueryHandler : QueryHandler<GetOrderQuery,OrderDto>
     {
 
         private readonly IOrderDbContext _orderDbContext;
@@ -20,7 +20,7 @@ namespace MicroStore.Ordering.Application.Queries
             _orderDbContext = orderDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetOrderQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<OrderDto>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
             var query = _orderDbContext
                 .Query<OrderStateEntity>()

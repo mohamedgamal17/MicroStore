@@ -20,7 +20,7 @@ namespace MicroStore.Inventory.Application.Commands
             _orderRepository = orderRepository;
         }
 
-        public override async Task<ResponseResult> Handle(ReleaseOrderStockCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<Unit>> Handle(ReleaseOrderStockCommand request, CancellationToken cancellationToken)
         {
 
             var query = await _orderRepository.WithDetailsAsync(x=> x.Items);
@@ -40,7 +40,7 @@ namespace MicroStore.Inventory.Application.Commands
 
             await _orderRepository.UpdateAsync(order);
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted);
+            return ResponseResult.Success((int) HttpStatusCode.OK);
         }
     }
 }

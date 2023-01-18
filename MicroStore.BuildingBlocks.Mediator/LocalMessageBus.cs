@@ -12,10 +12,10 @@ namespace MicroStore.BuildingBlocks.Mediator
             _mediator = mediator;
         }
 
-        public Task<ResponseResult> Send(IRequest request, CancellationToken cancellationToken = default)
+        public Task<ResponseResult<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
 
         {
-            return _mediator.Send(new RequestAdapter<ResponseResult>(request), cancellationToken);
+            return _mediator.Send(new RequestAdapter<TResponse>(request), cancellationToken);
         }
     }
 }

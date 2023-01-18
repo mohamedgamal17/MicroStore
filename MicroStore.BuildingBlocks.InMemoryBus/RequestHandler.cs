@@ -11,8 +11,8 @@ using Volo.Abp.Validation;
 namespace MicroStore.BuildingBlocks.InMemoryBus
 {
     [DisableValidation]
-    public abstract class RequestHandler<TRequest> : IRequestHandler<TRequest>, IValidationEnabled
-      where TRequest : IRequest
+    public abstract class RequestHandler<TRequest,TResponse> : IRequestHandler<TRequest, TResponse>
+      where TRequest : IRequest<TResponse>
     {
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = null!;
         protected Type? ObjectMapperContext { get; set; }
@@ -23,7 +23,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
                 : (IObjectMapper)provider.GetRequiredService(typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext)));
 
 
-        public abstract Task<ResponseResult> Handle(TRequest request, CancellationToken cancellationToken);
+        public abstract Task<ResponseResult<TResponse>> Handle(TRequest request, CancellationToken cancellationToken);
 
 
         protected ResponseResult Success(HttpStatusCode statusCode)
@@ -31,28 +31,50 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
             return ResponseResult.Success((int)statusCode);
         }
 
-        protected ResponseResult Success<T>(HttpStatusCode statusCode , T result)
+        protected ResponseResult<TResponse> Success(HttpStatusCode statusCode , TResponse result)
         {
-            return ResponseResult.Success<T>((int)statusCode, result);
+            return ResponseResult.Success<TResponse>((int)statusCode, result);
         }
 
-        protected ResponseResult Success<T>(HttpStatusCode statusCode, List<T> result)
+        protected ResponseResult<T> Success<T>(HttpStatusCode statusCode, T result)
+        {
+            return ResponseResult.Success((int)statusCode, result);
+        }
+      
+        protected ResponseResult<ListResultDto<T>> Success<T>(HttpStatusCode statusCode, List<T> result)
         {
             return ResponseResult.Success((int)statusCode, new ListResultDto<T>(result));
         }
 
-        protected ResponseResult Failure(HttpStatusCode stausCode , string errorMessage , string? details = null)
+        protected ResponseResult<TResponse> Failure(HttpStatusCode statusCode , string errorMessage , string? details = null)
         {
-            return ResponseResult.Failure((int)stausCode, new ErrorInfo
+            return ResponseResult.Failure<TResponse>((int)statusCode, new ErrorInfo
             {
                 Message = errorMessage,
                 Details = details
             });
         }
 
-        protected ResponseResult Failure(HttpStatusCode stausCode , ErrorInfo errorInfo)
+
+        protected ResponseResult<T> Failure<T>(HttpStatusCode statusCode,  string errorMessage, string? details = null)
         {
-            return ResponseResult.Failure((int)stausCode, errorInfo);
+            return ResponseResult.Failure<T>((int)statusCode, new ErrorInfo
+            {
+                Message = errorMessage,
+                Details = details
+            });
+        }
+
+
+
+        protected ResponseResult<TResponse> Failure(HttpStatusCode stausCode , ErrorInfo errorInfo)
+        {
+            return ResponseResult.Failure<TResponse>((int)stausCode, errorInfo);
+        }
+
+        protected ResponseResult<T> Failure<T>(HttpStatusCode stausCode, ErrorInfo errorInfo)
+        {
+            return ResponseResult.Failure<T>((int)stausCode, errorInfo);
         }
     }
 }

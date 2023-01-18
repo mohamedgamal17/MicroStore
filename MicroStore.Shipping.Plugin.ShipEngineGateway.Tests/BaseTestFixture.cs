@@ -129,7 +129,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             BuyShipmentLabelModel model = new BuyShipmentLabelModel
             {
-                ShipmentRateId = rates.GetEnvelopeResult<List<ShipmentRateDto>>().Result.First().Id
+                ShipmentRateId = rates.EnvelopeResult.Result.Items.First().Id
             };
 
             await shipeEngineProvider.BuyShipmentLabel(fakeShipment.ShipmentExternalId!, model, CancellationToken.None);

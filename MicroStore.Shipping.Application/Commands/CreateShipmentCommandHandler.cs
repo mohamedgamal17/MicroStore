@@ -8,7 +8,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class CreateShipmentCommandHandler : CommandHandler<CreateShipmentCommand>
+    public class CreateShipmentCommandHandler : CommandHandler<CreateShipmentCommand,ShipmentDto>
     {
         private readonly IRepository<Shipment> _shipmentRepository;
 
@@ -17,13 +17,13 @@ namespace MicroStore.Shipping.Application.Commands
             _shipmentRepository = shipmentRepository;
         }
 
-        public override async Task<ResponseResult> Handle(CreateShipmentCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ShipmentDto>> Handle(CreateShipmentCommand request, CancellationToken cancellationToken)
         {
             var isOrderShipmentCreated = await _shipmentRepository.AnyAsync(x=> x.OrderId == request.OrderId);
 
             if(isOrderShipmentCreated)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.BadRequest, new ErrorInfo
+                return Failure(HttpStatusCode.BadRequest, new ErrorInfo
                 {
                     Message = $"Shipment is already created for Order with id : {request.OrderId}"
                 });
@@ -38,7 +38,7 @@ namespace MicroStore.Shipping.Application.Commands
 
 
 
-            return  ResponseResult.Success((int) HttpStatusCode.Created, ObjectMapper.Map<Shipment, ShipmentDto>(shipment));
+            return  Success(HttpStatusCode.Created, ObjectMapper.Map<Shipment, ShipmentDto>(shipment));
         }
     }
 }

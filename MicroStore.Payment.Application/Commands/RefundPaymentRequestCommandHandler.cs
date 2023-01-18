@@ -3,6 +3,7 @@ using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Abstractions;
 using MicroStore.Payment.Application.Abstractions.Commands;
+using MicroStore.Payment.Application.Abstractions.Dtos;
 using MicroStore.Payment.Domain;
 using System.Net;
 using Volo.Abp;
@@ -10,7 +11,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Payment.Application.Commands
 {
-    public class RefundPaymentRequestCommandHandler : CommandHandler<RefundPaymentRequestCommand>
+    public class RefundPaymentRequestCommandHandler : CommandHandler<RefundPaymentRequestCommand, PaymentRequestDto>
     {
         private readonly IRepository<PaymentRequest> _paymentRequestRepository;
 
@@ -21,14 +22,15 @@ namespace MicroStore.Payment.Application.Commands
             _paymentMethodResolver = paymentMethodResolver;
         }
 
-        public override async Task<ResponseResult> Handle(RefundPaymentRequestCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PaymentRequestDto>> Handle(RefundPaymentRequestCommand request, CancellationToken cancellationToken)
         {
             PaymentRequest paymentRequest = await _paymentRequestRepository
                 .SingleOrDefaultAsync(x => x.Id == request.PaymentId);
 
             if(paymentRequest == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo { Message = $"Payment request with id :{request.PaymentId}, is not exist" });
+                return Failure(HttpStatusCode.NotFound,
+                    new ErrorInfo { Message = $"Payment request with id :{request.PaymentId}, is not exist" });
             }
 
             if(paymentRequest.State != PaymentStatus.Payed)
@@ -39,7 +41,7 @@ namespace MicroStore.Payment.Application.Commands
                  $"in  {PaymentStatus.Payed}"
                 };
 
-                return ResponseResult.Failure((int)HttpStatusCode.BadRequest, errorInfo);
+                return Failure(HttpStatusCode.BadRequest, errorInfo);
             }
 
 

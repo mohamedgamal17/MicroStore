@@ -10,7 +10,7 @@ using MicroStore.Payment.Application.Abstractions.Queries;
 using System.Net;
 namespace MicroStore.Payment.Application.Queries
 {
-    public class GetPaymentRequestQueryHandler : QueryHandler<GetPaymentRequestQuery>
+    public class GetPaymentRequestQueryHandler : QueryHandler<GetPaymentRequestQuery,PaymentRequestDto>
     {
         private readonly IPaymentDbContext _paymentDbContext;
 
@@ -19,7 +19,7 @@ namespace MicroStore.Payment.Application.Queries
             _paymentDbContext = paymentDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetPaymentRequestQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PaymentRequestDto>> Handle(GetPaymentRequestQuery request, CancellationToken cancellationToken)
         {
             var query = _paymentDbContext.PaymentRequests
                 .AsNoTracking()

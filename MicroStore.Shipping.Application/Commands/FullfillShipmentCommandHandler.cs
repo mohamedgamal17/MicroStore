@@ -4,6 +4,7 @@ using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Const;
+using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Extensions;
 using MicroStore.Shipping.Domain.Entities;
@@ -12,7 +13,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class FullfillShipmentCommandHandler : CommandHandler<FullfillShipmentCommand>
+    public class FullfillShipmentCommandHandler : CommandHandler<FullfillShipmentCommand, ShipmentDto>
     {
         private readonly IShipmentSystemResolver _shipmentSystemResolver;
 
@@ -24,13 +25,13 @@ namespace MicroStore.Shipping.Application.Commands
             _shipmentRepository = shipmentRepository;
         }
 
-        public override async Task<ResponseResult> Handle(FullfillShipmentCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ShipmentDto>> Handle(FullfillShipmentCommand request, CancellationToken cancellationToken)
         {
             bool isShipmentExist = await _shipmentRepository.AnyAsync(x=> x.Id == request.ShipmentId, cancellationToken); 
 
             if(!isShipmentExist)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
+                return Failure(HttpStatusCode.NotFound, new ErrorInfo
                 {
                     Message = $"Shipment entity with id : {request.ShipmentId} is not exist"
                 });
@@ -41,7 +42,7 @@ namespace MicroStore.Shipping.Application.Commands
 
             if (unitresult.IsFailure)
             {
-                return unitresult.ConvertFaildUnitResult();
+                return unitresult.ConvertFaildUnitResult<ShipmentDto>();
             }
 
             var system = unitresult.Value;

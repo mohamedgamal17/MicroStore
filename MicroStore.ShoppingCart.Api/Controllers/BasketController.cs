@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.ShoppingCart.Api.Infrastructure;
 using MicroStore.ShoppingCart.Api.Models;
@@ -133,13 +134,13 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         [NonAction]
         protected IActionResult Success(int statusCode)
         {
-            return StatusCode(statusCode, Envelope.Success());
+            return StatusCode(statusCode, Envelope.Success<Unit>(Unit.Value));
         }
 
         [NonAction]
         protected IActionResult Failure(int statusCode , ErrorInfo error)
         {
-            return StatusCode(statusCode, Envelope.Failure(error));
+            return StatusCode(statusCode, Envelope.Failure<Unit>(error));
         }
 
     }

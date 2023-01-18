@@ -27,17 +27,17 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             _objectMapper = objectMapper;
         }
 
-        public Task<ResponseResult> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
+        public Task<ResponseResult<PaymentProcessResultDto>> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             var result = new PaymentProcessResultDto
             {
                 CheckoutLink = PaymentMethodConst.CheckoutUrl
             };
 
-            return Task.FromResult(Success(HttpStatusCode.Accepted, result));
+            return Task.FromResult(Success(HttpStatusCode.OK, result));
         }
 
-        public async Task<ResponseResult> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default)
+        public async Task<ResponseResult<PaymentRequestDto>> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default)
         {
             PaymentRequest paymentRequest = await _paymentRequestRepository.SingleOrDefaultAsync(x => x.Id == Guid.Parse(completePaymentModel.Token) , cancellationToken);
 
@@ -47,16 +47,20 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             await _paymentRequestRepository.UpdateAsync(paymentRequest);
 
 
-            return Success(HttpStatusCode.Accepted, _objectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest));
+            return Success(HttpStatusCode.OK, _objectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest));
 
         }
 
-        public async Task<ResponseResult> Refund(Guid paymentId, CancellationToken cancellationToken = default)
+        public async Task<ResponseResult<PaymentRequestDto>> Refund(Guid paymentId, CancellationToken cancellationToken = default)
         {
             PaymentRequest paymentRequest = await _paymentRequestRepository.SingleOrDefaultAsync(x => x.Id == paymentId, cancellationToken);
             paymentRequest.MarkAsRefunded(DateTime.UtcNow, "fake");
 
-           return Success(HttpStatusCode.Accepted, await _paymentRequestRepository.UpdateAsync(paymentRequest));
+            await _paymentRequestRepository.UpdateAsync(paymentRequest);
+
+            var result = _objectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
+
+           return Success(HttpStatusCode.OK, result);
           
         }
 
@@ -66,14 +70,14 @@ namespace MicroStore.Payment.Application.Tests.Fakes
         }
 
 
-        private ResponseResult Success<T>(HttpStatusCode statusCode, T result)
-            => ResponseResult.Success((int)statusCode, result);
+        private ResponseResult<T> Success<T>(HttpStatusCode statusCode, T result)
+            => ResponseResult.Success<T>((int)statusCode, result);
 
         private ResponseResult Success(HttpStatusCode statusCode)
             => ResponseResult.Success((int)statusCode);
 
-        private ResponseResult Failure(HttpStatusCode statusCode, ErrorInfo error)
-            => ResponseResult.Failure((int)statusCode, error);
+        private ResponseResult<T> Failure<T>(HttpStatusCode statusCode, ErrorInfo error)
+            => ResponseResult.Failure<T>((int)statusCode, error);
     }
 
     [ExposeServices(typeof(IPaymentMethod))]
@@ -81,7 +85,7 @@ namespace MicroStore.Payment.Application.Tests.Fakes
     {
         public string PaymentGatewayName => PaymentMethodConst.NonActiveGateway;
 
-        public Task<ResponseResult> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default)
+        public Task<ResponseResult<PaymentRequestDto>> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -91,12 +95,12 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             return Task.FromResult(false);
         }
 
-        public Task<ResponseResult> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
+        public Task<ResponseResult<PaymentProcessResultDto>> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ResponseResult> Refund(Guid paymentId, CancellationToken cancellationToken = default)
+        public Task<ResponseResult<PaymentRequestDto>> Refund(Guid paymentId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

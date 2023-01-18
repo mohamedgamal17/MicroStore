@@ -21,7 +21,7 @@ namespace MicroStore.Inventory.Application.Commands
             _orderRepository = orderRepository;
         }
 
-        public override async Task<ResponseResult> Handle(AllocateOrderStockCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<Unit>> Handle(AllocateOrderStockCommand request, CancellationToken cancellationToken)
         {
             List<Result> failureResults = new List<Result>();
 
@@ -46,12 +46,12 @@ namespace MicroStore.Inventory.Application.Commands
                 string details = failureResults.Select(x => x.ToString())
                         .Aggregate((t1, t2) => t1 + "\n" + t2)!;
 
-                var errorEnfo = new ErrorInfo
+                var errorInfo = new ErrorInfo
                 {
                     Message = details,
                 };
 
-                return ResponseResult.Failure((int) HttpStatusCode.BadRequest, errorEnfo);
+                return ResponseResult.Failure((int) HttpStatusCode.BadRequest, errorInfo);
             }
 
             foreach (var orderItem in request.Items)
@@ -91,7 +91,7 @@ namespace MicroStore.Inventory.Application.Commands
 
             await _orderRepository.InsertAsync(order);
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted);
+            return ResponseResult.Success((int) HttpStatusCode.OK);
         }
     }
 }

@@ -10,12 +10,12 @@ namespace MicroStore.BuildingBlocks.InMemoryBus.Wrappers
     }
     public abstract class RequestHandlerWrapper<TResponse> : RequestHandlerBase
     {
-        public abstract Task<ResponseResult> Handle(IRequest request, CancellationToken cancellationToken);
+        public abstract Task<ResponseResult<TResponse>> Handle(IRequest<TResponse> request, CancellationToken cancellationToken);
     }
 
 
     public class RequestHandlerWrapperImpl<TRequest, TResponse> : RequestHandlerWrapper<TResponse>
-        where TRequest : IRequest
+        where TRequest : IRequest<TResponse>
     {
 
         private readonly IServiceProvider _serviceProvider;
@@ -27,21 +27,21 @@ namespace MicroStore.BuildingBlocks.InMemoryBus.Wrappers
 
         public override async Task<object?> Handle(object request, CancellationToken cancellationToken)
         {
-            return await Handle((IRequest)request, cancellationToken);
+            return await Handle((IRequest<TResponse>)request, cancellationToken);
         }
 
-        public override Task<ResponseResult> Handle(IRequest request, CancellationToken cancellationToken)
+        public override Task<ResponseResult<TResponse>> Handle(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
 
 
-            Task<ResponseResult> handler() => _serviceProvider
-                .GetRequiredService<IRequestHandler<TRequest>>()
+            Task<ResponseResult<TResponse>> handler() => _serviceProvider
+                .GetRequiredService<IRequestHandler<TRequest, TResponse>>()
                 .Handle((TRequest)request, cancellationToken);
 
 
-            return  _serviceProvider.GetServices<IRequestMiddleware<TRequest>>()
+            return  _serviceProvider.GetServices<IRequestMiddleware<TRequest,TResponse>>()
                 .Reverse()
-                .Aggregate((RequestHandlerDelegate)handler, (next, pipeline) =>
+                .Aggregate((RequestHandlerDelegate<TResponse>)handler, (next, pipeline) =>
                     () => pipeline.Handle((TRequest)request, next, cancellationToken))();
         }
     }

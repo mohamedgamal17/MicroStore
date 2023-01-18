@@ -1,9 +1,12 @@
 ﻿using FluentValidation;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
+using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
+using Volo.Abp.Application.Dtos;
+
 namespace MicroStore.Shipping.Application.Abstraction.Commands
 {
-    public class EstimateShipmentRateCommand : ICommand
+    public class EstimateShipmentRateCommand : ICommand<ListResultDto<EstimatedRateDto>>
     {
         public AddressModel Address { get; set; }
         public List<ShipmentItemEstimationModel> Items { get; set; }

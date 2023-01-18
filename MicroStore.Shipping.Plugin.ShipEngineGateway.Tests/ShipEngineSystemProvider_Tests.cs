@@ -59,7 +59,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             responseResult.StatusCode.Should().Be((int) HttpStatusCode.OK);
 
-            var result = responseResult.GetEnvelopeResult<ShipmentDto>().Result;
+            var result = responseResult.EnvelopeResult.Result;
 
             var shipment = await SingleAsync<Shipment>(x=> x.Id == result.Id);
 
@@ -82,7 +82,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
             responseResult.StatusCode.Should().Be((int )HttpStatusCode.OK);
             responseResult.IsSuccess.Should().BeTrue();
 
-            var result = responseResult.GetEnvelopeResult<List<ShipmentRateDto>>().Result;
+            var result = responseResult.EnvelopeResult.Result.Items;
 
             result.Count.Should().NotBe(0);
             var rate = result.First();
@@ -106,11 +106,11 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             var ratesResult = await sut.RetriveShipmentRates(fakeShipment.ShipmentExternalId!);
 
-            var rates = ratesResult.GetEnvelopeResult<List<ShipmentRateDto>>().Result;
+            var rates = ratesResult.EnvelopeResult.Result;
 
             var model = new BuyShipmentLabelModel
             {
-                ShipmentRateId = rates.First().Id
+                ShipmentRateId = rates.Items.First().Id
             };
 
             var responseResult = await sut.BuyShipmentLabel(fakeShipment.ShipmentExternalId!, model);
@@ -119,7 +119,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             responseResult.IsSuccess.Should().BeTrue();
 
-            var result = responseResult.GetEnvelopeResult<ShipmentDto>().Result;
+            var result = responseResult.EnvelopeResult.Result;
 
             var shipment = await SingleAsync<Shipment>(x => x.Id == fakeShipment.Id);
 
@@ -157,7 +157,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             result.IsSuccess.Should().BeTrue();
 
-            var envelopeResut = result.GetEnvelopeResult<AddressValidationResultModel>();
+            var envelopeResut = result.EnvelopeResult;
 
             envelopeResut?.Should().NotBeNull();
 
@@ -190,7 +190,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             result.IsSuccess.Should().BeTrue();
 
-            var envelopeResut = result.GetEnvelopeResult<AddressValidationResultModel>();
+            var envelopeResut = result.EnvelopeResult;
 
             envelopeResut?.Should().NotBeNull();
 
@@ -209,7 +209,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Tests
 
             result.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var response = result.GetEnvelopeResult<List<EstimatedRateDto>>().Result;
+            var response = result.EnvelopeResult.Result.Items;
 
             response.Count.Should().NotBe(0);
 

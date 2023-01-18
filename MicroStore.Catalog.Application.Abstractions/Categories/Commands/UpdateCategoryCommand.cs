@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Abstractions.Categories.Commands
 {
-    public class UpdateCategoryCommand : CategoryCommandBase,ICommand
+    public class UpdateCategoryCommand : CategoryCommandBase,ICommand<CategoryDto>
     {
         public Guid CategoryId { get; set; }
     }

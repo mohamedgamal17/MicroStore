@@ -4,9 +4,9 @@ using Volo.Abp.Uow;
 
 namespace MicroStore.BuildingBlocks.InMemoryBus
 {
-    public abstract class RequestMiddleware<TRequest> :  IRequestMiddleware<TRequest>, IUnitOfWorkEnabled
-        where TRequest : IRequest
+    public abstract class RequestMiddleware<TRequest, TResponse> :  IRequestMiddleware<TRequest,TResponse>, IUnitOfWorkEnabled
+        where TRequest : IRequest<TResponse>
     {
-        public abstract Task<ResponseResult> Handle(TRequest request, RequestHandlerDelegate next, CancellationToken cancellationToken);
+        public abstract Task<ResponseResult<TResponse>> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken);
     }
 }

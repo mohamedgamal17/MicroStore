@@ -2,8 +2,8 @@
 using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Ordering.Application.Abstractions.Abstractions.Common;
 using MicroStore.Ordering.Application.Abstractions.Commands;
+using MicroStore.Ordering.Application.Abstractions.Common;
 using MicroStore.Ordering.Application.Abstractions.Consts;
 using MicroStore.Ordering.Events;
 using System.Net;
@@ -22,16 +22,14 @@ namespace MicroStore.Ordering.Application.Commands
             _orderRepository = orderRepository;
         }
 
-        public override async Task<ResponseResult> Handle(FullfillOrderCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<Unit>> Handle(FullfillOrderCommand request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetOrder(request.OrderId);
 
             if (order == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo
-                {
-                    Message = $"Order entity with id {request.OrderId} is not exist"
-                });
+                return Failure(HttpStatusCode.NotFound, 
+                    new ErrorInfo { Message = $"Order entity with id {request.OrderId} is not exist" });
             }
 
             if (order.CurrentState != OrderStatusConst.Approved)
@@ -42,7 +40,7 @@ namespace MicroStore.Ordering.Application.Commands
                     $"please make sure that order is in {OrderStatusConst.Approved} status to be able to fullfill the order"
                 };
 
-                return ResponseResult.Failure((int)HttpStatusCode.BadRequest, errorInfo);
+                return Failure(HttpStatusCode.BadRequest, errorInfo);
             }
 
             var orderFulfillmentCompletedEvent = new OrderFulfillmentCompletedEvent
@@ -53,7 +51,7 @@ namespace MicroStore.Ordering.Application.Commands
 
             await _publishEndPoint.Publish(orderFulfillmentCompletedEvent);
 
-            return ResponseResult.Success((int) HttpStatusCode.Accepted);
+            return Success(HttpStatusCode.Accepted);
         }
     }
 }

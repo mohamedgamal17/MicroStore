@@ -19,7 +19,7 @@ namespace MicroStore.Ordering.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<OrderDto>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.Id.Should().Be(query.OrderId);
         }

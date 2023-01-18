@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Inventory.Application.Abstractions.Common;
@@ -10,7 +11,7 @@ using MicroStore.Inventory.Application.Abstractions.Queries;
 using System.Net;
 namespace MicroStore.Inventory.Application.Queries
 {
-    public class GetProductListQueryHandler : QueryHandler<GetProductListQuery>
+    public class GetProductListQueryHandler : QueryHandler<GetProductListQuery,PagedResult<ProductDto>>
     {
 
         private readonly IInventoyDbContext _inventoryDbContext;
@@ -20,7 +21,7 @@ namespace MicroStore.Inventory.Application.Queries
             _inventoryDbContext = inventoryDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetProductListQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PagedResult<ProductDto>>> Handle(GetProductListQuery request, CancellationToken cancellationToken)
         {
             var query = _inventoryDbContext.Products
                 .AsNoTracking()

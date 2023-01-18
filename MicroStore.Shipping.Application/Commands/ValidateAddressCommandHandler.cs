@@ -7,10 +7,9 @@ using MicroStore.Shipping.Application.Extensions;
 using MicroStore.Shipping.Domain.Const;
 using MicroStore.Shipping.Domain.Entities;
 using System.Net;
-
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class ValidateAddressCommandHandler : CommandHandler<ValidateAddressCommand>
+    public class ValidateAddressCommandHandler : CommandHandler<ValidateAddressCommand, AddressValidationResultModel>
     {
         private readonly ISettingsRepository _settingsRepository;
 
@@ -22,7 +21,7 @@ namespace MicroStore.Shipping.Application.Commands
             _shipmentSystemResolver = shipmentSystemResolver;
         }
 
-        public override async Task<ResponseResult> Handle(ValidateAddressCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<AddressValidationResultModel>> Handle(ValidateAddressCommand request, CancellationToken cancellationToken)
         {
             var settings = await _settingsRepository.TryToGetSettings<ShippingSettings>(SettingsConst.ProviderKey, cancellationToken) ?? new ShippingSettings();
 
@@ -35,7 +34,7 @@ namespace MicroStore.Shipping.Application.Commands
 
             if (systemResult.IsFailure)
             {
-                return systemResult.ConvertFaildUnitResult();
+                return systemResult.ConvertFaildUnitResult<AddressValidationResultModel>();
             }
 
             var system = systemResult.Value;

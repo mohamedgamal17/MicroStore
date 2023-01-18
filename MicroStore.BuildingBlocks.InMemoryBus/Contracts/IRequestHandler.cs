@@ -5,8 +5,10 @@ using MicroStore.BuildingBlocks.Results;
 namespace MicroStore.BuildingBlocks.InMemoryBus.Contracts
 {
  
-    public interface IRequestHandler<TRequest>  where TRequest : IRequest
+    public interface IRequestHandler<TRequest,TResponse>  where TRequest : IRequest<TResponse>
     {
-        Task<ResponseResult> Handle(TRequest request, CancellationToken cancellationToken);
+        Task<ResponseResult<TResponse>> Handle(TRequest request, CancellationToken cancellationToken);
     }
+
+  
 }

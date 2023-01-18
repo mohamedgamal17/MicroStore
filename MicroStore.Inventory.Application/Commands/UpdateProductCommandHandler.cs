@@ -15,7 +15,7 @@ namespace MicroStore.Inventory.Application.Commands
             _productRepository = productRepository;
         }
 
-        public override async Task<ResponseResult> Handle(UpdateProdutCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<Unit>> Handle(UpdateProdutCommand request, CancellationToken cancellationToken)
         {
             Product product = await _productRepository.SingleAsync(x => x.ExternalProductId == request.ExternalProductId);
             product.Sku = request.Sku;

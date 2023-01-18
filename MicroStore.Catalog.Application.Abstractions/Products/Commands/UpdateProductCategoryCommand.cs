@@ -3,7 +3,7 @@ using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
-    public class UpdateProductCategoryCommand : ICommand
+    public class UpdateProductCategoryCommand : ICommand<ProductDto>
     {
         public Guid ProductId { get; set; }
         public Guid CategoryId { get; set; }

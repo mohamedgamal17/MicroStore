@@ -8,12 +8,9 @@ using MicroStore.Payment.Application.Abstractions.Models;
 using MicroStore.Payment.Application.Extensions;
 using MicroStore.Payment.Domain;
 using System.Net;
-using Volo.Abp;
-using Volo.Abp.Domain.Entities;
-
 namespace MicroStore.Payment.Application.Commands
 {
-    public class ProcessPaymentRequestCommandHandler : CommandHandler<ProcessPaymentRequestCommand>
+    public class ProcessPaymentRequestCommandHandler : CommandHandler<ProcessPaymentRequestCommand,PaymentProcessResultDto>
     {
         private readonly IPaymentMethodResolver _paymentMethodResolver;
 
@@ -25,13 +22,13 @@ namespace MicroStore.Payment.Application.Commands
             _paymentRequestRepository = paymentRequestRepository;
         }
 
-        public override  async Task<ResponseResult> Handle(ProcessPaymentRequestCommand request, CancellationToken cancellationToken)
+        public override  async Task<ResponseResult<PaymentProcessResultDto>> Handle(ProcessPaymentRequestCommand request, CancellationToken cancellationToken)
         {
             var paymentRequest = await _paymentRequestRepository.GetPaymentRequest(request.PaymentId, cancellationToken);
 
             if(paymentRequest == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound,new ErrorInfo { Message = $"Payment request with id :{request.PaymentId}, is not exist" });
+                return Failure(HttpStatusCode.NotFound,new ErrorInfo { Message = $"Payment request with id :{request.PaymentId}, is not exist" });
             }
 
             if(paymentRequest.State != PaymentStatus.Waiting)
@@ -43,7 +40,7 @@ namespace MicroStore.Payment.Application.Commands
                     $"in  {PaymentStatus.Waiting}"
                 };
 
-                return ResponseResult.Failure((int)HttpStatusCode.BadRequest, errorInfo);
+                return Failure(HttpStatusCode.BadRequest, errorInfo);
        
             }
 
@@ -51,7 +48,7 @@ namespace MicroStore.Payment.Application.Commands
 
             if (unitResult.IsFailure)
             {
-                return unitResult.ConvertFaildUnitResult();
+                return unitResult.ConvertFaildUnitResult<PaymentProcessResultDto>();
             }
 
             var paymentMethod = unitResult.Value;

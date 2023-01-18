@@ -30,7 +30,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Tests
             result.IsSuccess.Should().BeTrue();
             result.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var response = result.GetEnvelopeResult<PaymentProcessResultDto>().Result;
+            var response = result.EnvelopeResult.Result;
 
             response.AmountTotal.Should().Be(paymentRequest.TotalCost);
             response.AmountSubTotal.Should().Be(paymentRequest.SubTotal);

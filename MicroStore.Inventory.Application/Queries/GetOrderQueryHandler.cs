@@ -10,7 +10,7 @@ using System.Net;
 
 namespace MicroStore.Inventory.Application.Queries
 {
-    public class GetOrderQueryHandler : QueryHandler<GetOrderQuery>
+    public class GetOrderQueryHandler : QueryHandler<GetOrderQuery,OrderDto>
     {
         private readonly IInventoyDbContext _inventoryDbContext;
 
@@ -19,7 +19,7 @@ namespace MicroStore.Inventory.Application.Queries
             _inventoryDbContext = inventoryDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetOrderQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<OrderDto>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
             var query = _inventoryDbContext.Orders
               .AsNoTracking()

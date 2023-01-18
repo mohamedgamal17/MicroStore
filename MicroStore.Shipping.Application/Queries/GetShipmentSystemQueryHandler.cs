@@ -9,7 +9,7 @@ using MicroStore.Shipping.Application.Abstraction.Queries;
 using System.Net;
 namespace MicroStore.Shipping.Application.Queries
 {
-    public class GetShipmentSystemQueryHandler : QueryHandler<GetShipmentSystemQuery>
+    public class GetShipmentSystemQueryHandler : QueryHandler<GetShipmentSystemQuery,ShipmentSystemDto>
     {
         private readonly IShippingDbContext _shippingDbContext;
 
@@ -18,7 +18,7 @@ namespace MicroStore.Shipping.Application.Queries
             _shippingDbContext = shippingDbContext;
         }
 
-        public override async Task<ResponseResult> Handle(GetShipmentSystemQuery request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ShipmentSystemDto>> Handle(GetShipmentSystemQuery request, CancellationToken cancellationToken)
         {
             var query = _shippingDbContext.ShippingSystems
                 .AsNoTracking()

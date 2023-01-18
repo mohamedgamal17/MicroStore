@@ -17,7 +17,7 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result = response.GetEnvelopeResult<ListResultDto<ShipmentSystemDto>>().Result;
+            var result = response.EnvelopeResult.Result;
 
             result.Items.Count.Should().BeGreaterThan(0);
         }

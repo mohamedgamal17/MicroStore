@@ -2,11 +2,14 @@
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Common;
+using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Extensions;
 using System.Net;
+using Volo.Abp.Application.Dtos;
+
 namespace MicroStore.Shipping.Application.Commands
 {
-    public class RetriveShipmentRateCommandHandler : QueryHandler<RetriveShipmentRateCommand>
+    public class RetriveShipmentRateCommandHandler : QueryHandler<RetriveShipmentRateCommand,ListResultDto<ShipmentRateDto>>
     {
         private readonly IShipmentSystemResolver _shipmentSystemResolver;
 
@@ -15,7 +18,7 @@ namespace MicroStore.Shipping.Application.Commands
             _shipmentSystemResolver = shipmentSystemResolver;
         }
 
-        public override async Task<ResponseResult> Handle(RetriveShipmentRateCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<ListResultDto<ShipmentRateDto>>> Handle(RetriveShipmentRateCommand request, CancellationToken cancellationToken)
         {
 
             var unitresult = await _shipmentSystemResolver.Resolve(request.SystemName, cancellationToken);
@@ -23,7 +26,7 @@ namespace MicroStore.Shipping.Application.Commands
             if (unitresult.IsFailure)
             {
 
-                return unitresult.ConvertFaildUnitResult();
+                return unitresult.ConvertFaildUnitResult<ListResultDto<ShipmentRateDto>>();
 
             }
 

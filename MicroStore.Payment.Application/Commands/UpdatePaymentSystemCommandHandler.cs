@@ -8,7 +8,7 @@ using System.Net;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Payment.Application.Commands
 {
-    public class UpdatePaymentSystemCommandHandler : CommandHandler<UpdatePaymentSystemCommand>
+    public class UpdatePaymentSystemCommandHandler : CommandHandler<UpdatePaymentSystemCommand,PaymentSystemDto>
     {
         private readonly IRepository<PaymentSystem> _paymentSystemRepository;
 
@@ -17,13 +17,13 @@ namespace MicroStore.Payment.Application.Commands
             _paymentSystemRepository = paymentSystemRepository;
         }
 
-        public override async Task<ResponseResult> Handle(UpdatePaymentSystemCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PaymentSystemDto>> Handle(UpdatePaymentSystemCommand request, CancellationToken cancellationToken)
         {
             PaymentSystem? paymentSystem = await _paymentSystemRepository.SingleOrDefaultAsync(x => x.Name == request.Name);
 
             if(paymentSystem == null)
             {
-                return ResponseResult.Failure((int)HttpStatusCode.NotFound, new ErrorInfo { Message = $"Payment system with name :{request.Name}, is not exist" });
+                return Failure(HttpStatusCode.NotFound, new ErrorInfo { Message = $"Payment system with name :{request.Name}, is not exist" });
             }
 
             paymentSystem.IsEnabled = request.IsEnabled;
@@ -32,7 +32,7 @@ namespace MicroStore.Payment.Application.Commands
 
 
 
-            return ResponseResult.Success((int) HttpStatusCode.OK, ObjectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem));
+            return Success(HttpStatusCode.OK, ObjectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem));
         }
     }
 }

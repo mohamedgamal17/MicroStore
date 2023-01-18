@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Payment.Application.Commands
 {
-    public class CreatePaymentRequestCommandHandler : CommandHandler<CreatePaymentRequestCommand>
+    public class CreatePaymentRequestCommandHandler : CommandHandler<CreatePaymentRequestCommand,PaymentRequestDto>
     {
 
         private readonly IRepository<PaymentRequest> _paymentRepository;
@@ -19,7 +19,7 @@ namespace MicroStore.Payment.Application.Commands
             _paymentRepository = paymentRepository;
         }
 
-        public override async Task<ResponseResult> Handle(CreatePaymentRequestCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<PaymentRequestDto>> Handle(CreatePaymentRequestCommand request, CancellationToken cancellationToken)
         {
             bool isOrderPaymentCreated = await _paymentRepository.AnyAsync(x=> x.OrderId == request.OrderId
               || x.OrderNumber == request.OrderNumber);
@@ -27,7 +27,7 @@ namespace MicroStore.Payment.Application.Commands
             if (isOrderPaymentCreated)
             {
 
-                return ResponseResult.Failure((int)HttpStatusCode.BadRequest,new ErrorInfo {
+                return Failure(HttpStatusCode.BadRequest,new ErrorInfo {
                     Message = $"Order payment request for order id : {request.OrderId} , with number : {request.OrderNumber} is already created" 
                 });
             }

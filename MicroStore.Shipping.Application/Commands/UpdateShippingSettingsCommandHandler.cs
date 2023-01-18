@@ -18,7 +18,7 @@ namespace MicroStore.Shipping.Application.Commands
             _settingsRepository = settingsRepository;
         }
 
-        public override async Task<ResponseResult> Handle(UpdateShippingSettingsCommand request, CancellationToken cancellationToken)
+        public override async Task<ResponseResult<Unit>> Handle(UpdateShippingSettingsCommand request, CancellationToken cancellationToken)
         {
             var settings =await _settingsRepository.TryToGetSettings<ShippingSettings>(SettingsConst.ProviderKey, cancellationToken) ?? new ShippingSettings();
 
@@ -28,7 +28,7 @@ namespace MicroStore.Shipping.Application.Commands
 
             await _settingsRepository.TryToUpdateSettrings(settings, cancellationToken);
 
-            return Success(HttpStatusCode.Accepted);
+            return Success(HttpStatusCode.OK);
         }
 
 

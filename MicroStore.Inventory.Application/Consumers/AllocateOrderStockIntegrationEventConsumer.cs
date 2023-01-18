@@ -55,7 +55,7 @@ namespace MicroStore.Inventory.Application.Consumers
                     OrderNumber = context.Message.OrderNumber,
                     ExternalPaymentId = context.Message.ExternalPaymentId,
                     UserId= context.Message.UserId, 
-                    Details = result.Envelope.Error.Message
+                    Details = result.EnvelopeResult.Error.Message
                 });
 
             }
