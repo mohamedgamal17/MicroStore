@@ -12,7 +12,8 @@ using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.TestBase
 {
-    public class QueryTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> where TStartupModule : AbpModule
+    [Obsolete("Use ApplicationTestBase Instead")]
+    public class QueryTestBase<TStartupModule> : ApplicationTestBase<TStartupModule> where TStartupModule : AbpModule
     {
         public async Task<ResponseResult<TResposne>> Send<TResposne>(IRequest<TResposne> request)
         {

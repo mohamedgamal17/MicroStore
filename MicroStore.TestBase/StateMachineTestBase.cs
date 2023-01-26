@@ -12,7 +12,7 @@ using MicroStore.BuildingBlocks.Results;
 
 namespace MicroStore.TestBase
 {
-    public abstract class StateMachineTestBase<TStartupModule, TStateMachine, TInstance> : AbpIntegratedTest<TStartupModule>
+    public abstract class StateMachineTestBase<TStartupModule, TStateMachine, TInstance> : ApplicationTestBase<TStartupModule>
          where TStartupModule : AbpModule
          where TStateMachine : class, SagaStateMachine<TInstance>
          where TInstance : class, SagaStateMachineInstance
@@ -34,14 +34,6 @@ namespace MicroStore.TestBase
         }
 
 
-        public async Task<ResponseResult<TResposne>> Send<TResposne>(IRequest<TResposne> request)
-        {
-            using var scope = ServiceProvider.CreateScope();
-
-            var messageBus = scope.ServiceProvider.GetRequiredService<ILocalMessageBus>();
-
-            return await messageBus.Send(request);
-        }
         public async Task StartMassTransit()
         {
             await TestHarness.Start();
