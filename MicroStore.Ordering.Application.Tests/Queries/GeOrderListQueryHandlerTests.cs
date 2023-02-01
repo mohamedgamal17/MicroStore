@@ -4,7 +4,7 @@ using System.Net;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.Ordering.Application.Abstractions.Dtos;
 
-namespace MicroStore.Ordering.Application.Queries.Tests.Queries
+namespace MicroStore.Ordering.Application.Tests.Queries
 {
     public class GeOrderListQueryHandlerTests : BaseTestFixture
     {

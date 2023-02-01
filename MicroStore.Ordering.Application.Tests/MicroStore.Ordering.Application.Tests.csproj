@@ -10,10 +10,14 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Dummies\Orders.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dummies\Orders.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -37,10 +41,6 @@
     <ProjectReference Include="..\MicroStore.BuildingBlocks.Mediator\MicroStore.BuildingBlocks.Mediator.csproj" />
     <ProjectReference Include="..\MicroStore.Ordering.Infrastructure\MicroStore.Ordering.Infrastructure.csproj" />
     <ProjectReference Include="..\MicroStore.TestBase\MicroStore.TestBase.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Fakes\" />
   </ItemGroup>
 
 </Project>

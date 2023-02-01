@@ -4,7 +4,7 @@ using MicroStore.Ordering.Application.Abstractions.Queries;
 using FluentAssertions;
 using System.Net;
 
-namespace MicroStore.Ordering.Application.Queries.Tests.Queries
+namespace MicroStore.Ordering.Application.Tests.Queries
 {
     public class GetUserOrderListQueryHandlerTests : BaseTestFixture
     {

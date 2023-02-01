@@ -2,12 +2,14 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Ordering.Application.Abstractions.StateMachines;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Infrastructure;
 using MicroStore.Ordering.Infrastructure.EntityFramework;
+using MicroStore.TestBase.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Respawn;
 using Respawn.Graph;
 using System.Reflection;
@@ -23,7 +25,13 @@ namespace MicroStore.Ordering.Application.Tests
     [DependsOn(typeof(AbpAutofacModule))]
     public class StartupModule : AbpModule
     {
-       
+        private readonly JsonSerializerSettings _jsonSerilizerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new DomainModelContractResolver()
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            },
+        };
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddMassTransitTestHarness(busRegisterConfig =>
@@ -56,30 +64,43 @@ namespace MicroStore.Ordering.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
 
                 dbContext.Database.Migrate();
-
+                SeedOrdersData(dbContext);
             }
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            using (var scope = context.ServiceProvider.CreateScope())
+            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
+
+            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection"), new RespawnerOptions
             {
-                var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
-
-                var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection"), new RespawnerOptions
+                TablesToIgnore = new Table[]
                 {
-                    TablesToIgnore = new Table[]
-                    {
                     "__EFMigrationsHistory"
-                    }
-                }).Result;
+                }
+            }).Result;
 
 
-                respawner.ResetAsync(config.GetConnectionString("DefaultConnection")).Wait();
+            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")).Wait();
+        }
 
 
+        private void SeedOrdersData(OrderDbContext dbContext)
+        {
+            using (var stream = new StreamReader(@"Dummies\Orders.json"))
+            {
+                var json = stream.ReadToEnd();
+
+                var data = JsonConvert.DeserializeObject<JsonWrapper<OrderStateEntity>>(json, _jsonSerilizerSettings);
+
+                if (data != null)
+                {
+                    dbContext.AddRange(data.Data);
+                }
+
+                dbContext.SaveChanges();
             }
         }
-   
+
     }
 }

@@ -2,7 +2,7 @@
 using MicroStore.Ordering.Application.Abstractions.Dtos;
 using MicroStore.Ordering.Application.Abstractions.Queries;
 using System.Net;
-namespace MicroStore.Ordering.Application.Queries.Tests.Queries
+namespace MicroStore.Ordering.Application.Tests.Queries
 {
     public class GetOrderQueryHandlerTest : BaseTestFixture
     {
