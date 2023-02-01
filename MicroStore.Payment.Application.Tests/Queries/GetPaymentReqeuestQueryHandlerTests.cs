@@ -3,16 +3,16 @@ using MicroStore.Payment.Application.Abstractions.Dtos;
 using MicroStore.Payment.Application.Abstractions.Queries;
 using System.Net;
 
-namespace MicroStore.Payment.Application.Queries.Tests.Queries
+namespace MicroStore.Payment.Application.Tests.Queries
 {
-    public class GetPaymentSystemWithNameQueryHandlerTests : BaseTestFixture
+    public class GetPaymentReqeuestQueryHandlerTests : BaseTestFixture
     {
         [Test]
-        public async Task Should_get_payment_system_with_name()
+        public async Task Should_get_payment_request_with_id()
         {
-            var query = new GetPaymentSystemWithNameQuery
+            var query = new GetPaymentRequestQuery
             {
-                SystemName = "Example"
+                PaymentRequestId = Guid.Parse("dd2be1f2-e980-40f2-a47d-b9194ef03fe7")
             };
 
             var response = await Send(query);
@@ -21,20 +21,21 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
 
             var result = response.EnvelopeResult.Result;
 
-            result.Name.Should().Be(query.SystemName);
+            result.Id.Should().Be(query.PaymentRequestId);
         }
 
         [Test]
-        public async Task Should_return_status_code_404_notfound_when_payment_system_name_is_not_exist()
+        public async Task Should_return_status_code_404_notfound_when_payment_id_request_is_not_exist()
         {
-            var query = new GetPaymentSystemWithNameQuery
+            var query = new GetPaymentRequestQuery
             {
-                SystemName = Guid.NewGuid().ToString()
+                PaymentRequestId = Guid.NewGuid()
             };
 
             var response = await Send(query);
 
             response.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+
         }
     }
 }

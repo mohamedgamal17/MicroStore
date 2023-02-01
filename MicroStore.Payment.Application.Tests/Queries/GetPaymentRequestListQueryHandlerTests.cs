@@ -4,7 +4,7 @@ using MicroStore.Payment.Application.Abstractions.Dtos;
 using MicroStore.Payment.Application.Abstractions.Queries;
 using System.Net;
 
-namespace MicroStore.Payment.Application.Queries.Tests.Queries
+namespace MicroStore.Payment.Application.Tests.Queries
 {
     public class GetPaymentRequestListQueryHandlerTests : BaseTestFixture
     {
@@ -54,7 +54,7 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
             }
             else
             {
-                result.Items.Should().BeInAscendingOrder(x=> x.CreationTime);
+                result.Items.Should().BeInAscendingOrder(x => x.CreationTime);
             }
 
 

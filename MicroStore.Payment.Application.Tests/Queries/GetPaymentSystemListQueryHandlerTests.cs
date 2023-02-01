@@ -4,7 +4,7 @@ using MicroStore.Payment.Application.Abstractions.Queries;
 using System.Net;
 using Volo.Abp.Application.Dtos;
 
-namespace MicroStore.Payment.Application.Queries.Tests.Queries
+namespace MicroStore.Payment.Application.Tests.Queries
 {
     public class GetPaymentSystemListQueryHandlerTests : BaseTestFixture
     {
@@ -20,7 +20,7 @@ namespace MicroStore.Payment.Application.Queries.Tests.Queries
             var result = response.EnvelopeResult.Result;
 
             result.Items.Count.Should().BeGreaterThan(0);
-           
+
         }
     }
 }

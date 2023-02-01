@@ -5,11 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Payment.Application.EntityFramework;
+using MicroStore.TestBase.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using Respawn;
 using Respawn.Graph;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using MicroStore.Payment.Domain;
 
 namespace MicroStore.Payment.Application.Tests
 {
@@ -18,6 +22,15 @@ namespace MicroStore.Payment.Application.Tests
         typeof(AbpAutofacModule))]
     public class PaymentApplicationTestModule : AbpModule
     {
+        private readonly JsonSerializerSettings _jsonSerilizerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new DomainModelContractResolver()
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            },
+
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+        };
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
 
@@ -40,7 +53,6 @@ namespace MicroStore.Payment.Application.Tests
             LogContext.ConfigureCurrentLogContext(loggerFactory);
         }
 
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             using (var scope = context.ServiceProvider.CreateScope())
@@ -48,6 +60,11 @@ namespace MicroStore.Payment.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
                 dbContext.Database.Migrate();
+
+                SeedPaymentsData(dbContext);
+
+                SeedPaymentSystemsData(dbContext);
+
             }
         }
 
@@ -69,6 +86,41 @@ namespace MicroStore.Payment.Application.Tests
                 respawner.ResetAsync(config.GetConnectionString("DefaultConnection")).Wait();
 
 
+            }
+        }
+
+
+        private void SeedPaymentsData(PaymentDbContext dbContext)
+        {
+            using (var stream = new StreamReader(@"Dummies\Payments.json"))
+            {
+                var json = stream.ReadToEnd();
+
+                var data = JsonConvert.DeserializeObject<JsonWrapper<PaymentRequest>>(json, _jsonSerilizerSettings);
+
+                if (data != null)
+                {
+                    dbContext.PaymentRequests.AddRange(data.Data);
+                }
+
+                dbContext.SaveChanges();
+            }
+        }
+
+        private void SeedPaymentSystemsData(PaymentDbContext dbContext)
+        {
+            using (var stream = new StreamReader(@"Dummies\PaymentSystems.json"))
+            {
+                var json = stream.ReadToEnd();
+
+                var data = JsonConvert.DeserializeObject<JsonWrapper<PaymentSystem>>(json, _jsonSerilizerSettings);
+
+                if (data != null)
+                {
+                    dbContext.PaymentSystems.AddRange(data.Data);
+                }
+
+                dbContext.SaveChanges();
             }
         }
 

@@ -1,12 +1,12 @@
 {
   "profiles": {
-    "MicroStore.Payment.Application.Queries.Tests": {
+    "MicroStore.BuildingBlocks.Paging": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:62732;http://localhost:62734"
+      "applicationUrl": "https://localhost:63098;http://localhost:63099"
     }
   }
 }

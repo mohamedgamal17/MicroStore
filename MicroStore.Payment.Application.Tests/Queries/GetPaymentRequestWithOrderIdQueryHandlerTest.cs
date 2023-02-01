@@ -3,7 +3,7 @@ using MicroStore.Payment.Application.Abstractions.Dtos;
 using MicroStore.Payment.Application.Abstractions.Queries;
 using System.Net;
 
-namespace MicroStore.Payment.Application.Queries.Tests.Queries
+namespace MicroStore.Payment.Application.Tests.Queries
 {
     public class GetPaymentRequestWithOrderIdQueryHandlerTest : BaseTestFixture
     {
