@@ -2,7 +2,7 @@
 using MicroStore.Inventory.Application.Abstractions.Dtos;
 using MicroStore.Inventory.Application.Abstractions.Queries;
 using System.Net;
-namespace MicroStore.Inventory.Application.Queries.Tests.Queries
+namespace MicroStore.Inventory.Application.Tests.Queries
 {
     public class GetProductWithExternalIdQueryHandlerTests : BaseTestFixture
     {

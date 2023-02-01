@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using MicroStore.Inventory.Application.Tests.Extensions;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using MicroStore.Inventory.IntegrationEvents;
 using MicroStore.Inventory.IntegrationEvents.Models;

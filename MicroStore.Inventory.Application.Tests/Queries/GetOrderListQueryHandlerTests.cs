@@ -1,18 +1,20 @@
 ﻿using FluentAssertions;
+using MicroStore.BuildingBlocks.Paging;
+using MicroStore.Inventory.Application.Abstractions.Dtos;
 using MicroStore.Inventory.Application.Abstractions.Queries;
 using System.Net;
-namespace MicroStore.Inventory.Application.Queries.Tests.Queries
+
+namespace MicroStore.Inventory.Application.Tests.Queries
 {
-    public class GetUserOrderListQueryHandlerTests : BaseTestFixture
+    public class GetOrderListQueryHandlerTests : BaseTestFixture
     {
         [Test]
-        public async Task Should_get_user_order_list_paged()
+        public async Task Should_get_order_paged_list()
         {
-            var query = new GetUserOrderListQuery
+            var query = new GetOrderListQuery
             {
                 PageNumber = 1,
-                PageSize = 3,
-                UserId = "2cd94e7f-d80a-41c9-9805-75f1e3b4b925"
+                PageSize = 3
             };
 
             var response = await Send(query);

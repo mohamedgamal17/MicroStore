@@ -10,10 +10,18 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Dummies\Orders.json" />
+    <None Remove="Dummies\Products.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dummies\Orders.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dummies\Products.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

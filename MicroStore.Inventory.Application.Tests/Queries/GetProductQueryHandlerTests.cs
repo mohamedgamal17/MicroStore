@@ -2,16 +2,16 @@
 using MicroStore.Inventory.Application.Abstractions.Dtos;
 using MicroStore.Inventory.Application.Abstractions.Queries;
 using System.Net;
-namespace MicroStore.Inventory.Application.Queries.Tests.Queries
+namespace MicroStore.Inventory.Application.Tests.Queries
 {
-    public class GetOrderQueryHandlerTests :BaseTestFixture
+    public class GetProductQueryHandlerTests : BaseTestFixture
     {
         [Test]
-        public async Task Should_get_order_with_id()
+        public async Task Should_get_product_with_id()
         {
-            var query = new GetOrderQuery
+            var query = new GetProductQuery
             {
-                OrderId = Guid.Parse("159b39f4-d03d-48df-9c89-ef5aaba7ef52")
+                ProductId = Guid.Parse("6820be8e-0f4e-4ae2-94dc-e226a0e8f2f7")
             };
 
             var response = await Send(query);
@@ -20,15 +20,15 @@ namespace MicroStore.Inventory.Application.Queries.Tests.Queries
 
             var result = response.EnvelopeResult.Result;
 
-            result.Id.Should().Be(query.OrderId);
+            result.Id.Should().Be(query.ProductId);
         }
 
         [Test]
-        public async Task Should_return_status_code_404_notfound_when_order_id_is_not_exist()
+        public async Task Should_return_status_code_404_notfound_when_product_id_is_not_exist()
         {
-            var query = new GetOrderQuery
+            var query = new GetProductQuery
             {
-                OrderId = Guid.NewGuid()
+                ProductId = Guid.NewGuid()
             };
 
             var response = await Send(query);

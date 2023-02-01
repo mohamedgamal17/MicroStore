@@ -2,16 +2,17 @@
 using MicroStore.Inventory.Application.Abstractions.Dtos;
 using MicroStore.Inventory.Application.Abstractions.Queries;
 using System.Net;
-namespace MicroStore.Inventory.Application.Queries.Tests.Queries
+
+namespace MicroStore.Inventory.Application.Tests.Queries
 {
-    public class GetProductQueryHandlerTests : BaseTestFixture
+    public class GetProductWithSkuQueryHandlerTests : BaseTestFixture
     {
         [Test]
-        public async Task Should_get_product_with_id()
+        public async Task Should_get_product_with_sku()
         {
-            var query = new GetProductQuery
+            var query = new GetProductWithSkuQuery
             {
-                ProductId = Guid.Parse("6820be8e-0f4e-4ae2-94dc-e226a0e8f2f7")
+                Sku = "IPHONE-9"
             };
 
             var response = await Send(query);
@@ -20,15 +21,16 @@ namespace MicroStore.Inventory.Application.Queries.Tests.Queries
 
             var result = response.EnvelopeResult.Result;
 
-            result.Id.Should().Be(query.ProductId);
+            result.Sku.Should().Be(query.Sku);
+
         }
 
         [Test]
-        public async Task Should_return_status_code_404_notfound_when_product_id_is_not_exist()
+        public async Task Should_return_status_code_404_notfound_when_product_sku_is_not_exist()
         {
-            var query = new GetProductQuery
+            var query = new GetProductWithSkuQuery
             {
-                ProductId = Guid.NewGuid()
+                Sku = Guid.NewGuid().ToString()
             };
 
             var response = await Send(query);
