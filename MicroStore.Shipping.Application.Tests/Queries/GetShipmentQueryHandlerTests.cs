@@ -3,7 +3,7 @@ using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Queries;
 using System.Net;
 
-namespace MicroStore.Shipping.Application.Queries.Tests.Queries
+namespace MicroStore.Shipping.Application.Tests.Queries
 {
     public class GetShipmentQueryHandlerTests : BaseTestFixture
     {

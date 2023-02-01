@@ -3,7 +3,8 @@ using FluentAssertions;
 using System.Net;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
-namespace MicroStore.Shipping.Application.Queries.Tests.Queries
+
+namespace MicroStore.Shipping.Application.Tests.Queries
 {
     public class GetShipmentListQueryHandlerTests : BaseTestFixture
     {
@@ -25,6 +26,6 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
             result.PageNumber.Should().Be(query.PageNumber);
             result.PageSize.Should().Be(query.PageSize);
             result.Items.Count().Should().BeLessThanOrEqualTo(query.PageSize);
-        }     
+        }
     }
 }

@@ -4,7 +4,7 @@ using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Queries;
 using System.Net;
 
-namespace MicroStore.Shipping.Application.Queries.Tests.Queries
+namespace MicroStore.Shipping.Application.Tests.Queries
 {
     public class GetUserShipmentListQueryHandlerTests : BaseTestFixture
     {
@@ -23,7 +23,7 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
 
             response.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var result =  response.EnvelopeResult.Result;
+            var result = response.EnvelopeResult.Result;
 
             result.PageNumber.Should().Be(query.PageNumber);
             result.PageSize.Should().Be(query.PageSize);

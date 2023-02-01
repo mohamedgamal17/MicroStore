@@ -2,16 +2,16 @@
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Queries;
 using System.Net;
-namespace MicroStore.Shipping.Application.Queries.Tests.Queries
+namespace MicroStore.Shipping.Application.Tests.Queries
 {
-    public class GetShippingSystemQueryHandlerTests : BaseTestFixture
+    public class GetShipmentWithOrderIdQueryHandlerTests : BaseTestFixture
     {
         [Test]
-        public async Task Should_get_shipping_system_with_id()
+        public async Task Should_get_shipment_with_order_id()
         {
-            var query = new GetShipmentSystemQuery
+            var query = new GetShipmentWithOrderIdQuery
             {
-                SystemId = Guid.Parse("6cc93286-de57-4fe8-af64-90bdbe378e40")
+                OrderId = "379a9bf2-c85f-49c3-8422-6d6a10999bd6"
             };
 
             var response = await Send(query);
@@ -20,22 +20,20 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
 
             var result = response.EnvelopeResult.Result;
 
-            result.Id.Should().Be(query.SystemId);
+            result.OrderId.Should().Be(query.OrderId);
         }
 
         [Test]
-        public async Task Should_return_status_code_404_notfound_when_shipment_system_id_is_not_exist()
+        public async Task Should_return_status_code_404_notfound_when_shipment_for_order_id_is_not_exist()
         {
-            var query = new GetShipmentSystemQuery
+            var query = new GetShipmentWithOrderIdQuery
             {
-                SystemId = Guid.NewGuid()
+                OrderId = Guid.NewGuid().ToString()
             };
 
             var response = await Send(query);
 
             response.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
-
-
     }
 }
