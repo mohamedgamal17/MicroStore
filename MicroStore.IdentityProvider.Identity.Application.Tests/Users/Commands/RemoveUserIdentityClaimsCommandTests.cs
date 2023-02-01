@@ -2,7 +2,7 @@
 using MicroStore.IdentityProvider.Identity.Application.Users.Commands.AssignUserIdentityClaims;
 using MicroStore.IdentityProvider.Identity.Application.Users.Commands.RemoveUserIdentityClaims;
 using System.Net;
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users.Commands
 {
     public class RemoveUserIdentityClaimsCommandTests : UserCommandBaseTestFixture
     {

@@ -2,7 +2,7 @@
 using MicroStore.IdentityProvider.Identity.Application.Roles.Commands.RemoveRoleIdentityClaims;
 using System.Net;
 
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles.Commands
 {
     public class RemoveRoleIdentityClaimsCommandTests : RoleCommandBaseTestFixture
     {

@@ -3,7 +3,7 @@ using MicroStore.IdentityProvider.Identity.Application.Common.Models;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using System.Security.Claims;
 
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users.Commands
 {
     public abstract class UserCommandBaseTestFixture : BaseTestFixture
     {
@@ -15,7 +15,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             ApplicationIdentityUser user = GenerateApplicationUser();
 
-            await  usermanager.CreateAsync(user);
+            await usermanager.CreateAsync(user);
 
             return user;
         }
@@ -29,9 +29,9 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             var user = GenerateApplicationUser();
 
-            await usermanager.CreateAsync(user,Guid.NewGuid().ToString());
+            await usermanager.CreateAsync(user, Guid.NewGuid().ToString());
 
-            await usermanager.AddToRolesAsync(user,roles);
+            await usermanager.AddToRolesAsync(user, roles);
 
             return user;
         }
@@ -62,12 +62,12 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             await usermanager.AddClaimsAsync(user, claims.Select(x => new Claim(x.Type, x.Value)));
 
-            return user;  
+            return user;
         }
 
         protected async Task<List<ApplicationIdentityRole>> CreateFakeRoles()
         {
-             var rolmanager =ServiceProvider.GetRequiredService<ApplicationRoleManager>();
+            var rolmanager = ServiceProvider.GetRequiredService<ApplicationRoleManager>();
             var rules = new List<ApplicationIdentityRole>
             {
                 new ApplicationIdentityRole
@@ -93,7 +93,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             foreach (var item in rules)
             {
-               var identityResult =  await rolmanager.CreateAsync(item);
+                var identityResult = await rolmanager.CreateAsync(item);
                 ThrowIfFailureResult(identityResult);
             }
 
@@ -110,5 +110,5 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
             };
         }
     }
-    
+
 }

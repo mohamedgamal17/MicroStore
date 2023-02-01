@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MicroStore.IdentityProvider.Identity.Application.Common.Models;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using System.Security.Claims;
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles.Commands
 {
     public abstract class RoleCommandBaseTestFixture : BaseTestFixture
     {
@@ -34,16 +34,16 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             var rolemanager = scope.ServiceProvider.GetRequiredService<ApplicationRoleManager>();
 
-            var identityRole =  new ApplicationIdentityRole
+            var identityRole = new ApplicationIdentityRole
             {
                 Name = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
             };
 
-            identityRole.AddClaims(claims.Select(x=> new Claim(x.Type, x.Value)));
+            identityRole.AddClaims(claims.Select(x => new Claim(x.Type, x.Value)));
 
 
-            var identityResult=  await rolemanager.CreateAsync(identityRole);
+            var identityResult = await rolemanager.CreateAsync(identityRole);
 
             ThrowIfFailureResult(identityResult);
 

@@ -3,7 +3,7 @@ using MicroStore.IdentityProvider.Identity.Application.Users.Commands.CreateUser
 using System.Net;
 
 
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users.Commands
 {
     public class CreateUserCommandTests : UserCommandBaseTestFixture
     {
@@ -59,6 +59,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
             };
         }
 
-        
+
     }
 }

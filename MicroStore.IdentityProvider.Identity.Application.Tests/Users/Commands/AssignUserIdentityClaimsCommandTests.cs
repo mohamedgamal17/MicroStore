@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using MicroStore.IdentityProvider.Identity.Application.Users.Commands.AssignUserIdentityClaims;
 using System.Net;
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users.Commands
 {
     public class AssignUserIdentityClaimsCommandTests : UserCommandBaseTestFixture
     {

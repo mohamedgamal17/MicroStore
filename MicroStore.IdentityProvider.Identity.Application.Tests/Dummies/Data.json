@@ -1,0 +1,69 @@
+﻿{
+  "data": [
+    {
+      "first_name": "john",
+      "last_name": "doe",
+      "email": "johndoe54@example.com",
+      "user_name": "johndoe54@example.com",
+      "phone": "652314544",
+      "password": "8d4ecbf38cc64d99a3f28b7e7ce9b08a",
+      "user_claims": [
+        {
+          "type": "permission",
+          "value": "read"
+        }
+      ],
+
+      "user_roles": [
+        {
+          "name": "user",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+        }
+      ]
+    },
+
+    {
+      "first_name": "Angela",
+      "last_name": "Smith",
+      "email": "AngelaSmith55@example.com",
+      "user_name": "AngelaSmith55@example.com",
+      "phone": "652314544",
+      "password": "8d4ecbf38cc64d99a3f28b7e7ce9b08a",
+      "user_claims": [
+        {
+          "type": "permission",
+          "value": "read"
+        }
+      ],
+
+      "user_roles": [
+        {
+          "name": "admin",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+        }
+      ]
+    },
+
+    {
+      "first_name": "Jonathan",
+      "last_name": "Mannings",
+      "email": "JonathanMannings20@example.com",
+      "user_name": "JonathanMannings20@example.com",
+      "phone": "652314544",
+      "password": "8d4ecbf38cc64d99a3f28b7e7ce9b08a",
+      "user_claims": [
+        {
+          "type": "permission",
+          "value": "read"
+        }
+      ],
+
+      "user_roles": [
+        {
+          "name": "devloper",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+        }
+      ]
+    }
+  ]
+}

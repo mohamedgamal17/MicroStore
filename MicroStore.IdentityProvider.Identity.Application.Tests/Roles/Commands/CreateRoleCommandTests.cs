@@ -2,7 +2,7 @@
 using MicroStore.IdentityProvider.Identity.Application.Roles.Commands.CreateRole;
 using System.Net;
 
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles.Commands
 {
     public class CreateRoleCommandTests : RoleCommandBaseTestFixture
     {
@@ -24,7 +24,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
             var role = await FindRoleById(result.EnvelopeResult.Result.Id.ToString());
 
             role.Name.Should().Be(command.Name);
-            role.Description.Should().Be(command.Description);  
+            role.Description.Should().Be(command.Description);
         }
 
     }

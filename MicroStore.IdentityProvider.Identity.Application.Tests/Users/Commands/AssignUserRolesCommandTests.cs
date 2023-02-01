@@ -2,7 +2,7 @@
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application.Users.Commands.AssingUserRoles;
 using System.Net;
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users.Commands
 {
     public class AssignUserRolesCommandTests : UserCommandBaseTestFixture
     {
@@ -27,7 +27,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             var user = await FindUserById(fakeUser.Id);
 
-            var userRoles =  user.UserRoles.Select(x => x.Role.Name).ToList();
+            var userRoles = user.UserRoles.Select(x => x.Role.Name).ToList();
 
             userRoles.Should().HaveCount(fakeRules.Count);
 

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using MicroStore.IdentityProvider.Identity.Application.Roles.Commands.AssignRoleIdentityClaims;
 using System.Net;
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles.Commands
 {
     public class AssignRoleIdentityClaimsCommandTests : RoleCommandBaseTestFixture
     {
@@ -10,7 +10,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
         public async Task Should_assign_role_identity_claims()
         {
             var fakeClaims = CreateFakeClaims();
-            var fakeRole =await CreateRole();
+            var fakeRole = await CreateRole();
 
             var command = new AssignRoleIdentityClaimsCommand
             {
@@ -24,7 +24,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
             result.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
             var role = await FindRoleById(fakeRole.Id.ToString());
-            
+
             role.RoleClaims.Count.Should().Be(fakeClaims.Count);
 
             role.RoleClaims.Should().Equal(fakeClaims, (left, right) => left.ClaimType == right.Type && left.ClaimValue == right.Value);

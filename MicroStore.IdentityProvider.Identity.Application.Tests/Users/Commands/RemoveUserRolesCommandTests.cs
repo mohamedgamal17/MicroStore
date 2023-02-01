@@ -2,7 +2,7 @@
 using MicroStore.IdentityProvider.Identity.Application.Users.Commands.RemoveUserRoles;
 using System.Net;
 
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users.Commands
 {
     public class RemoveUserRolesCommandTests : UserCommandBaseTestFixture
     {

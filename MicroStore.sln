@@ -179,8 +179,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{3379
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Application.Tests", "MicroStore.IdentityProvider.Identity.Application.Tests\MicroStore.IdentityProvider.Identity.Application.Tests.csproj", "{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Application.Queries.Tests", "MicroStore.IdentityProvider.Identity.Application.Queries.Tests\MicroStore.IdentityProvider.Identity.Application.Queries.Tests.csproj", "{DDF65498-A8EF-401E-923B-5C5E0639CAF3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Infrastructure", "MicroStore.IdentityProvider.Identity.Infrastructure\MicroStore.IdentityProvider.Identity.Infrastructure.csproj", "{BABABB81-6742-4742-8744-FB8FEBD4262C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServerModule", "IdentityServerModule", "{33E12BB6-BDE8-4E84-8226-D19679ECCA45}"
@@ -453,10 +451,6 @@ Global
 		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDF65498-A8EF-401E-923B-5C5E0639CAF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDF65498-A8EF-401E-923B-5C5E0639CAF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDF65498-A8EF-401E-923B-5C5E0639CAF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDF65498-A8EF-401E-923B-5C5E0639CAF3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BABABB81-6742-4742-8744-FB8FEBD4262C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BABABB81-6742-4742-8744-FB8FEBD4262C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BABABB81-6742-4742-8744-FB8FEBD4262C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -564,7 +558,6 @@ Global
 		{53F22E17-C08D-4A42-9996-A2549237A1B4} = {7107956E-BC05-4060-8D9C-563805110605}
 		{33798677-D8A3-4294-A28A-C9C6DFE09D45} = {53F22E17-C08D-4A42-9996-A2549237A1B4}
 		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40} = {2FB29A7D-6164-41A0-B908-307A7035265A}
-		{DDF65498-A8EF-401E-923B-5C5E0639CAF3} = {2FB29A7D-6164-41A0-B908-307A7035265A}
 		{BABABB81-6742-4742-8744-FB8FEBD4262C} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
 		{33E12BB6-BDE8-4E84-8226-D19679ECCA45} = {21827ADD-5DB2-467B-B2E3-A206CB003FA2}
 		{F55EE88D-49FF-4AC6-B0AA-07F0BA667B99} = {33E12BB6-BDE8-4E84-8226-D19679ECCA45}

@@ -2,7 +2,7 @@
 using MicroStore.IdentityProvider.Identity.Application.Roles.Commands.UpdateRole;
 using System.Net;
 
-namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
+namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles.Commands
 {
     public class UpdateRoleCommandTests : RoleCommandBaseTestFixture
     {
@@ -45,6 +45,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
             result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
-        
+
     }
 }
