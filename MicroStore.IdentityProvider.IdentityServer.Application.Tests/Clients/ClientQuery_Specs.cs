@@ -2,7 +2,7 @@
 using FluentAssertions;
 using MicroStore.IdentityProvider.IdentityServer.Application.Clients.Queries;
 using System.Net;
-namespace MicroStore.IdentityProvider.IdentityServer.Application.Queries.Tests.Clients
+namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 {
     public class When_receving_get_client_list_query : BaseTestFixture
     {

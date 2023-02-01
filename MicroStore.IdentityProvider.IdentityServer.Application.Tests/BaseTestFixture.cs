@@ -45,5 +45,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests
             return await repository.SingleOrDefaultAsync(expression);
 
         }
+
+        public async Task<TEntity> FirstAsync<TEntity>() where TEntity : class
+        {
+            using var scope = ServiceProvider.CreateScope();
+
+            var repository = scope.ServiceProvider.GetRequiredService<IRepository<TEntity>>();
+
+            return await repository.FirstAsync();
+        } 
     }
 }

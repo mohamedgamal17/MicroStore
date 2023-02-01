@@ -193,9 +193,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityModule", "IdentityM
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServerModule", "IdentityServerModule", "{AC79C94B-3DBE-4AF9-A22A-0EE770582052}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.IdentityProvider.IdentityServer.Application.Tests", "MicroStore.IdentityProvider.IdentityServer.Application.Tests\MicroStore.IdentityProvider.IdentityServer.Application.Tests.csproj", "{9AC1D401-9637-4774-87E4-05EF221923BB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.IdentityProvider.IdentityServer.Application.Queries.Tests", "MicroStore.IdentityProvider.IdentityServer.Application.Queries.Tests\MicroStore.IdentityProvider.IdentityServer.Application.Queries.Tests.csproj", "{67CC3CDF-1CC0-4971-9532-0C886E1A4DD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.IdentityServer.Application.Tests", "MicroStore.IdentityProvider.IdentityServer.Application.Tests\MicroStore.IdentityProvider.IdentityServer.Application.Tests.csproj", "{9AC1D401-9637-4774-87E4-05EF221923BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -475,10 +473,6 @@ Global
 		{9AC1D401-9637-4774-87E4-05EF221923BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AC1D401-9637-4774-87E4-05EF221923BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AC1D401-9637-4774-87E4-05EF221923BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67CC3CDF-1CC0-4971-9532-0C886E1A4DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67CC3CDF-1CC0-4971-9532-0C886E1A4DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67CC3CDF-1CC0-4971-9532-0C886E1A4DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67CC3CDF-1CC0-4971-9532-0C886E1A4DD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -578,7 +572,6 @@ Global
 		{2FB29A7D-6164-41A0-B908-307A7035265A} = {33798677-D8A3-4294-A28A-C9C6DFE09D45}
 		{AC79C94B-3DBE-4AF9-A22A-0EE770582052} = {33798677-D8A3-4294-A28A-C9C6DFE09D45}
 		{9AC1D401-9637-4774-87E4-05EF221923BB} = {AC79C94B-3DBE-4AF9-A22A-0EE770582052}
-		{67CC3CDF-1CC0-4971-9532-0C886E1A4DD9} = {AC79C94B-3DBE-4AF9-A22A-0EE770582052}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}

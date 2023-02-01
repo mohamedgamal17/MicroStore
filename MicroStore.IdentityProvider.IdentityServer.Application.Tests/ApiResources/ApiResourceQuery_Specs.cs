@@ -2,7 +2,7 @@
 using FluentAssertions;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources.Queries;
 using System.Net;
-namespace MicroStore.IdentityProvider.IdentityServer.Application.Queries.Tests.ApiResources
+namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResources
 {
     public class When_receving_get_api_resource_list_query : BaseTestFixture
     {

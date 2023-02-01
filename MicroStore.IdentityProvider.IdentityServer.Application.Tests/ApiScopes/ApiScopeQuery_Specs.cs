@@ -2,9 +2,9 @@
 using FluentAssertions;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes.Queries;
 using System.Net;
-namespace MicroStore.IdentityProvider.IdentityServer.Application.Queries.Tests.ApiScopes
+namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
 {
-    public class When_receving_get_api_scope_list_query  : BaseTestFixture
+    public class When_receving_get_api_scope_list_query : BaseTestFixture
     {
         [Test]
         public async Task Should_return_paged_list_api_scope()
@@ -28,7 +28,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Queries.Tests.A
     }
 
 
-    public class When_receving_get_api_scope_query: BaseTestFixture
+    public class When_receving_get_api_scope_query : BaseTestFixture
     {
         [Test]
         public async Task Should_return_api_scope()

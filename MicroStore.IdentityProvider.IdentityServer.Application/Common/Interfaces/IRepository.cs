@@ -16,5 +16,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Common.Interfac
 
         Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
 
+        Task<TEntity> FirstAsync(CancellationToken cancellationToken = default);
+        Task<TEntity?> FirstOrDefaultAsync(CancellationToken cancellationToken = default);
+
+
+
     }
 }
