@@ -1,0 +1,43 @@
+{
+  "data": [
+    {
+      "client_name": "a68a374b1c9545b9a59d1a84f896a2d3",
+      "client_id": "a5a8946be92c4a8094a824bbaddfc1a3",
+      "client_uri": "http://exmple.com/",
+      "logo_uri": "http://exmple.com/",
+      "require_consent ": false,
+      "allowed_grant_types": [
+        {
+          "grant_type": "client_credentials"
+        }
+      ]
+    },
+
+    {
+      "client_name": "f445cf13497d436ba833040851384c69",
+      "client_id": "9d27afb444b94a279f54b528d0d77eb7",
+      "client_uri": "http://exmple.com/",
+      "logo_uri": "http://exmple.com/",
+      "require_consent ": false,
+      "allowed_grant_types": [
+        {
+          "grant_type": "client_credentials"
+        }
+      ]
+    },
+
+
+    {
+      "client_name": "720d0e54b60645cbbdbb88775a89649a",
+      "client_id": "5240e588cabc48e6a8372d1697c6e650",
+      "client_uri": "http://exmple.com/",
+      "logo_uri": "http://exmple.com/",
+      "require_consent ": false,
+      "allowed_grant_types": [
+        {
+          "grant_type": "client_credentials"
+        }
+      ]
+    }
+  ]
+}
