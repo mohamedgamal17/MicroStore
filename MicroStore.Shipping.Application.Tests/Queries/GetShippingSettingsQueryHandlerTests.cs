@@ -3,7 +3,7 @@ using MicroStore.Shipping.Application.Abstraction.Queries;
 using MicroStore.Shipping.Domain.Entities;
 using System.Net;
 
-namespace MicroStore.Shipping.Application.Queries.Tests.Queries
+namespace MicroStore.Shipping.Application.Tests.Queries
 {
     public class GetShippingSettingsQueryHandlerTests : BaseTestFixture
     {
@@ -17,7 +17,7 @@ namespace MicroStore.Shipping.Application.Queries.Tests.Queries
             result.IsSuccess.Should().BeTrue();
             result.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var response =  result.EnvelopeResult;
+            var response = result.EnvelopeResult;
 
             response.Should().NotBeNull();
 

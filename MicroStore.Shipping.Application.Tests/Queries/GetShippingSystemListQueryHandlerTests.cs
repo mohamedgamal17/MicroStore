@@ -4,7 +4,7 @@ using MicroStore.Shipping.Application.Abstraction.Queries;
 using System.Net;
 using Volo.Abp.Application.Dtos;
 
-namespace MicroStore.Shipping.Application.Queries.Tests.Queries
+namespace MicroStore.Shipping.Application.Tests.Queries
 {
     public class GetShippingSystemListQueryHandlerTests : BaseTestFixture
     {
