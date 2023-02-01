@@ -2,7 +2,7 @@
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 using MicroStore.Catalog.Application.Abstractions.Products.Queries;
 using System.Net;
-namespace MicroStore.Catalog.Application.Queries.Tests.Queries
+namespace MicroStore.Catalog.Application.Tests.Products.Queries
 {
     public class GetProductQueryHandlerTests : BaseTestFixture
     {

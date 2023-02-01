@@ -4,7 +4,7 @@ using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
 using System.Net;
 using Volo.Abp.Application.Dtos;
 
-namespace MicroStore.Catalog.Application.Queries.Tests.Queries
+namespace MicroStore.Catalog.Application.Tests.Categories.Queries
 {
     public class GetCategoryListQueryHandlerTests : BaseTestFixture
     {

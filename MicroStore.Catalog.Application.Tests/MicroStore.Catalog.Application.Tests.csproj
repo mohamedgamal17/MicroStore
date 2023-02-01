@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Dummies\Categories.json" />
+    <None Remove="Dummies\Products.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +19,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Dummies\Categories.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dummies\Products.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -41,10 +49,6 @@
     <ProjectReference Include="..\MicroStore.Catalog.Domain\MicroStore.Catalog.Domain.csproj" />
     <ProjectReference Include="..\MicroStore.Catalog.Infrastructure\MicroStore.Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\MicroStore.TestBase\MicroStore.TestBase.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

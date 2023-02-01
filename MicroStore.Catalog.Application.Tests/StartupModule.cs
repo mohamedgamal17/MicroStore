@@ -5,12 +5,16 @@ using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Catalog.Infrastructure;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
+using MicroStore.TestBase.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using Respawn;
 using Respawn.Graph;
 using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using MicroStore.Catalog.Domain.Entities;
 
 namespace MicroStore.Catalog.Application.Tests
 {
@@ -20,6 +24,13 @@ namespace MicroStore.Catalog.Application.Tests
     [DependsOn(typeof(MediatorModule))]
     public class StartupModule : AbpModule
     {
+        private readonly JsonSerializerSettings _jsonSerilizerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new DomainModelContractResolver()
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            },
+        };
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
@@ -42,6 +53,10 @@ namespace MicroStore.Catalog.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
 
                 dbContext.Database.Migrate();
+
+                SeedCategoriesData(dbContext);
+
+                SeedProductsData(dbContext);
             }
         }
 
@@ -63,6 +78,42 @@ namespace MicroStore.Catalog.Application.Tests
 
             }
         }
-       
+
+        private void SeedCategoriesData(CatalogDbContext dbContext)
+        {
+            using (var stream = new StreamReader(@"Dummies\Categories.json"))
+            {
+                var json = stream.ReadToEnd();
+                var dummy = JsonConvert.DeserializeObject<JsonWrapper<Category>>(json, _jsonSerilizerSettings);
+
+                if (dummy != null)
+                {
+                    dbContext.Categories.AddRange(dummy.Data);
+                }
+
+                dbContext.SaveChanges();
+            }
+        }
+
+
+        private void SeedProductsData(CatalogDbContext dbContext)
+        {
+            using (var stream = new StreamReader(@"Dummies\Products.json"))
+            {
+                var json = stream.ReadToEnd();
+
+                var dummy = JsonConvert.DeserializeObject<JsonWrapper<Product>>(json, _jsonSerilizerSettings);
+
+                if (dummy != null)
+                {
+                    dbContext.Products.AddRange(dummy.Data);
+                }
+
+                dbContext.SaveChanges();
+
+            }
+
+        }
+
     }
 }

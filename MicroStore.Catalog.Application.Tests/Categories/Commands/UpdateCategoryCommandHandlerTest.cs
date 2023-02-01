@@ -5,7 +5,7 @@ using MicroStore.Catalog.Domain.Entities;
 using System.Net;
 using Volo.Abp.Domain.Repositories;
 
-namespace MicroStore.Catalog.Application.Tests.Categories
+namespace MicroStore.Catalog.Application.Tests.Categories.Commands
 {
     public class UpdateCategoryCommandHandlerTest : BaseTestFixture
     {

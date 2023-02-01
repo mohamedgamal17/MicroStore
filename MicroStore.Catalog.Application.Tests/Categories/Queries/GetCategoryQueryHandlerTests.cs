@@ -2,7 +2,8 @@
 using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
 using FluentAssertions;
 using System.Net;
-namespace MicroStore.Catalog.Application.Queries.Tests.Queries
+
+namespace MicroStore.Catalog.Application.Tests.Categories.Queries
 {
     public class GetCategoryQueryHandlerTests : BaseTestFixture
     {
