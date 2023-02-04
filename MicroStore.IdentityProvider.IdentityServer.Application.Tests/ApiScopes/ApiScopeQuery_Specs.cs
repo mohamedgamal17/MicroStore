@@ -1,6 +1,6 @@
 ﻿using Duende.IdentityServer.EntityFramework.Entities;
 using FluentAssertions;
-using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes.Queries;
+using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
 using System.Net;
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
 {

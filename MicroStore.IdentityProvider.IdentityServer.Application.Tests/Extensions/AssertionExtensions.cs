@@ -1,11 +1,9 @@
 ﻿using Duende.IdentityServer.EntityFramework.Entities;
 using FluentAssertions;
-using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources.Commands;
-using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources.Dtos;
-using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes.Commands;
-using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes.Dtos;
-using MicroStore.IdentityProvider.IdentityServer.Application.Clients.Commands;
-using MicroStore.IdentityProvider.IdentityServer.Application.Clients.Dtos;
+using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
+using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
+using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
+using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Extensions
 {

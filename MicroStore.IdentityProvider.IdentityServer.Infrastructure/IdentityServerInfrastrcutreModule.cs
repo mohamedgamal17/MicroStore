@@ -14,42 +14,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var config = context.Services.GetConfiguration();
-
-            context.Services.AddConfigurationDbContext<ApplicationConfigurationDbContext>(cfg =>
-            {
-                cfg.DefaultSchema = IdentityServerDbConsts.ConfigurationSchema;
-
-                cfg.ConfigureDbContext= (builder) =>
-                {
-                    builder.UseSqlServer(config.GetConnectionString("DefaultConnection"), sqlServerOpt =>
-                    {
-                        sqlServerOpt.MigrationsAssembly(typeof(IdentityServerInfrastrcutreModule).Assembly.FullName)
-                            .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-
-                    });
-
-
-                };
-            });
-
-            var migrationAssembly = typeof(IdentityServerInfrastrcutreModule).Assembly.FullName;
-
-            context.Services.AddOperationalDbContext<ApplicationPersistedGrantDbContext>(cfg =>
-            {
-               
-                cfg.DefaultSchema = IdentityServerDbConsts.OperationalSchema;
-
-                cfg.ConfigureDbContext = (builder) =>
-                {
-                    builder.UseSqlServer(config.GetConnectionString("DefaultConnection"), sqlServerOpt =>
-                    {
-                        sqlServerOpt.MigrationsAssembly(typeof(IdentityServerInfrastrcutreModule).Assembly.FullName)
-                            .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-
-                    });
-                };
-            });
+            
         }
     }
 }

@@ -2,7 +2,7 @@
 using FluentAssertions;
 using IdentityModel;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources.Commands;
+using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common.Interfaces;
 
 using System.Net;

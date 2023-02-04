@@ -5,8 +5,8 @@ using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework
 {
-    [ExposeServices(new Type[] { typeof(IClinetRepository), typeof(IRepository<Client>) }, IncludeSelf = true)]
-    public class ClinetRepository : Repository<ApplicationConfigurationDbContext, Client>, IClinetRepository, IScopedDependency 
+    [ExposeServices(new Type[] { typeof(IClientRepository), typeof(IRepository<Client>) }, IncludeSelf = true)]
+    public class ClinetRepository : Repository<ApplicationConfigurationDbContext, Client>, IClientRepository, IScopedDependency 
     {
         public ClinetRepository(ApplicationConfigurationDbContext dbContext) : base(dbContext)
         {

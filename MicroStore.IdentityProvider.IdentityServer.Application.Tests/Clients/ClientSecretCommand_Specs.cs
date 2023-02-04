@@ -2,7 +2,7 @@
 using FluentAssertions;
 using IdentityModel;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.IdentityProvider.IdentityServer.Application.Clients.Commands;
+using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common.Interfaces;
 using Newtonsoft.Json.Linq;
 using System.Net;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Duende.IdentityServer.EntityFramework.Entities;
-using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes.Dtos;
+using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Mappers
 {
     public class ApiScopeMapper : Profile

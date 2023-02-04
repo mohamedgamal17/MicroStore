@@ -48,7 +48,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramew
     [ExposeServices(typeof(IApplicationPersistedGrantDbContext))]
     public class ApplicationPersistedGrantDbContext : PersistedGrantDbContext<ApplicationPersistedGrantDbContext>, IApplicationPersistedGrantDbContext , IScopedDependency
     {
-        public ApplicationPersistedGrantDbContext(DbContextOptions options) : base(options)
+        public ApplicationPersistedGrantDbContext(DbContextOptions<ApplicationPersistedGrantDbContext> options) : base(options)
         {
 
         }
