@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MicroStore.IdentityProvider.Host.Models;
+using MicroStore.IdentityProvider.Identity.Application;
+using MicroStore.IdentityProvider.Identity.Application.Domain;
 
 namespace MicroStore.IdentityProvider.Host.Pages.Login
 {
@@ -15,8 +16,8 @@ namespace MicroStore.IdentityProvider.Host.Pages.Login
     [AllowAnonymous]
     public class Index : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly SignInManager<ApplicationIdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -32,8 +33,8 @@ namespace MicroStore.IdentityProvider.Host.Pages.Login
             IAuthenticationSchemeProvider schemeProvider,
             IIdentityProviderStore identityProviderStore,
             IEventService events,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            ApplicationUserManager userManager,
+            SignInManager<ApplicationIdentityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -94,7 +95,7 @@ namespace MicroStore.IdentityProvider.Host.Pages.Login
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(Input.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName, clientId: context?.Client.ClientId));
 
                     if (context != null)
                     {

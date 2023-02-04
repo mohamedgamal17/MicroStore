@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MicroStore.IdentityProvider.Host.Models;
+using MicroStore.IdentityProvider.Identity.Application;
+using MicroStore.IdentityProvider.Identity.Application.Domain;
 using System.Security.Claims;
 
 namespace MicroStore.IdentityProvider.Host.Pages.ExternalLogin
@@ -16,8 +17,8 @@ namespace MicroStore.IdentityProvider.Host.Pages.ExternalLogin
     [SecurityHeaders]
     public class Callback : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly SignInManager<ApplicationIdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly ILogger<Callback> _logger;
         private readonly IEventService _events;
@@ -26,8 +27,8 @@ namespace MicroStore.IdentityProvider.Host.Pages.ExternalLogin
             IIdentityServerInteractionService interaction,
             IEventService events,
             ILogger<Callback> logger,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            ApplicationUserManager userManager,
+            SignInManager<ApplicationIdentityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -107,11 +108,11 @@ namespace MicroStore.IdentityProvider.Host.Pages.ExternalLogin
             return Redirect(returnUrl);
         }
 
-        private async Task<ApplicationUser> AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
+        private async Task<ApplicationIdentityUser> AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
         {
             var sub = Guid.NewGuid().ToString();
 
-            var user = new ApplicationUser
+            var user = new ApplicationIdentityUser
             {
                 Id = sub,
                 UserName = sub, // don't need a username, since the user will be using an external provider to login

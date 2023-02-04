@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MicroStore.IdentityProvider.Host.Models;
+using MicroStore.IdentityProvider.Identity.Application;
+using MicroStore.IdentityProvider.Identity.Application.Domain;
 
 namespace MicroStore.IdentityProvider.Host.Pages.Logout
 {
@@ -15,14 +16,14 @@ namespace MicroStore.IdentityProvider.Host.Pages.Logout
     [AllowAnonymous]
     public class Index : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly SignInManager<ApplicationIdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events;
 
         [BindProperty]
         public string LogoutId { get; set; }
 
-        public Index(SignInManager<ApplicationUser> signInManager, IIdentityServerInteractionService interaction, IEventService events)
+        public Index(SignInManager<ApplicationIdentityUser> signInManager, IIdentityServerInteractionService interaction, IEventService events)
         {
             _signInManager = signInManager;
             _interaction = interaction;
