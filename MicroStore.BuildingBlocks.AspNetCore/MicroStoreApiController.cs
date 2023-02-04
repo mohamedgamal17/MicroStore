@@ -10,7 +10,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore
         public ILocalMessageBus LocalMessageBus { get; set; }
 
         [NonAction]
-        public IActionResult FromResult(ResponseResult result)
+        public IActionResult FromResult<T>(ResponseResult<T> result)
         {
             return StatusCode(result.StatusCode, result.EnvelopeResult);
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MicroStore.BuildingBlocks.Results.Http;
 using System.Reflection;
@@ -11,6 +12,11 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Security
     {
         public Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+            if(context.ActionDescriptor.GetType() != typeof(ControllerActionDescriptor))
+            {
+                return Task.CompletedTask; 
+            }
+
             var attribute = context.ActionDescriptor.GetMethodInfo().GetCustomAttribute<RequiredScopeAttribute>();
 
             if (attribute == null || attribute?.AllowedScope == null)
