@@ -30,13 +30,13 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
 
 
 
-        public async Task<ApplicationIdentityUser> FindUserById(Guid userId)
+        public async Task<ApplicationIdentityUser> FindUserById(string userId)
         {
             using var scope = ServiceProvider.CreateScope();
 
             var usermanager = scope.ServiceProvider.GetRequiredService<ApplicationUserManager>();
 
-            return await usermanager.FindByIdAsync(userId.ToString());
+            return await usermanager.FindByIdAsync(userId);
         }
 
         public async Task<ApplicationIdentityRole> FindRoleById(string roleId)

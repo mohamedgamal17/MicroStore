@@ -4,14 +4,14 @@ using System.Security.Claims;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Domain
 {
-    public class ApplicationIdentityUser : IdentityUser<Guid>
+    public class ApplicationIdentityUser : IdentityUser
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
         public ApplicationIdentityUser()
         {
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString("N");
         }
 
         public List<ApplicationIdentityUserClaim> UserClaims { get; set; } = new List<ApplicationIdentityUserClaim>();
@@ -29,6 +29,8 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
 
         public void AddUserClaims(IEnumerable<Claim> claims)
         {
+            UserClaims.Clear();
+
             foreach (var claim in claims)
             {
                 AddUserClaim(claim);
@@ -46,6 +48,8 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
 
         public UnitResult AddUserRoles(IEnumerable<ApplicationIdentityRole> identityRoles)
         {
+            UserRoles.Clear();
+
             foreach (var role in identityRoles)
             {
                 var result = AddUserRole(role);
@@ -138,7 +142,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
         }
     }
 
-    public class ApplicationIdentityUserClaim : IdentityUserClaim<Guid>
+    public class ApplicationIdentityUserClaim : IdentityUserClaim<string>
     {
 
     }

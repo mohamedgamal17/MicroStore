@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
@@ -18,6 +20,33 @@ namespace MicroStore.IdentityProvider.Identity.Application
         public override Task<IdentityResult> AddToRolesAsync(ApplicationIdentityUser user, IEnumerable<string> roles)
         {
             return base.AddToRolesAsync(user, roles);
+        }
+
+        public override Task<IdentityResult> AddPasswordAsync(ApplicationIdentityUser user, string password)
+        {
+            return base.AddPasswordAsync(user, password);
+        }
+        public async Task<IdentityResult> UpdateUserPasswordAsync(ApplicationIdentityUser user, string password)
+        {
+            var passwordStore = GetPasswordStore();
+
+            var result = await UpdatePasswordHash(user, password,true);
+
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            return await UpdateUserAsync(user);
+        }
+
+        private IUserPasswordStore<ApplicationIdentityUser> GetPasswordStore()
+        {
+            var cast = Store as IUserPasswordStore<ApplicationIdentityUser>;
+            if (cast == null)
+            {
+                throw new NotSupportedException();
+            }
+            return cast;
         }
     }
 

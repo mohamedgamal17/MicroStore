@@ -10,6 +10,7 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework.En
         {
 
             builder.HasKey(r => r.Id);
+            builder.Property(x => x.Id).HasMaxLength(256);
             builder.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
             builder.ToTable("AspNetRoles");
             builder.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
@@ -19,6 +20,7 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework.En
             builder.Property(x => x.Description).HasDefaultValue(string.Empty).HasMaxLength(500);
             builder.Property(u => u.NormalizedName).HasMaxLength(256);
             builder.Property(x => x.ConcurrencyStamp).HasMaxLength(256);
+
 
             builder.HasMany(x => x.RoleClaims).WithOne().HasForeignKey(x => x.RoleId).IsRequired();
 

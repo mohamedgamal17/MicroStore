@@ -12,12 +12,13 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework.En
             builder.ToTable("IdentityUsers");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).HasMaxLength(256);
             builder.HasIndex(x => x.NormalizedUserName).HasDatabaseName("UserNameIndex").IsUnique();
             builder.HasIndex(x => x.NormalizedEmail).HasDatabaseName("EmailIndex");
             builder.Property(x => x.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(x => x.UserName).HasMaxLength(256);
-            builder.Property(x => x.FirstName).HasMaxLength(256);
-            builder.Property(x => x.LastName).HasMaxLength(256);
+            builder.Property(x => x.FirstName).HasMaxLength(256).HasDefaultValue(string.Empty);
+            builder.Property(x => x.LastName).HasMaxLength(256).HasDefaultValue(string.Empty); 
             builder.Property(x => x.NormalizedUserName).HasMaxLength(256);
             builder.Property(x => x.Email).HasMaxLength(256);
             builder.Property(x => x.PhoneNumber).HasMaxLength(30);
@@ -29,6 +30,7 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework.En
             builder.HasMany(x => x.UserLogins).WithOne().HasForeignKey(x => x.UserId).IsRequired();
             builder.HasMany(x => x.UserTokens).WithOne().HasForeignKey(x => x.UserId).IsRequired();
             builder.HasMany(x => x.UserRoles).WithOne().HasForeignKey(x => x.UserId).IsRequired();
+           
             builder.Navigation(x => x.UserRoles).AutoInclude(true);
             builder.Navigation(x => x.UserClaims).AutoInclude(true);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.Mediator;
@@ -28,6 +29,23 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
             },
         };
 
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddIdentity<ApplicationIdentityUser, ApplicationIdentityRole>(opt =>
+            {
+                opt.Stores.ProtectPersonalData = false;
+                opt.User.RequireUniqueEmail = true;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 6;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+            }).AddUserManager<ApplicationUserManager>()
+               .AddRoleManager<ApplicationRoleManager>()
+               .AddDefaultTokenProviders();
+
+        }
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             using (var scope = context.ServiceProvider.CreateScope())
@@ -62,6 +80,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
         {
             using (var stream = new StreamReader(@"Dummies\Data.json"))
             {
+
                 var userManager = serviceProvider.GetRequiredService<ApplicationUserManager>();
                 var roleManager = serviceProvider.GetRequiredService<ApplicationRoleManager>();
 

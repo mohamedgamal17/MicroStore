@@ -10,7 +10,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Extensions
         {
             if (identityResult.Succeeded)
             {
-                throw new InvalidOperationException("identity result is dose not contain any error to serialize");
+                throw new InvalidOperationException("identity result dose not contain any error to serialize");
             }
 
             return new ErrorInfo

@@ -8,7 +8,7 @@ using Volo.Abp.DependencyInjection;
 namespace MicroStore.IdentityProvider.Identity.Infrastructure.Services
 {
     [ExposeServices(typeof(IUserStore<ApplicationIdentityUser>), IncludeSelf =  true)]
-    public class ApplicationUserStore : UserStore<ApplicationIdentityUser, ApplicationIdentityRole, ApplicationIdentityDbContext, Guid, ApplicationIdentityUserClaim, ApplicationIdentityUserRole, ApplicationIdentityUserLogin, ApplicationIdentityUserToken, ApplicationIdentityRoleClaim>, ITransientDependency
+    public class ApplicationUserStore : UserStore<ApplicationIdentityUser, ApplicationIdentityRole, ApplicationIdentityDbContext, string, ApplicationIdentityUserClaim, ApplicationIdentityUserRole, ApplicationIdentityUserLogin, ApplicationIdentityUserToken, ApplicationIdentityRoleClaim>, ITransientDependency
     {
         public ApplicationUserStore(ApplicationIdentityDbContext context, IdentityErrorDescriber describer = null) : base(context, describer)
         {
@@ -48,7 +48,7 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.Services
     }
 
     [ExposeServices(typeof(IRoleStore<ApplicationIdentityRole>), IncludeSelf = true)]
-    public class ApplicationRoleStore : RoleStore<ApplicationIdentityRole, ApplicationIdentityDbContext, Guid, ApplicationIdentityUserRole, ApplicationIdentityRoleClaim>, ITransientDependency
+    public class ApplicationRoleStore : RoleStore<ApplicationIdentityRole, ApplicationIdentityDbContext, string, ApplicationIdentityUserRole, ApplicationIdentityRoleClaim>, ITransientDependency
     {
         public ApplicationRoleStore(ApplicationIdentityDbContext context, IdentityErrorDescriber describer = null) : base(context, describer)
         {

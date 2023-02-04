@@ -2,7 +2,7 @@
 
 namespace MicroStore.IdentityProvider.Identity.Application.Domain
 {
-    public class ApplicationIdentityUserToken : IdentityUserToken<Guid>
+    public class ApplicationIdentityUserToken : IdentityUserToken<string>
     {
 
     }

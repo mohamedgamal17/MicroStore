@@ -3,11 +3,16 @@ using System.Security.Claims;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Domain
 {
-    public class ApplicationIdentityRole : IdentityRole<Guid>
+    public class ApplicationIdentityRole : IdentityRole<string>
     {
 
         public string Description { get; set; }
 
+
+        public ApplicationIdentityRole()
+        {
+            Id = Guid.NewGuid().ToString("N");
+        }
         public List<ApplicationIdentityRoleClaim> RoleClaims { get; set; } = new List<ApplicationIdentityRoleClaim>();
 
         public void AddClaims(IEnumerable<Claim> claims)
@@ -52,12 +57,12 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
 
     }
 
-    public class ApplicationIdentityRoleClaim : IdentityRoleClaim<Guid>
+    public class ApplicationIdentityRoleClaim : IdentityRoleClaim<string>
     {
 
     }
 
-    public class ApplicationIdentityUserRole : IdentityUserRole<Guid>
+    public class ApplicationIdentityUserRole : IdentityUserRole<string>
     {
         public ApplicationIdentityRole Role { get; set; }
 
@@ -65,7 +70,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
         {
 
         }
-        public ApplicationIdentityUserRole(Guid userId , Guid roleId)
+        public ApplicationIdentityUserRole(string userId , string roleId)
         {
             UserId = userId;
             RoleId = roleId;

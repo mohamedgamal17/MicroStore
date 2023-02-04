@@ -9,7 +9,8 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework.En
         public void Configure(EntityTypeBuilder<ApplicationIdentityUserRole> builder)
         {
             builder.HasKey(x => new { x.UserId, x.RoleId });
-
+            builder.Property(x => x.UserId).HasMaxLength(256);
+            builder.Property(x => x.RoleId).HasMaxLength(256);
             builder.Navigation(x => x.Role).AutoInclude();
         }
     }

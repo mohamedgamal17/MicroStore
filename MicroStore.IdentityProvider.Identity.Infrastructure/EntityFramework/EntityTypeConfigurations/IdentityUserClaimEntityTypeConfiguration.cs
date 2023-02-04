@@ -12,6 +12,8 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework.En
             builder.Property(x => x.ClaimType).HasMaxLength(256);
             builder.Property(x => x.ClaimValue).HasMaxLength(500);
             builder.HasIndex(x => x.ClaimType);
+            builder.Property(x => x.UserId).HasMaxLength(256);
+            builder.HasIndex(x => x.UserId);
             builder.ToTable("IdentityUserClaims");
         }
     }
