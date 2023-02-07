@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Ordering.Application;
-using MicroStore.Ordering.Application.Abstractions.StateMachines;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Infrastructure.EntityFramework;
 using Volo.Abp.Modularity;

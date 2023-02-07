@@ -19,11 +19,10 @@
   
  <ItemGroup>
    <ProjectReference Include="..\MicroStore.BuildingBlocks.InMemoryBus\MicroStore.BuildingBlocks.InMemoryBus.csproj" />
+   <ProjectReference Include="..\MicroStore.BuildingBlocks.Paging\MicroStore.BuildingBlocks.Paging.csproj" />
    <ProjectReference Include="..\MicroStore.BuildingBlocks.Results\MicroStore.BuildingBlocks.Results.csproj" />
    <ProjectReference Include="..\MicroStore.BuildingBlocks.Security\MicroStore.BuildingBlocks.Security.csproj" />
    <ProjectReference Include="..\MicroStore.Inventory.IntegrationEvents\MicroStore.Inventory.IntegrationEvents.csproj" />
-   <ProjectReference Include="..\MicroStore.Ordering.Application.Abstractions\MicroStore.Ordering.Application.Abstractions.csproj" />
-   <ProjectReference Include="..\MicroStore.Ordering.Events\MicroStore.Ordering.Events.csproj" />
    <ProjectReference Include="..\MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj" />
    <ProjectReference Include="..\MicroStore.Payment.IntegrationEvents\MicroStore.Payment.IntegrationEvents.csproj" />
  </ItemGroup>

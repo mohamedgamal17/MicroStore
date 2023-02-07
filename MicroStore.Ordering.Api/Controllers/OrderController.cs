@@ -2,21 +2,17 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Ordering.Api.Models;
-using MicroStore.Ordering.Application.Abstractions.Commands;
-using MicroStore.Ordering.Application.Abstractions.Dtos;
-using MicroStore.Ordering.Application.Abstractions.Queries;
-using MicroStore.Ordering.Application.Abstractions.Security;
 using MicroStore.Ordering.Application.Dtos;
+using MicroStore.Ordering.Application.Orders;
+
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/orders")]
     [ApiController]
-    [Authorize]
     public class OrderController : MicroStoreApiController
     {
 
@@ -29,7 +25,6 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        [RequiredScope(OrderingScope.Order.List)]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<OrderListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -50,33 +45,10 @@ namespace MicroStore.Ordering.Api.Controllers
             return FromResult(result);
         }
 
-        [HttpGet]
-        [Route("user/{userId}")]
-        [RequiredScope(OrderingScope.Order.List)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<OrderListDto>>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveUserOrderList(string userId, [FromQuery]  PagingAndSortingQueryParams @params)
-        {
-            var query = new GetUserOrderListQuery
-            {
-                UserId = userId,
-                SortBy = @params.SortBy,
-                Desc = @params.Desc,
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber,
-            };
-
-            var result = await Send(query);
-
-            return FromResult(result);
-        }
+      
 
         [HttpGet]
         [Route("{orderId}")]
-        [RequiredScope(OrderingScope.Order.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<OrderListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -95,27 +67,15 @@ namespace MicroStore.Ordering.Api.Controllers
         }
 
 
-        [HttpPost("submit")]
-        [RequiredScope(OrderingScope.Order.Submit)]
+        [HttpPost("")]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(OrderSubmitedDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> SubmitOrder([FromBody]SubmitOrderModel model)
+        public async Task<IActionResult> SubmitOrder([FromBody]CreateOrderModel model)
         {
-            var command = new SubmitOrderCommand
-            {
-                UserId = model.UserId,
-                ShippingAddress = model.ShippingAddress,
-                BillingAddress = model.BillingAddress,
-                ShippingCost = model.ShippingCost,
-                SubTotal = model.SubTotal,
-                TaxCost = model.TaxCost,
-                TotalPrice = model.TotalPrice,
-                OrderItems = model.OrderItems,
-                SubmissionDate = DateTime.UtcNow
-            };
+            var command = ObjectMapper.Map<CreateOrderModel, SubmitOrderCommand>(model);
 
             var result = await Send(command);
 
@@ -125,7 +85,6 @@ namespace MicroStore.Ordering.Api.Controllers
 
 
         [HttpPost("fullfill/{orderId}")]
-        [RequiredScope(OrderingScope.Order.Fullfill)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -146,7 +105,6 @@ namespace MicroStore.Ordering.Api.Controllers
 
 
         [HttpPost("complete/{orderId}")]
-        [RequiredScope(OrderingScope.Order.Complete)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -168,7 +126,6 @@ namespace MicroStore.Ordering.Api.Controllers
 
 
         [HttpPost("cancel/{orderId}")]
-        [RequiredScope(OrderingScope.Order.Cancel)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

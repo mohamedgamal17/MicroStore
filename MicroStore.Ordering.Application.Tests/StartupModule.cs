@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.Mediator;
-using MicroStore.Ordering.Application.Abstractions.StateMachines;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Infrastructure;
 using MicroStore.Ordering.Infrastructure.EntityFramework;

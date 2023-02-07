@@ -7,28 +7,81 @@ using Volo.Abp.Users;
 namespace MicroStore.BuildingBlocks.Security
 {
     [Dependency(ReplaceServices = true)]
-    internal class ApplicationCurrentUser : ICurrentUser , ITransientDependency 
+    internal class ApplicationCurrentUser : IApplicationCurrentUser , ITransientDependency 
     {
-        public Guid? Id => TryToGetUserId();
+        public string Id
+        {
+            get 
+            {
+                if (!IsAuthenticated)
+                {
+                    ThrowIfNotAuthorized();
+                }
 
-        public bool IsAuthenticated => Id.HasValue;
+                return _userId!;
+            }
+        }
+        private string? _userId => TryToGetUserId();
 
-        public string? UserName => FindClaim(JwtClaimTypes.Name)?.Value;
+        public bool IsAuthenticated => _userId !=  null && Id != string.Empty ;
 
-        public string? Name => FindClaim(JwtClaimTypes.GivenName)?.Value;
+        public string UserName
+        {
+            get
+            {
+                if(!IsAuthenticated)
+                {
+                    ThrowIfNotAuthorized();
+                }
 
-        public string? SurName => FindClaim(JwtClaimTypes.FamilyName)?.Value;
+               return  FindClaimValue(JwtClaimTypes.Name)!;
+            }
+        }
 
-        public string? PhoneNumber => FindClaim(JwtClaimTypes.PhoneNumber)?.Value;
+        public string Name
+        {
+            get
+            {
+                if (!IsAuthenticated)
+                {
+                    ThrowIfNotAuthorized();
+                }
 
-        public bool PhoneNumberVerified => string.Equals(this.FindClaimValue(JwtClaimTypes.PhoneNumberVerified), "true", StringComparison.InvariantCultureIgnoreCase);
+                return FindClaimValue(JwtClaimTypes.Name)!;
+            }
+        }
 
-        public string? Email => FindClaim(JwtClaimTypes.Email)?.Value;
+        public string SurName
+        {
+            get
+            {
+                if (!IsAuthenticated)
+                {
+                    ThrowIfNotAuthorized();
+                }
+                return FindClaimValue(JwtClaimTypes.FamilyName)!;
+            }
+        }
 
-        public bool EmailVerified => string.Equals(this.FindClaimValue(JwtClaimTypes.EmailVerified), "true", StringComparison.InvariantCultureIgnoreCase);
+        public string? PhoneNumber
+        {
+            get
+            {
+                if (!IsAuthenticated)
+                {
+                    ThrowIfNotAuthorized();
+                }
 
+                return FindClaimValue(JwtClaimTypes.PhoneNumber);
+            }
+        }
 
-        public Guid? TenantId => TryToGetTenantId();
+        public bool PhoneNumberVerified => string.Equals(FindClaimValue(JwtClaimTypes.PhoneNumberVerified), "true", StringComparison.InvariantCultureIgnoreCase);
+
+        public string? Email => FindClaimValue(JwtClaimTypes.Email);
+
+        public bool EmailVerified => string.Equals(FindClaimValue(JwtClaimTypes.EmailVerified), "true", StringComparison.InvariantCultureIgnoreCase);
+
 
         public string[] Roles => FindClaims(JwtClaimTypes.Role).Select(x => x.Value).ToArray();
 
@@ -50,6 +103,13 @@ namespace MicroStore.BuildingBlocks.Security
             return _currentPrincipalAccessor.Principal.Claims.Where(x => x.Type == claimType).ToArray();
         }
 
+        public string? FindClaimValue(string claimType)
+        {
+            return FindClaim(claimType)?.Value;
+        }
+
+
+
         public Claim[] GetAllClaims()
         {
             return _currentPrincipalAccessor.Principal.Claims.ToArray();
@@ -61,30 +121,11 @@ namespace MicroStore.BuildingBlocks.Security
         }
 
 
-        private Guid? TryToGetUserId()
-        {
-            string? userId = _currentPrincipalAccessor.Principal.Claims.SingleOrDefault(x => x.Type == JwtClaimTypes.Subject)?.Value;
+        private string? TryToGetUserId() => _currentPrincipalAccessor.Principal.Claims.SingleOrDefault(x => x.Type == JwtClaimTypes.Subject)?.Value;
 
 
-            if (Guid.TryParse(userId, out var result))
-            {
-                return result;
-            }
 
-            return null;
-        }
-
-        private Guid? TryToGetTenantId()
-        {
-            string? tenantId = _currentPrincipalAccessor.Principal.Claims.SingleOrDefault(x => x.Type == AbpClaimTypes.TenantId)?.Value;
-
-            if (Guid.TryParse(tenantId, out var result))
-            {
-                return result;
-            }
-
-            return null;
-        }
+        private void ThrowIfNotAuthorized() => throw new InvalidOperationException("Current user is not authorized");
     }
 }
 

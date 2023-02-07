@@ -1,11 +1,10 @@
 ﻿using MicroStore.BuildingBlocks.InMemoryBus;
 using MicroStore.BuildingBlocks.Security;
-using MicroStore.Ordering.Application.Abstractions;
 using Volo.Abp.Authorization;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
-using Volo.Abp.Validation;
 namespace MicroStore.Ordering.Application
 {
 
@@ -13,10 +12,12 @@ namespace MicroStore.Ordering.Application
         typeof(AbpAuthorizationModule),
         typeof(AbpUnitOfWorkModule),
         typeof(InMemoryBusModule),
-        typeof(AbpFluentValidationModule),
-        typeof(OrderApplicationAbstractionModule))]
+        typeof(AbpFluentValidationModule))]
     public class OrderApplicationModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<OrderApplicationModule>());
+        }
     }
 }

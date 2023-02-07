@@ -1,6 +1,6 @@
 ﻿using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.Ordering.Application.Abstractions.Common;
+using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigurations;
 using Volo.Abp.DependencyInjection;
 

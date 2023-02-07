@@ -1,10 +1,12 @@
 ﻿using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.Ordering.Application.Abstractions.StateMachines;
+using MicroStore.Ordering.Application.Dtos;
+using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.StateMachines.Activities;
-using MicroStore.Ordering.Events;
-using MicroStore.Ordering.Events.Models;
-using MicroStore.Ordering.Events.Responses;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.ObjectMapping;
+
 namespace MicroStore.Ordering.Application.StateMachines
 {
     public class OrderStateMachine : MassTransitStateMachine<OrderStateEntity>
@@ -15,7 +17,6 @@ namespace MicroStore.Ordering.Application.StateMachines
         public State Fullfilled { get; private set; }
         public State Completed { get; private set; }
         public State Cancelled { get; private set; }
-
         public Event<OrderSubmitedEvent> OrderSubmitted { get; private set; }
         public Event<OrderPaymentAcceptedEvent> OrderPaymentAccepted { get; private set; }
         public Event<OrderApprovedEvent> OrderApproved { get; private set; }
@@ -25,6 +26,10 @@ namespace MicroStore.Ordering.Application.StateMachines
         public Event<OrderPaymentFaildEvent> OrderPaymentFaild { get; private set; }
         public Event<OrderShippmentFailedEvent> OrderShippmentFaild { get; private set; }
         public Event<OrderCancelledEvent> OrderCancelled { get; private set; }
+
+        public ICachedServiceProvider ServiceProvider { get; set; }
+
+        public IObjectMapper ObjectMapper => ServiceProvider.GetRequiredService<IObjectMapper>();
 
         public Event<CheckOrderStatusEvent> CheckOrderStatus { get; set; }
 
@@ -60,7 +65,7 @@ namespace MicroStore.Ordering.Application.StateMachines
 
                 x.OnMissingInstance((m) => m.Execute(async context =>
                 {
-                    await context.RespondAsync(StateMachineResult.Failure<OrderResponse>("order is not exist"));
+                    await context.RespondAsync(StateMachineResult.Failure<OrderDto>("order is not exist"));
                 }));
 
             });
@@ -72,7 +77,7 @@ namespace MicroStore.Ordering.Application.StateMachines
                     When(OrderSubmitted)
                         .CopyDataToInstance()
                         .TransitionTo(Submitted)
-                        .Respond((context) => context.Saga.MapOrderResponse())
+                        .Respond((context) => ObjectMapper.Map<OrderStateEntity, OrderDto>(context.Saga))
                 );
 
 
@@ -121,9 +126,8 @@ namespace MicroStore.Ordering.Application.StateMachines
                              context.Saga.ShipmentId = context.Message.ShipmentId;
                          })
                         .TransitionTo(Fullfilled)
-                        .RespondAsync((context) => Task.FromResult(StateMachineResult.Success(context.Saga.MapOrderResponse())))
+                        .RespondAsync((context) => Task.FromResult(StateMachineResult.Success(ObjectMapper.Map<OrderStateEntity, OrderDto>(context.Saga))))
                   );
-
 
             During(Fullfilled,
                     When(OrderCompleted)
@@ -134,8 +138,8 @@ namespace MicroStore.Ordering.Application.StateMachines
                         .TransitionTo(Completed)
                     );
 
- 
-            DuringAny(            
+
+            DuringAny(
                     When(OrderCancelled)
                         .Then((context) =>
                         {
@@ -146,7 +150,7 @@ namespace MicroStore.Ordering.Application.StateMachines
                         .Activity(x => x.OfType<OrderCancelledActivity>()),
 
                      When(CheckOrderStatus)
-                        .RespondAsync((context) => Task.FromResult(StateMachineResult.Success(context.Saga.MapOrderResponse())))
+                        .RespondAsync((context) => Task.FromResult(StateMachineResult.Success(ObjectMapper.Map<OrderStateEntity, OrderDto>(context.Saga))))
                     );
 
         }
@@ -167,7 +171,7 @@ namespace MicroStore.Ordering.Application.StateMachines
                 x.Saga.ShippingCost = x.Message.ShippingCost;
                 x.Saga.TaxCost = x.Message.TaxCost;
                 x.Saga.SubTotal = x.Message.SubTotal;
-                x.Saga.TotalPrice = x.Message.Total;
+                x.Saga.TotalPrice = x.Message.TotalPrice;
                 x.Saga.SubmissionDate = x.Message.SubmissionDate;
                 x.Saga.OrderItems = x.Message.OrderItems.Select(item => new OrderItemEntity
                 {
@@ -210,56 +214,6 @@ namespace MicroStore.Ordering.Application.StateMachines
                       .WithZip(addressModel.Zip)
                       .Build();
         }
-        public static OrderResponse MapOrderResponse(this OrderStateEntity orderStateEntity)
-        {
-            return new OrderResponse
-            {
-                OrderId = orderStateEntity.CorrelationId,
-                OrderNumber = orderStateEntity.OrderNumber,
-                UserId = orderStateEntity.UserId,
-                ShippingAddress = MapAddressModel(orderStateEntity.ShippingAddress),
-                BillingAddress = MapAddressModel(orderStateEntity.BillingAddress),
-                PaymentId = orderStateEntity.PaymentId,
-                ShipmentId = orderStateEntity.ShipmentId,
-                ShippingCost = orderStateEntity.ShippingCost,
-                TaxCost = orderStateEntity.TaxCost,
-                SubTotal = orderStateEntity.SubTotal,
-                TotalPrice = orderStateEntity.TotalPrice,
-                SubmissionDate = orderStateEntity.SubmissionDate,
-                ShippedDate = orderStateEntity.ShippedDate,
-                CurrentState = orderStateEntity.CurrentState,
-                OrderItems = MapOrderItemResponse(orderStateEntity.OrderItems)
-            };
-        }
 
-        public static AddressModel MapAddressModel(Address address)
-        {
-            return new AddressModel
-            {
-                CountryCode = address.CountryCode,
-                City = address.City,
-                State = address.State,
-                PostalCode = address.PostalCode,
-                AddressLine1 = address.AddressLine1,
-                AddressLine2 = address.AddressLine2,
-                Zip = address.Zip,
-                Name = address.Name,
-                Phone = address.Phone
-
-            };
-        }
-
-        private static List<OrderItemResponseModel> MapOrderItemResponse(List<OrderItemEntity> orderItems)
-        {
-            return orderItems.Select(item => new OrderItemResponseModel
-            {
-                ExternalProductId = item.ExternalProductId,
-                Sku  = item.Sku,
-                Name = item.Name,
-                Thumbnail = item.Thumbnail,
-                Quantity = item.Quantity,
-                UnitPrice = item.UnitPrice,
-            }).ToList();
-        }
     }
 }
