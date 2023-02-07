@@ -14,6 +14,8 @@ using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using MicroStore.Payment.Domain;
+using MicroStore.Payment.Application.Tests.Fakes;
+using MicroStore.Payment.Application.Tests.Consts;
 
 namespace MicroStore.Payment.Application.Tests
 {
@@ -60,6 +62,8 @@ namespace MicroStore.Payment.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
                 dbContext.Database.Migrate();
+
+                SeedFakePaymentMethod(dbContext);
 
                 SeedPaymentsData(dbContext);
 
@@ -122,6 +126,33 @@ namespace MicroStore.Payment.Application.Tests
 
                 dbContext.SaveChanges();
             }
+        }
+
+        private  void SeedFakePaymentMethod(PaymentDbContext dbContext)
+        {
+            var paymentMethods = new List<PaymentSystem>
+            {
+                new PaymentSystem
+                {
+                    Name = PaymentMethodConst.PaymentGatewayName,
+                    IsEnabled = true,
+                    DisplayName = PaymentMethodConst.PaymentGatewayName,
+                    Image = PaymentMethodConst.PaymentGatewayName,
+
+                },
+
+                new PaymentSystem
+                {
+                   Name = PaymentMethodConst.NonActiveGateway,
+                    IsEnabled = false,
+                    DisplayName = PaymentMethodConst.NonActiveGateway,
+                    Image = PaymentMethodConst.NonActiveGateway,
+                }
+            };
+
+            dbContext.AddRange(paymentMethods);
+
+            dbContext.SaveChanges();
         }
 
     }

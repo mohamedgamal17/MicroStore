@@ -7,21 +7,18 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Api.Models.PaymentRequests;
-using MicroStore.Payment.Application.Abstractions.Commands;
-using MicroStore.Payment.Application.Abstractions.Dtos;
-using MicroStore.Payment.Application.Abstractions.Queries;
-using MicroStore.Payment.Domain.Security;
+using MicroStore.Payment.Application.PaymentRequests;
+using MicroStore.Payment.Domain.Shared.Dtos;
+using MicroStore.Payment.Domain.Shared.Security;
 
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
     [Route("api/payments")]
-    [Authorize]
     public class PaymentRequestController : MicroStoreApiController
     {
         [HttpGet]
         [Route("")]
-        [RequiredScope(BillingScope.Payment.List)]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<PaymentRequestListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -44,7 +41,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("user/{userId}")]
-        [RequiredScope(BillingScope.Payment.List)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<PaymentRequestListDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -69,7 +65,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("order_id/{orderId}")]
-        [RequiredScope(BillingScope.Payment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -89,7 +84,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("{paymentId}")]
-        [RequiredScope(BillingScope.Payment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -109,7 +103,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPost]
         [Route("")]
-        [RequiredScope(BillingScope.Payment.Create)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -136,7 +129,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPost]
         [Route("process/{paymentId}")]
-        [RequiredScope(BillingScope.Payment.Process)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentProcessResultDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<PaymentProcessResultDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
@@ -162,7 +154,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPost]
         [Route("complete")]
-        [RequiredScope(BillingScope.Payment.Complete)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<PaymentRequestDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]

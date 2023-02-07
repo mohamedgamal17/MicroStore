@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Payment.Application.Abstractions;
+using MicroStore.Payment.Domain.Shared;
+using MicroStore.Payment.Plugin.StripeGateway.Consts;
 using Stripe;
 using Stripe.Checkout;
+using Volo.Abp;
 using Volo.Abp.Modularity;
 namespace MicroStore.Payment.Plugin.StripeGateway
 {
-    [DependsOn(typeof(PaymentApplicationAbstractionModule))]
     public class StripeGatewayPluginModule : AbpModule
     {
 
@@ -19,6 +20,17 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
             context.Services.AddTransient<RefundService>();
 
+        }
+
+
+        public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var paymentSystemManager = scope.ServiceProvider.GetRequiredService<IPaymentSystemManager>();
+
+                await paymentSystemManager.TryToCreate(StripePaymentConst.Provider, StripePaymentConst.DisplayName, StripePaymentConst.Image);
+            }
         }
     }
 }

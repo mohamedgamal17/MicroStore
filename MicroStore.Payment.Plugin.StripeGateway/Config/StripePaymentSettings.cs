@@ -1,5 +1,5 @@
 ﻿#nullable disable
-using MicroStore.Payment.Domain.Common;
+using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Plugin.StripeGateway.Consts;
 
 namespace MicroStore.Payment.Plugin.StripeGateway.Config

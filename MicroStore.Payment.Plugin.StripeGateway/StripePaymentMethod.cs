@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Payment.Application.Abstractions;
-using MicroStore.Payment.Application.Abstractions.Common;
-using MicroStore.Payment.Application.Abstractions.Dtos;
-using MicroStore.Payment.Application.Abstractions.Models;
-using MicroStore.Payment.Domain;
+using MicroStore.Payment.Domain.Shared;
+using MicroStore.Payment.Domain.Shared.Dtos;
+using MicroStore.Payment.Domain.Shared.Models;
 using MicroStore.Payment.Plugin.StripeGateway.Config;
 using MicroStore.Payment.Plugin.StripeGateway.Consts;
 using Stripe;
@@ -18,8 +16,8 @@ using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 namespace MicroStore.Payment.Plugin.StripeGateway
 {
-    [ExposeServices(typeof(IPaymentMethod),IncludeDefaults = true, IncludeSelf = true)]
-    public class StripePaymentMethod : IPaymentMethod , IUnitOfWorkEnabled , ITransientDependency
+    [ExposeServices(typeof(IPaymentMethod), IncludeDefaults = true, IncludeSelf = true)]
+    public class StripePaymentMethod : IPaymentMethod, IUnitOfWorkEnabled, ITransientDependency
     {
 
         private readonly SessionService _sessionService;
@@ -28,23 +26,21 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         private readonly RefundService _refundService;
 
-        private readonly IPaymentRequestRepository _paymentRequestRepository;
+        private readonly IPaymentRequestManager _paymentRequestManager;
 
         private readonly ISettingsRepository _settingsRepository;
 
         private readonly IObjectMapper _objectMapper;
 
-        private readonly IRepository<PaymentSystem> _paymentSystemRepository;
 
         private readonly ILogger<StripePaymentMethod> _logger;
 
-        public StripePaymentMethod(SessionService sessionService, PaymentIntentService paymentIntentService, IPaymentRequestRepository paymentRequestRepository, IObjectMapper objectMapper, IRepository<PaymentSystem> paymentSystemRepository, ISettingsRepository settingsRepository, RefundService refundService, ILogger<StripePaymentMethod> logger)
+        public StripePaymentMethod(SessionService sessionService, PaymentIntentService paymentIntentService, IPaymentRequestManager paymentRequestRepository, IObjectMapper objectMapper,  ISettingsRepository settingsRepository, RefundService refundService, ILogger<StripePaymentMethod> logger)
         {
             _sessionService = sessionService;
             _paymentIntentService = paymentIntentService;
-            _paymentRequestRepository = paymentRequestRepository;
+            _paymentRequestManager = paymentRequestRepository;
             _objectMapper = objectMapper;
-            _paymentSystemRepository = paymentSystemRepository;
             _settingsRepository = settingsRepository;
             _refundService = refundService;
             _logger = logger;
@@ -73,28 +69,21 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     };
 
                     return Failure<PaymentRequestDto>(HttpStatusCode.BadRequest, error);
-   
+
                 }
 
-                PaymentRequest paymentRequest = await _paymentRequestRepository.SingleAsync(x => x.Id == Guid.Parse(session.ClientReferenceId));
-
-
-                paymentRequest.Complete(PaymentGatewayName, session.PaymentIntentId, DateTime.UtcNow);
-
-                await _paymentRequestRepository.UpdateAsync(paymentRequest);
-
-                var result =  _objectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
+               var result =  await _paymentRequestManager.Complete(Guid.Parse(session.ClientReferenceId), PaymentGatewayName, session.PaymentIntentId, DateTime.UtcNow, cancellationToken);
 
                 return Success(HttpStatusCode.OK, result);
             });
-            
+
         }
 
         public async Task<ResponseResult<PaymentProcessResultDto>> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult<PaymentProcessResultDto>(HttpStatusCode.OK, async () =>
             {
-                var paymentRequest = await _paymentRequestRepository.GetPaymentRequest(paymentId);
+                var paymentRequest = await _paymentRequestManager.GetPaymentRequest(paymentId);
 
                 var options = new SessionCreateOptions
                 {
@@ -145,11 +134,11 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     CheckoutLink = session.Url
                 };
             });
-           
+
         }
 
 
-        private List<SessionLineItemOptions> PrepareStripeLineItems(List<PaymentRequestProduct> items)
+        private List<SessionLineItemOptions> PrepareStripeLineItems(List<PaymentRequestProductDto> items)
         {
             return items.Select(x => new SessionLineItemOptions
             {
@@ -160,14 +149,14 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
                         Name = x.Name,
-                        Images = new List<string> { x.Thumbnail ?? string.Empty},
-                        
+                        Images = new List<string> { x.Thumbnail ?? string.Empty },
+
                     },
 
                     UnitAmountDecimal = Convert.ToDecimal(x.UnitPrice * 100),
                     Currency = "usd"
                 }
-               
+
             }).ToList();
         }
 
@@ -183,10 +172,9 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         public async Task<ResponseResult<PaymentRequestDto>> Refund(Guid paymentId, CancellationToken cancellationToken = default)
         {
-            return await  WrappResponseResult<PaymentRequestDto>(HttpStatusCode.OK, async () =>
+            return await WrappResponseResult<PaymentRequestDto>(HttpStatusCode.OK, async () =>
             {
-                PaymentRequest paymentRequest = (await _paymentRequestRepository.GetPaymentRequest(paymentId))!;
-
+                var  paymentRequest = await _paymentRequestManager.GetPaymentRequest(paymentId);
 
                 var requestOptions = await PrepareStripeRequest();
 
@@ -197,25 +185,13 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
                 var refundObject = await _refundService.CreateAsync(refundOptions, requestOptions, cancellationToken);
 
-                paymentRequest.MarkAsRefunded(DateTime.UtcNow, string.Empty);
-
-                await _paymentRequestRepository.UpdateAsync(paymentRequest);
-
-
-                return _objectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
+                return await _paymentRequestManager.Refund(paymentId, DateTime.UtcNow, string.Empty, cancellationToken);
             });
         }
 
 
-        public async Task<bool> IsEnabled()
-        {
-            var paymentSystem = await _paymentSystemRepository.SingleAsync(x => x.Name == StripePaymentConst.Provider);
 
-            return paymentSystem.IsEnabled;
-        }
-
-
-        private async Task<ResponseResult<T>> WrappResponseResult<T>(HttpStatusCode httpStatusCode,Func<Task<T>> func)
+        private async Task<ResponseResult<T>> WrappResponseResult<T>(HttpStatusCode httpStatusCode, Func<Task<T>> func)
         {
 
             return await WrappResponseResult(async () =>
@@ -226,7 +202,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             });
         }
 
-        private async Task<ResponseResult<T>> WrappResponseResult<T>( Func<Task<ResponseResult<T>>> func)
+        private async Task<ResponseResult<T>> WrappResponseResult<T>(Func<Task<ResponseResult<T>>> func)
         {
             try
             {

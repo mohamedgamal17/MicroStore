@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
-using MicroStore.Payment.Domain.Security;
+using MicroStore.Payment.Domain.Shared.Security;
 using MicroStore.Payment.Plugin.StripeGateway;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;

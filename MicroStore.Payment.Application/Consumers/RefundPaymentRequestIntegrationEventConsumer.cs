@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.Payment.Application.Abstractions.Commands;
+using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.IntegrationEvents;
 
 

@@ -1,7 +1,7 @@
 ﻿using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.BuildingBlocks.Results;
 using System.Net;
-using MicroStore.Payment.Application.Abstractions.Consts;
+using MicroStore.Payment.Domain.Shared;
 
 namespace MicroStore.Payment.Application.Extensions
 {
@@ -19,10 +19,8 @@ namespace MicroStore.Payment.Application.Extensions
                 Message = unitResult.Error
             };
 
-
-
-            if (unitResult.ErrorType ==
-                PaymentMethodErrorType.ValidationError)
+            if (unitResult.ErrorType == PaymentMethodErrorType.ValidationError
+                || unitResult.ErrorType == PaymentMethodErrorType.BusinessLogicError)
             {
                 return ResponseResult.Failure<T>((int)HttpStatusCode.BadRequest, errorEnfo);
             }

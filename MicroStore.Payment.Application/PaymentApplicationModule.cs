@@ -6,6 +6,7 @@ using MicroStore.Payment.Application.Abstractions;
 using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.Payment.Domain;
 using System.Reflection;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
@@ -14,14 +15,15 @@ namespace MicroStore.Payment.Application
 
     [DependsOn(typeof(InMemoryBusModule),
         typeof(AbpEntityFrameworkCoreModule),
-        typeof(AbpEventBusModule),
-        typeof(PaymentApplicationAbstractionModule))]
+        typeof(AbpEventBusModule))]
     public class PaymentApplicationModule : AbpModule
     {
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var config = context.Services.GetConfiguration();
+
+            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<PaymentApplicationModule>());
 
             ConfigureMassTransit(context.Services, config);
 
@@ -35,8 +37,6 @@ namespace MicroStore.Payment.Application
             services.AddAbpDbContext<PaymentDbContext>(opt =>
             {
                 opt.AddDefaultRepositories(true);
-
-                opt.AddRepository<PaymentRequest, PaymentRequestRepository > ();
 
             });
 

@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Api.Models.Systems;
-using MicroStore.Payment.Application.Abstractions.Commands;
-using MicroStore.Payment.Application.Abstractions.Dtos;
-using MicroStore.Payment.Application.Abstractions.Queries;
-using MicroStore.Payment.Domain.Security;
+using MicroStore.Payment.Application.PaymentRequests;
+using MicroStore.Payment.Application.PaymentSystems;
+using MicroStore.Payment.Domain.Shared.Dtos;
 using Volo.Abp.Application.Dtos;
 
 namespace MicroStore.Payment.Api.Controllers
@@ -18,7 +16,6 @@ namespace MicroStore.Payment.Api.Controllers
     {
         [HttpGet]
         [Route("")]
-        [RequiredScope(BillingScope.System.List)]
         [ProducesResponseType(StatusCodes.Status200OK,Type =typeof(Envelope<ListResultDto<PaymentSystemDto>>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -36,7 +33,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("system_name/{systemName}")]
-        [RequiredScope(BillingScope.System.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ListResultDto<PaymentSystemDto>>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -58,7 +54,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("{systemId}")]
-        [RequiredScope(BillingScope.System.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ListResultDto<PaymentSystemDto>>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -81,7 +76,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPut]
         [Route("{systemName}")]
-        [RequiredScope(BillingScope.System.Update)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]

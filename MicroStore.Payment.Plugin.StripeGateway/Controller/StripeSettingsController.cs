@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Payment.Application.Abstractions.Common;
+using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Plugin.StripeGateway.Config;
 using MicroStore.Payment.Plugin.StripeGateway.Consts;
 using MicroStore.Payment.Plugin.StripeGateway.Model;

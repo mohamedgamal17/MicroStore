@@ -1,5 +1,5 @@
 ﻿using MassTransit;
-using MicroStore.Payment.Domain.Events;
+using MicroStore.Payment.Domain.Shared.Events;
 using MicroStore.Payment.IntegrationEvents;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;

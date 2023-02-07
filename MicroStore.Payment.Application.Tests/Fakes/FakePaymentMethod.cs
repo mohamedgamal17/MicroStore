@@ -1,10 +1,10 @@
 ﻿using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Payment.Application.Abstractions;
-using MicroStore.Payment.Application.Abstractions.Dtos;
-using MicroStore.Payment.Application.Abstractions.Models;
 using MicroStore.Payment.Application.Tests.Consts;
 using MicroStore.Payment.Domain;
+using MicroStore.Payment.Domain.Shared;
+using MicroStore.Payment.Domain.Shared.Dtos;
+using MicroStore.Payment.Domain.Shared.Models;
 using System.Net;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -64,12 +64,6 @@ namespace MicroStore.Payment.Application.Tests.Fakes
           
         }
 
-        public Task<bool> IsEnabled()
-        {
-            return Task.FromResult(true);
-        }
-
-
         private ResponseResult<T> Success<T>(HttpStatusCode statusCode, T result)
             => ResponseResult.Success<T>((int)statusCode, result);
 
@@ -90,11 +84,6 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        public Task<bool> IsEnabled()
-        {
-            return Task.FromResult(false);
-        }
-
         public Task<ResponseResult<PaymentProcessResultDto>> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
@@ -105,4 +94,5 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             throw new NotImplementedException();
         }
     }
+
 }

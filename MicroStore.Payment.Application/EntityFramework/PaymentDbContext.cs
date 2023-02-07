@@ -1,6 +1,6 @@
 ﻿#nullable disable
 using Microsoft.EntityFrameworkCore;
-using MicroStore.Payment.Application.Abstractions.Common;
+using MicroStore.Payment.Application.Common;
 using MicroStore.Payment.Domain;
 using System.Reflection;
 using Volo.Abp.Data;
