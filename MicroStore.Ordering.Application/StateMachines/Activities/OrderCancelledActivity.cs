@@ -1,7 +1,5 @@
 ﻿using MassTransit;
 using MicroStore.Inventory.IntegrationEvents;
-using MicroStore.Ordering.Application.Abstractions.StateMachines;
-using MicroStore.Ordering.Events;
 using MicroStore.Payment.IntegrationEvents;
 using Volo.Abp.DependencyInjection;
 namespace MicroStore.Ordering.Application.StateMachines.Activities

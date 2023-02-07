@@ -5,15 +5,15 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Ordering.Application;
-using MicroStore.Ordering.Application.Abstractions.Security;
+
 using MicroStore.Ordering.Infrastructure;
-using MicroStore.Ordering.Infrastructure.EntityFramework;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace MicroStore.Ordering.Api
@@ -33,6 +33,8 @@ namespace MicroStore.Ordering.Api
             var host = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
+
+            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<OrderApiModule>());
 
             ConfigureAuthentication(context.Services,configuration);
             ConfigureSwagger(context.Services,configuration);
@@ -83,8 +85,7 @@ namespace MicroStore.Ordering.Api
                     options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
                     options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
                     options.OAuthScopeSeparator(",");
-                    options.OAuthScopes(OrderingScope.List().ToArray());
-                });
+                  });
 
 
                 app.UseHsts();

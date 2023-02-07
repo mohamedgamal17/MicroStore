@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
 using MassTransit.Testing;
 using MicroStore.Inventory.IntegrationEvents;
-using MicroStore.Ordering.Application.Abstractions.StateMachines;
+using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.StateMachines;
-using MicroStore.Ordering.Events;
-using MicroStore.Ordering.Events.Models;
 namespace MicroStore.Ordering.Application.Tests.StateMachines
 {
     [NonParallelizable]
@@ -36,7 +34,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                         TaxCost= 0,
                         ShippingCost = 0,
                         SubTotal = 50,
-                        Total = 50,
+                        TotalPrice = 50,
                         UserId = _fakeUserId,
                         SubmissionDate = DateTime.UtcNow,
                         OrderItems = GenerateFakeOrderItems()
