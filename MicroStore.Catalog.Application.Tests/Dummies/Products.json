@@ -9,7 +9,7 @@
       "long_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
       "price": 50,
       "old_price": 60,
-      "_product_categories": [
+      "product_categories": [
         {
           "id": "90275157-f23a-4d88-8135-67791e3c6906",
           "category_id": "159b39f4-d03d-48df-9c89-ef5aaba7ef52", // clothes category
@@ -26,7 +26,7 @@
       "long_description": "An apple mobile which is nothing like apple",
       "price": 60,
       "old_price": 60,
-      "_product_categories": [
+      "product_categories": [
         {
           "id": "19388ee1-41da-41d3-a9f5-2d26c1f454a4",
           "category_id": "5573fc8b-e221-4d91-88ee-b8b772e0ddab",
@@ -44,7 +44,7 @@
       "long_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
       "price": 60,
       "old_price": 60,
-      "_product_categories": [
+      "product_categories": [
         {
           "id": "cffb5c89-90fc-40f6-88b9-84cc2fb4b104",
           "category_id": "6aae7a3c-a633-4096-8440-6d8cf3b65483",
@@ -63,7 +63,7 @@
       "long_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
       "price": 60,
       "old_price": 60,
-      "_product_categories": [
+      "product_categories": [
         {
           "id": "28e3f552-4739-4eca-bce8-68377d6e4a4d",
           "category_id": "80d49166-defd-4bd5-ac2b-7fabdc56d884",
@@ -81,7 +81,7 @@
       "long_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
       "price": 60,
       "old_price": 60,
-      "_product_categories": [
+      "product_categories": [
         {
           "id": "d4749517-69ed-4105-9183-ede53882c180",
           "category_id": "08216f0a-d0a1-44cd-a1f7-173f7c48c725",

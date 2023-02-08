@@ -4,13 +4,13 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Catalog.Application;
-using MicroStore.Catalog.Domain.Security;
 using MicroStore.Catalog.Infrastructure;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace MicroStore.Catalog.Api
@@ -29,7 +29,10 @@ namespace MicroStore.Catalog.Api
 
             var configuration = context.Services.GetConfiguration();
 
+            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<CatalogApiModule>());
+
             ConfigureAuthentication(context.Services,configuration);
+
             ConfigureSwagger(context.Services, configuration);
 
             Configure<AbpExceptionHandlingOptions>(options =>
@@ -80,8 +83,6 @@ namespace MicroStore.Catalog.Api
                 options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");
                 options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
-
-                options.OAuthScopes(CatalogScope.List().ToArray());
             });
 
 

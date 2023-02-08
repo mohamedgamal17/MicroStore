@@ -2,11 +2,6 @@
 using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Commands
 {
-    public class AssignProductCategoryCommand : ICommand<ProductDto>
-    {
-        public Guid ProductId { get; set; }
-        public Guid CategoryId { get; set; }
-        public bool IsFeatured { get; set; }
+    
 
-    }
 }

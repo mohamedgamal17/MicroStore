@@ -5,7 +5,7 @@ namespace MicroStore.Catalog.Domain.Entities
     {
         public Category Category { get;  set; }
         public Guid CategoryId { get; set; }
-        public bool IsFeaturedProduct { get; private set; }
+        public bool IsFeaturedProduct { get;  set; }
 
 
         public ProductCategory(Guid categoryId)
@@ -16,7 +16,7 @@ namespace MicroStore.Catalog.Domain.Entities
 
         public ProductCategory()
         {
-
+            Id = Guid.NewGuid();
         }
         public void SetFeaturedProduct(bool isFeatured) => IsFeaturedProduct = isFeatured;
 

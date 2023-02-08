@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application", "MicroStore.Catalog.Application\MicroStore.Catalog.Application.csproj", "{9F319B3B-7D27-4F9A-B2A6-77B1C64053D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Abstractions", "MicroStore.Catalog.Application.Abstractions\MicroStore.Catalog.Application.Abstractions.csproj", "{0C7B43F8-0A8C-4663-9646-49C5F1488109}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.IntegrationEvents", "MicroStore.Catalog.IntegrationEvents\MicroStore.Catalog.IntegrationEvents.csproj", "{EDF83FA4-2AD9-4075-9025-BD26696DFED3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Infrastructure", "MicroStore.Catalog.Infrastructure\MicroStore.Catalog.Infrastructure.csproj", "{B00EF95A-845C-4797-8434-5ACA8FE3812D}"
@@ -165,7 +163,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServerModule", "Ide
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.IdentityServer.Application.Tests", "MicroStore.IdentityProvider.IdentityServer.Application.Tests\MicroStore.IdentityProvider.IdentityServer.Application.Tests.csproj", "{9AC1D401-9637-4774-87E4-05EF221923BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Payment.Domain.Shared", "MicroStore.Payment.Domain.Shared\MicroStore.Payment.Domain.Shared.csproj", "{EBD18803-AB89-44EC-A092-4154CAD592E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Domain.Shared", "MicroStore.Payment.Domain.Shared\MicroStore.Payment.Domain.Shared.csproj", "{EBD18803-AB89-44EC-A092-4154CAD592E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -193,10 +191,6 @@ Global
 		{9F319B3B-7D27-4F9A-B2A6-77B1C64053D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F319B3B-7D27-4F9A-B2A6-77B1C64053D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F319B3B-7D27-4F9A-B2A6-77B1C64053D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C7B43F8-0A8C-4663-9646-49C5F1488109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C7B43F8-0A8C-4663-9646-49C5F1488109}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C7B43F8-0A8C-4663-9646-49C5F1488109}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C7B43F8-0A8C-4663-9646-49C5F1488109}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDF83FA4-2AD9-4075-9025-BD26696DFED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDF83FA4-2AD9-4075-9025-BD26696DFED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDF83FA4-2AD9-4075-9025-BD26696DFED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -408,7 +402,6 @@ Global
 		{993C7C07-BF1B-4E19-B7CF-EC6F0BA49375} = {E667C85C-80E1-4045-88A8-3BC69F2253AE}
 		{A4D0A453-2A90-4546-AB65-15FDD7F282D4} = {E667C85C-80E1-4045-88A8-3BC69F2253AE}
 		{9F319B3B-7D27-4F9A-B2A6-77B1C64053D3} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
-		{0C7B43F8-0A8C-4663-9646-49C5F1488109} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{EDF83FA4-2AD9-4075-9025-BD26696DFED3} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{B00EF95A-845C-4797-8434-5ACA8FE3812D} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{2EF24FB8-0673-426E-BC08-05CDDB9E77E4} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}

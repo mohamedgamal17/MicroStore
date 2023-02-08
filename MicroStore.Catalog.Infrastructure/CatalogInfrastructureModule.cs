@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Catalog.Application.Abstractions;
+using MicroStore.Catalog.Application;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
@@ -8,7 +8,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 namespace MicroStore.Catalog.Infrastructure
 {
-    [DependsOn(typeof(CatalogApplicationAbstractionModule),
+    [DependsOn(typeof(CatalogApplicationModule),
         typeof(AbpEntityFrameworkCoreModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringMinioModule))]

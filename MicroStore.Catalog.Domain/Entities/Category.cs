@@ -11,15 +11,11 @@ namespace MicroStore.Catalog.Domain.Entities
         public string Description { get;  set; } = string.Empty;
 
 
-        private Category()
+        public Category()
         {
-
+            Id = Guid.NewGuid();
         }
-        public Category(string name)
-            : base(Guid.NewGuid())
-        {
-            Name = name;
-        }
+  
      
     }
 }

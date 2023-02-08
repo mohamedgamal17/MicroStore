@@ -7,17 +7,10 @@ namespace MicroStore.Catalog.Domain.Entities
         public int DisplayOrder { get; set; }
 
 
-        private ProductImage()
+        public ProductImage()
         {
-
+            Id = Guid.NewGuid();
         }
 
-        public ProductImage(string imagePath, int displayOrder)
-        {
-            ImagePath = imagePath;
-
-            DisplayOrder = displayOrder;
-
-        }
     }
 }

@@ -3,35 +3,28 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Catalog.Api.Models.Products;
-using MicroStore.Catalog.Application.Abstractions.Products.Commands;
-using MicroStore.Catalog.Application.Abstractions.Products.Dtos;
-using MicroStore.Catalog.Domain.Security;
+using MicroStore.Catalog.Api.Models;
+using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Application.Products;
 
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/products/{productId}/productimages")]
-    [Authorize]
     [ApiController]
     public class ProductImageController : MicroStoreApiController
     {
 
         [Route("")]
         [HttpPost]
-        [RequiredScope(CatalogScope.ProductImage.Create)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> Post(Guid productId, [FromBody] AssignProductImageModel model)
+        public async Task<IActionResult> CreateProductImage(Guid productId, [FromBody] ProductImageModel model)
         {
-            var command = new AssignProductImageCommand
-            {
+            var command = ObjectMapper.Map<ProductImageModel, CreateProductImageCommand>(model);
 
-                ProductId = productId,
-                ImageModel = model.Image,
-                DisplayOrder = model.DisplayOrder
-            };
+            command.ProductId = productId;
 
             var result = await Send(command);
 
@@ -40,19 +33,16 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{productImageId}")]
         [HttpPut]
-        [RequiredScope(CatalogScope.ProductImage.Update)]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(Guid productId, Guid productImageId, [FromBody] UpdateProductImageModel model)
+        public async Task<IActionResult> Put(Guid productId, Guid productImageId, [FromBody] ProductImageModel model)
         {
-            var command = new UpdateProductImageCommand
-            {
-                ProductId = productId,
-                ProductImageId = productImageId,
-                DisplayOrder = model.DisplayOrder
-            };
+            var command = ObjectMapper.Map<ProductImageModel, UpdateProductImageCommand>(model);
+
+            command.ProductId = productId;
+            command.ProductImageId = productImageId;
 
             var result = await Send(command);
 
@@ -61,8 +51,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{productImageId}")]
         [HttpDelete]
-        [RequiredScope(CatalogScope.ProductImage.Delete)]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

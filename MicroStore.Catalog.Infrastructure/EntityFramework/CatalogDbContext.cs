@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MicroStore.Catalog.Application.Abstractions.Common;
+using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Domain.Entities;
 using System.Reflection;
 using Volo.Abp.Data;

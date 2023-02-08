@@ -23,7 +23,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\MicroStore.Catalog.Application.Abstractions\MicroStore.Catalog.Application.Abstractions.csproj" />
+    <ProjectReference Include="..\MicroStore.Catalog.Application\MicroStore.Catalog.Application.csproj" />
     <ProjectReference Include="..\MicroStore.Catalog.Domain\MicroStore.Catalog.Domain.csproj" />
   </ItemGroup>
   

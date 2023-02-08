@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
-using MicroStore.Catalog.Application.Abstractions.Common;
-using MicroStore.Catalog.Application.Abstractions.Common.Models;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.DependencyInjection;
 using SixLabors.ImageSharp;
-using Microsoft.Extensions.Hosting;
+using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Common;
+
 namespace MicroStore.Catalog.Infrastructure.Images
 {
     public class ImageService : IImageService , ITransientDependency

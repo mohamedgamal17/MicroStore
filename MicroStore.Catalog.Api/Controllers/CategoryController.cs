@@ -1,25 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MicroStore.Catalog.Application.Abstractions.Categories.Commands;
-using MicroStore.Catalog.Application.Abstractions.Categories.Dtos;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Catalog.Api.Models.Categories;
-using MicroStore.Catalog.Application.Abstractions.Categories.Queries;
 using MicroStore.BuildingBlocks.Paging.Params;
 using Volo.Abp.Application.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using MicroStore.Catalog.Domain.Security;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
+using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Application.Categories;
+using MicroStore.Catalog.Api.Models;
+
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/categories")]
-    [Authorize]
     public class CategoryController : MicroStoreApiController
     {
     
         [Route("")]
         [HttpGet]
-        [RequiredScope(CatalogScope.Product.List)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<ListResultDto<CategoryListDto>>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -40,7 +36,6 @@ namespace MicroStore.Catalog.Api.Controllers
    
         [Route("category/{id}")]
         [HttpGet]
-        [RequiredScope(CatalogScope.Product.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<CategoryDto>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -59,17 +54,12 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("")]
         [HttpPost]
-        [RequiredScope(CatalogScope.Product.Create)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<CategoryDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<CategoryDto>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(CreateCategoryModel model)
+        public async Task<IActionResult> Post(CategoryModel model)
         {
-            CreateCategoryCommand comand = new CreateCategoryCommand
-            {
-                Name = model.Name,
-                Description = model.Description
-            };
+            CreateCategoryCommand comand = ObjectMapper.Map<CategoryModel, CreateCategoryCommand>(model);
 
             var result = await Send(comand);
 
@@ -78,19 +68,15 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{id}")]
         [HttpPut]
-        [RequiredScope(CatalogScope.Product.Update)]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<CategoryDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<CategoryDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<CategoryDto>))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateCategoryModel model)
+        public async Task<IActionResult> Put(Guid id, [FromBody] CategoryModel model)
         {
-            UpdateCategoryCommand command = new UpdateCategoryCommand
-            {
-                CategoryId = id,
-                Name = model.Name,
-                Description = model.Description
-            };
+            UpdateCategoryCommand command = ObjectMapper.Map<CategoryModel, UpdateCategoryCommand>(model);
+
+            command.CategoryId = id;
 
             var result = await Send(command);
 

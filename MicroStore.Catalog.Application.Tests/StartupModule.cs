@@ -10,7 +10,6 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Respawn;
 using Respawn.Graph;
-using System.Reflection;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
@@ -18,7 +17,6 @@ using MicroStore.Catalog.Domain.Entities;
 
 namespace MicroStore.Catalog.Application.Tests
 {
-    [DependsOn(typeof(CatalogApplicationModule))]
     [DependsOn(typeof(CatalogInfrastructureModule))]
     [DependsOn(typeof(AbpAutofacModule))]
     [DependsOn(typeof(MediatorModule))]
