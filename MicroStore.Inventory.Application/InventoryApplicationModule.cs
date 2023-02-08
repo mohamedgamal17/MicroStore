@@ -1,18 +1,28 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Inventory.Application.Abstractions;
+using MicroStore.BuildingBlocks.InMemoryBus;
+using MicroStore.BuildingBlocks.Security;
 using System.Reflection;
+using Volo.Abp.AutoMapper;
+using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
 
 namespace MicroStore.Inventory.Application
 {
-    [DependsOn(typeof(InventoryApplicationAbstractionModule))]
+    [DependsOn(typeof(InMemoryBusModule),
+        typeof(AbpFluentValidationModule),
+        typeof(AbpAutoMapperModule),
+        typeof(MicroStoreSecurityModule))]
     public class InventoryApplicationModule  : AbpModule
     {
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            Configure<AbpAutoMapperOptions>(opt =>
+            {
+                opt.AddMaps<InventoryApplicationModule>();
+            });
 
             ConfigureMassTranstit(context.Services, context.Services.GetConfiguration());
 

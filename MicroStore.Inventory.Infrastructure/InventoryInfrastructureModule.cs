@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Inventory.Application.Abstractions;
 using MicroStore.Inventory.Infrastructure.EntityFramework;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus;
@@ -9,8 +8,7 @@ using Volo.Abp.Uow;
 namespace MicroStore.Inventory.Infrastructure
 {
 
-    [DependsOn(typeof(InventoryApplicationAbstractionModule),
-        typeof(AbpEntityFrameworkCoreModule),
+    [DependsOn(typeof(AbpEntityFrameworkCoreModule),
         typeof(AbpEventBusModule))]
     public  class InventoryInfrastructureModule : AbpModule
     {

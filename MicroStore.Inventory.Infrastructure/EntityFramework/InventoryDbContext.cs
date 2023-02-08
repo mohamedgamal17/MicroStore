@@ -1,6 +1,6 @@
 ﻿#nullable disable
 using Microsoft.EntityFrameworkCore;
-using MicroStore.Inventory.Application.Abstractions.Common;
+using MicroStore.Inventory.Application.Common;
 using MicroStore.Inventory.Domain.OrderAggregate;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using System.Reflection;

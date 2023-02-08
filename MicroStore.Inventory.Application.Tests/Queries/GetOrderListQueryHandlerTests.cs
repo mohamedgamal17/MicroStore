@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.Inventory.Application.Abstractions.Dtos;
-using MicroStore.Inventory.Application.Abstractions.Queries;
+using MicroStore.Inventory.Application.Orders;
 using System.Net;
 
 namespace MicroStore.Inventory.Application.Tests.Queries

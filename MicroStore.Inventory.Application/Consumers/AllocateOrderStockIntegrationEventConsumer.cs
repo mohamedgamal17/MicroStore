@@ -1,8 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.Inventory.Application.Abstractions.Commands;
-using MicroStore.Inventory.Application.Abstractions.Common;
+using MicroStore.Inventory.Application.Common;
+using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.IntegrationEvents;
 
 namespace MicroStore.Inventory.Application.Consumers

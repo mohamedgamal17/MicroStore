@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
-using MicroStore.Inventory.Application.Abstractions.Commands;
-using MicroStore.Inventory.Application.Abstractions.Dtos;
+using MicroStore.Inventory.Application.Products;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using System.Net;
 using Volo.Abp.Domain.Entities;

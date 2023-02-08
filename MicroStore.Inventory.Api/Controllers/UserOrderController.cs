@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
+using MicroStore.BuildingBlocks.Security;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.Domain.Security;
@@ -12,43 +12,29 @@ using MicroStore.Inventory.Domain.Security;
 namespace MicroStore.Inventory.Api.Controllers
 {
     [ApiController]
-    [Route("api/inventory/orders")]
-    [Authorize]
-    public class OrderController : MicroStoreApiController
+    [Route("api/user/orders")]
+    public class UserOrderController : MicroStoreApiController
     {
+        private readonly IApplicationCurrentUser _applicationCurrentUser;
 
-        [HttpGet]
-        [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<OrderListDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrderList([FromQuery] PagingQueryParams @params)
+        public UserOrderController(IApplicationCurrentUser applicationCurrentUser)
         {
-            var query = new GetOrderListQuery
-            {
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber,
-            };
-
-            var result = await Send(query);
-
-            return FromResult(result);
+            _applicationCurrentUser = applicationCurrentUser;
         }
 
         [HttpGet]
-        [Route("user/{userId}")]
+        [Route("")]
+        [RequiredScope(InventoryScope.Order.List)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<OrderListDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveUserOrderList(string userId, [FromQuery]  PagingQueryParams @params)
+        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingQueryParams @params)
         {
             var query = new GetUserOrderListQuery
             {
-                UserId = userId,
+                UserId = _applicationCurrentUser.Id,
                 PageSize = @params.PageSize,
                 PageNumber = @params.PageNumber,
             };
@@ -57,10 +43,9 @@ namespace MicroStore.Inventory.Api.Controllers
 
             return FromResult(result);
         }
-
-
         [HttpGet]
         [Route("external_order_id/{externalId}")]
+        [RequiredScope(InventoryScope.Order.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<OrderDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -80,6 +65,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
         [HttpGet]
         [Route("{orderId}")]
+        [RequiredScope(InventoryScope.Order.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<OrderDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

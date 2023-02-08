@@ -1,7 +1,8 @@
 ﻿using MassTransit;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Catalog.IntegrationEvents;
-using MicroStore.Inventory.Application.Abstractions.Commands;
+using MicroStore.Inventory.Application.Products;
+
 namespace MicroStore.Inventory.Application.Consumers
 {
     public class ProductUpdateIntegrationEventConsumer : IConsumer<ProductUpdatedIntegerationEvent>
@@ -15,7 +16,7 @@ namespace MicroStore.Inventory.Application.Consumers
 
         public Task Consume(ConsumeContext<ProductUpdatedIntegerationEvent> context)
         {
-            return _localMessageBus.Send(new UpdateProdutCommand
+            return _localMessageBus.Send(new UpdateProductCommand
             {
                 ExternalProductId = context.Message.ProductId,
                 Sku = context.Message.Sku,

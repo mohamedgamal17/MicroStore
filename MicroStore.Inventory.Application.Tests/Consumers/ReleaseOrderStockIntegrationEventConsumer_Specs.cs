@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Inventory.Application.Abstractions.Common;
+using MicroStore.Inventory.Application.Common;
 using MicroStore.Inventory.Domain.OrderAggregate;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using MicroStore.Inventory.Domain.ValueObjects;

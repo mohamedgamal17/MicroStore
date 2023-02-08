@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.Inventory.Application.Abstractions.Commands;
+using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.IntegrationEvents;
 namespace MicroStore.Inventory.Application.Consumers
 {

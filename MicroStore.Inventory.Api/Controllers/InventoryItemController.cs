@@ -7,9 +7,8 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Api.Models;
-using MicroStore.Inventory.Application.Abstractions.Commands;
-using MicroStore.Inventory.Application.Abstractions.Dtos;
-using MicroStore.Inventory.Application.Abstractions.Queries;
+using MicroStore.Inventory.Application.Dtos;
+using MicroStore.Inventory.Application.Products;
 using MicroStore.Inventory.Domain.Security;
 
 namespace MicroStore.Inventory.Api.Controllers
@@ -21,7 +20,6 @@ namespace MicroStore.Inventory.Api.Controllers
     {
         [HttpGet]
         [Route("")]
-        [RequiredScope(InventoryScope.Product.List)]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<ProductDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -42,7 +40,6 @@ namespace MicroStore.Inventory.Api.Controllers
 
         [HttpGet]
         [Route("external_product_id/{externalId}")]
-        [RequiredScope(InventoryScope.Product.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -62,7 +59,6 @@ namespace MicroStore.Inventory.Api.Controllers
 
         [HttpGet]
         [Route("sku/{sku}")]
-        [RequiredScope(InventoryScope.Product.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -82,7 +78,6 @@ namespace MicroStore.Inventory.Api.Controllers
 
         [HttpGet]
         [Route("{productId}")]
-        [RequiredScope(InventoryScope.Product.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -102,7 +97,6 @@ namespace MicroStore.Inventory.Api.Controllers
 
         [HttpPost]
         [Route("adjustquantity/{productsku}")]
-        [RequiredScope(InventoryScope.Product.AdjustQuantity)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]

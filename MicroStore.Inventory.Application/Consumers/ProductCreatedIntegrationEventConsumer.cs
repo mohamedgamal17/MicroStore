@@ -1,7 +1,8 @@
 ﻿using MassTransit;
 using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Catalog.IntegrationEvents;
-using MicroStore.Inventory.Application.Abstractions.Commands;
+using MicroStore.Inventory.Application.Products;
+
 namespace MicroStore.Inventory.Application.Consumers
 {
     public class ProductCreatedIntegrationEventConsumer : IConsumer<ProductCreatedIntegrationEvent>
