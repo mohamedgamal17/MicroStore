@@ -17,7 +17,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpGet]
         [Route("")]
-        [RequiredScope(ShippingScope.Settings.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(Envelope))]
         public async Task<IActionResult> GetShipmentSettings()
         {
@@ -31,7 +30,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        [RequiredScope(ShippingScope.Settings.Update)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]

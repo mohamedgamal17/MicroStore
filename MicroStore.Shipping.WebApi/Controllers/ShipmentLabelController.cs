@@ -21,7 +21,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("buylabel")]
-        [RequiredScope(ShippingScope.Label.Buy)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<List<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]

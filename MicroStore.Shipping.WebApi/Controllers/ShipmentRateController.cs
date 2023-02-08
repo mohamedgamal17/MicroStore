@@ -8,6 +8,7 @@ using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Domain.Security;
 using MicroStore.Shipping.WebApi.Models.Rates;
+using Volo.Abp.Application.Dtos;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {
@@ -18,7 +19,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
     {
         [HttpPost]
         [Route("retrive")]
-        [RequiredScope(ShippingScope.Rate.Retrive)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<List<ShipmentRateDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
@@ -37,8 +37,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("estimate")]
-        [RequiredScope(ShippingScope.Rate.Estimate)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AggregateEstimatedRateCollection))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ListResultDto<EstimatedRateDto>))]
         public async Task<IActionResult> EstimateShipmentRate([FromBody]EstimateShipmentRateModel model)
         {
             var command = new EstimateShipmentRateCommand

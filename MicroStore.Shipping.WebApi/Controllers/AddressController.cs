@@ -16,7 +16,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
     public class AddressController : MicroStoreApiController
     {
         [HttpPost]
-        [RequiredScope(ShippingScope.Address.Validate)]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<AddressValidationResultModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
