@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MicroStore.Payment.Application.Abstractions\MicroStore.Payment.Application.Abstractions.csproj" />
     <ProjectReference Include="..\MicroStore.Payment.Domain.Shared\MicroStore.Payment.Domain.Shared.csproj" />
   </ItemGroup>
 
