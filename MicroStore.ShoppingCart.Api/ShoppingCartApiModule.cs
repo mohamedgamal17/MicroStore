@@ -3,7 +3,6 @@ using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.ShoppingCart.Api.Models;
-using MicroStore.ShoppingCart.Api.Security;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
@@ -106,7 +105,6 @@ namespace MicroStore.ShoppingCart.Api
                     options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
                     options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
                     options.OAuthScopeSeparator(",");
-                    options.OAuthScopes(BasketScope.List().ToArray());
 
                 });
 

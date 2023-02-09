@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.ShoppingCart.Api.Infrastructure;
 using MicroStore.ShoppingCart.Api.Models;
-using MicroStore.ShoppingCart.Api.Security;
 using Volo.Abp.Caching;
 using Volo.Abp.ObjectMapping;
 
@@ -30,7 +28,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         }
 
         [HttpGet("{userId}")]
-        [RequiredScope(BasketScope.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -44,7 +41,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
 
         [HttpPut("update")]
-        [RequiredScope(BasketScope.Update)]
         [ProducesResponseType(StatusCodes.Status200OK,Type=  typeof(Envelope<BasketDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -58,7 +54,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         }
 
         [HttpPost("additem")]
-        [RequiredScope(BasketScope.Update)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -76,7 +71,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         }
 
         [HttpDelete("removeitem")]
-        [RequiredScope(BasketScope.Update)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -103,7 +97,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
 
         [HttpPut("migrate")]
-        [RequiredScope(BasketScope.Migrate)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
