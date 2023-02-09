@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/orders",
+      "DownstreamPathTemplate": "/api/orders/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -10,22 +10,16 @@
         }
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/orders",
+      "UpstreamPathTemplate": "/mvcgateway/orders/{everything}",
 
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "Get", "Post", "PUT", "DELETE", "PATCH" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.ordering.order.list" ]
-      },
-
-      "DelegatingHandlers": [
-        "OrderingTokenExchangeDelegatingHandler"
-      ]
-
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
-      "DownstreamPathTemplate": "/api/orders/{orderId}",
+      "DownstreamPathTemplate": "/api/user/orders/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -35,134 +29,34 @@
 
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/orders/user/{orderId}",
+      "UpstreamPathTemplate": "/mvcgateway/orders/user/{everything}",
 
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": [ "mvcgateway.ordering.order.read" ]
-      },
-      "DelegatingHandlers": [
-        "OrderingTokenExchangeDelegatingHandler"
-      ]
-
+      }
     },
 
     {
-      "DownstreamPathTemplate": "/api/orders/user/{userId}",
+      "DownstreamPathTemplate": "/api/user/orders/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 7226
         }
+
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/orders/user/{userId}",
+      "UpstreamPathTemplate": "/mvcgateway/orders/user/{everything}",
 
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE", "PATCH" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.ordering.order.list" ]
-      },
-      "DelegatingHandlers": [
-        "OrderingTokenExchangeDelegatingHandler"
-      ]
-
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/orders/submit",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7226
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/orders/submit",
-
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.ordering.order.submit" ]
-      },
-      "DelegatingHandlers": [
-        "OrderingTokenExchangeDelegatingHandler"
-      ]
-
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/orders/fullfill/{orderId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7226
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/orders/fullfill/{orderId}",
-
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.ordering.order.fullfill" ]
-      },
-      "DelegatingHandlers": [
-        "OrderingTokenExchangeDelegatingHandler"
-      ]
-
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/orders/complete/{orderId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7226
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/orders/complete/{orderId}",
-
-      "UpstreamHttpMethod": [ "POST" ],
-
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.ordering.order.complete" ]
-      },
-      "DelegatingHandlers": [
-        "OrderingTokenExchangeDelegatingHandler"
-      ]
-
-    },
-    {
-      "DownstreamPathTemplate": "/api/orders/cancel/{orderId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7226
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/orders/cancel/{orderId}",
-
-      "UpstreamHttpMethod": [ "POST" ],
-
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.ordering.order.cancel" ]
-      },
-      "DelegatingHandlers": [
-        "OrderingTokenExchangeDelegatingHandler"
-      ]
-
-    }
+        "AllowedScopes": [ "mvcgateway.ordering.order.write" ]
+      }
+    } 
 
   ]
 }

@@ -2,7 +2,7 @@
   "Routes": [
 
     {
-      "DownstreamPathTemplate": "/api/payments",
+      "DownstreamPathTemplate": "/api/payments/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -11,19 +11,15 @@
         }
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/payments",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/payments/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
 
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.payment.list" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
-      "DownstreamPathTemplate": "/api/payments/user/{userId}",
+      "DownstreamPathTemplate": "/api/user/payments/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -32,42 +28,17 @@
         }
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/payments/user/{userId}",
-      "UpstreamHttpMethod": [ "GET" ],
-
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.payment.list" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/payments/{paymentId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7092
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/payments/{paymentId}",
+      "UpstreamPathTemplate": "/mvcgateway/user/payments/{everything}",
       "UpstreamHttpMethod": [ "GET" ],
 
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": [ "mvcgateway.billing.payment.read" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
+      }
     },
 
     {
-      "DownstreamPathTemplate": "/api/payments/order_id/{orderId}",
+      "DownstreamPathTemplate": "/api/user/payments/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -76,19 +47,18 @@
         }
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/payments/order_id/{orderId}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/user/payments/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
+
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.payment.read" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
+        "AllowedScopes": [ "mvcgateway.billing.payment.write" ]
+      }
     },
 
+  
     {
-      "DownstreamPathTemplate": "/api/payments",
+      "DownstreamPathTemplate": "/api/systems/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -97,147 +67,15 @@
         }
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/payments",
-      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/mvcgateway/paymentsystems/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.payment.create" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/payments/process/{paymentId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7092
-        }
-      ],
+        "AuthenticationProviderKey": "Bearer"
+      }
 
-      "UpstreamPathTemplate": "/mvcgateway/payments/process/{paymentId}",
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.payment.process" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
     },
 
-    {
-      "DownstreamPathTemplate": "/api/payments/complete",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7092
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/payments/complete",
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.payment.complete" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
-    },
-
-
-
-
-    {
-      "DownstreamPathTemplate": "/api/systems",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7092
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/paymentsystems",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.system.list" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/systems/{systemId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7092
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/paymentsystems/{systemId}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.system.read" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/systems/system_name/{systemName}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7092
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/paymentsystems/system_name/{systemName}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.system.read" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/systems/{systemName}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7092
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/paymentsystems/{systemName}",
-      "UpstreamHttpMethod": [ "PUT" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.system.update" ]
-      },
-      "DelegatingHandlers": [
-        "BillingTokenExchangeDelegatingHandler"
-      ]
-    },
-
-
-
+ 
     {
       "DownstreamPathTemplate": "/api/plugins/{everything}",
       "DownstreamScheme": "https",
@@ -248,7 +86,7 @@
         }
       ],
       "UpstreamPathTemplate": "/mvcgateway/payment/plugins",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH" ]
 
     }
   ]

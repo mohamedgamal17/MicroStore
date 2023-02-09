@@ -2,7 +2,7 @@
   "Routes": [
 
     {
-      "DownstreamPathTemplate": "/api/shipments",
+      "DownstreamPathTemplate": "/api/shipments/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -10,18 +10,14 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/shipments/{everything}",
+      "UpstreamHttpMethod": [ "GET" , "POST" , "PUT" , "PATCH" ,  "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.shipment.list" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
-      "DownstreamPathTemplate": "/api/shipments/user/{userId}",
+      "DownstreamPathTemplate": "/api/user/shipments/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -29,26 +25,7 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments/user/{userId}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.shipment.list" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/shipments/order_id/{orderId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments/order_id/{orderId}",
+      "UpstreamPathTemplate": "/mvcgateway/shipments/user/{everything}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
@@ -59,7 +36,7 @@
       ]
     },
     {
-      "DownstreamPathTemplate": "/api/shipments/{shipmentId}",
+      "DownstreamPathTemplate": "/api/shipments/user/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -67,19 +44,20 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments/{shipmentId}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/shipments/user/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.shipment.read" ]
+        "AllowedScopes": [ "mvcgateway.shipping.shipment.write" ]
       },
       "DelegatingHandlers": [
         "ShippingTokenExchangeDelegatingHandler"
       ]
     },
 
+
     {
-      "DownstreamPathTemplate": "/api/shipments",
+      "DownstreamPathTemplate": "/api/labels/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -87,19 +65,15 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments",
-      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/mvcgateway/labels/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.shipment.create" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
-      "DownstreamPathTemplate": "/api/shipments/fullfill/{shipmentId}",
+      "DownstreamPathTemplate": "/api/rates/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -107,81 +81,18 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments/fullfill/{shipmentId}",
-      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/mvcgateway/rates/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.shipment.fullfill" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
-    },
 
-    {
-      "DownstreamPathTemplate": "/api/labels/buylabel",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-      "UpstreamPathTemplate": "/mvcgateway/labels/buylabel",
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.label.buy" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/rates/retrive",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-      "UpstreamPathTemplate": "/mvcgateway/rates/retrive",
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.rate.retrive" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/rates/estimate",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-      "UpstreamPathTemplate": "/mvcgateway/rates/estimate",
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.rate.estimate" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
+      }
     },
 
 
 
     {
-      "DownstreamPathTemplate": "/api/settings",
+      "DownstreamPathTemplate": "/api/settings/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -189,37 +100,15 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/shipmentsettings",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/shipmentsettings/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.settings.read" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
+        },
+     
     },
 
-    {
-      "DownstreamPathTemplate": "/api/settings",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-      "UpstreamPathTemplate": "/mvcgateway/shipmentsettings",
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.settings.update" ]
-      },
-      "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
-      ]
-    },
-
+  
     {
       "DownstreamPathTemplate": "/api/plugins/{everything}",
       "DownstreamScheme": "https",

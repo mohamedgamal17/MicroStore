@@ -53,8 +53,6 @@ namespace MicroStore.Gateway.Shopping.Extensions
         private static IServiceCollection ConfigureOcelot(IServiceCollection services)
         {
             services.AddOcelot()
-                .AddDelegatingHandler<BasketTokenExchangeDelegatingHandler>()
-                .AddDelegatingHandler<CatalogTokenExchangeDelegatingHandler>()
                 .AddDelegatingHandler<OrderingTokenExchangeDelegatingHandler>()
                 .AddDelegatingHandler<BillingTokenExchangeDelegatingHandler>()
                 .AddDelegatingHandler<InventoryTokenExchangeDelegatingHandler>()
