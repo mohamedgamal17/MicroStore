@@ -24,7 +24,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        [RequiredScope(InventoryScope.Order.List)]
+        [RequiredScope(InventoryScope.Order.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<OrderListDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
