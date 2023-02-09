@@ -26,7 +26,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpGet]
         [Route("")]
-        [RequiredScope(ShippingScope.Shipment.List)]
+        [RequiredScope(ShippingScope.Shipment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ShipmentDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
