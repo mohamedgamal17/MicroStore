@@ -7,25 +7,18 @@
         {
             return new List<string>
             {
-                Payment.List,
                 Payment.Read,
-                Payment.Create,
-                Payment.Process,
-                Payment.Complete,
+                Payment.Write,
             };
         }
 
         public static class Payment
         {
-            public const string List = "billing.payment.list";
 
             public const string Read = "billing.payment.read";
 
-            public const string Create = "billing.payment.create";
+            public const string Write = "billing.payment.write";
 
-            public const string Process = "billing.payment.process";
-
-            public const string Complete = "billing.payment.complete";
 
         }
 
