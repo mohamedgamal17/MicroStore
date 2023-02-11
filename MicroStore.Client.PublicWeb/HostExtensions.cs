@@ -8,7 +8,11 @@ namespace MicroStore.Client.PublicWeb
         {
             var config = builder.Configuration;
 
-            builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+            builder.Services.AddRazorPages()
+             .AddRazorPagesOptions(opt =>
+            {
+                opt.Conventions.AddPageRoute("/FrontEnd/Home/Index", "");
+            }).AddRazorRuntimeCompilation();
 
             builder.Services.AddAuthentication(options =>
             {

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MicroStore.Client.PublicWeb.Pages
+namespace MicroStore.Client.PublicWeb.Pages.FrontEnd.Orders
 {
-    public class OrdersModel : PageModel
+    public class IndexModel : PageModel
     {
         public void OnGet()
         {

@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\Categories.cshtml" />
+    <None Include="Pages\FrontEnd\Category\Index.cshtml" />
   </ItemGroup>
 
 </Project>
