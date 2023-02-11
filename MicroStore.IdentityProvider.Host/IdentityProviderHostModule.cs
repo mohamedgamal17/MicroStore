@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Mediator;
-using MicroStore.IdentityProvider.Host.Seeders;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Infrastructure;
@@ -14,13 +13,10 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using Volo.Abp.AutoMapper;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Duende.IdentityServer.Stores;
-using Duende.IdentityServer.EntityFramework.Stores;
+using Duende.IdentityServer.EntityFramework.Mappers;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -64,10 +60,9 @@ namespace MicroStore.IdentityProvider.Host
 
                 if (env.IsDevelopment())
                 {
-                    var seedEngine = context.ServiceProvider.GetRequiredService<IDataSeederEngine>();
+                     await SeedIdentityServerConfigurationData(context.ServiceProvider);
 
-                    await seedEngine.TryToSeedAsync(scope.ServiceProvider);
-
+                    await SeedIdentityData(context.ServiceProvider);
                 }
 
             }
@@ -121,6 +116,56 @@ namespace MicroStore.IdentityProvider.Host
 
         }
 
+
+        private async Task SeedIdentityServerConfigurationData(IServiceProvider service)
+        {
+            using (var scope = service.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationConfigurationDbContext>();
+
+                if (! await context.Clients.AnyAsync())
+                {
+                    foreach (var client in Config.Clients)
+                    {
+                        context.Clients.Add(client.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+                if (! await context.IdentityResources.AnyAsync())
+                {
+                    foreach (var resource in Config.IdentityResources)
+                    {
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (! await context.ApiScopes.AnyAsync())
+                {
+                    foreach (var resource in Config.ApiScopes)
+                    {
+                        context.ApiScopes.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+            }
+        }
+
+
+        private async Task SeedIdentityData(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>();
+                var usermanager = scope.ServiceProvider.GetRequiredService<ApplicationUserManager>();
+
+                if (!await context.Users.AnyAsync())
+                {
+                    await Config.SeedIdentityUsers(scope.ServiceProvider);
+                }
+            }
+        }
 
         private void ConfigureAspNetIdentity(IServiceCollection services)
         {
