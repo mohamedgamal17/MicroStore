@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Categories;
 using MicroStore.Catalog.Api.Models;
+using MicroStore.BuildingBlocks.AspNetCore.Models;
 
 namespace MicroStore.Catalog.Api.Controllers
 {
@@ -19,7 +20,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<ListResultDto<CategoryListDto>>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetCatalogCategoryList(SortingQueryParams @params)
+        public async Task<IActionResult> GetCatalogCategoryList(SortingParamsQueryString @params)
         {
             var request = new GetCategoryListQuery
             {
