@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.BuildingBlocks.Security;
 using MicroStore.Inventory.Application.Dtos;
@@ -30,7 +30,7 @@ namespace MicroStore.Inventory.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingQueryParams @params)
+        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingParamsQueryString @params)
         {
             var query = new GetUserOrderListQuery
             {
