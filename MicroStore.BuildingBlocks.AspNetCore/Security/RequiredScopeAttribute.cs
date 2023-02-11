@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-
-namespace MicroStore.BuildingBlocks.AspNetCore.Security
+﻿namespace MicroStore.BuildingBlocks.AspNetCore.Security
 {
     public class RequiredScopeAttribute : Attribute
     {
