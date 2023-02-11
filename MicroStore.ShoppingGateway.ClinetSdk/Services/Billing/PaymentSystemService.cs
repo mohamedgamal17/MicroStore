@@ -14,24 +14,24 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Billing
             _microStoreClinet = microStoreClinet;
         }
 
-        public Task<HttpResponseResult> UpdateAsync(string sysName , PyamentSystemUpdateRequestOptions options , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<PaymentSystem>> UpdateAsync(string sysName , PyamentSystemUpdateRequestOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest(options, BaseUrl, HttpMethod.Put, cancellationToken);
+            return await _microStoreClinet.MakeRequest<PaymentSystem>(BaseUrl, HttpMethod.Put, options, cancellationToken);
         } 
 
-        public Task<HttpResponseResult<ListResult<PaymentSystem>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<ListResult<PaymentSystem>>> ListAsync(CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeGetRequest<ListResult<PaymentSystem>>(BaseUrl, cancellationToken: cancellationToken);
+            return await _microStoreClinet.MakeRequest<ListResult<PaymentSystem>>(BaseUrl,HttpMethod.Get ,cancellationToken: cancellationToken);
         }
 
-        public Task<HttpResponseResult<PaymentSystem>> RetrieveAsync(Guid sysId , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<PaymentSystem>> RetrieveAsync(Guid sysId , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeGetRequest<PaymentSystem>(string.Format("{0}/{1}", BaseUrl, sysId), cancellationToken: cancellationToken); 
+            return await _microStoreClinet.MakeRequest<PaymentSystem>(string.Format("{0}/{1}", BaseUrl, sysId), HttpMethod.Get,cancellationToken: cancellationToken); 
         }
 
-        public Task<HttpResponseResult<PaymentSystem>> RetrieveByNameAsync(string sysName , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<PaymentSystem>> RetrieveByNameAsync(string sysName , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeGetRequest<PaymentSystem>(string.Format("{0}/system_name/{1}", BaseUrl, sysName), cancellationToken: cancellationToken);
+            return await _microStoreClinet.MakeRequest<PaymentSystem>(string.Format("{0}/system_name/{1}", BaseUrl, sysName), HttpMethod.Get, cancellationToken: cancellationToken);
         }
 
     }

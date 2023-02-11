@@ -13,40 +13,40 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             _microStoreClinet = microStoreClinet;
         }
 
-        public Task<HttpResponseResult<Order>> SubmitOrderAsync(OrderSubmitRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Order>> SubmitOrderAsync(OrderSubmitRequestOptions options, CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<OrderSubmitRequestOptions,Order>(options,string.Format("{0}/{1}",BaseUrl,"submit"),HttpMethod.Post,cancellationToken);
+            return await _microStoreClinet.MakeRequest<Order>(string.Format("{0}/{1}",BaseUrl,"submit"),HttpMethod.Post, options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<PagedList<OrderList>>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken)
+        public async Task<HttpResponseResult<PagedList<OrderList>>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<PagingReqeustOptions,PagedList<OrderList>>(options,BaseUrl,HttpMethod.Get,cancellationToken);  
+            return await _microStoreClinet.MakeRequest<PagedList<OrderList>>(BaseUrl,HttpMethod.Get, options, cancellationToken);  
         }
 
-        public Task<HttpResponseResult<PagedList<OrderList>>> ListByUserAsync(string userId,PagingReqeustOptions options , CancellationToken cancellationToken)
+        public async Task<HttpResponseResult<PagedList<OrderList>>> ListByUserAsync(string userId,PagingReqeustOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<PagingReqeustOptions, PagedList<OrderList>>(options, string.Format("{0}/user/{1}", BaseUrl, userId), HttpMethod.Get, cancellationToken);
+            return await _microStoreClinet.MakeRequest< PagedList<OrderList>>(string.Format("{0}/user/{1}", BaseUrl, userId), HttpMethod.Get, options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<Order>> Retrieve(Guid orderId , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Order>> Retrieve(Guid orderId , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<EmptyRequst,Order>(EmptyRequst.Empty,string.Format("{0}/{1}",BaseUrl,orderId),HttpMethod.Get,cancellationToken);
+            return await _microStoreClinet.MakeRequest<Order>(string.Format("{0}/{1}",BaseUrl,orderId),HttpMethod.Get,cancellationToken);
         } 
 
-        public Task<HttpResponseResult> FullfillAsync(Guid orderId ,OrderFullfillRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult> FullfillAsync(Guid orderId ,OrderFullfillRequestOptions options, CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest(options, string.Format("{0}/fullfill/{1}", BaseUrl, orderId), HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest(string.Format("{0}/fullfill/{1}", BaseUrl, orderId), HttpMethod.Post, options, cancellationToken);
 
         }
 
-        public Task<HttpResponseResult> CompleteAsync(Guid orderId, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult> CompleteAsync(Guid orderId, CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest(EmptyRequst.Empty, string.Format("{0}/complete/{1}", BaseUrl, orderId), HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest(string.Format("{0}/complete/{1}", BaseUrl, orderId), HttpMethod.Post, cancellationToken);
         }
 
-        public Task<HttpResponseResult> CancelAsync(Guid orderId , OrderCancelRequestOptions options , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult> CancelAsync(Guid orderId , OrderCancelRequestOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest(options, string.Format("{0}/cancel/{1}", BaseUrl, orderId), HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest(string.Format("{0}/cancel/{1}", BaseUrl, orderId), HttpMethod.Post,options, cancellationToken);
         }
 
     }

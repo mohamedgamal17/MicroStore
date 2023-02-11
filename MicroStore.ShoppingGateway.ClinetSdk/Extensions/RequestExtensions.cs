@@ -6,8 +6,13 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
     {
         const string Perfix = "param";
 
-        public static Dictionary<string, string> ConvertToDictionary(this IQueryRequestOptions request)
+        public static Dictionary<string, string> ConvertToDictionary(this object request)
         {
+            if(request == null)
+            {
+                return new Dictionary<string, string>();
+            }
+
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
             var requestType = request.GetType();

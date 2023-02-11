@@ -14,24 +14,24 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
             _clinet = clinet;
         }
 
-        public Task<HttpResponseResult<Product>> CreateAsync(ProductCreateOptions options, CancellationToken cancellationToken)
+        public async Task<HttpResponseResult<Product>> CreateAsync(ProductCreateOptions options, CancellationToken cancellationToken)
         {
-            return _clinet.MakeRequest<ProductCreateOptions, Product>(options, BaseUrl, HttpMethod.Post, cancellationToken);
+            return await _clinet.MakeRequest<Product>( BaseUrl, HttpMethod.Post ,options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<PagedList<ProductList>>> ListAsync(PagingAndSortingRequestOptions options, CancellationToken cancellationToken)
+        public Task<HttpResponseResult<PagedList<ProductList>>> ListAsync(PagingAndSortingRequestOptions options, CancellationToken cancellationToken = default)
         {
-            return _clinet.MakeRequest<PagingAndSortingRequestOptions,PagedList<ProductList>>(options,BaseUrl,HttpMethod.Get, cancellationToken);
+            return _clinet.MakeRequest<PagedList<ProductList>>(BaseUrl,HttpMethod.Get, options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<Product>> RetriveAsync(Guid productId , CancellationToken cancellationToken)
+        public async Task<HttpResponseResult<Product>> RetriveAsync(Guid productId , CancellationToken cancellationToken = default)
         {
-            return _clinet.MakeRequest<EmptyRequst, Product>(EmptyRequst.Empty, string.Format("{0}/{1}", BaseUrl, productId), HttpMethod.Get, cancellationToken);
+            return await _clinet.MakeRequest<Product>(string.Format("{0}/{1}", BaseUrl, productId), HttpMethod.Get, cancellationToken);
         }
                   
-        public Task<HttpResponseResult<Product>> UpdateAsync(Guid productId,  ProductUpdateOptions options, CancellationToken cancellationToken)
+        public async Task<HttpResponseResult<Product>> UpdateAsync(Guid productId,  ProductUpdateOptions options, CancellationToken cancellationToken = default)
         {
-            return _clinet.MakeRequest<ProductUpdateOptions, Product>(options, string.Format("{0}/{1}", BaseUrl, productId), HttpMethod.Put, cancellationToken);
+            return await _clinet.MakeRequest<Product>(string.Format("{0}/{1}", BaseUrl, productId), HttpMethod.Put, options, cancellationToken);
         }
     }
 }

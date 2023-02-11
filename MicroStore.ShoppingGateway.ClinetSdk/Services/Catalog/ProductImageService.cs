@@ -14,19 +14,19 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         }
 
 
-        public Task<HttpResponseResult<Product>> CreateAsync(Guid productId , ProductImageCreateOptions options , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Product>> CreateAsync(Guid productId , ProductImageCreateOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<ProductImageCreateOptions, Product>(options, string.Format(BaseUrl, productId), HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Product>(string.Format(BaseUrl, productId), HttpMethod.Post, options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<Product>> UpdateAsync(Guid productId , Guid productImageId  , ProductImageUpdateOptions options , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Product>> UpdateAsync(Guid productId , Guid productImageId  , ProductImageUpdateOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<ProductImageUpdateOptions, Product>(options, string.Format(BaseUrl, productId) + "/" + productImageId, HttpMethod.Put, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Product>( string.Format(BaseUrl, productId) + "/" + productImageId, HttpMethod.Put , options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<Product>> DeleteAsync(Guid productId , Guid productImageId , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Product>> DeleteAsync(Guid productId , Guid productImageId , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<EmptyRequst, Product>(EmptyRequst.Empty, string.Format(BaseUrl, productId) + "/" + productImageId, HttpMethod.Delete, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Product>(string.Format(BaseUrl, productId) + "/" + productImageId, HttpMethod.Delete, cancellationToken);
         }
 
     }

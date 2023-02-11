@@ -14,15 +14,15 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
         }
 
 
-        public Task<HttpResponseResult<ListResult<ShipmentRate>>> RetrieveAsync(ShipmentRateRetrieveRequestOptions options , CancellationToken
-             cancellationToken)
+        public async Task<HttpResponseResult<ListResult<ShipmentRate>>> RetrieveAsync(ShipmentRateRetrieveRequestOptions options , CancellationToken
+             cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<ShipmentRateRetrieveRequestOptions, ListResult<ShipmentRate>>(options, BaseUrl +"/"+"retrive", HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest<ListResult<ShipmentRate>>(BaseUrl + "/" + "retrive", HttpMethod.Post,options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<ListResult<EstimatedRate>>> EstimateAsync(ShipmentRateEstimateRequestOptions options , CancellationToken cancellationToken)
+        public async Task<HttpResponseResult<ListResult<EstimatedRate>>> EstimateAsync(ShipmentRateEstimateRequestOptions options , CancellationToken cancellationToken = default )
         {
-            return _microStoreClinet.MakeRequest<ShipmentRateEstimateRequestOptions, ListResult<EstimatedRate>>(options, BaseUrl + "/" + "retrive", HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest<ListResult<EstimatedRate>>(BaseUrl + "/" + "retrive", HttpMethod.Post, options,cancellationToken);
         }
     }
 }

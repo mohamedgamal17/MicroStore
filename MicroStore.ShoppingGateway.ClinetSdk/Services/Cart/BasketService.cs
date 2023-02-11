@@ -14,26 +14,26 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Cart
             _microStoreClinet = microStoreClinet;
         }
 
-        public Task<HttpResponseResult<Basket>> RetrieveAsync(string userId , CancellationToken  cancellationToken= default)
+        public async Task<HttpResponseResult<Basket>> RetrieveAsync(string userId , CancellationToken  cancellationToken= default)
         {
-            return _microStoreClinet.MakeGetRequest<Basket>(string.Format("{0}/{1}", userId), cancellationToken: cancellationToken);
+            return await _microStoreClinet.MakeRequest<Basket>(string.Format("{0}/{1}", userId), HttpMethod.Get, cancellationToken: cancellationToken);
         }
 
 
-        public Task<HttpResponseResult<Basket>> AddItemAsync(string userId, BasketAddItemRequestOptions options , CancellationToken cancellationToken= default)
+        public async Task<HttpResponseResult<Basket>> AddItemAsync(string userId, BasketAddItemRequestOptions options , CancellationToken cancellationToken= default)
         {
-            return _microStoreClinet.MakeRequest<BasketAddItemRequestOptions,Basket>(options, string.Format("{0}/{1}", userId), HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Basket>(string.Format("{0}/{1}", userId), HttpMethod.Post, options, cancellationToken);
         }
 
 
-        public Task<HttpResponseResult<Basket>> RemoveItemAsync(string userId, BasketRemoveItemRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Basket>> RemoveItemAsync(string userId, BasketRemoveItemRequestOptions options, CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<BasketRemoveItemRequestOptions, Basket>(options, string.Format("{0}/{1}", userId), HttpMethod.Delete, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Basket>(string.Format("{0}/{1}", userId), HttpMethod.Delete, options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<Basket>> MigrateAsync(BasketMigrateRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Basket>> MigrateAsync(BasketMigrateRequestOptions options, CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<BasketMigrateRequestOptions, Basket>(options, BaseUrl + "/" + "migrate", HttpMethod.Put, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Basket>(BaseUrl + "/" + "migrate", HttpMethod.Put, options, cancellationToken);
         }
     }
 }

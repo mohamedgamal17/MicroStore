@@ -4,7 +4,7 @@
 
     public class MicroStoreClinetConfiguration
     {
-        public TokenHandler TokenHandlerDeleagete { get; set; }  
-
+        public TokenHandler TokenHandlerDeleagete { get; set; }
+        public string BaseUrl { get; set; } = "https://localhost:7062/mvcgateway";
     }
 }

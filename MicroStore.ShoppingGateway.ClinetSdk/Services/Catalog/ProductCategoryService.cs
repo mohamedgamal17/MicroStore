@@ -15,19 +15,19 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         }
 
 
-        public Task<HttpResponseResult<Product>> CreateAsync(Guid productId , ProductCategoryCreateOptions options , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Product>> CreateAsync(Guid productId , ProductCategoryCreateOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<ProductCategoryCreateOptions, Product>(options, string.Format(BaseUrl, productId), HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Product>(string.Format(BaseUrl, productId), HttpMethod.Post, options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<Product>> UpdateAsync(Guid productId , Guid categoryId , ProductCategoryUpdateOptions options , CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Product>> UpdateAsync(Guid productId , Guid categoryId , ProductCategoryUpdateOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<ProductCategoryUpdateOptions, Product>(options, string.Format(BaseUrl, productId) + "/" + categoryId, HttpMethod.Put, cancellationToken);
+            return await _microStoreClinet.MakeRequest< Product>(string.Format(BaseUrl, productId) + "/" + categoryId, HttpMethod.Put, options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<Product>> DeleteAsync(Guid productId, Guid categoryId, ProductCategoryUpdateOptions options, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Product>> DeleteAsync(Guid productId, Guid categoryId,  CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<EmptyRequst, Product>(EmptyRequst.Empty, string.Format(BaseUrl, productId) + "/" + categoryId, HttpMethod.Delete, cancellationToken);
+            return await _microStoreClinet.MakeRequest< Product>(string.Format(BaseUrl, productId) + "/" + categoryId, HttpMethod.Delete, cancellationToken);
         }
     }
 }

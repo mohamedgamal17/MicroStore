@@ -5,12 +5,15 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddMicroStoreClinet(this IServiceCollection services, Action<MicroStoreClinetConfiguration> action)
+        public static IServiceCollection AddMicroStoreClinet(this IServiceCollection services, Action<MicroStoreClinetConfiguration> action = null)
         {
             var config = new MicroStoreClinetConfiguration();
 
-            action(config);
-
+            if(action != null)
+            {
+                action(config);
+            }
+  
             services.AddSingleton(config);
 
             services.AddTransient<MicroStoreClinet>();

@@ -14,9 +14,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
             _microStoreClinet = microStoreClinet;
         }
 
-        public Task<HttpResponseResult<Shipment>> BuyLabelAsync(ShipmentLabelBuyRequestOptions options , CancellationToken cancellationToken)
+        public async Task<HttpResponseResult<Shipment>> BuyLabelAsync(ShipmentLabelBuyRequestOptions options , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<ShipmentLabelBuyRequestOptions, Shipment>(options, BaseUrl + "/" + "buylabel", HttpMethod.Post, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Shipment>( BaseUrl + "/" + "buylabel", HttpMethod.Post, options, cancellationToken);
         }
     }
 }
