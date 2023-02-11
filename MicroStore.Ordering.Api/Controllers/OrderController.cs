@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
@@ -30,7 +31,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrderList([FromQuery]PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> RetirveOrderList([FromQuery]PagingAndSortingParamsQueryString @params)
         {
             var query = new GetOrderListQuery
             {
@@ -54,7 +55,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrder(Guid orderId, [FromQuery] PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> RetirveOrder(Guid orderId, [FromQuery] PagingAndSortingParamsQueryString @params)
         {
             var query = new GetOrderQuery
             {

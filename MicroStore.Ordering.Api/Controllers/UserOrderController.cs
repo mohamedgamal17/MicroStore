@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Security;
@@ -41,7 +42,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [HttpGet]
         [Route("")]
         [RequiredScope(OrderingScope.Order.List)]
-        public async Task<IActionResult> RetirveUserOrderList( [FromQuery] PagingAndSortingQueryParams @params)
+        public async Task<IActionResult> RetirveUserOrderList( [FromQuery] PagingAndSortingParamsQueryString @params)
         {          
 
             var query = new GetUserOrderListQuery
