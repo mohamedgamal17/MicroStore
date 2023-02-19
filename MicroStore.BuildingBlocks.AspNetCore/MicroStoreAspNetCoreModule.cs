@@ -13,10 +13,10 @@ namespace MicroStore.BuildingBlocks.AspNetCore
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<MvcOptions>(config =>
-            {
-                config.Filters.Add(typeof(RequiredScopeAuthorizationHandler));
-            });
+            //Configure<MvcOptions>(config =>
+            //{
+            //    config.Filters.Add(typeof(RequiredScopeAuthorizationHandler));
+            //});
 
             context.Services.AddTransient<RequiredScopeAuthorizationHandler>();
         }

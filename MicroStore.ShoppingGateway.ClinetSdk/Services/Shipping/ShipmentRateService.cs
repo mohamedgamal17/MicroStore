@@ -4,7 +4,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 {
     public class ShipmentRateService
     {
-        const string BaseUrl = "/rates";
+        const string BaseUrl = "/shipping/rates";
 
         private readonly MicroStoreClinet _microStoreClinet;
 
@@ -22,7 +22,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 
         public async Task<HttpResponseResult<ListResult<EstimatedRate>>> EstimateAsync(ShipmentRateEstimateRequestOptions options , CancellationToken cancellationToken = default )
         {
-            return await _microStoreClinet.MakeRequest<ListResult<EstimatedRate>>(BaseUrl + "/" + "retrive", HttpMethod.Post, options,cancellationToken);
+            return await _microStoreClinet.MakeRequest<ListResult<EstimatedRate>>(BaseUrl + "/" + "estimate", HttpMethod.Post, options,cancellationToken);
         }
     }
 }

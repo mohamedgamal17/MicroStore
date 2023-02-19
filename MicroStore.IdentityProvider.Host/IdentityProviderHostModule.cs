@@ -17,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using Volo.Abp.AutoMapper;
 using Duende.IdentityServer.EntityFramework.Mappers;
+using MicroStore.IdentityProvider.Host.Services;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -149,6 +150,15 @@ namespace MicroStore.IdentityProvider.Host
                     context.SaveChanges();
                 }
 
+                if(!await context.ApiResources.AnyAsync())
+                {
+                    foreach (var resource in Config.ApiResources)
+                    {
+                        context.ApiResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
             }
         }
 
@@ -197,8 +207,6 @@ namespace MicroStore.IdentityProvider.Host
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
-
-                    // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
                     options.EmitStaticAudienceClaim = true;
                 })
                 .AddServerSideSessions()
@@ -232,9 +240,8 @@ namespace MicroStore.IdentityProvider.Host
 
                         });
                     };
-                }).AddAspNetIdentity<ApplicationIdentityUser>();
-
-
+                }).AddAspNetIdentity<ApplicationIdentityUser>()
+                .AddExtensionGrantValidator<TokenExchangeExtensionGrantValidator>();
         }
 
 

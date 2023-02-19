@@ -11,6 +11,8 @@ using MicroStore.Shipping.WebApi;
 using Volo.Abp.AspNetCore.Mvc;
 using MicroStore.Shipping.Domain.Security;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
+using Volo.Abp.Data;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MicroStore.Shipping.Host
 {
@@ -47,7 +49,7 @@ namespace MicroStore.Shipping.Host
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
             {
@@ -98,11 +100,25 @@ namespace MicroStore.Shipping.Host
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
 
-            //app.MapControllers();
+
+
+
+
         }
 
 
+        public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using var scope = context.ServiceProvider.CreateScope();
 
+            var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
+
+            await  dataSeeder.SeedAsync(new DataSeedContext());
+
+
+           await base.OnApplicationInitializationAsync(context);
+
+        }
 
 
         private void ConfigureSwagger(IServiceCollection serviceCollection, IConfiguration configuration)

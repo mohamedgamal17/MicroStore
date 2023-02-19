@@ -10,6 +10,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AspNetCore.Mvc;
 using MicroStore.Inventory.Domain.Security;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MicroStore.Inventory.Host
 {
@@ -44,7 +45,7 @@ namespace MicroStore.Inventory.Host
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
             {

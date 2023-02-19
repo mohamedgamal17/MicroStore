@@ -10,8 +10,11 @@
         }
       ],
 
-      "UpstreamPathTemplate": "/mvcgateway/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ]
+      "UpstreamPathTemplate": "/mvcgateway/catalog/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
     }   
   ]
 }

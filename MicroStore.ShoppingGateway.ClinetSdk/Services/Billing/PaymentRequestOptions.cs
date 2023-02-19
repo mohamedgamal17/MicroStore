@@ -1,16 +1,20 @@
 ﻿namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Billing
 {
-  
-    public class PaymentCreateRequestOptions
+
+    public class PaymentRequestOptions
     {
         public string OrderId { get; set; }
         public string OrderNubmer { get; set; }
-        public string UserId { get; set; }
         public double ShippingCost { get; set; }
         public double TaxCost { get; set; }
         public double SubtTotal { get; set; }
         public double TotalCost { get; set; }
         public List<PaymentProductCreateRequestOptions> Items { get; set; }
+    }
+  
+    public class PaymentCreateRequestOptions : PaymentRequestOptions
+    {
+        public string UserId { get; set; }
     }
 
     public class PaymentProcessRequestOptions

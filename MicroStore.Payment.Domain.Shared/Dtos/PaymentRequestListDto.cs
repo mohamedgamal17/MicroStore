@@ -7,10 +7,16 @@ namespace MicroStore.Payment.Domain.Shared.Dtos
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
         public string CustomerId { get; set; }
-        public double Amount { get; set; }
-        public string TransctionId { get; set; }
-        public string PaymentGateway { get; set; }
-        public DateTime? OpenedAt { get; set; }
-        public DateTime? CapturedAt { get; set; }
+        public double SubTotal { get; set; }
+        public double TaxCost { get; set; }
+        public double ShippingCost { get; set; }
+        public double TotalCost { get; set; }
+        public string? Description { get; set; }
+        public string PaymentGateway { get; private set; }
+        public string TransctionId { get; private set; }
+        public string State { get; private set; }
+        public DateTime? CapturedAt { get; private set; }
+        public DateTime? RefundedAt { get; set; }
+        public DateTime? FaultAt { get; private set; }
     }
 }

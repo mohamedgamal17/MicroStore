@@ -20,8 +20,7 @@ using Volo.Abp.ObjectMapping;
 
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 {
-    [ExposeServices(typeof(IShipmentSystemProvider),IncludeDefaults =true,IncludeSelf =true)]
-    public class ShipEngineSystemProvider : IShipmentSystemProvider , ITransientDependency
+    public class ShipEngineSystemProvider : IShipmentSystemProvider 
     {
         public string SystemName => ShipEngineConst.SystemName;
 

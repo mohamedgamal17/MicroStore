@@ -1,4 +1,5 @@
-﻿using MicroStore.Payment.Domain.Shared;
+﻿using Microsoft.EntityFrameworkCore;
+using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -55,7 +56,9 @@ namespace MicroStore.Payment.Domain
 
         private async Task<PaymentRequest> RetrivePaymentRequest(Guid paymentId, CancellationToken cancellationToken = default)
         {
-           return await _paymentRequestRepository.SingleAsync(x => x.Id == paymentId, cancellationToken);
+            var query = await _paymentRequestRepository.GetQueryableAsync();    
+
+           return await query.Include(x=> x.Items).SingleAsync(x => x.Id == paymentId, cancellationToken);
         }
 
         public async Task<PaymentRequestDto> MarkAsFaild(Guid paymentId,string paymentGateway, DateTime faultAt, CancellationToken cancellationToken = default)

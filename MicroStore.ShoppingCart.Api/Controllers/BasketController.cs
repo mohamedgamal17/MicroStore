@@ -11,7 +11,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 {
     [Route("api/baskets")]
     [ApiController]
-    [Authorize]
+  //  [Authorize]
     public class BasketController : ControllerBase
     {
         private readonly IDistributedCache<Basket> _distributedCache;
@@ -74,7 +74,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
         }
 
-        [HttpDelete("")]
+        [HttpDelete("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

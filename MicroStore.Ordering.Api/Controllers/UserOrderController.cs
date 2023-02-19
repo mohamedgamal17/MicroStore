@@ -24,7 +24,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpPost]
         [Route("")]
-        [RequiredScope(OrderingScope.Order.Submit)]
+  //      [RequiredScope(OrderingScope.Order.Submit)]
 
         public async Task<IActionResult> SubmitOrder(OrderModel model)
         {
@@ -41,7 +41,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        [RequiredScope(OrderingScope.Order.List)]
+    //    [RequiredScope(OrderingScope.Order.List)]
         public async Task<IActionResult> RetirveUserOrderList( [FromQuery] PagingAndSortingParamsQueryString @params)
         {          
 
@@ -62,7 +62,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("{orderId}")]
-        [RequiredScope(OrderingScope.Order.Read)]
+  //      [RequiredScope(OrderingScope.Order.Read)]
         public async Task<IActionResult> RetirveUserOrder(Guid orderId)
         {
             var query = new GetOrderQuery

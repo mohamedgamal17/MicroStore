@@ -9,10 +9,10 @@ namespace MicroStore.Shipping.Infrastructure
 {
     public class ShipmentSystemResolver : IShipmentSystemResolver, ISingletonDependency
     {
-        private readonly IList<IShipmentSystemProvider> _providers;
+        private readonly IEnumerable<IShipmentSystemProvider> _providers;
 
         private readonly IRepository<ShippingSystem> _shippingSystemRepository;
-        public ShipmentSystemResolver(IList<IShipmentSystemProvider> providers, IRepository<ShippingSystem> shippingSystemRepository)
+        public ShipmentSystemResolver(IEnumerable<IShipmentSystemProvider> providers, IRepository<ShippingSystem> shippingSystemRepository)
         {
             _providers = providers;
             _shippingSystemRepository = shippingSystemRepository;

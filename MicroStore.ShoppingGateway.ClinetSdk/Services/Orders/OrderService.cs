@@ -4,7 +4,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 {
     public class OrderService
     {
-        const string BaseUrl = "/orders";
+        const string BaseUrl = "/ordering/orders";
 
         private readonly MicroStoreClinet _microStoreClinet;
 
@@ -13,9 +13,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             _microStoreClinet = microStoreClinet;
         }
 
-        public async Task<HttpResponseResult<Order>> SubmitOrderAsync(OrderSubmitRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<HttpResponseResult<Order>> CreateOrderAsync(OrderCreateRequestOptions options, CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Order>(string.Format("{0}/{1}",BaseUrl,"submit"),HttpMethod.Post, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Order>(BaseUrl, HttpMethod.Post, options, cancellationToken);
         }
 
         public async Task<HttpResponseResult<PagedList<OrderList>>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)

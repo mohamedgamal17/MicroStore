@@ -1,6 +1,5 @@
 ﻿using Duende.IdentityServer.Models;
 using IdentityModel;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
@@ -17,9 +16,83 @@ namespace MicroStore.IdentityProvider.Host
             new IdentityResources.Profile(),
             };
 
+
+
+
+
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
+                new ApiScope("shoppinggateway.access","Shopping api gateway"),
+
+                new ApiScope("catalog.access","access catalog api"),
+                new ApiScope("basket.access","access basket api"),
+                new ApiScope("ordering.access","acccess ordering api"),
+                new ApiScope("shipping.access","access shipping api"),
+                new ApiScope("billing.access","access billing api"),
+                new ApiScope("inventory.access","access inventory api"),
+
+
+                new ApiScope("ordering.read","allowing read user orders operations"),
+                new ApiScope("ordering.write","allowing write on user orders operations"),
+                new ApiScope("billing.read","allowing read user payments operations"),
+                new ApiScope("billing.write","allowing write on user payments operations"),
+                new ApiScope("shipping.read","allowing read on user shipments operations"),
+                new ApiScope("inventory.write","allowing write on user orders operations"),
+                new ApiScope("inventory.read","allowing read on user orders operations"),
+
+
+                new ApiScope("mvcgateway.ordering.read","allowing ordering read operation on micro store shopping api gateway"),
+                new ApiScope("mvcgateway.ordering.write","allowing ordering write operation on micro store shopping api gateway"),
+                new ApiScope("mvcgateway.billing.read","allowing billing read operation on micro store shopping api gateway"),        
+                new ApiScope("mvcgateway.billing.write","allowing billing write operation on micro store shopping api gateway"),
+                new ApiScope("mvcgateway.shipping.read","allowing shipping read operation on micro store shopping api gateway"),
+                new ApiScope("mvcgateway.inventory.read","allowing inventory read operation on micro store shopping api gateway"),
+                new ApiScope("mvcgateway.inventory.write","allowing inventory write operation on micro store shopping api gateway"),
+            };
+
+
+
+
+        public static IEnumerable<ApiResource> ApiResources =>
+            new ApiResource[]
+            {
+                new ApiResource("api-catalog","Catalog Api")
+                {
+                    Scopes = { "catalog.access" }
+                },
+
+                new ApiResource("api-basket","Basket Api")
+                {
+                    Scopes = {"basket.access"}
+                },
+
+                new ApiResource("api-ordering","Ordering Api")
+                {
+                    Scopes = {"ordering.access" , "ordering.read", "ordering.write"}
+                },
+
+                new ApiResource("api-billing","Billing Api")
+                {
+                    Scopes = {"billing.access" , "billing.read" , "billing.write" }
+                },
+
+                new ApiResource("api-shipping","Shipping Api")
+                {
+                    Scopes = {"shipping.access","shipping.read"}
+                },
+
+                new ApiResource("api-inventory" ,"Inventory APi")
+                {
+                    Scopes = {"inventory.access","inventory.read", "inventory.write" }
+                },
+
+                new ApiResource("api-gateway","Shopping gateway")
+                {
+                    Scopes ={ "shoppinggateway.access" , "mvcgateway.ordering.read" , "mvcgateway.ordering.write" , "mvcgateway.billing.read" ,
+                          "mvcgateway.billing.write" , "mvcgateway.shipping.read", "mvcgateway.inventory.read","mvcgateway.inventory.write"
+                    }
+                }
             };
 
         public static IEnumerable<Client> Clients =>
@@ -28,33 +101,38 @@ namespace MicroStore.IdentityProvider.Host
             // m2m client credentials flow client
             new Client
             {
-                ClientId = "m2m.client",
+                ClientId = "gatewaytodownstreamtokenexchangeclient",
                 ClientName = "Client Credentials Client",
 
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha512()) },
+                AllowedGrantTypes = new List<string> { "urn:ietf:params:oauth:grant-type:token-exchange"},
+                ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
-                AllowedScopes = { "scope1" }
+                AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read","inventory.write" , "inventory.read"},
+                AllowOfflineAccess = false,
+
             },
 
             // interactive client using code flow + pkce
             new Client
             {
-                ClientId = "60beaa73-e505-439f-9c3c-6518e2e37a02",
+                ClientId = "microstoreinteractiveclient",
                 ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
-                AllowedGrantTypes = new List<string> { OpenIdConnectGrantTypes.AuthorizationCode  , OpenIdConnectGrantTypes.ClientCredentials},
+                AllowedGrantTypes = new List<string> { OpenIdConnectGrantTypes.AuthorizationCode ,"urn:ietf:params:oauth:grant-type:token-exchange" },
+
+                ClientName ="Micro Store Interactive Client",
 
                 RedirectUris = { "https://localhost:7020/signin-oidc" },
                 FrontChannelLogoutUri = "https://localhost:7020/signout-oidc",
                 PostLogoutRedirectUris = { "https://localhost:7020/signout-callback-oidc" },
 
                 AllowOfflineAccess = true,
-                AllowedScopes = { "openid", "profile"},
+                AllowedScopes = { "openid", "profile", "shoppinggateway.access" ,"mvcgateway.ordering.read" , "mvcgateway.ordering.write", "mvcgateway.billing.read","mvcgateway.billing.write","mvcgateway.shipping.read","mvcgateway.inventory.read","mvcgateway.inventory.write" },
 
                 RequirePkce = true,
 
                 RequireConsent = true,
+               
 
 
             },
@@ -95,6 +173,7 @@ namespace MicroStore.IdentityProvider.Host
                 EmailConfirmed = true
             };
 
+            await usermanager.CreateAsync(bob, "pass123$");
             await usermanager.AddClaimsAsync(bob, new Claim[]{
                             new Claim(JwtClaimTypes.Name, "Bob Smith"),
                             new Claim(JwtClaimTypes.GivenName, "Bob"),

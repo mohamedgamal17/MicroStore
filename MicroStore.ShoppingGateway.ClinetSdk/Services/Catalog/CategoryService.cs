@@ -4,7 +4,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
 {
     public class CategoryService
     {
-        const string BaseUrl = "/categories";
+        const string BaseUrl = "/catalog/categories";
 
         private readonly MicroStoreClinet _microStoreClinet;
 

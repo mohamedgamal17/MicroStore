@@ -4,7 +4,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Inventory
 {
     public class InventoryItemService
     {
-        const string BaseUrl = "Inventory/products";
+        const string BaseUrl = "/inventory/products";
 
         private readonly MicroStoreClinet _microStoreClinet;
 

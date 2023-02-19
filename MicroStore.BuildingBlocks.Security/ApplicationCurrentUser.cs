@@ -6,7 +6,7 @@ using Volo.Abp.Users;
 
 namespace MicroStore.BuildingBlocks.Security
 {
-    [Dependency(ReplaceServices = true)]
+   
     internal class ApplicationCurrentUser : IApplicationCurrentUser , ITransientDependency 
     {
         public string Id
@@ -23,7 +23,7 @@ namespace MicroStore.BuildingBlocks.Security
         }
         private string? _userId => TryToGetUserId();
 
-        public bool IsAuthenticated => _userId !=  null && Id != string.Empty ;
+        public bool IsAuthenticated => TryToGetUserId() !=  null  ;
 
         public string UserName
         {

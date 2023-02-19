@@ -1,0 +1,89 @@
+﻿@page
+@model HomeModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<!-- Featured Section Begin -->
+<section class="featured spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Featured Product</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row featured__filter">
+
+            @foreach (var product in Model.Products.Items)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6">
+
+                    <div class="product__discount__item">
+                        <div class="product__discount__item__pic set-bg"
+                         data-setbg="@Url.Content("~/img/product/discount/pd-1.jpg")">
+                            <ul class="product__item__pic__hover">
+                                <li>
+                                    <a href="#" class="clickable" id="cartItem">
+                                        <i class="fa fa-shopping-cart"></i>
+                                        <input type="hidden" value="@product.Id" name="productId">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="product__discount__item__text">
+                            <h5><a asp-page="/ProductDetails" asp-route-id="@product.Id">@product.Name</a></h5>
+                            <div class="product__item__price">
+                                $@product.Price
+
+                                @if (product.Price < product.OldPrice)
+                                {
+                                    <span>$@product.OldPrice</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- Featured Section End -->
+@section Scripts{
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script class="demo">
+
+        function addToCart(productId) {
+            console.log(productId);
+        }
+
+
+        $(document).ready(function () {
+            $(".clickable").on("click", function (e) {
+
+                e.preventDefault();
+
+                var inputElement = $(this).children("input")[0];
+
+                var obj = { productId: inputElement.value, quantity: 1 };
+
+                console.log(obj);
+                $.post('api/Basket', obj,
+                    function (data, status, xhr) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: '<h6>Product has been addedd succefully</h6>',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            fontSize : 12
+                        });                     
+                    }, 'json');
+
+                console.log("clicked");
+            })
+        })
+
+    </script>
+}

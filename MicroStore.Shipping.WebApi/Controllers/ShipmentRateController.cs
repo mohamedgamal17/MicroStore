@@ -13,7 +13,7 @@ using Volo.Abp.Application.Dtos;
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
-    [Authorize]
+   // [Authorize]
     [Route("api/rates")]
     public class ShipmentRateController : MicroStoreApiController
     {

@@ -5,6 +5,7 @@ using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Catalog.Application;
 using MicroStore.Catalog.Infrastructure;
+using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
@@ -50,9 +51,7 @@ namespace MicroStore.Catalog.Api
 
         private void ConfigureAuthentication(IServiceCollection services , IConfiguration configuration)
         {
-
-
-
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

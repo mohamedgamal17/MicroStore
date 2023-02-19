@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Ordering.Application;
-
 using MicroStore.Ordering.Infrastructure;
+using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc;
@@ -53,7 +52,7 @@ namespace MicroStore.Ordering.Api
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
             {

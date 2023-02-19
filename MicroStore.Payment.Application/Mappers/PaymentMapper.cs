@@ -16,6 +16,7 @@ namespace MicroStore.Payment.Application.Mappers
 
             CreateMap<PaymentRequest, PaymentRequestListDto>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.State, opt => opt.MapFrom(c => c.State))
                 .ForMember(x => x.CreationTime, opt => opt.MapFrom(c => c.CreationTime));
 
 

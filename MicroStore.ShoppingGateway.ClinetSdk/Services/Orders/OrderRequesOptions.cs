@@ -4,7 +4,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 {
     public class OrderSubmitRequestOptions
     {
-        public string UserId { get; set; }
+    
         public Address ShippingAddress { get; set; }
         public Address BillingAddress { get; set; }
         public double ShippingCost { get; set; }
@@ -12,6 +12,11 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
         public double SubTotal { get; set; }
         public double TotalPrice { get; set; }
         public List<OrderItemRequestOptions> Items { get; set; }
+    }
+
+    public class OrderCreateRequestOptions : OrderSubmitRequestOptions
+    {
+        public string UserId { get; set; }
     }
 
     public class OrderFullfillRequestOptions

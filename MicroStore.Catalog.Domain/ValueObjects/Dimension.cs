@@ -60,8 +60,11 @@ namespace MicroStore.Catalog.Domain.ValueObjects
 
     public enum DimensionUnit
     {
+        
         None = 0,
+
         CentiMeter = 5,
+
         Inch = 10
     }
 }

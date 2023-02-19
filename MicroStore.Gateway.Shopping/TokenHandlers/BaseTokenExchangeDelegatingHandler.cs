@@ -5,6 +5,7 @@ using System.Security.Claims;
 using MicroStore.Gateway.Shopping.Config;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using MicroStore.Gateway.Shopping.Services;
 
 namespace MicroStore.Gateway.Shopping.TokenHandlers
 {
@@ -16,19 +17,23 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
 
         private readonly IClientAccessTokenCache _clientAccessTokenCache;
 
-        private readonly HttpContext _httpContext;
-
         private readonly IdentityProviderOptions _identityProviderOptions;
 
         private readonly GatewayClientOptions _gatewayClientOptions;
 
-        public BaseTokenExchangeDelegatingHandler(IHttpClientFactory httpClinetFactory, IClientAccessTokenCache clientAccessTokenCache, IHttpContextAccessor httpContextAccessor, IOptions<IdentityProviderOptions> identityProviderOptions, IOptions<GatewayClientOptions> gatewayClientOptions)
+        private readonly ILogger _logger;
+
+        private readonly HttpContextClaimsPrincibalAccessor _claimsPrincibalAccessor;
+
+        public BaseTokenExchangeDelegatingHandler(IHttpClientFactory httpClinetFactory, IClientAccessTokenCache clientAccessTokenCache, IOptions<IdentityProviderOptions> identityProviderOptions, IOptions<GatewayClientOptions> gatewayClientOptions, ILogger logger, HttpContextClaimsPrincibalAccessor claimsPrincibalAccessor)
         {
             _httpClinetFactory = httpClinetFactory;
             _clientAccessTokenCache = clientAccessTokenCache;
-            _httpContext = httpContextAccessor.HttpContext!;
+ 
             _identityProviderOptions = identityProviderOptions.Value;
             _gatewayClientOptions = gatewayClientOptions.Value;
+            this._logger = logger;
+            _claimsPrincibalAccessor = claimsPrincibalAccessor;
         }
 
         protected async Task<string> GetAccessToken(string incomingToken,string cacheKey ,CancellationToken cancellationToken = default)
@@ -38,7 +43,8 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
                 Resource = string.Format("clinetId:{0}_sub:{1}", FindClaim(JwtClaimTypes.ClientId)?.Value ?? string.Empty, FindClaim(JwtClaimTypes.Subject)?.Value ?? string.Empty)
             };
 
-
+            _logger.LogDebug("Access token cache key : {TokenCacheKey}", tokenParam.Resource);
+            
             var cachedItem = await _clientAccessTokenCache.GetAsync(cacheKey, tokenParam, cancellationToken);
 
             if (cachedItem != null)
@@ -99,7 +105,7 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
 
             if (tokenResponse.IsError)
             {
-                throw new InvalidOperationException(tokenResponse.Error);
+                throw new Exception(tokenResponse.Error);
             }
 
             return (tokenResponse.AccessToken, tokenResponse.ExpiresIn);
@@ -107,7 +113,7 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
 
         public Claim? FindClaim(string claimType)
         {
-            return _httpContext.User.Claims.FirstOrDefault(x => x.Type == claimType);
+            return _claimsPrincibalAccessor.TryToGetCurrentClaimsPrincibal()?.Claims.FirstOrDefault(x => x.Type == claimType);
         }
     }
 }

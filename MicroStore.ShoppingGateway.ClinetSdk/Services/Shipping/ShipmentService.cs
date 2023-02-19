@@ -4,7 +4,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 {
     public class ShipmentService
     {
-        const string BaseUrl = "/shipments";
+        const string BaseUrl = "/shipping/shipments";
 
         private readonly MicroStoreClinet _microStoreClinet;
 

@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.Payment.Domain.Shared.Security;
 using MicroStore.Payment.Plugin.StripeGateway;
+using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
@@ -45,6 +46,7 @@ namespace MicroStore.Payment.Api.Host
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
             {

@@ -129,8 +129,8 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     TransactionId = session.PaymentIntentId,
                     AmountSubTotal = (session.AmountSubtotal / 100 ?? 0),
                     AmountTotal = (session.AmountTotal / 100 ?? 0),
-                    SuccessUrl = session.SuccessUrl + $"?token{session.Id}" + $"?gate={StripePaymentConst.Provider}",
-                    CancelUrl = session.CancelUrl + $"?token{session.Id}" + $"?gate={StripePaymentConst.Provider}",
+                    SuccessUrl = session.SuccessUrl + $"?token{session.Id}" /*+ "&" + $"gate={StripePaymentConst.Provider}"*/,
+                    CancelUrl = session.CancelUrl + $"?token{session.Id}" /*+ "&" + $"gate={StripePaymentConst.Provider}"*/,
                     CheckoutLink = session.Url
                 };
             });

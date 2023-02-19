@@ -5,7 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddMicroStoreClinet(this IServiceCollection services, Action<MicroStoreClinetConfiguration> action = null)
+        public static IHttpClientBuilder AddMicroStoreClinet(this IServiceCollection services, Action<MicroStoreClinetConfiguration> action = null)
         {
             var config = new MicroStoreClinetConfiguration();
 
@@ -16,11 +16,13 @@ namespace Microsoft.Extensions.DependencyInjection
   
             services.AddSingleton(config);
 
-            services.AddTransient<MicroStoreClinet>();
-
             ConventionalRegistarServices(services);
 
-            return services;
+            return services.AddHttpClient<MicroStoreClinet>(client =>
+            {
+                client.BaseAddress = new Uri(config.BaseUrl);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
         }
 
         private static void ConventionalRegistarServices(IServiceCollection services)

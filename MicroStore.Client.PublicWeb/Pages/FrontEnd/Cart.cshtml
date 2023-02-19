@@ -1,0 +1,174 @@
+﻿@page
+@model CartModel
+@{
+}
+<!-- Shoping Cart Section Begin -->
+<section class="shoping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__table">
+
+                    @if (Model.Basket.Items.Count > 0)
+                    {
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="shoping__product">Products</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.Basket.Items)
+                                {
+                                    <tr>
+                                        <td class="shoping__cart__item">
+                                            <img src="~/img/cart/cart-1.jpg" alt="">
+                                            <h5>@item.Name</h5>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            @item.Price
+                                        </td>
+                                        <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <div class="pro-qty">
+                                                    <input type="hidden" value="@item.ProductId">
+                                                    <input type="text" value="@item.Quantity" readonly>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="shoping__cart__total">
+                                            @(item.Price * item.Quantity)
+                                        </td>
+                                        <td class="shoping__cart__item__close">
+                                            <form method="post" asp-page-handler="RemoveItem">
+                                                <input type="hidden" name="productId" value="@item.ProductId">
+                                            </form>
+                                            <span class="icon_close"></span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <h3 class="text-center">No items in cart yet</h3>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__btns">
+                    <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+
+                    @if (Model.Basket.Items.Count > 0)
+                    {
+                        <a href="#" class="primary-btn cart-btn cart-btn-right" id="btn-basketupdate">
+                            <span class="icon_loading"></span>
+                            Upadate Cart
+                        </a>
+                        <form method="post" asp-page-handler="UpdateBasket" id="frm-basketupdate" style="visibility:hidden!important">
+
+                            @for (int index = 0; index < Model.Basket.Items.Count; index++)
+                            {
+                                <div id="@Model.Basket.Items[index].ProductId" style="visibility:hidden!important">
+                                    <input type="hidden" name="items[@index][productId]" value="@Model.Basket.Items[index].ProductId">
+                                    <input type="hidden" name="items[@index][quantity]" value="@Model.Basket.Items[index].Quantity">
+                                </div>
+                            }
+
+                        </form>
+                    }
+
+                </div>
+            </div>
+
+            @if (Model.Basket.Items.Count > 0)
+            {
+                <div class="col-lg-6">
+                    <div class="shoping__checkout">
+                        <h5>Cart Total</h5>
+                        <ul>
+                            <li>Subtotal <span>@Model.SubTotal</span></li>
+                            <li>Total <span>@Model.TotalPrice</span></li>
+                        </ul>
+                        <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+        ///
+    <reference path="jquery-1.3.2-vsdoc2.js" />
+
+    <script>
+
+
+
+        $(document).ready(function () {
+
+            $("#up-btn").click(function () {
+
+                const products = []
+
+                $(".pro-qty").each(function () {
+
+                    var inputElements = $(this).children("input");
+                    products.push({ productId: inputElements[0], quantity: inputElements[1].value });
+
+                });
+
+                if (products.length != 0) {
+
+                    console.log(products);
+
+                    var js = JSON.stringify(products);
+
+                    console.log(js);
+                }
+
+
+            });
+
+            $(".icon_close").on('click', function () {
+                var element = $(this);
+
+                var frm = element.parent().find('form');
+
+                frm.submit();
+            });
+
+
+            $("#btn-basketupdate").on('click', function (event) {
+
+                event.preventDefault();
+
+                console.log("updating");
+
+                var $frm = $('#frm-basketupdate');
+
+                console.log($frm);
+                $frm.submit();
+
+
+
+
+            })
+
+        });
+
+
+    </script>
+}

@@ -7,10 +7,11 @@ using System.Net;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
+using Newtonsoft.Json.Converters;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk
 {
-    public class MicroStoreClinet : HttpClient
+    public class MicroStoreClinet 
     {
 
         const string DefaultMediaType = "application/json";
@@ -19,23 +20,15 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
 
         private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
         {
-            ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy(),
 
-            },
+         
         };
 
-        private readonly MicroStoreClinetConfiguration _microStoreClinetConfiguration;
+        private readonly HttpClient _httpClient;
 
-        private readonly IServiceProvider _serviceProvider;
-
-        public MicroStoreClinet(MicroStoreClinetConfiguration microStoreClinetConfiguration, IServiceProvider serviceProvider)
+        public MicroStoreClinet(HttpClient httpClient)
         {
-
-            _microStoreClinetConfiguration = microStoreClinetConfiguration;
-            _serviceProvider = serviceProvider;
-
+            _httpClient = httpClient;
         }
 
         public async Task<HttpResponseResult<TResponse>> MakeRequest<TResponse>(string path, HttpMethod httpMethod, object request = null, CancellationToken cancellationToken = default)
@@ -45,7 +38,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
             {
                 HttpRequestMessage httpRequest = new HttpRequestMessage
                 {
-                    RequestUri = new Uri(string.Format("{0}{1}", _microStoreClinetConfiguration.BaseUrl, path)),
+                    RequestUri = new Uri(string.Format("{0}{1}", _httpClient.BaseAddress?.AbsoluteUri, path)),
                     Method = httpMethod
                 };
 
@@ -62,15 +55,8 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
                 }
 
 
-                if (_microStoreClinetConfiguration.TokenHandlerDeleagete != null)
-                {
-                    var token = await _microStoreClinetConfiguration.TokenHandlerDeleagete(_serviceProvider.CreateScope().ServiceProvider);
 
-                    DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthorizationSchema, token);
-
-                }
-
-                var httpResponseMessage = await SendAsync(httpRequest, cancellationToken);
+                var httpResponseMessage = await _httpClient.SendAsync(httpRequest, cancellationToken);
 
                 return await ConvertResponseResult<TResponse>(httpResponseMessage, cancellationToken);
 
@@ -88,7 +74,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
             {
                 HttpRequestMessage httpRequest = new HttpRequestMessage
                 {
-                    RequestUri = new Uri(string.Format("{0}{1}", _microStoreClinetConfiguration.BaseUrl, path)),
+                    RequestUri = new Uri(string.Format("{0}{1}", _httpClient.BaseAddress?.AbsoluteUri , path)),
                     Method = httpMethod
                 };
 
@@ -98,15 +84,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
                 }
 
 
-                if (_microStoreClinetConfiguration.TokenHandlerDeleagete != null)
-                {
-                    var token = await _microStoreClinetConfiguration.TokenHandlerDeleagete(_serviceProvider.CreateScope().ServiceProvider);
-
-                    DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthorizationSchema, token);
-
-                }
-
-                var httpResponseMessage = await SendAsync(httpRequest, cancellationToken);
+                var httpResponseMessage = await _httpClient.SendAsync(httpRequest, cancellationToken);
 
                 return await ConvertResponseResult(httpResponseMessage, cancellationToken);
 
@@ -134,14 +112,12 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
         {
             string content = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
 
-            var httpEnvelopeResult = await DeserializeObject<HttpEnvelopeResult<TResponse>>(content);
-
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                return HttpResponseResult.Success(httpResponseMessage.StatusCode, httpEnvelopeResult);
+                return HttpResponseResult.Success(httpResponseMessage.StatusCode, await DeserializeObject<HttpEnvelopeResult<TResponse>>(content));
             }
 
-            return HttpResponseResult.Failure(httpResponseMessage.StatusCode, httpEnvelopeResult);
+            return HttpResponseResult.Failure<TResponse>(httpResponseMessage.StatusCode, await DeserializeObject<HttpEnvelopeResult>(content));
         }
 
 
@@ -159,15 +135,35 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
             return HttpResponseResult.Failure(httpResponseMessage.StatusCode, httpEnvelopeResult);
         }
 
+        private JsonSerializerSettings CreateJsonSerializerSettings()
+        {
+            var settings = new JsonSerializerSettings
+            {
+
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy(),
+
+                },
+
+
+            };
+
+            settings.Converters.Add(new StringEnumConverter());
+
+
+            return settings;
+        }
+
     }
 
-
+    
     public class HttpResponseResult
     {
 
         public bool IsSuccess { get; }
         public HttpStatusCode HttpStatusCode { get; }
-        public virtual HttpEnvelopeResult HttpEnvelopeResult { get; }
+        public HttpEnvelopeResult HttpEnvelopeResult { get; }
         public bool IsFailure => !IsSuccess;
 
         internal HttpResponseResult(bool isSuccess, HttpStatusCode httpStatusCode, HttpEnvelopeResult httpEnvelopeResult)
@@ -191,7 +187,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
             return new HttpResponseResult<T>(true, httpStatusCode, htttpEnvelopeResult);
         }
 
-        public static HttpResponseResult<T> Failure<T>(HttpStatusCode httpStatusCode, HttpEnvelopeResult<T> htttpEnvelopeResult)
+        public static HttpResponseResult<T> Failure<T>(HttpStatusCode httpStatusCode, HttpEnvelopeResult htttpEnvelopeResult)
         {
             return new HttpResponseResult<T>(false, httpStatusCode, htttpEnvelopeResult);
         }
@@ -213,7 +209,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
             {
                 if (IsSuccess)
                 {
-                    return ((HttpEnvelopeResult<T>)HttpEnvelopeResult).Result;
+                    return ((HttpEnvelopeResult<T>)HttpEnvelopeResult).GetResult();
                 }
 
                 throw new InvalidOperationException("http result cannot retrieved");
@@ -225,8 +221,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
     [Serializable]
     public class HttpEnvelopeResult
     {
-        public ErrorInfo Error { get; set; }
-        public DateTime TimeGenerated { get; set; }
+        public ErrorInfo Error { get; set; }    
 
     }
 
@@ -234,6 +229,10 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
     public class HttpEnvelopeResult<T> : HttpEnvelopeResult
     {
         public T Result { get; set; }
+        public T GetResult()
+        {
+            return (T)Result;
+        }
 
     }
 

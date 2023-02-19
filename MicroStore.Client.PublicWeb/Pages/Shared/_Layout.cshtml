@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MicroStore.Client.PublicWeb</title>
-    <link rel="stylesheet" href="~/css/style.css" type="text/css">
+
     <link rel="stylesheet" href="~/css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="~/lib/jquery-nice-select/css/nice-select.css" type="text/css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="~/lib/jqueryui/themes/base/jquery-ui.min.css" type="text/css">
     <link rel="stylesheet" href="~/lib/OwlCarousel2/assets/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="~/lib/SlickNav/slicknav.css" type="text/css">
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css"  type="text/css">
+    <link rel="stylesheet" href="~/css/style.css" type="text/css">
+    <link rel="stylesheet" href="~/css/main.css" type="text/css">
 
 </head>
 <body>
@@ -30,10 +33,8 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                <li><a href="#"><i class="fa fa-shopping-bag fa-5x"></i> <span id="cart-quantity">3</span></a></li>
             </ul>
-            <div class="header__cart__price">item: <span>$150.00</span></div>
         </div>
 
         <div class="humberger__menu__widget">
@@ -46,9 +47,9 @@
                     <li><a href="#">English</a></li>
                 </ul>
             </div>
-            <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
-            </div>
+
+        
+     
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
@@ -82,6 +83,7 @@
         </div>
     </div>
     <!-- Humberger End -->
+
     <!-- Header Section Begin -->
     <header class="header">
         <div class="header__top">
@@ -112,9 +114,24 @@
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
-                            <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
-                            </div>
+                            @if (User.Identity?.IsAuthenticated ?? false)
+                            {
+                                <div class="header__top__right__auth">
+                                    <a href="#" id="btn-logout"><i class="fa fa-user"></i>Logout</a>
+
+                                    <form method="post" asp-controller="Authentication" asp-action="Logout">
+                                        @Html.AntiForgeryToken()
+                                    </form>
+
+                                </div>
+                            }
+                            else
+                            {
+
+                                <div class="header__top__right__auth">
+                                    <a asp-controller="Authentication" asp-action="Login" asp-route-returnUrl="@Context.Request.Path"><i class="fa fa-user"></i> Login</a>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -149,10 +166,8 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span id="cart-quantity">100</span></a></li>
                         </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
                     </div>
                 </div>
             </div>
@@ -300,15 +315,33 @@
         </div>
     </footer>
     <!-- Footer Section End -->
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery-nice-select/js/jquery.nice-select.min.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/SlickNav/jquery.slicknav.min.js"> </script>   
     <script src="~/lib/mixitup/mixitup.min.js"></script>
     <script src="~/lib/OwlCarousel2/owl.carousel.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/lib/require.js/require.min.js"></script>
     <script src="~/js/main.js" asp-append-version="true"></script>
+
+
+    <script>
+        $(document).ready(function(){
+
+            $("#btn-logout").on('click', function(event){
+                event.preventDefault();
+
+                var $parentDiv = $(this).parent();
+
+                var $frm = $parentDiv.find('form');
+
+                $frm.submit();
+            });
+
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

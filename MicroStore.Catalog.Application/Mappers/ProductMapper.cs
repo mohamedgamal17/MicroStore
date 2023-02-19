@@ -48,10 +48,41 @@ namespace MicroStore.Catalog.Application.Mappers
 
 
             CreateMap<Dimension, DimensionModel>()
-                .ForMember(x => x.Unit, opt => opt.MapFrom(c => c.Unit.ToString()));
+                .ForMember(x => x.Unit, opt => opt.MapFrom(c => ConvertDimensionUnit(c.Unit)));
 
             CreateMap<Weight, WeightModel>()
-                .ForMember(x => x.Unit, opt => opt.MapFrom(c => c.Unit.ToString()));
+                .ForMember(x => x.Unit, opt => opt.MapFrom(c => ConvertWeightUnit(c.Unit)));
+        }
+
+
+
+        public static string ConvertWeightUnit(WeightUnit unit)
+        {
+            switch (unit)
+            {
+                case WeightUnit.Gram:
+                    return "g";
+                case WeightUnit.KiloGram:
+                    return "kg";
+                case WeightUnit.Pound:
+                    return "lb";
+
+                default:
+                    return "none";
+            }
+        }
+
+        public static string ConvertDimensionUnit(DimensionUnit unit)
+        {
+            switch (unit)
+            {
+                case DimensionUnit.CentiMeter:
+                    return "cm";
+                case DimensionUnit.Inch:
+                    return "inch";
+                default:
+                    return "none";
+            }
         }
     }
 }

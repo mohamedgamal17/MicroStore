@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using MicroStore.Client.PublicWeb.Infrastructure;
+using System.IdentityModel.Tokens.Jwt;
+
 namespace MicroStore.Client.PublicWeb
 {
     public static class HostExtensions
@@ -11,13 +14,17 @@ namespace MicroStore.Client.PublicWeb
             builder.Services.AddRazorPages()
              .AddRazorPagesOptions(opt =>
             {
-                opt.Conventions.AddPageRoute("/FrontEnd/Home/Index", "");
+                opt.Conventions.AddPageRoute("/FrontEnd/Home", "");
             }).AddRazorRuntimeCompilation();
+
+
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -28,9 +35,32 @@ namespace MicroStore.Client.PublicWeb
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.UsePkce = true;
                 options.ResponseType = "code";
+                options.Scope.Add("shoppinggateway.access");
+                options.Scope.Add("mvcgateway.ordering.read");
+                options.Scope.Add("mvcgateway.ordering.write");
+                options.Scope.Add("mvcgateway.billing.read");
+                options.Scope.Add("mvcgateway.billing.write");
+                options.Scope.Add("mvcgateway.shipping.read");
+                options.Scope.Add("mvcgateway.inventory.read");
+                options.Scope.Add("mvcgateway.inventory.write");
+                options.SaveTokens = true;
           
             });
 
+            builder.Services.AddAccessTokenManagement();
+
+            builder.Services.AddMvc();
+
+            builder.Services.AddControllers();
+     
+            builder.Services.AddTransient<IWorkContext, DefaultWorkContext>();
+
+            builder.Services.AddHttpContextAccessor();
+
+     
+
+            builder.Services.AddMicroStoreClinet()
+                .AddUserAccessTokenHandler();
 
             return builder.Build();
         } 

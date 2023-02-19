@@ -2,39 +2,58 @@
   "version": "1.0",
   "defaultProvider": "cdnjs",
   "libraries": [
-
-
     {
-      "provider": "cdnjs",
       "library": "SlickNav@1.0.10",
       "destination": "wwwroot/lib/SlickNav/"
     },
     {
-      "provider": "cdnjs",
       "library": "jqueryui@1.13.2",
       "destination": "wwwroot/lib/jqueryui/"
     },
     {
-      "provider": "cdnjs",
       "library": "font-awesome@4.7.0",
       "destination": "wwwroot/lib/font-awesome/"
     },
     {
-      "provider": "cdnjs",
       "library": "OwlCarousel2@2.3.4",
       "destination": "wwwroot/lib/OwlCarousel2/"
+    },
+    {
+      "library": "jquery-nice-select@1.1.0",
+      "destination": "wwwroot/lib/jquery-nice-select/"
+    },
+    {
+      "library": "mixitup@3.3.1",
+      "destination": "wwwroot/lib/mixitup/"
+    },
+    {
+      "library": "jquery@3.6.3",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "sweetalert2@11.7.1",
+      "destination": "wwwroot/lib/sweetalert2/",
+      "files": [
+        "sweetalert2.min.js",
+        "sweetalert2.all.js",
+        "sweetalert2.all.min.js",
+        "sweetalert2.css",
+        "sweetalert2.d.ts",
+        "sweetalert2.js",
+        "sweetalert2.min.css"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "country-state-city@3.1.2",
+      "destination": "wwwroot/lib/country-state-city/"
     }
   ,
 {
   "provider": "cdnjs",
-  "library": "jquery-nice-select@1.1.0",
-  "destination": "wwwroot/lib/jquery-nice-select/"
-}
-,
-{
-  "provider": "cdnjs",
-  "library": "mixitup@3.3.1",
-  "destination": "wwwroot/lib/mixitup/"
+  "library": "require.js@2.3.6",
+  "destination": "wwwroot/lib/require.js/"
 }
 ]
 }

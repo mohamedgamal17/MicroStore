@@ -2,7 +2,7 @@
   "Routes": [
 
     {
-      "DownstreamPathTemplate": "/api/shipments/{everything}",
+      "DownstreamPathTemplate": "/api/user/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -10,33 +10,19 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments/{everything}",
-      "UpstreamHttpMethod": [ "GET" , "POST" , "PUT" , "PATCH" ,  "DELETE" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/user/shipments/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments/user/{everything}",
+      "Priority": 1,
+      "UpstreamPathTemplate": "/mvcgateway/shipping/user/{everything}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.shipment.read" ]
+        "AllowedScopes": [ "mvcgateway.shipping.read" ]
       },
       "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
+        "DefaultTokenExchangeDelegatingHandler"
       ]
     },
     {
-      "DownstreamPathTemplate": "/api/shipments/user/{everything}",
+      "DownstreamPathTemplate": "/api/user/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -44,20 +30,20 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/shipments/user/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "PATCH", "DELETE" ],
+      "Priority": 1,
+      "UpstreamPathTemplate": "/mvcgateway/shipping/user/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE", "PATCH" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.shipping.shipment.write" ]
+         "AllowedScopes": [ "mvcgateway.shipping.write" ]
       },
       "DelegatingHandlers": [
-        "ShippingTokenExchangeDelegatingHandler"
+        "DefaultTokenExchangeDelegatingHandler"
       ]
     },
 
-
     {
-      "DownstreamPathTemplate": "/api/labels/{everything}",
+      "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -65,62 +51,14 @@
           "Port": 7162
         }
       ],
-      "UpstreamPathTemplate": "/mvcgateway/labels/{everything}",
+      "UpstreamPathTemplate": "/mvcgateway/shipping/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
-      }
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/rates/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-      "UpstreamPathTemplate": "/mvcgateway/rates/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-
-      }
-    },
-
-
-
-    {
-      "DownstreamPathTemplate": "/api/settings/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-      "UpstreamPathTemplate": "/mvcgateway/shipmentsettings/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        },
-     
-    },
-
-  
-    {
-      "DownstreamPathTemplate": "/api/plugins/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7162
-        }
-      ],
-
-      "UpstreamPathTemplate": "/mvcgateway/shipping/plugins/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" , "PATCH" , "DELETE"],
-    }
+      },
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+    }  
   ]
 }

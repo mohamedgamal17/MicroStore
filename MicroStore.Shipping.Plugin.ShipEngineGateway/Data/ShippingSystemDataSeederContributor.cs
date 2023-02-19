@@ -6,8 +6,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Data
 {
-    public class ShippingSystemDataSeederContributor : IDataSeedContributor , ITransientDependency
+    internal class ShippingSystemDataSeederContributor : IDataSeedContributor, ITransientDependency
     {
+
         private readonly IRepository<ShippingSystem> _shippingSystemRepository;
 
         public ShippingSystemDataSeederContributor(IRepository<ShippingSystem> shippingSystemRepository)

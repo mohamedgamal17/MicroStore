@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Gateway.Shopping.Config;
+using MicroStore.Gateway.Shopping.Services;
 using MicroStore.Gateway.Shopping.TokenHandlers;
 using Ocelot.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,7 +19,6 @@ namespace MicroStore.Gateway.Shopping.Extensions
 
             services.Configure<IdentityProviderOptions>(configuration.GetSection("IdentityProvider"));
 
-
             services.AddHttpContextAccessor();
 
             services.AddHttpClient();
@@ -26,6 +26,8 @@ namespace MicroStore.Gateway.Shopping.Extensions
             services.AddDistributedMemoryCache();
 
             services.AddAccessTokenManagement();
+
+            services.AddSingleton<HttpContextClaimsPrincibalAccessor>();
 
             ConfigureAuthentication(services, configuration);
 
@@ -53,10 +55,7 @@ namespace MicroStore.Gateway.Shopping.Extensions
         private static IServiceCollection ConfigureOcelot(IServiceCollection services)
         {
             services.AddOcelot()
-                .AddDelegatingHandler<OrderingTokenExchangeDelegatingHandler>()
-                .AddDelegatingHandler<BillingTokenExchangeDelegatingHandler>()
-                .AddDelegatingHandler<InventoryTokenExchangeDelegatingHandler>()
-                .AddDelegatingHandler<ShippingTokenExchangeDelegatingHandler>();
+                .AddDelegatingHandler<DefaultTokenExchangeDelegatingHandler>();
 
             return services;
         }

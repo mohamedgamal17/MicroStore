@@ -4,7 +4,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
 {
     public class ProductImageService
     {
-        const string BaseUrl = "/products/{0}/productimages";
+        const string BaseUrl = "/catalog/products/{0}/productimages";
 
         private readonly MicroStoreClinet _microStoreClinet;
 

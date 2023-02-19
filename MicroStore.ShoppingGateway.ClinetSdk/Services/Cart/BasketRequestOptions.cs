@@ -1,16 +1,20 @@
 ﻿namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Cart
 {
-    public class BasketAddItemRequestOptions
+    public class BaskeItemRequestOptions
     {
-        public string UserId { get; set; }
         public string ProductId { get; set; }
         public int Quantity { get; set; }
     }
 
+    public class BasketRequestOptions
+    {
+        public List<BaskeItemRequestOptions> Items { get; set; }
+
+    }
+
     public class BasketRemoveItemRequestOptions
     {
-        public string UserId { get; set; }
-        public string ProductId { get; set; }
+        public string[] ProductIds { get; set; }
     }
 
     public class BasketMigrateRequestOptions

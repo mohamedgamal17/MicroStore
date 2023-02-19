@@ -35,6 +35,7 @@
         }
     });
 
+  
     /*------------------
         Background Set
     --------------------*/
@@ -209,9 +210,10 @@
     var proQty = $('.pro-qty');
     proQty.prepend('<span class="dec qtybtn">-</span>');
     proQty.append('<span class="inc qtybtn">+</span>');
+
     proQty.on('click', '.qtybtn', function () {
         var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
+        var oldValue = $button.parent().find('input[type=text]').val()
         if ($button.hasClass('inc')) {
             var newVal = parseFloat(oldValue) + 1;
         } else {
@@ -222,7 +224,14 @@
                 newVal = 0;
             }
         }
-        $button.parent().find('input').val(newVal);
+
+        $button.parent().find('input[type=text]').val(newVal);
+
+        var productId = $button.parent().find('input[type=hidden]').val();
+
+        var frmgroup = $("#" + productId);
+
+        frmgroup.find('input')[1].value = newVal;
     });
 
 })(jQuery);

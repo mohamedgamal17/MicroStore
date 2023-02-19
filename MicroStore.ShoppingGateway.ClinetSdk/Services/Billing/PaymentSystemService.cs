@@ -5,7 +5,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Billing
 {
     public class PaymentSystemService 
     {
-        const string BaseUrl = "/paymentsystems";
+        const string BaseUrl = "/billing/systems";
 
         private readonly MicroStoreClinet _microStoreClinet;
 

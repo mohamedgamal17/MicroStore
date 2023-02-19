@@ -8,7 +8,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
 
         private readonly MicroStoreClinet _clinet;
 
-        const string BaseUrl = "/products";
+        const string BaseUrl = "/catalog/products";
         public ProductService(MicroStoreClinet clinet)
         {
             _clinet = clinet;
