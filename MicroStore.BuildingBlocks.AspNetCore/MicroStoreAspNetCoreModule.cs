@@ -31,12 +31,16 @@ namespace MicroStore.BuildingBlocks.AspNetCore
             {
                 opt.InvalidModelStateResponseFactory = context =>
                 {
-                    var result = context.ModelState.ConvertModelStateErrors();
+                    
 
-                    var errorInfo = ErrorInfo.Validation("One or more validation error occured.", result);
+                    var errorInfo = new ValidationProblemDetails(context.ModelState)
+                    {
+                        
+                        Instance = context.HttpContext.Request.PathBase,
+                        Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                    };
 
-
-                    return new ObjectResult(errorInfo);
+                    return new BadRequestObjectResult(errorInfo);
                 };
             });
 

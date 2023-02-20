@@ -4,9 +4,11 @@ using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Security;
-using MicroStore.Ordering.Api.Models;
+using MicroStore.Ordering.Application.Dtos;
+using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
 using MicroStore.Ordering.Application.Security;
+using System.Net;
 
 namespace MicroStore.Ordering.Api.Controllers
 {
@@ -17,9 +19,15 @@ namespace MicroStore.Ordering.Api.Controllers
 
         private readonly IApplicationCurrentUser _currentUser;
 
-        public UserOrderController(IApplicationCurrentUser currentUser)
+        private readonly IOrderCommandService _orderCommandService;
+
+        private readonly IOrderQueryService _orderQueryService;
+
+        public UserOrderController(IApplicationCurrentUser currentUser, IOrderCommandService orderCommandService, IOrderQueryService orderQueryService)
         {
             _currentUser = currentUser;
+            _orderCommandService = orderCommandService;
+            _orderQueryService = orderQueryService;
         }
 
         [HttpPost]
@@ -28,51 +36,67 @@ namespace MicroStore.Ordering.Api.Controllers
 
         public async Task<IActionResult> SubmitOrder(OrderModel model)
         {
-            var command = ObjectMapper.Map<OrderModel, SubmitOrderCommand>(model);
+            var orderModel = new CreateOrderModel
+            {
+                TaxCost = model.TaxCost,
+                ShippingCost = model.ShippingCost,
+                SubTotal = model.SubTotal,
+                TotalPrice = model.TotalPrice,
+                ShippingAddress = model.ShippingAddress,
+                BillingAddress = model.BillingAddress,
+                OrderItems = model.OrderItems,
+                UserId = _currentUser.Id,
+            };
 
+            var result = await _orderCommandService.CreateOrderAsync(orderModel);
 
-            command.UserId = _currentUser.Id;
-
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.Accepted);
         }
 
 
         [HttpGet]
         [Route("")]
     //    [RequiredScope(OrderingScope.Order.List)]
-        public async Task<IActionResult> RetirveUserOrderList( [FromQuery] PagingAndSortingParamsQueryString @params)
+        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingAndSortingParamsQueryString @params)
         {          
 
-            var query = new GetUserOrderListQuery
+            var queryParams = new PagingAndSortingQueryParams
             {
-                UserId = _currentUser.Id,
+
                 SortBy = @params.SortBy,
                 Desc = @params.Desc,
                 PageSize = @params.PageSize,
                 PageNumber = @params.PageNumber,
             };
 
-            var result = await Send(query);
+            var result = await _orderQueryService.ListAsync(queryParams, _currentUser.Id);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
 
         [HttpGet]
         [Route("{orderId}")]
-  //      [RequiredScope(OrderingScope.Order.Read)]
-        public async Task<IActionResult> RetirveUserOrder(Guid orderId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
+        //      [RequiredScope(OrderingScope.Order.Read)]
+        public async Task<IActionResult> RetirveOrder(Guid orderId)
         {
-            var query = new GetOrderQuery
-            {
-                OrderId = orderId,
-            };
 
-            var result = await Send(query);
+            var result = await _orderQueryService.GetAsync(orderId);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
+        }
+
+        [HttpGet]
+        [Route("order_number/{orderId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
+        //      [RequiredScope(OrderingScope.Order.Read)]
+        public async Task<IActionResult> RetirveOrderByNumber(string orderNumber)
+        {
+
+            var result = await _orderQueryService.GetByOrderNumberAsync(orderNumber);
+
+            return FromResultV2(result, HttpStatusCode.OK);
         }
     }
 }

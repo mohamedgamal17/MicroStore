@@ -38,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MicroStore.BuildingBlocks.Mediator\MicroStore.BuildingBlocks.Mediator.csproj" />
     <ProjectReference Include="..\MicroStore.Ordering.Infrastructure\MicroStore.Ordering.Infrastructure.csproj" />
     <ProjectReference Include="..\MicroStore.TestBase\MicroStore.TestBase.csproj" />
   </ItemGroup>

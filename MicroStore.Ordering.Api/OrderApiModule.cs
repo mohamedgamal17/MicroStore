@@ -19,8 +19,7 @@ namespace MicroStore.Ordering.Api
 {
     [DependsOn(typeof(MicroStoreAspNetCoreModule),
         typeof(AbpAutofacModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(MediatorModule))]
+        typeof(AbpAspNetCoreSerilogModule))]
     [DependsOn(typeof(OrderApplicationModule))]
     [DependsOn(typeof(OrderInfrastructureModule))]
     public class OrderApiModule : AbpModule
@@ -33,10 +32,10 @@ namespace MicroStore.Ordering.Api
 
             var configuration = context.Services.GetConfiguration();
 
-            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<OrderApiModule>());
-
             ConfigureAuthentication(context.Services,configuration);
+
             ConfigureSwagger(context.Services,configuration);
+
 
             Configure<AbpExceptionHandlingOptions>(options =>
             {

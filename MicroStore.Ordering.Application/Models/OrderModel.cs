@@ -1,18 +1,16 @@
-﻿using MicroStore.Ordering.Application.Models;
-
-namespace MicroStore.Ordering.Api.Models
+﻿#pragma warning disable CS8618
+namespace MicroStore.Ordering.Application.Models
 {
     public class OrderModel
     {
-        public AddressModel ShippingAddress { get; set; }
-        public AddressModel BillingAddress { get; set; }
         public double ShippingCost { get; set; }
         public double TaxCost { get; set; }
         public double SubTotal { get; set; }
         public double TotalPrice { get; set; }
+        public AddressModel ShippingAddress { get; set; }
+        public AddressModel BillingAddress { get; set; }
         public List<OrderItemModel> OrderItems { get; set; } = new List<OrderItemModel>();
     }
-
 
     public class CreateOrderModel : OrderModel
     {
@@ -24,12 +22,16 @@ namespace MicroStore.Ordering.Api.Models
         public string ShipmentId { get; set; }
     }
 
+    public class CompleteOrderModel
+    {
+        public DateTime ShippedAt { get; set; }
+    }
 
     public class CancelOrderModel
     {
         public string Reason { get; set; }
 
-        public DateTime CancellationDate { get; set; }
     }
+
 
 }

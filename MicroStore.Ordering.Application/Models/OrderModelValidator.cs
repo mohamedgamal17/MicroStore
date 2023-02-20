@@ -1,11 +1,9 @@
 ﻿using FluentValidation;
-using MicroStore.Ordering.Application.Models;
-
-namespace MicroStore.Ordering.Application.Orders
+namespace MicroStore.Ordering.Application.Models
 {
-    internal abstract class SubmitOrderCommandValidator : AbstractValidator<SubmitOrderCommand>
+    internal abstract class OrderModelValidator : AbstractValidator<OrderModel>
     {
-        public SubmitOrderCommandValidator()
+        public OrderModelValidator()
         {
             RuleFor(x => x.ShippingAddress)
                 .NotNull()
@@ -17,11 +15,6 @@ namespace MicroStore.Ordering.Application.Orders
                 .WithMessage("Billing Address is required")
                 .SetValidator(new AddressValidator());
 
-            RuleFor(x => x.UserId)
-                .NotNull()
-                .WithMessage("User Id is required")
-                .MaximumLength(256)
-                .WithMessage("User Id must not exceed 256 characters.");
 
             RuleFor(x => x.ShippingCost)
                 .GreaterThanOrEqualTo(0)
@@ -54,18 +47,23 @@ namespace MicroStore.Ordering.Application.Orders
 
             RuleForEach(x => x.OrderItems)
                 .SetValidator(new OrderItemValidator());
-
-
-            RuleFor(x => x.SubmissionDate)
-                .NotNull()
-                .WithMessage("Order submission date is required");
-
-
         }
     }
-    internal class FullfillOrderCommandValidator : AbstractValidator<FullfillOrderCommand>
+
+    public class CreateOrderModelValidator : AbstractValidator<CreateOrderModel>
     {
-        public FullfillOrderCommandValidator()
+        public CreateOrderModelValidator()
+        {
+            RuleFor(x => x.UserId)
+                .NotNull()
+                .WithMessage("User Id is required")
+                .MaximumLength(256)
+                .WithMessage("User Id must not exceed 256 characters.");
+        }
+    }
+    internal class FullfillOrderModelValidator : AbstractValidator<FullfillOrderModel>
+    {
+        public FullfillOrderModelValidator()
         {
             RuleFor(x => x.ShipmentId)
                 .NotEmpty()
@@ -76,18 +74,10 @@ namespace MicroStore.Ordering.Application.Orders
     }
 
 
-    internal class CompleterOrderCommandValidator : AbstractValidator<CompleteOrderCommand>
-    {
-        public CompleterOrderCommandValidator()
-        {
-            RuleFor(x => x.ShipedDate)
-                .NotEmpty()
-                .WithMessage("Shiped date is required");
-        }
-    }
+  
 
 
-    internal class CancelOrderCommandValidator : AbstractValidator<CancelOrderCommand>
+    internal class CancelOrderCommandValidator : AbstractValidator<CancelOrderModel>
     {
         public CancelOrderCommandValidator()
         {
@@ -95,11 +85,7 @@ namespace MicroStore.Ordering.Application.Orders
                 .NotEmpty()
                 .WithMessage("Order Cancellation Reason is required")
                 .MaximumLength(500)
-                .WithMessage("Order Cancellation Reason maximum characters is 500");
-
-            RuleFor(x => x.CancellationDate)
-                .NotEmpty()
-                .WithMessage("Order Cancellation date is required");
+                .WithMessage("Order Cancellation Reason maximum characters is 500");           
         }
     }
 

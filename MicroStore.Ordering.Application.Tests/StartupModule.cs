@@ -2,7 +2,6 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Infrastructure;
 using MicroStore.Ordering.Infrastructure.EntityFramework;
@@ -19,8 +18,7 @@ using Volo.Abp.Modularity;
 namespace MicroStore.Ordering.Application.Tests
 {
     [DependsOn(typeof(OrderApplicationModule),
-        typeof(OrderInfrastructureModule),
-        typeof(MediatorModule))]
+        typeof(OrderInfrastructureModule))]
     [DependsOn(typeof(AbpAutofacModule))]
     public class StartupModule : AbpModule
     {
