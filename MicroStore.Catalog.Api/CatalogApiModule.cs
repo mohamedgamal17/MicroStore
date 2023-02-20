@@ -2,18 +2,16 @@
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Catalog.Application;
 using MicroStore.Catalog.Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
+using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
-
 namespace MicroStore.Catalog.Api
 {
     [DependsOn(typeof(CatalogApplicationModule),
@@ -21,7 +19,7 @@ namespace MicroStore.Catalog.Api
     [DependsOn(typeof(MicroStoreAspNetCoreModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(MediatorModule))]
+        typeof(AbpDddApplicationModule))]
     public class CatalogApiModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -29,8 +27,6 @@ namespace MicroStore.Catalog.Api
             var host = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
-
-            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<CatalogApiModule>());
 
             ConfigureAuthentication(context.Services,configuration);
 
@@ -46,6 +42,8 @@ namespace MicroStore.Catalog.Api
             {
                 opt.AutoValidate = false;
             });
+
+           
         }
 
 
@@ -98,7 +96,6 @@ namespace MicroStore.Catalog.Api
         app.UseAuthorization();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
-
         //app.MapControllers();
     }
 

@@ -1,52 +1,57 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Catalog.Api.Models;
 using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Application.Products;
-
+using System.Net;
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/products")]
+   // [Authorize]
     [ApiController]
     public class ProductController : MicroStoreApiController
     {
+
+        private readonly IProductCommandService _productCommandService;
+
+        private readonly IProductQueryService _productQueryService;
+
+        public ProductController(IProductCommandService productCommandService, IProductQueryService productQueryService)
+        {
+            _productCommandService = productCommandService;
+            _productQueryService = productQueryService;
+        }
+
         [Route("")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ProductListDto>>))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetCatalogProductList([FromQuery] PagingAndSortingParamsQueryString @params)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductListDto>))]
+        public async Task<IActionResult> GetCatalogProductList([FromQuery] PagingAndSortingParamsQueryString queryParams)
         {
-            var request = new GetProductListQuery
+            var result = await _productQueryService.ListAsync(new PagingAndSortingQueryParams
             {
-                SortBy = @params.SortBy,
-                Desc = @params.Desc,
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber,
-            };
+                PageNumber = queryParams.PageNumber,
+                PageSize = queryParams.PageSize,
+                SortBy = queryParams.SortBy,
+                Desc = queryParams.Desc
+            });
 
-            var result = await Send(request);
 
-            return FromResult(result);
+            return FromResultV2(result,HttpStatusCode.OK);
         }
 
 
         [Route("{id}")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(Envelope<ProductDto>)))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetCatalogProduct(Guid id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ProductDto)))]
+        public async Task<IActionResult> GetCatalogProduct(string id)
         {
-            var query = new GetProductQuery() { Id = id };
+            var result = await _productQueryService.GetAsync(id);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [Route("")]
@@ -56,29 +61,18 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Post([FromBody] ProductModel model)
         {
-            CreateProductCommand command = ObjectMapper.Map<ProductModel, CreateProductCommand>(model);
+            var result = await _productCommandService.CreateAsync(model);
 
-
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result,HttpStatusCode.Created);
         }
 
         [Route("{id}")]
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(Guid id, [FromForm] ProductModel model)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        public async Task<IActionResult> Put(string id, [FromForm] ProductModel model)
         {
-            UpdateProductCommand command = ObjectMapper.Map<ProductModel, UpdateProductCommand>(model);
-
-            command.ProductId = id;
-
-            var result = await Send(command);
-
-            return FromResult(result);
+            var result = await _productCommandService.UpdateAsync(id, model);
+            return FromResultV2(result, HttpStatusCode.Created);
         }
 
     }

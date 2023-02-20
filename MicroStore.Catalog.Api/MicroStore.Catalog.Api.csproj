@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
-    <ProjectReference Include="..\MicroStore.BuildingBlocks.Mediator\MicroStore.BuildingBlocks.Mediator.csproj" />
     <ProjectReference Include="..\MicroStore.Catalog.Application\MicroStore.Catalog.Application.csproj" />
     <ProjectReference Include="..\MicroStore.Catalog.Infrastructure\MicroStore.Catalog.Infrastructure.csproj" />
   </ItemGroup>

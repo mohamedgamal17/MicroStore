@@ -7,6 +7,10 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
     {
         public void Configure(EntityTypeBuilder<ProductImage> builder)
         {
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Id).HasMaxLength(256);
+
             builder.Property(x => x.ImagePath).IsRequired().HasMaxLength(600);
 
             builder.Property(x => x.DisplayOrder).IsRequired();

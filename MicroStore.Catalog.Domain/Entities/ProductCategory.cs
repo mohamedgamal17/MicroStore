@@ -1,25 +1,18 @@
-﻿using Volo.Abp.Domain.Entities;
+﻿#pragma warning disable CS8618
+using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Domain.Entities
 {
-    public class ProductCategory : Entity<Guid>
+    public class ProductCategory : Entity<string>
     {
         public Category Category { get;  set; }
-        public Guid CategoryId { get; set; }
+        public string CategoryId { get; set; }
         public bool IsFeaturedProduct { get;  set; }
-
-
-        public ProductCategory(Guid categoryId)
-            : base(Guid.NewGuid())
-        {
-            CategoryId = categoryId;
-        }
 
         public ProductCategory()
         {
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString();
         }
         public void SetFeaturedProduct(bool isFeatured) => IsFeaturedProduct = isFeatured;
-
 
     }
 }

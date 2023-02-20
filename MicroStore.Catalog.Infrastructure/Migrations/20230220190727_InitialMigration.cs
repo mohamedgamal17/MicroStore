@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -13,7 +12,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false)
                 },
@@ -26,14 +25,20 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Thumbnail = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false, defaultValue: ""),
                     ShortDescription = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
                     LongDescription = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OldPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    OldPrice = table.Column<double>(type: "float", nullable: false),
+                    Weight_Value = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
+                    Weight_Unit = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Dimension_Width = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
+                    Dimension_Lenght = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
+                    Height_Width = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
+                    Dimension_Unit = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
@@ -44,10 +49,10 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                 name: "ProductCategory",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    CategoryId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     IsFeaturedProduct = table.Column<bool>(type: "bit", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ProductId = table.Column<string>(type: "nvarchar(256)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,10 +74,10 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                 name: "ProductImage",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
                     DisplayOrder = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ProductId = table.Column<string>(type: "nvarchar(256)", nullable: true)
                 },
                 constraints: table =>
                 {

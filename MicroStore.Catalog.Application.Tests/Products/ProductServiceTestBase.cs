@@ -1,16 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Application.Products;
-using MicroStore.Catalog.Application.Tests.Utilites;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.Products
 {
-    public class ProductCommandTestBase : BaseTestFixture
+    public class ProductServiceTestBase : BaseTestFixture
     {
 
-        public Task<Product> GetProductById(Guid id)
+        public Task<Product> GetProductById(string id)
         {
             return WithUnitOfWork(sp =>
             {
@@ -76,20 +75,15 @@ namespace MicroStore.Catalog.Application.Tests.Products
             return data;
         }
       
-
-        public async Task<CreateProductCommand> GenerateCreateProductCommand()
-        {
+        public async Task<ProductModel> GenerateProductModel()
+        { 
             var categories = await CreateFakeCategories();
 
-            return new CreateProductCommand
+            return new ProductModel
             {
                 Sku = Guid.NewGuid().ToString(),
                 Name = Guid.NewGuid().ToString(),
-                Thumbnail = new ImageModel
-                {
-                    FileName = $"{Guid.NewGuid()}",
-                    Data = ImageGenerator.GetBitmapData()
-                },
+                Thumbnail = Guid.NewGuid().ToString(),
                 ShortDescription = Guid.NewGuid().ToString(),
                 LongDescription = Guid.NewGuid().ToString(),
                 Price = 50,
@@ -108,45 +102,12 @@ namespace MicroStore.Catalog.Application.Tests.Products
                     Unit = "inch"
                 },
 
-                Categories = categories.Select(x => new CategoryModel { CategoryId = x.Id, IsFeatured = true }).ToList()
+                Categories = categories.Select(x => new ProductCategoryModel { CategoryId = x.Id, IsFeatured = true }).ToList(),
+                Images = new List<ProductImageModel> { new ProductImageModel { Image = Guid.NewGuid().ToString(), DisplayOrder = 1 } }
             };
         }
 
-
-        public async Task<UpdateProductCommand> GenerateUpdateProductCommand()
-        {
-            var categories = await CreateFakeCategories();
-
-            return new UpdateProductCommand
-            {
-                Sku = Guid.NewGuid().ToString(),
-                Name = Guid.NewGuid().ToString(),
-                Thumbnail = new ImageModel
-                {
-                    FileName = $"{Guid.NewGuid()}",
-                    Data = ImageGenerator.GetBitmapData()
-                },
-                ShortDescription = Guid.NewGuid().ToString(),
-                LongDescription = Guid.NewGuid().ToString(),
-                Price = 50,
-                OldPrice = 150,
-                Weight = new WeightModel
-                {
-                    Value = 50,
-                    Unit = "g"
-                },
-
-                Dimensions = new DimensionModel
-                {
-                    Height = 5,
-                    Width = 5,
-                    Lenght = 5,
-                    Unit = "inch"
-                },
-
-                Categories = categories.Select(x => new CategoryModel { CategoryId = x.Id, IsFeatured = true }).ToList()
-            };
-        }
+       
     }
 
 

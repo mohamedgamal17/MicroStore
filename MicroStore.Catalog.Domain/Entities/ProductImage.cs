@@ -1,7 +1,8 @@
-﻿using Volo.Abp.Domain.Entities;
+﻿#pragma warning disable CS8618
+using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Domain.Entities
 {
-    public class ProductImage : Entity<Guid>
+    public class ProductImage : Entity<string>
     {
         public string ImagePath { get; set; }
         public int DisplayOrder { get; set; }
@@ -9,7 +10,7 @@ namespace MicroStore.Catalog.Domain.Entities
 
         public ProductImage()
         {
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString();
         }
 
     }

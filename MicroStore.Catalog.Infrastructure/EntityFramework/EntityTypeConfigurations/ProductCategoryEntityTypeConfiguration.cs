@@ -11,6 +11,10 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Id).HasMaxLength(256);
+
+            builder.Property(x => x.CategoryId).HasMaxLength(256);
+
             builder.Property(x => x.IsFeaturedProduct).IsRequired();
 
             builder.Navigation(x => x.Category).AutoInclude();

@@ -1,8 +1,9 @@
-﻿using MicroStore.Catalog.Domain.ValueObjects;
+﻿#pragma warning disable CS8618
+using MicroStore.Catalog.Domain.ValueObjects;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Domain.Entities
 {
-    public class Product : BasicAggregateRoot<Guid>
+    public class Product : BasicAggregateRoot<string>
     {
         public string Name { get;  set; }
         public string Sku { get;  set; }
@@ -19,28 +20,8 @@ namespace MicroStore.Catalog.Domain.Entities
 
         public Product()
         {
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString();
         }
-
-
-     
-          
-        public void AssignProductImage(string imageUrl , int displayorder)
-        {
-            ProductImages.Add(new ProductImage
-            {
-                ImagePath = imageUrl,
-                DisplayOrder = displayorder
-            });
-        }
-
-        public void RemoveProductImage(Guid productImageid)
-        {
-            ProductImage productImage = ProductImages.Single(x => x.Id == productImageid);
-
-            ProductImages.Remove(productImage);         
-        }
-
 
 
     }

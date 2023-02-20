@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Catalog.Infrastructure;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
 using MicroStore.TestBase.Json;
@@ -19,7 +18,6 @@ namespace MicroStore.Catalog.Application.Tests
 {
     [DependsOn(typeof(CatalogInfrastructureModule))]
     [DependsOn(typeof(AbpAutofacModule))]
-    [DependsOn(typeof(MediatorModule))]
     public class StartupModule : AbpModule
     {
         private readonly JsonSerializerSettings _jsonSerilizerSettings = new JsonSerializerSettings

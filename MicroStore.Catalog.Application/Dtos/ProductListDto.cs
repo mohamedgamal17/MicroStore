@@ -1,10 +1,9 @@
-﻿using MicroStore.Catalog.Application.Models;
-using MicroStore.Catalog.Domain.ValueObjects;
+﻿#pragma warning disable CS8618
+using MicroStore.Catalog.Application.Models;
 using Volo.Abp.Application.Dtos;
-
 namespace MicroStore.Catalog.Application.Dtos
 {
-    public class ProductListDto : EntityDto<Guid>
+    public class ProductListDto : EntityDto<string>
     {
         public string Name { get; set; } = null!;
         public string Sku { get; set; }

@@ -11,7 +11,7 @@ namespace MicroStore.Catalog.Application.Models
 {
     public class ProductCategoryModel
     {
-        public Guid CategoryId { get; set; }
+        public string CategoryId { get; set; }
         public bool IsFeatured { get; set; }
 
     }
@@ -32,7 +32,7 @@ namespace MicroStore.Catalog.Application.Models
         }
 
 
-        private async Task<bool> CheckCategoryId(Guid categoryId, CancellationToken cancellationToken)
+        private async Task<bool> CheckCategoryId(string categoryId, CancellationToken cancellationToken)
         {
             return await _categoryRepository.AnyAsync(x => x.Id == categoryId, cancellationToken);
         }

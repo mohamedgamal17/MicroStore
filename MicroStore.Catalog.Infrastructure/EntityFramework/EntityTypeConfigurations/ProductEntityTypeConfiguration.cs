@@ -11,6 +11,8 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Id).HasMaxLength(256);
+
             builder.Property(x => x.Name).IsRequired().HasMaxLength(600);
 
             builder.Property(x => x.Sku).IsRequired().HasMaxLength(256);

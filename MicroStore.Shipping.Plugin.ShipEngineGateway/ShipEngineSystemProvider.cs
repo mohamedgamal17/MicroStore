@@ -230,7 +230,6 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                 var errorInfo = new ErrorInfo
                 {
                     Type = ex.ErrorType.ToString(),
-                    Source = ex.Source,
                     Message = ex.Message,
                 };
 

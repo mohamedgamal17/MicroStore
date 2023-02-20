@@ -1,5 +1,5 @@
-﻿using MicroStore.Catalog.Domain.ValueObjects;
-
+﻿#pragma warning disable CS8618
+using MicroStore.Catalog.Domain.ValueObjects;
 namespace MicroStore.Catalog.Application.Models
 {
     public class WeightModel

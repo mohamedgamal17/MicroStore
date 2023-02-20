@@ -239,11 +239,9 @@ namespace MicroStore.Payment.Plugin.StripeGateway
         private ErrorInfo ConvertStripeError(StripeError stripeError)
         {
             return new ErrorInfo
-            {
-                Source = stripeError.Source?.Object,
+            {               
                 Type = stripeError.Type,
-                Message = stripeError.Error,
-                Details = stripeError.Message
+                Message = stripeError.Message          
             };
         }
 

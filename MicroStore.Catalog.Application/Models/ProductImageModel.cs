@@ -1,10 +1,11 @@
 ﻿#pragma warning disable CS8618
-using Volo.Abp.Application.Dtos;
-namespace MicroStore.Catalog.Application.Dtos
+namespace MicroStore.Catalog.Application.Models
 {
-    public class ProductImageDto : EntityDto<string>
+    public class ProductImageModel
     {
         public string Image { get; set; }
         public int DisplayOrder { get; set; }
     }
+
+
 }
