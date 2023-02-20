@@ -31,16 +31,9 @@ namespace MicroStore.BuildingBlocks.InMemoryBus.Behaviours
 
         private ErrorInfo ConvertValidationErrors(List<ValidationResult> validationResults)
         {
-            return new ErrorInfo
-            {
-                Message = "Validation error",
-                ValidationErrors = validationResults.Select(x => new ValidationErrorInfo
-                {
-                    Members = x.MemberNames.ToArray(),
-                    Message = x.ErrorMessage
-                }).ToArray()
-            };
+            var kv = validationResults.Select(x => new KeyValuePair<string, string[]>(x.MemberNames.First(), new string[] { x.ErrorMessage }));
 
+            return ErrorInfo.Validation("One or more validation error occured", new Dictionary<string, string[]>(kv));
         }
     }
 }

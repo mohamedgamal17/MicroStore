@@ -37,7 +37,6 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
             return ResponseResult.Failure((int)statusCode, new ErrorInfo
             {
                 Message = errorMessage,
-                Details = details ?? string.Empty
             });
         }
         protected ResponseResult Failure(HttpStatusCode statusCode, ErrorInfo errorInfo)
@@ -49,8 +48,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
         {
             return ResponseResult.Failure<T>((int)statusCode, new ErrorInfo
             {
-                Message = errorMessage,
-                Details = details
+                Message = errorMessage
             });
         }
         protected ResponseResult<T> Failure<T>(HttpStatusCode stausCode, ErrorInfo errorInfo)
@@ -58,6 +56,25 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
             return ResponseResult.Failure<T>((int)stausCode, errorInfo);
         }
 
+        protected UnitResultV2 SuccessV2()
+        {
+            return UnitResultV2.Success();
+        }
+
+        protected UnitResultV2<T> SuccessV2<T>( T result)
+        {
+            return UnitResultV2.Success(result);
+        }
+
+        protected UnitResultV2 FailureV2(ErrorInfo error)
+        {
+            return UnitResultV2.Failure(error);
+        }
+
+        protected UnitResultV2<T> FailureV2<T> (ErrorInfo error)
+        {
+            return UnitResultV2.Failure<T>(error);
+        }
 
 
     }
@@ -103,7 +120,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
             return ResponseResult.Failure<TResponse>((int)statusCode, new ErrorInfo
             {
                 Message = errorMessage,
-                Details = details
+         
             });
         }
 
@@ -113,7 +130,7 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
             return ResponseResult.Failure<T>((int)statusCode, new ErrorInfo
             {
                 Message = errorMessage,
-                Details = details
+          
             });
         }
 

@@ -36,4 +36,37 @@ namespace MicroStore.BuildingBlocks.InMemoryBus
             return ServiceLifetime.Transient;
         }
     }
+
+
+    public class RequestHandlerConventionalRegistarV2 : DefaultConventionalRegistrar
+    {
+        protected override bool IsConventionalRegistrationDisabled(Type type)
+        {
+            return !CanRegister(type);
+        }
+
+
+        protected override List<Type> GetExposedServiceTypes(Type type)
+        {
+            return type.GetInterfaces()
+                .Where(x => x.IsGenericType)
+                .Where(x => x.GetGenericTypeDefinition() == typeof(IRequestHandlerV2<,>)).ToList();
+
+        }
+
+        private bool CanRegister(Type type)
+        {
+            return IsRequestHandler(type);
+        }
+
+        private bool IsRequestHandler(Type type)
+            => type.GetInterfaces()
+                .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IRequestHandlerV2<,>));
+
+
+        protected override ServiceLifetime? GetDefaultLifeTimeOrNull(Type type)
+        {
+            return ServiceLifetime.Transient;
+        }
+    }
 }
