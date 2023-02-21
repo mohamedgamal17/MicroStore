@@ -1,10 +1,9 @@
-﻿using Volo.Abp.Application.Dtos;
-
+﻿#pragma warning disable CS8618
+using Volo.Abp.Application.Dtos;
 namespace MicroStore.Inventory.Application.Dtos
 {
-    public class ProductDto : EntityDto<Guid>
+    public class ProductDto : EntityDto<string>
     {
-        public string ExternalProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
         public string Thumbnail { get; set; }

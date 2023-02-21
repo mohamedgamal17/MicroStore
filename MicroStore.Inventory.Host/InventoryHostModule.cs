@@ -119,8 +119,8 @@ namespace MicroStore.Inventory.Host
                     {
                         ClientCredentials = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")),
-                            TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")),
+                            AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")!),
+                            TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")!),
 
                         },
 

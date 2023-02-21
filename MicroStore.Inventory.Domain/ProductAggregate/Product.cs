@@ -1,35 +1,44 @@
-﻿using Volo.Abp.Domain.Entities;
+﻿#pragma warning disable CS8618
+using Volo.Abp.Domain.Entities;
 using Ardalis.GuardClauses;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Inventory.Domain.Events;
 using MicroStore.Inventory.Domain.Extensions;
 namespace MicroStore.Inventory.Domain.ProductAggregate
 {
-    public class Product : BasicAggregateRoot<Guid>
+    public class Product : BasicAggregateRoot<string>
     {
-        public string ExternalProductId { get; set; }
+   
         public string Sku { get; set; }
         public string Name { get; set; }
         public string Thumbnail { get; set; }
         public int Stock { get; private set; }
         public int AllocatedStock { get; private set; }
 
-        public Product(string externalProductId,  string name, string sku, string thumbnail,int stock)
+
+        public Product(string id)
         {
-            ExternalProductId = Guard.Against.NullOrWhiteSpace(externalProductId, nameof(externalProductId));
-            Name = Guard.Against.NullOrWhiteSpace(name, nameof(name));
-            Sku = Guard.Against.NullOrWhiteSpace(sku, nameof(sku));
-            Stock = Guard.Against.Negative(stock, nameof(stock));
-            Thumbnail = thumbnail;   
+            Id = id;
         }
 
-        protected Product() { }
+        public Product()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
+
+        public Product(string sku, string name, string thumbnail, int stock)
+        {
+            Id = Guid.NewGuid().ToString();
+            Sku = sku;
+            Name = name;
+            Thumbnail = thumbnail;
+            Stock = stock;
+        }
 
         public UnitResult AdjustInventory(int adjustedStock, string reason)
         {
-            Guard.Against.InvalidResult(CanAdjustQauntity(adjustedStock, reason),typeof(Product));
 
-            Stock += adjustedStock;
+            Stock = adjustedStock;
 
             AddLocalEvent(new InventoryAdjustedEvent
             {
@@ -38,19 +47,6 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
                 AdkustedDate = DateTime.UtcNow,
                 Reason = reason
             });
-
-            return UnitResult.Success();
-        }
-
-        public UnitResult CanAdjustQauntity(int adjustedStock, string reason)
-        {
-            int adjustedQuantity = Stock + adjustedStock;
-
-            if (adjustedQuantity < 0)
-            {
-                return UnitResult.Failure(ProductAggregateErrorType.ProductAdjustingQuantityError, "product stock cannot be adjusted to negative number");
-            }
-
 
             return UnitResult.Success();
         }

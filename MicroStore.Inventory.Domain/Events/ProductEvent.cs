@@ -2,7 +2,7 @@
 {
     public abstract class EventBase
     {
-        public Guid ProductId { get; init; }
+        public string ProductId { get; init; }
 
     }
 }

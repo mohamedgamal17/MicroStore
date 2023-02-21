@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Orders;
-using MicroStore.Inventory.Domain.Security;
+using System.Net;
 
 namespace MicroStore.Inventory.Api.Controllers
 {
@@ -18,84 +17,55 @@ namespace MicroStore.Inventory.Api.Controllers
     public class OrderController : MicroStoreApiController
     {
 
+
+        private readonly IOrderQueryService _orderQueryService;
+
+        public OrderController( IOrderQueryService orderQueryService)
+        {
+            _orderQueryService = orderQueryService;
+        }
+
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<OrderListDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrderList([FromQuery] PagingParamsQueryString @params)
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<OrderListDto>))]
+
+        public async Task<IActionResult> RetirveOrderList([FromQuery] PagingParamsQueryString @params , [FromQuery(Name ="user_id")] string? userId=  null)
         {
-            var query = new GetOrderListQuery
+            var queryParams = new PagingQueryParams
             {
                 PageSize = @params.PageSize,
                 PageNumber = @params.PageNumber,
             };
 
-            var result = await Send(query);
+            var result = await _orderQueryService.ListOrderAsync(queryParams, userId);
 
-            return FromResult(result);
-        }
-
-        [HttpGet]
-        [Route("user/{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<OrderListDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveUserOrderList(string userId, [FromQuery]  PagingParamsQueryString @params)
-        {
-            var query = new GetUserOrderListQuery
-            {
-                UserId = userId,
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber,
-            };
-
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
 
+
         [HttpGet]
-        [Route("external_order_id/{externalId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<OrderDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetirveOrderWithExternalId(string externalId)
+        [Route("order_number/{orderNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
+
+        public async Task<IActionResult> RetirveOrderWithExternalId(string orderNumber)
         {
-            var query = new GetOrderWithExternalIdQuery
-            {
-                ExternalOrderId = externalId
-            };
 
-            var result = await Send(query);
+            var result = await _orderQueryService.GetOrderByNumberAsync(orderNumber);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("{orderId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<OrderDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveOrder(Guid orderId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
+        
+        public async Task<IActionResult> RetriveOrder(string orderId)
         {
-            var query = new GetOrderQuery
-            {
-                OrderId = orderId
-            };
 
-            var result = await Send(query);
+            var result = await _orderQueryService.GetOrderAsync(orderId);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
     }
 }

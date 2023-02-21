@@ -1,57 +1,21 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace MicroStore.Inventory.Infrastructure.Migrations
 {
-    public partial class OrderMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "ConcurrencyStamp",
-                table: "Products");
-
-            migrationBuilder.DropColumn(
-                name: "ExtraProperties",
-                table: "Products");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Products",
-                type: "nvarchar(300)",
-                maxLength: 300,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(600)",
-                oldMaxLength: 600);
-
-            migrationBuilder.AddColumn<string>(
-                name: "ExternalProductId",
-                table: "Products",
-                type: "nvarchar(256)",
-                maxLength: 256,
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Thumbnail",
-                table: "Products",
-                type: "nvarchar(500)",
-                maxLength: 500,
-                nullable: false,
-                defaultValue: "");
-
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExternalOrderId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     OrderNumber = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    ExternalPaymentId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    PaymentId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     ShippingAddress_Name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false, defaultValue: ""),
                     ShippingAddress_Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, defaultValue: ""),
                     ShippingAddress_CountryCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, defaultValue: ""),
@@ -78,72 +42,47 @@ namespace MicroStore.Inventory.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Sku = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Thumbnail = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    AllocatedStock = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "OrderItem",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExternalItemId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    ExternalProductId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Thumbnail = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     UnitPrice = table.Column<double>(type: "float", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    OrderId = table.Column<string>(type: "nvarchar(256)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Order_OrderId",
+                        name: "FK_OrderItem_Orders_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Order",
+                        principalTable: "Orders",
                         principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_ExternalProductId",
-                table: "Products",
-                column: "ExternalProductId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_ExternalOrderId",
-                table: "Order",
-                column: "ExternalOrderId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_ExternalPaymentId",
-                table: "Order",
-                column: "ExternalPaymentId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_OrderNumber",
-                table: "Order",
-                column: "OrderNumber",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_UserId",
-                table: "Order",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_ExternalItemId",
-                table: "OrderItem",
-                column: "ExternalItemId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_ExternalProductId",
-                table: "OrderItem",
-                column: "ExternalProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_Name",
@@ -156,9 +95,43 @@ namespace MicroStore.Inventory.Infrastructure.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderItem_ProductId",
+                table: "OrderItem",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_Sku",
                 table: "OrderItem",
                 column: "Sku");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_OrderNumber",
+                table: "Orders",
+                column: "OrderNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_PaymentId",
+                table: "Orders",
+                column: "PaymentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_UserId",
+                table: "Orders",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_Name",
+                table: "Products",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_Sku",
+                table: "Products",
+                column: "Sku",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -167,42 +140,10 @@ namespace MicroStore.Inventory.Infrastructure.Migrations
                 name: "OrderItem");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Products");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Products_ExternalProductId",
-                table: "Products");
-
-            migrationBuilder.DropColumn(
-                name: "ExternalProductId",
-                table: "Products");
-
-            migrationBuilder.DropColumn(
-                name: "Thumbnail",
-                table: "Products");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Products",
-                type: "nvarchar(600)",
-                maxLength: 600,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(300)",
-                oldMaxLength: 300);
-
-            migrationBuilder.AddColumn<string>(
-                name: "ConcurrencyStamp",
-                table: "Products",
-                type: "nvarchar(40)",
-                maxLength: 40,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "ExtraProperties",
-                table: "Products",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.DropTable(
+                name: "Orders");
         }
     }
 }

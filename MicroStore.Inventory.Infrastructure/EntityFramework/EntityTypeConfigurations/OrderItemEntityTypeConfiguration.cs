@@ -7,9 +7,9 @@ namespace MicroStore.Inventory.Infrastructure.EntityFramework.EntityTypeConfigur
     {
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
-            builder.Property(x => x.ExternalItemId).HasMaxLength(256);
+            builder.Property(x => x.Id).HasMaxLength(256);
 
-            builder.Property(x => x.ExternalProductId).HasMaxLength(256);
+            builder.Property(x => x.ProductId).HasMaxLength(256);
 
             builder.Property(x => x.Name).HasMaxLength(300);
 
@@ -17,9 +17,7 @@ namespace MicroStore.Inventory.Infrastructure.EntityFramework.EntityTypeConfigur
 
             builder.Property(x => x.Thumbnail).HasMaxLength(500);
 
-            builder.HasIndex(x => x.ExternalItemId).IsUnique();
-
-            builder.HasIndex(x => x.ExternalProductId);
+            builder.HasIndex(x => x.ProductId);
 
             builder.HasIndex(x => x.Name);
 

@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.IntegrationEvents;
 namespace MicroStore.Inventory.Application.Consumers
@@ -7,18 +6,17 @@ namespace MicroStore.Inventory.Application.Consumers
     public class ReleaseOrderStockIntegrationEventConsumer : IConsumer<ReleaseOrderStockIntegrationEvent>
     {
 
-        private readonly ILocalMessageBus _localMessageBus;
+        private readonly IOrderCommandService _orderCommandService;
 
-        public ReleaseOrderStockIntegrationEventConsumer(ILocalMessageBus localMessageBus)
+        public ReleaseOrderStockIntegrationEventConsumer(IOrderCommandService orderCommandService)
         {
-            _localMessageBus = localMessageBus;
+            _orderCommandService = orderCommandService;
         }
+
+
         public async Task Consume(ConsumeContext<ReleaseOrderStockIntegrationEvent> context)
         {
-            await _localMessageBus.Send(new ReleaseOrderStockCommand
-            {
-                ExternalOrderId = context.Message.ExternalOrderId,    
-            });
-        }      
+            await _orderCommandService.ReleaseOrderStockAsync(context.Message.OrderId);
+        }
     }
 }

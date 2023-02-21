@@ -12,7 +12,7 @@ namespace MicroStore.Ordering.Application.Consumers
         {
             await context.Publish(new OrderApprovedEvent
             {
-                OrderId = Guid.Parse(context.Message.ExternalOrderId),
+                OrderId = Guid.Parse(context.Message.OrderId),
                 OrderNumber = context.Message.OrderNumber
             });
         }
@@ -21,7 +21,7 @@ namespace MicroStore.Ordering.Application.Consumers
         {
             await context.Publish(new OrderStockRejectedEvent
             {
-                OrderId = Guid.Parse(context.Message.ExternalOrderId),
+                OrderId = Guid.Parse(context.Message.OrderId),
                 OrderNumber = context.Message.OrderNumber,
                 Details = context.Message.Details
             });

@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Inventory.Api.Models;
 using MicroStore.Inventory.Application.Dtos;
+using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Products;
-using MicroStore.Inventory.Domain.Security;
+using System.Net;
 
 namespace MicroStore.Inventory.Api.Controllers
 {
@@ -19,103 +18,67 @@ namespace MicroStore.Inventory.Api.Controllers
     [Route("api/inventory/products")]
     public class InventoryItemController : MicroStoreApiController
     {
+        private readonly IProductCommandService _productCommandService;
+
+        private readonly IProductQueryService _productQueryService;
+
+        public InventoryItemController(IProductCommandService productCommandService, IProductQueryService productQueryService)
+        {
+            _productCommandService = productCommandService;
+            _productQueryService = productQueryService;
+        }
+
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<ProductDto>>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<ProductDto>))]
+
         public async Task<IActionResult> RetriveProductList([FromQuery] PagingParamsQueryString @params)
         {
-            var query = new GetProductListQuery
+            var query = new PagingQueryParams
             {
                 PageNumber = @params.PageNumber,
                 PageSize = @params.PageSize,
             };
 
-            var result = await Send(query);
+            var result = await _productQueryService.ListAsync(query);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
-        [HttpGet]
-        [Route("external_product_id/{externalId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveProductWithExternalId(string externalId)
-        {
-            var query = new GetProductWithExternalIdQuery
-            {
-                ExternalProductId = externalId
-            };
-
-            var result = await Send(query);
-
-            return FromResult(result);
-        }
 
         [HttpGet]
         [Route("sku/{sku}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         public async Task<IActionResult> RetriveProductWithSku(string sku)
         {
-            var query = new GetProductWithSkuQuery
-            {
-                Sku = sku
-            };
+  
+            var result = await _productQueryService.GetBySkyAsync(sku);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("{productId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveProductWithExternalId(Guid productId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+ 
+        public async Task<IActionResult> RetriveProductWithExternalId(string productId)
         {
-            var query = new GetProductQuery
-            {
-                ProductId = productId
-            };
+            var result = await _productQueryService.GetAsync(productId);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
-        [Route("adjustquantity/{productsku}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> AdjustProductInventory(string productsku, [FromBody] AdjustProductInventoryModel model)
+        [Route("adjustquantity/{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+
+
+        public async Task<IActionResult> AdjustProductInventory(string productId, [FromBody] AdjustProductInventoryModel model)
         {
-            var command = new AdjustProductInventoryCommand
-            {
-                Sku = productsku,
-                Stock = model.AdjustedQuantity,
-                Reason = model.Reason
-            };
 
-            var result = await Send(command);
+            var result = await _productCommandService.AdjustInventory(productId, model);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
     }
 }

@@ -7,11 +7,11 @@ namespace MicroStore.Inventory.Infrastructure.EntityFramework.EntityTypeConfigur
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.Property(x => x.ExternalOrderId).HasMaxLength(256);
+            builder.Property(x => x.Id).HasMaxLength(256);
 
             builder.Property(x => x.OrderNumber).HasMaxLength(256);
 
-            builder.Property(x => x.ExternalPaymentId).HasMaxLength(256);
+            builder.Property(x => x.PaymentId).HasMaxLength(256);
 
             builder.Property(x => x.UserId).HasMaxLength(256);
 
@@ -119,11 +119,10 @@ namespace MicroStore.Inventory.Infrastructure.EntityFramework.EntityTypeConfigur
                   .HasMaxLength(100);
             });
 
-            builder.HasIndex(x => x.ExternalOrderId).IsUnique();
 
             builder.HasIndex(x => x.OrderNumber).IsUnique();
 
-            builder.HasIndex(x => x.ExternalPaymentId).IsUnique();
+            builder.HasIndex(x => x.PaymentId).IsUnique();
 
             builder.HasIndex(x => x.UserId);
         }

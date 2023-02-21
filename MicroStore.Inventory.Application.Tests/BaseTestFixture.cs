@@ -36,7 +36,7 @@ namespace MicroStore.Inventory.Application.Tests
         }
 
 
-        public Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class, IEntity
+        protected Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>
             {
@@ -47,7 +47,7 @@ namespace MicroStore.Inventory.Application.Tests
         }
 
 
-        public Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class, IEntity
+        protected Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>
             {
@@ -57,7 +57,17 @@ namespace MicroStore.Inventory.Application.Tests
             });
         }
 
-        public Task<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class, IEntity
+        protected Task<TEntity> FirstAsync<TEntity>() where TEntity : class , IEntity
+        {
+            return WithUnitOfWork((sp) =>
+            {
+                var repository = sp.GetRequiredService<IRepository<TEntity>>();
+
+                return repository.FirstAsync();
+            });
+        }
+
+        protected Task<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>
             {
@@ -67,7 +77,7 @@ namespace MicroStore.Inventory.Application.Tests
             });
         }
 
-        public Task<long> Count<TEntity>() where TEntity : class, IEntity
+        protected Task<long> Count<TEntity>() where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>
             {

@@ -19,9 +19,9 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             var integrationEvent = new AllocateOrderStockIntegrationEvent
             {
-                ExternalOrderId = Guid.NewGuid().ToString(),
+                OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                ExternalPaymentId = Guid.NewGuid().ToString(),
+                PaymentId = Guid.NewGuid().ToString(),
                 UserId = Guid.NewGuid().ToString(),
                 ShippingCost= 0,
                 TaxCost = 0,
@@ -69,10 +69,10 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
         {
             return products.Select(x => new OrderItemModel
             {
-                ExternalItemId = Guid.NewGuid().ToString(),
+                ItemId = Guid.NewGuid().ToString(),
                 Name = x.Name,
                 Sku = x.Sku,
-                ExternalProductId = x.ExternalProductId,
+                ProductId = x.Id,
                 Thumbnail = x.Thumbnail,
                 Quantity = quantity,
                 UnitPrice = 50
@@ -88,9 +88,9 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             var integrationEvent = new AllocateOrderStockIntegrationEvent
             {
-                ExternalOrderId = Guid.NewGuid().ToString(),
+                OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                ExternalPaymentId = Guid.NewGuid().ToString(),
+                PaymentId = Guid.NewGuid().ToString(),
                 UserId = Guid.NewGuid().ToString(),
                 ShippingCost = 0,
                 TaxCost = 0,
@@ -129,11 +129,11 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             List<Product> fakeProducts = new List<Product>();
 
-            fakeProducts.Add(await Insert(new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 5)));
+            fakeProducts.Add(await Insert(new Product(Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 5)));
 
-            fakeProducts.Add(await Insert(new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 10)));
+            fakeProducts.Add(await Insert(new Product(Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 10)));
 
-            fakeProducts.Add(await Insert(new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 15)));
+            fakeProducts.Add(await Insert(new Product( Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 15)));
 
             return fakeProducts;
         }

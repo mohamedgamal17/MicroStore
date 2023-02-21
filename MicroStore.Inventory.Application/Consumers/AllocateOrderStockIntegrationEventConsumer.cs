@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Logging;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.Inventory.Application.Common;
+using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.IntegrationEvents;
 
@@ -13,49 +12,49 @@ namespace MicroStore.Inventory.Application.Consumers
 
         private readonly ILogger<AllocateOrderStockIntegrationEventConsumer> _logger;
 
-        private readonly ILocalMessageBus _localMessageBus;
 
-        public AllocateOrderStockIntegrationEventConsumer(ILocalMessageBus localMessageBus, ILogger<AllocateOrderStockIntegrationEventConsumer> logger)
+        private readonly IOrderCommandService _orderCommandService;
+
+
+        public AllocateOrderStockIntegrationEventConsumer(ILogger<AllocateOrderStockIntegrationEventConsumer> logger, IOrderCommandService orderCommandService)
         {
-            _localMessageBus = localMessageBus;
             _logger = logger;
+            _orderCommandService = orderCommandService;
         }
-
-
 
         public async Task Consume(ConsumeContext<AllocateOrderStockIntegrationEvent> context)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Consuming {EventName} : For Order : {OrderId}", nameof(AllocateOrderStockIntegrationEvent), context.Message.ExternalOrderId);
+                _logger.LogDebug("Consuming {EventName} : For Order : {OrderId}", nameof(AllocateOrderStockIntegrationEvent), context.Message.OrderId);
             }
 
-          
-            var result = await _localMessageBus.Send(new AllocateOrderStockCommand
+            var result = await _orderCommandService.AllocateOrderStockAsync(new AllocateOrderStockModel
             {
-                ExternalOrderId = context.Message.ExternalOrderId,
+                OrderId = context.Message.OrderId,
                 OrderNumber = context.Message.OrderNumber,
-                ExternalPaymentId = context.Message.ExternalPaymentId,
+                PaymentId = context.Message.PaymentId,
                 UserId = context.Message.UserId,
                 ShippingAddress = MapAddressModel(context.Message.ShippingAddress),
                 BillingAddres = MapAddressModel(context.Message.BillingAddres),
                 ShippingCost = context.Message.ShippingCost,
                 TaxCost = context.Message.TaxCost,
-                SubTotal= context.Message.SubTotal,
+                SubTotal = context.Message.SubTotal,
                 TotalPrice = context.Message.TotalPrice,
                 Items = MapeOrderItems(context.Message.Items),
             });
+
 
             if (result.IsFailure)
             {
 
                 await context.Publish(new StockRejectedIntegrationEvent
                 {
-                    ExternalOrderId = context.Message.ExternalOrderId,
+                    OrderId = context.Message.OrderId,
                     OrderNumber = context.Message.OrderNumber,
-                    ExternalPaymentId = context.Message.ExternalPaymentId,
+                    PaymentId = context.Message.PaymentId,
                     UserId= context.Message.UserId, 
-                    Details = result.EnvelopeResult.Error.Message
+                    Details = result.Error.Message
                 });
 
             }
@@ -63,9 +62,9 @@ namespace MicroStore.Inventory.Application.Consumers
             {
                 await context.Publish(new StockConfirmedIntegrationEvent
                 {
-                    ExternalOrderId = context.Message.ExternalOrderId,
+                    OrderId = context.Message.OrderId,
                     OrderNumber = context.Message.OrderNumber,
-                    ExternalPaymentId= context.Message.ExternalPaymentId,
+                    PaymentId= context.Message.PaymentId,
                     UserId = context.Message.UserId
                 });
             }
@@ -76,8 +75,8 @@ namespace MicroStore.Inventory.Application.Consumers
         {
             return products.Select(x => new OrderItemModel
             {
-               ExternalItemId  = x.ExternalItemId,
-               ExternalProductId= x.ExternalProductId,
+               ItemId  = x.ItemId,
+               ProductId= x.ProductId,
                Sku = x.Sku,
                Name = x.Name,
                Thumbnail = x.Thumbnail,

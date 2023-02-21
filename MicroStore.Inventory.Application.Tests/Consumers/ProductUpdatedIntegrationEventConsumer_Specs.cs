@@ -15,7 +15,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             var integrationEvent = new ProductUpdatedIntegerationEvent
             {
-                ProductId = fakeProduct.ExternalProductId,
+                ProductId = fakeProduct.Id,
                 Name = Guid.NewGuid().ToString(),
                 Sku = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
@@ -42,7 +42,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
             {
                 var repository = sp.GetRequiredService<IRepository<Product>>();
 
-                return repository.InsertAsync(new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 0));
+                return repository.InsertAsync(new Product( Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 0));
             });
     }
 }

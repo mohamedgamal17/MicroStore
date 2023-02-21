@@ -1,15 +1,19 @@
-﻿using Volo.Abp.Domain.Entities;
-
+﻿#pragma warning disable CS8618
+using Volo.Abp.Domain.Entities;
 namespace MicroStore.Inventory.Domain.OrderAggregate
 {
-    public class OrderItem : Entity<Guid>
+    public class OrderItem : Entity<string>
     {
-        public OrderItem() :base(Guid.NewGuid())
+        public OrderItem(string id)
         {
-
+            Id = id;
         }
-        public string ExternalItemId { get; set; }
-        public string ExternalProductId { get; set; }
+        public OrderItem() 
+        {
+            Id = Guid.NewGuid().ToString(); 
+        }
+
+        public string ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
         public string Thumbnail { get; set; }

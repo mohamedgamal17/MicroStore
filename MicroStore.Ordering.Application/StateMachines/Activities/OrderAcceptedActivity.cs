@@ -26,9 +26,9 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
 
             AllocateOrderStockIntegrationEvent integrationEvent = new AllocateOrderStockIntegrationEvent
             {
-                ExternalOrderId = context.Saga.CorrelationId.ToString(),
+                OrderId = context.Saga.CorrelationId.ToString(),
                 OrderNumber = context.Saga.OrderNumber,
-                ExternalPaymentId  = context.Saga.PaymentId,
+                PaymentId  = context.Saga.PaymentId,
                 UserId = context.Saga.UserId,
                 ShippingAddress = MapAddressModel(context.Saga.ShippingAddress),
                 BillingAddres = MapAddressModel(context.Saga.BillingAddress),
@@ -57,8 +57,8 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
         {
             return stockItems.Select(x => new OrderItemModel
             {
-                ExternalItemId = x.Id.ToString(),
-                ExternalProductId = x.ExternalProductId,
+                ItemId = x.Id.ToString(),
+                ProductId = x.ExternalProductId,
                 Sku = x.Sku,
                 Name = x.Name,
                 Thumbnail = x.Thumbnail,

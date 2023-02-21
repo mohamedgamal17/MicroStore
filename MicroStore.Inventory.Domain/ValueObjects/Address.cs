@@ -1,4 +1,6 @@
-﻿using MicroStore.Inventory.Domain.Common;
+﻿#pragma warning disable CS8618
+
+using MicroStore.Inventory.Domain.Common;
 
 namespace MicroStore.Inventory.Domain.ValueObjects
 {

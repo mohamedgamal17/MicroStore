@@ -22,9 +22,9 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
 
             await context.Publish(new ReleaseOrderStockIntegrationEvent
             {
-                ExternalOrderId = context.Saga.CorrelationId.ToString(),
+                OrderId = context.Saga.CorrelationId.ToString(),
                 OrderNumber = context.Saga.OrderNumber,
-                ExternalPaymentId = context.Saga.PaymentId,
+                PaymentId = context.Saga.PaymentId,
                 UserId = context.Saga.UserId
 
             });

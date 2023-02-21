@@ -25,9 +25,9 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             await TestHarness.Consumed.Any<ProductCreatedIntegrationEvent>();
 
-            Product product = await Find<Product>(x => x.ExternalProductId == integrationEvent.ProductId);
+            Product product = await Find<Product>(x => x.Id == integrationEvent.ProductId);
 
-            product.ExternalProductId.Should().Be(integrationEvent.ProductId);
+            product.Id.Should().Be(integrationEvent.ProductId);
             product.Sku.Should().Be(integrationEvent.Sku);
             product.Thumbnail.Should().Be(integrationEvent.Thumbnail);
             product.Name.Should().Be(integrationEvent.Name);

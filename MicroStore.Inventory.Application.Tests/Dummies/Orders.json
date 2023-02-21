@@ -1,11 +1,9 @@
 {
   "data": [
     {
-      "id": "159b39f4-d03d-48df-9c89-ef5aaba7ef52",
-      "external_order_id": "23afe9ae-43c7-4522-bac8-363803e40612",
       "order_number": "6820be8e-0f4e-4ae2-94dc-e226a0e8f2f7",
       "user_id": "2cd94e7f-d80a-41c9-9805-75f1e3b4b925",
-      "external_payment_id": "2b5b4c9b-2829-4edd-8ff5-6830c3265228",
+      "payment_id": "2b5b4c9b-2829-4edd-8ff5-6830c3265228",
       "is_cancelled": false,
       "shipping_address": {
         "name": "jane doe",
@@ -35,8 +33,7 @@
       "submission_date": "08/18/2018 07:22:16",
       "order_items": [
         {
-          "external_item_id": "ba33162d-3612-442b-b192-be04ccee11c9",
-          "external_product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
+          "product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
           "sku": "apple-lab-sk",
           "name": "Apple Apple MacBook Air 13.6 M2 256GB",
           "thumbnail": "NAN",
@@ -47,10 +44,8 @@
     },
 
     {
-      "id": "3353b4db-9770-4d77-a97c-9c05b438cde3",
-      "external_order_id": "0fceb4cc-9b15-49b8-a409-0a729e4fb741",
       "order_number": "2f1461ec-b96f-4447-9410-70b4d3b8a741",
-      "external_payment_id": "06ed1d89-2dcb-4db6-952a-6d8b589d5777",
+      "payment_id": "06ed1d89-2dcb-4db6-952a-6d8b589d5777",
       "user_id": "2cd94e7f-d80a-41c9-9805-75f1e3b4b925",
       "is_cancelled": false,
       "shipping_address": {
@@ -81,8 +76,7 @@
       "submission_date": "08/18/2018 07:22:16",
       "order_items": [
         {
-          "external_item_id": "522d87a9-ead6-4b0d-ba80-99f521db1761",
-          "external_product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
+          "product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
           "sku": "apple-lab-sk",
           "name": "Apple Apple MacBook Air 13.6 M2 256GB",
           "thumbnail": "NAN",
@@ -94,10 +88,8 @@
 
 
     {
-      "id": "42665f1a-0b26-4130-b234-8c5d5a3d30ce",
-      "external_order_id": "47cbe496-74ec-435f-82e5-278e9572e1c3",
       "order_number": "265c801f-6936-4f1f-b015-f61bb08b9133",
-      "external_payment_id": "b7977469-d655-492f-ada1-1097d66602fc",
+      "payment_id": "b7977469-d655-492f-ada1-1097d66602fc",
       "user_id": "a84eb974-50b7-4ce6-95ac-515b54d2d7a3",
       "is_cancelled": false,
       "shipping_address": {
@@ -128,8 +120,7 @@
       "submission_date": "08/18/2018 07:22:16",
       "order_items": [
         {
-          "external_item_id": "d8180b83-a523-47eb-b7df-65c6bfe361e6",
-          "external_product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
+          "product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
           "sku": "apple-lab-sk",
           "name": "Apple Apple MacBook Air 13.6 M2 256GB",
           "thumbnail": "NAN",
@@ -140,9 +131,7 @@
     },
 
     {
-      "id": "5abe7f28-9e3c-40f5-a0cc-1ba1bffed3f9",
-      "external_order_id": "108fa6bd-21f3-4716-a50a-e0d8103a7630",
-      "external_payment_id": "0258662c-c408-4d89-aea5-67cbfa3907f3",
+      "payment_id": "0258662c-c408-4d89-aea5-67cbfa3907f3",
       "order_number": "d0f7559a-fd2c-466c-a387-be4d396530ec",
       "user_id": "a84eb974-50b7-4ce6-95ac-515b54d2d7a3",
       "is_cancelled": false,
@@ -174,8 +163,7 @@
       "submission_date": "08/18/2018 07:22:16",
       "order_items": [
         {
-          "external_item_id": "200c2434-6b8a-405c-be10-654ea4e6e89b",
-          "external_product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
+          "product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
           "sku": "apple-lab-sk",
           "name": "Apple Apple MacBook Air 13.6 M2 256GB",
           "thumbnail": "NAN",

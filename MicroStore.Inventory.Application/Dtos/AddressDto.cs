@@ -1,4 +1,5 @@
-﻿namespace MicroStore.Inventory.Application.Dtos
+﻿#pragma warning disable CS8618
+namespace MicroStore.Inventory.Application.Dtos
 {
     public class AddressDto
     {

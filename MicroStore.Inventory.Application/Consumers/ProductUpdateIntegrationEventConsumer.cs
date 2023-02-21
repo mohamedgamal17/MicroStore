@@ -1,27 +1,30 @@
 ﻿using MassTransit;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Catalog.IntegrationEvents;
+using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Products;
 
 namespace MicroStore.Inventory.Application.Consumers
 {
     public class ProductUpdateIntegrationEventConsumer : IConsumer<ProductUpdatedIntegerationEvent>
     {
-        private readonly ILocalMessageBus _localMessageBus;
 
-        public ProductUpdateIntegrationEventConsumer(ILocalMessageBus localMessageBus)
+
+        private readonly IProductCommandService _productCommandService;
+
+        public ProductUpdateIntegrationEventConsumer(IProductCommandService productCommandService)
         {
-            _localMessageBus = localMessageBus;
+            _productCommandService = productCommandService;
         }
 
-        public Task Consume(ConsumeContext<ProductUpdatedIntegerationEvent> context)
+        public async Task Consume(ConsumeContext<ProductUpdatedIntegerationEvent> context)
         {
-            return _localMessageBus.Send(new UpdateProductCommand
+            await _productCommandService.UpdateAsync(new ProductModel
             {
-                ExternalProductId = context.Message.ProductId,
+                ProductId = context.Message.ProductId,
                 Sku = context.Message.Sku,
                 Name = context.Message.Name,
                 Thumbnail = context.Message.Thumbnail
+
             });
         }
     }

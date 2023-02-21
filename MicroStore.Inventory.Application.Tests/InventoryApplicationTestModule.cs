@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Inventory.Infrastructure;
 using MicroStore.Inventory.Infrastructure.EntityFramework;
 using MicroStore.TestBase.Json;
@@ -22,7 +21,6 @@ namespace MicroStore.Inventory.Application.Tests
 
     [DependsOn(typeof(InventoryApplicationModule),
         typeof(InventoryInfrastructureModule),
-        typeof(MediatorModule),
         typeof(AbpAutofacModule))]
     public class InventoryApplicationTestModule : AbpModule
     {

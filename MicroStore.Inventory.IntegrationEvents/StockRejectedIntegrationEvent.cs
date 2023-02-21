@@ -2,10 +2,10 @@
 {
     public class StockRejectedIntegrationEvent
     {
-        public string ExternalOrderId { get; set; }
+        public string OrderId { get; set; }
         public string OrderNumber { get; set; }
         public string UserId { get; set; }
-        public string ExternalPaymentId { get; set; }
+        public string PaymentId { get; set; }
         public string Details { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 {
     public class OrderItemModel
     {
-        public string ExternalItemId { get; set; }  
-        public string ExternalProductId { get; set; }
+        public string ItemId { get; set; }  
+        public string ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
         public string Thumbnail { get; set; }

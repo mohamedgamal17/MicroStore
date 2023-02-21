@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Inventory.Application.Common;
+using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Domain.OrderAggregate;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using MicroStore.Inventory.Domain.ValueObjects;
@@ -24,10 +25,10 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             ReleaseOrderStockIntegrationEvent integrationEvent = new ReleaseOrderStockIntegrationEvent
             {
-                ExternalOrderId = fakeOrder.ExternalOrderId,
+                OrderId = fakeOrder.Id,
                 OrderNumber = fakeOrder.OrderNumber,
 
-                ExternalPaymentId = fakeOrder.ExternalPaymentId,
+                PaymentId = fakeOrder.PaymentId,
 
                 UserId = fakeOrder.UserId
  
@@ -38,7 +39,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             Assert.That(await TestHarness.Consumed.Any<ReleaseOrderStockIntegrationEvent>());
 
-            var product =  await Find<Product>(x => x.ExternalProductId == fakeOrder.Items.First().ExternalProductId);
+            var product =  await Find<Product>(x => x.Id == fakeOrder.Items.First().ProductId);
 
             product.AllocatedStock.Should().Be(0);
 
@@ -50,9 +51,9 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             Order order = new Order
             {
-                ExternalOrderId = Guid.NewGuid().ToString(),
+
                 OrderNumber = Guid.NewGuid().ToString(),
-                ExternalPaymentId = Guid.NewGuid().ToString(),
+                PaymentId = Guid.NewGuid().ToString(),
                 UserId = Guid.NewGuid().ToString(),
                 ShippingCost = 0,
                 TaxCost = 0,
@@ -64,11 +65,10 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
                 {
                     new OrderItem
                     {
-                        ExternalItemId = Guid.NewGuid().ToString(),
                         Name = fakeProduct.Name,
                         Sku = fakeProduct.Sku,
-                        ExternalProductId = fakeProduct.ExternalProductId,
-                        Thumbnail = fakeProduct.ExternalProductId,
+                        ProductId = fakeProduct.Id,
+                        Thumbnail = fakeProduct.Thumbnail,
                         Quantity = fakeProduct.AllocatedStock,
                         UnitPrice = 50
                     }
@@ -113,7 +113,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
         private async Task<Product> GenerateFakeProduct()
         {
 
-            Product product = new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 20);
+            Product product = new Product(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 20);
 
             product.AllocateStock(20);
 

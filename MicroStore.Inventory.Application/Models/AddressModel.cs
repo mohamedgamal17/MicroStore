@@ -1,6 +1,6 @@
-﻿using MicroStore.Inventory.Domain.ValueObjects;
-
-namespace MicroStore.Inventory.Application.Common
+﻿#pragma warning disable CS8618
+using MicroStore.Inventory.Domain.ValueObjects;
+namespace MicroStore.Inventory.Application.Models
 {
     public class AddressModel
     {
