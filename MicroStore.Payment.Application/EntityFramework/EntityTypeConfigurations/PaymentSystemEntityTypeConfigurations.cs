@@ -7,6 +7,8 @@ namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfiguration
     {
         public void Configure(EntityTypeBuilder<PaymentSystem> builder)
         {
+            builder.Property(x => x.Id).HasMaxLength(256);
+
             builder.Property(x => x.Name).HasMaxLength(256).IsRequired();
 
             builder.Property(x => x.DisplayName).HasMaxLength(256).IsRequired();

@@ -1,8 +1,8 @@
-﻿using Volo.Abp.Domain.Entities;
-
+﻿#pragma warning disable CS8618
+using Volo.Abp.Domain.Entities;
 namespace MicroStore.Payment.Domain
 {
-    public class PaymentSystem : Entity<Guid>
+    public class PaymentSystem : Entity<string>
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
@@ -11,7 +11,7 @@ namespace MicroStore.Payment.Domain
 
         public PaymentSystem()
         {
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString();
         }
     }
 }

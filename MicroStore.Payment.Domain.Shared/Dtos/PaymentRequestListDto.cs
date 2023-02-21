@@ -2,7 +2,7 @@
 
 namespace MicroStore.Payment.Domain.Shared.Dtos
 {
-    public class PaymentRequestListDto : CreationAuditedEntityDto<Guid>
+    public class PaymentRequestListDto : CreationAuditedEntityDto<string>
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }

@@ -2,7 +2,7 @@
 using Volo.Abp.Application.Dtos;
 namespace MicroStore.Payment.Domain.Shared.Dtos
 {
-    public class PaymentRequestDto : CreationAuditedEntityDto<Guid>
+    public class PaymentRequestDto : CreationAuditedEntityDto<string>
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }

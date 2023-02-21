@@ -5,7 +5,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
-
 namespace MicroStore.Payment.Domain
 {
     public class PaymentRequestManager : IPaymentRequestManager, ITransientDependency , IUnitOfWorkEnabled
@@ -20,7 +19,7 @@ namespace MicroStore.Payment.Domain
             _objectMapper = objectMapper;
         }
 
-        public async Task<PaymentRequestDto> Complete(Guid paymentId, string paymentGateway, string transactionId, DateTime capturedAt , CancellationToken cancellationToken = default)
+        public async Task<PaymentRequestDto> Complete(string paymentId, string paymentGateway, string transactionId, DateTime capturedAt , CancellationToken cancellationToken = default)
         {
             var payment = await RetrivePaymentRequest(paymentId, cancellationToken);
 
@@ -33,7 +32,7 @@ namespace MicroStore.Payment.Domain
             return _objectMapper.Map<PaymentRequest, PaymentRequestDto>(payment);
         }
 
-        public async Task<PaymentRequestDto> GetPaymentRequest(Guid paymentId, CancellationToken cancellationToken = default)
+        public async Task<PaymentRequestDto> GetPaymentRequest(string paymentId, CancellationToken cancellationToken = default)
         {
             var payment = await RetrivePaymentRequest(paymentId, cancellationToken);
 
@@ -41,7 +40,7 @@ namespace MicroStore.Payment.Domain
         }
 
       
-        public async Task<PaymentRequestDto> Refund(Guid paymentId, DateTime refundedAt, string? description = null , CancellationToken cancellationToken = default)
+        public async Task<PaymentRequestDto> Refund(string paymentId, DateTime refundedAt, string? description = null , CancellationToken cancellationToken = default)
         {
             var payment = await RetrivePaymentRequest(paymentId, cancellationToken);
 
@@ -54,14 +53,14 @@ namespace MicroStore.Payment.Domain
 
 
 
-        private async Task<PaymentRequest> RetrivePaymentRequest(Guid paymentId, CancellationToken cancellationToken = default)
+        private async Task<PaymentRequest> RetrivePaymentRequest(string paymentId, CancellationToken cancellationToken = default)
         {
             var query = await _paymentRequestRepository.GetQueryableAsync();    
 
            return await query.Include(x=> x.Items).SingleAsync(x => x.Id == paymentId, cancellationToken);
         }
 
-        public async Task<PaymentRequestDto> MarkAsFaild(Guid paymentId,string paymentGateway, DateTime faultAt, CancellationToken cancellationToken = default)
+        public async Task<PaymentRequestDto> MarkAsFaild(string paymentId,string paymentGateway, DateTime faultAt, CancellationToken cancellationToken = default)
         {
             var payment = await RetrivePaymentRequest(paymentId, cancellationToken);
 

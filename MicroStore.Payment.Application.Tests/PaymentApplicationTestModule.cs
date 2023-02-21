@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.TestBase.Json;
 using Newtonsoft.Json.Serialization;
@@ -14,13 +13,11 @@ using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using MicroStore.Payment.Domain;
-using MicroStore.Payment.Application.Tests.Fakes;
 using MicroStore.Payment.Application.Tests.Consts;
 
 namespace MicroStore.Payment.Application.Tests
 {
     [DependsOn(typeof(PaymentApplicationModule),
-        typeof(MediatorModule),
         typeof(AbpAutofacModule))]
     public class PaymentApplicationTestModule : AbpModule
     {

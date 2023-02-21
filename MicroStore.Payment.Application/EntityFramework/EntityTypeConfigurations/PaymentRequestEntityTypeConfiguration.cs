@@ -11,6 +11,8 @@ namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfiguration
 
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Id).HasMaxLength(256);
+
             builder.Property(x => x.OrderId).HasMaxLength(256).IsRequired();
 
             builder.Property(x => x.OrderNumber).HasMaxLength(265).IsRequired();

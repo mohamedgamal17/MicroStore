@@ -1,100 +1,71 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Payment.Api.Models.Systems;
-using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Application.PaymentSystems;
 using MicroStore.Payment.Domain.Shared.Dtos;
-using Volo.Abp.Application.Dtos;
-
+using System.Net;
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
     [Route("api/systems")]
     public class SystemController : MicroStoreApiController
     {
+        private readonly IPaymentSystemCommandService _paymentSystemCommandService;
+
+        private readonly IPaymentSystemQueryService _paymentSystemQueryService;
+
+        public SystemController(IPaymentSystemCommandService paymentSystemCommandService, IPaymentSystemQueryService paymentSystemQueryService)
+        {
+            _paymentSystemCommandService = paymentSystemCommandService;
+            _paymentSystemQueryService = paymentSystemQueryService;
+        }
+
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type =typeof(Envelope<ListResultDto<PaymentSystemDto>>))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-
+        [ProducesResponseType(StatusCodes.Status200OK,Type =typeof(PaymentSystemDto))]
         public async Task<IActionResult> RetirveSystems()
         {
-            var query = new GetPaymentRequestListQuery();
+            var result = await _paymentSystemQueryService.ListPaymentSystemAsync();
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("system_name/{systemName}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ListResultDto<PaymentSystemDto>>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentSystemDto))]
         public async Task<IActionResult> RetirveSystemWithName(string systemName)
         {
-            var query = new GetPaymentSystemWithNameQuery()
-            {
-                SystemName = systemName
-            };
+            var result = await _paymentSystemQueryService.GetBySystemNameAsync(systemName);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("{systemId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ListResultDto<PaymentSystemDto>>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-
-        public async Task<IActionResult> RetirveSystems(Guid systemId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentSystemDto))]
+        public async Task<IActionResult> RetirveSystems(string systemId)
         {
-            var query = new GetPaymentSystemQuery()
-            {
-                SystemId = systemId
-            };
+            var result = await _paymentSystemQueryService.GetAsync(systemId);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
 
         [HttpPut]
         [Route("{systemName}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentSystemDto))]
         public async Task<IActionResult> UpdatePluginSystem(string systemName,[FromBody] UpdatePluginSystemModel model)
         {
-            var command = new UpdatePaymentSystemCommand
-            {
-                Name = systemName,
-                IsEnabled = model.IsEnabled,
-            };
+            var result = await _paymentSystemCommandService.EnablePaymentSystemAsync(systemName, model.IsEnabled);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
+    }
+
+
+    public class UpdatePluginSystemModel
+    {
+        public bool IsEnabled { get; set; }
     }
 }

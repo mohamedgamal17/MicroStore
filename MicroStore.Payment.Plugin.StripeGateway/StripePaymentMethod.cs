@@ -8,10 +8,7 @@ using MicroStore.Payment.Plugin.StripeGateway.Config;
 using MicroStore.Payment.Plugin.StripeGateway.Consts;
 using Stripe;
 using Stripe.Checkout;
-using System.Net;
-using Volo.Abp;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 namespace MicroStore.Payment.Plugin.StripeGateway
@@ -47,41 +44,11 @@ namespace MicroStore.Payment.Plugin.StripeGateway
         }
         public string PaymentGatewayName => StripePaymentConst.Provider;
 
-        public async Task<ResponseResult<PaymentRequestDto>> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default)
+    
+
+        public async Task<UnitResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
-            return await WrappResponseResult<PaymentRequestDto>(async () =>
-            {
-                var requestOptions = await PrepareStripeRequest(cancellationToken);
-
-                var session = await _sessionService
-                    .GetAsync(completePaymentModel.Token, new SessionGetOptions(), requestOptions, cancellationToken);
-
-                if (_logger.IsEnabled(LogLevel.Debug))
-                {
-                    _logger.LogDebug("Stripe payment session {session}", session);
-                }
-
-                if (session.Status != "complete")
-                {
-                    var error = new ErrorInfo
-                    {
-                        Message = $"checkout session with id : {session.Id} is not completed yet"
-                    };
-
-                    return Failure<PaymentRequestDto>(HttpStatusCode.BadRequest, error);
-
-                }
-
-               var result =  await _paymentRequestManager.Complete(Guid.Parse(session.ClientReferenceId), PaymentGatewayName, session.PaymentIntentId, DateTime.UtcNow, cancellationToken);
-
-                return Success(HttpStatusCode.OK, result);
-            });
-
-        }
-
-        public async Task<ResponseResult<PaymentProcessResultDto>> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default)
-        {
-            return await WrappResponseResult<PaymentProcessResultDto>(HttpStatusCode.OK, async () =>
+            return await WrappResponseResult(async () =>
             {
                 var paymentRequest = await _paymentRequestManager.GetPaymentRequest(paymentId);
 
@@ -112,10 +79,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     },
                 },
 
-
                     Mode = "payment"
-
-
                 };
 
 
@@ -129,12 +93,31 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     TransactionId = session.PaymentIntentId,
                     AmountSubTotal = (session.AmountSubtotal / 100 ?? 0),
                     AmountTotal = (session.AmountTotal / 100 ?? 0),
-                    SuccessUrl = session.SuccessUrl + $"?token{session.Id}" /*+ "&" + $"gate={StripePaymentConst.Provider}"*/,
-                    CancelUrl = session.CancelUrl + $"?token{session.Id}" /*+ "&" + $"gate={StripePaymentConst.Provider}"*/,
+                    SuccessUrl = session.SuccessUrl ,
+                    CancelUrl = session.CancelUrl ,
                     CheckoutLink = session.Url
                 };
             });
 
+        }
+
+        public async Task<UnitResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
+        {
+            return await WrappResponseResult(async () =>
+            {
+                var paymentRequest = await _paymentRequestManager.GetPaymentRequest(paymentId);
+
+                var requestOptions = await PrepareStripeRequest();
+
+                var refundOptions = new RefundCreateOptions
+                {
+                    PaymentIntent = paymentRequest.TransctionId
+                };
+
+                var refundObject = await _refundService.CreateAsync(refundOptions, requestOptions, cancellationToken);
+
+                return await _paymentRequestManager.Refund(paymentId, DateTime.UtcNow, string.Empty, cancellationToken);
+            });
         }
 
 
@@ -170,39 +153,22 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             };
         }
 
-        public async Task<ResponseResult<PaymentRequestDto>> Refund(Guid paymentId, CancellationToken cancellationToken = default)
-        {
-            return await WrappResponseResult<PaymentRequestDto>(HttpStatusCode.OK, async () =>
-            {
-                var  paymentRequest = await _paymentRequestManager.GetPaymentRequest(paymentId);
-
-                var requestOptions = await PrepareStripeRequest();
-
-                var refundOptions = new RefundCreateOptions
-                {
-                    PaymentIntent = paymentRequest.TransctionId
-                };
-
-                var refundObject = await _refundService.CreateAsync(refundOptions, requestOptions, cancellationToken);
-
-                return await _paymentRequestManager.Refund(paymentId, DateTime.UtcNow, string.Empty, cancellationToken);
-            });
-        }
+      
 
 
 
-        private async Task<ResponseResult<T>> WrappResponseResult<T>(HttpStatusCode httpStatusCode, Func<Task<T>> func)
+        private async Task<UnitResultV2<T>> WrappResponseResult<T>(Func<Task<T>> func)
         {
 
             return await WrappResponseResult(async () =>
             {
                 var result = await func();
 
-                return Success(httpStatusCode, result);
+                return UnitResultV2.Success(result);
             });
         }
 
-        private async Task<ResponseResult<T>> WrappResponseResult<T>(Func<Task<ResponseResult<T>>> func)
+        private async Task<UnitResultV2<T>> WrappResponseResult<T>(Func<Task<UnitResultV2<T>>> func)
         {
             try
             {
@@ -211,38 +177,20 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             }
             catch (StripeException ex)
             {
-                return Failure<T>(HttpStatusCode.BadRequest, ConvertStripeError(ex.StripeError));
+                return UnitResultV2.Failure<T>(ConvertStripeError(ex.StripeError));
 
             }
             catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
             {
-                return Failure<T>(HttpStatusCode.BadRequest, new ErrorInfo
-                {
-                    Message = "Stripe gateway is not available now"
-                });
+                return UnitResultV2.Failure<T>(ErrorInfo.BadGateway("Stripe gateway is not available now"));
+               
             }
         }
 
-
-        private ResponseResult<T> Success<T>(HttpStatusCode statusCode, T result)
-            => ResponseResult.Success<T>((int)statusCode, result);
-
-        private ResponseResult Success(HttpStatusCode statusCode)
-            => ResponseResult.Success((int)statusCode);
-
-        private ResponseResult<T> Failure<T>(HttpStatusCode statusCode, ErrorInfo error)
-            => ResponseResult.Failure<T>((int)statusCode, error);
-
-        private ResponseResult Failure(HttpStatusCode statusCode, ErrorInfo error)
-        => ResponseResult.Failure((int)statusCode, error);
-
         private ErrorInfo ConvertStripeError(StripeError stripeError)
         {
-            return new ErrorInfo
-            {               
-                Type = stripeError.Type,
-                Message = stripeError.Message          
-            };
+            return ErrorInfo.BusinessLogic(stripeError.Message);
+       
         }
 
 

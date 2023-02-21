@@ -5,7 +5,7 @@ namespace MicroStore.Payment.Domain.Shared.Events
 {
     public class PaymentAcceptedEvent
     {
-        public Guid PaymentId { get; set; }
+        public string PaymentId { get; set; }
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
         public string UserId { get; set; }

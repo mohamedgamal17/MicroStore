@@ -1,9 +1,10 @@
 ﻿#nullable disable
 using MicroStore;
+using Volo.Abp.Application.Dtos;
 
 namespace MicroStore.Payment.Domain.Shared.Dtos
 {
-    public class PaymentRequestProductDto
+    public class PaymentRequestProductDto : EntityDto<string>
     {
         public string ProductId { get; set; }
         public string Name { get; set; }

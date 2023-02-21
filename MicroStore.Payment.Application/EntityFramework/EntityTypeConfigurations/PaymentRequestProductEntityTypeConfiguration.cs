@@ -10,6 +10,8 @@ namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfiguration
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Id).HasMaxLength(256);
+
             builder.Property(x => x.ProductId).HasMaxLength(256);
 
             builder.Property(x => x.Sku).HasMaxLength(256);

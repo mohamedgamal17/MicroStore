@@ -8,11 +8,9 @@ namespace MicroStore.Payment.Domain.Shared
     {
         string PaymentGatewayName { get; }
 
-        Task<ResponseResult<PaymentProcessResultDto>> Process(Guid paymentId, ProcessPaymentModel processPaymentModel, CancellationToken cancellationToken = default);
+        Task<UnitResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default);
 
-        Task<ResponseResult<PaymentRequestDto>> Complete(CompletePaymentModel completePaymentModel, CancellationToken cancellationToken = default);
-
-        Task<ResponseResult<PaymentRequestDto>> Refund(Guid paymentId, CancellationToken cancellationToken = default);
+        Task<UnitResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default);
 
     }
 }

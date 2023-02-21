@@ -1,11 +1,10 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.InMemoryBus;
-using MicroStore.Payment.Application.Abstractions;
 using MicroStore.Payment.Application.EntityFramework;
-using MicroStore.Payment.Domain;
+using MicroStore.Payment.Domain.Shared;
 using System.Reflection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus;
@@ -13,9 +12,11 @@ using Volo.Abp.Modularity;
 namespace MicroStore.Payment.Application
 {
 
-    [DependsOn(typeof(InMemoryBusModule),
-        typeof(AbpEntityFrameworkCoreModule),
-        typeof(AbpEventBusModule))]
+    [DependsOn(typeof(AbpEntityFrameworkCoreModule),
+        typeof(AbpEventBusModule),
+        typeof(AbpDddApplicationModule),
+        typeof(PaymentDomainSharedModule),
+        typeof(AbpAutoMapperModule))]
     public class PaymentApplicationModule : AbpModule
     {
 

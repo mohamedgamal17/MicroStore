@@ -1,33 +1,38 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Payment.Api.Models.PaymentRequests;
 using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Domain.Shared.Dtos;
-using MicroStore.Payment.Domain.Shared.Security;
-
+using MicroStore.Payment.Domain.Shared.Models;
+using System.Net;
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
     [Route("api/payments")]
     public class PaymentRequestController : MicroStoreApiController
     {
+
+        private readonly IPaymentRequestQueryService _paymentRequestQueryService;
+
+        private readonly IPaymentRequestCommandService _paymentRequestCommandService;
+
+        public PaymentRequestController(IPaymentRequestQueryService paymentRequestQueryService, IPaymentRequestCommandService paymentRequestCommandService)
+        {
+            _paymentRequestQueryService = paymentRequestQueryService;
+            _paymentRequestCommandService = paymentRequestCommandService;
+        }
+
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(Envelope<PagedResult<PaymentRequestListDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<PaymentRequestListDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
-        public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PagingAndSortingParamsQueryString @params)
+        public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PagingAndSortingParamsQueryString @params, [FromQuery(Name = "user_id")] string? userId = null)
         {
-            var query = new GetPaymentRequestListQuery
+            var queryparams = new PagingAndSortingQueryParams
             {
                 SortBy = @params.SortBy,
                 Desc = @params.Desc,
@@ -35,143 +40,65 @@ namespace MicroStore.Payment.Api.Controllers
                 PageNumber = @params.PageNumber,
             };
 
-            var result = await Send(query);
+            var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, userId);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
-        [HttpGet]
-        [Route("user/{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<PaymentRequestListDto>>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveUserPaymentRequestList(string userId, [FromQuery] PagingAndSortingParamsQueryString @params)
-        {
-            var query = new GetUserPaymentRequestListQuery
-            {
-                UserId = userId,
-                SortBy = @params.SortBy,
-                Desc = @params.Desc,
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber,
-            };
-
-            var result = await Send(query);
-
-            return FromResult(result);
-        }
+       
 
 
         [HttpGet]
         [Route("order_id/{orderId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+
         public async Task<IActionResult> RetrivePaymentRequestWithOrderId(string orderId)
         {
-            var query = new GetPaymentRequestWithOrderIdQuery
-            {
-                OrderId = orderId
-            };
+            var result = await _paymentRequestQueryService.GetByOrderIdAsync(orderId);
 
-            var result = await Send(query);
+            return FromResultV2(result, HttpStatusCode.OK); 
+        }
 
-            return FromResult(result);
+
+        [HttpGet]
+        [Route("order_number/{orderNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+
+        public async Task<IActionResult> RetrivePaymentRequestWithOrderNumber(string orderNumber)
+        {
+            var result = await _paymentRequestQueryService.GetByOrderNumberAsync(orderNumber);
+
+            return FromResultV2(result, HttpStatusCode.OK); 
         }
 
         [HttpGet]
         [Route("{paymentId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetrivePaymentRequest(Guid paymentId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        public async Task<IActionResult> RetrivePaymentRequest(string paymentId)
         {
-            var query = new GetPaymentRequestQuery
-            {
-                PaymentRequestId = paymentId
-            };
+            var result = await _paymentRequestQueryService.GetAsync(paymentId);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
         public async Task<IActionResult> CreatePaymentRequest([FromBody] CreatePaymentRequestModel model)
         {
-            var command = new CreatePaymentRequestCommand
-            {
-                OrderId = model.OrderId,
-                OrderNumber = model.OrderNubmer,
-                UserId = model.UserId,
-                TaxCost = model.TaxCost,
-                ShippingCost = model.ShippingCost,
-                SubTotal = model.SubtTotal,
-                TotalCost = model.TotalCost,
-                Items = model.Items,
-            };
+            var result = await _paymentRequestCommandService.CreateAsync(model);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
         [Route("process/{paymentId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentProcessResultDto))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<PaymentProcessResultDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-
-        public async Task<IActionResult> ProcessPaymentRequest(Guid paymentId, [FromBody] ProcessPaymentRequestModel model)
+        public async Task<IActionResult> ProcessPaymentRequest(string paymentId, [FromBody] ProcessPaymentRequestModel model)
         {
-            var command = new ProcessPaymentRequestCommand
-            {
-                PaymentId = paymentId,
-                PaymentGatewayName = model.PaymentGatewayName,
-                ReturnUrl = model.ReturnUrl,
-                CancelUrl = model.CancelUrl,
-            };
+            var result = await _paymentRequestCommandService.ProcessPaymentAsync(paymentId,model);
 
-
-            var result = await Send(command);
-
-            return FromResult(result);
-        }
-
-        [HttpPost]
-        [Route("complete")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PaymentRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope<PaymentRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> CompletePaymentRequest([FromBody] CompletePaymentRequestModel model)
-        {
-            var command = new CompletePaymentRequestCommand
-            {
-                PaymentGatewayName = model.PaymentGatewayName,
-                Token = model.Token,
-            };
-
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
     }
 }

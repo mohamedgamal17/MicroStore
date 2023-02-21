@@ -1,30 +1,25 @@
 ﻿using MassTransit;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
 using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.IntegrationEvents;
-
-
 namespace MicroStore.Payment.Application.Consumers
 {
-    [Obsolete]
     public class RefundPaymentRequestIntegrationEventConsumer : IConsumer<RefundPaymentIntegrationEvent>
     {
 
-        private readonly ILocalMessageBus _localMessageBus;
+        private readonly IPaymentRequestCommandService _paymentRequestCommandService;
 
-        public RefundPaymentRequestIntegrationEventConsumer(ILocalMessageBus localMessageBus)
+        public RefundPaymentRequestIntegrationEventConsumer(IPaymentRequestCommandService paymentRequestCommandService)
         {
-            _localMessageBus = localMessageBus;
+            _paymentRequestCommandService = paymentRequestCommandService;
         }
 
-        public Task Consume(ConsumeContext<RefundPaymentIntegrationEvent> context)
-        {
-            RefundPaymentRequestCommand command = new RefundPaymentRequestCommand
-            {
-                PaymentId = Guid.Parse(context.Message.PaymentId),
-            };
 
-            return _localMessageBus.Send(command);
+
+        public async Task Consume(ConsumeContext<RefundPaymentIntegrationEvent> context)
+        {
+
+           await  _paymentRequestCommandService.RefundPaymentAsync(context.Message.PaymentId);
+
         }
     }
 }

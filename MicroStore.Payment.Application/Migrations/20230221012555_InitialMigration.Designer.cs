@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Payment.Application.Migrations
 {
     [DbContext(typeof(PaymentDbContext))]
-    [Migration("20221126201934_PaymentFlowRefactorMigration")]
-    partial class PaymentFlowRefactorMigration
+    [Migration("20230221012555_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,10 +26,11 @@ namespace MicroStore.Payment.Application.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("MicroStore.Payment.Domain.Shared.Domain.PaymentRequest", b =>
+            modelBuilder.Entity("MicroStore.Payment.Domain.PaymentRequest", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime?>("CapturedAt")
                         .HasColumnType("datetime2");
@@ -80,20 +81,20 @@ namespace MicroStore.Payment.Application.Migrations
                     b.Property<DateTime?>("RefundedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("ShippingCost")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("ShippingCost")
+                        .HasColumnType("float");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("SubTotal")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("TaxCost")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("TaxCost")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("TotalCost")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("TotalCost")
+                        .HasColumnType("float");
 
                     b.Property<string>("TransctionId")
                         .HasMaxLength(265)
@@ -114,37 +115,38 @@ namespace MicroStore.Payment.Application.Migrations
                     b.ToTable("PaymentRequests");
                 });
 
-            modelBuilder.Entity("MicroStore.Payment.Domain.Shared.Domain.PaymentRequestProduct", b =>
+            modelBuilder.Entity("MicroStore.Payment.Domain.PaymentRequestProduct", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(800)
-                        .HasColumnType("nvarchar(800)");
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
-                    b.Property<Guid?>("PaymentRequestId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PaymentRequestId")
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Sku")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Thumbnail")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -159,14 +161,69 @@ namespace MicroStore.Payment.Application.Migrations
                     b.ToTable("PaymentRequestProduct");
                 });
 
-            modelBuilder.Entity("MicroStore.Payment.Domain.Shared.Domain.PaymentRequestProduct", b =>
+            modelBuilder.Entity("MicroStore.Payment.Domain.PaymentSystem", b =>
                 {
-                    b.HasOne("MicroStore.Payment.Domain.Shared.Domain.PaymentRequest", null)
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("PaymentSystems");
+                });
+
+            modelBuilder.Entity("MicroStore.Payment.Domain.SettingsEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderKey")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderKey")
+                        .IsUnique();
+
+                    b.ToTable("SettingsEntity");
+                });
+
+            modelBuilder.Entity("MicroStore.Payment.Domain.PaymentRequestProduct", b =>
+                {
+                    b.HasOne("MicroStore.Payment.Domain.PaymentRequest", null)
                         .WithMany("Items")
                         .HasForeignKey("PaymentRequestId");
                 });
 
-            modelBuilder.Entity("MicroStore.Payment.Domain.Shared.Domain.PaymentRequest", b =>
+            modelBuilder.Entity("MicroStore.Payment.Domain.PaymentRequest", b =>
                 {
                     b.Navigation("Items");
                 });

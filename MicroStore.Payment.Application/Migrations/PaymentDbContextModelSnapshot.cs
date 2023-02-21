@@ -26,8 +26,9 @@ namespace MicroStore.Payment.Application.Migrations
 
             modelBuilder.Entity("MicroStore.Payment.Domain.PaymentRequest", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime?>("CapturedAt")
                         .HasColumnType("datetime2");
@@ -114,16 +115,17 @@ namespace MicroStore.Payment.Application.Migrations
 
             modelBuilder.Entity("MicroStore.Payment.Domain.PaymentRequestProduct", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<Guid?>("PaymentRequestId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PaymentRequestId")
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -159,8 +161,9 @@ namespace MicroStore.Payment.Application.Migrations
 
             modelBuilder.Entity("MicroStore.Payment.Domain.PaymentSystem", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()

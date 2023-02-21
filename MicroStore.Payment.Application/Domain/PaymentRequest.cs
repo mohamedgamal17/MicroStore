@@ -1,8 +1,10 @@
-﻿using MicroStore.Payment.Domain.Shared.Events;
+﻿#pragma warning disable CS8618
+
+using MicroStore.Payment.Domain.Shared.Events;
 using Volo.Abp.Domain.Entities.Auditing;
 namespace MicroStore.Payment.Domain
 {
-    public class PaymentRequest : CreationAuditedAggregateRoot<Guid>
+    public class PaymentRequest : CreationAuditedAggregateRoot<string>
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
@@ -23,7 +25,7 @@ namespace MicroStore.Payment.Domain
 
         public PaymentRequest()
         {
-
+            Id = Guid.NewGuid().ToString();
         }
 
         public void Complete(string paymentGateway, string transactionId, DateTime capturedAt)
