@@ -1,8 +1,9 @@
-﻿using MicroStore.Shipping.Domain.ValueObjects;
+﻿#pragma warning disable CS8618
+using MicroStore.Shipping.Domain.ValueObjects;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.Shipping.Domain.Entities
 {
-    public class ShipmentItem : Entity<Guid>
+    public class ShipmentItem : Entity<string>
     {
         public string Name { get; set; }
         public string Sku { get; set; }
@@ -12,6 +13,11 @@ namespace MicroStore.Shipping.Domain.Entities
         public decimal UnitPrice { get; set; }
         public Weight Weight { get; set; }
         public Dimension Dimension { get; set; }
+
+        public ShipmentItem()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
 
     }
 }

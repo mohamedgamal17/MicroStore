@@ -9,9 +9,13 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework.EntityTypeConfigura
     {
         public void Configure(EntityTypeBuilder<Shipment> builder)
         {
+            builder.Property(x => x.Id).HasMaxLength(256);
+
             builder.Property(x => x.OrderId)
                 .IsRequired()
                 .HasMaxLength(265);
+
+            builder.Property(x => x.OrderNumber).IsRequired().HasMaxLength(256);
 
             builder.Property(x => x.UserId)
                 .IsRequired()
@@ -28,6 +32,10 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework.EntityTypeConfigura
             builder.Property(x => x.ShipmentLabelExternalId)
                 .HasDefaultValue(string.Empty)
                 .HasMaxLength(265);
+
+            builder.Property(x => x.SystemName)
+                .HasDefaultValue(string.Empty)
+                .HasMaxLength(256);
 
             builder.OwnsOne(x => x.Address, addressNavigationBuilder =>
             {
@@ -93,6 +101,8 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework.EntityTypeConfigura
 
             builder.HasIndex(x => x.OrderId).IsUnique(true);
 
+            builder.HasIndex(x => x.OrderNumber).IsUnique(true);
+
             builder.HasIndex(x => x.UserId);
 
             builder.HasIndex(x => x.ShipmentExternalId);
@@ -100,6 +110,8 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework.EntityTypeConfigura
             builder.HasIndex(x => x.TrackingNumber);
 
             builder.HasIndex(x => x.ShipmentLabelExternalId);
+
+            builder.HasIndex(x => x.SystemName);
         }
     }
 }

@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
-using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
-using MicroStore.Shipping.Domain.Security;
-using MicroStore.Shipping.WebApi.Models.Rates;
-using Volo.Abp.Application.Dtos;
+using MicroStore.Shipping.Application.Abstraction.Models;
+using MicroStore.Shipping.Application.Rates;
+using System.Net;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {
@@ -17,38 +13,21 @@ namespace MicroStore.Shipping.WebApi.Controllers
     [Route("api/rates")]
     public class ShipmentRateController : MicroStoreApiController
     {
-        [HttpPost]
-        [Route("retrive")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<List<ShipmentRateDto>>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveShipmentRates([FromBody] RetriveShipmentRateModel model)
+        private readonly IRateApplicationService _rateApplicationService;
+
+        public ShipmentRateController(IRateApplicationService rateApplicationService)
         {
-            var command = new RetriveShipmentRateCommand
-            {
-                SystemName = model.SystemName,
-                ExternalShipmentId = model.ExternalShipmentId
-            };
-
-            var result = await Send(command);
-
-            return FromResult(result);
+            _rateApplicationService = rateApplicationService;
         }
 
         [HttpPost]
         [Route("estimate")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ListResultDto<EstimatedRateDto>))]
-        public async Task<IActionResult> EstimateShipmentRate([FromBody]EstimateShipmentRateModel model)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<EstimatedRateDto>))]
+        public async Task<IActionResult> EstimateShipmentRate([FromBody]EstimatedRateModel model)
         {
-            var command = new EstimateShipmentRateCommand
-            {
-                Address = model.Address,
-                Items = model.Items
-            };
+            var result = await _rateApplicationService.EstimateRate(model);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result,HttpStatusCode.OK);
         }
 
     }

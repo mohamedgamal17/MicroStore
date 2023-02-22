@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
-using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
-using MicroStore.Shipping.Application.Abstraction.Queries;
-using MicroStore.Shipping.Domain.Security;
-using MicroStore.Shipping.WebApi.Models.Systems;
-using Volo.Abp.Application.Dtos;
+using MicroStore.Shipping.Application.ShippingSystems;
+using System.Net;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {
@@ -16,72 +11,62 @@ namespace MicroStore.Shipping.WebApi.Controllers
     [Route("api/systems")]
     public class ShipmentSystemController : MicroStoreApiController
     {
+        private readonly IShippingSystemCommandService _shippingSystemCommandService;
+
+        private readonly IShippingSystemQueryService _shippingSystemQueryService;
+
+        public ShipmentSystemController(IShippingSystemCommandService shippingSystemCommandService, IShippingSystemQueryService shippingSystemQueryService)
+        {
+            _shippingSystemCommandService = shippingSystemCommandService;
+            _shippingSystemQueryService = shippingSystemQueryService;
+        }
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type =typeof(Envelope<ListResultDto<ShipmentSystemDto>>))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK,Type =typeof(List<ShippingSystemDto>))]
+   
         public async Task<IActionResult> RetriveShipmentSystemList()
         {
-            var query = new GetShipmentSystemListQuery();
 
-            var result = await Send(query);
+            var result = await _shippingSystemQueryService.ListAsync();
 
-            return FromResult(result);           
+            return FromResultV2(result,HttpStatusCode.OK);           
         }
 
         [HttpGet]
         [Route("system_name/{name}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ListResultDto<ShipmentSystemDto>>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShippingSystemDto))]
         public async Task<IActionResult> RetriveShipmentSystemWithName(string name)
         {
-            var query = new GetShipmentSystemWithNameQuery
-            {
-                Name = name
-            };
+            var result = await _shippingSystemQueryService.GetByNameAsync(name);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("{systemId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ListResultDto<ShipmentSystemDto>>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveShipmentSystem(Guid systemId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShippingSystemDto))]
+
+        public async Task<IActionResult> RetriveShipmentSystem(string systemId)
         {
-            var query = new GetShipmentSystemQuery
-            {
-                SystemId = systemId
-            };
+            var result = await _shippingSystemQueryService.GetAsync(systemId);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPut]
         [Route("{systemName}")]
-        [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status404NotFound,Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError,Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(ShippingSystemDto))]
         public async Task<IActionResult> UpdateShipmentSystem(string systemName, [FromBody] UpdateShippingSystemModel model)
         {
-            var command = new UpdateShippingSystemCommand
-            {
-                SystemName = systemName,
-                IsEnabled = model.IsEnabled,
-            };
+            var result = await _shippingSystemCommandService.EnableAsync(systemName,model.IsEnabled);
 
-            var result = await Send(command);
-
-            return FromResult(result);
-
+            return FromResultV2(result, HttpStatusCode.OK);
         }
+    }
+
+    public class UpdateShippingSystemModel
+    {
+        public bool IsEnabled { get; set; } 
     }
 }

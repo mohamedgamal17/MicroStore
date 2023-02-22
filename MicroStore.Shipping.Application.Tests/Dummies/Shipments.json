@@ -1,8 +1,8 @@
 {
   "data": [
     {
-      "id": "70b35252-5149-4418-b6bb-c647ea3cc030",
       "order_id": "379a9bf2-c85f-49c3-8422-6d6a10999bd6",
+      "order_number": "379a9bf2-c85f-49c3-8422-6d6a10999bd6",
       "user_id": "bfdd1deb-167d-4269-b0e3-351613b8a202",
       "status": 0,
       "address": {
@@ -17,7 +17,7 @@
       },
       "items": [
         {
-          "id": "3f13f263-8e31-4900-a97b-eb7676d7dfd4",
+
           "product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
           "sku": "apple-lab-sk",
           "name": "Apple Apple MacBook Air 13.6 M2 256GB",
@@ -39,8 +39,9 @@
     },
 
     {
-      "id": "15ba0b95-d38f-4396-8fa1-c1508dc36e8b",
+
       "order_id": "023b4122-26a9-43cb-81b6-433e2f3d292e",
+      "order_number": "023b4122-26a9-43cb-81b6-433e2f3d292e",
       "user_id": "bfdd1deb-167d-4269-b0e3-351613b8a202",
       "status": 0,
       "address": {
@@ -55,7 +56,7 @@
       },
       "items": [
         {
-          "id": "c616a4f1-d7da-411c-ac7c-22fed2f1ea94",
+
           "product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
           "sku": "apple-lab-sk",
           "name": "Apple Apple MacBook Air 13.6 M2 256GB",
@@ -77,8 +78,9 @@
     },
 
     {
-      "id": "a8686082-4a66-4157-abd4-96af3459af46",
+
       "order_id": "dc3f1f42-3181-4fc8-acd3-5d563e9b6081",
+      "order_number": "dc3f1f42-3181-4fc8-acd3-5d563e9b6081",
       "user_id": "fceab0cf-5bd6-4ac6-8b9c-f5f7f3ff9c68",
       "status": 0,
       "address": {
@@ -93,7 +95,6 @@
       },
       "items": [
         {
-          "id": "8d05ebd4-5ca1-4dcf-b490-844327486543",
           "product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
           "sku": "apple-lab-sk",
           "name": "Apple Apple MacBook Air 13.6 M2 256GB",
@@ -115,8 +116,8 @@
     },
 
     {
-      "id": "0b387507-8cee-4e36-ae75-f43f20205705",
       "order_id": "a998180c-171c-4d91-ace3-983c41ea710e",
+      "order_number": "a998180c-171c-4d91-ace3-983c41ea710e",
       "user_id": "fceab0cf-5bd6-4ac6-8b9c-f5f7f3ff9c68",
       "status": 0,
       "address": {
@@ -131,7 +132,6 @@
       },
       "items": [
         {
-          "id": "bc2dfecd-5443-4b3f-b0b9-9ce30cace2d4",
           "product_id": "94174b5b-25a8-4c29-9364-3482e9356231",
           "sku": "apple-lab-sk",
           "name": "Apple Apple MacBook Air 13.6 M2 256GB",

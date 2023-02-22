@@ -49,13 +49,19 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
 
             modelBuilder.Entity("MicroStore.Shipping.Domain.Entities.Shipment", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("OrderId")
                         .IsRequired()
                         .HasMaxLength(265)
                         .HasColumnType("nvarchar(265)");
+
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("ShipmentExternalId")
                         .ValueGeneratedOnAdd()
@@ -73,7 +79,10 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SystemName")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasDefaultValue("");
 
                     b.Property<string>("TrackingNumber")
                         .ValueGeneratedOnAdd()
@@ -91,9 +100,14 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
+                    b.HasIndex("OrderNumber")
+                        .IsUnique();
+
                     b.HasIndex("ShipmentExternalId");
 
                     b.HasIndex("ShipmentLabelExternalId");
+
+                    b.HasIndex("SystemName");
 
                     b.HasIndex("TrackingNumber");
 
@@ -104,8 +118,9 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
 
             modelBuilder.Entity("MicroStore.Shipping.Domain.Entities.ShipmentItem", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -120,8 +135,8 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ShipmentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ShipmentId")
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Sku")
                         .IsRequired()
@@ -151,8 +166,9 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
 
             modelBuilder.Entity("MicroStore.Shipping.Domain.Entities.ShippingSystem", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -184,8 +200,8 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
                 {
                     b.OwnsOne("MicroStore.Shipping.Domain.ValueObjects.Address", "Address", b1 =>
                         {
-                            b1.Property<Guid>("ShipmentId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<string>("ShipmentId")
+                                .HasColumnType("nvarchar(256)");
 
                             b1.Property<string>("AddressLine1")
                                 .IsRequired()
@@ -279,8 +295,8 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
 
                     b.OwnsOne("MicroStore.Shipping.Domain.ValueObjects.Dimension", "Dimension", b1 =>
                         {
-                            b1.Property<Guid>("ShipmentItemId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<string>("ShipmentItemId")
+                                .HasColumnType("nvarchar(256)");
 
                             b1.Property<double>("Height")
                                 .ValueGeneratedOnAdd()
@@ -316,8 +332,8 @@ namespace MicroStore.Shipping.Infrastructure.Migrations
 
                     b.OwnsOne("MicroStore.Shipping.Domain.ValueObjects.Weight", "Weight", b1 =>
                         {
-                            b1.Property<Guid>("ShipmentItemId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<string>("ShipmentItemId")
+                                .HasColumnType("nvarchar(256)");
 
                             b1.Property<int>("Unit")
                                 .ValueGeneratedOnAdd()

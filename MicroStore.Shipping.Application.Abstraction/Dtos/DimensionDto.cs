@@ -1,6 +1,4 @@
-﻿using MicroStore.BuildingBlocks.InMemoryBus;
-
-namespace MicroStore.Shipping.Application.Abstraction.Dtos
+﻿namespace MicroStore.Shipping.Application.Abstraction.Dtos
 {
     public class DimensionDto
     {

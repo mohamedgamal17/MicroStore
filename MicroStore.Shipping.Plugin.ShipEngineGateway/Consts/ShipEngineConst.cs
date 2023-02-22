@@ -7,8 +7,6 @@
 
         public static string DisplayName => "MicroStore ShipEngine";
 
-
-
         public static bool Active => true;
     }
 }

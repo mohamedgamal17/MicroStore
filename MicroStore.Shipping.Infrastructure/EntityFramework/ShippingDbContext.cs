@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#pragma warning disable CS8618
+using Microsoft.EntityFrameworkCore;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Domain.Entities;
 using System.Reflection;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-
 namespace MicroStore.Shipping.Infrastructure.EntityFramework
 {
     [ConnectionStringName("DefaultConnection")]

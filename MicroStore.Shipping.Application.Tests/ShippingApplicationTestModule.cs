@@ -1,27 +1,24 @@
 ﻿using MassTransit;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Shipping.Infrastructure;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
-using MicroStore.Shipping.Application;
 using Volo.Abp;
 using MicroStore.Shipping.Infrastructure.EntityFramework;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Respawn;
-using Respawn.Graph;
-using Microsoft.Extensions.Configuration;
 using MicroStore.Shipping.Domain.Entities;
 using MicroStore.TestBase.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Respawn;
+using Respawn.Graph;
+using Microsoft.Extensions.Configuration;
 
 namespace MicroStore.Shipping.Application.Tests
 {
     [DependsOn(typeof(ShippingApplicationModule),
         typeof(ShippingInfrastructureModule),
-        typeof(AbpAutofacModule),
-        typeof(MediatorModule))]
+        typeof(AbpAutofacModule))]
     public class ShippingApplicationTestModule : AbpModule
     {
         private readonly JsonSerializerSettings _jsonSerilizerSettings = new JsonSerializerSettings
@@ -61,13 +58,17 @@ namespace MicroStore.Shipping.Application.Tests
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            using (var scope = context.ServiceProvider.CreateScope())
+            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
+
+            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ShippingDbContext>();
+                TablesToIgnore = new Table[]
+                {
+                    "__EFMigrationsHistory"
+                }
+            }).Result;
 
-                dbContext.Database.EnsureDeleted();
-
-            }
+            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
         }
         private void SeedShipmentData(ShippingDbContext dbContext)
         {

@@ -6,27 +6,21 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace MicroStore.Shipping.Infrastructure.EntityFramework
 {
-    public class ShipmentRepository : EfCoreRepository<ShippingDbContext, Shipment, Guid>, IShipmentRepository
+    public class ShipmentRepository : EfCoreRepository<ShippingDbContext, Shipment, string>, IShipmentRepository
     {
         public ShipmentRepository(IDbContextProvider<ShippingDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 
-        public async Task<Shipment?> RetriveShipment(Guid id, CancellationToken cancellationToken)
+        public async Task<Shipment?> RetriveShipment(string id, CancellationToken cancellationToken)
         {
             var query = await GetQueryableAsync();
 
             return await query.Include(x => x.Items)
-                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+                .SingleAsync(x => x.Id == id, cancellationToken);
 
         }
 
-        public async Task<Shipment?> RetriveShipmentByExternalId(string externalShipmentId, CancellationToken cancellationToken = default)
-        {
-            var query = await GetQueryableAsync();
-
-            return await query.Include(x => x.Items)
-                .SingleOrDefaultAsync(x => x.ShipmentExternalId == externalShipmentId, cancellationToken);
-        }
+      
     }
 }

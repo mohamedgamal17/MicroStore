@@ -13,9 +13,6 @@ using ShipEngineSDK.Common.Enums;
 using ShipEngineSDK.CreateLabelFromShipmentDetails;
 using ShipEngineSDK.GetRatesWithShipmentDetails;
 using System.Net;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectMapping;
 
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway
@@ -37,14 +34,14 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
              _settingsRepository = settingsRepository;
         }
 
-        public async Task<ResponseResult<ShipmentDto>> BuyShipmentLabel(string externalShipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResultV2<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
         {
 
             return await WrappResponseResult(HttpStatusCode.OK, async () =>
             {
                 var clinet = await GetShipEngineClinet(cancellationToken);
 
-                var shipment = await _shipmentRepository.RetriveShipmentByExternalId(externalShipmentId, cancellationToken);
+                var shipment = await _shipmentRepository.RetriveShipment(shipmentId, cancellationToken);
 
                 var label = await clinet.CreateLabelFromRate(new ShipEngineSDK.CreateLabelFromRate.Params
                 {
@@ -63,7 +60,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
         
         }
 
-        public async Task<ResponseResult<ListResultDto<EstimatedRateDto>>> EstimateShipmentRate(EstimatedRateModel model , CancellationToken cancellationToken = default)
+        public async Task<UnitResultV2<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel addressFrom , AddressModel addressTo , List<ShipmentItemEstimationModel>  items, CancellationToken cancellationToken = default)
         {
 
             return await WrappResponseResult(HttpStatusCode.OK, async () =>
@@ -72,30 +69,25 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
                 var carriersResult = await clinet.ListCarriers();
 
-                var estimaedRate = PrepareEstimateRate(model);
+                var estimaedRate = PrepareEstimateRate(addressFrom,addressTo,items);
 
                 estimaedRate.CarrierIds = carriersResult.Carriers.Select(x=> x.CarrierId).ToArray();
 
                 var result =  await clinet.EstimateRate(estimaedRate);
 
-                return new ListResultDto<EstimatedRateDto>(PrepareEstimateRateDto(result).AsReadOnly());
+                return PrepareEstimateRateDto(result);
             });
 
           
         }
 
-        public async Task<ResponseResult<ShipmentDto>> Fullfill(Guid shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResultV2<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(HttpStatusCode.OK, async () =>
             {
                 var clinet = await GetShipEngineClinet();
 
-                var shipment = await _shipmentRepository.RetriveShipment(shipmentId, cancellationToken);
-
-                if (shipment == null)
-                {
-                    throw new EntityNotFoundException(typeof(MicroStore.Shipping.Domain.Entities.Shipment), shipmentId);
-                }
+                var shipment = await _shipmentRepository.RetriveShipment(shipmentId, cancellationToken)!;
 
                 ShipEngineShipment shipEngineShipment = new ShipEngineShipment()
                 {
@@ -103,7 +95,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                     ExternalOrderId = shipment.OrderId,
                     Items = _objectMapper.Map<List<MicroStore.Shipping.Domain.Entities.ShipmentItem>, List<ShipEngineShipmentItem>>(shipment.Items),
                     ShipFrom = _objectMapper.Map<MicroStore.Shipping.Domain.ValueObjects.Address, ShipEngineAddress>(model.AddressFrom.AsAddress()),
-                    ShipTo = _objectMapper.Map<MicroStore.Shipping.Domain.ValueObjects.Address, ShipEngineAddress>(shipment.Address),
+                    ShipTo = _objectMapper.Map<MicroStore.Shipping.Domain.ValueObjects.Address, ShipEngineAddress>(model.AddressTo.AsAddress()),
                     Packages = new List<Package>
                 {
                     new Package
@@ -127,10 +119,12 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                      
         }
 
-        public async Task<ResponseResult<ListResultDto<ShipmentRateDto>>> RetriveShipmentRates(string externalShipmentId, CancellationToken cancellationToken = default)
+        public async Task<UnitResultV2<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(HttpStatusCode.OK ,async () =>
             {
+                var shipment = await _shipmentRepository.RetriveShipment(shipmentId, cancellationToken)!;
+
                 var clinet = await GetShipEngineClinet();
 
                 var settings = await _settingsRepository.TryToGetSettings<ShipEngineSettings>(ShipEngineConst.SystemName) ?? new ShipEngineSettings();
@@ -144,7 +138,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                 };
 
 
-                var result = await clinet.GetRatesWithShipmentDetails(new ShipEngineSDK.GetRatesWithShipmentDetails.Params { ShipmentId = externalShipmentId, RateOptions = rateOptions });
+                var result = await clinet.GetRatesWithShipmentDetails(new ShipEngineSDK.GetRatesWithShipmentDetails.Params { ShipmentId = shipment.ShipmentExternalId, RateOptions = rateOptions });
 
                 var rates = result.RateResponse.Rates.Select(x => new ShipmentRateDto
                 {
@@ -166,16 +160,16 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                         Name = x.CarrierFriendlyName
                     },
 
-                }).ToList().AsReadOnly();
+                }).ToList();
 
-                return new ListResultDto<ShipmentRateDto>(rates);
+                return rates;
                  
 
             });
                        
         }
 
-        public async Task<ResponseResult<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
+        public async Task<UnitResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
         {
 
             return await WrappResponseResult(HttpStatusCode.OK, async () =>
@@ -208,17 +202,17 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
 
 
-        private async Task<ResponseResult<T>> WrappResponseResult<T>(HttpStatusCode statusCode,Func<Task<T>> func)
+        private async Task<UnitResultV2<T>> WrappResponseResult<T>(HttpStatusCode statusCode,Func<Task<T>> func)
         {
             return await WrappResponseResult(async () =>
             {
                 var result = await func();
 
-                return ResponseResult.Success<T>((int)statusCode, result);
+                return UnitResultV2.Success<T>(result);
             });
         }
 
-        private async Task <ResponseResult<T>> WrappResponseResult<T>(Func<Task<ResponseResult<T>>> func)
+        private async Task <UnitResultV2<T>> WrappResponseResult<T>(Func<Task<UnitResultV2<T>>> func)
         {
             try
             {
@@ -233,17 +227,12 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                     Message = ex.Message,
                 };
 
-                return ResponseResult.Failure<T>((int)HttpStatusCode.BadRequest, errorInfo);
+                return UnitResultV2.Failure<T>(ErrorInfo.Validation(ex.Message));
 
             }
             catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
             {
-                var errorInfo = new ErrorInfo
-                {
-                    Message = "Ship Engine Api is not availabe now"
-                };
-
-                return ResponseResult.Failure<T>((int)HttpStatusCode.BadRequest, errorInfo);
+                return UnitResultV2.Failure<T>(ErrorInfo.BadGateway(ex.Message));
             }
         }
         private Weight ConvertWeight(MicroStore.Shipping.Domain.ValueObjects.Weight weight)
@@ -307,19 +296,19 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
             throw new NotImplementedException();
         }
 
-        private EstimateRate PrepareEstimateRate(EstimatedRateModel model)
+        private EstimateRate PrepareEstimateRate(AddressModel addressFrom , AddressModel addressTo, List<ShipmentItemEstimationModel> items)
         {
             return new EstimateRate
             {
-                FromCountryCode = model.AddressFrom.CountryCode,
-                FromCityLocality = model.AddressFrom.City,
-                FromStateProvince = model.AddressFrom.State,
-                FromPostalCode = model.AddressFrom.PostalCode,
-                ToCountryCode = model.AddressTo.CountryCode,
-                ToCityLocality = model.AddressTo.City,
-                ToStateProvince = model.AddressTo.State,
-                ToPostalCode = model.AddressTo.PostalCode,
-                Weight = EstimatePacakgeWeight(model.Items)
+                FromCountryCode = addressFrom.CountryCode,
+                FromCityLocality = addressFrom.City,
+                FromStateProvince = addressFrom.State,
+                FromPostalCode = addressFrom.PostalCode,
+                ToCountryCode = addressTo.CountryCode,
+                ToCityLocality = addressTo.City,
+                ToStateProvince = addressTo.State,
+                ToPostalCode = addressTo.PostalCode,
+                Weight = EstimatePacakgeWeight(items)
             };
         }
 

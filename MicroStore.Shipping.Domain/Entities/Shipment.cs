@@ -1,12 +1,14 @@
-﻿using MicroStore.Shipping.Domain.ValueObjects;
+﻿#pragma warning disable CS8618
+using MicroStore.Shipping.Domain.ValueObjects;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
-
 namespace MicroStore.Shipping.Domain.Entities
 {
-    public class Shipment :BasicAggregateRoot<Guid>
+    public class Shipment :BasicAggregateRoot<string>
     {
         public string OrderId { get; set; }
+
+        public string OrderNumber { get; set; }
         public string UserId { get; set; }
         public Address Address { get; set; }
         public string? ShipmentExternalId { get;  set; }
@@ -15,10 +17,17 @@ namespace MicroStore.Shipping.Domain.Entities
         public string? SystemName { get;  set; }
         public ShipmentStatus Status { get;  set; }
         public List<ShipmentItem> Items { get; set; } = new List<ShipmentItem>();     
-        private Shipment() { }  
-        public Shipment(string orderId,string userId ,Address address)
+
+    
+        protected Shipment()
         {
+            Id = Guid.NewGuid().ToString();
+        }
+        public Shipment(string orderId, string orderNumber ,string userId ,Address address)
+        {
+            Id = Guid.NewGuid().ToString(); 
             OrderId = orderId;
+            OrderNumber = orderNumber;
             UserId = userId;
             Address = address;
 

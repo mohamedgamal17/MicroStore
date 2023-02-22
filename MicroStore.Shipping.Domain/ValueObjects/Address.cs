@@ -1,20 +1,20 @@
-﻿using MicroStore.Shipping.Domain.Common;
-
+﻿#pragma warning disable CS8618
+using MicroStore.Shipping.Domain.Common;
 namespace MicroStore.Shipping.Domain.ValueObjects
 {
     public class Address : ValueObject<Address>
     {
         public static readonly Address  Empty  = new Address(string.Empty,string.Empty,string.Empty,string.Empty,string.Empty, string.Empty,string.Empty,string.Empty,string.Empty);
 
-        public string Name { get; }
-        public string Phone { get; }
-        public string CountryCode { get; }
-        public string City { get; }
-        public string State { get; }
-        public string PostalCode { get; }
-        public string Zip { get; }
-        public string AddressLine1 { get; }
-        public string AddressLine2 { get; }
+        public string Name { get; protected set; }
+        public string Phone { get; protected set; }
+        public string CountryCode { get; protected set; }
+        public string City { get; protected set; }
+        public string State { get; protected set; }
+        public string PostalCode { get; protected set; }
+        public string Zip { get; protected set; }
+        public string AddressLine1 { get; protected set; }
+        public string AddressLine2 { get; protected set; }
 
         private Address() { }
 

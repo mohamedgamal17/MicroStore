@@ -1,29 +1,31 @@
 ﻿using MassTransit;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.Shipping.Application.Abstraction.Commands;
+
+using MicroStore.Shipping.Application.Abstraction.Models;
+using MicroStore.Shipping.Application.Shipments;
 using MicroStore.Shipping.IntegrationEvents;
 namespace MicroStore.Shipping.Application.Consumers
 {
     public class CreateShipmentIntegrationEventConsumer : IConsumer<CreateShipmentIntegrationEvent>
     {
-        private readonly ILocalMessageBus _localMessageBus;
 
-        public CreateShipmentIntegrationEventConsumer(ILocalMessageBus localMessageBus)
+        private readonly IShipmentCommandService _shipmentCommandService;
+
+        public CreateShipmentIntegrationEventConsumer(IShipmentCommandService shipmentCommandService)
         {
-            _localMessageBus = localMessageBus;
+            _shipmentCommandService = shipmentCommandService;
         }
 
-        public Task Consume(ConsumeContext<CreateShipmentIntegrationEvent> context)
+        public async Task Consume(ConsumeContext<CreateShipmentIntegrationEvent> context)
         {
-            var command = PrepareCreateShipmentCommand(context.Message);
+            var model = PrepareCreateShipmentModel(context.Message);
 
-            return _localMessageBus.Send(command, context.CancellationToken);
+            await _shipmentCommandService.CreateAsync(model);
         }
 
 
-        private CreateShipmentCommand PrepareCreateShipmentCommand(CreateShipmentIntegrationEvent integrationEvent)
+        private ShipmentModel PrepareCreateShipmentModel(CreateShipmentIntegrationEvent integrationEvent)
         {
-            return new CreateShipmentCommand
+            return new ShipmentModel
             {
                 OrderId = integrationEvent.OrderId,
                 UserId = integrationEvent.UserId,

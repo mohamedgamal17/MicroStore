@@ -3,136 +3,128 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Shipping.Application.Abstraction.Commands;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
-using MicroStore.Shipping.Application.Abstraction.Queries;
-using MicroStore.Shipping.Domain.Security;
-using MicroStore.Shipping.WebApi.Models.Shipments;
+using MicroStore.Shipping.Application.Abstraction.Models;
+using MicroStore.Shipping.Application.Shipments;
+using System.Net;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
-    [Authorize]
+   // [Authorize]
     [Route("api/shipments")]
     public class ShipmentController : MicroStoreApiController
     {
+        private readonly IShipmentCommandService _shipmentCommandService;
+
+        private readonly IShipmentQueryService _shipmentQueryService;
+
+        public ShipmentController(IShipmentCommandService shipmentCommandService, IShipmentQueryService shipmentQueryService)
+        {
+            _shipmentCommandService = shipmentCommandService;
+            _shipmentQueryService = shipmentQueryService;
+        }
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type= typeof(Envelope<PagedResult<ShipmentDto>>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest,Type= typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError,Type= typeof(Envelope))]
-        public async Task<IActionResult> RetriveShipmentList([FromQuery]PagingParamsQueryString @params)
+        [ProducesResponseType(StatusCodes.Status200OK,Type= typeof(PagedResult<ShipmentListDto>))]
+
+        public async Task<IActionResult> RetriveShipmentList([FromQuery]PagingParamsQueryString @params , [FromQuery(Name = "user_id")] string? userId=  null)
         {
-            var query = new GetShipmentListQuery
+            var queryParams = new PagingQueryParams
             {
                 PageSize = @params.PageSize,
                 PageNumber = @params.PageNumber
             };
 
-            var result = await Send(query);
+            var result = await _shipmentQueryService.ListAsync(queryParams, userId);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
-        [HttpGet]
-        [Route("user/{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ShipmentDto>>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveUserShipmentList(string userId, [FromQuery] PagingParamsQueryString @params)
-        {
-            var query = new GetUserShipmentListQuery
-            {
-                UserId = userId,
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber
-            };
 
-            var result = await Send(query);
 
-            return FromResult(result);
-        }
-
-        [HttpGet]
-        [Route("order_id/{orderId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ShipmentDto>>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveShipmentWithOrderId(string orderId)
-        {
-            var query = new GetShipmentWithOrderIdQuery
-            {
-               OrderId = orderId
-            };
-
-            var result = await Send(query);
-
-            return FromResult(result);
-        }
 
         [HttpGet]
         [Route("{shipmentId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<PagedResult<ShipmentDto>>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> RetriveShipment(Guid shipmentId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
+
+        public async Task<IActionResult> RetriveShipmentById(string shipmentId)
         {
-            var query = new GetShipmentQuery
-            {
-                ShipmentId = shipmentId
-            };
 
-            var result = await Send(query);
+            var result = await _shipmentQueryService.GetAsync(shipmentId);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
+        }
+
+
+        [HttpGet]
+        [Route("order_id/{orderId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
+
+        public async Task<IActionResult> RetriveShipmentByOrderId(string orderId)
+        {
+
+            var result = await _shipmentQueryService.GetByOrderIdAsync(orderId);
+
+            return FromResultV2(result, HttpStatusCode.OK);
+        }
+
+        [HttpGet]
+        [Route("order_number/{orderNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
+
+        public async Task<IActionResult> RetriveShipmentByOrderNumber(string orderNumber)
+        {
+
+            var result = await _shipmentQueryService.GetByOrderNumberAsync(orderNumber);
+
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<ShipmentDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> CreateShipment([FromBody] CreateShipmentModel createShipmentModel)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ShipmentDto))]
+        public async Task<IActionResult> CreateShipment([FromBody] ShipmentModel model)
         {
-            var command = new CreateShipmentCommand
-            {
-                UserId = createShipmentModel.UserId,
-                OrderId = createShipmentModel.OrderId,
-                Items = createShipmentModel.Items,
-                Address = createShipmentModel.Address
-            };
+            var result = await _shipmentCommandService.CreateAsync(model);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result,HttpStatusCode.Created);
         }
 
         [HttpPost]
         [Route("fullfill/{shipmentId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ShipmentDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
-        public async Task<IActionResult> FullfillShipment(Guid shipmentId, [FromBody] FullfillShipmentModel model)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
+        public async Task<IActionResult> FullfillShipment(string shipmentId, [FromBody] PackageModel model)
         {
-            var command = new FullfillShipmentCommand
-            {
-                ShipmentId = shipmentId,
-                SystemName = model.SystemName,
-                AddressFrom = model.AddressFrom,
-                Pacakge = model.Pacakge
-            };
 
-            var result = await Send(command);
+            var result = await _shipmentCommandService.FullfillAsync(shipmentId,model);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
+        }
+
+        [HttpPost]
+        [Route("{shipmentId}/labels")]
+        public async Task<IActionResult> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model)
+        {
+            var result = await _shipmentCommandService.BuyLabelAsync(shipmentId, model);
+
+            return FromResultV2(result, HttpStatusCode.OK);
+
+        }
+
+        [HttpPost]
+        [Route("{shipmentId}/rates")]
+        public async Task<IActionResult> RetriveShipmentRate(string shipmentId)
+        {
+            var result  =await  _shipmentCommandService.RetriveShipmentRatesAsync(shipmentId);
+
+            return FromResultV2(result,HttpStatusCode.OK);
         }
 
 
-     
+
     }
 }

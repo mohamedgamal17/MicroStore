@@ -1,4 +1,5 @@
-﻿namespace MicroStore.Shipping.Domain.Common
+﻿#pragma warning disable CS8765
+namespace MicroStore.Shipping.Domain.Common
 {
     public abstract class ValueObject<T>
          where T : ValueObject<T>

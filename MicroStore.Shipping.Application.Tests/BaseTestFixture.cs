@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Tests.Fakes;
@@ -73,6 +74,8 @@ namespace MicroStore.Shipping.Application.Tests
         {
             await StopMassTransit();
         }
+
+   
         public Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>
@@ -93,6 +96,7 @@ namespace MicroStore.Shipping.Application.Tests
                 return repository.UpdateAsync(entity);
             });
         }
+  
         public Task<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class, IEntity
         {
             return WithUnitOfWork((sp) =>
@@ -100,6 +104,16 @@ namespace MicroStore.Shipping.Application.Tests
                 var repository = sp.GetRequiredService<IRepository<TEntity>>();
 
                 return repository.SingleAsync(expression);
+            });
+        }
+
+        public Task<TEntity> First<TEntity>() where TEntity : class, IEntity
+        {
+            return WithUnitOfWork((sp) =>
+            {
+                var repository = sp.GetRequiredService<IRepository<TEntity>>();
+
+                return repository.FirstAsync();
             });
         }
 

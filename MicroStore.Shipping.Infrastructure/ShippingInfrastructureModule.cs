@@ -17,8 +17,6 @@ namespace MicroStore.Shipping.Infrastructure
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddConventionalRegistrar(new ShippingSystemProviderConventionalRegistar());
-            context.Services.AddConventionalRegistrar(new UnitSystemProviderConventionalRegistar());
-
 
             ConfigureEntityFramework(context.Services);
         }

@@ -8,6 +8,8 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework.EntityTypeConfigura
     {
         public void Configure(EntityTypeBuilder<ShippingSystem> builder)
         {
+            builder.Property(x => x.Id).HasMaxLength(256);
+
             builder.Property(x => x.Name).HasMaxLength(256).IsRequired();
 
             builder.Property(x => x.DisplayName).HasMaxLength(256).IsRequired();

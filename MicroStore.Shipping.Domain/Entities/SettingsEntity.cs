@@ -1,5 +1,5 @@
-﻿using Volo.Abp.Domain.Entities;
-
+﻿#pragma warning disable CS8618
+using Volo.Abp.Domain.Entities;
 namespace MicroStore.Shipping.Domain.Entities
 {
     public class SettingsEntity : Entity<Guid>

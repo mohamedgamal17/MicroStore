@@ -3,11 +3,10 @@ using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Shipping.Application.Abstraction.Common
 {
-    public interface IShipmentRepository : IRepository<Shipment,Guid>
+    public interface IShipmentRepository : IRepository<Shipment,string>
     {
-        Task<Shipment> RetriveShipment(Guid id, CancellationToken cancellationToken = default);
+        Task<Shipment> RetriveShipment(string id, CancellationToken cancellationToken = default);
 
-        Task<Shipment> RetriveShipmentByExternalId(string externalShipmentId , CancellationToken cancellationToken = default);
 
     }
 }

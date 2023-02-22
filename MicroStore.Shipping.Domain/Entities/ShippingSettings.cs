@@ -1,6 +1,6 @@
-﻿using MicroStore.Shipping.Domain.Common;
+﻿#pragma warning disable CS8618
+using MicroStore.Shipping.Domain.Common;
 using MicroStore.Shipping.Domain.Const;
-
 namespace MicroStore.Shipping.Domain.Entities
 {
     public class ShippingSettings : ISettings
@@ -15,7 +15,6 @@ namespace MicroStore.Shipping.Domain.Entities
     public class AddressSettings
     {
         public string Name { get; set; }
-
         public string Phone { get; set; }
         public string CountryCode { get; set; }
         public string City { get; set; }

@@ -2,8 +2,8 @@
 using MicroStore.Shipping.Domain.Entities;
 using Volo.Abp.DependencyInjection;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.Shipping.Application.Abstraction.Const;
 using Volo.Abp.Domain.Repositories;
+using MicroStore.BuildingBlocks.Results.Http;
 
 namespace MicroStore.Shipping.Infrastructure
 {
@@ -18,26 +18,26 @@ namespace MicroStore.Shipping.Infrastructure
             _shippingSystemRepository = shippingSystemRepository;
         }
 
-        public async Task<UnitResult<IShipmentSystemProvider>> Resolve(string systemName, CancellationToken cancellationToken = default)
+        public async Task<UnitResultV2<IShipmentSystemProvider>> Resolve(string systemName, CancellationToken cancellationToken = default)
         {
 
             var system = await _shippingSystemRepository.SingleOrDefaultAsync(x=> x.Name == systemName);
 
             if(system == null)
             {
-                return UnitResult.Failure<IShipmentSystemProvider>(ShippingSystemErrorType.NotExist, $"Shipping system with name: { systemName} is not exist");
+                return UnitResultV2.Failure<IShipmentSystemProvider>(ErrorInfo.NotFound($"Shipping system with name: { systemName} is not exist"));
             }
 
             if (!system.IsEnabled)
             {
-                return UnitResult.Failure<IShipmentSystemProvider>(ShippingSystemErrorType.BusinessLogicError, $"Shipping system with name {systemName} is not enabled");
+                return UnitResultV2.Failure<IShipmentSystemProvider>(ErrorInfo.BusinessLogic($"Shipping system with name {systemName} is not enabled"));
             }
 
             var provider = _providers
                 .Single(x => x.SystemName == systemName);
 
 
-            return UnitResult.Success(provider);
+            return UnitResultV2.Success(provider);
         }
      
     }

@@ -9,6 +9,8 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework.EntityTypeConfigura
     {
         public void Configure(EntityTypeBuilder<ShipmentItem> builder)
         {
+            builder.Property(x => x.Id).HasMaxLength(256);
+
             builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(265);

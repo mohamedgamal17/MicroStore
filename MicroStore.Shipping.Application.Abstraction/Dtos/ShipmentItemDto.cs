@@ -2,7 +2,7 @@
 
 namespace MicroStore.Shipping.Application.Abstraction.Dtos
 {
-    public class ShipmentItemDto : EntityDto<Guid>
+    public class ShipmentItemDto : EntityDto<string>
     {
         public string Name { get; set; }
         public string Sku { get; set; }
@@ -12,5 +12,10 @@ namespace MicroStore.Shipping.Application.Abstraction.Dtos
         public decimal UnitPrice { get; set; }
         public WeightDto Weight { get; set; }
         public DimensionDto Dimension { get; set; }
+
+        public ShipmentItemDto()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Profiles
     {
         public ShipmentSystemProfile()
         {
-            CreateMap<ShippingSystem, ShipmentSystemDto>()
+            CreateMap<ShippingSystem, ShippingSystemDto>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id));
         }
     }

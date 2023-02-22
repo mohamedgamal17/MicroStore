@@ -13,6 +13,8 @@ using MicroStore.Shipping.Domain.Security;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using Volo.Abp.Data;
 using System.IdentityModel.Tokens.Jwt;
+using MicroStore.Shipping.Infrastructure.EntityFramework;
+using Microsoft.EntityFrameworkCore;
 
 namespace MicroStore.Shipping.Host
 {
@@ -103,6 +105,16 @@ namespace MicroStore.Shipping.Host
 
 
 
+
+        }
+
+        public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using var scope = context.ServiceProvider.CreateScope();
+
+            var dbContext =  scope.ServiceProvider.GetRequiredService<ShippingDbContext>();
+
+            await dbContext.Database.MigrateAsync();
 
         }
 

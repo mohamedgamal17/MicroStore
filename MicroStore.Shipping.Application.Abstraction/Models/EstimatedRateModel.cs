@@ -4,8 +4,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
 {
     public class EstimatedRateModel
     {
-        public AddressModel AddressFrom { get; set; }
-        public AddressModel AddressTo { get; set; }
+        public AddressModel Address { get; set; }
         public List<ShipmentItemEstimationModel> Items { get; set; }
     }
 }
