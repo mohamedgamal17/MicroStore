@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
-    <ProjectReference Include="..\MicroStore.BuildingBlocks.Results\MicroStore.BuildingBlocks.Results.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.ShoppingCart.Api.Infrastructure;
@@ -28,10 +27,8 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         }
 
         [HttpGet("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError , Type= typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
+
         public async Task<IActionResult> GetUserBasket(string userId)
         {
             var basket = await _basketRepository.GetAsync(userId);
@@ -41,7 +38,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
 
         [HttpPut("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type=  typeof(Envelope<BasketDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK,Type=  typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
@@ -58,7 +55,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         }
 
         [HttpPost("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
@@ -75,7 +72,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         }
 
         [HttpDelete("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
@@ -96,10 +93,9 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
 
         [HttpPut("migrate")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<BasketDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> Migrate(MigrateDto model)
         {
             var basketFrom = await _basketRepository.GetAsync(model.FromUserId);
@@ -120,13 +116,13 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         [NonAction]
         protected IActionResult Success<TResult>(int statusCode,TResult result)
         {
-            return StatusCode(statusCode, Envelope.Success(result));
+            return StatusCode(statusCode, result);
         }
 
         [NonAction]
         protected IActionResult Success(int statusCode)
         {
-            return StatusCode(statusCode, Envelope.Success<Unit>(Unit.Value));
+            return StatusCode(statusCode);
         }
 
         [NonAction]
