@@ -1,7 +1,7 @@
 ﻿using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.IdentityProvider.IdentityServer.Application.Common.Interfaces;
+using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework

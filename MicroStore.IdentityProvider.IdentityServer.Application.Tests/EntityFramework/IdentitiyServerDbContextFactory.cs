@@ -2,7 +2,6 @@
 using MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.IdentityProvider.IdentityServer.Infrastructure;
 using Volo.Abp.Autofac;
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.EntityFramework
@@ -45,8 +44,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.EntityFra
 
     [DependsOn(typeof(IdentityServerInfrastrcutreModule),
         typeof(IdentityServerApplicationModule),
-        typeof(AbpAutofacModule),
-        typeof(MediatorModule))]
+        typeof(AbpAutofacModule))]
     internal class IdentityServerDbContextFactoryModule : AbpModule
     {
 

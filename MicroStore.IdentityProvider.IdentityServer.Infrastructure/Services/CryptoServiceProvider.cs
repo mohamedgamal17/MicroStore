@@ -1,4 +1,4 @@
-﻿using MicroStore.IdentityProvider.IdentityServer.Application.Common.Interfaces;
+﻿using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using System.Security.Cryptography;
 using Volo.Abp.DependencyInjection;
 

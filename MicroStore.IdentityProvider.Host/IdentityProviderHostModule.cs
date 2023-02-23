@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Infrastructure;
@@ -18,6 +17,7 @@ using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using Volo.Abp.AutoMapper;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using MicroStore.IdentityProvider.Host.Services;
+using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -25,7 +25,6 @@ namespace MicroStore.IdentityProvider.Host
     [DependsOn(typeof(IdentityServerInfrastrcutreModule),
         typeof(IdentityInfrastructureModule),
         typeof(MicroStoreAspNetCoreModule),
-        typeof(MediatorModule),
         typeof(AbpAutofacModule))]
     public class IdentityProviderHostModule : AbpModule
     {
@@ -87,7 +86,7 @@ namespace MicroStore.IdentityProvider.Host
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity Provider API");
                 });
 
             }

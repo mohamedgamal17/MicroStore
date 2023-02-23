@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using MicroStore.IdentityProvider.IdentityServer.Application.Common.Interfaces;
+using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using System.Linq.Expressions;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework
@@ -63,6 +62,11 @@ namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramew
         public async Task<TEntity?> FirstOrDefaultAsync(CancellationToken cancellationToken = default)
         {
             return await DbContext.Set<TEntity>().FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public IQueryable<TEntity> Query()
+        {
+            return DbContext.Set<TEntity>().AsQueryable();
         }
     }
 }

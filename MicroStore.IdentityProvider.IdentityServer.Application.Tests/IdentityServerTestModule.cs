@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.IdentityProvider.IdentityServer.Infrastructure;
 using MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework;
 using MicroStore.TestBase.Json;
@@ -19,8 +18,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests
 {
     [DependsOn(typeof(IdentityServerInfrastrcutreModule),
         typeof(IdentityServerApplicationModule),
-        typeof(AbpAutofacModule),
-        typeof(MediatorModule))]
+        typeof(AbpAutofacModule))]
     public class IdentityServerTestModule : AbpModule
     {
         private readonly JsonSerializerSettings _jsonSerilizerSettings = new JsonSerializerSettings

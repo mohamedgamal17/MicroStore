@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.IdentityProvider.Host.Models;
 using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
+using MicroStore.IdentityProvider.IdentityServer.Application.Models;
+using System.Net;
 
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
@@ -10,37 +12,44 @@ namespace MicroStore.IdentityProvider.Host.Controllers
     [Route("api/clients")]
     public class ClientController : MicroStoreApiController
     {
+
+        private readonly IClientCommandService _clientCommandService;
+
+        private readonly IClientQueryService _clientQueryService;
+
+        public ClientController(IClientCommandService clientCommandService, IClientQueryService clientQueryService)
+        {
+            _clientCommandService = clientCommandService;
+            _clientQueryService = clientQueryService;
+        }
+
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetClientList([FromQuery]PagingQueryParams @params)
+        public async Task<IActionResult> GetClientList([FromQuery]PagingAndSortingParamsQueryString @params)
         {
-            var query = new GetClientListQuery { PageNumber = @params.PageNumber, PageSize = @params.PageSize };
+            var queryParams = new PagingQueryParams { PageNumber = @params.PageNumber, PageSize = @params.PageSize };
 
-            var result = await Send(query);
+            var result = await _clientQueryService.ListAsync(queryParams);
 
-            return FromResult(result);
+            return FromResultV2(result , HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("{clientId}")]
-        public async Task<IActionResult> GetClientById(int clientId,[FromQuery] PagingQueryParams @params)
+        public async Task<IActionResult> GetClientById(int clientId)
         {
-            var query = new GetClientQuery { ClientId = clientId };
+            var result = await _clientQueryService.GetAsync(clientId);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
         [Route("")]
         public  async Task<IActionResult> CreateClient([FromBody] ClientModel model)
         {
-            var command = ObjectMapper.Map<ClientModel, CreateClientCommand>(model);
+            var result = await _clientCommandService.CreateAsync(model);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.Created);
         }
 
 
@@ -48,11 +57,9 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         [Route("{clientId}")]
         public async Task<IActionResult> UpdateClient(int clientId , [FromBody] ClientModel model)
         {
-            var command = ObjectMapper.Map<ClientModel,UpdateClientCommand>(model);
+            var result = await _clientCommandService.UpdateAsync(clientId,model);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
 
@@ -60,11 +67,27 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         [Route("{clientId}")]
         public async Task<IActionResult> DeleteClient(int clientId)
         {
-            var command = new RemoveClientCommand { ClinetId = clientId };
+            var result = await _clientCommandService.DeleteAsync(clientId);
 
-            var result = await Send(command);
+            return FromResultV2(result, HttpStatusCode.NoContent);
+        }
 
-            return FromResult(result);
+        [HttpPost]
+        [Route("{clientId}/secrets")]
+        public async Task<IActionResult> CreateClientSecret(int clientId, [FromBody] SecretModel model)
+        {
+            var result = await _clientCommandService.AddClientSecret(clientId,model);
+
+            return FromResultV2(result, HttpStatusCode.OK);
+        }
+
+        [HttpDelete]
+        [Route("{clientId}/secrets")]
+        public async Task<IActionResult> CreateClientSecret(int clientId, int secretId)
+        {
+            var result = await _clientCommandService.DeleteClientSecret(clientId, secretId);
+
+            return FromResultV2(result, HttpStatusCode.NoContent);
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.IdentityProvider.Host.Models;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
+using MicroStore.IdentityProvider.IdentityServer.Application.Models;
+using System.Net;
 
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
@@ -11,19 +13,29 @@ namespace MicroStore.IdentityProvider.Host.Controllers
     [Route("api/apiscopes")]
     public class ApiScopeController : MicroStoreApiController
     {
+        private readonly IApiScopeCommandService _apiScopeCommandService;
+
+        private readonly IApiResourceQueryService _apiResourceQueryService;
+
+        public ApiScopeController(IApiScopeCommandService apiScopeCommandService, IApiResourceQueryService apiResourceQueryService)
+        {
+            _apiScopeCommandService = apiScopeCommandService;
+            _apiResourceQueryService = apiResourceQueryService;
+        }
+
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetListApiScope([FromQuery]PagingQueryParams @params)
+        public async Task<IActionResult> GetListApiScope([FromQuery]PagingParamsQueryString @params)
         {
-            var query = new GetApiScopeListQuery
+            var queryParams = new PagingQueryParams
             {
                 PageNumber = @params.PageNumber,
                 PageSize = @params.PageSize,
             };
 
-            var result = await Send(query);
+            var result = await _apiResourceQueryService.ListAsync(queryParams);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
 
@@ -31,35 +43,28 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         [Route("{apiScopeId}")]
         public async Task<IActionResult> GetApiScope(int apiScopeId)
         {
-            var query = new GetApiScopeQuery { ApiScopeId = apiScopeId };
 
-            var result = await Send(query);
+            var result = await _apiResourceQueryService.GetAsync(apiScopeId);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> CreateApiScope([FromBody]ApiScopeModel model)
         {
-            var command = ObjectMapper.Map<ApiScopeModel, CreateApiResourceCommand>(model);
+            var result = await _apiScopeCommandService.CreateAsync(model);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.Created);
         }
 
         [HttpPut]
         [Route("{apiScopeId}")]
         public  async Task<IActionResult> UpdateApiScope(int apiScopeId, [FromBody] ApiScopeModel model)
         {
-            var command = ObjectMapper.Map<ApiScopeModel, UpdateApiResourceCommand>(model);
+            var result = await _apiScopeCommandService.UpdateAsync(apiScopeId, model);
 
-            command.ApiResourceId = apiScopeId;
-
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
 
@@ -67,11 +72,9 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         [Route("{apiScopeId}")]
         public async Task<IActionResult> RemoveApiScope(int apiScopeId)
         {
-            var command = new RemoveApiResourceCommand { ApiResourceId= apiScopeId };
+            var result = await _apiScopeCommandService.DeleteAsync(apiScopeId);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.NoContent);
         }
     }
 }

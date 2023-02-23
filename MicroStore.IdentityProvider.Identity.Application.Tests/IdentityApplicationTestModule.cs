@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Infrastructure;
+using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
 using MicroStore.TestBase.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -17,7 +17,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
 {
     [DependsOn(typeof(IdentityInfrastructureModule),
         typeof(IdentityApplicationModule),
-        typeof(MediatorModule),
         typeof(AbpAutofacModule))]
     public class IdentityApplicationTestModule : AbpModule
     {

@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
-using System.Resources;
 using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.IdentityProvider.Identity.Application

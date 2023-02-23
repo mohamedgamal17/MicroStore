@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using MicroStore.IdentityProvider.Identity.Infrastructure;
+using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
+
 namespace MicroStore.IdentityProvider.Identity.Application.Tests.EntityFramework
 {
     internal class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationIdentityDbContext>

@@ -1,80 +1,79 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.IdentityProvider.Host.Models;
+using MicroStore.IdentityProvider.Identity.Application.Models;
 using MicroStore.IdentityProvider.Identity.Application.Users;
+using System.Net;
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
     [Route("api/users")]
     [ApiController]
     public class UserController : MicroStoreApiController
     {
+        private readonly IUserCommandService _userCommandService;
+        private readonly IUserQueryService _userQueryService;
+
+        public UserController(IUserCommandService userCommandService, IUserQueryService userQueryService)
+        {
+            _userCommandService = userCommandService;
+            _userQueryService = userQueryService;
+        }
+
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetUserList([FromQuery] PagingQueryParams @params)
+        public async Task<IActionResult> GetUserList([FromQuery] PagingParamsQueryString @params)
         {
-            var query = new GetUserListQuery { PageNumber =@params.PageNumber, PageSize = @params.PageSize };
+            var queryParams = new PagingQueryParams { PageNumber =@params.PageNumber, PageSize = @params.PageSize };
 
-            var result = await Send(query);
+            var result = await _userQueryService.ListAsync(queryParams);
 
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("{userId}")]
         public async Task<IActionResult> GetUserById(string userId)
         {
-            var query = new GetUserByIdQuery { UserId = userId };
+            var result = await _userQueryService.GetAsync(userId);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("email/{email}")]
         public async Task<IActionResult> GetUserByEmail(string email)
         {
-            var query = new GetUserByEmailQuery { Email = email };
+            var result = await _userQueryService.GetAsync(email);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("user-name/{userName}")]
         public async Task<IActionResult> GetUserByName(string userName)
         {
-            var query = new GetUserByUserNameQuery { UserName = userName };
+            var result = await _userQueryService.GetByUserNameAsync(userName);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> CreateUser([FromBody] UserModel model)
         {
-            var command = ObjectMapper.Map<UserModel, CreateUserCommand>(model);
+            var result = await _userCommandService.CreateUserAsync(model);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.Created);
         }
 
         [HttpPut]
         [Route("{userId}")]
         public async Task<IActionResult> UpdateUser(string userId, [FromBody]  UserModel model)
         {
-            var command = ObjectMapper.Map<UserModel,UpdateUserCommand>(model);
+            var result = await _userCommandService.UpdateUserAsync(userId,model);
 
-            command.UserId = userId;
-
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.Created);
         } 
     }
 }

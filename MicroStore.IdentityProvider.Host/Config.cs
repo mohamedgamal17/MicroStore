@@ -115,6 +115,7 @@ namespace MicroStore.IdentityProvider.Host
             // interactive client using code flow + pkce
             new Client
             {
+                
                 ClientId = "microstoreinteractiveclient",
                 ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.IdentityProvider.Host.Models;
+using MicroStore.IdentityProvider.Identity.Application.Models;
 using MicroStore.IdentityProvider.Identity.Application.Roles;
+using System.Net;
 
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
@@ -10,62 +11,59 @@ namespace MicroStore.IdentityProvider.Host.Controllers
     [Route("api/roles")]
     public class RoleController : MicroStoreApiController
     {
+        private readonly IRoleCommandService _roleCommandService;
+
+        private readonly IRoleQueryService _roleQueryService;
+
+        public RoleController(IRoleCommandService roleCommandService, IRoleQueryService roleQueryService)
+        {
+            _roleCommandService = roleCommandService;
+            _roleQueryService = roleQueryService;
+        }
 
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetRoleList()
         {
-            var query = new GetRoleListQuery { };
+            var result = await _roleQueryService.ListAsync();
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result,HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("name/{roleName}")]
         public async Task<IActionResult> GetRoleByName(string roleName)
         {
-            var query = new GetRoleWithNameQuery { Name = roleName };
+            var result = await _roleQueryService.GetByNameAsync(roleName);
 
-            var result= await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
         [Route("{roleId}")]
         public async Task<IActionResult> GetRoleById(string roleId)
         {
-            var query = new GetRoleWithIdQuery { Id = roleId };
+            var result = await _roleQueryService.GetAsync(roleId);
 
-            var result = await Send(query);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> CreateRole([FromBody] RoleModel model)
         {
-            var command = ObjectMapper.Map<RoleModel, CreateRoleCommand>(model);
+            var result = await _roleCommandService.CreateAsync(model);
 
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.Created);
         }
 
         [HttpPut]
         [Route("{roleId}")]
         public async Task<IActionResult> UpdateRole(string roleId, [FromBody] RoleModel model)
         {
-            var command = ObjectMapper.Map<RoleModel,UpdateRoleCommand>(model);
+            var result = await _roleCommandService.UpdateAsync(roleId, model);
 
-            command.RoleId = roleId;
-
-            var result = await Send(command);
-
-            return FromResult(result);
+            return FromResultV2(result, HttpStatusCode.OK);
         }
 
 

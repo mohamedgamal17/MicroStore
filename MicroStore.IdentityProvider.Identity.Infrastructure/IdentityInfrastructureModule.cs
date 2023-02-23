@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.IdentityProvider.Identity.Application;
+using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
 using Volo.Abp.Modularity;
 namespace MicroStore.IdentityProvider.Identity.Infrastructure
 {

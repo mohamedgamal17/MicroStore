@@ -1,17 +1,18 @@
-﻿using MicroStore.BuildingBlocks.InMemoryBus;
-using Volo.Abp.AutoMapper;
+﻿using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Application
 {
-    [DependsOn(typeof(InMemoryBusModule))]
+    [DependsOn(typeof(AbpValidationModule),
+        typeof(AbpAutoMapperModule))]
     public class IdentityServerApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpAutoMapperOptions>(opt =>
             {
-                opt.AddMaps<IdentityServerApplicationModule>(true);
+                opt.AddMaps<IdentityServerApplicationModule>();
             });
         }
     }

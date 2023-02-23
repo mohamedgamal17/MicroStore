@@ -16,10 +16,10 @@ namespace MicroStore.IdentityProvider.Identity.Application.Extensions
             return new ErrorInfo
             {
                 Message = "Error while creating role see validation error for more details",
-                ValidationErrors = identityResult.Errors.Select(x => new ValidationErrorInfo
-                {
-                    Message = x.Description
-                }).ToArray()
+                //ValidationErrors = identityResult.Errors.Select(x => new ValidationErrorInfo
+                //{
+                //    Message = x.Description
+                //}).ToArray()
             };
         }
     }

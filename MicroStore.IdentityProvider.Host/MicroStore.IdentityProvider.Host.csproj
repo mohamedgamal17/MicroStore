@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
-    <ProjectReference Include="..\MicroStore.BuildingBlocks.Mediator\MicroStore.BuildingBlocks.Mediator.csproj" />
     <ProjectReference Include="..\MicroStore.IdentityProvider.Identity.Infrastructure\MicroStore.IdentityProvider.Identity.Infrastructure.csproj" />
     <ProjectReference Include="..\MicroStore.IdentityProvider.IdentityServer.Infrastructure\MicroStore.IdentityProvider.IdentityServer.Infrastructure.csproj" />
   </ItemGroup>
