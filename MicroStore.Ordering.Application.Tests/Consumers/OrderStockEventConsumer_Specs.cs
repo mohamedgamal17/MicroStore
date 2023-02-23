@@ -12,9 +12,9 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
         {
             await TestHarness.Bus.Publish(new StockConfirmedIntegrationEvent
             {
-                ExternalOrderId = Guid.NewGuid().ToString(),
+                OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                ExternalPaymentId= Guid.NewGuid().ToString(),   
+                PaymentId= Guid.NewGuid().ToString(),   
                 UserId = Guid.NewGuid().ToString(), 
             });
 
@@ -32,7 +32,7 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
         {
             await TestHarness.Bus.Publish(new StockRejectedIntegrationEvent
             {
-                ExternalOrderId = Guid.NewGuid().ToString(),
+                OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
                 Details = Guid.NewGuid().ToString(),
             });

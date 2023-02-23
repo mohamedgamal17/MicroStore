@@ -7,9 +7,6 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Testing;
 using Volo.Abp;
 using MicroStore.TestBase.Extensions;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.BuildingBlocks.Results;
-
 namespace MicroStore.TestBase
 {
     public abstract class StateMachineTestBase<TStartupModule, TStateMachine, TInstance> : ApplicationTestBase<TStartupModule>

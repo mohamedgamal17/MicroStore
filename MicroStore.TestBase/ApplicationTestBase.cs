@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MicroStore.BuildingBlocks.InMemoryBus.Contracts;
-using MicroStore.BuildingBlocks.Results;
 using MicroStore.TestBase.Extensions;
 using MicroStore.TestBase.Fakes;
 using MicroStore.TestBase.Utilites;
@@ -17,14 +15,6 @@ namespace MicroStore.TestBase
     public class ApplicationTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
          where TStartupModule : AbpModule
     {
-        public async Task<ResponseResult<TResposne>> Send<TResposne>(IRequest<TResposne> request)
-        {
-            using var scope = ServiceProvider.CreateScope();
-
-            var messageBus = scope.ServiceProvider.GetRequiredService<ILocalMessageBus>();
-
-            return await messageBus.Send(request);
-        }
 
 
         public async Task WithUnitOfWork(Func<IServiceProvider, Task> func)
