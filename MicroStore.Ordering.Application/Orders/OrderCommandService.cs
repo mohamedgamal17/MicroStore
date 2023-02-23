@@ -20,7 +20,7 @@ namespace MicroStore.Ordering.Application.Orders
             _orderRepository = orderRepository;
         }
 
-        public async Task<UnitResultV2<OrderSubmitedDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<OrderSubmitedDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default)
         {
             var orderSubmitedEvent = new OrderSubmitedEvent
             {
@@ -40,21 +40,21 @@ namespace MicroStore.Ordering.Application.Orders
 
             await _publishEndPoint.Publish(orderSubmitedEvent, cancellationToken);
 
-            return UnitResultV2.Success(PrepareSubmitOrderResponse(orderSubmitedEvent));
+            return UnitResult.Success(PrepareSubmitOrderResponse(orderSubmitedEvent));
         }
-        public async Task<UnitResultV2> FullfillOrderAsync(Guid orderId, FullfillOrderModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult> FullfillOrderAsync(Guid orderId, FullfillOrderModel model, CancellationToken cancellationToken = default)
         {
             var order = await _orderRepository.GetOrder(orderId);
 
             if (order == null)
             {
-                return UnitResultV2.Failure(ErrorInfo.NotFound($"Order entity with id {orderId} is not exist"));
+                return UnitResult.Failure(ErrorInfo.NotFound($"Order entity with id {orderId} is not exist"));
             }
 
             if (order.CurrentState != OrderStatusConst.Approved)
             {
    
-                return UnitResultV2.Failure(ErrorInfo.BusinessLogic($"invalid order status. " +
+                return UnitResult.Failure(ErrorInfo.BusinessLogic($"invalid order status. " +
                     $"please make sure that order is in {OrderStatusConst.Approved} status to be able to fullfill the order"));
             }
 
@@ -66,20 +66,20 @@ namespace MicroStore.Ordering.Application.Orders
 
             await _publishEndPoint.Publish(orderFulfillmentCompletedEvent);
 
-            return UnitResultV2.Success();
+            return UnitResult.Success();
         }
-        public async Task<UnitResultV2> CompleteOrderAsync(Guid orderId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult> CompleteOrderAsync(Guid orderId, CancellationToken cancellationToken = default)
         {
             var order = await _orderRepository.GetOrder(orderId);
 
             if (order == null)
             {
-                return UnitResultV2.Failure(ErrorInfo.NotFound($"Order entity with id {orderId} is not exist"));
+                return UnitResult.Failure(ErrorInfo.NotFound($"Order entity with id {orderId} is not exist"));
 
             }
             if (order.CurrentState != OrderStatusConst.Fullfilled)
             {
-                return UnitResultV2.Failure(ErrorInfo.BusinessLogic($"invalid order status. " + $"please make sure that order is in {OrderStatusConst.Fullfilled} status to be able to complete the order"));
+                return UnitResult.Failure(ErrorInfo.BusinessLogic($"invalid order status. " + $"please make sure that order is in {OrderStatusConst.Fullfilled} status to be able to complete the order"));
             }
 
             var orderCompletedEvent = new OrderCompletedEvent
@@ -90,21 +90,21 @@ namespace MicroStore.Ordering.Application.Orders
 
             await _publishEndPoint.Publish(orderCompletedEvent, cancellationToken);
 
-            return UnitResultV2.Success();
+            return UnitResult.Success();
         }
 
-        public async Task<UnitResultV2> CancelOrderAsync(Guid orderId,CancelOrderModel model ,CancellationToken cancellationToken = default)
+        public async Task<UnitResult> CancelOrderAsync(Guid orderId,CancelOrderModel model ,CancellationToken cancellationToken = default)
         {
             var order = await _orderRepository.GetOrder(orderId);
 
             if (order == null)
             {
-                return UnitResultV2.Failure(ErrorInfo.NotFound($"Order entity with id {orderId} is not exist"));
+                return UnitResult.Failure(ErrorInfo.NotFound($"Order entity with id {orderId} is not exist"));
             }
 
             if (order.CurrentState == OrderStatusConst.Cancelled)
             {
-                return UnitResultV2.Failure(ErrorInfo.BusinessLogic("order state is already canceled"));
+                return UnitResult.Failure(ErrorInfo.BusinessLogic("order state is already canceled"));
             }
 
             var orderCancelledEvent = new OrderCancelledEvent
@@ -116,7 +116,7 @@ namespace MicroStore.Ordering.Application.Orders
 
             await _publishEndPoint.Publish(orderCancelledEvent, cancellationToken);
 
-            return UnitResultV2.Success();
+            return UnitResult.Success();
         }
 
 

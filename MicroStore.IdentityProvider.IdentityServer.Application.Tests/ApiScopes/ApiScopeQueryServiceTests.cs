@@ -24,9 +24,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.PageSize.Should().Be(queryParams.PageSize);
 
-            result.Result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Id.Should().Be(apiScope.Id);
+            result.Value.Id.Should().Be(apiScope.Id);
 
         }
 

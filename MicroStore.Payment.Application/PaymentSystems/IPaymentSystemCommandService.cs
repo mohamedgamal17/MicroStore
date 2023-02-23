@@ -6,6 +6,6 @@ namespace MicroStore.Payment.Application.PaymentSystems
 {
     public interface IPaymentSystemCommandService : IApplicationService
     {
-        Task<UnitResultV2<PaymentSystemDto>> EnablePaymentSystemAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default);
+        Task<UnitResult<PaymentSystemDto>> EnablePaymentSystemAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default);
     }
 }

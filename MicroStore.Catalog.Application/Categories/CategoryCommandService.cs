@@ -17,7 +17,7 @@ namespace MicroStore.Catalog.Application.Categories
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<UnitResultV2<CategoryDto>> CreateAsync(CategoryModel input, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<CategoryDto>> CreateAsync(CategoryModel input, CancellationToken cancellationToken = default)
         {
             Category category = new Category();
 
@@ -25,23 +25,23 @@ namespace MicroStore.Catalog.Application.Categories
 
             await _categoryRepository.InsertAsync(category, cancellationToken: cancellationToken);
 
-            return UnitResultV2.Success(ObjectMapper.Map<Category, CategoryDto>(category));
+            return UnitResult.Success(ObjectMapper.Map<Category, CategoryDto>(category));
         }
 
-        public async Task<UnitResultV2<CategoryDto>> UpdateAsync(string id, CategoryModel input, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<CategoryDto>> UpdateAsync(string id, CategoryModel input, CancellationToken cancellationToken = default)
         {
             Category? category = await _categoryRepository.SingleOrDefaultAsync(x => x.Id == id);
 
             if (category == null)
             {
-                return UnitResultV2.Failure<CategoryDto>(ErrorInfo.NotFound($"Category entity with id : {id} is not found"));
+                return UnitResult.Failure<CategoryDto>(ErrorInfo.NotFound($"Category entity with id : {id} is not found"));
 
             }
             PrepareCategoryEntity(category, input);
 
             await _categoryRepository.UpdateAsync(category, cancellationToken: cancellationToken);
 
-            return UnitResultV2.Success(ObjectMapper.Map<Category, CategoryDto>(category));
+            return UnitResult.Success(ObjectMapper.Map<Category, CategoryDto>(category));
         }
 
         private void PrepareCategoryEntity(Category category, CategoryModel input)

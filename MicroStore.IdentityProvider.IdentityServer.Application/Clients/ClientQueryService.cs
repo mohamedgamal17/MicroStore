@@ -18,7 +18,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
 
-        public async Task<UnitResultV2<ClientDto>> GetAsync(int clientId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ClientDto>> GetAsync(int clientId, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.Clients.AsNoTracking().ProjectTo<ClientDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -26,19 +26,19 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 
             if (result == null)
             {
-                return UnitResultV2.Failure<ClientDto>(ErrorInfo.NotFound($"Clinet with id : {clientId} is not exist"));
+                return UnitResult.Failure<ClientDto>(ErrorInfo.NotFound($"Clinet with id : {clientId} is not exist"));
             }
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.Clients.AsNoTracking().ProjectTo<ClientDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
 
         }
     }

@@ -23,7 +23,7 @@ namespace MicroStore.Inventory.Application.Orders
         }
 
         [DisableValidation]
-        public async Task<UnitResultV2<OrderDto>> AllocateOrderStockAsync(AllocateOrderStockModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<OrderDto>> AllocateOrderStockAsync(AllocateOrderStockModel model, CancellationToken cancellationToken = default)
         {
             List<Result> failureResults = new();
 
@@ -48,7 +48,7 @@ namespace MicroStore.Inventory.Application.Orders
 
 
 
-                return UnitResultV2.Failure<OrderDto>(ErrorInfo.BusinessLogic(details));
+                return UnitResult.Failure<OrderDto>(ErrorInfo.BusinessLogic(details));
                 
             }
 
@@ -87,11 +87,11 @@ namespace MicroStore.Inventory.Application.Orders
 
             await _orderRepository.InsertAsync(order,cancellationToken: cancellationToken);
 
-            return UnitResultV2.Success(ObjectMapper.Map<Order, OrderDto>(order));
+            return UnitResult.Success(ObjectMapper.Map<Order, OrderDto>(order));
         }
 
         [DisableValidation]
-        public async Task<UnitResultV2<OrderDto>> ReleaseOrderStockAsync(string orderId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<OrderDto>> ReleaseOrderStockAsync(string orderId, CancellationToken cancellationToken = default)
         {
             var query = await _orderRepository.WithDetailsAsync(x => x.Items);
 
@@ -110,7 +110,7 @@ namespace MicroStore.Inventory.Application.Orders
 
             await _orderRepository.UpdateAsync(order,cancellationToken:cancellationToken);
 
-            return UnitResultV2.Success(ObjectMapper.Map<Order, OrderDto>(order));
+            return UnitResult.Success(ObjectMapper.Map<Order, OrderDto>(order));
         }
     }
 

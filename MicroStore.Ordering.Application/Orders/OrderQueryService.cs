@@ -22,7 +22,7 @@ namespace MicroStore.Ordering.Application.Orders
             _orderDbContext = orderDbContext;
         }
 
-        public async Task<UnitResultV2<OrderDto>> GetAsync(Guid orderId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<OrderDto>> GetAsync(Guid orderId, CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext
                  .Query<OrderStateEntity>()
@@ -34,13 +34,13 @@ namespace MicroStore.Ordering.Application.Orders
 
             if (result == null)
             {
-                return UnitResultV2.Failure<OrderDto>(ErrorInfo.NotFound($"order with id :{orderId} is not exist"));
+                return UnitResult.Failure<OrderDto>(ErrorInfo.NotFound($"order with id :{orderId} is not exist"));
             }
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<OrderDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default )
+        public async Task<UnitResult<OrderDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default )
         {
             var query = _orderDbContext
               .Query<OrderStateEntity>()
@@ -52,13 +52,13 @@ namespace MicroStore.Ordering.Application.Orders
 
             if (result == null)
             {
-                return UnitResultV2.Failure<OrderDto>(ErrorInfo.NotFound($"order with order number :{orderNumber} is not exist"));
+                return UnitResult.Failure<OrderDto>(ErrorInfo.NotFound($"order with order number :{orderNumber} is not exist"));
             }
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<PagedResult<OrderListDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PagedResult<OrderListDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext
                   .Query<OrderStateEntity>()
@@ -77,7 +77,7 @@ namespace MicroStore.Ordering.Application.Orders
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
         private IQueryable<OrderListDto> TryToSort(IQueryable<OrderListDto> query, string sortby, bool desc)

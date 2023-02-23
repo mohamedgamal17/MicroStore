@@ -64,7 +64,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
            
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.CheckoutLink.Should().Be(PaymentMethodConst.CheckoutUrl);
+            result.Value.CheckoutLink.Should().Be(PaymentMethodConst.CheckoutUrl);
         }
 
         [Test]

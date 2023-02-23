@@ -27,7 +27,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _roleQueryService.ListAsync();
 
-            return FromResultV2(result,HttpStatusCode.OK);
+            return FromResult(result,HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -36,7 +36,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _roleQueryService.GetByNameAsync(roleName);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -45,7 +45,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _roleQueryService.GetAsync(roleId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -54,7 +54,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _roleCommandService.CreateAsync(model);
 
-            return FromResultV2(result, HttpStatusCode.Created);
+            return FromResult(result, HttpStatusCode.Created);
         }
 
         [HttpPut]
@@ -63,7 +63,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _roleCommandService.UpdateAsync(roleId, model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 

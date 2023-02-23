@@ -20,7 +20,7 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 
             response.IsSuccess.Should().BeTrue();
 
-            response.Result.Count.Should().BeGreaterThan(0);
+            response.Value.Count.Should().BeGreaterThan(0);
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 
             response.IsSuccess.Should().BeTrue();
 
-            response.Result.Id.Should().Be(productId);
+            response.Value.Id.Should().Be(productId);
         }
 
         [Test]

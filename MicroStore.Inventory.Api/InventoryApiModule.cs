@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Inventory.Application;
 using MicroStore.Inventory.Infrastructure;
 using Volo.Abp.Modularity;
@@ -7,8 +6,7 @@ using Volo.Abp.Modularity;
 namespace MicroStore.Inventory.Api
 {
     [DependsOn(typeof(InventoryInfrastructureModule),
-        typeof(InventoryApplicationModule),
-         typeof(MediatorModule))]
+        typeof(InventoryApplicationModule))]
     public class InventoryApiModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

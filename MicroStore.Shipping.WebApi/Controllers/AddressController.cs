@@ -28,7 +28,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
             var result = await _addressApplicationService.ValidateAddress(model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
     }

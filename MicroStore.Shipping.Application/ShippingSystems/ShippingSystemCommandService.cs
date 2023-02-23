@@ -15,13 +15,13 @@ namespace MicroStore.Shipping.Application.ShippingSystems
             _shippingSystemRepository = shippingSystemRepository;
         }
 
-        public async Task<UnitResultV2<ShippingSystemDto>> EnableAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ShippingSystemDto>> EnableAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
         {
             var system = await _shippingSystemRepository.SingleOrDefaultAsync(x => x.Name == systemName,cancellationToken);
 
             if (system == null)
             {
-                return UnitResultV2.Failure<ShippingSystemDto>(ErrorInfo.NotFound($"Shipping system with name : {systemName} is not exist"));
+                return UnitResult.Failure<ShippingSystemDto>(ErrorInfo.NotFound($"Shipping system with name : {systemName} is not exist"));
 
             }
 
@@ -31,7 +31,7 @@ namespace MicroStore.Shipping.Application.ShippingSystems
             await _shippingSystemRepository.UpdateAsync(system);
 
 
-            return UnitResultV2.Success(ObjectMapper.Map<ShippingSystem, ShippingSystemDto>(system));
+            return UnitResult.Success(ObjectMapper.Map<ShippingSystem, ShippingSystemDto>(system));
         }
     }
 }

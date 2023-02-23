@@ -42,7 +42,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _productQueryService.ListAsync(query);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -54,7 +54,7 @@ namespace MicroStore.Inventory.Api.Controllers
   
             var result = await _productQueryService.GetBySkyAsync(sku);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -65,7 +65,7 @@ namespace MicroStore.Inventory.Api.Controllers
         {
             var result = await _productQueryService.GetAsync(productId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -78,7 +78,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _productCommandService.AdjustInventory(productId, model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
     }
 }

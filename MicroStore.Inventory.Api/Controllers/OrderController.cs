@@ -39,7 +39,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _orderQueryService.ListOrderAsync(queryParams, userId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -53,7 +53,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _orderQueryService.GetOrderByNumberAsync(orderNumber);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -65,7 +65,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _orderQueryService.GetOrderAsync(orderId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
     }
 }

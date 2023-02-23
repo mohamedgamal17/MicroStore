@@ -19,23 +19,23 @@ namespace MicroStore.Payment.Application
             _paymentSystemRepository = paymentSystemRepository;
         }
 
-        public async Task<UnitResultV2<IPaymentMethod>> Resolve(string paymentGatewayName, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<IPaymentMethod>> Resolve(string paymentGatewayName, CancellationToken cancellationToken = default)
         {
             var paymentMethod = _paymentMethods.SingleOrDefault(x => x.PaymentGatewayName == paymentGatewayName);
             
             if(paymentMethod == null)
             {
-                 return UnitResultV2.Failure<IPaymentMethod>(ErrorInfo.NotFound( $"Payment system with name :{paymentGatewayName}, is not exist") );
+                 return UnitResult.Failure<IPaymentMethod>(ErrorInfo.NotFound( $"Payment system with name :{paymentGatewayName}, is not exist") );
             }
 
             bool isEnabled = await IsPaymentSystemEnabled(paymentGatewayName, cancellationToken);
 
             if (!isEnabled)
             {
-                return UnitResultV2.Failure<IPaymentMethod>( ErrorInfo.BusinessLogic($"Payment system : {paymentGatewayName} is disabled")); ;
+                return UnitResult.Failure<IPaymentMethod>( ErrorInfo.BusinessLogic($"Payment system : {paymentGatewayName} is disabled")); ;
             }
 
-            return UnitResultV2.Success(paymentMethod);
+            return UnitResult.Success(paymentMethod);
         }
 
         private async Task<bool> IsPaymentSystemEnabled(string systemName , CancellationToken cancellationToken = default)

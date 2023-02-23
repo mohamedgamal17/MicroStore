@@ -17,7 +17,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentSystems
         {
             var result = await _paymentSystemQueryService.ListPaymentSystemAsync();
 
-            result.Result.Count.Should().BeGreaterThan(0);
+            result.Value.Count.Should().BeGreaterThan(0);
 
         }
 
@@ -30,7 +30,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentSystems
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Id.Should().Be(systemId);
+            result.Value.Id.Should().Be(systemId);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentSystems
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Name.Should().Be(sysName);
+            result.Value.Name.Should().Be(sysName);
         }
 
         [Test]

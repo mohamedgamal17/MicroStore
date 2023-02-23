@@ -50,7 +50,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderCommandService.CreateOrderAsync(orderModel);
 
-            return FromResultV2(result, HttpStatusCode.Accepted);
+            return FromResult(result, HttpStatusCode.Accepted);
         }
 
 
@@ -71,7 +71,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.ListAsync(queryParams, _currentUser.Id);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -84,7 +84,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.GetAsync(orderId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -96,7 +96,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.GetByOrderNumberAsync(orderNumber);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
     }
 }

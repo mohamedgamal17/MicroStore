@@ -25,8 +25,8 @@ namespace MicroStore.Catalog.Application.Tests.Products
             
             result.IsSuccess.Should().BeTrue();
             result.IsSuccess.Should().BeTrue();
-            result.Result.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
         }
 
 
@@ -40,7 +40,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Id.Should().Be(productId);
+            result.Value.Id.Should().Be(productId);
         }
 
         [Test]

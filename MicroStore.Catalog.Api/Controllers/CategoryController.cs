@@ -30,7 +30,7 @@ namespace MicroStore.Catalog.Api.Controllers
             var result = await  _categoryQueryService
                 .ListAsync(new SortingQueryParams { SortBy = @params.SortBy, Desc = @params.Desc});
 
-            return FromResultV2(result,HttpStatusCode.OK);
+            return FromResult(result,HttpStatusCode.OK);
         }
 
 
@@ -42,7 +42,7 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _categoryQueryService.GetAsync(id);
 
-            return FromResultV2(result,HttpStatusCode.OK);
+            return FromResult(result,HttpStatusCode.OK);
         }
 
 
@@ -53,7 +53,7 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _categoryCommandService.CreateAsync(model);
 
-            return FromResultV2(result,HttpStatusCode.Created);
+            return FromResult(result,HttpStatusCode.Created);
         }
 
         [Route("{id}")]
@@ -63,7 +63,7 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _categoryCommandService.UpdateAsync(id,model);
 
-            return FromResultV2(result,HttpStatusCode.OK);
+            return FromResult(result,HttpStatusCode.OK);
         }
     }
 }

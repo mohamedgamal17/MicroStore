@@ -23,13 +23,13 @@ namespace MicroStore.Shipping.Application.Shipments
             _settingsRepository = settingsRepository;
         }
 
-        public async Task<UnitResultV2<ShipmentDto>> CreateAsync(ShipmentModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ShipmentDto>> CreateAsync(ShipmentModel model, CancellationToken cancellationToken = default)
         {
             var validationResult = await ValidateShipment(model);
 
             if (validationResult.IsFailure)
             {
-                return UnitResultV2.Failure<ShipmentDto>(validationResult.Error);
+                return UnitResult.Failure<ShipmentDto>(validationResult.Error);
             }
             Shipment shipment = new Shipment(model.OrderId,model.OrderNumber , model.UserId, model.Address.AsAddress())
             {
@@ -39,22 +39,22 @@ namespace MicroStore.Shipping.Application.Shipments
             await _shipmentRepository.InsertAsync(shipment);
 
 
-            return UnitResultV2.Success(ObjectMapper.Map<Shipment, ShipmentDto>(shipment));
+            return UnitResult.Success(ObjectMapper.Map<Shipment, ShipmentDto>(shipment));
         }
      
     
-        public async Task<UnitResultV2<ShipmentDto>> FullfillAsync(string shipmentId, PackageModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ShipmentDto>> FullfillAsync(string shipmentId, PackageModel model, CancellationToken cancellationToken = default)
         {
             var settings = await _settingsRepository.TryToGetSettings<ShippingSettings>(SettingsConst.ProviderKey, cancellationToken) ?? new ShippingSettings();
 
             if (settings.DefaultShippingSystem == null )
             {
-                return UnitResultV2.Failure<ShipmentDto>(ErrorInfo.BusinessLogic("Please configure default shipping system first"));
+                return UnitResult.Failure<ShipmentDto>(ErrorInfo.BusinessLogic("Please configure default shipping system first"));
             }
 
             if(settings.Location == null)
             {
-                return UnitResultV2.Failure<ShipmentDto>(ErrorInfo.BusinessLogic("Please configure location address first"));
+                return UnitResult.Failure<ShipmentDto>(ErrorInfo.BusinessLogic("Please configure location address first"));
             }
 
 
@@ -62,96 +62,96 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (shipment == null)
             {
-                return UnitResultV2.Failure<ShipmentDto>(ErrorInfo.NotFound($"Shipment with id : {shipmentId} is not exist"));
+                return UnitResult.Failure<ShipmentDto>(ErrorInfo.NotFound($"Shipment with id : {shipmentId} is not exist"));
             }
 
             if(shipment.Status != ShipmentStatus.Created)
             {
-                return UnitResultV2.Failure<ShipmentDto>(ErrorInfo.BusinessLogic($"Shipment status should be in {ShipmentStatus.Created}"));
+                return UnitResult.Failure<ShipmentDto>(ErrorInfo.BusinessLogic($"Shipment status should be in {ShipmentStatus.Created}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(settings.DefaultShippingSystem, cancellationToken);
 
             if (systemResult.IsFailure)
             {
-                return UnitResultV2.Failure<ShipmentDto>(systemResult.Error);
+                return UnitResult.Failure<ShipmentDto>(systemResult.Error);
             }
 
-            var system = systemResult.Result;
+            var system = systemResult.Value;
 
             var fullfillModel = PrepareFullfillModel(settings, shipment, model);
 
             return await system.Fullfill(shipmentId, fullfillModel);
 
         }
-        public async Task<UnitResultV2<List<ShipmentRateDto>>> RetriveShipmentRatesAsync(string shipmentId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<List<ShipmentRateDto>>> RetriveShipmentRatesAsync(string shipmentId, CancellationToken cancellationToken = default)
         {
             var shipment = await _shipmentRepository.SingleOrDefaultAsync(x => x.Id == shipmentId, cancellationToken);
 
             if (shipment == null)
             {
-                return UnitResultV2.Failure<List<ShipmentRateDto>>(ErrorInfo.NotFound($"Shipment with id : {shipmentId} is not exist"));
+                return UnitResult.Failure<List<ShipmentRateDto>>(ErrorInfo.NotFound($"Shipment with id : {shipmentId} is not exist"));
             }
 
             if (shipment.Status != ShipmentStatus.Fullfilled)
             {
-                return UnitResultV2.Failure<List<ShipmentRateDto>>(ErrorInfo.BusinessLogic($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
+                return UnitResult.Failure<List<ShipmentRateDto>>(ErrorInfo.BusinessLogic($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(shipment.SystemName);
 
             if (systemResult.IsFailure)
             {
-                return UnitResultV2.Failure<List<ShipmentRateDto>>(systemResult.Error);
+                return UnitResult.Failure<List<ShipmentRateDto>>(systemResult.Error);
             }
 
-            var system = systemResult.Result;
+            var system = systemResult.Value;
 
             return await system.RetriveShipmentRates(shipment.Id, cancellationToken);
         }
 
-        public async Task<UnitResultV2<ShipmentDto>> BuyLabelAsync(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ShipmentDto>> BuyLabelAsync(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
         {
             var shipment = await _shipmentRepository.SingleOrDefaultAsync(x => x.Id == shipmentId, cancellationToken);
 
             if (shipment == null)
             {
-                return UnitResultV2.Failure<ShipmentDto>(ErrorInfo.NotFound($"Shipment with id : {shipmentId} is not exist"));
+                return UnitResult.Failure<ShipmentDto>(ErrorInfo.NotFound($"Shipment with id : {shipmentId} is not exist"));
             }
 
             if (shipment.Status != ShipmentStatus.Fullfilled)
             {
-                return UnitResultV2.Failure<ShipmentDto>(ErrorInfo.BusinessLogic($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
+                return UnitResult.Failure<ShipmentDto>(ErrorInfo.BusinessLogic($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(shipment.SystemName);
 
             if (systemResult.IsFailure)
             {
-                return UnitResultV2.Failure<ShipmentDto>(systemResult.Error);
+                return UnitResult.Failure<ShipmentDto>(systemResult.Error);
             }
 
-            var system = systemResult.Result;
+            var system = systemResult.Value;
 
             return await system.BuyShipmentLabel(shipment.Id , model, cancellationToken);
         }
 
-        private async Task<UnitResultV2> ValidateShipment(ShipmentModel model)
+        private async Task<UnitResult> ValidateShipment(ShipmentModel model)
         {
             var query = await _shipmentRepository.GetQueryableAsync();
 
 
             if(await query.AnyAsync(x=> x.OrderId == model.OrderId))
             {
-                return UnitResultV2.Failure(ErrorInfo.BusinessLogic($"Shipment is already created for Order with id : {model.OrderId}"));
+                return UnitResult.Failure(ErrorInfo.BusinessLogic($"Shipment is already created for Order with id : {model.OrderId}"));
             }
 
             if(await query.AnyAsync(x=> x.OrderNumber == model.OrderNumber))
             {
-                return UnitResultV2.Failure(ErrorInfo.BusinessLogic($"Shipment is already created for Order with numer : {model.OrderNumber}"));
+                return UnitResult.Failure(ErrorInfo.BusinessLogic($"Shipment is already created for Order with numer : {model.OrderNumber}"));
             }
 
-            return UnitResultV2.Success();
+            return UnitResult.Success();
         }
 
         private FullfillModel PrepareFullfillModel(ShippingSettings settings, Shipment shipment ,  PackageModel model)

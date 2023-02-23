@@ -17,15 +17,15 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
         {
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
-        public async Task<UnitResultV2<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiScopes.AsNoTracking().ProjectTo<ApiScopeDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
-        public async Task<UnitResultV2<ApiScopeDto>> GetAsync(int apiScopeId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ApiScopeDto>> GetAsync(int apiScopeId, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiScopes.AsNoTracking().ProjectTo<ApiScopeDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -33,10 +33,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 
             if (result == null)
             {
-                return UnitResultV2.Failure<ApiScopeDto>(ErrorInfo.NotFound($"Api Scope with id : {apiScopeId} is not exist"));
+                return UnitResult.Failure<ApiScopeDto>(ErrorInfo.NotFound($"Api Scope with id : {apiScopeId} is not exist"));
             }
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
     }
 }

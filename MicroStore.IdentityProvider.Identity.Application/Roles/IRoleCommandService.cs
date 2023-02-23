@@ -7,7 +7,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
 {
     public interface IRoleCommandService : IApplicationService
     {
-        Task<UnitResultV2<IdentityRoleDto>> CreateAsync(RoleModel model, CancellationToken cancellationToken = default);
-        Task<UnitResultV2<IdentityRoleDto>> UpdateAsync(string roleId, RoleModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult<IdentityRoleDto>> CreateAsync(RoleModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult<IdentityRoleDto>> UpdateAsync(string roleId, RoleModel model, CancellationToken cancellationToken = default);
     }
 }

@@ -22,7 +22,7 @@ namespace MicroStore.Inventory.Application.Products
             _inventoryDbContext = inventoryDbContext;
         }
 
-        public async Task<UnitResultV2<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Products
                 .AsNoTracking()
@@ -32,13 +32,13 @@ namespace MicroStore.Inventory.Application.Products
 
             if (result == null)
                 {
-                    return UnitResultV2.Failure<ProductDto>(ErrorInfo.NotFound($"product with product id {id} is not exist"));
+                    return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"product with product id {id} is not exist"));
             }
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Products
              .AsNoTracking()
@@ -48,13 +48,13 @@ namespace MicroStore.Inventory.Application.Products
 
             if (result == null)
             {
-                return UnitResultV2.Failure<ProductDto>(ErrorInfo.NotFound($"product with product sku {sku} is not exist"));
+                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"product with product sku {sku} is not exist"));
             }
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
 
             var query = _inventoryDbContext.Products
@@ -63,7 +63,7 @@ namespace MicroStore.Inventory.Application.Products
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
     }
 }

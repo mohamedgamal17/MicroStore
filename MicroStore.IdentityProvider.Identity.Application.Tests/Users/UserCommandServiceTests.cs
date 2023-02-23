@@ -23,13 +23,13 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsSuccess.Should().BeTrue();
 
-            var user = await FindUserById(result.Result.Id);
+            var user = await FindUserById(result.Value.Id);
 
             user.AssertUser(model);
 
             user.AssertUserPassword(model, ServiceProvider);
 
-            user.AssertUserDto(result.Result);
+            user.AssertUserDto(result.Value);
         }
 
         [Test]
@@ -43,13 +43,13 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsSuccess.Should().BeTrue();
 
-            var user = await FindUserById(result.Result.Id);
+            var user = await FindUserById(result.Value.Id);
 
             user.AssertUser(model);
 
             user.AssertUserPassword(model, ServiceProvider);
 
-            user.AssertUserDto(result.Result);
+            user.AssertUserDto(result.Value);
         }
 
         [Test]

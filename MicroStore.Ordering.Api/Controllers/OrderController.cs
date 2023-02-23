@@ -39,7 +39,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.ListAsync(queryParams, userId);
 
-            return FromResultV2(result,HttpStatusCode.OK);
+            return FromResult(result,HttpStatusCode.OK);
         }
 
       
@@ -53,7 +53,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.GetAsync(orderId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -64,7 +64,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.GetByOrderNumberAsync(orderNumber);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -75,7 +75,7 @@ namespace MicroStore.Ordering.Api.Controllers
         {
             var result  = await _orderCommandService.CreateOrderAsync(model);
 
-            return FromResultV2(result,HttpStatusCode.Accepted);
+            return FromResult(result,HttpStatusCode.Accepted);
         }
 
 
@@ -88,7 +88,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderCommandService.FullfillOrderAsync(orderId,model);
 
-            return FromResultV2(result, HttpStatusCode.Accepted);
+            return FromResult(result, HttpStatusCode.Accepted);
         }
 
 
@@ -98,7 +98,7 @@ namespace MicroStore.Ordering.Api.Controllers
         {
             var result = await _orderCommandService.CompleteOrderAsync(orderId);
 
-            return FromResultV2(result, HttpStatusCode.Accepted);
+            return FromResult(result, HttpStatusCode.Accepted);
         }
 
 
@@ -109,7 +109,7 @@ namespace MicroStore.Ordering.Api.Controllers
         {
             var result = await _orderCommandService.CancelOrderAsync(orderId,model);
 
-            return FromResultV2(result, HttpStatusCode.Accepted);
+            return FromResult(result, HttpStatusCode.Accepted);
 
         }
 

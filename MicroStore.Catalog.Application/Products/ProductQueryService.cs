@@ -20,7 +20,7 @@ namespace MicroStore.Catalog.Application.Products
             _catalogDbContext = catalogDbContext;
         }
 
-        public async Task<UnitResultV2<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Products
                  .AsNoTracking()
@@ -30,13 +30,13 @@ namespace MicroStore.Catalog.Application.Products
 
             if (product == null)
             {
-                return UnitResultV2.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {id} is not found"));
+                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {id} is not found"));
             }
 
-            return UnitResultV2.Success(product);
+            return UnitResult.Success(product);
         }
 
-        public async Task<UnitResultV2<PagedResult<ProductListDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PagedResult<ProductListDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Products.AsQueryable()
                          .AsNoTracking()
@@ -49,7 +49,7 @@ namespace MicroStore.Catalog.Application.Products
 
             var pagingResult = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResultV2.Success(pagingResult);
+            return UnitResult.Success(pagingResult);
         }
 
         public IQueryable<ProductListDto> TryToSort(IQueryable<ProductListDto> query, string sortBy, bool desc = false)

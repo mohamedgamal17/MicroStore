@@ -6,9 +6,9 @@ namespace MicroStore.Payment.Application.PaymentSystems
 {
     public interface IPaymentSystemQueryService : IApplicationService
     {
-        Task<UnitResultV2<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default);
-        Task<UnitResultV2<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default);
-        Task<UnitResultV2<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default);
+        Task<UnitResult<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default);
+        Task<UnitResult<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default);
+        Task<UnitResult<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default);
 
         
     }

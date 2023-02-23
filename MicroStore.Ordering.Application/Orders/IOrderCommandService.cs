@@ -7,10 +7,10 @@ namespace MicroStore.Ordering.Application.Orders
 {
     public interface IOrderCommandService : IApplicationService
     {
-        Task<UnitResultV2<OrderSubmitedDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default);
-        Task<UnitResultV2> FullfillOrderAsync(Guid orderId,FullfillOrderModel model , CancellationToken cancellationToken = default);
-        Task<UnitResultV2> CompleteOrderAsync(Guid orderId, CancellationToken cancellationToken = default);
-        Task<UnitResultV2> CancelOrderAsync(Guid orderId, CancelOrderModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult<OrderSubmitedDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult> FullfillOrderAsync(Guid orderId,FullfillOrderModel model , CancellationToken cancellationToken = default);
+        Task<UnitResult> CompleteOrderAsync(Guid orderId, CancellationToken cancellationToken = default);
+        Task<UnitResult> CancelOrderAsync(Guid orderId, CancelOrderModel model, CancellationToken cancellationToken = default);
 
     }
 }

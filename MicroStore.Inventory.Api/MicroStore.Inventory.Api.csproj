@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
-    <ProjectReference Include="..\MicroStore.BuildingBlocks.Mediator\MicroStore.BuildingBlocks.Mediator.csproj" />
     <ProjectReference Include="..\MicroStore.Inventory.Application\MicroStore.Inventory.Application.csproj" />
     <ProjectReference Include="..\MicroStore.Inventory.Infrastructure\MicroStore.Inventory.Infrastructure.csproj" />
   </ItemGroup>

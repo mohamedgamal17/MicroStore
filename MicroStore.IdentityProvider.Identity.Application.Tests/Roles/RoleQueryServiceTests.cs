@@ -23,7 +23,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Count.Should().BeGreaterThan(0);
+            result.Value.Count.Should().BeGreaterThan(0);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Name.Should().Be(fakeRole.Name);
+            result.Value.Name.Should().Be(fakeRole.Name);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Id.Should().Be(fakeRole.Id);
+            result.Value.Id.Should().Be(fakeRole.Id);
         }
 
         [Test]

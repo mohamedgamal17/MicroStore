@@ -46,7 +46,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
             var result = await _shipmentQueryService.ListAsync(queryParams, _applicationCurrentUser.Id);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -58,7 +58,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
             var result = await _shipmentQueryService.GetAsync(shipmentId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -71,7 +71,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
             var result = await _shipmentQueryService.GetByOrderIdAsync(orderId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -83,7 +83,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
             var result = await _shipmentQueryService.GetByOrderNumberAsync(orderNumber);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
     }
 }

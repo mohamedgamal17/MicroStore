@@ -27,7 +27,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var result = await _rateApplicationService.EstimateRate(model);
 
-            return FromResultV2(result,HttpStatusCode.OK);
+            return FromResult(result,HttpStatusCode.OK);
         }
 
     }

@@ -2,7 +2,6 @@
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
-using MicroStore.BuildingBlocks.Mediator;
 using MicroStore.Ordering.Application;
 using MicroStore.Ordering.Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,7 +11,6 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace MicroStore.Ordering.Api

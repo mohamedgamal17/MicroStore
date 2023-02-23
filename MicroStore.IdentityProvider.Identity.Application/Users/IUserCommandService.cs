@@ -7,9 +7,9 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
 {
     public interface IUserCommandService : IApplicationService
     {
-        Task<UnitResultV2<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default);
 
-        Task<UnitResultV2<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default);
 
     }
 }

@@ -5,7 +5,7 @@ namespace MicroStore.Catalog.Application.Categories
 {
     public interface ICategoryCommandService
     {
-        Task<UnitResultV2<CategoryDto>> CreateAsync(CategoryModel input, CancellationToken cancellationToken = default);
-        Task<UnitResultV2<CategoryDto>> UpdateAsync(string id, CategoryModel input, CancellationToken cancellationToken = default);
+        Task<UnitResult<CategoryDto>> CreateAsync(CategoryModel input, CancellationToken cancellationToken = default);
+        Task<UnitResult<CategoryDto>> UpdateAsync(string id, CategoryModel input, CancellationToken cancellationToken = default);
     }
 }

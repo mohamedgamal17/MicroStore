@@ -34,7 +34,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _apiResourceQueryService.ListAsync(queryParams);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -43,7 +43,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceQueryService.GetAsync(apiResourceId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -53,7 +53,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.CreateAsync(model);
 
-            return FromResultV2(result, HttpStatusCode.Created);
+            return FromResult(result, HttpStatusCode.Created);
         }
 
 
@@ -63,7 +63,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.UpdateAsync(apiResourceId,model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -75,7 +75,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.DeleteAsync(apiResourceId);
 
-            return FromResultV2(result, HttpStatusCode.NoContent);
+            return FromResult(result, HttpStatusCode.NoContent);
         }
 
         [HttpPost]
@@ -84,7 +84,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.AddApiSecret(apiResourceId, model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -94,7 +94,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.RemoveApiSecret(apiResourceId, secretId);
 
-            return FromResultV2(result, HttpStatusCode.NoContent);
+            return FromResult(result, HttpStatusCode.NoContent);
         }
 
 

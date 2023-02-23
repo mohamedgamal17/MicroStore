@@ -23,7 +23,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsSuccess.Should().BeTrue();
 
-            var product = await Find<Product>(x => x.Id == result.Result.Id);
+            var product = await Find<Product>(x => x.Id == result.Value.Id);
 
             product.AssertProductModel(model);
 

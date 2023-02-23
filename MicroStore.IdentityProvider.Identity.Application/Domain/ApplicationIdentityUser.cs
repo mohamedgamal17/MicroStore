@@ -46,7 +46,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
             });
         }
 
-        public UnitResult AddUserRoles(IEnumerable<ApplicationIdentityRole> identityRoles)
+        public Result AddUserRoles(IEnumerable<ApplicationIdentityRole> identityRoles)
         {
             UserRoles.Clear();
 
@@ -60,16 +60,16 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
                 }
             }
 
-            return UnitResult.Success();
+            return Result.Success();
         }
 
-        public UnitResult AddUserRole(ApplicationIdentityRole identityRole)
+        public Result AddUserRole(ApplicationIdentityRole identityRole)
         {
             var role = UserRoles.SingleOrDefault(x => x.RoleId == identityRole.Id);
 
             if(role != null)
             {
-                return UnitResult.Failure("user_role_error", $"User is already assigned to role : {identityRole.Name}");
+                return Result.Failure("user_role_error", $"User is already assigned to role : {identityRole.Name}");
             }
 
             UserRoles.Add(new ApplicationIdentityUserRole
@@ -78,7 +78,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
                 UserId = Id,
             });
 
-            return UnitResult.Success();
+            return Result.Success();
         }
 
         public void AddUserLogin(ApplicationIdentityUserLogin userlogin)
@@ -111,7 +111,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
             }
         }
 
-        public UnitResult RemoveUserRoles(IEnumerable<ApplicationIdentityRole> identityRoles)
+        public Result RemoveUserRoles(IEnumerable<ApplicationIdentityRole> identityRoles)
         {
             foreach (var role in identityRoles)
             {
@@ -123,22 +123,22 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
                 }
             }
 
-            return UnitResult.Success();
+            return Result.Success();
         }
 
 
-        public UnitResult RemoveUserRole(ApplicationIdentityRole identityRole)
+        public Result RemoveUserRole(ApplicationIdentityRole identityRole)
         {
             var role = UserRoles.SingleOrDefault(x => x.RoleId == identityRole.Id);
 
             if (role == null)
             {
-                return UnitResult.Failure("user_role_error", $"User is not assigned to role : {identityRole.Name}");
+                return Result.Failure("user_role_error", $"User is not assigned to role : {identityRole.Name}");
             }
 
             UserRoles.Remove(role);
 
-            return UnitResult.Success();
+            return Result.Success();
         }
     }
 

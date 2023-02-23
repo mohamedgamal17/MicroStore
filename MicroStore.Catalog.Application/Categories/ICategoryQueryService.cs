@@ -6,7 +6,7 @@ namespace MicroStore.Catalog.Application.Categories
 {
     public interface ICategoryQueryService
     {
-        Task<UnitResultV2<List<CategoryListDto>>> ListAsync(SortingQueryParams queryParams,CancellationToken cancellationToken = default);
-        Task<UnitResultV2<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default);
+        Task<UnitResult<List<CategoryListDto>>> ListAsync(SortingQueryParams queryParams,CancellationToken cancellationToken = default);
+        Task<UnitResult<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default);
     }
 }

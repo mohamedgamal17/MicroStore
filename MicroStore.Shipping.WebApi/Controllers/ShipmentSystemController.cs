@@ -30,7 +30,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
             var result = await _shippingSystemQueryService.ListAsync();
 
-            return FromResultV2(result,HttpStatusCode.OK);           
+            return FromResult(result,HttpStatusCode.OK);           
         }
 
         [HttpGet]
@@ -40,7 +40,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var result = await _shippingSystemQueryService.GetByNameAsync(name);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -51,7 +51,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var result = await _shippingSystemQueryService.GetAsync(systemId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpPut]
@@ -61,7 +61,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var result = await _shippingSystemCommandService.EnableAsync(systemName,model.IsEnabled);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
     }
 

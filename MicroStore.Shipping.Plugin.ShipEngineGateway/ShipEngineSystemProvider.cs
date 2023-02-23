@@ -34,7 +34,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
              _settingsRepository = settingsRepository;
         }
 
-        public async Task<UnitResultV2<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
         {
 
             return await WrappResponseResult(HttpStatusCode.OK, async () =>
@@ -60,7 +60,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
         
         }
 
-        public async Task<UnitResultV2<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel addressFrom , AddressModel addressTo , List<ShipmentItemEstimationModel>  items, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel addressFrom , AddressModel addressTo , List<ShipmentItemEstimationModel>  items, CancellationToken cancellationToken = default)
         {
 
             return await WrappResponseResult(HttpStatusCode.OK, async () =>
@@ -81,7 +81,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
           
         }
 
-        public async Task<UnitResultV2<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(HttpStatusCode.OK, async () =>
             {
@@ -119,7 +119,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                      
         }
 
-        public async Task<UnitResultV2<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(HttpStatusCode.OK ,async () =>
             {
@@ -169,7 +169,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                        
         }
 
-        public async Task<UnitResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
+        public async Task<UnitResult<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
         {
 
             return await WrappResponseResult(HttpStatusCode.OK, async () =>
@@ -202,17 +202,17 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
 
 
-        private async Task<UnitResultV2<T>> WrappResponseResult<T>(HttpStatusCode statusCode,Func<Task<T>> func)
+        private async Task<UnitResult<T>> WrappResponseResult<T>(HttpStatusCode statusCode,Func<Task<T>> func)
         {
             return await WrappResponseResult(async () =>
             {
                 var result = await func();
 
-                return UnitResultV2.Success<T>(result);
+                return UnitResult.Success<T>(result);
             });
         }
 
-        private async Task <UnitResultV2<T>> WrappResponseResult<T>(Func<Task<UnitResultV2<T>>> func)
+        private async Task <UnitResult<T>> WrappResponseResult<T>(Func<Task<UnitResult<T>>> func)
         {
             try
             {
@@ -227,12 +227,12 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                     Message = ex.Message,
                 };
 
-                return UnitResultV2.Failure<T>(ErrorInfo.Validation(ex.Message));
+                return UnitResult.Failure<T>(ErrorInfo.Validation(ex.Message));
 
             }
             catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
             {
-                return UnitResultV2.Failure<T>(ErrorInfo.BadGateway(ex.Message));
+                return UnitResult.Failure<T>(ErrorInfo.BadGateway(ex.Message));
             }
         }
         private Weight ConvertWeight(MicroStore.Shipping.Domain.ValueObjects.Weight weight)

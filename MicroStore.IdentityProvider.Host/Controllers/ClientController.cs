@@ -31,7 +31,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _clientQueryService.ListAsync(queryParams);
 
-            return FromResultV2(result , HttpStatusCode.OK);
+            return FromResult(result , HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -40,7 +40,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientQueryService.GetAsync(clientId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -49,7 +49,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.CreateAsync(model);
 
-            return FromResultV2(result, HttpStatusCode.Created);
+            return FromResult(result, HttpStatusCode.Created);
         }
 
 
@@ -59,7 +59,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.UpdateAsync(clientId,model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -69,7 +69,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.DeleteAsync(clientId);
 
-            return FromResultV2(result, HttpStatusCode.NoContent);
+            return FromResult(result, HttpStatusCode.NoContent);
         }
 
         [HttpPost]
@@ -78,7 +78,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.AddClientSecret(clientId,model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpDelete]
@@ -87,7 +87,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.DeleteClientSecret(clientId, secretId);
 
-            return FromResultV2(result, HttpStatusCode.NoContent);
+            return FromResult(result, HttpStatusCode.NoContent);
         }
     }
 }

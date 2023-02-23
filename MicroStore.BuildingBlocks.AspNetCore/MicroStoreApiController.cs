@@ -10,30 +10,18 @@ namespace MicroStore.BuildingBlocks.AspNetCore
     public class MicroStoreApiController : AbpControllerBase
     {
 
-        [NonAction]
-        public IActionResult FromResult<T>(ResponseResult<T> result)
+
+        protected IActionResult FromResult<T>(UnitResult<T> result , HttpStatusCode successStatusCode)
         {
             if (result.IsSuccess)
             {
-                return StatusCode(result.StatusCode, result.EnvelopeResult.Result);
-            }
-
-            return StatusCode(result.StatusCode, result.EnvelopeResult.Error);
-        }
-
-
-
-        protected IActionResult FromResultV2<T>(UnitResultV2<T> result , HttpStatusCode successStatusCode)
-        {
-            if (result.IsSuccess)
-            {
-                return StatusCode((int)successStatusCode, result.Result);
+                return StatusCode((int)successStatusCode, result.Value);
             }
 
             return ConvertErrorResult(result);
         }
 
-        protected IActionResult FromResultV2(UnitResultV2 result , HttpStatusCode successStatusCode)
+        protected IActionResult FromResult(UnitResult result , HttpStatusCode successStatusCode)
         {
             if (result.IsSuccess)
             {
@@ -45,7 +33,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore
 
 
         [NonAction]
-        protected IActionResult ConvertErrorResult(UnitResultV2 result)
+        protected IActionResult ConvertErrorResult(UnitResult result)
         {
             switch (result.Error.Type)
             {

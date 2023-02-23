@@ -24,11 +24,11 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             result.IsSuccess.Should().BeTrue();
 
-            var role = await FindRoleById(result.Result.Id);
+            var role = await FindRoleById(result.Value.Id);
 
             role.AssertRole(model);
 
-            role.AssertRoleDto(result.Result);
+            role.AssertRoleDto(result.Value);
         }
 
 
@@ -47,7 +47,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             role.AssertRole(model);
 
-            role.AssertRoleDto(result.Result);
+            role.AssertRoleDto(result.Value);
         }
 
 

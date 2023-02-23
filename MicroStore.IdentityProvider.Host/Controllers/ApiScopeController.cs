@@ -35,7 +35,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _apiResourceQueryService.ListAsync(queryParams);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -46,7 +46,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _apiResourceQueryService.GetAsync(apiScopeId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -55,7 +55,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiScopeCommandService.CreateAsync(model);
 
-            return FromResultV2(result, HttpStatusCode.Created);
+            return FromResult(result, HttpStatusCode.Created);
         }
 
         [HttpPut]
@@ -64,7 +64,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiScopeCommandService.UpdateAsync(apiScopeId, model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -74,7 +74,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiScopeCommandService.DeleteAsync(apiScopeId);
 
-            return FromResultV2(result, HttpStatusCode.NoContent);
+            return FromResult(result, HttpStatusCode.NoContent);
         }
     }
 }

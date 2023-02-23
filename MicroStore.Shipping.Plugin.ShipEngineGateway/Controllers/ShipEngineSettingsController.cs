@@ -21,9 +21,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Controllers
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<ShipEngineSettings>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipEngineSettings))]
         public async Task<IActionResult> GetShipEngineSettings()
         {
             var settings = await _settingsRepository.TryToGetSettings<ShipEngineSettings>(ShipEngineConst.SystemName) ?? new ShipEngineSettings();
@@ -33,9 +31,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Controllers
 
         [HttpPost]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(Envelope<ShipEngineSettings>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(ShipEngineSettings))]
         public async Task<IActionResult> UpdateShipEngineSettings(ShipEngineSettings settings)
         {
             await _settingsRepository.TryToUpdateSettrings(settings);
@@ -46,13 +42,13 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Controllers
         [NonAction]
         protected IActionResult Success<TResult>(int statusCode, TResult result)
         {
-            return StatusCode(statusCode, Envelope.Success(result));
+            return StatusCode(statusCode, result);
         }
 
         [NonAction]
         protected IActionResult Failure(int statusCode, ErrorInfo error)
         {
-            return StatusCode(statusCode, Envelope.Failure<Unit>(error));
+            return StatusCode(statusCode, error);
         }
     }
 }

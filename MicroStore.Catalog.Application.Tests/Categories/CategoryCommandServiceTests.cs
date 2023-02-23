@@ -28,7 +28,7 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 
             result.IsSuccess.Should().BeTrue();
 
-            var category = await Find<Category>(x => x.Id == result.Result.Id);
+            var category = await Find<Category>(x => x.Id == result.Value.Id);
 
             category.AssertCategoryModel(model);
 

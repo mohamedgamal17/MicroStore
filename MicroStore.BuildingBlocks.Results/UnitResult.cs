@@ -1,63 +1,68 @@
-﻿namespace MicroStore.BuildingBlocks.Results
+﻿using MicroStore.BuildingBlocks.Results.Http;
+
+namespace MicroStore.BuildingBlocks.Results
 {
-    public class UnitResult : Result
+    public class UnitResult
     {
-        private readonly string _errorType;
+        private bool _isSuccess;
+        public bool IsSuccess => _isSuccess;
+        public bool IsFailure => !_isSuccess;
+        public ErrorInfo Error { get; }
 
-        public string ErrorType => _errorType;
 
-        internal UnitResult(bool isSucess, string errorType,  string error)
-            : base(isSucess, error)
+        internal UnitResult(bool isSuccess , ErrorInfo error = null)
         {
-            _errorType= errorType;
-
+            _isSuccess = isSuccess;
+            Error = error;
         }
+
 
 
         public static UnitResult Success()
         {
-            return new UnitResult(true, string.Empty, string.Empty);
+            return new UnitResult(true, ErrorInfo.Empty);
         }
-
-
-        public static UnitResult<T> Success<T>(T value)
+        public static UnitResult Failure(ErrorInfo error)
         {
-            return new UnitResult<T>(true, value, string.Empty,string.Empty);    
+            return new UnitResult(false, error);
         }
 
-        public static UnitResult Failure(string errorType , string error)
+        public static UnitResult<T> Success<T> (T value)
         {
-            return new UnitResult(false, errorType, error);
+            return new UnitResult<T>(true, value, ErrorInfo.Empty);
         }
 
-        public static UnitResult<T> Failure<T>(string errorType, string error)
+        public static UnitResult<T> Failure<T>(ErrorInfo error)
         {
-            return new UnitResult<T>(false,default(T), errorType, error);
+            return new UnitResult<T>(false, error: error);
         }
+
+
+
     }
+
 
 
     public class UnitResult<T> : UnitResult
     {
         private readonly T _value;
-
         public T Value
         {
             get
             {
                 if (IsFailure)
                 {
-                    throw new InvalidOperationException("result is already failured");
+                    throw new InvalidOperationException(Error.Message);
                 }
 
                 return _value;
             }
         }
 
-        internal UnitResult(bool isSucess, T value , string errorType ,string error) : base(isSucess,errorType ,error)
+        internal UnitResult(bool isSuccess,  T value = default(T) , ErrorInfo error = null)
+            : base(isSuccess,error)
         {
             _value = value;
         }
-
     }
 }

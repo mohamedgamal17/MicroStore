@@ -23,9 +23,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 
             result.IsSuccess.Should().BeTrue();
 
-            var client = await SingleAsync<Client>(x => x.Id == result.Result.Id);
+            var client = await SingleAsync<Client>(x => x.Id == result.Value.Id);
 
-            client.AssertClient(result.Result);
+            client.AssertClient(result.Value);
 
             client.AssertClientCommand(model);
         }
@@ -43,7 +43,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 
             var client = await SingleAsync<Client>(x => x.Id == fakeClient.Id);
 
-            client.AssertClient(result.Result);
+            client.AssertClient(result.Value);
 
             client.AssertClientCommand(model);
         }

@@ -30,9 +30,9 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
             result.IsSuccess.Should().BeTrue();
 
 
-            result.Result.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Result.PageSize.Should().Be(queryParams.PageSize);
-            result.Result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
+            result.Value.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
         }
 
 
@@ -47,7 +47,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Id.Should().Be(fakeUser.Id);
+            result.Value.Id.Should().Be(fakeUser.Id);
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Email.Should().Be(fakeUser.Email);
+            result.Value.Email.Should().Be(fakeUser.Email);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.UserName.Should().Be(fakeUser.UserName);
+            result.Value.UserName.Should().Be(fakeUser.UserName);
         }
 
         [Test]

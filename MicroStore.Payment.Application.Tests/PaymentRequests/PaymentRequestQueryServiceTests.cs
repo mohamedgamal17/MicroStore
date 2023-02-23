@@ -22,10 +22,10 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryParams);
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Result.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
+            result.Value.PageSize.Should().Be(queryParams.PageSize);
 
-            result.Result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
 
         }
 
@@ -42,12 +42,12 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
       
 
-            result.Result.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Result.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
+            result.Value.PageSize.Should().Be(queryParams.PageSize);
 
-            result.Result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
 
-            result.Result.Items.All(x => x.CustomerId == userId).Should().BeTrue();
+            result.Value.Items.All(x => x.CustomerId == userId).Should().BeTrue();
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Id.Should().Be(paymentId);
+            result.Value.Id.Should().Be(paymentId);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.OrderId.Should().Be(orderId);
+            result.Value.OrderId.Should().Be(orderId);
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.OrderNumber.Should().Be(orderNumber);
+            result.Value.OrderNumber.Should().Be(orderNumber);
         }
 
         [Test]

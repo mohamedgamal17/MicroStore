@@ -21,9 +21,8 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<StripePaymentSettings>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StripePaymentSettings))]
+
         public async Task <IActionResult> GetStripeSettings()
         {
             var settings = await _settingsRepository.TryToGetSettings<StripePaymentSettings>(StripePaymentConst.Provider);
@@ -33,9 +32,8 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
 
         [HttpPut]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Envelope<StripePaymentSettings>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StripePaymentSettings))]
+
         public async Task<IActionResult> UpdateStripeSettings(UpdateStripeSettingsModel model)
         {
             var settings = await _settingsRepository
@@ -55,13 +53,13 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
         [NonAction]
         protected IActionResult Success<TResult>(int statusCode,TResult result)
         {
-            return StatusCode(statusCode, Envelope.Success(result));
+            return StatusCode(statusCode, result);
         }
 
         [NonAction]
         protected IActionResult Failure(int statusCode, ErrorInfo error) 
         {
-            return StatusCode(statusCode, Envelope.Failure<Unit>(error));
+            return StatusCode(statusCode, error);
         }
     }
 }

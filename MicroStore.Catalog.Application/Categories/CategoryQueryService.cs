@@ -19,21 +19,21 @@ namespace MicroStore.Catalog.Application.Categories
             _catalogDbContext = catalogDbContext;
         }
 
-        public async Task<UnitResultV2<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             Category? category = await _catalogDbContext.Categories
                 .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (category == null)
             {
-                return UnitResultV2.Failure<CategoryDto>(ErrorInfo.NotFound($"Category with id : {id} is not exist"));
+                return UnitResult.Failure<CategoryDto>(ErrorInfo.NotFound($"Category with id : {id} is not exist"));
          
             }
 
-            return UnitResultV2.Success(ObjectMapper.Map<Category, CategoryDto>(category));
+            return UnitResult.Success(ObjectMapper.Map<Category, CategoryDto>(category));
         }
 
-        public async Task<UnitResultV2<List<CategoryListDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<List<CategoryListDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Categories
                 .AsNoTracking()
@@ -46,7 +46,7 @@ namespace MicroStore.Catalog.Application.Categories
 
             var result = await query.ToListAsync(cancellationToken);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
         private IQueryable<CategoryListDto> TryToSort(IQueryable<CategoryListDto> query, string sortBy, bool desc)

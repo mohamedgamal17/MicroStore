@@ -16,7 +16,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
             _roleRepository = roleRepository;
         }
 
-        public async Task<UnitResultV2<IdentityRoleDto>> CreateAsync(RoleModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<IdentityRoleDto>> CreateAsync(RoleModel model, CancellationToken cancellationToken = default)
         {
             var identityRole = new ApplicationIdentityRole();
 
@@ -25,16 +25,16 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
            await _roleRepository.CreateAsync(identityRole);
 
 
-            return UnitResultV2.Success(ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(identityRole));
+            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(identityRole));
         }
 
-        public async Task<UnitResultV2<IdentityRoleDto>> UpdateAsync(string roleId, RoleModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<IdentityRoleDto>> UpdateAsync(string roleId, RoleModel model, CancellationToken cancellationToken = default)
         {
             var identityRole = await _roleRepository.FindById(roleId);
 
             if (identityRole == null)
             {
-                return UnitResultV2.Failure<IdentityRoleDto>(ErrorInfo.NotFound($"Role with id {roleId} is not exist"));
+                return UnitResult.Failure<IdentityRoleDto>(ErrorInfo.NotFound($"Role with id {roleId} is not exist"));
 
             }
 
@@ -43,7 +43,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
              await _roleRepository.UpdateAsync(identityRole);
 
            
-            return UnitResultV2.Success(ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(identityRole));
+            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(identityRole));
         }
 
         private void PrepareRoleEntity(RoleModel model, ApplicationIdentityRole identityRole)

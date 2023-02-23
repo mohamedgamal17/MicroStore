@@ -40,7 +40,7 @@ namespace MicroStore.Catalog.Api.Controllers
             });
 
 
-            return FromResultV2(result,HttpStatusCode.OK);
+            return FromResult(result,HttpStatusCode.OK);
         }
 
 
@@ -51,19 +51,17 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _productQueryService.GetAsync(id);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [Route("")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Envelope<ProductDto>))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProductDto))]
         public async Task<IActionResult> Post([FromBody] ProductModel model)
         {
             var result = await _productCommandService.CreateAsync(model);
 
-            return FromResultV2(result,HttpStatusCode.Created);
+            return FromResult(result,HttpStatusCode.Created);
         }
 
         [Route("{id}")]
@@ -72,7 +70,7 @@ namespace MicroStore.Catalog.Api.Controllers
         public async Task<IActionResult> Put(string id, [FromForm] ProductModel model)
         {
             var result = await _productCommandService.UpdateAsync(id, model);
-            return FromResultV2(result, HttpStatusCode.Created);
+            return FromResult(result, HttpStatusCode.Created);
         }
 
     }

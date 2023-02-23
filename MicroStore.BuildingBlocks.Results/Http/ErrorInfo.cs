@@ -2,6 +2,12 @@
 {
     public class ErrorInfo
     {
+        public static readonly ErrorInfo Empty = new ErrorInfo
+        {
+            Type = string.Empty,
+            Message = string.Empty,
+            Errors = new Dictionary<string, string[]>()
+        };
         public string Type { get; set; }
         public string Message { get; set; }     
         public Dictionary<string, string[]> Errors { get; set; }

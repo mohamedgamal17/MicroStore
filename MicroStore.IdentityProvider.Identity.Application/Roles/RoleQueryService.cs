@@ -20,31 +20,31 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
             _roleRepository = roleRepository;
         }
 
-        public async Task<UnitResultV2<IdentityRoleDto>> GetAsync(string roleId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<IdentityRoleDto>> GetAsync(string roleId, CancellationToken cancellationToken = default)
         {
             var role = await _roleRepository.FindById(roleId);
 
             if (role == null)
             {
-                return UnitResultV2.Failure<IdentityRoleDto>(ErrorInfo.NotFound($"Role with id : {roleId} is not exist"));
+                return UnitResult.Failure<IdentityRoleDto>(ErrorInfo.NotFound($"Role with id : {roleId} is not exist"));
             }
 
-            return UnitResultV2.Success(ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(role));
+            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(role));
         }
 
-        public async Task<UnitResultV2<IdentityRoleDto>> GetByNameAsync(string roleName, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<IdentityRoleDto>> GetByNameAsync(string roleName, CancellationToken cancellationToken = default)
         {
             var role = await _roleRepository.FindByName(roleName);
 
             if (role == null)
             {
-                return UnitResultV2.Failure<IdentityRoleDto>(ErrorInfo.NotFound($"Role with name : {roleName} is not exist"));
+                return UnitResult.Failure<IdentityRoleDto>(ErrorInfo.NotFound($"Role with name : {roleName} is not exist"));
             }
 
-            return UnitResultV2.Success(ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(role));
+            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(role));
         }
 
-        public async Task<UnitResultV2<List<IdentityRoleDto>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<UnitResult<List<IdentityRoleDto>>> ListAsync(CancellationToken cancellationToken = default)
         {
             var query = _identityDbContext.Roles
                      .AsNoTracking()
@@ -53,7 +53,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
 
             var result = await query.ToListAsync(cancellationToken);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
     }
 }

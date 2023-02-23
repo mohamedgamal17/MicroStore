@@ -20,7 +20,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
             _identityUserRepository = identityUserRepository;
         }
 
-        public async Task<UnitResultV2<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default)
         {
             var applicationUser = new ApplicationIdentityUser();
 
@@ -30,23 +30,23 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
 
             await _identityUserRepository.CreateAsync(applicationUser, model.Password);
 
-            return UnitResultV2.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser));
+            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser));
         }
 
-        public async Task<UnitResultV2<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default)
         {
             var applicationUser = await _identityUserRepository.FindById(userId, cancellationToken);
 
             if (applicationUser == null)
             {
-                return UnitResultV2.Failure<IdentityUserDto>(ErrorInfo.NotFound($"User with id : {userId} is not exist"));
+                return UnitResult.Failure<IdentityUserDto>(ErrorInfo.NotFound($"User with id : {userId} is not exist"));
             }
 
             await PrepareUserEntity(model, applicationUser, cancellationToken);
 
             await _identityUserRepository.UpdateAsync(applicationUser, model.Password);
 
-            return UnitResultV2.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser));
+            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser));
         }
 
         private async Task PrepareUserEntity(UserModel model, ApplicationIdentityUser identityUser, CancellationToken cancellationToken)

@@ -29,7 +29,6 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<PaymentRequestListDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest,Type = typeof(Envelope))]
         public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PagingAndSortingParamsQueryString @params, [FromQuery(Name = "user_id")] string? userId = null)
         {
             var queryparams = new PagingAndSortingQueryParams
@@ -42,7 +41,7 @@ namespace MicroStore.Payment.Api.Controllers
 
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, userId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
        
@@ -56,7 +55,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentRequestQueryService.GetByOrderIdAsync(orderId);
 
-            return FromResultV2(result, HttpStatusCode.OK); 
+            return FromResult(result, HttpStatusCode.OK); 
         }
 
 
@@ -68,7 +67,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentRequestQueryService.GetByOrderNumberAsync(orderNumber);
 
-            return FromResultV2(result, HttpStatusCode.OK); 
+            return FromResult(result, HttpStatusCode.OK); 
         }
 
         [HttpGet]
@@ -78,7 +77,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentRequestQueryService.GetAsync(paymentId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -88,7 +87,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentRequestCommandService.CreateAsync(model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -98,7 +97,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentRequestCommandService.ProcessPaymentAsync(paymentId,model);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
     }
 }

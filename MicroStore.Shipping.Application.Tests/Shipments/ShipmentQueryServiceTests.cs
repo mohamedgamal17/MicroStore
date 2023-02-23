@@ -29,9 +29,9 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
             result.IsSuccess.Should().BeTrue();
 
 
-            result.Result.PageNumber.Should().Be(query.PageNumber);
-            result.Result.PageSize.Should().Be(query.PageSize);
-            result.Result.Items.Count().Should().BeLessThanOrEqualTo(query.PageSize);
+            result.Value.PageNumber.Should().Be(query.PageNumber);
+            result.Value.PageSize.Should().Be(query.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(query.PageSize);
         }
 
         [Test]
@@ -50,10 +50,10 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.PageNumber.Should().Be(query.PageNumber);
-            result.Result.PageSize.Should().Be(query.PageSize);
-            result.Result.Items.Count().Should().BeLessThan(query.PageSize);
-            result.Result.Items.All(x => x.UserId == userId).Should().BeTrue();
+            result.Value.PageNumber.Should().Be(query.PageNumber);
+            result.Value.PageSize.Should().Be(query.PageSize);
+            result.Value.Items.Count().Should().BeLessThan(query.PageSize);
+            result.Value.Items.All(x => x.UserId == userId).Should().BeTrue();
 
 
         }
@@ -69,7 +69,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Id.Should().Be(shipmentId);
+            result.Value.Id.Should().Be(shipmentId);
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.OrderId.Should().Be(orderId);
+            result.Value.OrderId.Should().Be(orderId);
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.OrderNumber.Should().Be(orderNumber);
+            result.Value.OrderNumber.Should().Be(orderNumber);
         }
 
         [Test]

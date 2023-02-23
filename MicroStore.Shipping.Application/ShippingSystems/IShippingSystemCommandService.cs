@@ -6,6 +6,6 @@ namespace MicroStore.Shipping.Application.ShippingSystems
 {
     public interface IShippingSystemCommandService : IApplicationService
     {
-        Task<UnitResultV2<ShippingSystemDto>> EnableAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default);
+        Task<UnitResult<ShippingSystemDto>> EnableAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default);
     }
 }

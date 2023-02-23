@@ -19,16 +19,16 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
 
-        public async Task<UnitResultV2<PagedResult<ApiResourceDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PagedResult<ApiResourceDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiResources.AsNoTracking().ProjectTo<ApiResourceDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<ApiResourceDto>> GetAsync(int apiResourceId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<ApiResourceDto>> GetAsync(int apiResourceId, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiResources.AsNoTracking().ProjectTo<ApiResourceDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -36,9 +36,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
 
             if (result == null)
             {
-                return UnitResultV2.Failure<ApiResourceDto>(ErrorInfo.NotFound($"Api resource with id : {apiResourceId} , is not exist"));
+                return UnitResult.Failure<ApiResourceDto>(ErrorInfo.NotFound($"Api resource with id : {apiResourceId} , is not exist"));
             }
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }  
     }
 }

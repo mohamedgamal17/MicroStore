@@ -30,10 +30,10 @@ namespace MicroStore.Inventory.Application.Tests.Orders
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Result.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
+            result.Value.PageSize.Should().Be(queryParams.PageSize);
 
-            result.Result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
         }
 
 
@@ -53,10 +53,10 @@ namespace MicroStore.Inventory.Application.Tests.Orders
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Result.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
+            result.Value.PageSize.Should().Be(queryParams.PageSize);
 
-            result.Result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
         }
 
 
@@ -70,7 +70,7 @@ namespace MicroStore.Inventory.Application.Tests.Orders
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.Id.Should().Be(orderId);
+            result.Value.Id.Should().Be(orderId);
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace MicroStore.Inventory.Application.Tests.Orders
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Result.OrderNumber.Should().Be(orderNumber);
+            result.Value.OrderNumber.Should().Be(orderNumber);
         }
 
         [Test]

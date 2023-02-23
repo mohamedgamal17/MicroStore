@@ -27,7 +27,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentSystemQueryService.ListPaymentSystemAsync();
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -37,7 +37,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentSystemQueryService.GetBySystemNameAsync(systemName);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -47,7 +47,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentSystemQueryService.GetAsync(systemId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
 
@@ -58,7 +58,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentSystemCommandService.EnablePaymentSystemAsync(systemName, model.IsEnabled);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
     }

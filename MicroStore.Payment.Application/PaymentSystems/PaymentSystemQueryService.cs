@@ -17,7 +17,7 @@ namespace MicroStore.Payment.Application.PaymentSystems
             _paymentDbContext = paymentDbContext;
         }
 
-        public async Task<UnitResultV2<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
                 .AsNoTracking()
@@ -27,13 +27,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
             if (result == null)
             {
-                return UnitResultV2.Failure<PaymentSystemDto>(ErrorInfo.NotFound($"payment sytem with Id : {id} is not exist"));
+                return UnitResult.Failure<PaymentSystemDto>(ErrorInfo.NotFound($"payment sytem with Id : {id} is not exist"));
             }
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
                .AsNoTracking()
@@ -43,13 +43,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
             if (result == null)
             {
-                return UnitResultV2.Failure<PaymentSystemDto>(ErrorInfo.NotFound($"payment sytem with name : {name} is not exist"));
+                return UnitResult.Failure<PaymentSystemDto>(ErrorInfo.NotFound($"payment sytem with name : {name} is not exist"));
             }
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default)
+        public async Task<UnitResult<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
               .AsNoTracking()
@@ -58,7 +58,7 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
             var result = await query.ToListAsync(cancellationToken);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
     }
 }

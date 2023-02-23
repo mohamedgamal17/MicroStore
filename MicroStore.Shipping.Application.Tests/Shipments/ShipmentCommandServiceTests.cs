@@ -36,16 +36,16 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
             result.IsSuccess.Should().BeTrue();
 
 
-            var shipment = await RetriveShipment(result.Result.Id);
+            var shipment = await RetriveShipment(result.Value.Id);
 
             var item = model.Items.First();
 
             var shipmentItem = shipment?.Items.FirstOrDefault();
 
             shipment.Should().NotBeNull();
-            shipment?.OrderId.Should().Be(result.Result.OrderId);
-            shipment?.OrderNumber.Should().Be(result.Result.OrderNumber);
-            shipment?.UserId.Should().Be(result.Result.UserId);
+            shipment?.OrderId.Should().Be(result.Value.OrderId);
+            shipment?.OrderNumber.Should().Be(result.Value.OrderNumber);
+            shipment?.UserId.Should().Be(result.Value.UserId);
             shipment?.Address.Should().Be(model.Address.AsAddress());
             shipmentItem.Should().NotBeNull();
             shipmentItem?.Name.Should().Be(item.Name);
@@ -71,7 +71,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             shipment.Should().NotBeNull();
 
-            shipment?.ShipmentExternalId.Should().Be(result.Result.ShipmentExternalId);
+            shipment?.ShipmentExternalId.Should().Be(result.Value.ShipmentExternalId);
 
             shipment?.Status.Should().Be(ShipmentStatus.Fullfilled);
 
@@ -103,15 +103,15 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             var result = await _shipmentCommandService.BuyLabelAsync(fakeShipment.Id, model);
 
-            var shipment = await Find<Shipment>(x=> x.Id == result.Result.Id);
+            var shipment = await Find<Shipment>(x=> x.Id == result.Value.Id);
 
             shipment.Should().NotBeNull();
 
-            shipment?.TrackingNumber?.Should().Be(result.Result.TrackingNumber);
+            shipment?.TrackingNumber?.Should().Be(result.Value.TrackingNumber);
 
             shipment?.Status.Should().Be(ShipmentStatus.Shipping);
 
-            shipment?.ShipmentLabelExternalId.Should().Be(result.Result.ShipmentLabelExternalId);
+            shipment?.ShipmentLabelExternalId.Should().Be(result.Value.ShipmentLabelExternalId);
         }
 
 

@@ -19,7 +19,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
             _paymentMethodResolver = paymentMethodResolver;
         }
 
-        public async Task<UnitResultV2<PaymentRequestDto>> CreateAsync(CreatePaymentRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PaymentRequestDto>> CreateAsync(CreatePaymentRequestModel model, CancellationToken cancellationToken = default)
         {
             bool isOrderPaymentCreated = await _paymentRequestRepository.AnyAsync(x => x.OrderId == model.OrderId
                || x.OrderNumber == model.OrderNumber);
@@ -27,7 +27,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
             if (isOrderPaymentCreated)
             {
 
-                return UnitResultV2.Failure<PaymentRequestDto>(ErrorInfo.BusinessLogic($"Order payment request for order id : {model.OrderId} , with number : {model.OrderNumber} is already created"));
+                return UnitResult.Failure<PaymentRequestDto>(ErrorInfo.BusinessLogic($"Order payment request for order id : {model.OrderId} , with number : {model.OrderNumber} is already created"));
 
             }
 
@@ -48,22 +48,22 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             var result = ObjectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
 
-            return UnitResultV2.Success(result);
+            return UnitResult.Success(result);
         }
 
-        public async Task<UnitResultV2<PaymentProcessResultDto>> ProcessPaymentAsync(string paymentId, ProcessPaymentRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PaymentProcessResultDto>> ProcessPaymentAsync(string paymentId, ProcessPaymentRequestModel model, CancellationToken cancellationToken = default)
         {
             var paymentRequest = await _paymentRequestRepository.SingleOrDefaultAsync(x => x.Id == paymentId, cancellationToken);
 
             if (paymentRequest == null)
             {
-                return UnitResultV2.Failure<PaymentProcessResultDto>(ErrorInfo.NotFound($"Payment request with id :{paymentId}, is not exist"));
+                return UnitResult.Failure<PaymentProcessResultDto>(ErrorInfo.NotFound($"Payment request with id :{paymentId}, is not exist"));
             }
 
             if (paymentRequest.State != PaymentStatus.Waiting)
             {
 
-                return UnitResultV2.Failure<PaymentProcessResultDto>(
+                return UnitResult.Failure<PaymentProcessResultDto>(
                     ErrorInfo.BusinessLogic($"Invalid payment request state {paymentRequest.State}.Payment request state should be" +
                     $"in  {PaymentStatus.Waiting}"));
             }
@@ -72,30 +72,30 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (unitResult.IsFailure)
             {
-                return UnitResultV2.Failure<PaymentProcessResultDto>(unitResult.Error);
+                return UnitResult.Failure<PaymentProcessResultDto>(unitResult.Error);
             }
 
-            var paymentMethod = unitResult.Result;
+            var paymentMethod = unitResult.Value;
 
 
             return await paymentMethod.Process(paymentId, model);
         }
 
-        public async Task<UnitResultV2<PaymentRequestDto>> RefundPaymentAsync(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PaymentRequestDto>> RefundPaymentAsync(string paymentId, CancellationToken cancellationToken = default)
         {
             PaymentRequest paymentRequest = await _paymentRequestRepository
                  .SingleOrDefaultAsync(x => x.Id == paymentId);
 
             if (paymentRequest == null)
             {
-                return UnitResultV2.Failure<PaymentRequestDto>(ErrorInfo.NotFound($"Payment request with id :{paymentId}, is not exist"));
+                return UnitResult.Failure<PaymentRequestDto>(ErrorInfo.NotFound($"Payment request with id :{paymentId}, is not exist"));
 
             }
 
             if (paymentRequest.State != PaymentStatus.Payed)
             {
 
-                return UnitResultV2.Failure<PaymentRequestDto>(ErrorInfo.BusinessLogic($"Invalid payment request state {paymentRequest.State}.Payment request state should be" +
+                return UnitResult.Failure<PaymentRequestDto>(ErrorInfo.BusinessLogic($"Invalid payment request state {paymentRequest.State}.Payment request state should be" +
                  $"in  {PaymentStatus.Payed}"));
             }
 
@@ -104,10 +104,10 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (unitResult.IsFailure)
             {
-                return UnitResultV2.Failure<PaymentRequestDto>(unitResult.Error);
+                return UnitResult.Failure<PaymentRequestDto>(unitResult.Error);
             }
 
-            var paymentMethod = unitResult.Result;
+            var paymentMethod = unitResult.Value;
 
             return await paymentMethod.Refund(paymentId, cancellationToken);
         }

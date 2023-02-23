@@ -26,9 +26,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             result.IsSuccess.Should().BeTrue();
 
-            var apiResource = await SingleAsync<ApiResource>(x => x.Id == result.Result.Id);
+            var apiResource = await SingleAsync<ApiResource>(x => x.Id == result.Value.Id);
 
-            apiResource.AssertApiResource(result.Result);
+            apiResource.AssertApiResource(result.Value);
 
             apiResource.AssertApiResourceCommand(model);
         }
@@ -44,9 +44,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             result.IsSuccess.Should().BeTrue();
 
-            var apiResource = await SingleAsync<ApiResource>(x => x.Id == result.Result.Id);
+            var apiResource = await SingleAsync<ApiResource>(x => x.Id == result.Value.Id);
 
-            apiResource.AssertApiResource(result.Result);
+            apiResource.AssertApiResource(result.Value);
 
             apiResource.AssertApiResourceCommand(model);
         }
@@ -104,7 +104,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             result.IsSuccess.Should().BeTrue();
 
-            var apiResource = await SingleAsync<ApiResource>(x => x.Id == result.Result.Id);
+            var apiResource = await SingleAsync<ApiResource>(x => x.Id == result.Value.Id);
 
             apiResource.Secrets.Count.Should().Be(1);
 

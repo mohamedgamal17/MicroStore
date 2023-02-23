@@ -24,9 +24,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
 
             result.IsSuccess.Should().BeTrue();
 
-            var apiScope = await SingleAsync<ApiScope>(x => x.Id == result.Result.Id);
+            var apiScope = await SingleAsync<ApiScope>(x => x.Id == result.Value.Id);
 
-            apiScope.AssertApiScope(result.Result);
+            apiScope.AssertApiScope(result.Value);
 
             apiScope.AssertApiScopeCommand(model);
         }
@@ -42,9 +42,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
 
             result.IsSuccess.Should().BeTrue();
 
-            var apiScope = await SingleAsync<ApiScope>(x => x.Id == result.Result.Id);
+            var apiScope = await SingleAsync<ApiScope>(x => x.Id == result.Value.Id);
 
-            apiScope.AssertApiScope(result.Result);
+            apiScope.AssertApiScope(result.Value);
 
             apiScope.AssertApiScopeCommand(model);
         }

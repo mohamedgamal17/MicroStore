@@ -25,7 +25,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             response.IsSuccess.Should().BeTrue();
 
-            var result = response.Result;
+            var result = response.Value;
 
             result.PageNumber.Should().Be(queryParams.PageNumber);
             result.PageSize.Should().Be(queryParams.PageSize);
@@ -50,7 +50,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             response.IsSuccess.Should().BeTrue();
 
-            var result = response.Result;
+            var result = response.Value;
 
             result.PageNumber.Should().Be(queryParams.PageNumber);
 
@@ -69,7 +69,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             response.IsSuccess.Should().BeTrue();
 
-            response.Result.Id.Should().Be(orderId);
+            response.Value.Id.Should().Be(orderId);
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             response.IsSuccess.Should().BeTrue();
 
-            response.Result.OrderNumber.Should().Be(orderNumber);
+            response.Value.OrderNumber.Should().Be(orderNumber);
         }
 
         [Test]

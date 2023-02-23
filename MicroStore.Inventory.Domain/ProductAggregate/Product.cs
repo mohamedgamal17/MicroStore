@@ -35,7 +35,7 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             Stock = stock;
         }
 
-        public UnitResult AdjustInventory(int adjustedStock, string reason)
+        public Result AdjustInventory(int adjustedStock, string reason)
         {
 
             Stock = adjustedStock;
@@ -48,11 +48,11 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
                 Reason = reason
             });
 
-            return UnitResult.Success();
+            return Result.Success();
         }
 
 
-        public UnitResult AllocateStock(int quantity)
+        public Result AllocateStock(int quantity)
         {
             Guard.Against.InvalidResult(CanAllocateStock(quantity),typeof(Product));
 
@@ -67,22 +67,22 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
 
             Stock -= quantity;
 
-            return UnitResult.Success();
+            return Result.Success();
         }
 
-        public UnitResult CanAllocateStock(int quantity)
+        public Result CanAllocateStock(int quantity)
         {
             if (Stock < quantity)
             {
-                return UnitResult.Failure(ProductAggregateErrorType.ProductAllocationError,
+                return Result.Failure(ProductAggregateErrorType.ProductAllocationError,
                     $"Current product : {Name} \n \t stock is less than requested allocated quantity");
             }
 
-            return UnitResult.Success();
+            return Result.Success();
         }
 
    
-        public UnitResult ReleaseStock(int quantity)
+        public Result ReleaseStock(int quantity)
         {        
             Guard.Against.InvalidResult(CanReleaseStock(quantity),typeof(Product));
 
@@ -97,19 +97,19 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
 
             Stock += quantity;
 
-            return UnitResult.Success();
+            return Result.Success();
         }
 
 
-        public UnitResult CanReleaseStock(int quantity)
+        public Result CanReleaseStock(int quantity)
         {
             if (AllocatedStock < quantity)
             {
-                return UnitResult.Failure(ProductAggregateErrorType.ProductReleasingStockError,
+                return Result.Failure(ProductAggregateErrorType.ProductReleasingStockError,
                    "Current allocated quantity is less than requested release quantity");
             }
 
-            return UnitResult.Success();
+            return Result.Success();
         }
        
     }

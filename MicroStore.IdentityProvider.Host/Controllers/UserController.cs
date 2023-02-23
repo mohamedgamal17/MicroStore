@@ -28,7 +28,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _userQueryService.ListAsync(queryParams);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -37,7 +37,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _userQueryService.GetAsync(userId);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -46,7 +46,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _userQueryService.GetAsync(email);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpGet]
@@ -55,7 +55,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _userQueryService.GetByUserNameAsync(userName);
 
-            return FromResultV2(result, HttpStatusCode.OK);
+            return FromResult(result, HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -64,7 +64,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _userCommandService.CreateUserAsync(model);
 
-            return FromResultV2(result, HttpStatusCode.Created);
+            return FromResult(result, HttpStatusCode.Created);
         }
 
         [HttpPut]
@@ -73,7 +73,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _userCommandService.UpdateUserAsync(userId,model);
 
-            return FromResultV2(result, HttpStatusCode.Created);
+            return FromResult(result, HttpStatusCode.Created);
         } 
     }
 }

@@ -16,13 +16,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
             _paymentSystemRepository = paymentSystemRepository;
         }
 
-        public async Task<UnitResultV2<PaymentSystemDto>> EnablePaymentSystemAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PaymentSystemDto>> EnablePaymentSystemAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
         {
             PaymentSystem? paymentSystem = await _paymentSystemRepository.SingleOrDefaultAsync(x => x.Name == systemName,cancellationToken);
 
             if (paymentSystem == null)
             {
-                return UnitResultV2.Failure<PaymentSystemDto>(ErrorInfo.NotFound( $"Payment system with name : {systemName}, is not exist" ));
+                return UnitResult.Failure<PaymentSystemDto>(ErrorInfo.NotFound( $"Payment system with name : {systemName}, is not exist" ));
             }
 
             paymentSystem.IsEnabled = isEnabled;
@@ -31,7 +31,7 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
 
 
-            return UnitResultV2.Success(ObjectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem));
+            return UnitResult.Success(ObjectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem));
         }
     }
 }

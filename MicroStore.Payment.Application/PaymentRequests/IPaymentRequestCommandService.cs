@@ -6,9 +6,9 @@ namespace MicroStore.Payment.Application.PaymentRequests
 {
     public interface IPaymentRequestCommandService : IApplicationService
     {
-        Task<UnitResultV2<PaymentRequestDto>> CreateAsync(CreatePaymentRequestModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult<PaymentRequestDto>> CreateAsync(CreatePaymentRequestModel model, CancellationToken cancellationToken = default);
 
-        Task<UnitResultV2<PaymentProcessResultDto>> ProcessPaymentAsync(string paymentId, ProcessPaymentRequestModel model, CancellationToken cancellationToken = default);
-        Task<UnitResultV2<PaymentRequestDto>> RefundPaymentAsync(string paymentId, CancellationToken cancellationToken = default);
+        Task<UnitResult<PaymentProcessResultDto>> ProcessPaymentAsync(string paymentId, ProcessPaymentRequestModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult<PaymentRequestDto>> RefundPaymentAsync(string paymentId, CancellationToken cancellationToken = default);
     }
 }

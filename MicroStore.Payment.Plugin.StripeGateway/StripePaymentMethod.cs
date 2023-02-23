@@ -46,7 +46,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
     
 
-        public async Task<UnitResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(async () =>
             {
@@ -101,7 +101,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         }
 
-        public async Task<UnitResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(async () =>
             {
@@ -157,18 +157,18 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
 
 
-        private async Task<UnitResultV2<T>> WrappResponseResult<T>(Func<Task<T>> func)
+        private async Task<UnitResult<T>> WrappResponseResult<T>(Func<Task<T>> func)
         {
 
             return await WrappResponseResult(async () =>
             {
                 var result = await func();
 
-                return UnitResultV2.Success(result);
+                return UnitResult.Success(result);
             });
         }
 
-        private async Task<UnitResultV2<T>> WrappResponseResult<T>(Func<Task<UnitResultV2<T>>> func)
+        private async Task<UnitResult<T>> WrappResponseResult<T>(Func<Task<UnitResult<T>>> func)
         {
             try
             {
@@ -177,12 +177,12 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             }
             catch (StripeException ex)
             {
-                return UnitResultV2.Failure<T>(ConvertStripeError(ex.StripeError));
+                return UnitResult.Failure<T>(ConvertStripeError(ex.StripeError));
 
             }
             catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
             {
-                return UnitResultV2.Failure<T>(ErrorInfo.BadGateway("Stripe gateway is not available now"));
+                return UnitResult.Failure<T>(ErrorInfo.BadGateway("Stripe gateway is not available now"));
                
             }
         }
