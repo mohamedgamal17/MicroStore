@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.Ordering.Application;
 using MicroStore.Ordering.Infrastructure;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
@@ -60,6 +62,7 @@ namespace MicroStore.Ordering.Api
             {
                 options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+
             });
         }
 

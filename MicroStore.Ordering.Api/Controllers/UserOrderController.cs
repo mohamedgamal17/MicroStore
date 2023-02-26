@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
@@ -7,12 +8,12 @@ using MicroStore.BuildingBlocks.Security;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
-using MicroStore.Ordering.Application.Security;
 using System.Net;
 
 namespace MicroStore.Ordering.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/user/orders")]
     public class UserOrderController : MicroStoreApiController
     {
@@ -50,6 +51,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderCommandService.CreateOrderAsync(orderModel);
 
+            
             return FromResult(result, HttpStatusCode.Accepted);
         }
 
