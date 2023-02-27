@@ -14,7 +14,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
             _microStoreClient = microStoreClient;
         }
 
-        public Task<HttpResponseResult<AddressValidation>> ValidateAsync(Address address , CancellationToken cancellationToken = default)
+        public Task<AddressValidation> ValidateAsync(Address address , CancellationToken cancellationToken = default)
         {
             return _microStoreClient.MakeRequest<AddressValidation>(BaseUrl + "/"+ "validate",HttpMethod.Post, address, cancellationToken);
         }

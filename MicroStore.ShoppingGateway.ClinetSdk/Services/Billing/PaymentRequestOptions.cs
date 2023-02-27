@@ -4,7 +4,7 @@
     public class PaymentRequestOptions
     {
         public string OrderId { get; set; }
-        public string OrderNubmer { get; set; }
+        public string OrderNumber { get; set; }
         public double ShippingCost { get; set; }
         public double TaxCost { get; set; }
         public double SubtTotal { get; set; }
@@ -19,7 +19,8 @@
 
     public class PaymentProcessRequestOptions
     {
-        public string PaymentGatewayName { get; set; }
+        public string GatewayName { get;
+            set; }
         public string ReturnUrl { get; set; }
         public string CancelUrl { get; set; }
     }

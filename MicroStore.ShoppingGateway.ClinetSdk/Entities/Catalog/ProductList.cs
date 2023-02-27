@@ -1,7 +1,7 @@
 ﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog
 {
-    public class ProductList : BaseEntity<Guid>
+    public class ProductList : BaseEntity<string>
     {
         public string Name { get; set; } = null!;
         public string Sku { get; set; }

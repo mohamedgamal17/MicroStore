@@ -1,6 +1,6 @@
 ﻿namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing
 {
-    public class PaymentSystem : BaseEntity<Guid>
+    public class PaymentSystem : BaseEntity<string>
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }

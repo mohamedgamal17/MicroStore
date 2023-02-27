@@ -1,6 +1,6 @@
 ﻿namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing
 {
-    public class PaymentRequestList : CreationAuditedEntity<Guid>
+    public class PaymentRequestList : CreationAuditedEntity<string>
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }

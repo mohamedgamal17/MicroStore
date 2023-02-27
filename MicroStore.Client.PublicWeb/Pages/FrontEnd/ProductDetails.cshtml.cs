@@ -22,21 +22,10 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 
 
 
-        public async Task<IActionResult> OnGet(Guid id)
+        public async Task<IActionResult> OnGet(string id)
         {
 
-            var response = await _productService.RetriveAsync(id);
-
-            if (response.IsFailure)
-            {
-                TempData.Put("ErrorInfo", response.HttpEnvelopeResult?.Error);
-
-                TempData["StatusCode"] = response.HttpStatusCode;
-
-                return Redirect("~/frontend/error");
-            }
-
-            Product = response.Result;
+            Product = await _productService.RetriveAsync(id);
 
             return Page();
         }

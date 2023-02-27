@@ -41,7 +41,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK,Type=  typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> Update(string userId ,BasketModel basket)
         {
             var userBasket = await _basketRepository.GetAsync(userId);
@@ -58,7 +57,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> AddProduct(string userId ,  BasketItemModel model)
         {
             var basket = await _basketRepository.GetAsync(userId);
@@ -75,7 +73,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Envelope))]
         public async Task<IActionResult> RemoveProduct(string userId ,RemoveBasketItemsModel model)
         {
             var basket = await _basketRepository.GetAsync(userId);
@@ -125,11 +122,6 @@ namespace MicroStore.ShoppingCart.Api.Controllers
             return StatusCode(statusCode);
         }
 
-        [NonAction]
-        protected IActionResult Failure(int statusCode , ErrorInfo error)
-        {
-            return StatusCode(statusCode, Envelope.Failure<Unit>(error));
-        }
 
     }
 }

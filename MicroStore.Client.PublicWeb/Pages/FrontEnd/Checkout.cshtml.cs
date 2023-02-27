@@ -93,9 +93,8 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 
             var estimateRateResponse = await _shipmentRateService.EstimateAsync(rateRequestOptions);
 
-            estimateRateResponse.ThrowIfFailure();
 
-            double shippingCost = estimateRateResponse.Result.Items.Where(x => x.EstaimatedDays < 7).Select(x => x.Money.Value).Min();
+            double shippingCost = estimateRateResponse.Where(x => x.EstaimatedDays < 7).Select(x => x.Money.Value).Min();
 
             OrderSubmitRequestOptions submitRequestOptions = new OrderSubmitRequestOptions
             {
@@ -113,40 +112,29 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 
             var orderResponse =   await _userOrderService.SubmitOrderAsync(submitRequestOptions);
 
-            orderResponse.ThrowIfFailure();
-            
-            var order = orderResponse.Result;
-
             var paymentRequestOptions = new PaymentRequestOptions
             {
-                OrderId = order.Id.ToString(),
-                OrderNubmer = order.OrderNumber,
-                ShippingCost = order.ShippingCost,
-                TaxCost = order.TaxCost,
-                SubtTotal = order.SubTotal,
-                TotalCost = order.TotalPrice,
+                OrderId = orderResponse.Id.ToString(),
+                OrderNumber = orderResponse.OrderNumber,
+                ShippingCost = orderResponse.ShippingCost,
+                TaxCost = orderResponse.TaxCost,
+                SubtTotal = orderResponse.SubTotal,
+                TotalCost = orderResponse.TotalPrice,
                 Items = PreparePaymentProductCreateRequest(Basket)
             };
 
             var paymentResponse = await _userPaymentRequestService.CreateAsync(paymentRequestOptions);
 
-            paymentResponse.ThrowIfFailure();
-
-
-            var payment = paymentResponse.Result;
-
             var processPaymentRequestOptions = new PaymentProcessRequestOptions
             {
-                PaymentGatewayName = "stripe_gateway",
+                GatewayName = "stripe_gateway",
                 ReturnUrl = HttpContext.GetCurrentUrl(),
                 CancelUrl = HttpContext.GetCurrentUrl()
             };
 
-            var paymentProcessResponse = await _userPaymentRequestService.ProcessAsync(payment.Id, processPaymentRequestOptions);
+            var paymentProcessResponse = await _userPaymentRequestService.ProcessAsync(paymentResponse.Id, processPaymentRequestOptions);
 
-            paymentProcessResponse.ThrowIfFailure();
-
-            return Redirect(paymentProcessResponse.Result.CheckoutLink);
+            return Redirect(paymentProcessResponse.CheckoutLink);
         }
 
 
@@ -224,11 +212,7 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 
             Total = Basket.Items.Aggregate((double)0, (t1, t2) => t1 + (t2.Price * t2.Quantity));
 
-            var response = await _paymentSystemService.ListAsync();
-
-            response.ThrowIfFailure();
-
-            PaymentSystems = response.Result.Items;
+            PaymentSystems = await _paymentSystemService.ListAsync();
         }
         private async Task PrepareAvailablePaymentSystems()
         {

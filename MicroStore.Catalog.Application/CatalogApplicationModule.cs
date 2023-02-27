@@ -10,7 +10,8 @@ using Volo.Abp.Uow;
 
 namespace MicroStore.Catalog.Application
 {
-    [DependsOn(typeof(AbpEventBusModule))]
+    [DependsOn(typeof(AbpEventBusModule),
+        typeof(AbpAutoMapperModule))]
     public class CatalogApplicationModule : AbpModule
     {
 

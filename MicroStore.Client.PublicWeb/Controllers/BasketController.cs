@@ -47,14 +47,11 @@ namespace MicroStore.Client.PublicWeb.Controllers
             var basketResponse = await _basketService.AddItemAsync(_workContext.TryToGetCurrentUserId(),options);
 
             
-            return FromHttpResponseResult(basketResponse);
+            return Ok(basketResponse);
         }
 
 
-        private IActionResult FromHttpResponseResult<T>(HttpResponseResult<T> response)
-        {
-            return StatusCode((int)response.HttpStatusCode, response.HttpEnvelopeResult);
-        }
+  
 
 
         [HttpPut]
@@ -68,7 +65,7 @@ namespace MicroStore.Client.PublicWeb.Controllers
 
             var basketResponse = await _basketService.UpdateAsync(_workContext.TryToGetCurrentUserId(), options);
 
-            return FromHttpResponseResult(basketResponse);
+            return Ok(basketResponse);
         }
 
 
@@ -85,7 +82,7 @@ namespace MicroStore.Client.PublicWeb.Controllers
             var basketResponse = await _basketService.RemoveItemsAsync(_workContext.TryToGetCurrentUserId(), options);
 
 
-            return FromHttpResponseResult(basketResponse);
+            return Ok(basketResponse);
         }
     }
 

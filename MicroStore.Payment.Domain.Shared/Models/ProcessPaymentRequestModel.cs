@@ -26,15 +26,28 @@ namespace MicroStore.Payment.Domain.Shared.Models
             RuleFor(x => x.ReturnUrl)
                 .NotEmpty()
                 .WithMessage("Return url is required")
-                .Matches(@"(([\w]+:)?//)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,253}[\d\w]\.)+[\w]{2,4}(:[\d]+)?(/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&?([-+_~.\d\w]|%[a-fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?")
+                .Must(LinkMustBeAUri)
                 .WithMessage("Return url should be valid url");
 
 
             RuleFor(x => x.CancelUrl)
                 .NotEmpty()
                 .WithMessage("Cancel url is required")
-                .Matches(@"(([\w]+:)?//)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,253}[\d\w]\.)+[\w]{2,4}(:[\d]+)?(/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&?([-+_~.\d\w]|%[a-fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?")
+                .Must(LinkMustBeAUri)
                 .WithMessage("Cancel url should be valid");
+        }
+
+        private static bool LinkMustBeAUri(string link)
+        {
+            if (string.IsNullOrWhiteSpace(link))
+            {
+                return false;
+            }
+
+            Uri outUri;
+
+            return Uri.TryCreate(link, UriKind.Absolute, out outUri)
+                   && (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

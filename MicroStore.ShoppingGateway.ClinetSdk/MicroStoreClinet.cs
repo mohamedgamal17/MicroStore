@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System.Net.Http.Headers;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using Microsoft.AspNetCore.WebUtilities;
-using System;
 using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
-using Newtonsoft.Json.Converters;
+using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk
 {
@@ -16,7 +13,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
 
         const string DefaultMediaType = "application/json";
 
-        const string AuthorizationSchema = "Bearer";
+        const string UnauthorizedMessage = "Unauthorized";
+
+        const string ForbiddenMessage = "Forbidden";
 
         private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
         {
@@ -26,12 +25,15 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
 
         private readonly HttpClient _httpClient;
 
-        public MicroStoreClinet(HttpClient httpClient)
+        private readonly ILogger<MicroStoreClinet> _logger;
+
+        public MicroStoreClinet(HttpClient httpClient, ILogger<MicroStoreClinet> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
-        public async Task<HttpResponseResult<TResponse>> MakeRequest<TResponse>(string path, HttpMethod httpMethod, object request = null, CancellationToken cancellationToken = default)
+        public async Task<TResponse> MakeRequest<TResponse>(string path, HttpMethod httpMethod, object request = null, CancellationToken cancellationToken = default)
         {
 
             try
@@ -45,6 +47,8 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
                 if (httpMethod == HttpMethod.Get)
                 {
                     httpRequest.RequestUri = new Uri(QueryHelpers.AddQueryString(httpRequest.RequestUri.AbsoluteUri, request.ConvertToDictionary()));
+
+                    _logger.LogInformation("Sending request with http method : {@httpMethod}  & request query : {request}", httpMethod, request);
                 }
                 else
                 {
@@ -52,11 +56,16 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
                     {
                         httpRequest.Content = new StringContent(await SerializeObject(request), Encoding.UTF8, DefaultMediaType);
                     }
+
+                    _logger.LogInformation("Sending request with http method : {@httpMethod}  & request query : {@request}", httpMethod, request);
                 }
 
-
+   
 
                 var httpResponseMessage = await _httpClient.SendAsync(httpRequest, cancellationToken);
+
+                ThrowIfFailureResponse(httpResponseMessage);
+
 
                 return await ConvertResponseResult<TResponse>(httpResponseMessage, cancellationToken);
 
@@ -67,7 +76,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
             }
         }
 
-        public async Task<HttpResponseResult> MakeRequest(string path, HttpMethod httpMethod, object request = null, CancellationToken cancellationToken = default)
+        public async Task MakeRequest(string path, HttpMethod httpMethod, object request = null, CancellationToken cancellationToken = default)
         {
 
             try
@@ -83,10 +92,12 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
                     httpRequest.Content = new StringContent(await SerializeObject(request), Encoding.UTF8, DefaultMediaType);
                 }
 
+                _logger.LogInformation("Sending request with http method : {@HttpMethod} & request body : {@Request}", httpMethod, request);
+
 
                 var httpResponseMessage = await _httpClient.SendAsync(httpRequest, cancellationToken);
 
-                return await ConvertResponseResult(httpResponseMessage, cancellationToken);
+                ThrowIfFailureResponse(httpResponseMessage);
 
             }
             catch (HttpRequestException ex)
@@ -108,173 +119,56 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
             return Task.FromResult(JsonConvert.DeserializeObject<T>(Json, _jsonSerializerSettings));
         }
 
-        public async Task<HttpResponseResult<TResponse>> ConvertResponseResult<TResponse>(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken)
+        public async Task<TResponse> ConvertResponseResult<TResponse>(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken)
         {
+
             string content = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
 
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                return HttpResponseResult.Success(httpResponseMessage.StatusCode, await DeserializeObject<HttpEnvelopeResult<TResponse>>(content));
-            }
+            _logger.LogInformation("respoonse {@response}", content);
 
-            return HttpResponseResult.Failure<TResponse>(httpResponseMessage.StatusCode, await DeserializeObject<HttpEnvelopeResult>(content));
+            return await DeserializeObject<TResponse>(content);
         }
 
-
-        public async Task<HttpResponseResult> ConvertResponseResult(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken)
+        private async void ThrowIfFailureResponse(HttpResponseMessage httpResponseMessage)
         {
-            string content = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
-
-            var httpEnvelopeResult = await DeserializeObject<HttpEnvelopeResult>(content);
-
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                return HttpResponseResult.Success(httpResponseMessage.StatusCode, httpEnvelopeResult);
-            }
-
-            return HttpResponseResult.Failure(httpResponseMessage.StatusCode, httpEnvelopeResult);
-        }
-
-        private JsonSerializerSettings CreateJsonSerializerSettings()
-        {
-            var settings = new JsonSerializerSettings
+            if (!httpResponseMessage.IsSuccessStatusCode)
             {
 
-                ContractResolver = new DefaultContractResolver
+                if (httpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    NamingStrategy = new CamelCaseNamingStrategy(),
-
-                },
-
-
-            };
-
-            settings.Converters.Add(new StringEnumConverter());
-
-
-            return settings;
-        }
-
-    }
-
-    
-    public class HttpResponseResult
-    {
-
-        public bool IsSuccess { get; }
-        public HttpStatusCode HttpStatusCode { get; }
-        public HttpEnvelopeResult HttpEnvelopeResult { get; }
-        public bool IsFailure => !IsSuccess;
-
-        internal HttpResponseResult(bool isSuccess, HttpStatusCode httpStatusCode, HttpEnvelopeResult httpEnvelopeResult)
-        {
-            IsSuccess = isSuccess;
-            HttpStatusCode = httpStatusCode;
-            HttpEnvelopeResult = httpEnvelopeResult;
-        }
-        public static HttpResponseResult Success(HttpStatusCode httpStatusCode, HttpEnvelopeResult htttpEnvelopeResult)
-        {
-            return new HttpResponseResult(true, httpStatusCode, htttpEnvelopeResult);
-        }
-
-        public static HttpResponseResult Failure(HttpStatusCode httpStatusCode, HttpEnvelopeResult htttpEnvelopeResult)
-        {
-            return new HttpResponseResult(false, httpStatusCode, htttpEnvelopeResult);
-        }
-
-        public static HttpResponseResult<T> Success<T>(HttpStatusCode httpStatusCode, HttpEnvelopeResult<T> htttpEnvelopeResult)
-        {
-            return new HttpResponseResult<T>(true, httpStatusCode, htttpEnvelopeResult);
-        }
-
-        public static HttpResponseResult<T> Failure<T>(HttpStatusCode httpStatusCode, HttpEnvelopeResult htttpEnvelopeResult)
-        {
-            return new HttpResponseResult<T>(false, httpStatusCode, htttpEnvelopeResult);
-        }
-
-
-    }
-
-
-    public class HttpResponseResult<T> : HttpResponseResult
-    {
-        internal HttpResponseResult(bool isSuccess, HttpStatusCode httpStatusCode, HttpEnvelopeResult httpEnvelopeResult) : base(isSuccess, httpStatusCode, httpEnvelopeResult)
-        {
-
-        }
-
-        public T Result
-        {
-            get
-            {
-                if (IsSuccess)
-                {
-                    return ((HttpEnvelopeResult<T>)HttpEnvelopeResult).GetResult();
+                    throw new MicroStoreClientException(httpResponseMessage.StatusCode, UnauthorizedMessage);
                 }
 
-                throw new InvalidOperationException("http result cannot retrieved");
+                if(httpResponseMessage.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    throw new MicroStoreClientException(httpResponseMessage.StatusCode, ForbiddenMessage);
+
+                }
+                var json = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                _logger.LogInformation("Error respoonse {@response}", json);     
+
+                var error = await DeserializeObject<MicroStoreError>(json);
+
+                throw new MicroStoreClientException(httpResponseMessage.StatusCode, error.Title, error);
             }
         }
 
-    }
 
-    [Serializable]
-    public class HttpEnvelopeResult
-    {
-        public ErrorInfo Error { get; set; }    
 
     }
 
-    [Serializable]
-    public class HttpEnvelopeResult<T> : HttpEnvelopeResult
-    {
-        public T Result { get; set; }
-        public T GetResult()
-        {
-            return (T)Result;
-        }
 
-    }
 
     [Serializable]
-    public class ErrorInfo
+    public class MicroStoreError
     {
         public string Type { get; set; }
-        public string Source { get; set; }
-        public string Message { get; set; }
-        public string Details { get; set; }
-        public ValidationErrorInfo[] ValidationErrors { get; set; }
-
+        public string Title {get ; set;}
+        public string Detail { get; set; }
+        public string Instance { get; set; }
+        public Dictionary<string,string[]> Errors { get; set; }
     }
 
-    [Serializable]
-    public class ValidationErrorInfo
-    {
-        public string Message { get; set; }
 
-        public string[] Members { get; set; }
-
-        public ValidationErrorInfo()
-        {
-
-        }
-
-        public ValidationErrorInfo(string message)
-        {
-            Message = message;
-        }
-
-        public ValidationErrorInfo(string message, string[] members)
-            : this(message)
-        {
-            Members = members;
-        }
-
-
-        public ValidationErrorInfo(string message, string member)
-            : this(message, new[] { member })
-        {
-
-        }
-    }
 }

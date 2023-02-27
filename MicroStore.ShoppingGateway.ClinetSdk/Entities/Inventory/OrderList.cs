@@ -2,7 +2,7 @@
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Inventory
 { 
-    public class OrderList : BaseEntity<Guid>
+    public class OrderList : BaseEntity<string>
     {
         public string ExternalOrderId { get; set; }
         public string OrderNumber { get; set; }

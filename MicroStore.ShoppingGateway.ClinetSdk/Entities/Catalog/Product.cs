@@ -3,7 +3,7 @@
 namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog
 {
     [Serializable]
-    public class Product : BaseEntity<Guid>
+    public class Product : BaseEntity<string>
     {
         public string Name { get; set; }
         public string Sku { get; set; }

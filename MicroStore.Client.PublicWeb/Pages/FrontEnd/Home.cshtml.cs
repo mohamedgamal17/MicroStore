@@ -30,18 +30,8 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
                 Desc = @params.Desc
             };
 
-            var result = await _productService.ListAsync(pagingOptions);
-
-            if (result.IsFailure)
-            {
-                TempData["HttpEnvelopeResult"] = result.HttpEnvelopeResult;
-                TempData["StatusCode"] = result.HttpStatusCode;
-
-                _logger.LogInformation($"Status code  : {result.HttpStatusCode}");
-                return Redirect("~/frontend/Error");
-            }
-
-            Products = result.Result;
+    
+            Products = await _productService.ListAsync(pagingOptions); 
 
 
             return Page();

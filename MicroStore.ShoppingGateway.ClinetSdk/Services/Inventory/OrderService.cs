@@ -15,26 +15,21 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Inventory
         }
 
 
-        public async Task<HttpResponseResult<PagedList<OrderList>>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
+        public async Task<PagedList<OrderList>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<PagedList<OrderList>>(BaseUrl, HttpMethod.Get, options, cancellationToken);
         }
 
-        public Task<HttpResponseResult<PagedList<OrderList>>> ListByUserAsync(string userId,PagingReqeustOptions options, CancellationToken cancellationToken = default)
+        public Task<PagedList<OrderList>> ListByUserAsync(string userId,PagingReqeustOptions options, CancellationToken cancellationToken = default)
         {
             return _microStoreClinet.MakeRequest<PagedList<OrderList>>(string.Format("{0}/user/{1}", BaseUrl, userId), HttpMethod.Get, options, cancellationToken);
         }
 
-        public async Task<HttpResponseResult<Order>> RetrieveAsync(Guid orderId , CancellationToken cancellationToken = default)
+        public async Task<Order> RetrieveAsync(string orderId , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<Order>(string.Format("{0}/{1}", BaseUrl, orderId), HttpMethod.Get,  cancellationToken);
         }
 
-        public async Task<HttpResponseResult<Order>> RetrieveByExternalIdAsync(Guid externalOrderId, CancellationToken cancellationToken)
-        {
-            return await _microStoreClinet.MakeRequest<Order>(string.Format("{0}/external_order_id/{1}", BaseUrl, externalOrderId),HttpMethod.Get , cancellationToken);
-        }
-
-
+ 
     }
 }

@@ -15,17 +15,17 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         }
 
 
-        public async Task<HttpResponseResult<Product>> CreateAsync(Guid productId , ProductCategoryCreateOptions options , CancellationToken cancellationToken = default)
+        public async Task<Product> CreateAsync(string productId , ProductCategoryCreateOptions options , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<Product>(string.Format(BaseUrl, productId), HttpMethod.Post, options, cancellationToken);
         }
 
-        public async Task<HttpResponseResult<Product>> UpdateAsync(Guid productId , Guid categoryId , ProductCategoryUpdateOptions options , CancellationToken cancellationToken = default)
+        public async Task<Product> UpdateAsync(string productId , string categoryId , ProductCategoryUpdateOptions options , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest< Product>(string.Format(BaseUrl, productId) + "/" + categoryId, HttpMethod.Put, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Product>(string.Format(BaseUrl, productId) + "/" + categoryId, HttpMethod.Put, options, cancellationToken);
         }
 
-        public async Task<HttpResponseResult<Product>> DeleteAsync(Guid productId, Guid categoryId,  CancellationToken cancellationToken = default)
+        public async Task<Product> DeleteAsync(string productId, string categoryId,  CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest< Product>(string.Format(BaseUrl, productId) + "/" + categoryId, HttpMethod.Delete, cancellationToken);
         }

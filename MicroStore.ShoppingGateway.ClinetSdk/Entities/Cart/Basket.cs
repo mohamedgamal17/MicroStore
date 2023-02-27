@@ -1,7 +1,7 @@
 ﻿namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart
 {
     [Serializable]
-    public class Basket : BaseEntity<Guid>
+    public class Basket : BaseEntity<string>
     {
         public string UserId { get; set; }
 

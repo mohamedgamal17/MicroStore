@@ -2,7 +2,7 @@
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping
 {
-    public class ShipmentItem : BaseEntity<Guid>
+    public class ShipmentItem : BaseEntity<string>
     {
         public string Name { get; set; }
         public string Sku { get; set; }

@@ -1,15 +1,14 @@
 ﻿using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
+using System.Net;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
 {
     public static class HttpResponseResultExtensions
     {
-        public static void ThrowIfFailure(this HttpResponseResult result)
+        public static void ThrowIfFailure(this HttpResponseMessage httpResponseMessage)
         {
-            if (result.IsFailure)
-            {
-                throw new MicroStoreClientException(result.HttpStatusCode ,result?.HttpEnvelopeResult?.Error);
-            }
+
+            
         }
     }
 }

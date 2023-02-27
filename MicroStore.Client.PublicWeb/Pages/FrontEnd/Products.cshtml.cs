@@ -33,17 +33,7 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 
             var response = await _productService.ListAsync(options);
 
-            if (response.IsFailure)
-            {
-                TempData.Put("ErrorInfo", response.HttpEnvelopeResult?.Error);
-
-                TempData["StatusCode"] = response.HttpStatusCode;
-
-                return Redirect("~/frontend/error");
-            }
-
-
-            Products = response.Result;
+            Products = response;
 
             return Page();
         }
