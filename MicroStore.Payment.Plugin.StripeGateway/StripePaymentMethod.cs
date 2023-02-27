@@ -32,7 +32,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         private readonly ILogger<StripePaymentMethod> _logger;
 
-        public StripePaymentMethod(SessionService sessionService, PaymentIntentService paymentIntentService, IPaymentRequestManager paymentRequestRepository, IObjectMapper objectMapper,  ISettingsRepository settingsRepository, RefundService refundService, ILogger<StripePaymentMethod> logger)
+        public StripePaymentMethod(SessionService sessionService, PaymentIntentService paymentIntentService, IPaymentRequestManager paymentRequestRepository, IObjectMapper objectMapper, ISettingsRepository settingsRepository, RefundService refundService, ILogger<StripePaymentMethod> logger)
         {
             _sessionService = sessionService;
             _paymentIntentService = paymentIntentService;
@@ -44,7 +44,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
         }
         public string PaymentGatewayName => StripePaymentConst.Provider;
 
-    
+
 
         public async Task<UnitResult<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
@@ -60,24 +60,37 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     LineItems = PrepareStripeLineItems(paymentRequest!.Items),
 
 
-                    ShippingOptions = new List<SessionShippingOptionOptions>
-                {
-                    new SessionShippingOptionOptions
-                    {
-                        ShippingRateData = new SessionShippingOptionShippingRateDataOptions
-                        {
-                            FixedAmount = new SessionShippingOptionShippingRateDataFixedAmountOptions
-                            {
-                               Amount = Convert.ToInt64((paymentRequest.ShippingCost + paymentRequest.TaxCost)  * 100),
-                               Currency = "usd"
-                            },
 
-                            DisplayName = "Shipping Cost",
-                            Type = "fixed_amount"
-                        }
+
+                    ShippingOptions = new List<SessionShippingOptionOptions>
+                    {
+                        new SessionShippingOptionOptions
+                        {
+                            ShippingRateData = new SessionShippingOptionShippingRateDataOptions
+                            {
+                                FixedAmount = new SessionShippingOptionShippingRateDataFixedAmountOptions
+                                {
+                                   Amount = Convert.ToInt64((paymentRequest.ShippingCost + paymentRequest.TaxCost)  * 100),
+                                   Currency = "usd"
+                                },
+
+
+                                DisplayName = "Shipping Cost",
+
+                                Type = "fixed_amount"
+                            }
+
+                        },
+
 
                     },
-                },
+
+                    Metadata = new Dictionary<string, string>
+                    {
+                        {  "paymentrequest_id" ,  paymentRequest.Id}
+                    },
+
+
 
                     Mode = "payment"
                 };
@@ -93,8 +106,8 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     TransactionId = session.PaymentIntentId,
                     AmountSubTotal = (session.AmountSubtotal / 100 ?? 0),
                     AmountTotal = (session.AmountTotal / 100 ?? 0),
-                    SuccessUrl = session.SuccessUrl ,
-                    CancelUrl = session.CancelUrl ,
+                    SuccessUrl = session.SuccessUrl,
+                    CancelUrl = session.CancelUrl,
                     CheckoutLink = session.Url
                 };
             });
@@ -153,7 +166,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             };
         }
 
-      
+
 
 
 
@@ -183,14 +196,14 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
             {
                 return UnitResult.Failure<T>(ErrorInfo.BadGateway("Stripe gateway is not available now"));
-               
+
             }
         }
 
         private ErrorInfo ConvertStripeError(StripeError stripeError)
         {
             return ErrorInfo.BusinessLogic(stripeError.Message);
-       
+
         }
 
 
