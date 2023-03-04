@@ -9,6 +9,8 @@
         public string TransctionId { get; set; }
         public string PaymentGateway { get; set; }
         public List<PaymentRequestProduct> Items { get; set; }
+        public string Description { get; set; }
+        public string State { get; private set; }
         public DateTime? OpenedAt { get; set; }
         public DateTime? CapturedAt { get; set; }
     }

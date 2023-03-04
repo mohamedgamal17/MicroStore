@@ -163,9 +163,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Appli
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geographic", "Geographic", "{180F0EAF-5EB7-4716-A3FF-0493B4500123}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Geographic.Application.Tests", "MicroStore.Geographic.Application.Tests\MicroStore.Geographic.Application.Tests.csproj", "{43DE17E0-D1A6-4595-9020-1F98DB440B3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Application.Tests", "MicroStore.Geographic.Application.Tests\MicroStore.Geographic.Application.Tests.csproj", "{43DE17E0-D1A6-4595-9020-1F98DB440B3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Geographic.Host", "MicroStore.Geographic.Host\MicroStore.Geographic.Host.csproj", "{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Host", "MicroStore.Geographic.Host\MicroStore.Geographic.Host.csproj", "{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

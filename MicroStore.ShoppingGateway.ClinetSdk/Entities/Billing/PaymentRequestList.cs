@@ -8,6 +8,8 @@
         public double Amount { get; set; }
         public string TransctionId { get; set; }
         public string PaymentGateway { get; set; }
+
+        public string State { get; set; }
         public DateTime? OpenedAt { get; set; }
         public DateTime? CapturedAt { get; set; }
     }

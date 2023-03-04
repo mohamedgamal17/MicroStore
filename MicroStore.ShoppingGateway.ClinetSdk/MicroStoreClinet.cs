@@ -133,24 +133,13 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
         {
             if (!httpResponseMessage.IsSuccessStatusCode)
             {
-
-                if (httpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    throw new MicroStoreClientException(httpResponseMessage.StatusCode, UnauthorizedMessage);
-                }
-
-                if(httpResponseMessage.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    throw new MicroStoreClientException(httpResponseMessage.StatusCode, ForbiddenMessage);
-
-                }
                 var json = await httpResponseMessage.Content.ReadAsStringAsync();
 
                 _logger.LogInformation("Error respoonse {@response}", json);     
 
                 var error = await DeserializeObject<MicroStoreError>(json);
 
-                throw new MicroStoreClientException(httpResponseMessage.StatusCode, error.Title, error);
+                throw new MicroStoreClientException(httpResponseMessage.StatusCode, error?.Title ?? httpResponseMessage.StatusCode.ToString(), error);
             }
         }
 
