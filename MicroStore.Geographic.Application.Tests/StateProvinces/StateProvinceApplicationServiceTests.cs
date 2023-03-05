@@ -203,6 +203,45 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
 
             result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
         }
+
+
+
+
+        [Test]
+        public async Task Should_get_country_state_by_code_province()
+        {
+            var fakeCountry = await CreateCountryWithStateProvince();
+            var stateCode = fakeCountry.StateProvinces.First().Abbreviation;
+            var result = await _stateProvinceApplicationService.GetByCodeAsync(fakeCountry.TwoLetterIsoCode, stateCode);
+
+            result.IsSuccess.Should().BeTrue();
+
+            result.Value.Abbreviation.Should().Be(stateCode);
+            result.Value.CountryId.Should().Be(fakeCountry.Id);
+        }
+
+        [Test]
+        public async Task Should_return_failure_result_while_getting_country_state_province_by_code_when_country_not_exist()
+        {
+            var result = await _stateProvinceApplicationService.GetByCodeAsync(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+        }
+
+
+        [Test]
+        public async Task Should_return_failure_result_while_getting_country_state_province_by_code_when_state_province_is_not_exist_is_country()
+        {
+            var fakeCountry = await CreateCountry();
+
+            var result = await _stateProvinceApplicationService.GetByCodeAsync(fakeCountry.TwoLetterIsoCode, Guid.NewGuid().ToString());
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+        }
         protected StateProvinceModel PrepareStateProvinceModel()
         {
             return new StateProvinceModel

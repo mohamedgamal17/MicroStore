@@ -16,6 +16,7 @@ namespace MicroStore.Geographic.Host.Controllers
 
         private readonly IStateProvinceApplicationService _stateProvinceApplicationService;
 
+
         public CountryController(ICountryApplicationService countryApplicationService, IStateProvinceApplicationService stateProvinceApplicationService)
         {
             _countryApplicationService = countryApplicationService;
@@ -38,6 +39,16 @@ namespace MicroStore.Geographic.Host.Controllers
         public async Task<IActionResult> GetCountry(string countryId)
         {
             var result = await _countryApplicationService.GetAsync(countryId);
+
+            return FromResult(result, HttpStatusCode.OK);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CountryDto))]
+        [HttpGet]
+        [Route("code/{countryCode}")]
+        public async Task<IActionResult> GetCountryByCode(string countryCode)
+        {
+            var result = await _countryApplicationService.GetByCodeAsync(countryCode);
 
             return FromResult(result, HttpStatusCode.OK);
         }
@@ -90,6 +101,16 @@ namespace MicroStore.Geographic.Host.Controllers
         public async Task<IActionResult> GetCountryStateProvince(string countryId , string stateId)
         {
             var result = await _stateProvinceApplicationService.GetAsync(countryId, stateId);
+
+            return FromResult(result, HttpStatusCode.OK);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StateProvinceDto))]
+        [HttpGet]
+        [Route("code/{countryCode}/states/code/{stateCode}")]
+        public async Task<IActionResult> GetCountryStateProvinceByCode(string countryCode, string stateCode)
+        {
+            var result = await _stateProvinceApplicationService.GetByCodeAsync(countryCode, stateCode);
 
             return FromResult(result, HttpStatusCode.OK);
         }

@@ -4,7 +4,6 @@ using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Geographic.Application.Domain;
 using MicroStore.Geographic.Application.Dtos;
 using MicroStore.Geographic.Application.Models;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Geographic.Application.StateProvinces
 {
@@ -132,6 +131,28 @@ namespace MicroStore.Geographic.Application.StateProvinces
             return UnitResult.Success(ObjectMapper.Map<StateProvince, StateProvinceDto>(state));
         }
 
+        public async Task<UnitResult<StateProvinceDto>> GetByCodeAsync(string countryCode, string stateCode, CancellationToken cancellationToken = default)
+        {
+            var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
+
+            var country = await query.SingleOrDefaultAsync(x => x.TwoLetterIsoCode == countryCode || x.ThreeLetterIsoCode == countryCode, cancellationToken);
+
+            if (country == null)
+            {
+                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"Country with code : {countryCode} is not exist"));
+            }
+
+            var state = country.StateProvinces.SingleOrDefault(x => x.Abbreviation == stateCode);
+
+            if (state == null)
+            {
+                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"State province with abbrevation : {stateCode} is not exist in country : {country.Name}"));
+            }
+
+            return UnitResult.Success(ObjectMapper.Map<StateProvince, StateProvinceDto>(state));
+        }
+
+
         public async Task<UnitResult<List<StateProvinceDto>>> ListAsync(string countryId, CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
@@ -173,18 +194,5 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             return UnitResult.Success();
         }
-    }
-
-    public interface IStateProvinceApplicationService : IApplicationService
-    {
-        Task<UnitResult<StateProvinceDto>> CreateAsync(string countryId, StateProvinceModel model, CancellationToken cancellationToken = default);
-
-        Task<UnitResult<StateProvinceDto>> UpdateAsync(string countryId,string stateProvinceId ,StateProvinceModel model, CancellationToken cancellationToken = default);
-
-        Task<UnitResult> DeleteAsync(string countryId, string stateProvinceId, CancellationToken cancellationToken = default);
-
-        Task<UnitResult<List<StateProvinceDto>>> ListAsync(string countryId,CancellationToken cancellationToken = default);
-
-        Task<UnitResult<StateProvinceDto>> GetAsync(string countryId, string stateProvinceId, CancellationToken cancellationToken = default);
     }
 }

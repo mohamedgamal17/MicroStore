@@ -16,5 +16,7 @@ namespace MicroStore.Geographic.Application.Countries
         Task<List<CountryListDto>> ListAsync(CancellationToken cancellationToken = default);
         
         Task<UnitResult<CountryDto>> GetAsync(string countryId, CancellationToken cancellationToken = default);
+
+        Task<UnitResult<CountryDto>> GetByCodeAsync(string countryCode,  CancellationToken cancellationToken = default);
     }
 }

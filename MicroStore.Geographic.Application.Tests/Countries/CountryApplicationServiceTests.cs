@@ -120,8 +120,28 @@ namespace MicroStore.Geographic.Application.Tests.Countries
 
         }
 
+        [Test]
+        public async Task Should_get_country_by_code()
+        {
+            var fakeCountry = await CreateCountry();
 
+            var result = await _countryApplicationService.GetByCodeAsync(fakeCountry.TwoLetterIsoCode);
 
+            result.IsSuccess.Should().BeTrue();
+
+            result.Value.TwoLetterIsoCode.Should().Be(fakeCountry.TwoLetterIsoCode);
+            result.Value.ThreeLetterIsoCode.Should().Be(fakeCountry.ThreeLetterIsoCode);
+        }
+
+        [Test]
+        public async Task Should_return_failure_result_while_getting_by_code_when_country_is_not_exist()
+        {
+            var result = await _countryApplicationService.GetByCodeAsync(Guid.NewGuid().ToString());
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+        }
         protected CountryModel PrepareCountryModel()
         {
             return new CountryModel
