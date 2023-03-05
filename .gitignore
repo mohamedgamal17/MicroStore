@@ -192,6 +192,9 @@ publish/
 # in these scripts will be unencrypted
 PublishScripts/
 
+# Client side libraries
+**/wwwroot/lib/*
+
 # NuGet Packages
 *.nupkg
 # NuGet Symbol Packages
