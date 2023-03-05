@@ -1,5 +1,4 @@
 ﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
-using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
@@ -24,20 +23,18 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
         {
             var shipment = await _shipmentService.GetAsync(shipmentId, cancellationToken);
 
-            var country = await _countryService.GetByCodeAsync(shipment.Address.CountryCode, false, cancellationToken);
+            var addressAggregate = await PrepareAddressAggregate(shipment.Address);
 
-            var stateProvince = await _stateProvinceService.GetByCodeAsync(shipment.Address.CountryCode, shipment.Address.State, cancellationToken);
+            var shipmentAggregate = BuildShipmentAggregate(shipment);
 
-            var shipmentAggregate = PrepareShipmentAggregate(shipment);
-
-            shipmentAggregate.Address = PrepareAddressAggregate(shipment.Address, country, stateProvince);
+            shipmentAggregate.Address = addressAggregate;
 
             return shipmentAggregate;
 
         }
 
 
-        private ShipmentAggregate PrepareShipmentAggregate(Shipment shipment )
+        private ShipmentAggregate BuildShipmentAggregate(Shipment shipment )
         {
             return new ShipmentAggregate
             {
@@ -53,18 +50,35 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
             };
         }
 
-        private AddressAggregate PrepareAddressAggregate( Address address , Country country , StateProvince stateProvince ) 
+        private async Task<AddressAggregate> PrepareAddressAggregate(Address address, CancellationToken cancellationToken = default)
         {
+            var country = await _countryService.GetByCodeAsync(address.CountryCode, cancellationToken);
+            var stateProvince = await _stateProvinceService.GetByCodeAsync(address.CountryCode, address.State, cancellationToken);
+
             return new AddressAggregate
             {
                 Name = address.Name,
                 Phone = address.Phone,
-                Country = country,
-                State = stateProvince,
+                Country = new AddressCountry
+                {
+                    Id = country.Id,
+                    Name = country.Name,
+                    NumericIsoCode = country.NumericIsoCode,
+                    TwoLetterIsoCode = country.TwoLetterIsoCode,
+                    ThreeLetterIsoCode = country.ThreeLetterIsoCode
+                },
+                State = new AddressStateProvince
+                {
+                    Id = stateProvince.Id,
+                    Name = stateProvince.Name,
+                    Abbreviation = stateProvince.Abbreviation,
+                    CountryId = stateProvince.CountryId
+                },
                 City = address.City,
                 AddressLine1 = address.AddressLine1,
                 AddressLine2 = address.AddressLine2
             };
         }
+
     }
 }
