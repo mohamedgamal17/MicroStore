@@ -15,8 +15,10 @@ namespace MicroStore.Client.PublicWeb
              .AddRazorPagesOptions(opt =>
             {
                 opt.Conventions.AddPageRoute("/FrontEnd/Home", "");
+
             }).AddRazorRuntimeCompilation();
 
+            builder.Services.AddControllersWithViews();
 
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 

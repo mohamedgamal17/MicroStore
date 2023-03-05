@@ -1,0 +1,73 @@
+﻿@page
+@model MicroStore.Client.PublicWeb.Areas.Administration.Pages.Payments.IndexModel
+@{
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Dashboard v3</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a class="btn btn-info" href="#">
+                                <i class="fas
+                                    fa-plus-square mr-1"></i> Create Category
+                            </a>
+                        </li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-default">
+                <div class="card-body">
+                    @if (Model.PaymentRequests != null || Model.PaymentRequests?.TotalCount > 0)
+                    {
+                        <table class="table  table-hover table-striped  dataTable no-footer" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().OrderId)</th>
+                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().OrderNumber)</th>
+                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().CustomerId)</th>
+                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().Amount)</th>
+                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().State)</th>
+                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().OpenedAt)</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var payment in Model.PaymentRequests.Items)
+                                {
+                                    <tr>
+                                        <td>@payment.OrderId</td>
+                                        <td>@payment.OrderNumber</td>
+                                        <td>@payment.CustomerId</td>
+                                        <td>@payment.Amount</td>
+                                        <td>@payment.State</td>
+                                        <td>@payment.OpenedAt</td>
+                        
+                                        <td><button class="btn btn-info">View</button></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <h4 class=" text-center">There is no products yet</h4>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

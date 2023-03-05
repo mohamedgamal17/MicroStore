@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using Microsoft.AspNetCore.Http;
 
 namespace MicroStore.Client.PublicWeb.Infrastructure
 {

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;

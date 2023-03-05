@@ -34,11 +34,11 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
             return await _microStoreClinet.MakeRequest<PagedList<ShipmentList>>(string.Format("{0}/user/{1}",BaseUrl,userId),HttpMethod.Get ,options, cancellationToken);
         }
 
-        public async Task<Shipment> Retrieve(Guid shipmentId , CancellationToken cancellationToken = default)
+        public async Task<Shipment> GetAsync(string shipmentId , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<Shipment>(string.Format("{0}/{1}", BaseUrl, shipmentId), HttpMethod.Get ,cancellationToken);
         }
-        public async Task<Shipment> RetrieveByOrderId(string orderid, CancellationToken cancellationToken = default)
+        public async Task<Shipment> GetByOrderId(string orderid, CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<Shipment>(string.Format("{0}/order_id/{1}", BaseUrl, orderid), HttpMethod.Get , cancellationToken);
         }

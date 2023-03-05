@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace MicroStore.Client.PublicWeb.Pages.FrontEnd

@@ -30,7 +30,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic
         }
 
 
-        public async Task<Country> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<List<Country>> ListAsync(CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<List<Country>>(BASE_URL,HttpMethod.Get, cancellationToken);
         }
@@ -38,6 +38,11 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic
         public async Task<Country> GetAsync(string id , bool includeStateProvince = true , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<Country>(string.Format("{0}/{1}", BASE_URL, id),  HttpMethod.Get, new { IncludeStateProvince = includeStateProvince }, cancellationToken);
+        }
+
+        public async Task<Country> GetByCodeAsync(string code , bool includeStateProvince = true, CancellationToken cancellationToken = default)
+        {
+            return await _microStoreClinet.MakeRequest<Country>(string.Format("{0}/code/{1}", BASE_URL, code), HttpMethod.Get, new { IncludeStateProvince = includeStateProvince }, cancellationToken);
         }
     }
 }

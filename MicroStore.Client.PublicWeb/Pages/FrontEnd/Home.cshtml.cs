@@ -5,6 +5,7 @@ using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
+using Microsoft.Extensions.Logging;
 
 namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 {

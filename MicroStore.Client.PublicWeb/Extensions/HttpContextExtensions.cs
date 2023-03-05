@@ -1,4 +1,6 @@
-﻿namespace MicroStore.Client.PublicWeb.Extensions
+﻿using Microsoft.AspNetCore.Http;
+
+namespace MicroStore.Client.PublicWeb.Extensions
 {
     public static class HttpContextExtensions
     {

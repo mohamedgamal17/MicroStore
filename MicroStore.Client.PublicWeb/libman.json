@@ -11,10 +11,6 @@
       "destination": "wwwroot/lib/jqueryui/"
     },
     {
-      "library": "font-awesome@4.7.0",
-      "destination": "wwwroot/lib/font-awesome/"
-    },
-    {
       "library": "OwlCarousel2@2.3.4",
       "destination": "wwwroot/lib/OwlCarousel2/"
     },
@@ -31,7 +27,6 @@
       "destination": "wwwroot/lib/jquery/"
     },
     {
-      "provider": "cdnjs",
       "library": "sweetalert2@11.7.1",
       "destination": "wwwroot/lib/sweetalert2/",
       "files": [
@@ -45,15 +40,20 @@
       ]
     },
     {
-      "provider": "unpkg",
-      "library": "country-state-city@3.1.2",
-      "destination": "wwwroot/lib/country-state-city/"
+      "library": "admin-lte@3.2.0",
+      "destination": "wwwroot/lib/admin-lte/"
+    },
+    {
+      "library": "font-awesome@5.15.4",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "Chart.js@4.2.1",
+      "destination": "wwwroot/lib/Chart.js/"
+    },
+    {
+      "library": "summernote@0.8.20",
+      "destination": "wwwroot/lib/summernote/"
     }
-  ,
-{
-  "provider": "cdnjs",
-  "library": "require.js@2.3.6",
-  "destination": "wwwroot/lib/require.js/"
-}
-]
+  ]
 }

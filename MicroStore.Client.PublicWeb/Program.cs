@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
 using MicroStore.Client.PublicWeb;
 
 var builder = WebApplication.CreateBuilder(args);

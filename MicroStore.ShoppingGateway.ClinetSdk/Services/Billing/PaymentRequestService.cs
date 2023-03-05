@@ -36,12 +36,12 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Billing
             return await _microStoreClinet.MakeRequest<PagedList<PaymentRequestList>>(string.Format("{0}/user/{1}", BaseUrl, userId),HttpMethod.Get ,options, cancellationToken);
         }
 
-        public async Task<PaymentRequest> Retrieve(string paymentId , CancellationToken cancellationToken = default)
+        public async Task<PaymentRequest> GetAsync(string paymentId , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<PaymentRequest>(string.Format("{0}/{1}",BaseUrl,paymentId), HttpMethod.Get,  cancellationToken);
         }
 
-        public async Task<PaymentRequest> RetrieveByOrderAsync(string orderId , CancellationToken cancellationToken = default)
+        public async Task<PaymentRequest> GetByOrderAsync(string orderId , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<PaymentRequest>(string.Format("{0}/order_id/{1}", BaseUrl, orderId), HttpMethod.Get ,cancellationToken: cancellationToken);
         }

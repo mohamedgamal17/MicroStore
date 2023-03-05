@@ -13,7 +13,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             _microStoreClinet = microStoreClinet;
         }
 
-        public async Task<Order> CreateOrderAsync(OrderCreateRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<Order> CreateAsync(OrderCreateRequestOptions options, CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<Order>(BaseUrl, HttpMethod.Post, options, cancellationToken);
         }
@@ -28,7 +28,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             return await _microStoreClinet.MakeRequest< PagedList<OrderList>>(string.Format("{0}/user/{1}", BaseUrl, userId), HttpMethod.Get, options, cancellationToken);
         }
 
-        public async Task<Order> Retrieve(Guid orderId , CancellationToken cancellationToken = default)
+        public async Task<Order> GetAsync(Guid orderId , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<Order>(string.Format("{0}/{1}",BaseUrl,orderId),HttpMethod.Get,cancellationToken);
         } 

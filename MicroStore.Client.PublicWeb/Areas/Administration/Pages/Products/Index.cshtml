@@ -1,0 +1,70 @@
+﻿@page
+@model MicroStore.Client.PublicWeb.Areas.Administration.Pages.Products.IndexModel
+@{
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Dashboard v3</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a class="btn btn-info" href="#">
+                                <i class="fas
+                                    fa-plus-square mr-1"></i> Create Category
+                            </a>
+                        </li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-default">
+                <div class="card-body">
+                    @if (Model.Products != null || Model.Products?.Count > 0)
+                    {
+                        <table class="table  table-hover table-striped  dataTable no-footer" width="100%">
+                            <thead>
+                                <tr>
+
+                                    <th>Product Name</th>
+                                    <th>Product Sku</th>
+                                    <th>Price</th>
+                                    <th>Stock quantity</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in Model.Products)
+                                {
+                                    <tr>
+                                        <td>@product.Name</td>
+                                        <td>@product.Sku</td>
+                                        <td>@product.Price</td>
+                                        <td>5</td>
+                                        <td><button class="btn btn-info">Edit</button></td>
+                                        <td><button class="btn btn-danger">Delete</button></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <h4 class=" text-center">There is no products yet</h4>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
