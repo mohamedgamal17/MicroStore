@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Models;
-using MicroStore.Catalog.Application.Products;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
@@ -83,7 +82,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
             {
                 Sku = Guid.NewGuid().ToString(),
                 Name = Guid.NewGuid().ToString(),
-                Thumbnail = Guid.NewGuid().ToString(),
+                IsFeatured = true,
                 ShortDescription = Guid.NewGuid().ToString(),
                 LongDescription = Guid.NewGuid().ToString(),
                 Price = 50,

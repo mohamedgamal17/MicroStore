@@ -17,7 +17,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.Sku).IsRequired().HasMaxLength(256);
 
-            builder.Property(x => x.Thumbnail).IsRequired().HasDefaultValue(string.Empty).HasMaxLength(600);
+            builder.Property(x => x.IsFeatured).HasDefaultValue(default(bool));
 
             builder.Property(x => x.ShortDescription).HasMaxLength(600);
 

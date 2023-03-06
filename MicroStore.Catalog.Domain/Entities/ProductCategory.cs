@@ -6,13 +6,11 @@ namespace MicroStore.Catalog.Domain.Entities
     {
         public Category Category { get;  set; }
         public string CategoryId { get; set; }
-        public bool IsFeaturedProduct { get;  set; }
 
         public ProductCategory()
         {
             Id = Guid.NewGuid().ToString();
         }
-        public void SetFeaturedProduct(bool isFeatured) => IsFeaturedProduct = isFeatured;
 
     }
 }

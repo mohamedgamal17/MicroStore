@@ -6,7 +6,6 @@ namespace MicroStore.Catalog.Application.Dtos
     {
         public string CateogryId { get; set; }
         public string Name { get; set; }
-        public bool IsFeaturedProduct { get; set; }
 
     }
 }

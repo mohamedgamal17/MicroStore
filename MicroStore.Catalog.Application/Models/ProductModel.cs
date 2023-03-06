@@ -12,9 +12,9 @@ namespace MicroStore.Catalog.Application.Models
         public string Sku { get; set; } 
         public string ShortDescription { get; set; } 
         public string LongDescription { get; set; }
+        public bool IsFeatured { get; set; }
         public double Price { get; set; }
         public double OldPrice { get; set; }
-        public string Thumbnail { get; set; }
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
         public List<ProductCategoryModel>? Categories { get; set; }
@@ -62,11 +62,6 @@ namespace MicroStore.Catalog.Application.Models
             RuleFor(x => x.OldPrice)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Product old price can not be negative");
-
-
-
-            RuleFor(x => x.Thumbnail).MaximumLength(600);
-
 
             RuleFor(x => x.Weight)
                 .ChildRules((weight) =>

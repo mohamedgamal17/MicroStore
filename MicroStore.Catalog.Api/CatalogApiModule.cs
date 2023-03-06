@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.Catalog.Application;
 using MicroStore.Catalog.Infrastructure;
+using MicroStore.Catalog.Infrastructure.EntityFramework;
 using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
 using Volo.Abp.Application;
@@ -28,7 +30,7 @@ namespace MicroStore.Catalog.Api
 
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureAuthentication(context.Services,configuration);
+            ConfigureAuthentication(context.Services, configuration);
 
             ConfigureSwagger(context.Services, configuration);
 
@@ -43,11 +45,11 @@ namespace MicroStore.Catalog.Api
                 opt.AutoValidate = false;
             });
 
-           
+
         }
 
 
-        private void ConfigureAuthentication(IServiceCollection services , IConfiguration configuration)
+        private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(options =>
@@ -59,74 +61,83 @@ namespace MicroStore.Catalog.Api
                 options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
                 options.MapInboundClaims = true;
- 
+
             });
 
         }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var app = context.GetApplicationBuilder();
-        var env = context.GetEnvironment();
-        var config = context.GetConfiguration();
+        public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using var scope = context.ServiceProvider.CreateScope();
+
+            var dbContext =  scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
+
+            await dbContext.Database.MigrateAsync();
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
+            var config = context.GetConfiguration();
 
             if (env.IsDevelopment())
-        {
-
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
             {
-                options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
-                options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");
-                options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
-            });
+
+                app.UseSwagger();
+                app.UseSwaggerUI(options =>
+                {
+                    options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
+                    options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");
+                    options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
+                });
 
 
-            app.UseHsts();
+                app.UseHsts();
 
+            }
+
+
+            app.UseAbpRequestLocalization();
+            app.UseCorrelationId();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseAbpSerilogEnrichers();
+            app.UseConfiguredEndpoints();
+            //app.MapControllers();
         }
 
 
-        app.UseAbpRequestLocalization();
-        app.UseCorrelationId();
-        app.UseStaticFiles();
-        app.UseRouting();
-        app.UseAuthentication();
-        app.UseAuthorization();
-        app.UseAbpSerilogEnrichers();
-        app.UseConfiguredEndpoints();
-        //app.MapControllers();
-    }
 
 
 
-
-
-    private void ConfigureSwagger(IServiceCollection serviceCollection, IConfiguration configuration)
-    {
-        serviceCollection.AddSwaggerGen((options) =>
+        private void ConfigureSwagger(IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog Api", Version = "v1" });
-            options.DocInclusionPredicate((docName, description) => true);
-            options.CustomSchemaIds(type => type.FullName);
-            options.OperationFilter<AuthorizeCheckOperationFilter>();
-            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            serviceCollection.AddSwaggerGen((options) =>
             {
-                Type = SecuritySchemeType.OAuth2,
-
-                Flows = new OpenApiOAuthFlows
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog Api", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+                options.CustomSchemaIds(type => type.FullName);
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
-                    ClientCredentials = new OpenApiOAuthFlow
+                    Type = SecuritySchemeType.OAuth2,
+
+                    Flows = new OpenApiOAuthFlows
                     {
-                        AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")),
-                        TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")),
-                    }           
-                }
+                        ClientCredentials = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")),
+                            TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")),
+                        }
+                    }
+                });
+
             });
+        }
 
-        });
     }
-
-}
 }

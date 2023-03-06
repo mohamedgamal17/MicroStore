@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.IntegrationEvents;
+using MicroStore.Catalog.IntegrationEvents.Models;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
@@ -28,8 +29,17 @@ namespace MicroStore.Catalog.Application.Products.EventHandlers
                 Name = eventData.Entity.Name,
                 Description = eventData.Entity.ShortDescription,
                 Price = eventData.Entity.Price,
-                Thumbnail = eventData.Entity.Thumbnail
+                
             };
+
+            if(eventData.Entity.ProductImages != null)
+            {
+                integrationEvent.ProductImages = eventData.Entity.ProductImages.Select(x => new ProductImageModel
+                {
+                    ImageLink = x.ImagePath,
+                    DisplayOrder = x.DisplayOrder
+                }).ToList();
+            }
 
             return _publishEndPoint.Publish(integrationEvent,_cancellationTokenProvider.Token);
         }

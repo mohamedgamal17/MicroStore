@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.Catalog.Application.Categories;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Domain.Entities;
@@ -72,12 +71,12 @@ namespace MicroStore.Catalog.Application.Products
             product.OldPrice = model.OldPrice;
             product.Weight = model.Weight?.AsWeight() ?? Weight.Empty;
             product.Dimensions = model.Dimensions?.AsDimension() ?? Dimension.Empty;
-            product.Thumbnail = model.Thumbnail;
+            product.IsFeatured = model.IsFeatured;
 
             if (model.Categories != null)
             {
                 product.ProductCategories = model.Categories
-                    .Select(x => new ProductCategory { CategoryId = x.CategoryId, IsFeaturedProduct = x.IsFeatured })
+                    .Select(x => new ProductCategory { CategoryId = x.CategoryId })
                     .ToList();
             }
 

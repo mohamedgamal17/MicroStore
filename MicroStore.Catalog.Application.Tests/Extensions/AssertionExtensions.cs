@@ -17,11 +17,10 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
             product.OldPrice.Should().Be(model.OldPrice);
             product.Weight.Should().Be(model.Weight.AsWeight());
             product.Dimensions.Should().Be(model.Dimensions.AsDimension());
-            product.Thumbnail.Should().Be(model.Thumbnail);
+            product.IsFeatured.Should().Be(model.IsFeatured);
             product.ProductCategories.OrderBy(x => x.CategoryId).Should().Equal(model.Categories?.OrderBy(x => x.CategoryId), (left, right) =>
             {
-                return left.CategoryId == right.CategoryId &&
-                    left.IsFeaturedProduct == right.IsFeatured;
+                return left.CategoryId == right.CategoryId ;
             });
 
         }
