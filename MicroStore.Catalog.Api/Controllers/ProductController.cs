@@ -3,7 +3,6 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Application.Products;
@@ -28,7 +27,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductListDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductDto>))]
         public async Task<IActionResult> GetCatalogProductList([FromQuery] PagingAndSortingParamsQueryString queryParams)
         {
             var result = await _productQueryService.ListAsync(new PagingAndSortingQueryParams
@@ -57,7 +56,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProductDto))]
-        public async Task<IActionResult> Post([FromBody] ProductModel model)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductModel model)
         {
             var result = await _productCommandService.CreateAsync(model);
 
@@ -67,11 +66,39 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{id}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-        public async Task<IActionResult> Put(string id, [FromForm] ProductModel model)
+        public async Task<IActionResult> UpdateProduct(string id, [FromBody] ProductModel model)
         {
             var result = await _productCommandService.UpdateAsync(id, model);
             return FromResult(result, HttpStatusCode.Created);
         }
 
+
+        [Route("{productId}/productimage")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        public async Task<IActionResult> AddProductImage (string productId, [FromBody] CreateProductImageModel model)
+        {
+            var result = await _productCommandService.AddProductImageAsync(productId, model);
+            return FromResult(result, HttpStatusCode.Created);
+        }
+
+
+        [Route("{productId}/productimage/{productImageId}")]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        public async Task<IActionResult> AddProductImage(string productId, string productImageId,[FromBody] UpdateProductImageModel model)
+        {
+            var result = await _productCommandService.UpdateProductImageAsync(productId, productImageId,model);
+            return FromResult(result, HttpStatusCode.OK);
+        }
+
+        [Route("{productId}/productimage/{productImageId}")]
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        public async Task<IActionResult> DeleteProductImage(string productId, string productImageId)
+        {
+            var result = await _productCommandService.DeleteProductImageAsync(productId, productImageId);
+            return FromResult(result, HttpStatusCode.OK);
+        }
     }
 }

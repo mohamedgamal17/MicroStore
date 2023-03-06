@@ -81,16 +81,81 @@ namespace MicroStore.Catalog.Application.Products
                     .ToList();
             }
 
-            if (model.Images != null)
-            {
-                product.ProductImages = model.Images.Select(x => new ProductImage
-                {
-                    ImagePath = x.Image,
-                    DisplayOrder = x.DisplayOrder,
-                }).ToList();
-            }
+
         }
 
+
+       public async Task<UnitResult<ProductDto>> AddProductImageAsync(string productId, CreateProductImageModel model, CancellationToken cancellationToken = default)
+        {
+            Product? product = await _productRepository
+                .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
+
+            if(product == null)
+            {
+                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {productId} is not found"));
+            }
+
+            ProductImage productImage = new ProductImage
+            {
+                ImagePath = model.Image,
+                DisplayOrder = model.DisplayOrder,
+            };
+
+            product.ProductImages.Add(productImage);
+
+
+            await _productRepository.UpdateAsync(product, cancellationToken : cancellationToken);
+
+
+            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+        }
+
+        public async Task<UnitResult<ProductDto>> UpdateProductImageAsync(string productId, string productImageId, UpdateProductImageModel model, CancellationToken cancellationToken = default)
+        {
+            Product? product = await _productRepository
+                .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
+
+            if (product == null)
+            {
+                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {productId} is not found"));
+            }
+
+            var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
+
+            if(productImage == null)
+            {
+                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product image entity with id : {productImage} is not exist in product with id : {productId}"));
+            }
+
+            productImage.DisplayOrder = model.DisplayOrder;
+
+            await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
+
+            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+        }
+        public async Task<UnitResult<ProductDto>> DeleteProductImageAsync(string productId, string productImageId, CancellationToken cancellationToken = default)
+        {
+            Product? product = await _productRepository
+                .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
+
+            if (product == null)
+            {
+                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {productId} is not found"));
+            }
+
+            var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
+
+            if (productImage == null)
+            {
+                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product image entity with id : {productImage} is not exist in product with id : {productId}"));
+            }
+
+            product.ProductImages.Remove(productImage);
+
+            await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
+
+            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+        }
 
         private async Task<UnitResult> ValidateProduct(ProductModel model , string? productId = null)
         {

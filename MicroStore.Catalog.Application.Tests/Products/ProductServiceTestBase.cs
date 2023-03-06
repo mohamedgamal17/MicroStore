@@ -103,7 +103,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 },
 
                 Categories = categories.Select(x => new ProductCategoryModel { CategoryId = x.Id, IsFeatured = true }).ToList(),
-                Images = new List<ProductImageModel> { new ProductImageModel { Image = Guid.NewGuid().ToString(), DisplayOrder = 1 } }
             };
         }
 

@@ -36,11 +36,11 @@ namespace MicroStore.Catalog.Application.Products
             return UnitResult.Success(product);
         }
 
-        public async Task<UnitResult<PagedResult<ProductListDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<PagedResult<ProductDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Products.AsQueryable()
                          .AsNoTracking()
-                         .ProjectTo<ProductListDto>(MapperAccessor.Mapper.ConfigurationProvider);
+                         .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             if (queryParams.SortBy != null)
             {
@@ -52,7 +52,7 @@ namespace MicroStore.Catalog.Application.Products
             return UnitResult.Success(pagingResult);
         }
 
-        public IQueryable<ProductListDto> TryToSort(IQueryable<ProductListDto> query, string sortBy, bool desc = false)
+        public IQueryable<ProductDto> TryToSort(IQueryable<ProductDto> query, string sortBy, bool desc = false)
         {
             return sortBy.ToLower() switch
             {

@@ -33,11 +33,11 @@ namespace MicroStore.Catalog.Application.Categories
             return UnitResult.Success(ObjectMapper.Map<Category, CategoryDto>(category));
         }
 
-        public async Task<UnitResult<List<CategoryListDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<UnitResult<List<CategoryDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Categories
                 .AsNoTracking()
-                .ProjectTo<CategoryListDto>(MapperAccessor.Mapper.ConfigurationProvider);
+                .ProjectTo<CategoryDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             if (queryParams.SortBy != null)
             {
@@ -49,7 +49,7 @@ namespace MicroStore.Catalog.Application.Categories
             return UnitResult.Success(result);
         }
 
-        private IQueryable<CategoryListDto> TryToSort(IQueryable<CategoryListDto> query, string sortBy, bool desc)
+        private IQueryable<CategoryDto> TryToSort(IQueryable<CategoryDto> query, string sortBy, bool desc)
         {
             return sortBy.ToLower() switch
             {

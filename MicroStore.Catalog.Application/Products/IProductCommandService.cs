@@ -12,6 +12,10 @@ namespace MicroStore.Catalog.Application.Products
         Task<UnitResult<ProductDto>> UpdateAsync(string id,ProductModel model , CancellationToken cancellationToken = default);
 
     
+        Task<UnitResult<ProductDto>> AddProductImageAsync(string productId , CreateProductImageModel model , CancellationToken cancellationToken = default);
+
+        Task<UnitResult<ProductDto>> UpdateProductImageAsync(string productId, string productImageId, UpdateProductImageModel model, CancellationToken cancellationToken = default);
+        Task<UnitResult<ProductDto>> DeleteProductImageAsync(string productId, string productImageId, CancellationToken cancellationToken = default);
     }
 
 

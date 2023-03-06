@@ -23,6 +23,5 @@ namespace MicroStore.Catalog.Domain.Entities
             Id = Guid.NewGuid().ToString();
         }
 
-
     }
 }

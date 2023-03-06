@@ -18,7 +18,6 @@ namespace MicroStore.Catalog.Application.Models
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
         public List<ProductCategoryModel>? Categories { get; set; }
-        public List<ProductImageModel>? Images { get; set; }
     }
 
     public class ProductModelValidator : AbstractValidator<ProductModel>

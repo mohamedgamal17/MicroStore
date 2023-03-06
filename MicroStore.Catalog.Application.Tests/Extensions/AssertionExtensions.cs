@@ -24,12 +24,6 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
                     left.IsFeaturedProduct == right.IsFeatured;
             });
 
-            product.ProductImages.OrderBy(x => x.ImagePath).Should().Equal(model.Images?.OrderBy(x => x.Image),
-                (left, right) =>
-                {
-                    return left.ImagePath == right.Image &&
-                        left.DisplayOrder == right.DisplayOrder;
-                });
         }
 
         public static void AssertCategoryModel(this Category category, CategoryModel model)

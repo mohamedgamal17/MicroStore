@@ -24,7 +24,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<CategoryListDto>)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<CategoryDto>)))]
         public async Task<IActionResult> GetCatalogCategoryList(SortingParamsQueryString @params)
         {
             var result = await  _categoryQueryService
@@ -35,7 +35,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
 
    
-        [Route("category/{id}")]
+        [Route("{id}")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CategoryDto)))]
         public async Task<IActionResult> GetCatalogCategory(string id)
@@ -49,7 +49,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CategoryDto))]
-        public async Task<IActionResult> Post(CategoryModel model)
+        public async Task<IActionResult> Post([FromBody]CategoryModel model)
         {
             var result = await _categoryCommandService.CreateAsync(model);
 
