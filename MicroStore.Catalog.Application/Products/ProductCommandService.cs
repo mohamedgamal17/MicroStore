@@ -73,10 +73,10 @@ namespace MicroStore.Catalog.Application.Products
             product.Dimensions = model.Dimensions?.AsDimension() ?? Dimension.Empty;
             product.IsFeatured = model.IsFeatured;
 
-            if (model.Categories != null)
+            if (model.CategoriesIds != null)
             {
-                product.ProductCategories = model.Categories
-                    .Select(x => new ProductCategory { CategoryId = x.CategoryId })
+                product.ProductCategories = model.CategoriesIds
+                    .Select(x => new ProductCategory { CategoryId = x })
                     .ToList();
             }
 

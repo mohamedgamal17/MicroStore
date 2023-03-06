@@ -17,7 +17,7 @@ namespace MicroStore.Catalog.Application.Models
         public double OldPrice { get; set; }
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
-        public List<ProductCategoryModel>? Categories { get; set; }
+        public string[]? CategoriesIds { get; set; }
     }
 
     public class ProductModelValidator : AbstractValidator<ProductModel>
@@ -106,13 +106,13 @@ namespace MicroStore.Catalog.Application.Models
                 })
                 .When(x => x.Dimensions != null);
 
-            RuleForEach(x => x.Categories)
+            RuleForEach(x => x.CategoriesIds)
                 .MustAsync(CheckCategoryExist)
-                .When(x => x.Categories != null);
+                .When(x => x.CategoriesIds != null);
         }
-        private Task<bool> CheckCategoryExist(ProductCategoryModel model, CancellationToken cancellationToken)
+        private Task<bool> CheckCategoryExist(string category, CancellationToken cancellationToken)
         {
-            return CategoryRepository.AnyAsync(x => x.Id == model.CategoryId, cancellationToken);
+            return CategoryRepository.AnyAsync(x => x.Id == category, cancellationToken);
         }
     }
 }
