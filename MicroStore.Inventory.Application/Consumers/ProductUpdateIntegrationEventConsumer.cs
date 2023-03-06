@@ -2,6 +2,7 @@
 using MicroStore.Catalog.IntegrationEvents;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Products;
+using System.Xml.Linq;
 
 namespace MicroStore.Inventory.Application.Consumers
 {
@@ -18,14 +19,20 @@ namespace MicroStore.Inventory.Application.Consumers
 
         public async Task Consume(ConsumeContext<ProductUpdatedIntegerationEvent> context)
         {
-            await _productCommandService.UpdateAsync(new ProductModel
+            var productModel = new ProductModel
             {
                 ProductId = context.Message.ProductId,
                 Sku = context.Message.Sku,
                 Name = context.Message.Name,
-                Thumbnail = context.Message.Thumbnail
+            };
 
-            });
+            if (context.Message.ProductImages != null && context.Message.ProductImages.Count > 0) 
+            { 
+
+                productModel.Thumbnail = context.Message.ProductImages.OrderBy(x => x.DisplayOrder).First().ImageLink;
+            }
+
+            await _productCommandService.UpdateAsync(productModel);
         }
     }
 }

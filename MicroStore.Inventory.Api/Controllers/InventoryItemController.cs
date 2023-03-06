@@ -14,7 +14,7 @@ using System.Net;
 namespace MicroStore.Inventory.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+   // [Authorize]
     [Route("api/inventory/products")]
     public class InventoryItemController : MicroStoreApiController
     {

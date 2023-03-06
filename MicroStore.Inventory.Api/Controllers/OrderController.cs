@@ -13,7 +13,7 @@ namespace MicroStore.Inventory.Api.Controllers
 {
     [ApiController]
     [Route("api/inventory/orders")]
-    [Authorize]
+    //[Authorize]
     public class OrderController : MicroStoreApiController
     {
 
