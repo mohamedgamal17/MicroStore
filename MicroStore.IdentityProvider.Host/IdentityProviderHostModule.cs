@@ -18,6 +18,7 @@ using Volo.Abp.AutoMapper;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using MicroStore.IdentityProvider.Host.Services;
 using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
+using MicroStore.IdentityProvider.Host.Extensions;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -187,6 +188,7 @@ namespace MicroStore.IdentityProvider.Host
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
+               // opt.ClaimsIdentity.MapClaimIdentity();
             }).AddRoleManager<ApplicationRoleManager>()
             .AddUserManager<ApplicationUserManager>()
             .AddDefaultTokenProviders();
@@ -240,7 +242,8 @@ namespace MicroStore.IdentityProvider.Host
                         });
                     };
                 }).AddAspNetIdentity<ApplicationIdentityUser>()
-                .AddExtensionGrantValidator<TokenExchangeExtensionGrantValidator>();
+                .AddExtensionGrantValidator<TokenExchangeExtensionGrantValidator>()
+                .AddProfileService<ApplicationProfileService>();
         }
 
 

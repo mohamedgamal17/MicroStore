@@ -26,7 +26,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes
 
     public enum OrderState
     {
-        [EnumMember(Value = "Submited")]
+        [EnumMember(Value = "Submitted")]
         Submited,
 
         [EnumMember(Value = "Accepted")]

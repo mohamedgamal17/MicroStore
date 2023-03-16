@@ -13,7 +13,7 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigura
             builder.Property(x => x.ExternalProductId).HasMaxLength(256);
             builder.Property(x => x.Sku).HasMaxLength(256);
             builder.Property(x => x.Name).HasMaxLength(300);
-            builder.Property(x => x.Thumbnail).HasMaxLength(600);
+            builder.Property(x => x.Thumbnail).IsRequired(false).HasMaxLength(600);
 
             builder.HasIndex(x => x.ExternalProductId);
             builder.HasIndex(x => x.Sku);

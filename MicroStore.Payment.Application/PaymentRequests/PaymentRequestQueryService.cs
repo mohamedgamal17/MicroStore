@@ -77,7 +77,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (userId != null)
             {
-                query = query.Where(x => x.CustomerId == userId);
+                query = query.Where(x => x.UserId == userId);
             }
 
             if (queryParams.SortBy != null)

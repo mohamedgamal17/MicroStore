@@ -61,7 +61,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                     b.HasIndex("Sku");
 
-                    b.ToTable("OrderItemEntity");
+                    b.ToTable("OrderItemEntity", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Ordering.Application.StateMachines.OrderStateEntity", b =>
@@ -124,7 +124,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrderStateEntity");
+                    b.ToTable("OrderStateEntity", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Ordering.Application.StateMachines.OrderItemEntity", b =>
@@ -136,7 +136,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
             modelBuilder.Entity("MicroStore.Ordering.Application.StateMachines.OrderStateEntity", b =>
                 {
-                    b.OwnsOne("MicroStore.Ordering.Application.StateMachines.Address", "BillingAddress", b1 =>
+                    b.OwnsOne("MicroStore.Ordering.Application.StateMachines.OrderStateEntity.BillingAddress#MicroStore.Ordering.Application.StateMachines.Address", "BillingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderStateEntityCorrelationId")
                                 .HasColumnType("uniqueidentifier");
@@ -206,13 +206,13 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                             b1.HasKey("OrderStateEntityCorrelationId");
 
-                            b1.ToTable("OrderStateEntity");
+                            b1.ToTable("OrderStateEntity", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderStateEntityCorrelationId");
                         });
 
-                    b.OwnsOne("MicroStore.Ordering.Application.StateMachines.Address", "ShippingAddress", b1 =>
+                    b.OwnsOne("MicroStore.Ordering.Application.StateMachines.OrderStateEntity.ShippingAddress#MicroStore.Ordering.Application.StateMachines.Address", "ShippingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderStateEntityCorrelationId")
                                 .HasColumnType("uniqueidentifier");
@@ -282,7 +282,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                             b1.HasKey("OrderStateEntityCorrelationId");
 
-                            b1.ToTable("OrderStateEntity");
+                            b1.ToTable("OrderStateEntity", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderStateEntityCorrelationId");

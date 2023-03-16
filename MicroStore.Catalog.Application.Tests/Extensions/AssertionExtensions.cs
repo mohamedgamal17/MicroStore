@@ -18,9 +18,9 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
             product.Weight.Should().Be(model.Weight.AsWeight());
             product.Dimensions.Should().Be(model.Dimensions.AsDimension());
             product.IsFeatured.Should().Be(model.IsFeatured);
-            product.ProductCategories.OrderBy(x => x.CategoryId).Should().Equal(model.Categories?.OrderBy(x => x.CategoryId), (left, right) =>
+            product.ProductCategories.OrderBy(x => x.CategoryId).Should().Equal(model.CategoriesIds?.OrderBy(x => x), (left, right) =>
             {
-                return left.CategoryId == right.CategoryId ;
+                return left.CategoryId == right;
             });
 
         }

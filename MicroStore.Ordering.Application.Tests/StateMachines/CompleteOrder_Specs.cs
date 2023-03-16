@@ -35,7 +35,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                         ShippingCost = 0,
                         SubTotal = 50,
                         TotalPrice = 50,
-                        UserId = _fakeUserId,
+                        UserName = _fakeUserId,
                         SubmissionDate = DateTime.UtcNow,
                         OrderItems = GenerateFakeOrderItems()
                     }

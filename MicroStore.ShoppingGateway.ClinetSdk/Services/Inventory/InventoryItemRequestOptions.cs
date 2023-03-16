@@ -1,7 +1,7 @@
 ﻿namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Inventory
 {
-	public class InventoryItemAdjustQuantityRequestOptions
+	public class InventoryItemRequestOptions
 	{
-		public int AdjustedQuantity { get; set; }
+		public int Stock { get; set; }
 	}
 }

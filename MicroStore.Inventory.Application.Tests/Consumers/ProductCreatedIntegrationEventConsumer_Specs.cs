@@ -14,7 +14,6 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
             {
                 ProductId = Guid.NewGuid().ToString(),
                 Sku = Guid.NewGuid().ToString(),
-                Thumbnail = Guid.NewGuid().ToString(),
                 Name = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
                 Price = 50
@@ -29,7 +28,6 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             product.Id.Should().Be(integrationEvent.ProductId);
             product.Sku.Should().Be(integrationEvent.Sku);
-            product.Thumbnail.Should().Be(integrationEvent.Thumbnail);
             product.Name.Should().Be(integrationEvent.Name);
         }
 

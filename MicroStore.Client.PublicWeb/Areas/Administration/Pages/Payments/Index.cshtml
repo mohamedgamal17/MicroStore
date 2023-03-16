@@ -34,12 +34,12 @@
                         <table class="table  table-hover table-striped  dataTable no-footer" width="100%">
                             <thead>
                                 <tr>
-                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().OrderId)</th>
-                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().OrderNumber)</th>
-                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().CustomerId)</th>
-                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().Amount)</th>
-                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().State)</th>
-                                    <th>@Html.DisplayFor(x=> x.PaymentRequests.Items.First().OpenedAt)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.PaymentRequests.Items.First().OrderId)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.PaymentRequests.Items.First().OrderNumber)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.PaymentRequests.Items.First().UserName)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.PaymentRequests.Items.First().TotalCost)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.PaymentRequests.Items.First().Status)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.PaymentRequests.Items.First().OpenedAt)</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -49,12 +49,12 @@
                                     <tr>
                                         <td>@payment.OrderId</td>
                                         <td>@payment.OrderNumber</td>
-                                        <td>@payment.CustomerId</td>
-                                        <td>@payment.Amount</td>
-                                        <td>@payment.State</td>
+                                        <td>@payment.UserName</td>
+                                        <td>@payment.TotalCost</td>
+                                        <td>@payment.Status</td>
                                         <td>@payment.OpenedAt</td>
-                        
-                                        <td><button class="btn btn-info">View</button></td>
+
+                                        <td><a asp-page="Detail" asp-route-paymentRequestId="@payment.Id" class="btn btn-info">View</a></td>
                                     </tr>
                                 }
                             </tbody>

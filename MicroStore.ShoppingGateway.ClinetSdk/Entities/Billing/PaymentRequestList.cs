@@ -4,12 +4,14 @@
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
-        public string CustomerId { get; set; }
-        public double Amount { get; set; }
+        public string UserName { get; set; }
+        public double TaxCost { get; set; }
+        public double SubTotal { get; set; }
+        public double ShippingCost { get; set; }
+        public double TotalCost { get; set; }
         public string TransctionId { get; set; }
         public string PaymentGateway { get; set; }
-
-        public string State { get; set; }
+        public PaymentStatus Status { get; set; }
         public DateTime? OpenedAt { get; set; }
         public DateTime? CapturedAt { get; set; }
     }

@@ -17,7 +17,7 @@ namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfiguration
 
             builder.Property(x => x.OrderNumber).HasMaxLength(265).IsRequired();
 
-            builder.Property(x => x.CustomerId).HasMaxLength(265).IsRequired();
+            builder.Property(x => x.UserId).HasMaxLength(265).IsRequired();
 
             builder.Property(x => x.TransctionId).HasMaxLength(265);
 
@@ -27,7 +27,7 @@ namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfiguration
 
             builder.HasIndex(x => x.OrderNumber).IsUnique();
 
-            builder.HasIndex(x => x.CustomerId);
+            builder.HasIndex(x => x.UserId);
 
             builder.HasIndex(x => x.TransctionId);
 

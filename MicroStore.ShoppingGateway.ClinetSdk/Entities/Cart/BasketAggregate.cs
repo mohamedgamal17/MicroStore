@@ -4,7 +4,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart
 {
     public class BasketAggregate
     {
-        public string UserId { get; set; }
+        public string UserName { get; set; }
 
         public List<BasketItemAggregate> Items { get; set; }
     }

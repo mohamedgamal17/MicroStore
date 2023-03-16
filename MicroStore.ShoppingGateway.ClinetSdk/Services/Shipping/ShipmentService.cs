@@ -1,4 +1,5 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities;
+﻿using Microsoft.Extensions.Options;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 {
@@ -19,9 +20,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
             return await _microStoreClinet.MakeRequest<Shipment>(BaseUrl, HttpMethod.Post, options, cancellationToken);
         }
 
-        public async Task<Shipment> FullfillAsync(Guid shipmentId ,ShipmentFullfillRequestOptions options , CancellationToken cancellationToken = default)
+        public async Task<Shipment> FullfillAsync(string shipmentId ,ShipmentFullfillRequestOptions options , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest< Shipment>( string.Format("{0}/fullfill/{1}"), HttpMethod.Post, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest< Shipment>( string.Format("{0}/fullfill/{1}", BaseUrl, shipmentId), HttpMethod.Post, options, cancellationToken);
         }
 
         public Task<PagedList<ShipmentList>> ListAsync(PagingReqeustOptions options, CancellationToken cancellationToken = default)
@@ -43,5 +44,16 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
             return await _microStoreClinet.MakeRequest<Shipment>(string.Format("{0}/order_id/{1}", BaseUrl, orderid), HttpMethod.Get , cancellationToken);
         }
 
+
+        public async Task<List<ShipmentRate>> RetrieveRatesAsync(string shipmentId, CancellationToken
+          cancellationToken = default)
+        {
+            return await _microStoreClinet.MakeRequest<List<ShipmentRate>>(string.Format("{0}/{1}/rates",BaseUrl,shipmentId) , HttpMethod.Post, cancellationToken);
+        }
+
+        public async Task<Shipment> PurchaseLabelAsync(string shipmentId, PurchaseLabelRequestOptions options , CancellationToken cancellationToken = default)
+        {
+            return await _microStoreClinet.MakeRequest<Shipment>(string.Format("{0}/{1}/labels", BaseUrl, shipmentId), HttpMethod.Post, options,  cancellationToken);
+        }
     }
 }

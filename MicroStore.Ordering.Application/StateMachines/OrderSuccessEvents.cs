@@ -9,7 +9,7 @@ namespace MicroStore.Ordering.Application.StateMachines
         public string OrderNumber { get; set; }
         public AddressModel ShippingAddress { get; set; }
         public AddressModel BillingAddress { get; set; }
-        public string UserId { get; set; }
+        public string UserName { get; set; }
         public double ShippingCost { get; set; }
         public double TaxCost { get; set; }
         public double SubTotal { get; set; }

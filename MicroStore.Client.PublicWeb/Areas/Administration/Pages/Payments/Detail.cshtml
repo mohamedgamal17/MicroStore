@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{paymentRequestId}"
 @model MicroStore.Client.PublicWeb.Areas.Administration.Pages.Payments.DetailModel
 <div class="content-wrapper mr-2">
     <div class="content-header clearfix p-3">
@@ -39,9 +39,6 @@
                                     <div class="col-md-3 clearfix">
                                         <div class="float-right">
                                             <micro-label asp-for="@Model.PaymentRequest.Id" />
-                                            <div title="" data-toggle="tooltip" class="ui-icon-help d-inline ml-1  text-lightblue">
-                                                <i class="fas fa-question-circle"></i>
-                                            </div>
                                         </div>
 
                                     </div>
@@ -55,9 +52,8 @@
                                     <div class="col-md-3 clearfix">
                                         <div class="float-right">
                                             <micro-label asp-for="@Model.PaymentRequest.OrderId" />
-                                            <div title="" data-toggle="tooltip" class="ui-icon-help d-inline ml-1  text-lightblue">
-                                                <i class="fas fa-question-circle"></i>
-                                            </div>
+                                       
+                                           
                                         </div>
 
                                     </div>
@@ -71,9 +67,6 @@
                                     <div class="col-md-3 clearfix">
                                         <div class="float-right">
                                             <micro-label asp-for="@Model.PaymentRequest.OrderNumber" />
-                                            <div title="" data-toggle="tooltip" class="ui-icon-help d-inline ml-1  text-lightblue">
-                                                <i class="fas fa-question-circle"></i>
-                                            </div>
                                         </div>
 
                                     </div>
@@ -86,16 +79,13 @@
                                 <div class="form-group row">
                                     <div class="col-md-3 clearfix">
                                         <div class="float-right">
-                                            <micro-label asp-for="@Model.PaymentRequest.CustomerId" />
-                                            <div title="" data-toggle="tooltip" class="ui-icon-help      d-inline ml-1  text-lightblue">
-                                                <i class="fas fa-question-circle"></i>
-                                            </div>
+                                            <micro-label asp-for="@Model.PaymentRequest.UserName" />
                                         </div>
 
                                     </div>
                                     <div class="col-md-9">
                                         <div class="form-text text-lg" style="padding-top:  2px">
-                                            @Model.PaymentRequest.CustomerId
+                                            @Model.PaymentRequest.UserName
                                         </div>
                                     </div>
                                 </div>
@@ -104,9 +94,6 @@
                                     <div class="col-md-3 clearfix">
                                         <div class="float-right">
                                             <micro-label asp-for="@Model.PaymentRequest.TransctionId" />
-                                            <div title="" data-toggle="tooltip" class="ui-icon-help d-inline ml-1  text-lightblue">
-                                                <i class="fas fa-question-circle"></i>
-                                            </div>
                                         </div>
 
                                     </div>
@@ -121,9 +108,7 @@
                                     <div class="col-md-3 clearfix">
                                         <div class="float-right">
                                             <micro-label asp-for="@Model.PaymentRequest.PaymentGateway" />
-                                            <div title="" data-toggle="tooltip" class="ui-icon-help d-inline ml-1  text-lightblue">
-                                                <i class="fas fa-question-circle"></i>
-                                            </div>
+
                                         </div>
 
                                     </div>
@@ -137,16 +122,13 @@
                                 <div class="form-group row">
                                     <div class="col-md-3 clearfix">
                                         <div class="float-right">
-                                            <micro-label asp-for="@Model.PaymentRequest.State" />
-                                            <div title="" data-toggle="tooltip" class="ui-icon-help  d-inline ml-1 text-lightblue">
-                                                <i class="fas fa-question-circle"></i>
-                                            </div>
+                                            <micro-label asp-for="@Model.PaymentRequest.Status" />
                                         </div>
 
                                     </div>
                                     <div class="col-md-9">
                                         <div class="form-text text-lg" style="padding-top: 2px">
-                                            @Model.PaymentRequest.PaymentGateway
+                                            @Model.PaymentRequest.Status
                                         </div>
                                     </div>
                                 </div>
@@ -155,9 +137,7 @@
                                     <div class="col-md-3 clearfix">
                                         <div class="float-right">
                                             <micro-label asp-for="@Model.PaymentRequest.Description" />
-                                            <div title="" data-toggle="tooltip" class="ui-icon-help d-inline ml-1 text-lightblue">
-                                                <i class="fas fa-question-circle"></i>
-                                            </div>
+                          
                                         </div>
 
                                     </div>

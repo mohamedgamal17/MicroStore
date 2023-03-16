@@ -41,7 +41,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 
             if(order.PaymentId != null)
             {
-                paymentRequest = await _paymentRequestService.GetByOrderAsync(order.PaymentId, cancellationToken);
+                paymentRequest = await _paymentRequestService.GetAsync(order.PaymentId, cancellationToken);
             }
 
             if(order.ShipmentId != null)
@@ -82,7 +82,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
                 CurrentState = order.CurrentState,
                 CancellationDate = order.CancellationDate,
                 CancellationReason = order.CancellationReason,
-
+               
             };
         }
 

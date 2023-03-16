@@ -5,8 +5,6 @@ using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
-using MicroStore.BuildingBlocks.Security;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Shipments;
 using MicroStore.Shipping.Domain.Security;
@@ -18,15 +16,11 @@ namespace MicroStore.Shipping.WebApi.Controllers
     [Route("api/user/shipments")]
     public class UserShipmentController : MicroStoreApiController
     {
-        
-
-        private readonly IApplicationCurrentUser _applicationCurrentUser;
-
         private readonly IShipmentQueryService _shipmentQueryService;
 
-        public UserShipmentController(IApplicationCurrentUser applicationCurrentUser, IShipmentQueryService shipmentQueryService)
+        public UserShipmentController( IShipmentQueryService shipmentQueryService)
         {
-            _applicationCurrentUser = applicationCurrentUser;
+   
             _shipmentQueryService = shipmentQueryService;
         }
 
@@ -44,7 +38,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
                 PageNumber = @params.PageNumber
             };
 
-            var result = await _shipmentQueryService.ListAsync(queryParams, _applicationCurrentUser.Id);
+            var result = await _shipmentQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);
 
             return FromResult(result, HttpStatusCode.OK);
         }

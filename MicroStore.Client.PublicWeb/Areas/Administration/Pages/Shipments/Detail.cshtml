@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "Shipments/Detail/{paymenRequestId}"
 @model MicroStore.Client.PublicWeb.Areas.Administration.Pages.Shipments.DetailModel
 @{
 }
@@ -267,18 +267,18 @@
 
                                 <tr>
                                     <td>
-                                        @Html.DisplayNameFor(x=> x.Shipment.Address.CountryCode)
+                                        @Html.DisplayNameFor(x=> x.Shipment.Address.Country.Name)
                                     </td>
                                     <td>
-                                        @Model.Shipment.Address.CountryCode
+                                        @Model.Shipment.Address.Country.Name
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Html.DisplayNameFor(x=> x.Shipment.Address.State)
+                                        @Html.DisplayNameFor(x=> x.Shipment.Address.State.Name)
                                     </td>
                                     <td>
-                                        @Model.Shipment.Address.State
+                                        @Model.Shipment.Address.State.Name
                                     </td>
                                 </tr>
                                 <tr>

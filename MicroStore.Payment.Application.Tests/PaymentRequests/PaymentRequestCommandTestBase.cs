@@ -12,7 +12,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
             {
                 OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                CustomerId = Guid.NewGuid().ToString(),
+                UserId = Guid.NewGuid().ToString(),
                 TotalCost = 50,
             };
 

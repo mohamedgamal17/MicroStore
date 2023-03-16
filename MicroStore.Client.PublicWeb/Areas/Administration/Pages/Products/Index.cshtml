@@ -13,10 +13,10 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a class="btn btn-info" href="#">
-                                <i class="fas
-                                    fa-plus-square mr-1"></i> Create Category
+                            <a asp-page="Create" class="btn btn-info" >
+                                <i class="fas fa-plus-square mr-1"></i>Create Product
                             </a>
+
                         </li>
                     </ol>
                 </div><!-- /.col -->
@@ -29,7 +29,7 @@
         <div class="container-fluid">
             <div class="card card-default">
                 <div class="card-body">
-                    @if (Model.Products != null || Model.Products?.Count > 0)
+                    @if (Model.Products.Items.Count > 0)
                     {
                         <table class="table  table-hover table-striped  dataTable no-footer" width="100%">
                             <thead>
@@ -43,14 +43,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var product in Model.Products)
+                                @foreach (var product in Model.Products.Items)
                                 {
                                     <tr>
                                         <td>@product.Name</td>
                                         <td>@product.Sku</td>
                                         <td>@product.Price</td>
                                         <td>5</td>
-                                        <td><button class="btn btn-info">Edit</button></td>
+                                        <td><a asp-page="Edit" asp-route-productId="@product.Id" class="btn btn-info">Edit</a></td>
                                         <td><button class="btn btn-danger">Delete</button></td>
                                     </tr>
                                 }

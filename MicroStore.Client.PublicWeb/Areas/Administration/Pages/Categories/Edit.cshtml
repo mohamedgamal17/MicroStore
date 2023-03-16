@@ -1,10 +1,10 @@
-﻿@page
+﻿@page  "/categories/Edit/{categoryId}"
 @model MicroStore.Client.PublicWeb.Areas.Administration.Pages.Categories.EditModel
 @{
 }
 <div class="content-wrapper mr-2">
     <!-- Content Header (Page header) -->
-    <form>
+    <form method="post">
         @Html.AntiForgeryToken()
         <div class="content-header">
             <div class="container-fluid">

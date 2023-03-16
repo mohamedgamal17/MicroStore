@@ -42,7 +42,11 @@ namespace MicroStore.Gateway.Shopping.Extensions
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
                 {
                     opt.Authority = configuration.GetValue<string>("IdentityProvider:Authority");

@@ -119,6 +119,12 @@
                                 <div class="header__top__right__auth">
                                     <a href="#" id="btn-logout"><i class="fa fa-user"></i>Logout</a>
 
+                                    @foreach(var cl in User.Claims)
+                                    {
+                                        <a href="#" id="btn-logout"><i class="fa fa-user"></i>@cl.Type :: @cl.Value</a>
+                                    }
+                          
+
                                     <form method="post" asp-controller="Authentication" asp-action="Logout">
                                         @Html.AntiForgeryToken()
                                     </form>

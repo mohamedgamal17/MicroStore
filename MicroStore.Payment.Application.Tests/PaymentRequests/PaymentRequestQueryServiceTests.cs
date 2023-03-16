@@ -47,7 +47,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
 
-            result.Value.Items.All(x => x.CustomerId == userId).Should().BeTrue();
+            result.Value.Items.All(x => x.UserId == userId).Should().BeTrue();
         }
 
         [Test]

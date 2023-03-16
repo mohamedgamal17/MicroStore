@@ -51,8 +51,6 @@ namespace MicroStore.Shipping.Host
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

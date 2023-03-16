@@ -54,12 +54,10 @@
         }
       ],
       "Priority": 0,
-      "UpstreamPathTemplate": "/mvcgateway/ordering/orders",
+      "UpstreamPathTemplate": "/mvcgateway/ordering/{everything}",
 
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
+
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]

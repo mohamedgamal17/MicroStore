@@ -26,7 +26,7 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
         public async Task<IActionResult> OnGet(string id)
         {
 
-            Product = await _productService.RetriveAsync(id);
+            Product = await _productService.GetAsync(id);
 
             return Page();
         }

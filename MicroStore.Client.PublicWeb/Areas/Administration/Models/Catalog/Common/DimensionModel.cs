@@ -1,6 +1,6 @@
 ﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
 
-namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products
+namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Common
 {
     public class DimensionModel
     {

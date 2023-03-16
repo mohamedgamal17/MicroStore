@@ -37,7 +37,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
                       ShippingCost = 0,
                       SubTotal = 50,
                       TotalPrice = 50,
-                      UserId = Guid.NewGuid().ToString(),
+                      UserName = Guid.NewGuid().ToString(),
                       SubmissionDate = DateTime.UtcNow,
                       OrderItems = new List<OrderItemModel>
                       {

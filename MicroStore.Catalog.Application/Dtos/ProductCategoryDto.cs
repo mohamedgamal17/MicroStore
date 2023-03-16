@@ -4,7 +4,7 @@ namespace MicroStore.Catalog.Application.Dtos
 {
     public class ProductCategoryDto : EntityDto<string>
     {
-        public string CateogryId { get; set; }
+        public string CategoryId { get; set; }
         public string Name { get; set; }
 
     }

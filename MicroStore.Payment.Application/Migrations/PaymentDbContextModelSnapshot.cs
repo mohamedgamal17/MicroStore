@@ -47,11 +47,6 @@ namespace MicroStore.Payment.Application.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasMaxLength(265)
-                        .HasColumnType("nvarchar(265)");
-
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -98,9 +93,12 @@ namespace MicroStore.Payment.Application.Migrations
                         .HasMaxLength(265)
                         .HasColumnType("nvarchar(265)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(265)
+                        .HasColumnType("nvarchar(265)");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
@@ -109,6 +107,8 @@ namespace MicroStore.Payment.Application.Migrations
                         .IsUnique();
 
                     b.HasIndex("TransctionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("PaymentRequests");
                 });

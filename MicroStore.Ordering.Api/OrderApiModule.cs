@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.Ordering.Application;
 using MicroStore.Ordering.Infrastructure;
-using Newtonsoft.Json;
-using System.IdentityModel.Tokens.Jwt;
+using MicroStore.Ordering.Infrastructure.EntityFramework;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc;
@@ -51,8 +50,6 @@ namespace MicroStore.Ordering.Api
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -63,9 +60,18 @@ namespace MicroStore.Ordering.Api
                 options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
 
+
             });
         }
+        public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using var scope = context.ServiceProvider.CreateScope();
 
+            var dbContext = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
+
+            await dbContext.Database.MigrateAsync();
+
+        }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {

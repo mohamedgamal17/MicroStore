@@ -21,7 +21,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Cart
         {
             var basketAggregate = new BasketAggregate
             {
-                UserId = userId,
+                UserName = userId,
                 Items = new List<BasketItemAggregate>()
             };
 
@@ -31,7 +31,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Cart
             {
                 foreach (var item in basketResponse.Items)
                 {
-                    var productResponse = await _productService.RetriveAsync(item.ProductId, cancellationToken);
+                    var productResponse = await _productService.GetAsync(item.ProductId, cancellationToken);
 
 
                     var basketItem = PrepareBasketItemAggregate(productResponse);
@@ -55,7 +55,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Cart
                 LongDescription = product.LongDescription,
                 Name = product.Name,
                 Sku = product.Sku,
-                Thumbnail= product.Thumbnail,
+                Thumbnail= product.ProductImages.FirstOrDefault()?.ImagePath,
                 Price = product.Price,
                 Weight = product.Weight,
                 Dimensions = product.Dimensions

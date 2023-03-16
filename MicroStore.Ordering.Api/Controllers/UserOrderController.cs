@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
-using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Security;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
@@ -17,18 +15,16 @@ namespace MicroStore.Ordering.Api.Controllers
     [Route("api/user/orders")]
     public class UserOrderController : MicroStoreApiController
     {
-
-        private readonly IApplicationCurrentUser _currentUser;
-
         private readonly IOrderCommandService _orderCommandService;
 
         private readonly IOrderQueryService _orderQueryService;
+        private readonly ILogger<UserOrderController> _logger;
 
-        public UserOrderController(IApplicationCurrentUser currentUser, IOrderCommandService orderCommandService, IOrderQueryService orderQueryService)
+        public UserOrderController(IOrderCommandService orderCommandService, IOrderQueryService orderQueryService, ILogger<UserOrderController> logger)
         {
-            _currentUser = currentUser;
             _orderCommandService = orderCommandService;
             _orderQueryService = orderQueryService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -37,6 +33,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         public async Task<IActionResult> SubmitOrder(OrderModel model)
         {
+
             var orderModel = new CreateOrderModel
             {
                 TaxCost = model.TaxCost,
@@ -46,7 +43,7 @@ namespace MicroStore.Ordering.Api.Controllers
                 ShippingAddress = model.ShippingAddress,
                 BillingAddress = model.BillingAddress,
                 OrderItems = model.OrderItems,
-                UserId = _currentUser.Id,
+                UserId = CurrentUser.Id.ToString()!,
             };
 
             var result = await _orderCommandService.CreateOrderAsync(orderModel);
@@ -60,7 +57,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [Route("")]
     //    [RequiredScope(OrderingScope.Order.List)]
         public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingAndSortingParamsQueryString @params)
-        {          
+        {
 
             var queryParams = new PagingAndSortingQueryParams
             {
@@ -71,7 +68,7 @@ namespace MicroStore.Ordering.Api.Controllers
                 PageNumber = @params.PageNumber,
             };
 
-            var result = await _orderQueryService.ListAsync(queryParams, _currentUser.Id);
+            var result = await _orderQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);
 
             return FromResult(result, HttpStatusCode.OK);
         }

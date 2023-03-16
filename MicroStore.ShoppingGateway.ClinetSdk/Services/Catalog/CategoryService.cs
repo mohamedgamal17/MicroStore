@@ -3,7 +3,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
 {
     public class CategoryService
     {
-        const string BaseUrl = "/catalog/categories";
+        const string BASE_URL = "/catalog/categories";
+
+        const string BASE_URL_WITH_ID = "/catalog/cateogries/{0}";
 
         private readonly MicroStoreClinet _microStoreClinet;
 
@@ -12,24 +14,24 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
             _microStoreClinet = microStoreClinet;
         }
 
-        public async Task<Category> CreateAsync(CategoryCreateOptions options  ,  CancellationToken cancellationToken = default)
+        public async Task<Category> CreateAsync(CategoryRequestOptions options  ,  CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Category>(BaseUrl, HttpMethod.Post, options,  cancellationToken );
+            return await _microStoreClinet.MakeRequest<Category>(BASE_URL, HttpMethod.Post, options,  cancellationToken );
         }
 
-        public Task<List<CategoryList>> ListAsync(SortingRequestOptions options , CancellationToken cancellationToken =default )
+        public async Task<List<Category>> ListAsync(SortingRequestOptions options , CancellationToken cancellationToken =default )
         {
-            return _microStoreClinet.MakeRequest<List<CategoryList>>(BaseUrl, HttpMethod.Get, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<List<Category>>(BASE_URL, HttpMethod.Get, options, cancellationToken);
         }
 
-        public Task<Category> RetriveAsync(string categoryId , CancellationToken cancellationToken = default)
+        public async Task<Category> GetAsync(string categoryId , CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<Category>(string.Format("{0}/{1}",BaseUrl,categoryId),HttpMethod.Get ,cancellationToken: cancellationToken);
+            return await _microStoreClinet.MakeRequest<Category>(string.Format(BASE_URL_WITH_ID, categoryId),HttpMethod.Get ,cancellationToken: cancellationToken);
         }
 
-        public Task<Category> UpdateAsync(string categoryId , CategoryUpdateOptions options ,CancellationToken cancellationToken = default)
+        public async Task<Category> UpdateAsync(string categoryId , CategoryRequestOptions options ,CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<Category>(string.Format("{0}/{1}", BaseUrl, categoryId), HttpMethod.Put, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Category>(string.Format(BASE_URL_WITH_ID, categoryId), HttpMethod.Put, options, cancellationToken);
         }
     }
 }

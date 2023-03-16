@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
+using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.Payment.Domain.Shared.Security;
 using MicroStore.Payment.Plugin.StripeGateway;
 using System.IdentityModel.Tokens.Jwt;
@@ -46,8 +48,6 @@ namespace MicroStore.Payment.Api.Host
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -60,6 +60,15 @@ namespace MicroStore.Payment.Api.Host
             services.AddAuthorization();
         }
 
+        public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using var scope = context.ServiceProvider.CreateScope();
+
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
+
+            await dbContext.Database.MigrateAsync();
+
+        }
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();

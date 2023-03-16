@@ -165,7 +165,7 @@ namespace MicroStore.Ordering.Application.StateMachines
             {
                 x.Saga.CorrelationId = x.Message.OrderId;
                 x.Saga.OrderNumber = x.Message.OrderNumber;
-                x.Saga.UserId = x.Message.UserId;
+                x.Saga.UserId = x.Message.UserName;
                 x.Saga.BillingAddress = MapAddress(x.Message.BillingAddress);
                 x.Saga.ShippingAddress = MapAddress(x.Message.ShippingAddress);
                 x.Saga.ShippingCost = x.Message.ShippingCost;

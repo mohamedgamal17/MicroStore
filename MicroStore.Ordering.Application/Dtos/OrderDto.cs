@@ -17,6 +17,6 @@ namespace MicroStore.Ordering.Application.Dtos
         public DateTime SubmissionDate { get; set; }
         public DateTime? ShippedDate { get; set; }
         public string CurrentState { get; set; }
-        public List<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
+        public List<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
     }
 }

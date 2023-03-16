@@ -15,7 +15,7 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
             return context.Publish(new RefundPaymentIntegrationEvent
             {
                 OrderId = context.Saga.CorrelationId.ToString(),
-                CustomerId = context.Saga.UserId,
+                UserId = context.Saga.UserId,
                 PaymentId = context.Saga.PaymentId
             });
         }

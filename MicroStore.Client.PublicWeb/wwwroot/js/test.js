@@ -1,6 +1,1 @@
-
-
-
-$(document).ready(function () {
-    
-})
+<reference path="../lib/jquery/jquery.js" />

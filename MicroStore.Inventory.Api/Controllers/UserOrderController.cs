@@ -16,13 +16,12 @@ namespace MicroStore.Inventory.Api.Controllers
     [Route("api/user/orders")]
     public class UserOrderController : MicroStoreApiController
     {
-        private readonly IApplicationCurrentUser _applicationCurrentUser;
+
 
         private readonly IOrderQueryService _orderQueryService;
 
-        public UserOrderController(IApplicationCurrentUser applicationCurrentUser, IOrderQueryService orderQueryService)
+        public UserOrderController( IOrderQueryService orderQueryService)
         {
-            _applicationCurrentUser = applicationCurrentUser;
             _orderQueryService = orderQueryService;
         }
 
@@ -38,7 +37,7 @@ namespace MicroStore.Inventory.Api.Controllers
                 PageNumber = @params.PageNumber,
             };
 
-            var result = await _orderQueryService.ListOrderAsync(queryParam, _applicationCurrentUser.Id);
+            var result = await _orderQueryService.ListOrderAsync(queryParam, CurrentUser.Id.ToString()!);
 
             return FromResult(result, HttpStatusCode.OK);
         }

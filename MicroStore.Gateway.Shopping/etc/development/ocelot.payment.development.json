@@ -65,9 +65,7 @@
       "UpstreamPathTemplate": "/mvcgateway/billing/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
 
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
+
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]

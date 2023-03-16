@@ -158,7 +158,7 @@ namespace MicroStore.IdentityProvider.Host
             await usermanager.CreateAsync(alice, "pass123$");
 
             await usermanager.AddClaimsAsync(alice, new Claim[]{
-                            new Claim(JwtClaimTypes.Name, "Alice Smith"),
+                            new Claim(JwtClaimTypes.Name, "alice"),
                             new Claim(JwtClaimTypes.GivenName, "Alice"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
@@ -175,8 +175,9 @@ namespace MicroStore.IdentityProvider.Host
             };
 
             await usermanager.CreateAsync(bob, "pass123$");
+
             await usermanager.AddClaimsAsync(bob, new Claim[]{
-                            new Claim(JwtClaimTypes.Name, "Bob Smith"),
+                            new Claim(JwtClaimTypes.Name, "bob"),
                             new Claim(JwtClaimTypes.GivenName, "Bob"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://bob.com"),

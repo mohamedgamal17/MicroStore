@@ -6,7 +6,6 @@ namespace MicroStore.Shipping.Application.Abstraction.Dtos
     {
         public string OrderId { get; set; }
         public string UserId { get; set; }
-
         public string  OrderNumber { get; set; }
         public AddressDto Address { get; set; }
         public string ShipmentExternalId { get; set; }

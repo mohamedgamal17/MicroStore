@@ -143,9 +143,10 @@ namespace MicroStore.Inventory.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Thumbnail")
-                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasDefaultValue("");
 
                     b.HasKey("Id");
 

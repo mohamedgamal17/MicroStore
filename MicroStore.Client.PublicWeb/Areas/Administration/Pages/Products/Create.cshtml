@@ -6,7 +6,7 @@
 
 <div class="content-wrapper mr-2">
     <!-- Content Header (Page header) -->
-    <form>
+    <form method="post">
         @Html.AntiForgeryToken()
         <div class="content-header">
             <div class="container-fluid">
@@ -77,6 +77,20 @@
                                 <input asp-for="@Model.ProductModel.Sku" id="name" class="form-control" />
 
                                 <span class="text-danger" asp-validation-for="@Model.ProductModel.Name">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <div class="col-md-3">
+                                <div style="float:
+                                                right!important;">
+                                    <micro-label asp-for="@Model.ProductModel.CategoriesId"></micro-label>
+                                </div>
+
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control" id="category_select" asp-for="@Model.ProductModel.CategoriesId" multiple asp-items="@Model.CategorySelectItems" ></select>
+                                <span class="text-danger" asp-validation-for="@Model.ProductModel.CategoriesId">
                                 </span>
                             </div>
                         </div>
@@ -172,7 +186,6 @@
 
 
                             </div>
-
                         </div>
 
                     </div>
@@ -255,7 +268,12 @@
             });
 
 
-            $.ajx
+            $("#category_select").select2({
+                allowClear :true,
+                placeholder : 'select product categories'
+            })
+
+
         });
     </script>
 }

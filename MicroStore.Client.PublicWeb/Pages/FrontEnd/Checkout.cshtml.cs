@@ -196,7 +196,7 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
             {
           
                 ProductId = x.ProductId,
-                Image = x.Thumbnail,
+                Image = x.Thumbnail ?? Guid.NewGuid().ToString(), // For now we will add fallback image
                 Name = x.Name,
                 Sku = x.Sku,
                 Quantity = x.Quantity,

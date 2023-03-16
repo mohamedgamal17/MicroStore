@@ -5,6 +5,7 @@ using MicroStore.Inventory.Domain.ProductAggregate;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Inventory.Application.Tests.Consumers
 {
+    [NonParallelizable]
     public class When_product_update_integration_event_consumer : BaseTestFixture
     {
 
@@ -19,7 +20,6 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
                 Name = Guid.NewGuid().ToString(),
                 Sku = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
-                Thumbnail = Guid.NewGuid().ToString(),
                 UnitPrice = 50
             };
 
@@ -32,7 +32,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             product.Name.Should().Be(integrationEvent.Name);
             product.Sku.Should().Be(integrationEvent.Sku);
-            product.Thumbnail.Should().Be(integrationEvent.Thumbnail);
+
         }
 
 

@@ -7,10 +7,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog
     {
         public string Name { get; set; }
         public string Sku { get; set; }
-
-        public string Thumbnail  { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
+        public bool IsFeatured { get; set; }
         public double Price { get; set; }
         public double OldPrice { get; set; }
         public Weight Weight { get; set; }

@@ -5,7 +5,6 @@ namespace MicroStore.Shipping.IntegrationEvents
     public class CreateShipmentIntegrationEvent
     {
         public string OrderId { get; set; }
-
         public string OrderNumber { get; set; }
         public string UserId { get; set; }
         public AddressModel Address { get; set; }

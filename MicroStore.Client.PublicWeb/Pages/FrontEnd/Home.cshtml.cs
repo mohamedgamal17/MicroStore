@@ -14,7 +14,7 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
         private readonly ILogger<HomeModel> _logger;
 
         private readonly ProductService _productService;
-        public PagedList<ProductList> Products { get; set; }
+        public PagedList<Product> Products { get; set; }
         public HomeModel(ILogger<HomeModel> logger,
             ProductService productService)
         {

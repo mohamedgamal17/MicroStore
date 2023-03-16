@@ -21,7 +21,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                        OrderNumber = _fakeOrderData.OrderNumber,
                        BillingAddress = new AddressModel(),
                        ShippingAddress = new AddressModel(),
-                       UserId = _fakeOrderData.UserId,
+                       UserName = _fakeOrderData.UserId,
                        SubmissionDate = DateTime.UtcNow,
                        OrderItems = new List<OrderItemModel>
                        {
@@ -91,7 +91,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                         OrderNumber = _fakeOrderData.OrderNumber,
                         BillingAddress = new AddressModel(),
                         ShippingAddress = new AddressModel(),
-                        UserId = _fakeOrderData.UserId,
+                        UserName = _fakeOrderData.UserId,
                         SubmissionDate = DateTime.UtcNow,
                         OrderItems = new List<OrderItemModel>
                         {
@@ -143,7 +143,7 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                         OrderNumber = _fakeOrderData.OrderNumber,
                         BillingAddress = new AddressModel(),
                         ShippingAddress = new AddressModel(),
-                        UserId = _fakeOrderData.UserId,
+                        UserName = _fakeOrderData.UserId,
                         SubmissionDate = DateTime.UtcNow,
                         OrderItems = new List<OrderItemModel>
                         {

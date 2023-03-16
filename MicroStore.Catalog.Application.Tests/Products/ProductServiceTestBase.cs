@@ -101,7 +101,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
                     Unit = "inch"
                 },
 
-                Categories = categories.Select(x => new ProductCategoryModel { CategoryId = x.Id, IsFeatured = true }).ToList(),
+                CategoriesIds =categories.Select(x=> x.Id).ToArray()
             };
         }
 

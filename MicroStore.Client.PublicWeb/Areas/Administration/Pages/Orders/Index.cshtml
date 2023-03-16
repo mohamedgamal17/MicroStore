@@ -34,10 +34,10 @@
                         <table class="table  table-hover table-striped  dataTable no-footer" width="100%">
                             <thead>
                                 <tr>
-                                    <th>@Html.DisplayFor(x=> x.Orders.Items.First().Id)</th>
-                                    <th>@Html.DisplayFor(x=> x.Orders.Items.First().OrderNumber)</th>
-                                    <th>@Html.DisplayFor(x=> x.Orders.Items.First().CurrentState)</th>
-                                    <th>@Html.DisplayFor(x=> x.Orders.Items.First().TotalPrice)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.Orders.Items.First().Id)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.Orders.Items.First().OrderNumber)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.Orders.Items.First().CurrentState)</th>
+                                    <th>@Html.DisplayNameFor(x=> x.Orders.Items.First().TotalPrice)</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -49,7 +49,7 @@
                                         <td>@order.OrderNumber</td>
                                         <td>@order.CurrentState</td>
                                         <td>@order.TotalPrice</td>
-                                        <td><button class="btn btn-info">View</button></td>
+                                        <td><a asp-page="Detail" asp-route-orderId = "@order.Id" class="btn btn-info">View</a></td>
                                     </tr>
                                 }
                             </tbody>

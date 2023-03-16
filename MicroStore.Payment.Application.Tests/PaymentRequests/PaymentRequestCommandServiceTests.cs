@@ -28,7 +28,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
             paymentRequest.TaxCost.Should().Be(model.TaxCost);
             paymentRequest.ShippingCost.Should().Be(model.ShippingCost);
             paymentRequest.TotalCost.Should().Be(model.TotalCost);
-            paymentRequest.CustomerId.Should().Be(model.UserId);
+            paymentRequest.UserId.Should().Be(model.UserId);
             paymentRequest.State.Should().Be(PaymentStatus.Waiting);
         }
 

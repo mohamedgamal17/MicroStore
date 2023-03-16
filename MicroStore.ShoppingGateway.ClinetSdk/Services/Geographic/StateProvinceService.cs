@@ -41,7 +41,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic
 
         public async Task<StateProvince> GetByCodeAsync(string countryCode, string stateCode, CancellationToken cancellationToken = default)
         {
-            return await _microStoreClient.MakeRequest<StateProvince>(string.Format(BASE_URL, $"code/{ countryCode}") + "code/" + stateCode, HttpMethod.Get, cancellationToken);
+            return await _microStoreClient.MakeRequest<StateProvince>(string.Format(BASE_URL, $"code/{ countryCode}") + "/code/" + stateCode, HttpMethod.Get, cancellationToken);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace MicroStore.Payment.Application.Tests.Consumers
             {
                 PaymentId = fakepaymentRequest.Id.ToString(),
                 OrderId = fakepaymentRequest.OrderId,
-                CustomerId = fakepaymentRequest.CustomerId,
+                UserId = fakepaymentRequest.UserId,
             };
 
             await TestHarness.Bus.Publish(voidPaymentIntegarationEvent);
@@ -36,7 +36,7 @@ namespace MicroStore.Payment.Application.Tests.Consumers
             {
                 OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                CustomerId = Guid.NewGuid().ToString(),
+                UserId = Guid.NewGuid().ToString(),
                 TotalCost = 50,
             };
 

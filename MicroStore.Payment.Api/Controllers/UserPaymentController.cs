@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Security;
 using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
@@ -20,16 +20,17 @@ namespace MicroStore.Payment.Api.Controllers
     {
 
 
-        private readonly IApplicationCurrentUser _applicationCurrentUser;
 
         private readonly IPaymentRequestCommandService _paymentRequestCommandService;
 
         private readonly IPaymentRequestQueryService _paymentRequestQueryService;
-        public UserPaymentController(IApplicationCurrentUser applicationCurrentUser, IPaymentRequestCommandService paymentRequestCommandService, IPaymentRequestQueryService paymentRequestQueryService)
+
+        private readonly ILogger<UserPaymentController> _logger;
+        public UserPaymentController(IPaymentRequestCommandService paymentRequestCommandService, IPaymentRequestQueryService paymentRequestQueryService, ILogger<UserPaymentController> logger)
         {
-            _applicationCurrentUser = applicationCurrentUser;
             _paymentRequestCommandService = paymentRequestCommandService;
             _paymentRequestQueryService = paymentRequestQueryService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -38,17 +39,20 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
         public async Task<IActionResult> CreatePaymentRequest([FromBody] PaymentRequestModel model)
         {
+
             var paymentModel = new CreatePaymentRequestModel
             {
                 OrderId = model.OrderId,
                 OrderNumber = model.OrderNumber,
-                UserId = _applicationCurrentUser.Id,
+                UserId = CurrentUser.Id.ToString()!,
                 TaxCost = model.TaxCost,
                 ShippingCost = model.ShippingCost,
                 SubTotal = model.SubTotal,
                 TotalCost = model.TotalCost,
                 Items = model.Items,
             };
+
+            
 
             var result = await _paymentRequestCommandService.CreateAsync(paymentModel);
 
@@ -82,7 +86,7 @@ namespace MicroStore.Payment.Api.Controllers
                 PageNumber = @params.PageNumber,
             };
 
-            var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, _applicationCurrentUser.Id);
+            var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, CurrentUser.Id.ToString()!);
 
             return FromResult(result, HttpStatusCode.OK);
         }

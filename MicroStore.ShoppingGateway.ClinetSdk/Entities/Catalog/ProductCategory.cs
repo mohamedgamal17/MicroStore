@@ -3,8 +3,7 @@
     [Serializable]
     public class ProductCategory : BaseEntity<string>
     {
-        public Guid CategoryId { get; set; }
+        public string CategoryId { get; set; }
         public string Name { get; set; }
-        public bool IsFeatured { get; set; }
     }
 }

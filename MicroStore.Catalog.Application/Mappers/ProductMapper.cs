@@ -25,7 +25,7 @@ namespace MicroStore.Catalog.Application.Mappers
 
 
             CreateMap<ProductCategory, ProductCategoryDto>()
-                .ForMember(x => x.CateogryId, opt => opt.MapFrom(x => x.CategoryId))
+                .ForMember(x => x.CategoryId, opt => opt.MapFrom(x => x.CategoryId))
                 .ForMember(x => x.Name, opt => opt.MapFrom(x => x.Category.Name));
 
 

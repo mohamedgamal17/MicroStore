@@ -11,6 +11,8 @@ using Volo.Abp.AspNetCore.Mvc;
 using MicroStore.Inventory.Domain.Security;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
+using MicroStore.Inventory.Infrastructure.EntityFramework;
+using Microsoft.EntityFrameworkCore;
 
 namespace MicroStore.Inventory.Host
 {
@@ -42,11 +44,17 @@ namespace MicroStore.Inventory.Host
             });
 
         }
+        public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using var scope = context.ServiceProvider.CreateScope();
 
+            var dbContext = scope.ServiceProvider.GetRequiredService<InventoryDbContext>();
+
+            await dbContext.Database.MigrateAsync();
+
+        }
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

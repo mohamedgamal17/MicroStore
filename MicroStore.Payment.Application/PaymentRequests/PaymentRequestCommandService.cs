@@ -36,7 +36,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
             {
                 OrderId = model.OrderId,
                 OrderNumber = model.OrderNumber,
-                CustomerId = model.UserId,
+                UserId = model.UserId,
                 ShippingCost = model.ShippingCost,
                 TaxCost = model.TaxCost,
                 SubTotal = model.SubTotal,

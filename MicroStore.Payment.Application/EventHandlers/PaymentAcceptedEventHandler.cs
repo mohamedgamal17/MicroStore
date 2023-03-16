@@ -21,7 +21,7 @@ namespace MicroStore.Payment.Application.EventHandlers
             return _publishEndPoint.Publish(new PaymentAccepetedIntegrationEvent
             {
                 OrderId = eventData.OrderId,
-                UserId = eventData.UserId,
+                UserId = eventData.UserName,
                 PaymentId = eventData.PaymentId.ToString(),
                 TransactionId = eventData.TransactionId,
                 PaymentGateway = eventData.PaymentGateway

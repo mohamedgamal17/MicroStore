@@ -42,7 +42,7 @@
     <None Include="Areas\Administration\Pages\Categories\Create.cshtml" />
     <None Include="Pages\FrontEnd\Products.cshtml" />
     <None Include="Pages\FrontEnd\ProductDetails.cshtml" />
-    <None Include="Areas\Administration\Pages\Shared\_AdministrationLayout.cshtml" />
+    <None Include="Areas\Administration\Pages\Shared\_Layout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
