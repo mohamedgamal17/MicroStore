@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.Results;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
@@ -15,11 +16,32 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             {
                 AbpValidationException ex => new BadRequestObjectResult(exception),
 
-                BusinessException ex => new BadRequestObjectResult(ex),
+                BusinessException ex => new BadRequestObjectResult(new ProblemDetails
+                {
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                    Title = "Invalid entity state",
+                    Detail = ex.Message
+                }),
 
-                EntityNotFoundException ex => new BadRequestObjectResult(ex),
+                EntityNotFoundException ex =>  new NotFoundObjectResult (new ProblemDetails
+                {
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
 
-                _ => new BadRequestObjectResult(exception),
+                    Title = "The specified resource was not found.",
+
+                    Detail = ex.Message
+
+                }),
+
+                _ => new ObjectResult(new ProblemDetails
+                {
+                    Title = "Internal Server Error",
+                    Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.6.1",
+                    Detail = exception.Message
+                })
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                },
             };
 
         };
