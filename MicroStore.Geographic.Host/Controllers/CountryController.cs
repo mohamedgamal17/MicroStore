@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Geographic.Application.Countries;
 using MicroStore.Geographic.Application.Dtos;
 using MicroStore.Geographic.Application.Models;
@@ -35,12 +36,13 @@ namespace MicroStore.Geographic.Host.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK , Type = typeof(CountryDto))]
         [HttpGet]
+        [ActionName(nameof(GetCountry))]
         [Route("{countryId}")]
         public async Task<IActionResult> GetCountry(string countryId)
         {
             var result = await _countryApplicationService.GetAsync(countryId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CountryDto))]
@@ -50,7 +52,7 @@ namespace MicroStore.Geographic.Host.Controllers
         {
             var result = await _countryApplicationService.GetByCodeAsync(countryCode);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -60,7 +62,8 @@ namespace MicroStore.Geographic.Host.Controllers
         public async Task<IActionResult > CreateCountry([FromBody] CountryModel model)
         {
             var result= await _countryApplicationService.CreateAsync(model);
-            return FromResult(result, HttpStatusCode.Created);
+
+            return result.ToCreatedAtAction(nameof(GetCountry), new { countryId = result.Value?.Id });
         }
 
 
@@ -70,7 +73,8 @@ namespace MicroStore.Geographic.Host.Controllers
         public async Task<IActionResult> UpdateCountry(string countryId , [FromBody]  CountryModel model)
         {
             var result = await _countryApplicationService.UpdateAsync(countryId, model);
-            return FromResult(result, HttpStatusCode.Created);
+
+            return result.ToOk();
         }
 
 
@@ -80,7 +84,8 @@ namespace MicroStore.Geographic.Host.Controllers
         public async Task<IActionResult> DeleteCountry(string countryId)
         {
             var result = await _countryApplicationService.DeleteAsync(countryId);
-            return FromResult(result, HttpStatusCode.NoContent);
+
+            return result.ToNoContent();
         }
 
 
@@ -91,18 +96,19 @@ namespace MicroStore.Geographic.Host.Controllers
         public async Task<IActionResult> ListCountryStateProvinces(string countryId)
         {
             var result = await _stateProvinceApplicationService.ListAsync(countryId);
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<StateProvinceDto>))]
+        [ActionName(nameof(GetCountryStateProvince))]
         [HttpGet]
         [Route("{countryId}/states/{stateId}")]
         public async Task<IActionResult> GetCountryStateProvince(string countryId , string stateId)
         {
             var result = await _stateProvinceApplicationService.GetAsync(countryId, stateId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StateProvinceDto))]
@@ -112,7 +118,7 @@ namespace MicroStore.Geographic.Host.Controllers
         {
             var result = await _stateProvinceApplicationService.GetByCodeAsync(countryCode, stateCode);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StateProvinceDto))]
@@ -122,7 +128,7 @@ namespace MicroStore.Geographic.Host.Controllers
         {
             var result = await _stateProvinceApplicationService.CreateAsync(countryId, model);
 
-            return FromResult(result, HttpStatusCode.Created);
+            return result.ToCreatedAtAction(nameof(GetCountryStateProvince), new { countryId = countryId, stateId = result.Value?.Id });
         }
 
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(StateProvinceDto))]
@@ -132,7 +138,7 @@ namespace MicroStore.Geographic.Host.Controllers
         {
             var result = await _stateProvinceApplicationService.UpdateAsync(countryId, stateId,model);
 
-            return FromResult(result,HttpStatusCode.OK);
+            return result.ToOk();
 
         }
 
@@ -143,7 +149,7 @@ namespace MicroStore.Geographic.Host.Controllers
         {
             var result = await _stateProvinceApplicationService.DeleteAsync(countryId, stateId);
 
-            return FromResult(result, HttpStatusCode.NoContent);
+            return result.ToNoContent();
 
         }
 
