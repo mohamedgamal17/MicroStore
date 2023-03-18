@@ -5,6 +5,9 @@ using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 {
     public class ApiScopeCommandService : IdentityServiceApplicationService, IApiScopeCommandService
@@ -16,62 +19,62 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
             _apiScopeRepository = apiScopeRepository;
         }
 
-        public async Task<UnitResult<ApiScopeDto>> CreateAsync(ApiScopeModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ApiScopeDto>> CreateAsync(ApiScopeModel model, CancellationToken cancellationToken = default)
         {
             var validationResult = await ValidateApiScope(model, cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<ApiScopeDto>(validationResult.Error);
+                return  new ResultV2<ApiScopeDto>(validationResult.Exception);
             }
 
             var apiScope = ObjectMapper.Map<ApiScopeModel, ApiScope>(model);
 
             apiScope = await _apiScopeRepository.InsertAsync(apiScope);
 
-            return UnitResult.Success(ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope));
+            return ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope);
         }
 
-        public async Task<UnitResult<ApiScopeDto>> UpdateAsync(int apiScopeId, ApiScopeModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ApiScopeDto>> UpdateAsync(int apiScopeId, ApiScopeModel model, CancellationToken cancellationToken = default)
         {
             var apiScope = await _apiScopeRepository.SingleOrDefaultAsync(x => x.Id == apiScopeId, cancellationToken);
 
             if (apiScope == null)
             {
-                return UnitResult.Failure<ApiScopeDto>(ErrorInfo.NotFound( $"Api Scope with id : {apiScopeId} is not exist"));
+                return new ResultV2<ApiScopeDto>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
             }
 
             var validationResult = await ValidateApiScope(model, cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<ApiScopeDto>(validationResult.Error);
+                return new ResultV2<ApiScopeDto>(validationResult.Exception);
             }
 
             apiScope = ObjectMapper.Map(model, apiScope);
 
             await _apiScopeRepository.UpdateApiScopeAsync(apiScope,cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope));
+            return ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope);
 
         }
 
-        public async Task<UnitResult> DeleteAsync(int apiScopeId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<Unit>> DeleteAsync(int apiScopeId, CancellationToken cancellationToken = default)
         {
             var apiScope = await _apiScopeRepository.SingleOrDefaultAsync(x => x.Id == apiScopeId, cancellationToken);
 
             if (apiScope == null)
             {
-                return UnitResult.Failure(ErrorInfo.NotFound($"Api Scope with id : {apiScopeId} is not exist"));
+                return new ResultV2<Unit>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
             }
 
             await _apiScopeRepository.DeleteAsync(apiScope, cancellationToken);
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
 
 
-        private async Task<UnitResult> ValidateApiScope(ApiScopeModel model,int? apiScopeId = null ,CancellationToken cancellationToken = default)
+        private async Task<ResultV2<Unit>> ValidateApiScope(ApiScopeModel model,int? apiScopeId = null ,CancellationToken cancellationToken = default)
         {
             var query = _apiScopeRepository.Query();
 
@@ -82,10 +85,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 
             if(await query.AnyAsync(x=> x.Name == model.Name))
             {
-                return UnitResult.Failure(ErrorInfo.BusinessLogic($"Api scope with name : {model.Name} is already exist"));
+                return new ResultV2<Unit>(new BusinessException($"Api scope with name : {model.Name} is already exist"));
             }
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
     }
 }

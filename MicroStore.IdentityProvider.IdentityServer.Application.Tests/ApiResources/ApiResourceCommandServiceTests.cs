@@ -3,6 +3,8 @@ using FluentAssertions;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using MicroStore.IdentityProvider.IdentityServer.Application.Tests.Extensions;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResources
 {
 
@@ -61,7 +63,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             response.IsFailure.Should().BeTrue();
 
-            response.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            response.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -88,7 +90,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -124,7 +126,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -151,7 +153,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError); 
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -163,11 +165,11 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             response.IsFailure.Should().BeTrue();
 
-            response.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            response.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
-   
+
     }
 
 }

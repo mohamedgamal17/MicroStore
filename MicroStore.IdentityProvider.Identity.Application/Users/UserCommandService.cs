@@ -5,6 +5,7 @@ using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application.Dtos;
 using MicroStore.IdentityProvider.Identity.Application.Models;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Users
 {
@@ -20,7 +21,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
             _identityUserRepository = identityUserRepository;
         }
 
-        public async Task<UnitResult<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default)
         {
             var applicationUser = new ApplicationIdentityUser();
 
@@ -30,23 +31,23 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
 
             await _identityUserRepository.CreateAsync(applicationUser, model.Password);
 
-            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser));
+            return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser);
         }
 
-        public async Task<UnitResult<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default)
         {
             var applicationUser = await _identityUserRepository.FindById(userId, cancellationToken);
 
             if (applicationUser == null)
             {
-                return UnitResult.Failure<IdentityUserDto>(ErrorInfo.NotFound($"User with id : {userId} is not exist"));
+                return new ResultV2<IdentityUserDto>(new EntityNotFoundException(typeof(ApplicationIdentityUser), userId));
             }
 
             await PrepareUserEntity(model, applicationUser, cancellationToken);
 
             await _identityUserRepository.UpdateAsync(applicationUser, model.Password);
 
-            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser));
+            return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser);
         }
 
         private async Task PrepareUserEntity(UserModel model, ApplicationIdentityUser identityUser, CancellationToken cancellationToken)

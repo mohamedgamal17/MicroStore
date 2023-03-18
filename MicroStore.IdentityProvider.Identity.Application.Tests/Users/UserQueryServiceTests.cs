@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.Identity.Application.Users;
 using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 {
     public class UserQueryServiceTests : BaseTestFixture
@@ -57,7 +58,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -82,7 +83,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -109,7 +110,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
     }

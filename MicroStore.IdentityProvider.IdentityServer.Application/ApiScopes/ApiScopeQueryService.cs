@@ -1,12 +1,14 @@
 ﻿using AutoMapper.QueryableExtensions;
+using Duende.IdentityServer.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 {
     public class ApiScopeQueryService : IdentityServiceApplicationService, IApiScopeQueryService
@@ -17,15 +19,15 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
         {
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
-        public async Task<UnitResult<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiScopes.AsNoTracking().ProjectTo<ApiScopeDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
         }
-        public async Task<UnitResult<ApiScopeDto>> GetAsync(int apiScopeId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ApiScopeDto>> GetAsync(int apiScopeId, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiScopes.AsNoTracking().ProjectTo<ApiScopeDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -33,10 +35,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 
             if (result == null)
             {
-                return UnitResult.Failure<ApiScopeDto>(ErrorInfo.NotFound($"Api Scope with id : {apiScopeId} is not exist"));
+                return new ResultV2<ApiScopeDto>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
     }
 }

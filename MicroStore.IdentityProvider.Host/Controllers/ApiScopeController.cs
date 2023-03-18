@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
-using System.Net;
-
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
     [ApiController]
@@ -35,18 +34,19 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _apiResourceQueryService.ListAsync(queryParams);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
         [HttpGet]
+        [ActionName(nameof(GetApiScope))]
         [Route("{apiScopeId}")]
         public async Task<IActionResult> GetApiScope(int apiScopeId)
         {
 
             var result = await _apiResourceQueryService.GetAsync(apiScopeId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpPost]
@@ -55,7 +55,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiScopeCommandService.CreateAsync(model);
 
-            return FromResult(result, HttpStatusCode.Created);
+            return result.ToCreatedAtAction(nameof(GetApiScope), new { apiScopeId = result.Value?.Id });
         }
 
         [HttpPut]
@@ -64,7 +64,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiScopeCommandService.UpdateAsync(apiScopeId, model);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -74,7 +74,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiScopeCommandService.DeleteAsync(apiScopeId);
 
-            return FromResult(result, HttpStatusCode.NoContent);
+            return result.ToNoContent();
         }
     }
 }

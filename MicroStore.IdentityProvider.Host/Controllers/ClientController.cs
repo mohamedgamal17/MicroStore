@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
-using System.Net;
-
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
     [ApiController]
@@ -31,16 +30,17 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _clientQueryService.ListAsync(queryParams);
 
-            return FromResult(result , HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
+        [ActionName(nameof(GetClientById))]
         [Route("{clientId}")]
         public async Task<IActionResult> GetClientById(int clientId)
         {
             var result = await _clientQueryService.GetAsync(clientId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpPost]
@@ -49,7 +49,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.CreateAsync(model);
 
-            return FromResult(result, HttpStatusCode.Created);
+            return result.ToCreatedAtAction(nameof(GetClientById), new { clientId = result.Value?.Id });
         }
 
 
@@ -59,7 +59,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.UpdateAsync(clientId,model);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -69,7 +69,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.DeleteAsync(clientId);
 
-            return FromResult(result, HttpStatusCode.NoContent);
+            return result.ToNoContent();
         }
 
         [HttpPost]
@@ -78,16 +78,16 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _clientCommandService.AddClientSecret(clientId,model);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpDelete]
         [Route("{clientId}/secrets")]
-        public async Task<IActionResult> CreateClientSecret(int clientId, int secretId)
+        public async Task<IActionResult> RemoveClientSecret(int clientId, int secretId)
         {
             var result = await _clientCommandService.DeleteClientSecret(clientId, secretId);
 
-            return FromResult(result, HttpStatusCode.NoContent);
+            return result.ToNoContent();
         }
     }
 }

@@ -4,6 +4,8 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using System.Net;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResources
 {
     public class ApiResourceQueryServiceTests : BaseTestFixture
@@ -50,7 +52,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
     }

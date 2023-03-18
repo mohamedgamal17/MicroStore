@@ -1,12 +1,14 @@
 ﻿using AutoMapper.QueryableExtensions;
+using Duende.IdentityServer.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 {
     public class ClientQueryService : IdentityServiceApplicationService, IClientQueryService
@@ -18,7 +20,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
 
-        public async Task<UnitResult<ClientDto>> GetAsync(int clientId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ClientDto>> GetAsync(int clientId, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.Clients.AsNoTracking().ProjectTo<ClientDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -26,19 +28,19 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 
             if (result == null)
             {
-                return UnitResult.Failure<ClientDto>(ErrorInfo.NotFound($"Clinet with id : {clientId} is not exist"));
+                return new ResultV2<ClientDto>(new EntityNotFoundException(typeof(Client), clientId));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.Clients.AsNoTracking().ProjectTo<ClientDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
 
         }
     }

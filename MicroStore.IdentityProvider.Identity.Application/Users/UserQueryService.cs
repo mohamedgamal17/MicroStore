@@ -8,6 +8,7 @@ using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Users
 {
@@ -23,43 +24,43 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
             _identityUserRepository = identityUserRepository;
         }
 
-        public async Task<UnitResult<IdentityUserDto>> GetAsync(string userId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<IdentityUserDto>> GetAsync(string userId, CancellationToken cancellationToken = default)
         {
             var user = await _identityUserRepository.FindById(userId);
 
             if (user == null)
             {
-                return UnitResult.Failure<IdentityUserDto>(ErrorInfo.NotFound($"User with id : {userId} is not exist"));
+                return new ResultV2<IdentityUserDto>(new EntityNotFoundException(typeof(ApplicationIdentityUser), userId));
             }
 
-            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user));
+            return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user);
         }
 
-        public async Task<UnitResult<IdentityUserDto>> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<IdentityUserDto>> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
         {
             var user = await _identityUserRepository.FindByEmail(email);
 
             if (user == null)
             {
-                return UnitResult.Failure<IdentityUserDto>(ErrorInfo.NotFound($"User with email : {email} is not exist"));
+                return new ResultV2<IdentityUserDto>(new EntityNotFoundException($"User with email : {email} is not exist"));
             }
 
-            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user));
+            return   ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user);
         }
 
-        public async Task<UnitResult<IdentityUserDto>> GetByUserNameAsync(string userName, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<IdentityUserDto>> GetByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
             var user = await _identityUserRepository.FindByUserName(userName);
 
             if (user == null)
             {
-                return UnitResult.Failure<IdentityUserDto>(ErrorInfo.NotFound($"User with user name : {userName} is not exist"));
+                return  new ResultV2<IdentityUserDto>(new EntityNotFoundException($"User with user name : {userName} is not exist"));
             }
 
-            return UnitResult.Success(ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user));
+            return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user);
         }
 
-        public async Task<UnitResult<PagedResult<IdentityUserListDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PagedResult<IdentityUserListDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _identityDbContext.Users
                .AsNoTracking()
@@ -68,7 +69,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
         }
     }
 }

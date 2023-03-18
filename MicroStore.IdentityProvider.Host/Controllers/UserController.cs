@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.Identity.Application.Models;
 using MicroStore.IdentityProvider.Identity.Application.Users;
-using System.Net;
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
     [Route("api/users")]
@@ -28,34 +28,38 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _userQueryService.ListAsync(queryParams);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
+        [ActionName(nameof(GetUserById))]
         [Route("{userId}")]
         public async Task<IActionResult> GetUserById(string userId)
         {
             var result = await _userQueryService.GetAsync(userId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
+        [ActionName(nameof(GetUserByEmail))]
+
         [Route("email/{email}")]
         public async Task<IActionResult> GetUserByEmail(string email)
         {
             var result = await _userQueryService.GetAsync(email);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
+        [ActionName(nameof(GetUserByName))]
         [Route("user-name/{userName}")]
         public async Task<IActionResult> GetUserByName(string userName)
         {
             var result = await _userQueryService.GetByUserNameAsync(userName);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpPost]
@@ -64,7 +68,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _userCommandService.CreateUserAsync(model);
 
-            return FromResult(result, HttpStatusCode.Created);
+            return result.ToCreatedAtAction(nameof(GetUserById), new { userId = result.Value?.Id });
         }
 
         [HttpPut]
@@ -73,7 +77,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _userCommandService.UpdateUserAsync(userId,model);
 
-            return FromResult(result, HttpStatusCode.Created);
+            return result.ToOk();
         } 
     }
 }

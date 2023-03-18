@@ -3,6 +3,8 @@ using FluentAssertions;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
 using MicroStore.IdentityProvider.IdentityServer.Application.Tests.Extensions;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 {
     public class ClientCommandServiceTests : ClientCommandServiceBaseTest
@@ -57,7 +59,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -78,7 +80,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -113,7 +115,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -140,7 +142,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -152,7 +154,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 

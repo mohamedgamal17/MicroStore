@@ -1,10 +1,12 @@
 ﻿using Duende.IdentityServer.EntityFramework.Entities;
 using IdentityModel;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 {
     public class ClientCommandService : IdentityServiceApplicationService, IClientCommandService
@@ -17,68 +19,68 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
         {
             _clinetRepository = clinetRepository;
         }
-        public async Task<UnitResult<ClientDto>> CreateAsync(ClientModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ClientDto>> CreateAsync(ClientModel model, CancellationToken cancellationToken = default)
         {
             var validationResult = await ValidateClient(model, cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<ClientDto>(validationResult.Error);
+                return new ResultV2<ClientDto>(validationResult.Exception);
             }
 
             var client = ObjectMapper.Map<ClientModel, Client>(model);
 
             await _clinetRepository.InsertAsync(client);
 
-            return UnitResult.Success(ObjectMapper.Map<Client, ClientDto>(client));
+            return ObjectMapper.Map<Client, ClientDto>(client);
         }
-        public async Task<UnitResult<ClientDto>> UpdateAsync(int clientId, ClientModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ClientDto>> UpdateAsync(int clientId, ClientModel model, CancellationToken cancellationToken = default)
         {
             var client = await _clinetRepository.SingleOrDefaultAsync(x => x.Id == clientId
              , cancellationToken);
 
             if (client == null)
             {
-                return UnitResult.Failure<ClientDto>(ErrorInfo.NotFound($"Clinet with id : {clientId} is not exist"));
+                return new ResultV2<ClientDto>(new EntityNotFoundException(typeof(Client), clientId));
             }
 
             var validationResult = await ValidateClient(model, cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<ClientDto>(validationResult.Error);
+                return new ResultV2<ClientDto>(validationResult.Exception);
             }
 
             client = ObjectMapper.Map(model,client);
 
             await _clinetRepository.UpdateClinetAsync(client, cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Client, ClientDto>(client));
+            return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
-        public async Task<UnitResult> DeleteAsync(int clientId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<Unit>> DeleteAsync(int clientId, CancellationToken cancellationToken = default)
         {
             var client = await _clinetRepository.SingleOrDefaultAsync(x => x.Id == clientId
               , cancellationToken);
 
             if (client == null)
             {
-                return UnitResult.Failure<ClientDto>(ErrorInfo.NotFound($"Clinet with id : {clientId} is not exist"));
+                return new ResultV2<Unit>(new EntityNotFoundException(typeof(Client), clientId));
             }
 
             await _clinetRepository.DeleteAsync(client);
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
 
-        public async Task<UnitResult<ClientDto>> AddClientSecret(int clientId, SecretModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ClientDto>> AddClientSecret(int clientId, SecretModel model, CancellationToken cancellationToken = default)
         {
             var client = await _clinetRepository.SingleOrDefaultAsync(x => x.Id == clientId
              , cancellationToken);
 
             if (client == null)
             {
-                return UnitResult.Failure<ClientDto>(ErrorInfo.NotFound($"Clinet with id : {clientId} is not exist"));
+                return new ResultV2<ClientDto>(new EntityNotFoundException(typeof(Client), clientId));
             }
 
             if (client.ClientSecrets == null)
@@ -99,23 +101,23 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 
             await _clinetRepository.UpdateAsync(client, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Client, ClientDto>(client));
+            return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
 
-        public async Task<UnitResult<ClientDto>> DeleteClientSecret(int clientId, int secretId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ClientDto>> DeleteClientSecret(int clientId, int secretId, CancellationToken cancellationToken = default)
         {
             var client = await _clinetRepository.SingleOrDefaultAsync(x => x.Id == clientId
              , cancellationToken);
 
             if (client == null)
             {
-                return UnitResult.Failure<ClientDto>(ErrorInfo.NotFound($"Clinet with id : {clientId} is not exist"));
+                return new ResultV2<ClientDto>(new EntityNotFoundException(typeof(Client), clientId));
             }
 
             if (client.ClientSecrets == null || !client.ClientSecrets.Any(x => x.Id == secretId))
             {
-                return UnitResult.Failure<ClientDto>(ErrorInfo.NotFound($"Clinet dose not have secret id : {secretId}"));
+                return new ResultV2<ClientDto>(new EntityNotFoundException(typeof(ClientSecret), secretId));
             }
 
             var secret = client.ClientSecrets.Single(x => x.Id == secretId);
@@ -125,10 +127,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 
             await _clinetRepository.UpdateAsync(client, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Client, ClientDto>(client));
+            return ObjectMapper.Map<Client, ClientDto>(client);
         }
 
-        private async Task<UnitResult> ValidateClient(ClientModel model , int? clientId=  null , CancellationToken cancellationToken = default)
+        private async Task<ResultV2<Unit>> ValidateClient(ClientModel model , int? clientId=  null , CancellationToken cancellationToken = default)
         {
             var query = _clinetRepository.Query();
 
@@ -139,10 +141,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 
             if(await _clinetRepository.AnyAsync(x=> x.ClientId == model.ClientId))
             {
-                return UnitResult.Failure(ErrorInfo.BusinessLogic($"Clinet id : {model.ClientId} is already exist"));
+                return new ResultV2<Unit>(new BusinessException($"Clinet id : {model.ClientId} is already exist"));
             }
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
     }
 }

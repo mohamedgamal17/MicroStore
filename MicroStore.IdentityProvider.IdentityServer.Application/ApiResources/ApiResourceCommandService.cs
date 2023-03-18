@@ -1,11 +1,11 @@
 ﻿using Duende.IdentityServer.EntityFramework.Entities;
 using IdentityModel;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
-using System.Net;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
 {
@@ -20,65 +20,65 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
             _apiResourceRepository = apiResourceRepository;
         }
 
-        public async Task<UnitResult<ApiResourceDto>> CreateAsync(ApiResourceModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ApiResourceDto>> CreateAsync(ApiResourceModel model, CancellationToken cancellationToken = default)
         {
             var validationResult = await ValidateApiResource(model, cancellationToken : cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<ApiResourceDto>(validationResult.Error);
+                return new ResultV2<ApiResourceDto>(validationResult.Exception);
             }
 
             var apiResource = ObjectMapper.Map<ApiResourceModel, ApiResource>(model);
 
             apiResource =  await _apiResourceRepository.InsertAsync(apiResource, cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource));
+            return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
 
         }
-        public async Task<UnitResult<ApiResourceDto>> UpdateAsync(int apiResourceId, ApiResourceModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ApiResourceDto>> UpdateAsync(int apiResourceId, ApiResourceModel model, CancellationToken cancellationToken = default)
         {
             var apiResource = await _apiResourceRepository.SingleOrDefaultAsync(x => x.Id == apiResourceId);
 
             if (apiResource == null)
             {
-                return UnitResult.Failure<ApiResourceDto>(ErrorInfo.NotFound($"Api resource with id : {apiResourceId} , is not exist"));
+                return new ResultV2<ApiResourceDto>(new EntityNotFoundException(typeof(ApiResource), apiResourceId));
             }
             var validationResult = await ValidateApiResource(model,apiResourceId , cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<ApiResourceDto>(validationResult.Error);
+                return new ResultV2<ApiResourceDto>(validationResult.Exception);
             }
 
             ObjectMapper.Map(model, apiResource);
 
             await _apiResourceRepository.UpdateApiResourceAsync(apiResource, cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource));
+            return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
 
         }
-        public async Task<UnitResult> DeleteAsync(int apiResourceId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<Unit>> DeleteAsync(int apiResourceId, CancellationToken cancellationToken = default)
         {
             var apiResource = await _apiResourceRepository.SingleOrDefaultAsync(x => x.Id == apiResourceId);
 
             if (apiResource == null)
             {
-                return UnitResult.Failure<ApiResourceDto>(ErrorInfo.NotFound($"Api resource with id : {apiResourceId} , is not exist"));
+                return new ResultV2<Unit>(new EntityNotFoundException(typeof(ApiResource), apiResourceId));
             }
 
             await _apiResourceRepository.DeleteAsync(apiResource,cancellationToken);
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
 
-       public async Task<UnitResult<ApiResourceDto>> AddApiSecret(int apiResourceId, SecretModel model, CancellationToken cancellationToken = default)
+       public async Task<ResultV2<ApiResourceDto>> AddApiSecret(int apiResourceId, SecretModel model, CancellationToken cancellationToken = default)
         {
             var apiResource = await _apiResourceRepository.SingleOrDefaultAsync(x => x.Id == apiResourceId, cancellationToken);
 
             if (apiResource == null)
             {
-                return UnitResult.Failure<ApiResourceDto>(ErrorInfo.NotFound($"Api resource with id : {apiResourceId} , is not exist"));
+                return new ResultV2<ApiResourceDto>(new EntityNotFoundException(typeof(ApiResource), apiResourceId));
             }
 
             if (apiResource.Secrets == null)
@@ -95,21 +95,21 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
 
             await _apiResourceRepository.UpdateAsync(apiResource, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource));
+            return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
         }
 
-       public  async Task<UnitResult<ApiResourceDto>> RemoveApiSecret(int apiResourceId, int secretId, CancellationToken cancellationToken = default)
+       public  async Task<ResultV2<ApiResourceDto>> RemoveApiSecret(int apiResourceId, int secretId, CancellationToken cancellationToken = default)
         {
             var apiResource = await _apiResourceRepository.SingleOrDefaultAsync(x => x.Id == apiResourceId, cancellationToken);
 
             if (apiResource == null)
             {
-                return UnitResult.Failure<ApiResourceDto>(ErrorInfo.NotFound($"Api resource with id : {apiResourceId} , is not exist"));
+                return new ResultV2<ApiResourceDto>(new EntityNotFoundException(typeof(ApiResource), apiResourceId));
             }
 
             if (apiResource.Secrets == null || !apiResource.Secrets.Any(x => x.Id == secretId))
             {
-                return UnitResult.Failure<ApiResourceDto>(ErrorInfo.NotFound($"Api Secret key with id : {secretId} , is not exist"));
+                return new ResultV2<ApiResourceDto>(new EntityNotFoundException(typeof(ApiResourceSecret), secretId));
             }
 
             var secret = apiResource.Secrets.Single(x => x.Id == secretId);
@@ -118,10 +118,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
 
             await _apiResourceRepository.UpdateAsync(apiResource, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource));
+            return ObjectMapper.Map<ApiResource, ApiResourceDto>(apiResource);
         }
 
-        private async Task<UnitResult> ValidateApiResource(ApiResourceModel model, int? apiResourceId = null, CancellationToken cancellationToken =default)
+        private async Task<ResultV2<Unit>> ValidateApiResource(ApiResourceModel model, int? apiResourceId = null, CancellationToken cancellationToken =default)
         {
             var query = _apiResourceRepository.Query();
 
@@ -132,11 +132,11 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
 
             if(await _apiResourceRepository.AnyAsync(x=> x.Name == model.Name))
             {
-                return UnitResult.Failure(ErrorInfo.BusinessLogic($"Api reosurce name : {model.Name} is already exist"));
+                return new ResultV2<Unit>(new BusinessException($"Api reosurce name : {model.Name} is already exist"));
             }
 
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
     }
 }

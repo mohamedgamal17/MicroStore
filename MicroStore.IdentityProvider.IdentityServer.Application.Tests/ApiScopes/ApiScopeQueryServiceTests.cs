@@ -3,6 +3,8 @@ using FluentAssertions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
 {
     public class ApiScopeQueryServiceTests : BaseTestFixture
@@ -50,7 +52,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
     }
 

@@ -7,8 +7,8 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 {
     public interface IApiScopeQueryService : IApplicationService
     {
-        Task<UnitResult<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default);
+        Task<ResultV2<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default);
 
-        Task<UnitResult<ApiScopeDto>> GetAsync(int apiScopeId, CancellationToken cancellationToken = default);
+        Task<ResultV2<ApiScopeDto>> GetAsync(int apiScopeId, CancellationToken cancellationToken = default);
     }
 }

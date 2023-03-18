@@ -5,6 +5,8 @@ using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.Identity.Application.Roles;
 using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
 using System.Net;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 {
     public class RoleQueryServiceTests : BaseTestFixture
@@ -47,7 +49,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -72,7 +74,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
     }

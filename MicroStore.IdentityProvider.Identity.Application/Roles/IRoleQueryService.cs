@@ -6,8 +6,8 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
 {
     public interface IRoleQueryService : IApplicationService
     {
-        Task<UnitResult<List<IdentityRoleDto>>> ListAsync(CancellationToken cancellationToken = default);
-        Task<UnitResult<IdentityRoleDto>> GetAsync(string roleId , CancellationToken cancellationToken  =default);
-        Task<UnitResult<IdentityRoleDto>> GetByNameAsync(string roleName, CancellationToken cancellationToken = default);
+        Task<ResultV2<List<IdentityRoleDto>>> ListAsync(CancellationToken cancellationToken = default);
+        Task<ResultV2<IdentityRoleDto>> GetAsync(string roleId , CancellationToken cancellationToken  =default);
+        Task<ResultV2<IdentityRoleDto>> GetByNameAsync(string roleName, CancellationToken cancellationToken = default);
     }
 }

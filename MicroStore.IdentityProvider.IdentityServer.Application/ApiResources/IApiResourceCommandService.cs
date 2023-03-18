@@ -7,14 +7,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
 {
     public interface IApiResourceCommandService : IApplicationService
     {
-        Task<UnitResult<ApiResourceDto>> CreateAsync(ApiResourceModel model, CancellationToken cancellationToken = default);
-
-        Task<UnitResult<ApiResourceDto>> UpdateAsync(int apiResourceId ,ApiResourceModel model , CancellationToken cancellationToken = default);
-        Task<UnitResult> DeleteAsync(int apiResourceId , CancellationToken cancellationToken = default);
-
-
-        Task<UnitResult<ApiResourceDto>> AddApiSecret(int apiResourceId, SecretModel model, CancellationToken cancellationToken = default);
-
-        Task<UnitResult<ApiResourceDto>> RemoveApiSecret(int apiResourceId, int secretId, CancellationToken cancellationToken = default);
+        Task<ResultV2<ApiResourceDto>> CreateAsync(ApiResourceModel model, CancellationToken cancellationToken = default);
+        Task<ResultV2<ApiResourceDto>> UpdateAsync(int apiResourceId ,ApiResourceModel model , CancellationToken cancellationToken = default);
+        Task<ResultV2<Unit>> DeleteAsync(int apiResourceId , CancellationToken cancellationToken = default);
+        Task<ResultV2<ApiResourceDto>> AddApiSecret(int apiResourceId, SecretModel model, CancellationToken cancellationToken = default);
+        Task<ResultV2<ApiResourceDto>> RemoveApiSecret(int apiResourceId, int secretId, CancellationToken cancellationToken = default);
     }
 }

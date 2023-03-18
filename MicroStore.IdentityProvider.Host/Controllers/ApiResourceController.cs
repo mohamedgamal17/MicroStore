@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
-using System.Net;
-
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
     [ApiController]
@@ -34,16 +33,17 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
             var result = await _apiResourceQueryService.ListAsync(queryParams);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
+        [ActionName(nameof(GetApiResource))]
         [Route("{apiResourceId}")]
         public async Task<IActionResult> GetApiResource(int apiResourceId)
         {
             var result = await _apiResourceQueryService.GetAsync(apiResourceId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -53,7 +53,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.CreateAsync(model);
 
-            return FromResult(result, HttpStatusCode.Created);
+            return result.ToCreatedAtAction(nameof(GetApiResource), new { apiResourceId = result.Value?.Id });
         }
 
 
@@ -63,7 +63,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.UpdateAsync(apiResourceId,model);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -75,7 +75,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.DeleteAsync(apiResourceId);
 
-            return FromResult(result, HttpStatusCode.NoContent);
+            return result.ToNoContent();
         }
 
         [HttpPost]
@@ -84,7 +84,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.AddApiSecret(apiResourceId, model);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -94,7 +94,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _apiResourceCommandService.RemoveApiSecret(apiResourceId, secretId);
 
-            return FromResult(result, HttpStatusCode.NoContent);
+            return result.ToNoContent();
         }
 
 

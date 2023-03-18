@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.Identity.Application.Models;
 using MicroStore.IdentityProvider.Identity.Application.Roles;
@@ -27,34 +28,37 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _roleQueryService.ListAsync();
 
-            return FromResult(result,HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
+        [ActionName(nameof(GetRoleByName))]
         [Route("name/{roleName}")]
         public async Task<IActionResult> GetRoleByName(string roleName)
         {
             var result = await _roleQueryService.GetByNameAsync(roleName);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
+        [ActionName(nameof(GetRoleById))]
         [Route("{roleId}")]
         public async Task<IActionResult> GetRoleById(string roleId)
         {
             var result = await _roleQueryService.GetAsync(roleId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpPost]
+        [ActionName(nameof(CreateRole))]
         [Route("")]
         public async Task<IActionResult> CreateRole([FromBody] RoleModel model)
         {
             var result = await _roleCommandService.CreateAsync(model);
 
-            return FromResult(result, HttpStatusCode.Created);
+            return result.ToCreatedAtAction(nameof(GetRoleById), new { roleId = result.Value?.Id });
         }
 
         [HttpPut]
@@ -63,7 +67,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var result = await _roleCommandService.UpdateAsync(roleId, model);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 

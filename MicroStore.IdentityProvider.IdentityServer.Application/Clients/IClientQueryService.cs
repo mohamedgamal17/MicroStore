@@ -7,8 +7,8 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 {
     public interface IClientQueryService : IApplicationService
     {
-        Task<UnitResult<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default);
+        Task<ResultV2<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default);
 
-        Task<UnitResult<ClientDto>> GetAsync(int clientId, CancellationToken cancellationToken = default); 
+        Task<ResultV2<ClientDto>> GetAsync(int clientId, CancellationToken cancellationToken = default); 
     }
 }
