@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
@@ -47,7 +46,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
 
 
-        public async Task<ResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(async () =>
             {
@@ -115,7 +114,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         }
 
-        public async Task<ResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(async () =>
             {
@@ -171,7 +170,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
 
 
-        private async Task<ResultV2<T>> WrappResponseResult<T>(Func<Task<T>> func)
+        private async Task<Result<T>> WrappResponseResult<T>(Func<Task<T>> func)
         {
 
             try
@@ -181,18 +180,10 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             }
             catch (StripeException ex)
             {
-                return new ResultV2<T>(new BusinessException(message: ex.StripeError?.Message, details: ex.StripeError?.ErrorDescription));
+                return new Result<T>(new BusinessException(message: ex.StripeError?.Message, details: ex.StripeError?.ErrorDescription));
 
             }
         }
-
-
-        private ErrorInfo ConvertStripeError(StripeError stripeError)
-        {
-            return ErrorInfo.BusinessLogic(stripeError.Message);
-
-        }
-
 
 
 

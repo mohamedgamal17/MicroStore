@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Abstractions;
 using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;
@@ -21,14 +20,14 @@ namespace MicroStore.Payment.Application.PaymentRequests
             _paymentMethodResolver = paymentMethodResolver;
         }
 
-        public async Task<ResultV2<PaymentRequestDto>> CreateAsync(CreatePaymentRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentRequestDto>> CreateAsync(CreatePaymentRequestModel model, CancellationToken cancellationToken = default)
         {
             bool isOrderPaymentCreated = await _paymentRequestRepository.AnyAsync(x => x.OrderId == model.OrderId
                || x.OrderNumber == model.OrderNumber);
 
             if (isOrderPaymentCreated)
             {
-                return new ResultV2<PaymentRequestDto>(new BusinessException($"Order payment request for order id : {model.OrderId} , with number : {model.OrderNumber} is already created"));
+                return new Result<PaymentRequestDto>(new BusinessException($"Order payment request for order id : {model.OrderId} , with number : {model.OrderNumber} is already created"));
             }
 
 
@@ -51,20 +50,20 @@ namespace MicroStore.Payment.Application.PaymentRequests
             return result;
         }
 
-        public async Task<ResultV2<PaymentProcessResultDto>> ProcessPaymentAsync(string paymentId, ProcessPaymentRequestModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentProcessResultDto>> ProcessPaymentAsync(string paymentId, ProcessPaymentRequestModel model, CancellationToken cancellationToken = default)
         {
             var paymentRequest = await _paymentRequestRepository.SingleOrDefaultAsync(x => x.Id == paymentId, cancellationToken);
 
             if (paymentRequest == null)
             {
-                return new ResultV2<PaymentProcessResultDto>(new EntityNotFoundException(typeof(PaymentRequest), paymentId));
+                return new Result<PaymentProcessResultDto>(new EntityNotFoundException(typeof(PaymentRequest), paymentId));
             }
 
             if (paymentRequest.State != PaymentStatus.Waiting)
             {
 
 
-                return new ResultV2<PaymentProcessResultDto>(new BusinessException($"Invalid payment request state {paymentRequest.State}.Payment request state should be" +
+                return new Result<PaymentProcessResultDto>(new BusinessException($"Invalid payment request state {paymentRequest.State}.Payment request state should be" +
                     $"in  {PaymentStatus.Waiting}"));
             }
 
@@ -72,7 +71,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (unitResult.IsFailure)
             {
-                return new ResultV2<PaymentProcessResultDto>(unitResult.Exception);
+                return new Result<PaymentProcessResultDto>(unitResult.Exception);
             }
 
             var paymentMethod = unitResult.Value;
@@ -81,21 +80,21 @@ namespace MicroStore.Payment.Application.PaymentRequests
             return await paymentMethod.Process(paymentId, model);
         }
 
-        public async Task<ResultV2<PaymentRequestDto>> RefundPaymentAsync(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentRequestDto>> RefundPaymentAsync(string paymentId, CancellationToken cancellationToken = default)
         {
             PaymentRequest paymentRequest = await _paymentRequestRepository
                  .SingleOrDefaultAsync(x => x.Id == paymentId);
 
             if (paymentRequest == null)
             {
-                return new ResultV2<PaymentRequestDto>(new EntityNotFoundException(typeof(PaymentRequest), paymentId));
+                return new Result<PaymentRequestDto>(new EntityNotFoundException(typeof(PaymentRequest), paymentId));
 
             }
 
             if (paymentRequest.State != PaymentStatus.Payed)
             {
 
-                return new ResultV2<PaymentRequestDto>(new BusinessException($"Invalid payment request state {paymentRequest.State}.Payment request state should be" +
+                return new Result<PaymentRequestDto>(new BusinessException($"Invalid payment request state {paymentRequest.State}.Payment request state should be" +
                  $"in  {PaymentStatus.Payed}"));
             }
 
@@ -104,7 +103,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (unitResult.IsFailure)
             {
-                return new ResultV2<PaymentRequestDto>(unitResult.Exception);
+                return new Result<PaymentRequestDto>(unitResult.Exception);
             }
 
             var paymentMethod = unitResult.Value;

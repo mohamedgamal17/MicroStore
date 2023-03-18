@@ -19,20 +19,20 @@ namespace MicroStore.Shipping.Application.Addresses
             _shipmentSystemResolver = shipmentSystemResolver;
         }
 
-        public async Task<ResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<AddressValidationResultModel>> ValidateAddress(AddressModel model, CancellationToken cancellationToken = default)
         {
             var settings = await _settingsRepository.TryToGetSettings<ShippingSettings>(SettingsConst.ProviderKey, cancellationToken) ?? new ShippingSettings();
 
             if (settings.DefaultShippingSystem == null)
             {
-                return new ResultV2<AddressValidationResultModel>(new BusinessException("Please configure shipping settings first"));
+                return new Result<AddressValidationResultModel>(new BusinessException("Please configure shipping settings first"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(settings.DefaultShippingSystem);
 
             if (systemResult.IsFailure)
             {
-                return new ResultV2<AddressValidationResultModel>(systemResult.Exception);
+                return new Result<AddressValidationResultModel>(systemResult.Exception);
             }
 
             var system = systemResult.Value;
@@ -44,6 +44,6 @@ namespace MicroStore.Shipping.Application.Addresses
 
     public interface IAddressApplicationService : IApplicationService
     {
-        Task<ResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel model , CancellationToken cancellationToken  =default);
+        Task<Result<AddressValidationResultModel>> ValidateAddress(AddressModel model , CancellationToken cancellationToken  =default);
     }
 }

@@ -22,7 +22,7 @@ namespace MicroStore.Ordering.Application.Orders
             _orderDbContext = orderDbContext;
         }
 
-        public async Task<ResultV2<OrderDto>> GetAsync(Guid orderId, CancellationToken cancellationToken = default)
+        public async Task<Result<OrderDto>> GetAsync(Guid orderId, CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext
                  .Query<OrderStateEntity>()
@@ -35,14 +35,14 @@ namespace MicroStore.Ordering.Application.Orders
 
             if (result == null)
             {
-                return new ResultV2<OrderDto>(new EntityNotFoundException(typeof(OrderStateEntity), orderId));
+                return new Result<OrderDto>(new EntityNotFoundException(typeof(OrderStateEntity), orderId));
             }
 
 
             return result;
         }
 
-        public async Task<ResultV2<OrderDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default )
+        public async Task<Result<OrderDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default )
         {
             var query = _orderDbContext
               .Query<OrderStateEntity>()
@@ -54,13 +54,13 @@ namespace MicroStore.Ordering.Application.Orders
 
             if (result == null)
             {
-                return new ResultV2<OrderDto>(new EntityNotFoundException(typeof(OrderStateEntity), orderNumber));
+                return new Result<OrderDto>(new EntityNotFoundException(typeof(OrderStateEntity), orderNumber));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<PagedResult<OrderListDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<OrderListDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext
                   .Query<OrderStateEntity>()

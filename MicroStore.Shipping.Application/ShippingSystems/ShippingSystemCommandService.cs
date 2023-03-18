@@ -15,13 +15,13 @@ namespace MicroStore.Shipping.Application.ShippingSystems
             _shippingSystemRepository = shippingSystemRepository;
         }
 
-        public async Task<ResultV2<ShippingSystemDto>> EnableAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
+        public async Task<Result<ShippingSystemDto>> EnableAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
         {
             var system = await _shippingSystemRepository.SingleOrDefaultAsync(x => x.Name == systemName,cancellationToken);
 
             if (system == null)
             {
-                return new ResultV2<ShippingSystemDto>(new EntityNotFoundException($"Shipping system with name : {systemName} is not exist"));
+                return new Result<ShippingSystemDto>(new EntityNotFoundException($"Shipping system with name : {systemName} is not exist"));
 
             }
 

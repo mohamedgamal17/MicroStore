@@ -1,7 +1,6 @@
 ﻿using Duende.IdentityServer.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
@@ -19,13 +18,13 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
             _apiScopeRepository = apiScopeRepository;
         }
 
-        public async Task<ResultV2<ApiScopeDto>> CreateAsync(ApiScopeModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<ApiScopeDto>> CreateAsync(ApiScopeModel model, CancellationToken cancellationToken = default)
         {
             var validationResult = await ValidateApiScope(model, cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return  new ResultV2<ApiScopeDto>(validationResult.Exception);
+                return  new Result<ApiScopeDto>(validationResult.Exception);
             }
 
             var apiScope = ObjectMapper.Map<ApiScopeModel, ApiScope>(model);
@@ -35,20 +34,20 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
             return ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope);
         }
 
-        public async Task<ResultV2<ApiScopeDto>> UpdateAsync(int apiScopeId, ApiScopeModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<ApiScopeDto>> UpdateAsync(int apiScopeId, ApiScopeModel model, CancellationToken cancellationToken = default)
         {
             var apiScope = await _apiScopeRepository.SingleOrDefaultAsync(x => x.Id == apiScopeId, cancellationToken);
 
             if (apiScope == null)
             {
-                return new ResultV2<ApiScopeDto>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
+                return new Result<ApiScopeDto>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
             }
 
             var validationResult = await ValidateApiScope(model, cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return new ResultV2<ApiScopeDto>(validationResult.Exception);
+                return new Result<ApiScopeDto>(validationResult.Exception);
             }
 
             apiScope = ObjectMapper.Map(model, apiScope);
@@ -59,13 +58,13 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 
         }
 
-        public async Task<ResultV2<Unit>> DeleteAsync(int apiScopeId, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> DeleteAsync(int apiScopeId, CancellationToken cancellationToken = default)
         {
             var apiScope = await _apiScopeRepository.SingleOrDefaultAsync(x => x.Id == apiScopeId, cancellationToken);
 
             if (apiScope == null)
             {
-                return new ResultV2<Unit>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
+                return new Result<Unit>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
             }
 
             await _apiScopeRepository.DeleteAsync(apiScope, cancellationToken);
@@ -74,7 +73,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
         }
 
 
-        private async Task<ResultV2<Unit>> ValidateApiScope(ApiScopeModel model,int? apiScopeId = null ,CancellationToken cancellationToken = default)
+        private async Task<Result<Unit>> ValidateApiScope(ApiScopeModel model,int? apiScopeId = null ,CancellationToken cancellationToken = default)
         {
             var query = _apiScopeRepository.Query();
 
@@ -85,7 +84,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 
             if(await query.AnyAsync(x=> x.Name == model.Name))
             {
-                return new ResultV2<Unit>(new BusinessException($"Api scope with name : {model.Name} is already exist"));
+                return new Result<Unit>(new BusinessException($"Api scope with name : {model.Name} is already exist"));
             }
 
             return Unit.Value;

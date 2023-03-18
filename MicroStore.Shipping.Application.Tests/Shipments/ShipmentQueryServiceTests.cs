@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Shipments;
 using MicroStore.Shipping.Domain.Entities;
 using System.Net;

@@ -8,10 +8,10 @@ namespace MicroStore.Inventory.Application.Products
 {
     public interface IProductQueryService : IApplicationService
     {
-        Task<ResultV2<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams , CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams , CancellationToken cancellationToken = default);
 
-        Task<ResultV2<ProductDto>> GetAsync(string id , CancellationToken cancellationToken = default);
+        Task<Result<ProductDto>> GetAsync(string id , CancellationToken cancellationToken = default);
 
-        Task<ResultV2<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default);
+        Task<Result<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default);
     }
 }

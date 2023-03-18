@@ -1,7 +1,6 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Domain.Entities;
@@ -19,7 +18,7 @@ namespace MicroStore.Shipping.Application.ShippingSystems
             _shippingDbContext = shippingDbContext;
         }
 
-        public async Task<ResultV2<ShippingSystemDto>> GetAsync(string systemId, CancellationToken cancellationToken = default)
+        public async Task<Result<ShippingSystemDto>> GetAsync(string systemId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.ShippingSystems
                .AsNoTracking()
@@ -29,13 +28,13 @@ namespace MicroStore.Shipping.Application.ShippingSystems
 
             if (result == null)
             {
-                return new ResultV2<ShippingSystemDto>(new EntityNotFoundException(typeof(ShippingSystem), systemId));
+                return new Result<ShippingSystemDto>(new EntityNotFoundException(typeof(ShippingSystem), systemId));
             }
 
             return result;
         }   
 
-        public async Task<ResultV2<ShippingSystemDto>> GetByNameAsync(string systemName, CancellationToken cancellationToken = default)
+        public async Task<Result<ShippingSystemDto>> GetByNameAsync(string systemName, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.ShippingSystems
               .AsNoTracking()
@@ -45,13 +44,13 @@ namespace MicroStore.Shipping.Application.ShippingSystems
 
             if (result == null)
             {
-                return new ResultV2<ShippingSystemDto>(new EntityNotFoundException($"system with name {systemName} is not exist"));
+                return new Result<ShippingSystemDto>(new EntityNotFoundException($"system with name {systemName} is not exist"));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<List<ShippingSystemDto>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<List<ShippingSystemDto>>> ListAsync(CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.ShippingSystems
                  .AsNoTracking()

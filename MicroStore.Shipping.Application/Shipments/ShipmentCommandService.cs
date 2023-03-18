@@ -23,13 +23,13 @@ namespace MicroStore.Shipping.Application.Shipments
             _settingsRepository = settingsRepository;
         }
 
-        public async Task<ResultV2<ShipmentDto>> CreateAsync(ShipmentModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<ShipmentDto>> CreateAsync(ShipmentModel model, CancellationToken cancellationToken = default)
         {
             var validationResult = await ValidateShipment(model);
 
             if (validationResult.IsFailure)
             {
-                return new ResultV2<ShipmentDto>(validationResult.Exception);
+                return new Result<ShipmentDto>(validationResult.Exception);
             }
             Shipment shipment = new Shipment(model.OrderId,model.OrderNumber , model.UserId, model.Address.AsAddress())
             {
@@ -43,18 +43,18 @@ namespace MicroStore.Shipping.Application.Shipments
         }
      
     
-        public async Task<ResultV2<ShipmentDto>> FullfillAsync(string shipmentId, PackageModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<ShipmentDto>> FullfillAsync(string shipmentId, PackageModel model, CancellationToken cancellationToken = default)
         {
             var settings = await _settingsRepository.TryToGetSettings<ShippingSettings>(SettingsConst.ProviderKey, cancellationToken) ?? new ShippingSettings();
 
             if (settings.DefaultShippingSystem == null )
             {
-                 return new ResultV2<ShipmentDto>(new BusinessException("Please configure default shipping system first"));
+                 return new Result<ShipmentDto>(new BusinessException("Please configure default shipping system first"));
             }
 
             if(settings.Location == null)
             {
-                return new ResultV2<ShipmentDto>(new BusinessException("Please configure location address first"));
+                return new Result<ShipmentDto>(new BusinessException("Please configure location address first"));
             }
 
 
@@ -62,19 +62,19 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (shipment == null)
             {
-                return new ResultV2<ShipmentDto>(new EntityNotFoundException(typeof(Shipment), shipmentId));
+                return new Result<ShipmentDto>(new EntityNotFoundException(typeof(Shipment), shipmentId));
             }
 
             if(shipment.Status != ShipmentStatus.Created)
             {
-                return new ResultV2<ShipmentDto>(new BusinessException($"Shipment status should be in {ShipmentStatus.Created}"));
+                return new Result<ShipmentDto>(new BusinessException($"Shipment status should be in {ShipmentStatus.Created}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(settings.DefaultShippingSystem, cancellationToken);
 
             if (systemResult.IsFailure)
             {
-                return new ResultV2<ShipmentDto>(systemResult.Exception);
+                return new Result<ShipmentDto>(systemResult.Exception);
             }
 
             var system = systemResult.Value;
@@ -84,25 +84,25 @@ namespace MicroStore.Shipping.Application.Shipments
             return await system.Fullfill(shipmentId, fullfillModel);
 
         }
-        public async Task<ResultV2<List<ShipmentRateDto>>> RetriveShipmentRatesAsync(string shipmentId, CancellationToken cancellationToken = default)
+        public async Task<Result<List<ShipmentRateDto>>> RetriveShipmentRatesAsync(string shipmentId, CancellationToken cancellationToken = default)
         {
             var shipment = await _shipmentRepository.SingleOrDefaultAsync(x => x.Id == shipmentId, cancellationToken);
 
             if (shipment == null)
             {
-                return new ResultV2<List<ShipmentRateDto>>(new EntityNotFoundException(typeof(Shipment), shipmentId));
+                return new Result<List<ShipmentRateDto>>(new EntityNotFoundException(typeof(Shipment), shipmentId));
             }
 
             if (shipment.Status != ShipmentStatus.Fullfilled)
             {
-                return new ResultV2<List<ShipmentRateDto>>(new BusinessException($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
+                return new Result<List<ShipmentRateDto>>(new BusinessException($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(shipment.SystemName);
 
             if (systemResult.IsFailure)
             {
-                return new ResultV2<List<ShipmentRateDto>>(systemResult.Exception);
+                return new Result<List<ShipmentRateDto>>(systemResult.Exception);
             }
 
             var system = systemResult.Value;
@@ -110,25 +110,25 @@ namespace MicroStore.Shipping.Application.Shipments
             return await system.RetriveShipmentRates(shipment.Id, cancellationToken);
         }
 
-        public async Task<ResultV2<ShipmentDto>> BuyLabelAsync(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<ShipmentDto>> BuyLabelAsync(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
         {
             var shipment = await _shipmentRepository.SingleOrDefaultAsync(x => x.Id == shipmentId, cancellationToken);
 
             if (shipment == null)
             {
-                return new ResultV2<ShipmentDto>(new EntityNotFoundException(typeof(Shipment), shipmentId));
+                return new Result<ShipmentDto>(new EntityNotFoundException(typeof(Shipment), shipmentId));
             }
 
             if (shipment.Status != ShipmentStatus.Fullfilled)
             {
-                return new ResultV2<ShipmentDto>(new BusinessException($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
+                return new Result<ShipmentDto>(new BusinessException($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(shipment.SystemName);
 
             if (systemResult.IsFailure)
             {
-                return new ResultV2<ShipmentDto>(systemResult.Exception);
+                return new Result<ShipmentDto>(systemResult.Exception);
             }
 
             var system = systemResult.Value;
@@ -136,19 +136,19 @@ namespace MicroStore.Shipping.Application.Shipments
             return await system.BuyShipmentLabel(shipment.Id , model, cancellationToken);
         }
 
-        private async Task<ResultV2<Unit>> ValidateShipment(ShipmentModel model)
+        private async Task<Result<Unit>> ValidateShipment(ShipmentModel model)
         {
             var query = await _shipmentRepository.GetQueryableAsync();
 
 
             if(await query.AnyAsync(x=> x.OrderId == model.OrderId))
             {
-                return new ResultV2<Unit>( new BusinessException($"Shipment is already created for Order with id : {model.OrderId}"));
+                return new Result<Unit>( new BusinessException($"Shipment is already created for Order with id : {model.OrderId}"));
             }
 
             if(await query.AnyAsync(x=> x.OrderNumber == model.OrderNumber))
             {
-                return new ResultV2<Unit>(new BusinessException($"Shipment is already created for Order with numer : {model.OrderNumber}"));
+                return new Result<Unit>(new BusinessException($"Shipment is already created for Order with numer : {model.OrderNumber}"));
             }
 
             return Unit.Value;

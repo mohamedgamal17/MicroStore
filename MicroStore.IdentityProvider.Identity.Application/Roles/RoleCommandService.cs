@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application.Dtos;
@@ -18,7 +17,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
             _roleRepository = roleRepository;
         }
 
-        public async Task<ResultV2<IdentityRoleDto>> CreateAsync(RoleModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<IdentityRoleDto>> CreateAsync(RoleModel model, CancellationToken cancellationToken = default)
         {
             var identityRole = new ApplicationIdentityRole();
 
@@ -30,13 +29,13 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
             return ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(identityRole);
         }
 
-        public async Task<ResultV2<IdentityRoleDto>> UpdateAsync(string roleId, RoleModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<IdentityRoleDto>> UpdateAsync(string roleId, RoleModel model, CancellationToken cancellationToken = default)
         {
             var identityRole = await _roleRepository.FindById(roleId);
 
             if (identityRole == null)
             {
-                return new ResultV2<IdentityRoleDto>(new EntityNotFoundException(typeof(ApplicationIdentityRole), roleId));
+                return new Result<IdentityRoleDto>(new EntityNotFoundException(typeof(ApplicationIdentityRole), roleId));
 
             }
 

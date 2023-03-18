@@ -19,7 +19,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
         {
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
-        public async Task<ResultV2<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiScopes.AsNoTracking().ProjectTo<ApiScopeDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -27,7 +27,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 
             return result;
         }
-        public async Task<ResultV2<ApiScopeDto>> GetAsync(int apiScopeId, CancellationToken cancellationToken = default)
+        public async Task<Result<ApiScopeDto>> GetAsync(int apiScopeId, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiScopes.AsNoTracking().ProjectTo<ApiScopeDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -35,7 +35,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
 
             if (result == null)
             {
-                return new ResultV2<ApiScopeDto>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
+                return new Result<ApiScopeDto>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
             }
 
             return result;

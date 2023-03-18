@@ -20,7 +20,7 @@ namespace MicroStore.Ordering.Application.Orders
             _orderRepository = orderRepository;
         }
 
-        public async Task<ResultV2<OrderSubmitedDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<OrderSubmitedDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default)
         {
             var orderSubmitedEvent = new OrderSubmitedEvent
             {
@@ -42,18 +42,18 @@ namespace MicroStore.Ordering.Application.Orders
 
             return PrepareSubmitOrderResponse(orderSubmitedEvent);
         }
-        public async Task<ResultV2<Unit>> FullfillOrderAsync(Guid orderId, FullfillOrderModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> FullfillOrderAsync(Guid orderId, FullfillOrderModel model, CancellationToken cancellationToken = default)
         {
             var order = await _orderRepository.GetOrder(orderId);
 
             if (order == null)
             {
-                return new ResultV2<Unit>(new EntityNotFoundException(typeof(OrderStateEntity), orderId));
+                return new Result<Unit>(new EntityNotFoundException(typeof(OrderStateEntity), orderId));
             }
 
             if (order.CurrentState != OrderStatusConst.Approved)
             {
-                return new ResultV2<Unit>(new BusinessException($"invalid order status. " +
+                return new Result<Unit>(new BusinessException($"invalid order status. " +
                     $"please make sure that order is in {OrderStatusConst.Approved} status to be able to fullfill the order"));
             }
 
@@ -67,18 +67,18 @@ namespace MicroStore.Ordering.Application.Orders
 
             return Unit.Value;
         }
-        public async Task<ResultV2<Unit>> CompleteOrderAsync(Guid orderId, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> CompleteOrderAsync(Guid orderId, CancellationToken cancellationToken = default)
         {
             var order = await _orderRepository.GetOrder(orderId);
 
 
             if (order == null)
             {
-                return new ResultV2<Unit>(new EntityNotFoundException(typeof(OrderStateEntity), orderId));
+                return new Result<Unit>(new EntityNotFoundException(typeof(OrderStateEntity), orderId));
             }
             if (order.CurrentState != OrderStatusConst.Fullfilled)
             {
-                return new ResultV2<Unit>(new BusinessException($"invalid order status. " + $"please make sure that order is in {OrderStatusConst.Fullfilled} status to be able to complete the order"));
+                return new Result<Unit>(new BusinessException($"invalid order status. " + $"please make sure that order is in {OrderStatusConst.Fullfilled} status to be able to complete the order"));
             }
 
             var orderCompletedEvent = new OrderCompletedEvent
@@ -92,18 +92,18 @@ namespace MicroStore.Ordering.Application.Orders
             return Unit.Value;
         }
 
-        public async Task<ResultV2<Unit>> CancelOrderAsync(Guid orderId,CancelOrderModel model ,CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> CancelOrderAsync(Guid orderId,CancelOrderModel model ,CancellationToken cancellationToken = default)
         {
             var order = await _orderRepository.GetOrder(orderId);
 
             if (order == null)
             {
-                return new ResultV2<Unit>(new EntityNotFoundException(typeof(OrderStateEntity), orderId));
+                return new Result<Unit>(new EntityNotFoundException(typeof(OrderStateEntity), orderId));
             }
 
             if (order.CurrentState == OrderStatusConst.Cancelled)
             {
-                return new ResultV2<Unit>(new BusinessException("order state is already canceled"));
+                return new Result<Unit>(new BusinessException("order state is already canceled"));
                  }
 
             var orderCancelledEvent = new OrderCancelledEvent

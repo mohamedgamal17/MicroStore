@@ -22,7 +22,7 @@ namespace MicroStore.Shipping.Application.Shipments
             _shippingDbContext = shippingDbContext;
         }
 
-        public async Task<ResultV2<ShipmentDto>> GetAsync(string shipmentId, CancellationToken cancellationToken = default)
+        public async Task<Result<ShipmentDto>> GetAsync(string shipmentId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
                .AsNoTracking()
@@ -32,13 +32,13 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (result == null)
             {
-                return new ResultV2<ShipmentDto>(new EntityNotFoundException(typeof(Shipment), shipmentId));
+                return new Result<ShipmentDto>(new EntityNotFoundException(typeof(Shipment), shipmentId));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<ShipmentDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
+        public async Task<Result<ShipmentDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
                .AsNoTracking()
@@ -48,13 +48,13 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (result == null)
             {
-                return new ResultV2<ShipmentDto>(new EntityNotFoundException($"shipment with order id {orderId} is not exist"));
+                return new Result<ShipmentDto>(new EntityNotFoundException($"shipment with order id {orderId} is not exist"));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<ShipmentDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
+        public async Task<Result<ShipmentDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
         {
 
             var query = _shippingDbContext.Shipments
@@ -65,13 +65,13 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (result == null)
             {
-                return new ResultV2<ShipmentDto>(new EntityNotFoundException($"shipment with order number {orderNumber} is not exist"));
+                return new Result<ShipmentDto>(new EntityNotFoundException($"shipment with order number {orderNumber} is not exist"));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<PagedResult<ShipmentListDto>>> ListAsync(PagingQueryParams queryParams,string? userId = null ,CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ShipmentListDto>>> ListAsync(PagingQueryParams queryParams,string? userId = null ,CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
                  .AsNoTracking()

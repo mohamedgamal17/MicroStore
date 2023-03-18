@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.ShippingSystems;
 using MicroStore.Shipping.Domain.Entities;
 using System.Net;

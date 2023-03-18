@@ -7,10 +7,10 @@ namespace MicroStore.Payment.Application.PaymentRequests
 {
     public interface IPaymentRequestQueryService : IApplicationService
     {
-        Task<ResultV2<PaymentRequestDto>> GetAsync(string paymentId, CancellationToken cancellationToken = default);
-        Task<ResultV2<PaymentRequestDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default);
-        Task<ResultV2<PaymentRequestDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
-        Task<ResultV2<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PagingAndSortingQueryParams queryParams, string? userId = null, CancellationToken cancellationToken = default);
+        Task<Result<PaymentRequestDto>> GetAsync(string paymentId, CancellationToken cancellationToken = default);
+        Task<Result<PaymentRequestDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default);
+        Task<Result<PaymentRequestDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PagingAndSortingQueryParams queryParams, string? userId = null, CancellationToken cancellationToken = default);
 
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Plugin.StripeGateway.Config;
 using MicroStore.Payment.Plugin.StripeGateway.Consts;
@@ -27,7 +25,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
         {
             var settings = await _settingsRepository.TryToGetSettings<StripePaymentSettings>(StripePaymentConst.Provider);
 
-            return Success(StatusCodes.Status200OK, settings);
+            return Ok( settings);
         }
 
         [HttpPut]
@@ -46,20 +44,9 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
 
             await _settingsRepository.TryToUpdateSettrings(settings);
 
-            return Success(StatusCodes.Status200OK, settings);
+            return Ok( settings);
         }
 
-
-        [NonAction]
-        protected IActionResult Success<TResult>(int statusCode,TResult result)
-        {
-            return StatusCode(statusCode, result);
-        }
-
-        [NonAction]
-        protected IActionResult Failure(int statusCode, ErrorInfo error) 
-        {
-            return StatusCode(statusCode, error);
-        }
+    
     }
 }

@@ -23,7 +23,7 @@ namespace MicroStore.Inventory.Application.Products
             _inventoryDbContext = inventoryDbContext;
         }
 
-        public async Task<ResultV2<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Products
                 .AsNoTracking()
@@ -33,13 +33,13 @@ namespace MicroStore.Inventory.Application.Products
 
             if (result == null)
                 {
-                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(Product), id));
+                return new Result<ProductDto>(new EntityNotFoundException(typeof(Product), id));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Products
              .AsNoTracking()
@@ -49,14 +49,14 @@ namespace MicroStore.Inventory.Application.Products
 
             if (result == null)
             {
-                return new ResultV2<ProductDto>(new EntityNotFoundException($"product with product sku {sku} is not exist"));
+                return new Result<ProductDto>(new EntityNotFoundException($"product with product sku {sku} is not exist"));
 
             }
 
             return result;
         }
 
-        public async Task<ResultV2<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
 
             var query = _inventoryDbContext.Products

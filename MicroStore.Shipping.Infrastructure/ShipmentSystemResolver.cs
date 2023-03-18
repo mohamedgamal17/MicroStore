@@ -18,26 +18,26 @@ namespace MicroStore.Shipping.Infrastructure
             _shippingSystemRepository = shippingSystemRepository;
         }
 
-        public async Task<ResultV2<IShipmentSystemProvider>> Resolve(string systemName, CancellationToken cancellationToken = default)
+        public async Task<Result<IShipmentSystemProvider>> Resolve(string systemName, CancellationToken cancellationToken = default)
         {
 
             var system = await _shippingSystemRepository.SingleOrDefaultAsync(x=> x.Name == systemName);
 
             if(system == null)
             {
-                return new ResultV2<IShipmentSystemProvider>( new EntityNotFoundException( $"Shipping system with name: { systemName} is not exist"));
+                return new Result<IShipmentSystemProvider>( new EntityNotFoundException( $"Shipping system with name: { systemName} is not exist"));
             }
 
             if (!system.IsEnabled)
             {
-                return new ResultV2<IShipmentSystemProvider>(new BusinessException($"Shipping system with name {systemName} is not enabled"));
+                return new Result<IShipmentSystemProvider>(new BusinessException($"Shipping system with name {systemName} is not enabled"));
             }
 
             var provider = _providers
                 .Single(x => x.SystemName == systemName);
 
 
-            return new ResultV2<IShipmentSystemProvider>(provider);
+            return new Result<IShipmentSystemProvider>(provider);
         }
      
     }

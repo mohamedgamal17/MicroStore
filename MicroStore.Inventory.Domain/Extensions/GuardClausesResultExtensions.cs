@@ -5,7 +5,7 @@ namespace MicroStore.Inventory.Domain.Extensions
     public static class GuardClausesResultExtensions
     {
 
-        public static void InvalidResult<T>(this IGuardClause guardClause , ResultV2<T> result , Type entityType)
+        public static void InvalidResult<T>(this IGuardClause guardClause , Result<T> result , Type entityType)
         {
             if (result.IsFailure)
             {

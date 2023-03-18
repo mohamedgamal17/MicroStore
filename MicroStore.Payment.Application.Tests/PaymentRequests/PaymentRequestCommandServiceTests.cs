@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Application.Tests.Consts;
 using MicroStore.Payment.Domain;

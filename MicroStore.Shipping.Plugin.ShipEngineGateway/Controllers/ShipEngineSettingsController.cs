@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Consts;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Settings;
@@ -26,7 +24,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Controllers
         {
             var settings = await _settingsRepository.TryToGetSettings<ShipEngineSettings>(ShipEngineConst.SystemName) ?? new ShipEngineSettings();
 
-            return Success(StatusCodes.Status200OK, settings);
+            return Ok(settings);
         }
 
         [HttpPost]
@@ -36,19 +34,9 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway.Controllers
         {
             await _settingsRepository.TryToUpdateSettrings(settings);
 
-            return Success(StatusCodes.Status202Accepted, settings);
+            return Ok(settings);
         }
 
-        [NonAction]
-        protected IActionResult Success<TResult>(int statusCode, TResult result)
-        {
-            return StatusCode(statusCode, result);
-        }
-
-        [NonAction]
-        protected IActionResult Failure(int statusCode, ErrorInfo error)
-        {
-            return StatusCode(statusCode, error);
-        }
+       
     }
 }

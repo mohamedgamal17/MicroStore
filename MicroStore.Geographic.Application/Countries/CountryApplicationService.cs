@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Geographic.Application.Domain;
 using MicroStore.Geographic.Application.Dtos;
 using MicroStore.Geographic.Application.Models;
@@ -19,13 +18,13 @@ namespace MicroStore.Geographic.Application.Countries
             _countryRepository = countryRepository;
         }
 
-        public async Task<ResultV2<CountryDto>> CreateAsync(CountryModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<CountryDto>> CreateAsync(CountryModel model, CancellationToken cancellationToken = default)
         {
             var validationResult = await ValidateCountry(model, cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return new ResultV2<CountryDto>(validationResult.Exception);
+                return new Result<CountryDto>(validationResult.Exception);
             }
 
             var country =  ObjectMapper.Map<CountryModel, Country>(model);
@@ -34,7 +33,7 @@ namespace MicroStore.Geographic.Application.Countries
 
             return ObjectMapper.Map<Country, CountryDto>(country);
         }
-        public async Task<ResultV2<CountryDto>> UpdateAsync(string countryId, CountryModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<CountryDto>> UpdateAsync(string countryId, CountryModel model, CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
@@ -42,14 +41,14 @@ namespace MicroStore.Geographic.Application.Countries
 
             if (country == null)
             {
-                return  new ResultV2<CountryDto>(new EntityNotFoundException(typeof(CountryDto), countryId)) ;
+                return  new Result<CountryDto>(new EntityNotFoundException(typeof(CountryDto), countryId)) ;
             }
 
             var validationResult = await ValidateCountry(model, cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
-                return new ResultV2<CountryDto>(validationResult.Exception);
+                return new Result<CountryDto>(validationResult.Exception);
             }
 
             country =  ObjectMapper.Map(model, country);
@@ -59,7 +58,7 @@ namespace MicroStore.Geographic.Application.Countries
             return ObjectMapper.Map<Country, CountryDto>(country);
         }
 
-        public async Task<ResultV2<Unit>> DeleteAsync(string countryId, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> DeleteAsync(string countryId, CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
@@ -67,7 +66,7 @@ namespace MicroStore.Geographic.Application.Countries
 
             if (country == null)
             {
-                return new ResultV2<Unit>(new EntityNotFoundException(typeof(CountryDto), countryId));
+                return new Result<Unit>(new EntityNotFoundException(typeof(CountryDto), countryId));
             }
 
             await _countryRepository.DeleteAsync(country, cancellationToken: cancellationToken);
@@ -76,7 +75,7 @@ namespace MicroStore.Geographic.Application.Countries
 
         }
 
-        public async Task<ResultV2<CountryDto>> GetAsync(string countryId,  CancellationToken cancellationToken = default)
+        public async Task<Result<CountryDto>> GetAsync(string countryId,  CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
@@ -84,7 +83,7 @@ namespace MicroStore.Geographic.Application.Countries
 
             if (country == null)
             {
-                return new ResultV2<CountryDto>(new EntityNotFoundException(typeof(CountryDto), countryId));
+                return new Result<CountryDto>(new EntityNotFoundException(typeof(CountryDto), countryId));
             }
             return ObjectMapper.Map<Country, CountryDto>(country);
         }
@@ -97,7 +96,7 @@ namespace MicroStore.Geographic.Application.Countries
 
         }
         
-        public async Task<ResultV2<CountryDto>> GetByCodeAsync(string countryCode  , CancellationToken cancellationToken = default)
+        public async Task<Result<CountryDto>> GetByCodeAsync(string countryCode  , CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x=> x.StateProvinces);
 
@@ -105,12 +104,12 @@ namespace MicroStore.Geographic.Application.Countries
         
             if(country == null)
             {
-                return new ResultV2<CountryDto>(new EntityNotFoundException($"Country with code : {countryCode} is not exist"));
+                return new Result<CountryDto>(new EntityNotFoundException($"Country with code : {countryCode} is not exist"));
             }
 
             return ObjectMapper.Map<Country, CountryDto>(country);
         }
-        private async Task<ResultV2<Unit>> ValidateCountry(CountryModel model , string? countryId = null ,CancellationToken cancellationToken = default)
+        private async Task<Result<Unit>> ValidateCountry(CountryModel model , string? countryId = null ,CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.GetQueryableAsync();
 
@@ -121,17 +120,17 @@ namespace MicroStore.Geographic.Application.Countries
 
             if(await _countryRepository.AnyAsync(x=> x.Name == model.Name))
             {
-                return new ResultV2<Unit>(new BusinessException($"Country name : {model.Name} is already exist"));
+                return new Result<Unit>(new BusinessException($"Country name : {model.Name} is already exist"));
             }
 
             if(await _countryRepository.AnyAsync(x=> x.TwoLetterIsoCode == model.TwoLetterIsoCode))
             {
-                return new ResultV2<Unit>(new BusinessException($"Country two letter iso code : {model.TwoLetterIsoCode} is already exist"));
+                return new Result<Unit>(new BusinessException($"Country two letter iso code : {model.TwoLetterIsoCode} is already exist"));
             }
 
             if (await _countryRepository.AnyAsync(x => x.ThreeLetterIsoCode == model.ThreeLetterIsoCode))
             {
-                return new ResultV2<Unit>(new BusinessException($"Country three letter iso code : {model.ThreeLetterIsoCode} is already exist"));
+                return new Result<Unit>(new BusinessException($"Country three letter iso code : {model.ThreeLetterIsoCode} is already exist"));
             }
 
             return Unit.Value;

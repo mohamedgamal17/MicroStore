@@ -21,7 +21,7 @@ namespace MicroStore.Catalog.Application.Products
             _catalogDbContext = catalogDbContext;
         }
 
-        public async Task<ResultV2<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Products
                  .AsNoTracking()
@@ -31,14 +31,14 @@ namespace MicroStore.Catalog.Application.Products
 
             if (product == null)
             {
-                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(Product), id));
+                return new Result<ProductDto>(new EntityNotFoundException(typeof(Product), id));
 
             }
 
             return product;
         }
 
-        public async Task<ResultV2<PagedResult<ProductDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ProductDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Products.AsQueryable()
                          .AsNoTracking()

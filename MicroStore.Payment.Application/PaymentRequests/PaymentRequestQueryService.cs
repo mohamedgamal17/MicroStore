@@ -19,7 +19,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
         {
             _paymentDbContext = paymentDbContext;
         }
-        public async Task<ResultV2<PaymentRequestDto>> GetAsync(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentRequestDto>> GetAsync(string paymentId, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
               .AsNoTracking()
@@ -29,13 +29,13 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (result == null)
             {
-                return new ResultV2<PaymentRequestDto>(new EntityNotFoundException(typeof(PaymentRequest), paymentId));
+                return new Result<PaymentRequestDto>(new EntityNotFoundException(typeof(PaymentRequest), paymentId));
             }
 
             return  result;
         }
 
-        public async Task<ResultV2<PaymentRequestDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentRequestDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
               .AsNoTracking()
@@ -45,14 +45,14 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (result == null)
             {
-                return new ResultV2<PaymentRequestDto>(new EntityNotFoundException($"Payment request with order id : {orderId} is not exist"));
+                return new Result<PaymentRequestDto>(new EntityNotFoundException($"Payment request with order id : {orderId} is not exist"));
             }
 
 
             return result;
         }
 
-        public async Task<ResultV2<PaymentRequestDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentRequestDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
             .AsNoTracking()
@@ -62,14 +62,14 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (result == null)
             {
-                return new ResultV2<PaymentRequestDto>(new EntityNotFoundException($"Payment request with order number : {orderNumber} is not exist"));
+                return new Result<PaymentRequestDto>(new EntityNotFoundException($"Payment request with order number : {orderNumber} is not exist"));
             }
 
 
             return result;
         }
 
-        public async Task<ResultV2<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PagingAndSortingQueryParams queryParams, string? userId = null, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PagingAndSortingQueryParams queryParams, string? userId = null, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
               .AsNoTracking()

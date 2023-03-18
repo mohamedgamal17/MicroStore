@@ -5,6 +5,6 @@ namespace MicroStore.Payment.Application.Abstractions
 {
     public interface IPaymentMethodResolver
     {
-        Task<ResultV2<IPaymentMethod>> Resolve(string paymentGatewayName, CancellationToken cancellationToken  = default);
+        Task<Result<IPaymentMethod>> Resolve(string paymentGatewayName, CancellationToken cancellationToken  = default);
     }
 }

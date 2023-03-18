@@ -8,7 +8,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
 {
     public interface IApiResourceQueryService : IApplicationService
     {
-        Task<ResultV2<PagedResult<ApiResourceDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default);
-        Task<ResultV2<ApiResourceDto>> GetAsync(int apiResourceId , CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ApiResourceDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default);
+        Task<Result<ApiResourceDto>> GetAsync(int apiResourceId , CancellationToken cancellationToken = default);
     }
 }

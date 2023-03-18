@@ -20,32 +20,32 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
             _roleRepository = roleRepository;
         }
 
-        public async Task<ResultV2<IdentityRoleDto>> GetAsync(string roleId, CancellationToken cancellationToken = default)
+        public async Task<Result<IdentityRoleDto>> GetAsync(string roleId, CancellationToken cancellationToken = default)
         {
             var role = await _roleRepository.FindById(roleId);
 
             if (role == null)
             {
-                return new ResultV2<IdentityRoleDto>(new EntityNotFoundException(typeof(ApplicationIdentityRole), roleId));
+                return new Result<IdentityRoleDto>(new EntityNotFoundException(typeof(ApplicationIdentityRole), roleId));
             }
 
             return ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(role);
         }
 
-        public async Task<ResultV2<IdentityRoleDto>> GetByNameAsync(string roleName, CancellationToken cancellationToken = default)
+        public async Task<Result<IdentityRoleDto>> GetByNameAsync(string roleName, CancellationToken cancellationToken = default)
         {
             var role = await _roleRepository.FindByName(roleName);
 
             if (role == null)
             {
-                return new ResultV2<IdentityRoleDto>(new EntityNotFoundException($"Role with name : {roleName} is not exist"));
+                return new Result<IdentityRoleDto>(new EntityNotFoundException($"Role with name : {roleName} is not exist"));
 
             }
 
             return ObjectMapper.Map<ApplicationIdentityRole, IdentityRoleDto>(role);
         }
 
-        public async Task<ResultV2<List<IdentityRoleDto>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<List<IdentityRoleDto>>> ListAsync(CancellationToken cancellationToken = default)
         {
             var query = _identityDbContext.Roles
                      .AsNoTracking()

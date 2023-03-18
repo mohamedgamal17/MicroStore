@@ -35,7 +35,7 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             Stock = stock;
         }
 
-        public Result AdjustInventory(int adjustedStock, string reason)
+        public void AdjustInventory(int adjustedStock, string reason)
         {
 
             Stock = adjustedStock;
@@ -48,11 +48,10 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
                 Reason = reason
             });
 
-            return Result.Success();
         }
 
 
-        public Result AllocateStock(int quantity)
+        public void AllocateStock(int quantity)
         {
             Guard.Against.InvalidResult(CanAllocateStock(quantity),typeof(Product));
 
@@ -66,15 +65,13 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             AllocatedStock += quantity;
 
             Stock -= quantity;
-
-            return Result.Success();
         }
 
-        public ResultV2<Unit> CanAllocateStock(int quantity)
+        public Result<Unit> CanAllocateStock(int quantity)
         {
             if (Stock < quantity)
             {
-                return new ResultV2<Unit>(new BusinessException(
+                return new Result<Unit>(new BusinessException(
                      $"Current product : {Name} \n \t stock is less than requested allocated quantity"));
             }
 
@@ -82,7 +79,7 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
         }
 
    
-        public Result ReleaseStock(int quantity)
+        public void ReleaseStock(int quantity)
         {        
             Guard.Against.InvalidResult(CanReleaseStock(quantity),typeof(Product));
 
@@ -96,16 +93,14 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             AllocatedStock -= quantity;
 
             Stock += quantity;
-
-            return Result.Success();
         }
 
 
-        public ResultV2<Unit> CanReleaseStock(int quantity)
+        public Result<Unit> CanReleaseStock(int quantity)
         {
             if (AllocatedStock < quantity)
             {
-                return new ResultV2<Unit>(new BusinessException("Current allocated quantity is less than requested release quantity"));
+                return new Result<Unit>(new BusinessException("Current allocated quantity is less than requested release quantity"));
             }
 
             return Unit.Value;

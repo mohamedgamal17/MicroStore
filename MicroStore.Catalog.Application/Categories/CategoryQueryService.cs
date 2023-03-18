@@ -18,21 +18,21 @@ namespace MicroStore.Catalog.Application.Categories
             _catalogDbContext = catalogDbContext;
         }
 
-        public async Task<ResultV2<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Result<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             Category? category = await _catalogDbContext.Categories
                 .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (category == null)
             {
-                return new ResultV2<CategoryDto>(new EntityNotFoundException(typeof(Category), id));
+                return new Result<CategoryDto>(new EntityNotFoundException(typeof(Category), id));
 
             }
 
             return ObjectMapper.Map<Category, CategoryDto>(category);
         }
 
-        public async Task<ResultV2<List<CategoryDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<List<CategoryDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Categories
                 .AsNoTracking()

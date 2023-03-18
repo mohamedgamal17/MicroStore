@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.Identity.Application.Tests.Extensions;
 using MicroStore.IdentityProvider.Identity.Application.Users;
 using Volo.Abp.Domain.Entities;

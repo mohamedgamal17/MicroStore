@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Domain.OrderAggregate;
@@ -24,9 +23,9 @@ namespace MicroStore.Inventory.Application.Orders
         }
 
         [DisableValidation]
-        public async Task<ResultV2<OrderDto>> AllocateOrderStockAsync(AllocateOrderStockModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<OrderDto>> AllocateOrderStockAsync(AllocateOrderStockModel model, CancellationToken cancellationToken = default)
         {
-            List<ResultV2<Unit>> failureResults = new();
+            List<Result<Unit>> failureResults = new();
 
             foreach (var orderItem in model.Items)
             {
@@ -49,7 +48,7 @@ namespace MicroStore.Inventory.Application.Orders
 
 
 
-                return   new ResultV2<OrderDto>(new BusinessException(details));
+                return   new Result<OrderDto>(new BusinessException(details));
                 
             }
 
@@ -92,7 +91,7 @@ namespace MicroStore.Inventory.Application.Orders
         }
 
         [DisableValidation]
-        public async Task<ResultV2<OrderDto>> ReleaseOrderStockAsync(string orderId, CancellationToken cancellationToken = default)
+        public async Task<Result<OrderDto>> ReleaseOrderStockAsync(string orderId, CancellationToken cancellationToken = default)
         {
             var query = await _orderRepository.WithDetailsAsync(x => x.Items);
 

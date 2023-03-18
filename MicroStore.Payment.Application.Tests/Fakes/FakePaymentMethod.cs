@@ -24,19 +24,19 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             _objectMapper = objectMapper;
         }
 
-        public Task<ResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
+        public Task<Result<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             var result = new PaymentProcessResultDto
             {
                 CheckoutLink = PaymentMethodConst.CheckoutUrl
             };
 
-            return Task.FromResult(new ResultV2<PaymentProcessResultDto>( result));
+            return Task.FromResult(new Result<PaymentProcessResultDto>( result));
         }
 
     
 
-        public async Task<ResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
         {
             PaymentRequest paymentRequest = await _paymentRequestRepository.SingleOrDefaultAsync(x => x.Id == paymentId, cancellationToken);
 
@@ -50,9 +50,6 @@ namespace MicroStore.Payment.Application.Tests.Fakes
           
         }
 
-        private UnitResult<T> Success<T>( T result)
-            => UnitResult.Success(result);
-
     }
 
     [ExposeServices(typeof(IPaymentMethod))]
@@ -60,12 +57,12 @@ namespace MicroStore.Payment.Application.Tests.Fakes
     {
         public string PaymentGatewayName => PaymentMethodConst.NonActiveGateway;
 
-        public Task<ResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
+        public Task<Result<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
+        public Task<Result<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

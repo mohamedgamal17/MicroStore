@@ -16,13 +16,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
             _paymentSystemRepository = paymentSystemRepository;
         }
 
-        public async Task<ResultV2<PaymentSystemDto>> EnablePaymentSystemAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentSystemDto>> EnablePaymentSystemAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
         {
             PaymentSystem? paymentSystem = await _paymentSystemRepository.SingleOrDefaultAsync(x => x.Name == systemName,cancellationToken);
 
             if (paymentSystem == null)
             {
-                return new ResultV2<PaymentSystemDto>(new EntityNotFoundException($"Payment system with name : {systemName}, is not exist"));
+                return new Result<PaymentSystemDto>(new EntityNotFoundException($"Payment system with name : {systemName}, is not exist"));
             }
 
             paymentSystem.IsEnabled = isEnabled;

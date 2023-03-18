@@ -25,7 +25,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
         };
 
 
-        public static IActionResult ToOk<T>(this ResultV2<T> result )
+        public static IActionResult ToOk<T>(this Result<T> result )
         {
             return result.Match((r) =>
             {
@@ -34,7 +34,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             }, _exceptionHandler);
         }
 
-        public static IActionResult ToCreatedAtAction<T>(this ResultV2<T> result, string? actionName = null, object? routeValues = null)
+        public static IActionResult ToCreatedAtAction<T>(this Result<T> result, string? actionName = null, object? routeValues = null)
         {
             return result.Match(obj =>
             {
@@ -43,7 +43,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             }, _exceptionHandler);
         }
 
-        public static IActionResult ToCreatedAtAction<T>(this ResultV2<T> result, string? actionName = null, string? controllerName = null,object? routeValues = null)
+        public static IActionResult ToCreatedAtAction<T>(this Result<T> result, string? actionName = null, string? controllerName = null,object? routeValues = null)
         {
             return result.Match(obj =>
             {
@@ -52,7 +52,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             },_exceptionHandler);
         }
 
-        public static IActionResult ToCreatedAtRoute<T>(this ResultV2<T> result, string? routeName = null, object? routeValues = null)
+        public static IActionResult ToCreatedAtRoute<T>(this Result<T> result, string? routeName = null, object? routeValues = null)
         {
             return result.Match((obj) =>
             {
@@ -61,7 +61,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             }, _exceptionHandler);
         }
 
-        public static IActionResult ToAcceptedAtAction<T>(this ResultV2<T> result, string? actionName = null,  object? routeValues = null)
+        public static IActionResult ToAcceptedAtAction<T>(this Result<T> result, string? actionName = null,  object? routeValues = null)
         {
             return result.Match(obj =>
             {
@@ -70,7 +70,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             }, _exceptionHandler);
         }
 
-        public static IActionResult ToAcceptedAtAction<T>(this ResultV2<T> result, string? actionName = null, string? controllerName = null, object? routeValues = null)
+        public static IActionResult ToAcceptedAtAction<T>(this Result<T> result, string? actionName = null, string? controllerName = null, object? routeValues = null)
         {
             return result.Match(obj =>
             {
@@ -79,7 +79,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             }, _exceptionHandler);
         }
 
-        public static IActionResult ToAcceptedAtRoute<T>(this ResultV2<T> result , string? routeName = null  , object? routeValues = null)
+        public static IActionResult ToAcceptedAtRoute<T>(this Result<T> result , string? routeName = null  , object? routeValues = null)
         {
             return result.Match((obj) =>
             {
@@ -89,7 +89,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
         }
 
 
-        public static IActionResult ToNoContent<T>(this ResultV2<T> result)
+        public static IActionResult ToNoContent<T>(this Result<T> result)
         {
             return result.Match((obj) =>
             {

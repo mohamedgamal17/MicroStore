@@ -1,5 +1,4 @@
 ﻿using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Abstractions;
 using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared;
@@ -21,23 +20,23 @@ namespace MicroStore.Payment.Application
             _paymentSystemRepository = paymentSystemRepository;
         }
 
-        public async Task<ResultV2<IPaymentMethod>> Resolve(string paymentGatewayName, CancellationToken cancellationToken = default)
+        public async Task<Result<IPaymentMethod>> Resolve(string paymentGatewayName, CancellationToken cancellationToken = default)
         {
             var paymentMethod = _paymentMethods.SingleOrDefault(x => x.PaymentGatewayName == paymentGatewayName);
             
             if(paymentMethod == null)
             {
-                 return new ResultV2<IPaymentMethod>(new EntityNotFoundException( $"Payment system with name :{paymentGatewayName}, is not exist") );
+                 return new Result<IPaymentMethod>(new EntityNotFoundException( $"Payment system with name :{paymentGatewayName}, is not exist") );
             }
 
             bool isEnabled = await IsPaymentSystemEnabled(paymentGatewayName, cancellationToken);
 
             if (!isEnabled)
             {
-                return new ResultV2<IPaymentMethod>( new BusinessException($"Payment system : {paymentGatewayName} is disabled")); ;
+                return new Result<IPaymentMethod>( new BusinessException($"Payment system : {paymentGatewayName} is disabled")); ;
             }
 
-            return new ResultV2<IPaymentMethod>(paymentMethod);
+            return new Result<IPaymentMethod>(paymentMethod);
         }
 
         private async Task<bool> IsPaymentSystemEnabled(string systemName , CancellationToken cancellationToken = default)

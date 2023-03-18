@@ -5,6 +5,6 @@ namespace MicroStore.Shipping.Application.Abstraction.Common
 {
     public interface IShipmentSystemResolver
     {
-        Task<ResultV2<IShipmentSystemProvider>> Resolve(string systemName, CancellationToken cancellationToken = default);
+        Task<Result<IShipmentSystemProvider>> Resolve(string systemName, CancellationToken cancellationToken = default);
     }
 }

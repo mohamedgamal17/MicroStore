@@ -1,7 +1,6 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Common;
 using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;
@@ -19,7 +18,7 @@ namespace MicroStore.Payment.Application.PaymentSystems
             _paymentDbContext = paymentDbContext;
         }
 
-        public async Task<ResultV2<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
                 .AsNoTracking()
@@ -29,13 +28,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
             if (result == null)
             {
-                return new ResultV2<PaymentSystemDto>(new EntityNotFoundException(typeof(PaymentSystem), id));
+                return new Result<PaymentSystemDto>(new EntityNotFoundException(typeof(PaymentSystem), id));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<Result<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
                .AsNoTracking()
@@ -45,13 +44,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
             if (result == null)
             {
-                return new ResultV2<PaymentSystemDto>(new EntityNotFoundException($"payment sytem with name : {name} is not exist"));
+                return new Result<PaymentSystemDto>(new EntityNotFoundException($"payment sytem with name : {name} is not exist"));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
               .AsNoTracking()

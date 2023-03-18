@@ -1,15 +1,10 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Shipments;
-using MicroStore.Shipping.Application.Tests.Fakes;
 using MicroStore.Shipping.Domain.Entities;
-using MicroStore.Shipping.Domain.ValueObjects;
-using System.Net;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Shipping.Application.Tests.Shipments
 {

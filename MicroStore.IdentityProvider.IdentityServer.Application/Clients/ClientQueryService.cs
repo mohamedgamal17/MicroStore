@@ -20,7 +20,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
 
-        public async Task<ResultV2<ClientDto>> GetAsync(int clientId, CancellationToken cancellationToken = default)
+        public async Task<Result<ClientDto>> GetAsync(int clientId, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.Clients.AsNoTracking().ProjectTo<ClientDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -28,13 +28,13 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 
             if (result == null)
             {
-                return new ResultV2<ClientDto>(new EntityNotFoundException(typeof(Client), clientId));
+                return new Result<ClientDto>(new EntityNotFoundException(typeof(Client), clientId));
             }
 
             return result;
         }
 
-        public async Task<ResultV2<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.Clients.AsNoTracking().ProjectTo<ClientDto>(MapperAccessor.Mapper.ConfigurationProvider);
 

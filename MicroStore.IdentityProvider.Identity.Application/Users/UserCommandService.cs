@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application.Dtos;
@@ -21,7 +20,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
             _identityUserRepository = identityUserRepository;
         }
 
-        public async Task<ResultV2<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default)
         {
             var applicationUser = new ApplicationIdentityUser();
 
@@ -34,13 +33,13 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
             return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser);
         }
 
-        public async Task<ResultV2<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default)
         {
             var applicationUser = await _identityUserRepository.FindById(userId, cancellationToken);
 
             if (applicationUser == null)
             {
-                return new ResultV2<IdentityUserDto>(new EntityNotFoundException(typeof(ApplicationIdentityUser), userId));
+                return new Result<IdentityUserDto>(new EntityNotFoundException(typeof(ApplicationIdentityUser), userId));
             }
 
             await PrepareUserEntity(model, applicationUser, cancellationToken);

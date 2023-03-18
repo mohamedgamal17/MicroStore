@@ -8,9 +8,9 @@ namespace MicroStore.Inventory.Application.Orders
 {
     public interface IOrderQueryService : IApplicationService
     {
-        Task<ResultV2<OrderDto>> GetOrderAsync(string orderId , CancellationToken cancellationToken = default);
-        Task<ResultV2<OrderDto>> GetOrderByNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
-        Task<ResultV2<PagedResult<OrderListDto>>> ListOrderAsync(PagingQueryParams queryParams,string? userId = null ,CancellationToken cancellationToken = default);
+        Task<Result<OrderDto>> GetOrderAsync(string orderId , CancellationToken cancellationToken = default);
+        Task<Result<OrderDto>> GetOrderByNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<OrderListDto>>> ListOrderAsync(PagingQueryParams queryParams,string? userId = null ,CancellationToken cancellationToken = default);
     }
 
 
