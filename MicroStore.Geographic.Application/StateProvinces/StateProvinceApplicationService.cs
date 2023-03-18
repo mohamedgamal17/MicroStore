@@ -4,6 +4,8 @@ using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Geographic.Application.Domain;
 using MicroStore.Geographic.Application.Dtos;
 using MicroStore.Geographic.Application.Models;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Geographic.Application.StateProvinces
 {
@@ -16,22 +18,21 @@ namespace MicroStore.Geographic.Application.StateProvinces
             _countryRepository = countryRepository;
         }
 
-        public async Task<UnitResult<StateProvinceDto>> CreateAsync(string countryId, StateProvinceModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<StateProvinceDto>> CreateAsync(string countryId, StateProvinceModel model, CancellationToken cancellationToken = default)
         {
-      //      var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
             var country = await _countryRepository.SingleOrDefaultAsync(x => x.Id == countryId,cancellationToken);
 
             if(country == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"Country with id : {countryId} is not exist"));
+                return new ResultV2<StateProvinceDto>(new EntityNotFoundException(typeof(Country),countryId));
             }
 
             var validationResult = ValidateStateProvince(country, model);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<StateProvinceDto>(validationResult.Error);
+                return new ResultV2<StateProvinceDto>(validationResult.Exception);
             }
 
 
@@ -42,33 +43,34 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             await _countryRepository.UpdateAsync(country, cancellationToken : cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<StateProvince, StateProvinceDto>(state));
+            return ObjectMapper.Map<StateProvince, StateProvinceDto>(state);
         }
 
 
-        public async Task<UnitResult<StateProvinceDto>> UpdateAsync(string countryId, string stateProvinceId, StateProvinceModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<StateProvinceDto>> UpdateAsync(string countryId, string stateProvinceId, StateProvinceModel model, CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
             var country = await query.SingleOrDefaultAsync(x => x.Id == countryId, cancellationToken);
 
+
             if (country == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"Country with id : {countryId} is not exist"));
+                return new ResultV2<StateProvinceDto>(new EntityNotFoundException(typeof(Country), countryId));
             }
 
             var validationResult = ValidateStateProvince(country, model,stateProvinceId);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<StateProvinceDto>(validationResult.Error);
+                return new ResultV2<StateProvinceDto>(validationResult.Exception);
             }
 
             var state = country.StateProvinces.SingleOrDefault(x => x.Id == stateProvinceId);
 
             if(state == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"State province with id : {stateProvinceId} is not exist in country : {country.Name}"));
+                return new ResultV2<StateProvinceDto>(new EntityNotFoundException(typeof(StateProvince), stateProvinceId));
 
             }
 
@@ -76,12 +78,12 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             await _countryRepository.UpdateAsync(country, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<StateProvince, StateProvinceDto>(state));
+            return ObjectMapper.Map<StateProvince, StateProvinceDto>(state);
 
 
         }
 
-        public async Task<UnitResult> DeleteAsync(string countryId, string stateProvinceId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<Unit>> DeleteAsync(string countryId, string stateProvinceId, CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
@@ -89,7 +91,7 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             if (country == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"Country with id : {countryId} is not exist"));
+                return new ResultV2<Unit>(new EntityNotFoundException(typeof(Country), countryId));
             }
 
 
@@ -97,7 +99,7 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             if (state == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"State province with id : {stateProvinceId} is not exist in country : {country.Name}"));
+                return new ResultV2<Unit>(new EntityNotFoundException(typeof(StateProvince), stateProvinceId));
 
             }
 
@@ -105,18 +107,19 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             await _countryRepository.UpdateAsync(country, cancellationToken: cancellationToken);
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
 
-        public async Task<UnitResult<StateProvinceDto>> GetAsync(string countryId, string stateProvinceId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<StateProvinceDto>> GetAsync(string countryId, string stateProvinceId, CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
             var country = await query.SingleOrDefaultAsync(x => x.Id == countryId, cancellationToken);
 
+
             if (country == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"Country with id : {countryId} is not exist"));
+                return new ResultV2<StateProvinceDto>(new EntityNotFoundException(typeof(Country), countryId));
             }
 
 
@@ -124,14 +127,15 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             if (state == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"State province with id : {stateProvinceId} is not exist in country : {country.Name}"));
+                return new ResultV2<StateProvinceDto>(new EntityNotFoundException(typeof(StateProvince), stateProvinceId));
 
             }
 
-            return UnitResult.Success(ObjectMapper.Map<StateProvince, StateProvinceDto>(state));
+
+            return ObjectMapper.Map<StateProvince, StateProvinceDto>(state);
         }
 
-        public async Task<UnitResult<StateProvinceDto>> GetByCodeAsync(string countryCode, string stateCode, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<StateProvinceDto>> GetByCodeAsync(string countryCode, string stateCode, CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
@@ -139,21 +143,21 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             if (country == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"Country with code : {countryCode} is not exist"));
+                return new ResultV2<StateProvinceDto>(new EntityNotFoundException($"Country with code : {countryCode} is not exist"));
             }
 
             var state = country.StateProvinces.SingleOrDefault(x => x.Abbreviation == stateCode);
 
             if (state == null)
             {
-                return UnitResult.Failure<StateProvinceDto>(ErrorInfo.NotFound($"State province with abbrevation : {stateCode} is not exist in country : {country.Name}"));
+                return new ResultV2<StateProvinceDto>(new EntityNotFoundException($"State province with abbrevation : {stateCode} is not exist in country : {country.Name}"));
             }
 
-            return UnitResult.Success(ObjectMapper.Map<StateProvince, StateProvinceDto>(state));
+            return ObjectMapper.Map<StateProvince, StateProvinceDto>(state);
         }
 
 
-        public async Task<UnitResult<List<StateProvinceDto>>> ListAsync(string countryId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<List<StateProvinceDto>>> ListAsync(string countryId, CancellationToken cancellationToken = default)
         {
             var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
 
@@ -161,16 +165,17 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             if (country == null)
             {
-                return UnitResult.Failure<List<StateProvinceDto>>(ErrorInfo.NotFound($"Country with id : {countryId} is not exist"));
+                return new ResultV2<List<StateProvinceDto>>(new EntityNotFoundException(typeof(Country), countryId));
             }
 
-            return UnitResult.Success(ObjectMapper.Map<List<StateProvince>, List<StateProvinceDto>>(country.StateProvinces));
+
+            return ObjectMapper.Map<List<StateProvince>, List<StateProvinceDto>>(country.StateProvinces);
 
         }
 
 
 
-        private UnitResult ValidateStateProvince(Country country ,StateProvinceModel model, string? stateProvinceId = null
+        private  ResultV2<Unit> ValidateStateProvince(Country country ,StateProvinceModel model, string? stateProvinceId = null
             )
         {
             var states = country.StateProvinces;
@@ -183,16 +188,17 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             if(states.Any(x=> x.Name == model.Name))
             {
-                return UnitResult.Failure(ErrorInfo.BusinessLogic($"State Province with name : {model.Name} is already in exist in country : {country.Name}"));
+                return new ResultV2<Unit>(new BusinessException($"State Province with name : {model.Name} is already in exist in country : {country.Name}"));
+
             }
 
 
             if(states.Any(x=> x.Abbreviation == model.Abbreviation))
             {
-                return UnitResult.Failure(ErrorInfo.BusinessLogic($"State Province with abbreviation : {model.Abbreviation} is already in exist in country : {country.Name}"));
+                return new ResultV2<Unit>(new BusinessException($"State Province with abbreviation : {model.Abbreviation} is already in exist in country : {country.Name}"));
             }
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
     }
 }

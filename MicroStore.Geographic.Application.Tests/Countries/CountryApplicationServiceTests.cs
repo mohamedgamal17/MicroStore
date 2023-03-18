@@ -4,6 +4,8 @@ using MicroStore.Geographic.Application.Countries;
 using MicroStore.Geographic.Application.Domain;
 using MicroStore.Geographic.Application.Models;
 using MicroStore.Geographic.Application.Tests.Extensions;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.Geographic.Application.Tests.Countries
 {
     public class CountryApplicationServiceTests : BaseTestFixutre
@@ -60,7 +62,7 @@ namespace MicroStore.Geographic.Application.Tests.Countries
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -83,7 +85,8 @@ namespace MicroStore.Geographic.Application.Tests.Countries
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+
         }
 
         [Test]
@@ -116,7 +119,7 @@ namespace MicroStore.Geographic.Application.Tests.Countries
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -140,7 +143,7 @@ namespace MicroStore.Geographic.Application.Tests.Countries
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
         protected CountryModel PrepareCountryModel()
         {

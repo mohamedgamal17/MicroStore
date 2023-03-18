@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Geographic.Application.Domain;
 using MicroStore.Geographic.Application.Models;
 using MicroStore.Geographic.Application.StateProvinces;
 using MicroStore.Geographic.Application.Tests.Extensions;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Geographic.Application.Tests.StateProvinces
 {
@@ -46,7 +46,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
             result.IsFailure.Should().BeTrue();
 
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -92,7 +92,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
             result.IsFailure.Should().BeTrue();
 
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -125,7 +125,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
             result.IsFailure.Should().BeTrue();
 
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -138,8 +138,8 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
 
             result.IsFailure.Should().BeTrue();
 
-
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+                
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -163,7 +163,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -188,7 +188,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -201,7 +201,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -227,7 +227,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -240,7 +240,7 @@ namespace MicroStore.Geographic.Application.Tests.StateProvinces
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
         protected StateProvinceModel PrepareStateProvinceModel()
         {
