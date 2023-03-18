@@ -5,6 +5,7 @@ using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Domain.Const;
 using MicroStore.Shipping.Domain.Entities;
+using Volo.Abp;
 using Volo.Abp.Application.Services;
 
 namespace MicroStore.Shipping.Application.Rates
@@ -21,13 +22,13 @@ namespace MicroStore.Shipping.Application.Rates
             _settingsRepository = settingsRepository;
         }
 
-        public async Task<UnitResult<List<EstimatedRateDto>>> EstimateRate(EstimatedRateModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<List<EstimatedRateDto>>> EstimateRate(EstimatedRateModel model, CancellationToken cancellationToken = default)
         {
             var result = await RetriveShippingSettings(cancellationToken);
 
             if (result.IsFailure)
             {
-                return UnitResult.Failure<List<EstimatedRateDto>>(result.Error);
+                return new ResultV2<List<EstimatedRateDto>>(result.Exception);
             }
 
             var settings = result.Value;
@@ -36,7 +37,7 @@ namespace MicroStore.Shipping.Application.Rates
 
             if (systemResult.IsFailure)
             {
-                return UnitResult.Failure<List<EstimatedRateDto>>(result.Error);
+                return new ResultV2<List<EstimatedRateDto>>(result.Exception);
             }
 
 
@@ -61,23 +62,23 @@ namespace MicroStore.Shipping.Application.Rates
             };
         }
 
-        private async Task<UnitResult<ShippingSettings>> RetriveShippingSettings(CancellationToken cancellationToken)
+        private async Task<ResultV2<ShippingSettings>> RetriveShippingSettings(CancellationToken cancellationToken)
         {
             var settings = await _settingsRepository.TryToGetSettings<ShippingSettings>(SettingsConst.ProviderKey, cancellationToken) ?? new ShippingSettings();
 
 
             if (settings.DefaultShippingSystem == null)
             {
-                return UnitResult.Failure<ShippingSettings>(ErrorInfo.BusinessLogic("Please set default shipping system"));
+                return new ResultV2<ShippingSettings>(new BusinessException("Please set default shipping system"));
           
             }
             else if (settings.Location == null)
             {
-                return UnitResult.Failure<ShippingSettings>(ErrorInfo.BusinessLogic("Please add store location"));
+                return new ResultV2<ShippingSettings>(new BusinessException("Please add store location"));
          
             }
 
-            return UnitResult.Success(settings);
+            return settings;
 
         }
     }
@@ -86,6 +87,6 @@ namespace MicroStore.Shipping.Application.Rates
 
     public interface IRateApplicationService : IApplicationService
     {
-        Task<UnitResult<List<EstimatedRateDto>>> EstimateRate(EstimatedRateModel model, CancellationToken cancellationToken = default);
+        Task<ResultV2<List<EstimatedRateDto>>> EstimateRate(EstimatedRateModel model, CancellationToken cancellationToken = default);
     }
 }

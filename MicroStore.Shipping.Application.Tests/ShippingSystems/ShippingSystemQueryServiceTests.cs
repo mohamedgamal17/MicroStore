@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.ShippingSystems;
 using MicroStore.Shipping.Domain.Entities;
-using System.Net;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Shipping.Application.Tests.ShippingSystems
 {
@@ -47,7 +46,7 @@ namespace MicroStore.Shipping.Application.Tests.ShippingSystems
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -71,7 +70,7 @@ namespace MicroStore.Shipping.Application.Tests.ShippingSystems
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
     }
 }

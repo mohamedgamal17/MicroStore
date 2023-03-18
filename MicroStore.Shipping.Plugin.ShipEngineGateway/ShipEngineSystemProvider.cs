@@ -12,7 +12,7 @@ using ShipEngineSDK.Common;
 using ShipEngineSDK.Common.Enums;
 using ShipEngineSDK.CreateLabelFromShipmentDetails;
 using ShipEngineSDK.GetRatesWithShipmentDetails;
-using System.Net;
+using Volo.Abp;
 using Volo.Abp.ObjectMapping;
 
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway
@@ -34,10 +34,10 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
              _settingsRepository = settingsRepository;
         }
 
-        public async Task<UnitResult<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
         {
 
-            return await WrappResponseResult(HttpStatusCode.OK, async () =>
+            return await WrappResponseResult( async () =>
             {
                 var clinet = await GetShipEngineClinet(cancellationToken);
 
@@ -60,10 +60,10 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
         
         }
 
-        public async Task<UnitResult<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel addressFrom , AddressModel addressTo , List<ShipmentItemEstimationModel>  items, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel addressFrom , AddressModel addressTo , List<ShipmentItemEstimationModel>  items, CancellationToken cancellationToken = default)
         {
 
-            return await WrappResponseResult(HttpStatusCode.OK, async () =>
+            return await WrappResponseResult(async () =>
             {
                 var clinet = await GetShipEngineClinet();
 
@@ -81,9 +81,9 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
           
         }
 
-        public async Task<UnitResult<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
         {
-            return await WrappResponseResult(HttpStatusCode.OK, async () =>
+            return await WrappResponseResult(async () =>
             {
                 var clinet = await GetShipEngineClinet();
 
@@ -119,9 +119,9 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                      
         }
 
-        public async Task<UnitResult<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId, CancellationToken cancellationToken = default)
         {
-            return await WrappResponseResult(HttpStatusCode.OK ,async () =>
+            return await WrappResponseResult(async () =>
             {
                 var shipment = await _shipmentRepository.RetriveShipment(shipmentId, cancellationToken)!;
 
@@ -169,10 +169,10 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                        
         }
 
-        public async Task<UnitResult<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
+        public async Task<ResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
         {
 
-            return await WrappResponseResult(HttpStatusCode.OK, async () =>
+            return await WrappResponseResult(async () =>
             {
                 var clinet = await GetShipEngineClinet();
 
@@ -202,17 +202,9 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
 
 
-        private async Task<UnitResult<T>> WrappResponseResult<T>(HttpStatusCode statusCode,Func<Task<T>> func)
-        {
-            return await WrappResponseResult(async () =>
-            {
-                var result = await func();
 
-                return UnitResult.Success<T>(result);
-            });
-        }
 
-        private async Task <UnitResult<T>> WrappResponseResult<T>(Func<Task<UnitResult<T>>> func)
+        private async Task <ResultV2<T>> WrappResponseResult<T>(Func<Task<T>> func)
         {
             try
             {
@@ -227,13 +219,10 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                     Message = ex.Message,
                 };
 
-                return UnitResult.Failure<T>(ErrorInfo.Validation(ex.Message));
+                return new ResultV2<T>(new BusinessException(ex.Message));
 
             }
-            catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
-            {
-                return UnitResult.Failure<T>(ErrorInfo.BadGateway(ex.Message));
-            }
+          
         }
         private Weight ConvertWeight(MicroStore.Shipping.Domain.ValueObjects.Weight weight)
         {

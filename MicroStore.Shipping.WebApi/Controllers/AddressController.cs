@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Addresses;
@@ -28,7 +29,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
             var result = await _addressApplicationService.ValidateAddress(model);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
     }

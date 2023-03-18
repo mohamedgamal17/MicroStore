@@ -1,9 +1,9 @@
 ﻿using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Domain.Const;
 using MicroStore.Shipping.Domain.Entities;
+using Volo.Abp;
 using Volo.Abp.Application.Services;
 namespace MicroStore.Shipping.Application.Addresses
 {
@@ -19,20 +19,20 @@ namespace MicroStore.Shipping.Application.Addresses
             _shipmentSystemResolver = shipmentSystemResolver;
         }
 
-        public async Task<UnitResult<AddressValidationResultModel>> ValidateAddress(AddressModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel model, CancellationToken cancellationToken = default)
         {
             var settings = await _settingsRepository.TryToGetSettings<ShippingSettings>(SettingsConst.ProviderKey, cancellationToken) ?? new ShippingSettings();
 
             if (settings.DefaultShippingSystem == null)
             {
-                return UnitResult.Failure<AddressValidationResultModel>(ErrorInfo.BusinessLogic("Please configure shipping settings first"));
+                return new ResultV2<AddressValidationResultModel>(new BusinessException("Please configure shipping settings first"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(settings.DefaultShippingSystem);
 
             if (systemResult.IsFailure)
             {
-                return UnitResult.Failure<AddressValidationResultModel>(systemResult.Error);
+                return new ResultV2<AddressValidationResultModel>(systemResult.Exception);
             }
 
             var system = systemResult.Value;
@@ -44,6 +44,6 @@ namespace MicroStore.Shipping.Application.Addresses
 
     public interface IAddressApplicationService : IApplicationService
     {
-        Task<UnitResult<AddressValidationResultModel>> ValidateAddress(AddressModel model , CancellationToken cancellationToken  =default);
+        Task<ResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel model , CancellationToken cancellationToken  =default);
     }
 }

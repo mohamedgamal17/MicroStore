@@ -23,7 +23,7 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
             _objectMapper = objectMapper;
         }
 
-        public async Task<UnitResult<ShipmentDto>> BuyShipmentLabel(string shippmentId, BuyShipmentLabelModel model , CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShipmentDto>> BuyShipmentLabel(string shippmentId, BuyShipmentLabelModel model , CancellationToken cancellationToken = default)
         {
             Shipment shipment = await _shipmentRepsoitory.SingleOrDefaultAsync(x=> x.Id == shippmentId);
 
@@ -31,10 +31,10 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
 
             await _shipmentRepsoitory.UpdateAsync(shipment);
 
-            return Success(_objectMapper.Map<Shipment, ShipmentDto>(shipment));
+            return _objectMapper.Map<Shipment, ShipmentDto>(shipment);
         }
 
-        public Task<UnitResult<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel addressFrom , AddressModel addressTo , List<ShipmentItemEstimationModel> items, CancellationToken cancellationToken = default)
+        public Task<ResultV2<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel addressFrom , AddressModel addressTo , List<ShipmentItemEstimationModel> items, CancellationToken cancellationToken = default)
         {
             var result = new List<EstimatedRateDto>
             {
@@ -61,10 +61,10 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
                 },
             };
 
-            return Task.FromResult(Success(result));
+            return Task.FromResult(new ResultV2<List<EstimatedRateDto>>(result));
         }
 
-        public async Task<UnitResult<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model , CancellationToken cancellationToken =default)
+        public async Task<ResultV2<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model , CancellationToken cancellationToken =default)
         {
             Shipment shipment = await _shipmentRepsoitory.RetriveShipment(shipmentId);
 
@@ -72,10 +72,10 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
 
             await _shipmentRepsoitory.UpdateAsync(shipment);
 
-            return  Success(_objectMapper.Map<Shipment,ShipmentDto>(shipment));
+            return  _objectMapper.Map<Shipment, ShipmentDto>(shipment);
         }
    
-        public Task<UnitResult<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId,CancellationToken cancellationToken= default)
+        public Task<ResultV2<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId,CancellationToken cancellationToken= default)
         {
             var result = new List<ShipmentRateDto>
             {
@@ -98,7 +98,7 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
                 }
             };
 
-            return Task.FromResult(Success(result));
+            return Task.FromResult(new ResultV2<List<ShipmentRateDto>>(result));
         }
 
  
@@ -109,9 +109,9 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
 
      
 
-        public Task<UnitResult<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
+        public Task<ResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
         {
-            return Task.FromResult(Success(new AddressValidationResultModel()));
+            return Task.FromResult(new ResultV2<AddressValidationResultModel>( new AddressValidationResultModel()));
         }
 
 
@@ -125,27 +125,27 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
     {
         public string SystemName => FakeConst.NotActiveSystem;
 
-        public Task<UnitResult<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
+        public Task<ResultV2<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UnitResult<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel from, AddressModel to, List<ShipmentItemEstimationModel> items, CancellationToken cancellationToken = default)
+        public Task<ResultV2<List<EstimatedRateDto>>> EstimateShipmentRate(AddressModel from, AddressModel to, List<ShipmentItemEstimationModel> items, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UnitResult<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
+        public Task<ResultV2<ShipmentDto>> Fullfill(string shipmentId, FullfillModel model, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UnitResult<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId, CancellationToken cancellationToken = default)
+        public Task<ResultV2<List<ShipmentRateDto>>> RetriveShipmentRates(string shipmentId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UnitResult<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
+        public Task<ResultV2<AddressValidationResultModel>> ValidateAddress(AddressModel addressModel, CancellationToken cancellation = default)
         {
             throw new NotImplementedException();
         }

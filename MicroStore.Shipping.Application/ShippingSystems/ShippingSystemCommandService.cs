@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Domain.Entities;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Shipping.Application.ShippingSystems
 {
@@ -15,13 +15,13 @@ namespace MicroStore.Shipping.Application.ShippingSystems
             _shippingSystemRepository = shippingSystemRepository;
         }
 
-        public async Task<UnitResult<ShippingSystemDto>> EnableAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShippingSystemDto>> EnableAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
         {
             var system = await _shippingSystemRepository.SingleOrDefaultAsync(x => x.Name == systemName,cancellationToken);
 
             if (system == null)
             {
-                return UnitResult.Failure<ShippingSystemDto>(ErrorInfo.NotFound($"Shipping system with name : {systemName} is not exist"));
+                return new ResultV2<ShippingSystemDto>(new EntityNotFoundException($"Shipping system with name : {systemName} is not exist"));
 
             }
 
@@ -31,7 +31,7 @@ namespace MicroStore.Shipping.Application.ShippingSystems
             await _shippingSystemRepository.UpdateAsync(system);
 
 
-            return UnitResult.Success(ObjectMapper.Map<ShippingSystem, ShippingSystemDto>(system));
+            return ObjectMapper.Map<ShippingSystem, ShippingSystemDto>(system);
         }
     }
 }

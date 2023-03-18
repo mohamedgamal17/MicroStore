@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Rates;
@@ -27,7 +28,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var result = await _rateApplicationService.EstimateRate(model);
 
-            return FromResult(result,HttpStatusCode.OK);
+            return result.ToOk();
         }
 
     }

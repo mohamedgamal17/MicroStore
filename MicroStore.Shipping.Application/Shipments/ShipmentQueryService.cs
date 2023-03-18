@@ -4,12 +4,12 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
+using MicroStore.Shipping.Domain.Entities;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Validation;
-
 namespace MicroStore.Shipping.Application.Shipments
 {
     [DisableValidation]
@@ -22,7 +22,7 @@ namespace MicroStore.Shipping.Application.Shipments
             _shippingDbContext = shippingDbContext;
         }
 
-        public async Task<UnitResult<ShipmentDto>> GetAsync(string shipmentId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShipmentDto>> GetAsync(string shipmentId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
                .AsNoTracking()
@@ -32,13 +32,13 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (result == null)
             {
-                return UnitResult.Failure<ShipmentDto>(ErrorInfo.NotFound( $"shipment with id {shipmentId} is not exist"));
+                return new ResultV2<ShipmentDto>(new EntityNotFoundException(typeof(Shipment), shipmentId));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<ShipmentDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShipmentDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
                .AsNoTracking()
@@ -48,13 +48,13 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (result == null)
             {
-                return UnitResult.Failure<ShipmentDto>(ErrorInfo.NotFound($"shipment with order id {orderId} is not exist"));
+                return new ResultV2<ShipmentDto>(new EntityNotFoundException($"shipment with order id {orderId} is not exist"));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<ShipmentDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShipmentDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
         {
 
             var query = _shippingDbContext.Shipments
@@ -65,13 +65,13 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (result == null)
             {
-                return UnitResult.Failure<ShipmentDto>(ErrorInfo.NotFound($"shipment with order number {orderNumber} is not exist"));
+                return new ResultV2<ShipmentDto>(new EntityNotFoundException($"shipment with order number {orderNumber} is not exist"));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<PagedResult<ShipmentListDto>>> ListAsync(PagingQueryParams queryParams,string? userId = null ,CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PagedResult<ShipmentListDto>>> ListAsync(PagingQueryParams queryParams,string? userId = null ,CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
                  .AsNoTracking()
@@ -84,7 +84,7 @@ namespace MicroStore.Shipping.Application.Shipments
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
         }
     }
 }

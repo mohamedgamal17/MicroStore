@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.ShippingSystems;
 using System.Net;
@@ -30,7 +31,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
             var result = await _shippingSystemQueryService.ListAsync();
 
-            return FromResult(result,HttpStatusCode.OK);           
+            return result.ToOk();       
         }
 
         [HttpGet]
@@ -40,7 +41,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var result = await _shippingSystemQueryService.GetByNameAsync(name);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
@@ -51,7 +52,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var result = await _shippingSystemQueryService.GetAsync(systemId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpPut]
@@ -61,7 +62,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var result = await _shippingSystemCommandService.EnableAsync(systemName,model.IsEnabled);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
     }
 

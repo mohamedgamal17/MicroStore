@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS8618
+﻿ #pragma warning disable CS8618
 using MicroStore.Shipping.Domain.Common;
 using MicroStore.Shipping.Domain.Const;
 namespace MicroStore.Shipping.Domain.Entities

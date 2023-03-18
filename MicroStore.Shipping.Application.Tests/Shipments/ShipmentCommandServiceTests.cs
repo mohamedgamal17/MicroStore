@@ -88,7 +88,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         private Task<Shipment?> RetriveShipment(string id)

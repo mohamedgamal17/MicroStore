@@ -4,6 +4,8 @@ using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
+using MicroStore.Shipping.Domain.Entities;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Shipping.Application.ShippingSystems
@@ -17,7 +19,7 @@ namespace MicroStore.Shipping.Application.ShippingSystems
             _shippingDbContext = shippingDbContext;
         }
 
-        public async Task<UnitResult<ShippingSystemDto>> GetAsync(string systemId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShippingSystemDto>> GetAsync(string systemId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.ShippingSystems
                .AsNoTracking()
@@ -27,13 +29,13 @@ namespace MicroStore.Shipping.Application.ShippingSystems
 
             if (result == null)
             {
-                return UnitResult.Failure<ShippingSystemDto>(ErrorInfo.NotFound($"system with id {systemId} is not exist"));
+                return new ResultV2<ShippingSystemDto>(new EntityNotFoundException(typeof(ShippingSystem), systemId));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }   
 
-        public async Task<UnitResult<ShippingSystemDto>> GetByNameAsync(string systemName, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ShippingSystemDto>> GetByNameAsync(string systemName, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.ShippingSystems
               .AsNoTracking()
@@ -43,13 +45,13 @@ namespace MicroStore.Shipping.Application.ShippingSystems
 
             if (result == null)
             {
-                return UnitResult.Failure<ShippingSystemDto>(ErrorInfo.NotFound($"system with name {systemName} is not exist"));
+                return new ResultV2<ShippingSystemDto>(new EntityNotFoundException($"system with name {systemName} is not exist"));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<List<ShippingSystemDto>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<ResultV2<List<ShippingSystemDto>>> ListAsync(CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.ShippingSystems
                  .AsNoTracking()
@@ -57,7 +59,7 @@ namespace MicroStore.Shipping.Application.ShippingSystems
 
             var result = await query.ToListAsync();
 
-            return UnitResult.Success(result);
+            return result;
         }
     }
 }
