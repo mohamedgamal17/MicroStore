@@ -88,6 +88,16 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             }, _exceptionHandler);
         }
 
+
+        public static IActionResult ToNoContent<T>(this ResultV2<T> result)
+        {
+            return result.Match((obj) =>
+            {
+                return new NoContentResult();
+
+            }, _exceptionHandler);
+        }
+
        
     }
 }
