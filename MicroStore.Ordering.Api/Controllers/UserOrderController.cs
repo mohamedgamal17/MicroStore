@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Dtos;
@@ -48,13 +49,14 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderCommandService.CreateOrderAsync(orderModel);
 
-            
-            return FromResult(result, HttpStatusCode.Accepted);
+
+            return result.ToAcceptedAtAction(nameof(RetirveUserOrder),new {id = result.Value?.Id} );
         }
 
 
         [HttpGet]
         [Route("")]
+        [ActionName(nameof(RetirveUserOrderList))]
     //    [RequiredScope(OrderingScope.Order.List)]
         public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingAndSortingParamsQueryString @params)
         {
@@ -70,20 +72,22 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
         [HttpGet]
         [Route("{orderId}")]
+        [ActionName(nameof(RetirveUserOrder))]
+
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
         //      [RequiredScope(OrderingScope.Order.Read)]
-        public async Task<IActionResult> RetirveOrder(Guid orderId)
+        public async Task<IActionResult> RetirveUserOrder(Guid orderId)
         {
 
             var result = await _orderQueryService.GetAsync(orderId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
@@ -95,7 +99,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.GetByOrderNumberAsync(orderNumber);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
     }
 }

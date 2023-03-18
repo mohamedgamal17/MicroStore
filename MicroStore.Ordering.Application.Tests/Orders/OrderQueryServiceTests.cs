@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Orders;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.Ordering.Application.Tests.Orders
 {
 
@@ -79,6 +81,9 @@ namespace MicroStore.Ordering.Application.Tests.Orders
             var response = await _orderQueryService.GetAsync(Guid.NewGuid());
 
             response.IsFailure.Should().BeTrue();
+
+            response.Exception.Should().BeOfType<EntityNotFoundException>();
+
         }
 
 
@@ -101,6 +106,9 @@ namespace MicroStore.Ordering.Application.Tests.Orders
             var response = await _orderQueryService.GetByOrderNumberAsync(Guid.NewGuid().ToString());
 
             response.IsFailure.Should().BeTrue();
+
+            response.Exception.Should().BeOfType<EntityNotFoundException>();
+
         }
 
     }

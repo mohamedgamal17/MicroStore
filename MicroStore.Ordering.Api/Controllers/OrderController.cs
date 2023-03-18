@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Dtos;
@@ -39,13 +40,14 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.ListAsync(queryParams, userId);
 
-            return FromResult(result,HttpStatusCode.OK);
+            return result.ToOk();
         }
 
       
 
         [HttpGet]
         [Route("{orderId}")]
+        [ActionName(nameof(RetirveOrder))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
 
         public async Task<IActionResult> RetirveOrder(Guid orderId)
@@ -53,7 +55,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.GetAsync(orderId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
@@ -64,7 +66,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderQueryService.GetByOrderNumberAsync(orderNumber);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -75,7 +77,7 @@ namespace MicroStore.Ordering.Api.Controllers
         {
             var result  = await _orderCommandService.CreateOrderAsync(model);
 
-            return FromResult(result,HttpStatusCode.Accepted);
+            return result.ToAcceptedAtAction(nameof(RetirveOrder), new {id = result.Value?.Id});
         }
 
 
@@ -88,7 +90,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
             var result = await _orderCommandService.FullfillOrderAsync(orderId,model);
 
-            return FromResult(result, HttpStatusCode.Accepted);
+            return result.ToAcceptedAtAction(nameof(RetirveOrder), new { id = orderId });
         }
 
 
@@ -98,7 +100,7 @@ namespace MicroStore.Ordering.Api.Controllers
         {
             var result = await _orderCommandService.CompleteOrderAsync(orderId);
 
-            return FromResult(result, HttpStatusCode.Accepted);
+            return result.ToAcceptedAtAction(nameof(RetirveOrder), new {id = orderId});
         }
 
 
@@ -109,7 +111,7 @@ namespace MicroStore.Ordering.Api.Controllers
         {
             var result = await _orderCommandService.CancelOrderAsync(orderId,model);
 
-            return FromResult(result, HttpStatusCode.Accepted);
+            return result.ToAcceptedAtAction(nameof(RetirveOrder), new { id = orderId });
 
         }
 

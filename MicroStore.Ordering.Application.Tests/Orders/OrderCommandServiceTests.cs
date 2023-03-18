@@ -1,8 +1,10 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
 using MicroStore.Ordering.Application.StateMachines;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.Ordering.Application.Tests.Orders
 {
 
@@ -78,7 +80,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -98,7 +100,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.BusinessLogicError);
+            result.Exception.Should().BeOfType<BusinessException>();
 
         }
 
@@ -127,7 +129,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
             result.IsFailure.Should().BeTrue();
 
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -143,7 +145,8 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.BusinessLogicError);
+            result.Exception.Should().BeOfType<BusinessException>();
+
 
         }
 
@@ -177,7 +180,8 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+
         }
 
 
@@ -195,7 +199,8 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.BusinessLogicError);
+            result.Exception.Should().BeOfType<BusinessException>();
+
         }
 
     }
