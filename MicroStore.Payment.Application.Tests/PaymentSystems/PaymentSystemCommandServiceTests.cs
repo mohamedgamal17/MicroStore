@@ -2,6 +2,8 @@
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.PaymentSystems;
 using MicroStore.Payment.Domain;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.Payment.Application.Tests.PaymentSystems
 {
     public class PaymentSystemCommandServiceTests : PaymentSystemCommandTestBase
@@ -35,7 +37,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentSystems
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
     }
 }

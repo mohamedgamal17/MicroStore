@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Payment.Application.PaymentSystems;
 using MicroStore.Payment.Domain.Shared.Dtos;
-using System.Net;
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
@@ -27,7 +27,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentSystemQueryService.ListPaymentSystemAsync();
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
@@ -37,7 +37,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentSystemQueryService.GetBySystemNameAsync(systemName);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
@@ -47,7 +47,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentSystemQueryService.GetAsync(systemId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -58,7 +58,7 @@ namespace MicroStore.Payment.Api.Controllers
         {
             var result = await _paymentSystemCommandService.EnablePaymentSystemAsync(systemName, model.IsEnabled);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
     }

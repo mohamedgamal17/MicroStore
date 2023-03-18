@@ -7,7 +7,6 @@ using MicroStore.Payment.Domain.Shared.Models;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
-
 namespace MicroStore.Payment.Application.Tests.Fakes
 {
     [ExposeServices(typeof(IPaymentMethod))]
@@ -25,19 +24,19 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             _objectMapper = objectMapper;
         }
 
-        public Task<UnitResult<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
+        public Task<ResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             var result = new PaymentProcessResultDto
             {
                 CheckoutLink = PaymentMethodConst.CheckoutUrl
             };
 
-            return Task.FromResult(Success( result));
+            return Task.FromResult(new ResultV2<PaymentProcessResultDto>( result));
         }
 
     
 
-        public async Task<UnitResult<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
         {
             PaymentRequest paymentRequest = await _paymentRequestRepository.SingleOrDefaultAsync(x => x.Id == paymentId, cancellationToken);
 
@@ -47,7 +46,7 @@ namespace MicroStore.Payment.Application.Tests.Fakes
 
             var result = _objectMapper.Map<PaymentRequest, PaymentRequestDto>(paymentRequest);
 
-           return Success( result);
+            return result;
           
         }
 
@@ -61,12 +60,12 @@ namespace MicroStore.Payment.Application.Tests.Fakes
     {
         public string PaymentGatewayName => PaymentMethodConst.NonActiveGateway;
 
-        public Task<UnitResult<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
+        public Task<ResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UnitResult<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
+        public Task<ResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

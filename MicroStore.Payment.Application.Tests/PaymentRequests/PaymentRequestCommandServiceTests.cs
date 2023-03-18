@@ -4,6 +4,9 @@ using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Application.Tests.Consts;
 using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared.Models;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.Payment.Application.Tests.PaymentRequests
 {
     public class PaymentRequestCommandServiceTests : PaymentRequestCommandTestBase
@@ -47,7 +50,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.BusinessLogicError);
+            result.Exception.Should().BeOfType<BusinessException>();
         }
 
         [Test]
@@ -81,7 +84,8 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+
         }
 
         [Test]
@@ -99,7 +103,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -117,7 +121,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.BusinessLogicError);
+            result.Exception.Should().BeOfType<BusinessException>();
 
             result.IsFailure.Should().BeTrue();
         }
@@ -137,7 +141,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.BusinessLogicError);
+            result.Exception.Should().BeOfType<BusinessException>();
         }
 
         [Test]
@@ -162,7 +166,8 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+
         }
 
         [Test]
@@ -174,7 +179,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.BusinessLogicError);
+            result.Exception.Should().BeOfType<BusinessException>();
         }
 
     }

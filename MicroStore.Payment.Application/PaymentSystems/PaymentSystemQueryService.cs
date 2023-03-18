@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Common;
+using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Payment.Application.PaymentSystems
@@ -17,7 +19,7 @@ namespace MicroStore.Payment.Application.PaymentSystems
             _paymentDbContext = paymentDbContext;
         }
 
-        public async Task<UnitResult<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
                 .AsNoTracking()
@@ -27,13 +29,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
             if (result == null)
             {
-                return UnitResult.Failure<PaymentSystemDto>(ErrorInfo.NotFound($"payment sytem with Id : {id} is not exist"));
+                return new ResultV2<PaymentSystemDto>(new EntityNotFoundException(typeof(PaymentSystem), id));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
                .AsNoTracking()
@@ -43,13 +45,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
             if (result == null)
             {
-                return UnitResult.Failure<PaymentSystemDto>(ErrorInfo.NotFound($"payment sytem with name : {name} is not exist"));
+                return new ResultV2<PaymentSystemDto>(new EntityNotFoundException($"payment sytem with name : {name} is not exist"));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default)
+        public async Task<ResultV2<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentSystems
               .AsNoTracking()
@@ -58,7 +60,7 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
             var result = await query.ToListAsync(cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
         }
     }
 }

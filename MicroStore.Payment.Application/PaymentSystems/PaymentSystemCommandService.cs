@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Payment.Application.PaymentSystems
@@ -16,13 +16,13 @@ namespace MicroStore.Payment.Application.PaymentSystems
             _paymentSystemRepository = paymentSystemRepository;
         }
 
-        public async Task<UnitResult<PaymentSystemDto>> EnablePaymentSystemAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentSystemDto>> EnablePaymentSystemAsync(string systemName, bool isEnabled, CancellationToken cancellationToken = default)
         {
             PaymentSystem? paymentSystem = await _paymentSystemRepository.SingleOrDefaultAsync(x => x.Name == systemName,cancellationToken);
 
             if (paymentSystem == null)
             {
-                return UnitResult.Failure<PaymentSystemDto>(ErrorInfo.NotFound( $"Payment system with name : {systemName}, is not exist" ));
+                return new ResultV2<PaymentSystemDto>(new EntityNotFoundException($"Payment system with name : {systemName}, is not exist"));
             }
 
             paymentSystem.IsEnabled = isEnabled;
@@ -31,7 +31,7 @@ namespace MicroStore.Payment.Application.PaymentSystems
 
 
 
-            return UnitResult.Success(ObjectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem));
+            return ObjectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem);
         }
     }
 }

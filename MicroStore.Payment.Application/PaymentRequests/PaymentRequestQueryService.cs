@@ -4,9 +4,10 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.Common;
+using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Payment.Application.PaymentRequests
 {
@@ -18,7 +19,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
         {
             _paymentDbContext = paymentDbContext;
         }
-        public async Task<UnitResult<PaymentRequestDto>> GetAsync(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentRequestDto>> GetAsync(string paymentId, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
               .AsNoTracking()
@@ -28,14 +29,13 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (result == null)
             {
-                return UnitResult.Failure<PaymentRequestDto>(ErrorInfo.NotFound($"Payment request with id : {paymentId} is not exist"));
+                return new ResultV2<PaymentRequestDto>(new EntityNotFoundException(typeof(PaymentRequest), paymentId));
             }
 
-
-            return UnitResult.Success(result);
+            return  result;
         }
 
-        public async Task<UnitResult<PaymentRequestDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentRequestDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
               .AsNoTracking()
@@ -45,14 +45,14 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (result == null)
             {
-                return UnitResult.Failure<PaymentRequestDto>(ErrorInfo.NotFound($"Payment request with order id : {orderId} is not exist"));
+                return new ResultV2<PaymentRequestDto>(new EntityNotFoundException($"Payment request with order id : {orderId} is not exist"));
             }
 
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<PaymentRequestDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentRequestDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
             .AsNoTracking()
@@ -62,14 +62,14 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (result == null)
             {
-                return UnitResult.Failure<PaymentRequestDto>(ErrorInfo.NotFound($"Payment request with order number : {orderNumber} is not exist"));
+                return new ResultV2<PaymentRequestDto>(new EntityNotFoundException($"Payment request with order number : {orderNumber} is not exist"));
             }
 
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PagingAndSortingQueryParams queryParams, string? userId = null, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PagingAndSortingQueryParams queryParams, string? userId = null, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
               .AsNoTracking()
@@ -87,7 +87,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
         }
 
         private IQueryable<PaymentRequestListDto> TryToSort(IQueryable<PaymentRequestListDto> query, string sortBy, bool desc)

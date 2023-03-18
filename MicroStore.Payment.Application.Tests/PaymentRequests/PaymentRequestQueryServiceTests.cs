@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Payment.Application.PaymentRequests;
+using Volo.Abp.Domain.Entities;
 namespace MicroStore.Payment.Application.Tests.PaymentRequests
 {
 
@@ -69,7 +69,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -93,7 +93,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
@@ -117,7 +117,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
     } 

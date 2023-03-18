@@ -8,6 +8,7 @@ using MicroStore.Payment.Plugin.StripeGateway.Config;
 using MicroStore.Payment.Plugin.StripeGateway.Consts;
 using Stripe;
 using Stripe.Checkout;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
@@ -46,7 +47,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
 
 
-        public async Task<UnitResult<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(async () =>
             {
@@ -114,7 +115,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
         }
 
-        public async Task<UnitResult<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
         {
             return await WrappResponseResult(async () =>
             {
@@ -170,19 +171,9 @@ namespace MicroStore.Payment.Plugin.StripeGateway
 
 
 
-        private async Task<UnitResult<T>> WrappResponseResult<T>(Func<Task<T>> func)
+        private async Task<ResultV2<T>> WrappResponseResult<T>(Func<Task<T>> func)
         {
 
-            return await WrappResponseResult(async () =>
-            {
-                var result = await func();
-
-                return UnitResult.Success(result);
-            });
-        }
-
-        private async Task<UnitResult<T>> WrappResponseResult<T>(Func<Task<UnitResult<T>>> func)
-        {
             try
             {
                 return await func();
@@ -190,15 +181,11 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             }
             catch (StripeException ex)
             {
-                return UnitResult.Failure<T>(ConvertStripeError(ex.StripeError));
-
-            }
-            catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
-            {
-                return UnitResult.Failure<T>(ErrorInfo.BadGateway("Stripe gateway is not available now"));
+                return new ResultV2<T>(new BusinessException(message: ex.StripeError?.Message, details: ex.StripeError?.ErrorDescription));
 
             }
         }
+
 
         private ErrorInfo ConvertStripeError(StripeError stripeError)
         {
