@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Application.Products;
-using System.Net;
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/products")]
@@ -39,28 +39,31 @@ namespace MicroStore.Catalog.Api.Controllers
             });
 
 
-            return FromResult(result,HttpStatusCode.OK);
+            return result.ToOk();
+
         }
 
 
         [Route("{id}")]
+        [ActionName(nameof(GetCatalogProduct))]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ProductDto)))]
         public async Task<IActionResult> GetCatalogProduct(string id)
         {
             var result = await _productQueryService.GetAsync(id);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [Route("")]
+        [ActionName(nameof(CreateProduct))]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProductDto))]
         public async Task<IActionResult> CreateProduct([FromBody] ProductModel model)
         {
             var result = await _productCommandService.CreateAsync(model);
 
-            return FromResult(result,HttpStatusCode.Created);
+            return result.ToCreatedAtAction(nameof(GetCatalogProduct),new {id = result.Value?.Id});
         }
 
         [Route("{id}")]
@@ -69,7 +72,8 @@ namespace MicroStore.Catalog.Api.Controllers
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] ProductModel model)
         {
             var result = await _productCommandService.UpdateAsync(id, model);
-            return FromResult(result, HttpStatusCode.Created);
+
+            return result.ToOk();
         }
 
 
@@ -79,17 +83,19 @@ namespace MicroStore.Catalog.Api.Controllers
         public async Task<IActionResult> AddProductImage (string productId, [FromBody] CreateProductImageModel model)
         {
             var result = await _productCommandService.AddProductImageAsync(productId, model);
-            return FromResult(result, HttpStatusCode.Created);
+
+            return result.ToOk();
+
         }
 
 
         [Route("{productId}/productimage/{productImageId}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-        public async Task<IActionResult> AddProductImage(string productId, string productImageId,[FromBody] UpdateProductImageModel model)
+        public async Task<IActionResult> UpdateProductImage(string productId, string productImageId,[FromBody] UpdateProductImageModel model)
         {
             var result = await _productCommandService.UpdateProductImageAsync(productId, productImageId,model);
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [Route("{productId}/productimage/{productImageId}")]
@@ -98,7 +104,8 @@ namespace MicroStore.Catalog.Api.Controllers
         public async Task<IActionResult> DeleteProductImage(string productId, string productImageId)
         {
             var result = await _productCommandService.DeleteProductImageAsync(productId, productImageId);
-            return FromResult(result, HttpStatusCode.OK);
+
+            return result.ToOk();
         }
     }
 }

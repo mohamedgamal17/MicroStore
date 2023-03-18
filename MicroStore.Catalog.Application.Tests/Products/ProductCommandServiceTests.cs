@@ -5,6 +5,8 @@ using MicroStore.Catalog.Application.Products;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.IntegrationEvents;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.Catalog.Application.Tests.Products
 {
     public class ProductCommandServiceTests : ProductServiceTestBase
@@ -58,7 +60,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
         [Test]
         public async Task Should_add_new_product_image()
@@ -96,7 +98,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -133,7 +135,8 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -150,7 +153,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -186,7 +189,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
         [Test]
@@ -203,7 +206,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
     }
 

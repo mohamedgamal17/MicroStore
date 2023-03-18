@@ -3,9 +3,9 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Categories;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
-using System.Net;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 
 namespace MicroStore.Catalog.Api.Controllers
 {
@@ -30,7 +30,7 @@ namespace MicroStore.Catalog.Api.Controllers
             var result = await  _categoryQueryService
                 .ListAsync(new SortingQueryParams { SortBy = @params.SortBy, Desc = @params.Desc});
 
-            return FromResult(result,HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -42,7 +42,7 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _categoryQueryService.GetAsync(id);
 
-            return FromResult(result,HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -53,7 +53,7 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _categoryCommandService.CreateAsync(model);
 
-            return FromResult(result,HttpStatusCode.Created);
+            return result.ToCreatedAtAction(nameof(GetCatalogCategory), routeValues : new { id = result.Value.Id });
         }
 
         [Route("{id}")]
@@ -63,7 +63,7 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _categoryCommandService.UpdateAsync(id,model);
 
-            return FromResult(result,HttpStatusCode.OK);
+            return result.ToOk();
         }
     }
 }

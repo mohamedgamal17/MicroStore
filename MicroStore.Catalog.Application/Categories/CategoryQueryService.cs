@@ -2,12 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Domain.Entities;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Catalog.Application.Categories
 {
     public class CategoryQueryService : CatalogApplicationService, ICategoryQueryService
@@ -19,21 +18,21 @@ namespace MicroStore.Catalog.Application.Categories
             _catalogDbContext = catalogDbContext;
         }
 
-        public async Task<UnitResult<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             Category? category = await _catalogDbContext.Categories
                 .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (category == null)
             {
-                return UnitResult.Failure<CategoryDto>(ErrorInfo.NotFound($"Category with id : {id} is not exist"));
-         
+                return new ResultV2<CategoryDto>(new EntityNotFoundException(typeof(Category), id));
+
             }
 
-            return UnitResult.Success(ObjectMapper.Map<Category, CategoryDto>(category));
+            return ObjectMapper.Map<Category, CategoryDto>(category);
         }
 
-        public async Task<UnitResult<List<CategoryDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<List<CategoryDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Categories
                 .AsNoTracking()
@@ -46,7 +45,7 @@ namespace MicroStore.Catalog.Application.Categories
 
             var result = await query.ToListAsync(cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
         }
 
         private IQueryable<CategoryDto> TryToSort(IQueryable<CategoryDto> query, string sortBy, bool desc)

@@ -4,9 +4,10 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Domain.Entities;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Validation;
 namespace MicroStore.Catalog.Application.Products
@@ -20,7 +21,7 @@ namespace MicroStore.Catalog.Application.Products
             _catalogDbContext = catalogDbContext;
         }
 
-        public async Task<UnitResult<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Products
                  .AsNoTracking()
@@ -30,13 +31,14 @@ namespace MicroStore.Catalog.Application.Products
 
             if (product == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {id} is not found"));
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(Product), id));
+
             }
 
-            return UnitResult.Success(product);
+            return product;
         }
 
-        public async Task<UnitResult<PagedResult<ProductDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PagedResult<ProductDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Products.AsQueryable()
                          .AsNoTracking()
@@ -49,7 +51,7 @@ namespace MicroStore.Catalog.Application.Products
 
             var pagingResult = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResult.Success(pagingResult);
+            return pagingResult;
         }
 
         public IQueryable<ProductDto> TryToSort(IQueryable<ProductDto> query, string sortBy, bool desc = false)

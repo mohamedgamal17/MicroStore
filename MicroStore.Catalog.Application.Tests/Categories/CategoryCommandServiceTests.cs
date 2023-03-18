@@ -3,6 +3,8 @@ using MicroStore.Catalog.Application.Categories;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.Catalog.Application.Tests.Categories
 {
 
@@ -28,11 +30,12 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 
             result.IsSuccess.Should().BeTrue();
 
-            var category = await Find<Category>(x => x.Id == result.Value.Id);
+            await result.IfSuccess(async (val) =>
+            {
+                var category = await Find<Category>(x => x.Id == val.Id);
 
-            category.AssertCategoryModel(model);
-
-
+                category.AssertCategoryModel(model);
+            });
         }
 
         [Test]
@@ -52,9 +55,29 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 
             result.IsSuccess.Should().BeTrue();
 
-            Category category = await Find<Category>(x => x.Id == fakeCategory.Id);
+            await result.IfSuccess(async (val) =>
+            {
+                var category = await Find<Category>(x => x.Id == val.Id);
 
-            category.AssertCategoryModel(model);
+                category.AssertCategoryModel(model);
+            });
+        }
+
+
+        [Test]
+        public async Task Shoul_failure_while_updating_category_when_category_id_is_not_exist()
+        {
+            var model = new CategoryModel
+            {
+                Name = Guid.NewGuid().ToString(),
+                Description = Guid.NewGuid().ToString()
+            };
+
+            var result = await _categoryCommandService.UpdateAsync(Guid.NewGuid().ToString(), model);
+
+            result.IsFailure.Should().BeTrue();
+
+            result.IfFailure(ex => ex.Should().BeOfType<EntityNotFoundException>());
 
         }
     }

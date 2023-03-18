@@ -16,11 +16,14 @@ namespace MicroStore.Catalog.Application.Tests.Categories
         public async Task Should_get_all_categories()
         {
 
-            var response = await _categoryQueryService.ListAsync(new SortingQueryParams());
+            var result = await _categoryQueryService.ListAsync(new SortingQueryParams());
 
-            response.IsSuccess.Should().BeTrue();
+            result.IsSuccess.Should().BeTrue();
 
-            response.Value.Count.Should().BeGreaterThan(0);
+            result.IfSuccess((val) =>
+            {
+                val.Count.Should().BeGreaterThan(0);
+            });
         }
 
         [Test]
@@ -28,11 +31,15 @@ namespace MicroStore.Catalog.Application.Tests.Categories
         {
             string productId = "159b39f4-d03d-48df-9c89-ef5aaba7ef52";
 
-            var response = await _categoryQueryService.GetAsync(productId);
+            var result = await _categoryQueryService.GetAsync(productId);
 
-            response.IsSuccess.Should().BeTrue();
+            result.IsSuccess.Should().BeTrue();
 
-            response.Value.Id.Should().Be(productId);
+            result.IfSuccess((val) =>
+            {
+                val.Id.Should().Be(productId);
+            });
+
         }
 
         [Test]

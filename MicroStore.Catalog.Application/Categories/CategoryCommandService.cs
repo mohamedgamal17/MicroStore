@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Domain.Entities;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Categories
@@ -17,7 +17,7 @@ namespace MicroStore.Catalog.Application.Categories
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<UnitResult<CategoryDto>> CreateAsync(CategoryModel input, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<CategoryDto>> CreateAsync(CategoryModel input, CancellationToken cancellationToken = default)
         {
             Category category = new Category();
 
@@ -25,23 +25,23 @@ namespace MicroStore.Catalog.Application.Categories
 
             await _categoryRepository.InsertAsync(category, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Category, CategoryDto>(category));
+            return ObjectMapper.Map<Category, CategoryDto>(category);
         }
 
-        public async Task<UnitResult<CategoryDto>> UpdateAsync(string id, CategoryModel input, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<CategoryDto>> UpdateAsync(string id, CategoryModel input, CancellationToken cancellationToken = default)
         {
             Category? category = await _categoryRepository.SingleOrDefaultAsync(x => x.Id == id);
 
             if (category == null)
             {
-                return UnitResult.Failure<CategoryDto>(ErrorInfo.NotFound($"Category entity with id : {id} is not found"));
+                return new ResultV2<CategoryDto>(new EntityNotFoundException(typeof(Category), id)); 
 
             }
             PrepareCategoryEntity(category, input);
 
             await _categoryRepository.UpdateAsync(category, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Category, CategoryDto>(category));
+            return ObjectMapper.Map<Category, CategoryDto>(category);
         }
 
         private void PrepareCategoryEntity(Category category, CategoryModel input)

@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Domain.ValueObjects;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Products
 {
@@ -17,13 +18,13 @@ namespace MicroStore.Catalog.Application.Products
             _productRepository = productRepository;
         }
 
-        public async Task<UnitResult<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
         {
             var validationResult = await ValidateProduct(model);
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<ProductDto>(validationResult.Error);
+                return new ResultV2<ProductDto>(validationResult.Exception);
             }
 
             Product product = new Product();
@@ -32,10 +33,10 @@ namespace MicroStore.Catalog.Application.Products
 
             await _productRepository.InsertAsync(product, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+            return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
-        public async Task<UnitResult<ProductDto>> UpdateAsync(string id, ProductModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> UpdateAsync(string id, ProductModel model, CancellationToken cancellationToken = default)
         {
           
             Product? product = await _productRepository
@@ -45,11 +46,12 @@ namespace MicroStore.Catalog.Application.Products
 
             if (validationResult.IsFailure)
             {
-                return UnitResult.Failure<ProductDto>(validationResult.Error);
+                return new ResultV2<ProductDto>(validationResult.Exception);
             }
+
             if (product == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {id} is not found"));
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(Product) , id));
 
             }
 
@@ -57,7 +59,7 @@ namespace MicroStore.Catalog.Application.Products
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+            return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
 
@@ -84,14 +86,16 @@ namespace MicroStore.Catalog.Application.Products
         }
 
 
-       public async Task<UnitResult<ProductDto>> AddProductImageAsync(string productId, CreateProductImageModel model, CancellationToken cancellationToken = default)
+       public async Task<ResultV2<ProductDto>> AddProductImageAsync(string productId, CreateProductImageModel model, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository
                 .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
 
-            if(product == null)
+
+            if (product == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {productId} is not found"));
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(Product), productId));
+
             }
 
             ProductImage productImage = new ProductImage
@@ -106,57 +110,58 @@ namespace MicroStore.Catalog.Application.Products
             await _productRepository.UpdateAsync(product, cancellationToken : cancellationToken);
 
 
-            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+            return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
-        public async Task<UnitResult<ProductDto>> UpdateProductImageAsync(string productId, string productImageId, UpdateProductImageModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> UpdateProductImageAsync(string productId, string productImageId, UpdateProductImageModel model, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository
                 .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
 
             if (product == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {productId} is not found"));
-            }
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(Product), productId));
 
+            }
             var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
 
             if(productImage == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product image entity with id : {productImage} is not exist in product with id : {productId}"));
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(ProductImage), productImageId));
             }
 
             productImage.DisplayOrder = model.DisplayOrder;
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+            return ObjectMapper.Map<Product, ProductDto>(product);
         }
-        public async Task<UnitResult<ProductDto>> DeleteProductImageAsync(string productId, string productImageId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> DeleteProductImageAsync(string productId, string productImageId, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository
                 .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
 
             if (product == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product entity with id : {productId} is not found"));
-            }
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(Product), productId));
 
+            }
             var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
 
             if (productImage == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product image entity with id : {productImage} is not exist in product with id : {productId}"));
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(ProductImage), productImageId));
             }
+
 
             product.ProductImages.Remove(productImage);
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 
-            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+            return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
-        private async Task<UnitResult> ValidateProduct(ProductModel model , string? productId = null)
+        private async Task<ResultV2<Unit>> ValidateProduct(ProductModel model , string? productId = null)
         {
             var query = await _productRepository.GetQueryableAsync();
 
@@ -167,16 +172,16 @@ namespace MicroStore.Catalog.Application.Products
 
             if(await query.AnyAsync(x=> x.Name == model.Name))
             {
-                return UnitResult.Failure(ErrorInfo.BusinessLogic("Product name is already exist choose another name"));
+                return new ResultV2<Unit>(new BusinessException("Product name is already exist choose another name"));
             }
 
             if(await query.AnyAsync(x=> x.Sku == model.Sku))
             {
-                return UnitResult.Failure(ErrorInfo.BusinessLogic("Product sku is already exist choose another sku"));
+                return  new ResultV2<Unit>(new BusinessException("Product sku is already exist choose another sku"));
             }
 
 
-            return UnitResult.Success();
+            return Unit.Value;
         }
     }
 
