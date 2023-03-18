@@ -4,9 +4,10 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Common;
 using MicroStore.Inventory.Application.Dtos;
+using MicroStore.Inventory.Domain.ProductAggregate;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Validation;
 
@@ -22,7 +23,7 @@ namespace MicroStore.Inventory.Application.Products
             _inventoryDbContext = inventoryDbContext;
         }
 
-        public async Task<UnitResult<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Products
                 .AsNoTracking()
@@ -32,13 +33,13 @@ namespace MicroStore.Inventory.Application.Products
 
             if (result == null)
                 {
-                    return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"product with product id {id} is not exist"));
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(Product), id));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Products
              .AsNoTracking()
@@ -48,13 +49,14 @@ namespace MicroStore.Inventory.Application.Products
 
             if (result == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"product with product sku {sku} is not exist"));
+                return new ResultV2<ProductDto>(new EntityNotFoundException($"product with product sku {sku} is not exist"));
+
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
 
             var query = _inventoryDbContext.Products
@@ -63,7 +65,7 @@ namespace MicroStore.Inventory.Application.Products
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
         }
     }
 }

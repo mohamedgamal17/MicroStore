@@ -7,6 +7,8 @@ using MicroStore.BuildingBlocks.Results;
 using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Common;
 using MicroStore.Inventory.Application.Dtos;
+using MicroStore.Inventory.Domain.OrderAggregate;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Validation;
 
@@ -22,7 +24,7 @@ namespace MicroStore.Inventory.Application.Orders
             _inventoryDbContext = inventoryDbContext;
         }
 
-        public async Task<UnitResult<OrderDto>> GetOrderAsync(string orderId, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<OrderDto>> GetOrderAsync(string orderId, CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Orders
                .AsNoTracking()
@@ -33,13 +35,13 @@ namespace MicroStore.Inventory.Application.Orders
 
             if (result == null)
             {
-                return UnitResult.Failure<OrderDto>(ErrorInfo.NotFound( $"order with id : {orderId} is not exist"));
+                return new ResultV2<OrderDto>(new EntityNotFoundException(typeof(Order), orderId));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<OrderDto>> GetOrderByNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<OrderDto>> GetOrderByNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Orders
                     .AsNoTracking()
@@ -50,13 +52,13 @@ namespace MicroStore.Inventory.Application.Orders
 
             if (result == null)
             {
-                return UnitResult.Failure<OrderDto>(ErrorInfo.NotFound($"order with number : {orderNumber} is not exist"));
+                return new ResultV2<OrderDto>(new EntityNotFoundException($"order with number : {orderNumber} is not exist"));
             }
 
-            return UnitResult.Success(result);
+            return result;
         }
 
-        public async Task<UnitResult<PagedResult<OrderListDto>>> ListOrderAsync(PagingQueryParams queryParams, string? userId = null,  CancellationToken cancellationToken = default)
+        public async Task<ResultV2<PagedResult<OrderListDto>>> ListOrderAsync(PagingQueryParams queryParams, string? userId = null,  CancellationToken cancellationToken = default)
         {
             var query = _inventoryDbContext.Orders
                .AsNoTracking()
@@ -69,7 +71,7 @@ namespace MicroStore.Inventory.Application.Orders
 
             var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
 
-            return UnitResult.Success(result);
+            return result;
         }
     }
 

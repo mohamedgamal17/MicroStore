@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Domain.ProductAggregate;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Validation;
 
@@ -19,7 +19,7 @@ namespace MicroStore.Inventory.Application.Products
         }
 
         [DisableValidation]
-        public async Task<UnitResult<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
         {
             Product product = new Product(model.ProductId);
 
@@ -27,11 +27,11 @@ namespace MicroStore.Inventory.Application.Products
 
             await _productRepository.InsertAsync(product);
 
-            return UnitResult.Success(ObjectMapper.Map<Product,ProductDto>(product));
+            return ObjectMapper.Map<Product,ProductDto>(product);
         }
 
         [DisableValidation]
-        public async Task<UnitResult<ProductDto>> UpdateAsync( ProductModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> UpdateAsync( ProductModel model, CancellationToken cancellationToken = default)
         {
             Product product = await _productRepository.SingleAsync(x => x.Id == model.ProductId);
 
@@ -39,16 +39,16 @@ namespace MicroStore.Inventory.Application.Products
 
             await _productRepository.UpdateAsync(product);
 
-            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+            return ObjectMapper.Map<Product, ProductDto>(product);
         }
 
-        public async Task<UnitResult<ProductDto>> AdjustInventory(string id ,AdjustProductInventoryModel model, CancellationToken cancellationToken = default)
+        public async Task<ResultV2<ProductDto>> AdjustInventory(string id ,AdjustProductInventoryModel model, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository.SingleOrDefaultAsync(x => x.Id == id);
 
             if (product == null)
             {
-                return UnitResult.Failure<ProductDto>(ErrorInfo.NotFound($"Product with id : {id} is not exist"));
+                return new ResultV2<ProductDto>(new EntityNotFoundException(typeof(ProductDto), id));
             }
 
             product.AdjustInventory(model.Stock, model.Reason);
@@ -57,7 +57,7 @@ namespace MicroStore.Inventory.Application.Products
             await _productRepository.UpdateAsync(product);
 
 
-            return UnitResult.Success(ObjectMapper.Map<Product, ProductDto>(product));
+            return  ObjectMapper.Map<Product, ProductDto>(product);
         }
 
   

@@ -4,6 +4,7 @@ using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.Domain.OrderAggregate;
 using System.Net;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Inventory.Application.Tests.Orders
 {
@@ -81,7 +82,7 @@ namespace MicroStore.Inventory.Application.Tests.Orders
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
 
@@ -106,7 +107,7 @@ namespace MicroStore.Inventory.Application.Tests.Orders
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
     }
 }

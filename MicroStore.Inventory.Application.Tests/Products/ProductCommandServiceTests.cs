@@ -4,6 +4,7 @@ using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Products;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using System.Net;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Inventory.Application.Tests.Products
 {
@@ -42,7 +43,7 @@ namespace MicroStore.Inventory.Application.Tests.Products
 
             result.IsFailure.Should().BeTrue();
 
-            result.Error.Type.Should().Be(HttpErrorType.NotFoundError);
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
     }

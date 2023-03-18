@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.Paging\MicroStore.BuildingBlocks.Paging.csproj" />
-    <ProjectReference Include="..\MicroStore.BuildingBlocks.Security\MicroStore.BuildingBlocks.Security.csproj" />
     <ProjectReference Include="..\MicroStore.Catalog.IntegrationEvents\MicroStore.Catalog.IntegrationEvents.csproj" />
     <ProjectReference Include="..\MicroStore.Inventory.Domain\MicroStore.Inventory.Domain.csproj" />
     <ProjectReference Include="..\MicroStore.Inventory.IntegrationEvents\MicroStore.Inventory.IntegrationEvents.csproj" />

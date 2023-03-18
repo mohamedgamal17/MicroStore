@@ -4,6 +4,8 @@ using Ardalis.GuardClauses;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Inventory.Domain.Events;
 using MicroStore.Inventory.Domain.Extensions;
+using Volo.Abp;
+
 namespace MicroStore.Inventory.Domain.ProductAggregate
 {
     public class Product : BasicAggregateRoot<string>
@@ -14,8 +16,6 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
         public string Thumbnail { get; set; }
         public int Stock { get; private set; }
         public int AllocatedStock { get; private set; }
-
-
         public Product(string id)
         {
             Id = id;
@@ -70,15 +70,15 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             return Result.Success();
         }
 
-        public Result CanAllocateStock(int quantity)
+        public ResultV2<Unit> CanAllocateStock(int quantity)
         {
             if (Stock < quantity)
             {
-                return Result.Failure(ProductAggregateErrorType.ProductAllocationError,
-                    $"Current product : {Name} \n \t stock is less than requested allocated quantity");
+                return new ResultV2<Unit>(new BusinessException(
+                     $"Current product : {Name} \n \t stock is less than requested allocated quantity"));
             }
 
-            return Result.Success();
+            return Unit.Value;
         }
 
    
@@ -101,15 +101,14 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
         }
 
 
-        public Result CanReleaseStock(int quantity)
+        public ResultV2<Unit> CanReleaseStock(int quantity)
         {
             if (AllocatedStock < quantity)
             {
-                return Result.Failure(ProductAggregateErrorType.ProductReleasingStockError,
-                   "Current allocated quantity is less than requested release quantity");
+                return new ResultV2<Unit>(new BusinessException("Current allocated quantity is less than requested release quantity"));
             }
 
-            return Result.Success();
+            return Unit.Value;
         }
        
     }

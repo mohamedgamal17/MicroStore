@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
@@ -39,7 +40,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _orderQueryService.ListOrderAsync(queryParams, userId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
 
@@ -53,7 +54,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _orderQueryService.GetOrderByNumberAsync(orderNumber);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
@@ -65,7 +66,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _orderQueryService.GetOrderAsync(orderId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
     }
 }

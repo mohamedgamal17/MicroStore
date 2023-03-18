@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Products;
-using System.Net;
-
 namespace MicroStore.Inventory.Api.Controllers
 {
     [ApiController]
@@ -42,7 +39,8 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _productQueryService.ListAsync(query);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
+
         }
 
 
@@ -54,7 +52,7 @@ namespace MicroStore.Inventory.Api.Controllers
   
             var result = await _productQueryService.GetBySkyAsync(sku);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpGet]
@@ -65,7 +63,7 @@ namespace MicroStore.Inventory.Api.Controllers
         {
             var result = await _productQueryService.GetAsync(productId);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
 
         [HttpPost]
@@ -78,7 +76,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
             var result = await _productCommandService.AdjustInventory(productId, model);
 
-            return FromResult(result, HttpStatusCode.OK);
+            return result.ToOk();
         }
     }
 }

@@ -7,9 +7,9 @@ namespace MicroStore.Inventory.Application.Orders
 {
     public interface IOrderCommandService : IApplicationService
     {
-        Task<UnitResult<OrderDto>> AllocateOrderStockAsync(AllocateOrderStockModel model, CancellationToken cancellationToken = default);
+        Task<ResultV2<OrderDto>> AllocateOrderStockAsync(AllocateOrderStockModel model, CancellationToken cancellationToken = default);
 
-        Task<UnitResult<OrderDto>> ReleaseOrderStockAsync(string orderId , CancellationToken cancellationToken = default);
+        Task<ResultV2<OrderDto>> ReleaseOrderStockAsync(string orderId , CancellationToken cancellationToken = default);
     }
 
 

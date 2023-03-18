@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.BuildingBlocks.Security;
 using System.Reflection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FluentValidation;
@@ -10,8 +9,7 @@ using Volo.Abp.Modularity;
 namespace MicroStore.Inventory.Application
 {
     [DependsOn(typeof(AbpFluentValidationModule),
-        typeof(AbpAutoMapperModule),
-        typeof(MicroStoreSecurityModule))]
+        typeof(AbpAutoMapperModule))]
     public class InventoryApplicationModule  : AbpModule
     {
 

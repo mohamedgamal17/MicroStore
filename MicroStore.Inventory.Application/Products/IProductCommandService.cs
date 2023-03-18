@@ -7,10 +7,10 @@ namespace MicroStore.Inventory.Application.Products
 {
     public interface IProductCommandService : IApplicationService
     {
-        Task<UnitResult<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default);
+        Task<ResultV2<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default);
 
-        Task<UnitResult<ProductDto>> UpdateAsync( ProductModel model , CancellationToken cancellationToken = default);
+        Task<ResultV2<ProductDto>> UpdateAsync( ProductModel model , CancellationToken cancellationToken = default);
 
-        Task<UnitResult<ProductDto>> AdjustInventory(string id, AdjustProductInventoryModel model  , CancellationToken cancellationToken = default);
+        Task<ResultV2<ProductDto>> AdjustInventory(string id, AdjustProductInventoryModel model  , CancellationToken cancellationToken = default);
     }
 }

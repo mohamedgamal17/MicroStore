@@ -54,7 +54,7 @@ namespace MicroStore.Inventory.Application.Consumers
                     OrderNumber = context.Message.OrderNumber,
                     PaymentId = context.Message.PaymentId,
                     UserId= context.Message.UserId, 
-                    Details = result.Error.Message
+                    Details = result.Exception.Message
                 });
 
             }
