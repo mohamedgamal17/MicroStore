@@ -27,7 +27,6 @@
             return new Result(true, string.Empty, string.Empty);
         }
 
-
         public static Result<T> Success<T>(T value)
         {
             return new Result<T>(true, value, string.Empty,string.Empty);    
