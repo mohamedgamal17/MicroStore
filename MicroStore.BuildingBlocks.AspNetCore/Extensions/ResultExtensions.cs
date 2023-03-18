@@ -61,6 +61,15 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             }, _exceptionHandler);
         }
 
+        public static IActionResult ToAcceptedAtAction<T>(this ResultV2<T> result, string? actionName = null,  object? routeValues = null)
+        {
+            return result.Match(obj =>
+            {
+                return new AcceptedAtActionResult(actionName,null, routeValues, obj);
+
+            }, _exceptionHandler);
+        }
+
         public static IActionResult ToAcceptedAtAction<T>(this ResultV2<T> result, string? actionName = null, string? controllerName = null, object? routeValues = null)
         {
             return result.Match(obj =>
