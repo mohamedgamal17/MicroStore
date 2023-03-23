@@ -84,7 +84,7 @@ namespace MicroStore.Catalog.Application.Models
             RuleFor(x => x.Dimensions)
                 .ChildRules((dim) =>
                 {
-                    dim.RuleFor(x => x.Lenght)
+                    dim.RuleFor(x => x.Length)
                         .GreaterThanOrEqualTo(0)
                         .WithMessage("Product lenght cannot be negative value");
 

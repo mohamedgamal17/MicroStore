@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Application.Products;
 using MicroStore.Catalog.Application.Tests.Extensions;
