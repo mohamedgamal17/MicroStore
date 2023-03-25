@@ -25,10 +25,10 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<CategoryDto>)))]
-        public async Task<IActionResult> GetCatalogCategoryList(SortingParamsQueryString @params)
+        public async Task<IActionResult> GetCatalogCategoryList(PagingAndSortingParamsQueryString @params)
         {
             var result = await  _categoryQueryService
-                .ListAsync(new SortingQueryParams { SortBy = @params.SortBy, Desc = @params.Desc});
+                .ListAsync(new PagingAndSortingQueryParams { Lenght = @params.Lenght, Skip = @params.Skip ,SortBy = @params.SortBy, Desc = @params.Desc});
 
             return result.ToOk();
         }

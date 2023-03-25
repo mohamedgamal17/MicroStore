@@ -1,5 +1,7 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
@@ -32,18 +34,20 @@ namespace MicroStore.Catalog.Application.Categories
             return ObjectMapper.Map<Category, CategoryDto>(category);
         }
 
-        public async Task<Result<List<CategoryDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<CategoryDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.Categories
-                .AsNoTracking()
-                .ProjectTo<CategoryDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var query = _catalogDbContext.Categories.AsNoTracking().ProjectTo<CategoryDto>(MapperAccessor.Mapper.ConfigurationProvider);
+
+
+           
 
             if (queryParams.SortBy != null)
             {
                 query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
             }
 
-            var result = await query.ToListAsync(cancellationToken);
+            var result = await query.PageResult(queryParams.Skip,queryParams.Lenght);
+
 
             return result;
         }

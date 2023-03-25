@@ -19,7 +19,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
         
             
             result.IsSuccess.Should().BeTrue();
-            result.IsSuccess.Should().BeTrue();
             result.Value.Skip.Should().Be(queryParams.Skip);
             result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
         }

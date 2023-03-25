@@ -15,15 +15,16 @@ namespace MicroStore.Catalog.Application.Tests.Categories
         [Test]
         public async Task Should_get_all_categories()
         {
+            var queryParams = new PagingAndSortingQueryParams();
 
-            var result = await _categoryQueryService.ListAsync(new SortingQueryParams());
+            var result = await _categoryQueryService.ListAsync(queryParams);
 
             result.IsSuccess.Should().BeTrue();
 
-            result.IfSuccess((val) =>
-            {
-                val.Count.Should().BeGreaterThan(0);
-            });
+
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Skip.Should().Be(queryParams.Skip);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
         }
 
         [Test]
