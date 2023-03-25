@@ -66,8 +66,8 @@ namespace MicroStore.Ordering.Api.Controllers
 
                 SortBy = @params.SortBy,
                 Desc = @params.Desc,
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber,
+                Lenght = @params.Lenght,
+                Skip = @params.Skip,
             };
 
             var result = await _orderQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);

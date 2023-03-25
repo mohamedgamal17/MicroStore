@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Geographic.Application.Countries;
 using MicroStore.Geographic.Application.Domain;
 using MicroStore.Geographic.Application.Models;

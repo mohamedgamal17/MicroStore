@@ -34,8 +34,8 @@ namespace MicroStore.Inventory.Api.Controllers
         {
             var queryParams = new PagingQueryParams
             {
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber,
+                Lenght = @params.Lenght,
+                Skip = @params.Skip,
             };
 
             var result = await _orderQueryService.ListOrderAsync(queryParams, userId);

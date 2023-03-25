@@ -53,7 +53,20 @@ namespace MicroStore.Ordering.Application.Tests
                 });
             });
         }
+        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
 
+            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
+            {
+                TablesToIgnore = new Table[]
+                {
+                    "__EFMigrationsHistory"
+                }
+            }).Result;
+
+            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
+        }
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             using (var scope = context.ServiceProvider.CreateScope())

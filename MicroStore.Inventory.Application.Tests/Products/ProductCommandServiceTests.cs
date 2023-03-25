@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Products;
 using MicroStore.Inventory.Domain.ProductAggregate;

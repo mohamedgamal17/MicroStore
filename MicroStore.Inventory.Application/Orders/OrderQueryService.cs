@@ -68,7 +68,7 @@ namespace MicroStore.Inventory.Application.Orders
                 query = query.Where(x => x.UserId == userId);
             }
 
-            var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
 
             return result;
         }

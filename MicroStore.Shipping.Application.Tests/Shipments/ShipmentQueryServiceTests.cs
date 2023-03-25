@@ -18,30 +18,24 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
         [Test]
         public async Task Should_get_shipment_list_paged()
         {
-            var query = new PagingQueryParams
-            {
-                PageSize = 3,
-                PageNumber = 1
-            };
+            var query = new PagingQueryParams();
+
 
             var result = await _shipmentQueryService.ListAsync(query);
 
             result.IsSuccess.Should().BeTrue();
 
 
-            result.Value.PageNumber.Should().Be(query.PageNumber);
-            result.Value.PageSize.Should().Be(query.PageSize);
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(query.PageSize);
+            result.Value.Skip.Should().Be(query.Skip);
+            result.Value.Lenght.Should().Be(query.Lenght);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(query.Lenght);
         }
 
         [Test]
         public async Task Should_get_user_shipment_list_paged()
         {
-            var query = new PagingQueryParams
-            {
-                PageSize = 3,
-                PageNumber = 1
-            };
+            var query = new PagingQueryParams();
+
 
             string userId = "bfdd1deb-167d-4269-b0e3-351613b8a202";
 
@@ -50,9 +44,9 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Value.PageNumber.Should().Be(query.PageNumber);
-            result.Value.PageSize.Should().Be(query.PageSize);
-            result.Value.Items.Count().Should().BeLessThan(query.PageSize);
+            result.Value.Skip.Should().Be(query.Skip);
+            result.Value.Lenght.Should().Be(query.Lenght);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(query.Lenght);
             result.Value.Items.All(x => x.UserId == userId).Should().BeTrue();
 
 

@@ -28,8 +28,8 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         {
             var queryParams = new PagingQueryParams
             {
-                PageNumber = @params.PageNumber,
-                PageSize = @params.PageSize,
+                Skip = @params.Skip,
+                Lenght = @params.Lenght,
             };
 
             var result = await _apiResourceQueryService.ListAsync(queryParams);

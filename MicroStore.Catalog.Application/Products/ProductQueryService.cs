@@ -49,7 +49,7 @@ namespace MicroStore.Catalog.Application.Products
                 query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
             }
 
-            var pagingResult = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
+            var pagingResult = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
 
             return pagingResult;
         }

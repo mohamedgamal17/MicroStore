@@ -39,8 +39,12 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.Services
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, $"Role with name : {normalizedRoleName} is not exist", normalizedRoleName));
             }
 
+            if(user.UserRoles == null)
+            {
+                user.UserRoles = new List<ApplicationIdentityUserRole>();
+            }
 
-            user.AddUserRole(roleEntity);
+            user.UserRoles.Add(new ApplicationIdentityUserRole { RoleId  = roleEntity.Id , UserId = user.Id});
         }
 
 

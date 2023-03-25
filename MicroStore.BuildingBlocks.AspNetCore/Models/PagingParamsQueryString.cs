@@ -4,10 +4,10 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Models
 {
     public class PagingParamsQueryString
     {
-        [CustomFromQuery(nameof(PageNumber))]
-        public int PageNumber { get; set; } = 1;
+        [CustomFromQuery(nameof(Skip))]
+        public int Skip { get; set; } = 0;
 
-        [CustomFromQuery(nameof(PageSize))]
-        public int PageSize { get; set; } = 10;
+        [CustomFromQuery(nameof(Lenght))]
+        public int Lenght { get; set; } = 10;
     }
 }

@@ -17,11 +17,8 @@ namespace MicroStore.Ordering.Application.Tests.Orders
         [Test]
         public async Task Should_get_order_paged_list()
         {
-            var queryParams = new PagingAndSortingQueryParams
-            {
-                PageNumber = 1,
-                PageSize = 10,
-            };
+            var queryParams = new PagingAndSortingQueryParams();
+
 
             var response = await _orderQueryService.ListAsync(queryParams);
 
@@ -29,10 +26,9 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             var result = response.Value;
 
-            result.PageNumber.Should().Be(queryParams.PageNumber);
-            result.PageSize.Should().Be(queryParams.PageSize);
+            result.Lenght.Should().Be(queryParams.Lenght);
 
-            result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
 
         }
 
@@ -41,12 +37,8 @@ namespace MicroStore.Ordering.Application.Tests.Orders
         {
             string userId = "a84eb974-50b7-4ce6-95ac-515b54d2d7a3";
 
-            var queryParams = new PagingAndSortingQueryParams
-            {
-                
-                PageNumber = 1,
-                PageSize = 10
-            };
+            var queryParams = new PagingAndSortingQueryParams();
+        
 
             var response = await _orderQueryService.ListAsync(queryParams, userId);
 
@@ -54,11 +46,9 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             var result = response.Value;
 
-            result.PageNumber.Should().Be(queryParams.PageNumber);
+            result.Lenght.Should().Be(queryParams.Lenght);
 
-            result.PageSize.Should().Be(queryParams.PageSize);
-
-            result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
 
             result.Items.All(x => x.UserId == userId).Should().BeTrue();
         }

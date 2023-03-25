@@ -63,7 +63,7 @@ namespace MicroStore.Inventory.Application.Products
              .AsNoTracking()
              .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
 
             return result;
         }

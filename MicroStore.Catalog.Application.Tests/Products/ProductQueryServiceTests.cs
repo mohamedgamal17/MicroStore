@@ -14,19 +14,14 @@ namespace MicroStore.Catalog.Application.Tests.Products
         [Test]
         public async Task Should_get_product_list_paginated()
         {
-            var queryParams = new PagingAndSortingQueryParams
-            {
-                PageNumber = 1,
-                PageSize = 5,
-            };
-
+            var queryParams = new PagingAndSortingQueryParams();
             var result = await _productQueryService.ListAsync(queryParams);
         
             
             result.IsSuccess.Should().BeTrue();
             result.IsSuccess.Should().BeTrue();
-            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Skip.Should().Be(queryParams.Skip);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
         }
 
 

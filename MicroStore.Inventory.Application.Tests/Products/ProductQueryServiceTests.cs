@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Products;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using System.Net;
@@ -21,21 +20,18 @@ namespace MicroStore.Inventory.Application.Tests.Products
         [Test]
         public async Task Should_get_product_list_paged()
         {
-            var queryParams = new PagingQueryParams
-            {
-                PageSize = 4,
-                PageNumber = 1
-            };
+            var queryParams = new PagingQueryParams();
+
 
             var result = await _productQueryService.ListAsync(queryParams);
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
+            result.Value.Skip.Should().Be(queryParams.Skip);
 
-            result.Value.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.Lenght.Should().Be(queryParams.Lenght);
 
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
         }
 
 

@@ -36,8 +36,8 @@ namespace MicroStore.Shipping.WebApi.Controllers
         {
             var queryParams = new PagingQueryParams
             {
-                PageSize = @params.PageSize,
-                PageNumber = @params.PageNumber
+                Lenght = @params.Lenght,
+                Skip = @params.Skip
             };
 
             var result = await _shipmentQueryService.ListAsync(queryParams, userId);

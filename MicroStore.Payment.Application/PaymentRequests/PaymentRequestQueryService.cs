@@ -85,7 +85,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
                 query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
             }
 
-            var result = await query.PageResult(queryParams.PageNumber, queryParams.PageSize, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
 
             return result;
         }

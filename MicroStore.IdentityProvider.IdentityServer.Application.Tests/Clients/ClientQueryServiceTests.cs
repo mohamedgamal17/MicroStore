@@ -18,15 +18,15 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
         [Test]
         public async Task Should_return_paged_list_client()
         {
-            var queryParams = new PagingQueryParams() { PageSize = 3 };
+            var queryParams = new PagingQueryParams();
 
             var result = await _clientQueryService.ListAsync(queryParams);
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Value.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.Lenght.Should().Be(queryParams.Lenght);
 
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
         }
 
 

@@ -32,8 +32,8 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _productQueryService.ListAsync(new PagingAndSortingQueryParams
             {
-                PageNumber = queryParams.PageNumber,
-                PageSize = queryParams.PageSize,
+                Skip = queryParams.Skip,
+                Lenght = queryParams.Lenght,
                 SortBy = queryParams.SortBy,
                 Desc = queryParams.Desc
             });

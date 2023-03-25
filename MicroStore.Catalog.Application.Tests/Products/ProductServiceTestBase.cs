@@ -97,7 +97,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 {
                     Height = 5,
                     Width = 5,
-                    Lenght = 5,
+                    Length = 5,
                     Unit = "inch"
                 },
 

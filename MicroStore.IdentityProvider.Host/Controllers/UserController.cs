@@ -24,7 +24,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         [Route("")]
         public async Task<IActionResult> GetUserList([FromQuery] PagingParamsQueryString @params)
         {
-            var queryParams = new PagingQueryParams { PageNumber =@params.PageNumber, PageSize = @params.PageSize };
+            var queryParams = new PagingQueryParams { Skip =@params.Skip, Lenght = @params.Lenght };
 
             var result = await _userQueryService.ListAsync(queryParams);
 

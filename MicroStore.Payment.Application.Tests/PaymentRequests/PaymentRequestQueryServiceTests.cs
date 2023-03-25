@@ -17,15 +17,15 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
         [Test]
         public async Task Should_get_payment_request_list_paged()
         {
-            var queryParams = new PagingAndSortingQueryParams { PageNumber = 1, PageSize = 3 };
+            var queryParams = new PagingAndSortingQueryParams ();
 
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryParams);
             result.IsSuccess.Should().BeTrue();
 
-            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Value.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.Skip.Should().Be(queryParams.Skip);
+            result.Value.Lenght.Should().Be(queryParams.Lenght);
 
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
 
         }
 
@@ -34,7 +34,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
         {
             string userId = "2cd94e7f-d80a-41c9-9805-75f1e3b4b925";
 
-            var queryParams = new PagingAndSortingQueryParams { PageNumber = 1, PageSize = 3 };
+            var queryParams = new PagingAndSortingQueryParams ();
 
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryParams, userId);
 
@@ -42,10 +42,10 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
       
 
-            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Value.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.Skip.Should().Be(queryParams.Skip);
+            result.Value.Lenght.Should().Be(queryParams.Lenght);
 
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
 
             result.Value.Items.All(x => x.UserId == userId).Should().BeTrue();
         }

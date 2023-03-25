@@ -2,8 +2,8 @@
 {
     public class PagingQueryParams
     {
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int Skip { get; set; } = 0;
+        public int Lenght { get; set; } = 10;
 
     }
 }

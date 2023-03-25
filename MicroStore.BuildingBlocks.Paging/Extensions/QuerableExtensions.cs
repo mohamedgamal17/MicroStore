@@ -5,20 +5,20 @@ namespace MicroStore.BuildingBlocks.Paging.Extensions
     public static class QuerableExtensions
     {
 
-        public static async Task<PagedResult<T>> PageResult<T>(this IQueryable<T> query,int pagenumber , int pagesize,CancellationToken cancellationToken = default)
+        public static async Task<PagedResult<T>> PageResult<T>(this IQueryable<T> query,int skip , int lenght,CancellationToken cancellationToken = default)
         {
             Guard.Against.Null(query, nameof(query));
-            Guard.Against.NegativeOrZero(pagenumber, nameof(pagenumber));
-            Guard.Against.NegativeOrZero(pagesize, nameof(pagesize));
+            Guard.Against.Negative(skip, nameof(skip));
+            Guard.Against.NegativeOrZero(lenght, nameof(lenght));
 
             var count = await query.CountAsync();
 
             var items = await query
-                .Skip( ((pagenumber -1) * pagesize))
-                .Take(pagesize)
+                .Skip( skip)
+                .Take(lenght)
                 .ToListAsync();
 
-            return new PagedResult<T>(items, count,pagenumber,pagesize);
+            return new PagedResult<T>(items, count,skip,lenght);
 
         }
     }

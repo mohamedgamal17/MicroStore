@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results.Http;
 using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.Domain.OrderAggregate;
 using System.Net;
@@ -21,20 +20,16 @@ namespace MicroStore.Inventory.Application.Tests.Orders
         [Test]
         public async Task Should_get_order_paged_list()
         {
-            var queryParams = new PagingQueryParams
-            {
-                PageNumber = 1,
-                PageSize = 3
-            };
-
+            var queryParams = new PagingQueryParams();
+  
             var result = await _orderQuerService.ListOrderAsync(queryParams);
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Value.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.Skip.Should().Be(queryParams.Skip);
+            result.Value.Lenght.Should().Be(queryParams.Lenght);
 
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
         }
 
 
@@ -43,21 +38,17 @@ namespace MicroStore.Inventory.Application.Tests.Orders
         {
             string userId = "2cd94e7f-d80a-41c9-9805-75f1e3b4b925";
 
-            var queryParams = new PagingQueryParams
-            {
-                PageNumber = 1,
-                PageSize = 3,
-            };
+            var queryParams = new PagingQueryParams();
+    
 
 
             var result = await _orderQuerService.ListOrderAsync(queryParams,userId);
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Value.PageSize.Should().Be(queryParams.PageSize);
+            result.Value.Lenght.Should().Be(queryParams.Lenght);
 
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
         }
 
 

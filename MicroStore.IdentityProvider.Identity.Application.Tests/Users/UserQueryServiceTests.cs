@@ -20,20 +20,17 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
         [Test]
         public async Task Should_get_user_paged_list()
         {
-            var queryParams = new PagingQueryParams
-            {
-                PageNumber = 1,
-                PageSize = 3
-            };
+            var queryParams = new PagingQueryParams();
+
 
             var result = await _userQueryService.ListAsync(queryParams);
 
             result.IsSuccess.Should().BeTrue();
 
 
-            result.Value.PageNumber.Should().Be(queryParams.PageNumber);
-            result.Value.PageSize.Should().Be(queryParams.PageSize);
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.PageSize);
+            result.Value.Skip.Should().Be(queryParams.Skip);
+            result.Value.Lenght.Should().Be(queryParams.Lenght);
+            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
         }
 
 
