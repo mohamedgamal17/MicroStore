@@ -34,7 +34,7 @@ namespace MicroStore.Catalog.Application.Categories
             return ObjectMapper.Map<Category, CategoryDto>(category);
         }
 
-        public async Task<Result<PagedResult<CategoryDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<List<CategoryDto>>> ListAsync(SortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Categories.AsNoTracking().ProjectTo<CategoryDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
@@ -46,7 +46,7 @@ namespace MicroStore.Catalog.Application.Categories
                 query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
             }
 
-            var result = await query.PageResult(queryParams.Skip,queryParams.Lenght);
+            var result = await query.ToListAsync(cancellationToken);
 
 
             return result;
