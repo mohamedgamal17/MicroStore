@@ -5,7 +5,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
     {
         const string BASE_URL = "/catalog/categories";
 
-        const string BASE_URL_WITH_ID = "/catalog/cateogries/{0}";
+        const string BASE_URL_WITH_ID = "/catalog/categories/{0}";
 
         private readonly MicroStoreClinet _microStoreClinet;
 

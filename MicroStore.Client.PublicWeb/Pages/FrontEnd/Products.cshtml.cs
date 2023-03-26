@@ -26,8 +26,8 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
         {
             var options = new PagingAndSortingRequestOptions
             {
-                PageNumber = @params.PageNumber,
-                PageSize = @params.PageSize,
+                Skip = @params.Skip,
+                Lenght = @params.Lenght,
                 SortBy = @params.SortBy,
                 Desc = @params.Desc
             };

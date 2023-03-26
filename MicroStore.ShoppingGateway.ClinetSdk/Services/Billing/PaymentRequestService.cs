@@ -26,14 +26,14 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Billing
 
       
 
-        public async Task<PagedList<PaymentRequestList>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
+        public async Task<PagedList<PaymentRequest>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<PagedList<PaymentRequestList>>(BaseUrl, HttpMethod.Get, options,cancellationToken);
+            return await _microStoreClinet.MakeRequest<PagedList<PaymentRequest>>(BaseUrl, HttpMethod.Get, options,cancellationToken);
         }
 
-        public async Task<PagedList<PaymentRequestList>> ListByUserAsync(string userId,PagingReqeustOptions options ,CancellationToken cancellationToken = default)
+        public async Task<PagedList<PaymentRequest>> ListByUserAsync(string userId,PagingReqeustOptions options ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<PagedList<PaymentRequestList>>(string.Format("{0}/user/{1}", BaseUrl, userId),HttpMethod.Get ,options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<PagedList<PaymentRequest>>(string.Format("{0}/user/{1}", BaseUrl, userId),HttpMethod.Get ,options, cancellationToken);
         }
 
         public async Task<PaymentRequest> GetAsync(string paymentId , CancellationToken cancellationToken = default)

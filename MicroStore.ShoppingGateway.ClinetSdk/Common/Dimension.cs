@@ -7,7 +7,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Common
     [Serializable]
     public class Dimension
     {
-        public double Lenght { get; set; }
+        public double Length { get; set; } 
 
         public double Width { get; set; }
 

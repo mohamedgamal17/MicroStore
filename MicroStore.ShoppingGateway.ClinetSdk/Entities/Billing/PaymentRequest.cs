@@ -4,7 +4,7 @@
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
-        public string UserName { get; set; }
+        public string UserId { get; set; }
         public double TaxCost { get; set; }
         public double SubTotal { get; set; }
         public double ShippingCost { get; set; }

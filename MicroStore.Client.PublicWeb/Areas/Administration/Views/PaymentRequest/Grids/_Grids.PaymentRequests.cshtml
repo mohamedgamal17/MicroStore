@@ -1,0 +1,22 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing.PaymentRequestListModel
+<div class="card card-default">
+    <div class="card-body">
+
+        <table id="paymentrequests-grid" class="table table-hover table-striped  dataTable no-footer" width="100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().OrderId)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().OrderNumber)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().UserId)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().TotalCost)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().Status)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().CreatedAt)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        
+    </div>
+</div>

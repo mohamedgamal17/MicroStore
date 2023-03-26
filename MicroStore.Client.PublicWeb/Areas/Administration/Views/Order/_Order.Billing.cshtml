@@ -1,0 +1,80 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        @Html.DisplayNameFor(x=> x.BillingAddress)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.BillingAddress.Name)
+                    </td>
+                    <td>
+                        @Model.BillingAddress.Name
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.BillingAddress.Phone)
+                    </td>
+                    <td>
+                        @Model.BillingAddress.Phone
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.BillingAddress.Country.Name)
+                    </td>
+                    <td>
+                        @Model.BillingAddress.Country.Name
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.BillingAddress.City)
+                    </td>
+                    <td>
+                        @Model.BillingAddress.City
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.BillingAddress.State.Name)
+                    </td>
+                    <td>
+                        @Model.BillingAddress.State.Name
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.BillingAddress.AddressLine1)
+                    </td>
+                    <td>
+                        @Model.BillingAddress.AddressLine1
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.BillingAddress.AddressLine2)
+                    </td>
+                    <td>
+                        @Model.BillingAddress.AddressLine2
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

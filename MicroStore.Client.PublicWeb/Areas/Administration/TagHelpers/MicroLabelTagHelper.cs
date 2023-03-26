@@ -6,7 +6,7 @@ using System.Text;
 namespace MicroStore.Client.PublicWeb.Areas.Administration.TagHelpers
 {
 
-    [HtmlTargetElement(TARGET_NAME , Attributes = FOR_ATTRIBUTE_NAME)]
+    [HtmlTargetElement(TARGET_NAME )]
     public class MicroLabelTagHelper : TagHelper
     {
 

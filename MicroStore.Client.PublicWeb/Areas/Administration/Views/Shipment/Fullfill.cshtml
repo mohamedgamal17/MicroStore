@@ -1,0 +1,93 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Common;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentPackageModel
+
+<div class="content-wrapper mr-2">
+    <!-- Content Header (Page header) -->
+    <form method="post" asp-action="Fullfill" asp-route-shipmentId="@Model.ShipmentId">
+        @Html.AntiForgeryToken()
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Fullfill Shipment - @Model.ShipmentId</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <button class="btn btn-info" type="submit">
+                                    <i class="fas
+                                fa-plus-square mr-1"></i> Save And Continue
+                                </button>
+                            </li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> Package Info</p>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            @Html.ValidationSummary()
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <div class="col-md-3">
+                                <div class="float-sm-left float-md-right">
+                                    <micro-label asp-for="@Model.Weight"></micro-label>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input asp-for="@Model.Weight.Value" type="number" class="form-control" placeholder="Value" />
+                                    <select asp-for="@Model.Weight.Unit" asp-items="@Html.GetEnumSelectList<WeightUnit>()" class="form-control"></select>
+
+                                    <span asp-validation-for="@Model.Weight.Value" class="invalid-feedback"></span>
+                                    <span asp-validation-for="@Model.Weight.Unit" class="invalid-feedback"></span>
+                                    <span asp-validation-for="@Model.Weight" class="invalid-feedback"></span>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <div class="col-md-3">
+                                <div class="float-sm-left float-md-right">
+                                    <micro-label asp-for="@Model.Dimension"></micro-label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input asp-for="@Model.Dimension.Length" type="number" class="form-control" placeholder="Lenght" />
+                                    <input asp-for="@Model.Dimension.Width" type="number" class="form-control" placeholder="Width" />
+                                    <input asp-for="@Model.Dimension.Height" type="number" class="form-control" placeholder="Height" />
+                                    <select asp-for="@Model.Dimension.Unit" asp-items="@Html.GetEnumSelectList<DimensionUnit>()" class="form-control"></select>
+
+                                    <span asp-validation-for="@Model.Dimension.Length" class="invalid-feedback"></span>
+                                    <span asp-validation-for="@Model.Dimension.Width" class="invalid-feedback"></span>
+                                    <span asp-validation-for="@Model.Dimension.Height" class="invalid-feedback"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

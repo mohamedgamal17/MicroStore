@@ -1,0 +1,78 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover   table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        @Html.DisplayNameFor(x=> x.ShippingAddress)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.ShippingAddress.Name)
+                    </td>
+                    <td>
+                        @Model.ShippingAddress.Name
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.ShippingAddress.Phone)
+                    </td>
+                    <td>
+                        @Model.ShippingAddress.Phone
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.ShippingAddress.Country.Name)
+                    </td>
+                    <td>
+                        @Model.ShippingAddress.Country.Name
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.ShippingAddress.State.Name)
+                    </td>
+                    <td>
+                        @Model.ShippingAddress.State.Name
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.ShippingAddress.City)
+                    </td>
+                    <td>
+                        @Model.ShippingAddress.City
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.ShippingAddress.AddressLine1)
+                    </td>
+                    <td>
+                        @Model.ShippingAddress.AddressLine1
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.ShippingAddress.AddressLine2)
+                    </td>
+                    <td>
+                        @Model.ShippingAddress.AddressLine2
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -18,14 +18,14 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             return await _microStoreClinet.MakeRequest<Order>(BaseUrl, HttpMethod.Post, options, cancellationToken);
         }
 
-        public async Task<PagedList<OrderList>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
+        public async Task<PagedList<Order>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<PagedList<OrderList>>(BaseUrl,HttpMethod.Get, options, cancellationToken);  
+            return await _microStoreClinet.MakeRequest<PagedList<Order>>(BaseUrl,HttpMethod.Get, options, cancellationToken);  
         }
 
-        public async Task<PagedList<OrderList>> ListByUserAsync(string userId,PagingReqeustOptions options , CancellationToken cancellationToken = default)
+        public async Task<PagedList<Order>> ListByUserAsync(string userId,PagingReqeustOptions options , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest< PagedList<OrderList>>(string.Format("{0}/user/{1}", BaseUrl, userId), HttpMethod.Get, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest< PagedList<Order>>(string.Format("{0}/user/{1}", BaseUrl, userId), HttpMethod.Get, options, cancellationToken);
         }
 
         public async Task<Order> GetAsync(Guid orderId , CancellationToken cancellationToken = default)

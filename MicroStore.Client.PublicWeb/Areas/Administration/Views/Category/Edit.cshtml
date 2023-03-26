@@ -1,0 +1,40 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories.CategoryModel
+
+<div class="content-wrapper mr-2">
+    <!-- Content Header (Page header) -->
+    <form method="post" asp-action="Edit" >
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x=> x.Id)
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Edit category details - @Model.Name</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <button class="btn btn-info" type="submit">
+                                    <i class="fas
+                                fa-plus-square mr-1"></i> Save
+                                </button>
+                            </li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <div class="content">
+            <div class="container-fluid">
+                 @{
+                    await Html.RenderPartialAsync("_CreateOrUpdate.Info", Model); 
+                }
+
+
+            </div>
+        </div>
+    </form>
+
+</div>

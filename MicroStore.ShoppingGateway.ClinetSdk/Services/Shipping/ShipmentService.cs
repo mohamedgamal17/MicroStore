@@ -25,14 +25,14 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
             return await _microStoreClinet.MakeRequest< Shipment>( string.Format("{0}/fullfill/{1}", BaseUrl, shipmentId), HttpMethod.Post, options, cancellationToken);
         }
 
-        public Task<PagedList<ShipmentList>> ListAsync(PagingReqeustOptions options, CancellationToken cancellationToken = default)
+        public Task<PagedList<Shipment>> ListAsync(PagingReqeustOptions options, CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<PagedList<ShipmentList>>(BaseUrl,HttpMethod.Get ,options, cancellationToken);
+            return _microStoreClinet.MakeRequest<PagedList<Shipment>>(BaseUrl,HttpMethod.Get ,options, cancellationToken);
         }
 
-        public async Task<PagedList<ShipmentList>> ListByUserAsync(string userId , PagingReqeustOptions options, CancellationToken cancellationToken = default)
+        public async Task<PagedList<Shipment>> ListByUserAsync(string userId , PagingReqeustOptions options, CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<PagedList<ShipmentList>>(string.Format("{0}/user/{1}",BaseUrl,userId),HttpMethod.Get ,options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<PagedList<Shipment>>(string.Format("{0}/user/{1}",BaseUrl,userId),HttpMethod.Get ,options, cancellationToken);
         }
 
         public async Task<Shipment> GetAsync(string shipmentId , CancellationToken cancellationToken = default)

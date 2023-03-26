@@ -3,14 +3,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-
 namespace MicroStore.Client.PublicWeb.Controllers
-{
-    
+{  
     public class AuthenticationController : Controller
     {
-        
-   
         public async Task Login( string? returnUrl )
         {
 

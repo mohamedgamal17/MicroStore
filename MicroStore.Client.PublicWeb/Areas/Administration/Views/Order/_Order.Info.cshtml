@@ -1,0 +1,142 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
+
+<div class="card ">
+
+    <div class="card-body ">
+        <div class="card card-light mb-3 shadow">
+            <div class="card-header border-0">
+                <h1 class="card-title text-md
+                                                text-lg">
+                    Order Info
+                </h1>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus text-lg"></i>
+
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3 clearfix">
+                        <div class="float-right">
+                            <micro-label asp-for="@Model.Id" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text text-lg" style="padding-top: 2px">
+                            @Model.Id
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3 clearfix">
+                        <div class="float-right">
+                            <micro-label asp-for="@Model.OrderNumber" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text text-lg" style="padding-top: 2px">
+                            @Model.OrderNumber
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3 clearfix">
+                        <div class="float-right">
+                            <micro-label asp-for="@Model.UserId" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text text-lg" style="padding-top: 2px">
+                            @Model.UserId
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3 clearfix">
+                        <div class="float-right">
+                            <micro-label asp-for="@Model.TaxCost" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text text-lg" style="padding-top: 2px">
+                            @Model.TaxCost
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3 clearfix">
+                        <div class="float-right">
+                            <micro-label asp-for="@Model.ShippingCost" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text text-lg" style="padding-top: 2px">
+                            @Model.ShippingCost
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3 clearfix">
+                        <div class="float-right">
+                            <micro-label asp-for="@Model.SubTotal" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text text-lg" style="padding-top: 2px">
+                            @Model.SubTotal
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3 clearfix">
+                        <div class="float-right">
+                            <micro-label asp-for="@Model.TotalPrice" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text text-lg" style="padding-top: 2px">
+                            @Model.TotalPrice
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3 clearfix">
+                        <div class="float-right">
+                            <micro-label asp-for="@Model.CurrentState" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text text-lg" style="padding-top: 2px">
+                            @Model.CurrentState
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

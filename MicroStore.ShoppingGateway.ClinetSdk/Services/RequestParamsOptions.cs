@@ -23,8 +23,8 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services
     [Serializable]
     public class PagingReqeustOptions : IQueryRequestOptions
     {
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int Skip { get; set; } = 0;
+        public int Lenght { get; set; } = 10;
     }
 
 

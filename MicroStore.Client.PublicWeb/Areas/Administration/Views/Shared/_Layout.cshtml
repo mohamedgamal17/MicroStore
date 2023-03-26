@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - MicroStore.Client.PublicWeb</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" type="text/css">
+
+    <link href="~/lib/summernote/summernote.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel=" stylesheet" href="~/lib//select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/admin-lte/css/adminlte.min.css" type="text/css"/>
+    <link rel="stylesheet" href="~/lib/datatables/css/jquery.dataTables.min.css" />
+
+</head>
+
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="wrapper">
+        @{ await Html.RenderPartialAsync("_Header"); }
+        @{
+            await Html.RenderPartialAsync("_Sidebar");
+        }
+        @RenderBody();
+    </div>
+
+    
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/Chart.js/Chart.min.js"></script>
+    <script src="~/lib/summernote/summernote.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/admin-lte/js/adminlte.js"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"> </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+    
+       $(document).ready(function(){
+
+            var q = $("#app");
+            
+           
+       });
+
+    </script>
+</body>
+
+</html>

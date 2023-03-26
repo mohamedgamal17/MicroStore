@@ -1,0 +1,58 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
+@{
+}
+<div class="content-wrapper mr-2">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">
+                        View order details - @Model.Id
+                    </h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+
+                        @if (Model.CurrentState == OrderState.Approved)
+                        {
+                            <li class="breadcrumb-item">
+
+                                <form asp-page-handler="CreateOrderShipment" method="post" asp-route-orderId="@Model.Id">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button class="btn btn-info" type="submit">
+                                        <i class="fas
+                                fa-plus-square mr-1"></i> Create Order Shipment
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <div class="content">
+        <div class="container-fluid">
+
+            <div class="cards clearfix">
+                <partial name="_Order.Info"  model="Model" / >
+
+                <partial name="_Order.Addresses" model="Model" />
+
+                <partial name="Grids/_Grids.OrderItems" model=" Model" />
+
+                <partial name="_Order.Payment" model=" Model" />
+
+                <partial name="_Order.Shipment" model=" Model" />
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -5,6 +5,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping
     public class Shipment : BaseEntity<string>
     {
         public string OrderId { get; set; }
+        public string OrderNumber { get; set; }
         public string UserId { get; set; }
         public Address Address { get; set; }
         public string ShipmentExternalId { get; set; }

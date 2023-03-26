@@ -1,0 +1,46 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentListModel
+@{
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Shipments</h1>
+                </div><!-- /.col -->
+            </div>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <partial name="Grids/_Grid.Shipments" model="Model" />
+        </div>
+    </section>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function(){
+            $("#shipments-grid").DataTable({
+                ajax : {
+                    url:"",
+                    type:"POST"
+                },
+
+                processing : "processing",
+
+                columns:[
+                    {data : "orderId",  name: '@(Html.DisplayNameFor(x=> x.Data.First().OrderId))'},
+                    {data : "orderNumber",  name: '@(Html.DisplayNameFor(x=> x.Data.First().OrderNumber))'},
+                    {data : "userId",  name: '@(Html.DisplayNameFor(x=> x.Data.First().UserId))'},
+                    { data: "status", name: '@(Html.DisplayNameFor(x => x.Data.First().Status))' },
+                    {mRender : function(data, type, raw){
+                        return `<a href="Shipment/Detail/${raw.id}">View</a>`
+                    }}
+                ]
+            })
+
+        });
+     </script>
+}

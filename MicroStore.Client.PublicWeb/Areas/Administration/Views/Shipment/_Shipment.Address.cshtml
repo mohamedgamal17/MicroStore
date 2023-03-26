@@ -1,0 +1,81 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentAggregateVM
+<div class="card card-light shadow mt-3">
+    <div class="card-header border-0">
+        <h1 class="card-title text-md  text-lg font-weight-bold">
+
+            Shipping Address
+        </h1>
+        <div class="card-tools">
+            <button type="button" class="btn  btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus text-lg"></i>
+
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover text-lg  table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        Billing
+                        Address
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.Address.Name)
+                    </td>
+                    <td>
+                        @Model.Address.Name
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.Address.Phone)
+                    </td>
+                    <td>
+                        @Model.Address.Phone
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.Address.Country.Name)
+                    </td>
+                    <td>
+                        @Model.Address.Country.Name
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.Address.State.Name)
+                    </td>
+                    <td>
+                        @Model.Address.State.Name
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.Address.AddressLine1)
+                    </td>
+                    <td>
+                        @Model.Address.AddressLine1
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.Address.AddressLine2)
+                    </td>
+                    <td>
+                        @Model.Address.AddressLine2
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

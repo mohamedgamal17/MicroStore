@@ -1,10 +1,13 @@
-﻿using System.ComponentModel;
-using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Common;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using MicroStore.Client.PublicWeb.Areas.Administration.Models.Common;
+using System.ComponentModel;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products
 {
     public class ProductModel
     {
+        public string? Id { get; set; }
+
         [DisplayName("Product Name")]
         public string Name { get; set; }
 
@@ -16,8 +19,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
         [DisplayName("Product Short Description")]
         public string ShortDescription { get; set; }
 
-
         [DisplayName("Product Long Description")]
+      
         public string LongDescription { get; set; }
 
         [DisplayName("Is Featured")]
@@ -28,9 +31,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
 
         [DisplayName("Product Old Price")]
         public double OldPrice { get; set; }
-
+       
         public WeightModel? Weight { get; set; }
-        public DimensionModel? Dimension { get; set; }
+        public DimensionModel? Dimensions { get; set; }
     }
 
 }

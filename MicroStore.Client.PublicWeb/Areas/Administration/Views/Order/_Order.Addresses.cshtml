@@ -1,0 +1,30 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
+<div class="card card-light shadow mt-3">
+    <div class="card-header border-0">
+        <h1 class="card-title text-md  text-lg font-weight-bold">
+            Billing & Shiping
+        </h1>
+        <div class="card-tools">
+            <button type="button" class="btn  btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus text-lg"></i>
+
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <partial name="_Order.Billing" model="Model" />
+            </div>
+
+
+            <div class="col-md-6">
+                <partial name="_Order.Shipping" model="Model" />
+
+            </div>
+        </div>
+    </div>
+</div>
