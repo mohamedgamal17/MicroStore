@@ -4,6 +4,7 @@ using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Application.Products;
@@ -76,8 +77,18 @@ namespace MicroStore.Catalog.Api.Controllers
             return result.ToOk();
         }
 
+        [Route("{productId}/productimages")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<ProductImageDto>>))]
+        public async Task<IActionResult> GetProductImagesAsync(string productId)
+        {
+            var result = await _productQueryService.ListProductImagesAsync(productId);
 
-        [Route("{productId}/productimage")]
+            return result.ToOk();
+        }
+
+
+        [Route("{productId}/productimages")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         public async Task<IActionResult> AddProductImage (string productId, [FromBody] CreateProductImageModel model)
@@ -89,7 +100,7 @@ namespace MicroStore.Catalog.Api.Controllers
         }
 
 
-        [Route("{productId}/productimage/{productImageId}")]
+        [Route("{productId}/productimages/{productImageId}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         public async Task<IActionResult> UpdateProductImage(string productId, string productImageId,[FromBody] UpdateProductImageModel model)
@@ -98,7 +109,7 @@ namespace MicroStore.Catalog.Api.Controllers
             return result.ToOk();
         }
 
-        [Route("{productId}/productimage/{productImageId}")]
+        [Route("{productId}/productimages/{productImageId}")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         public async Task<IActionResult> DeleteProductImage(string productId, string productImageId)

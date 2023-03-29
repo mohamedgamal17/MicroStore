@@ -4,7 +4,10 @@ namespace MicroStore.Catalog.Application.Dtos
 {
     public class ProductImageDto : EntityDto<string>
     {
+        public string ProductId { get; set; }
+
         public string Image { get; set; }
+
         public int DisplayOrder { get; set; }
     }
 }

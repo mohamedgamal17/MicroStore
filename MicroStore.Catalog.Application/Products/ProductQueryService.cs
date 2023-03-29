@@ -54,6 +54,23 @@ namespace MicroStore.Catalog.Application.Products
             return pagingResult;
         }
 
+        public async Task<Result<List<ProductImageDto>>> ListProductImagesAsync(string productid, CancellationToken cancellationToken = default)
+        {
+            var isProductExist = await _catalogDbContext.Products.AnyAsync(x => x.Id == productid, cancellationToken);
+
+            if (!isProductExist)
+            {
+                return new Result<List<ProductImageDto>>(new EntityNotFoundException(typeof(Product), productid));
+            }
+
+
+            var result = await _catalogDbContext.Products.Where(x => x.Id == productid).SelectMany(x => x.ProductImages)
+                .ProjectTo<ProductImageDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return result;
+        }
+
         public IQueryable<ProductDto> TryToSort(IQueryable<ProductDto> query, string sortBy, bool desc = false)
         {
             return sortBy.ToLower() switch

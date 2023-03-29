@@ -7,7 +7,9 @@ namespace MicroStore.Catalog.Application.Products
     public interface IProductQueryService
     {
         Task<Result<PagedResult<ProductDto>>> ListAsync(PagingAndSortingQueryParams queryParams,CancellationToken cancellationToken = default);
+        Task<Result<List<ProductImageDto>>> ListProductImagesAsync(string productid, CancellationToken cancellationToken = default);
         Task<Result<ProductDto>> GetAsync(string id , CancellationToken cancellationToken = default );
+
     }
 
 

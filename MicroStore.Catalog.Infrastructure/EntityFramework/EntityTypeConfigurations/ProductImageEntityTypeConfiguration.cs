@@ -11,9 +11,14 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.Id).HasMaxLength(256);
 
+            builder.Property(x => x.ProductId).HasMaxLength(256);
+
             builder.Property(x => x.ImagePath).IsRequired().HasMaxLength(600);
 
             builder.Property(x => x.DisplayOrder).IsRequired();
+
+            builder.HasOne<Product>().WithMany(x => x.ProductImages)
+                .HasForeignKey(x => x.ProductId);
         }
     }
 }

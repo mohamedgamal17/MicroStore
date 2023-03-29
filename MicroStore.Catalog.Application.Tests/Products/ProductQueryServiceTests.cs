@@ -2,6 +2,8 @@
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Catalog.Application.Products;
 using System.Net;
+using Volo.Abp.Domain.Entities;
+
 namespace MicroStore.Catalog.Application.Tests.Products
 {
     public class ProductQueryServiceTests : BaseTestFixture
@@ -44,6 +46,28 @@ namespace MicroStore.Catalog.Application.Tests.Products
             var response = await _productQueryService.GetAsync(Guid.NewGuid().ToString());
 
             response.IsFailure.Should().BeTrue();
+
+        }
+
+        [Test]
+        public async Task Should_get_product_images()
+        {
+            string productId = "94174b5b-25a8-4c29-9364-3482e9356231";
+
+            var result = await _productQueryService.ListProductImagesAsync(productId);
+
+            result.IsSuccess.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task Should_return_failure_result_while_getting_product_images_when_product_id_is_not_exist()
+        {
+            var productId = Guid.NewGuid().ToString();
+
+            var result = await _productQueryService.ListProductImagesAsync(productId);
+
+            result.IsFailure.Should().BeTrue();
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
 
         }
 
