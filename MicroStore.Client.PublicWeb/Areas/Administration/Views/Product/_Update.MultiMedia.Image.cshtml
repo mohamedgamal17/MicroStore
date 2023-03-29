@@ -1,0 +1,115 @@
+﻿@model dynamic
+<div>
+    <button type="button" id="edit-product-image-btn-@(Model.ProductImageId)" data-bs-toggle="modal" data-bs-target="#edit-product-image-modal-@(Model.ProductImageId)" class="btn btn-warning">
+        Edit
+    </button>
+
+    <div class="modal fade" id="edit-product-image-modal-@(Model.ProductImageId)" aria-hidden="true" aria-labelledby="edit-product-image-btn-@(Model.ProductImageId)" tabindex="-100">
+
+        <div class="modal-dialog modal modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Product Image</h5>
+                    <button type="button" class="close" data-bs-target="#edit-product-image-modal-${row.id}" data-bs-toggle="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+
+                <div class="modal-body">
+
+                    <form asp-action="UpdateProductImage" asp-route-id="@Model.ProductId">
+                        <input type="Hidden" name="ProductImageId" value="@Model.ProductImagedId">
+                        <div class="form-group row mb-3">
+                            <div class="col-md-4 float-sm-left float-md-right">
+                                <label>
+                                    <label for="DisplayOrder">DisplayOrder</label>
+                                    "<div class='d-inline'> <i class='fas fa-question-circle text-lightblue '></i> </div>
+                                </label>
+                            </div>
+
+                            <div class="col-md-8">
+                                <input name="DisplayOrder" value="@Model.DisplayOrder" type="number" class="form-control" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-bs-target="#edit-product-image-modal-${row.id}"
+                            data-bs-toggle="modal">
+                        Update
+                    </button>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.UpdateProductImageModel
+@{
+    var product = (ProductVM)ViewBag.Product;
+}
+
+
+
+<div>
+    <button type="button" id="edit-product-image-btn-${row.id}" data-bs-toggle="modal" data-bs-target="#edit-product-image-modal-${row.id}" class="btn btn-warning">
+        Edit
+    </button>
+
+    <div class="modal fade" id="edit-product-image-modal-${row.id}" aria-hidden="true" aria-labelledby="edit-product-image-btn-${row.id}" tabindex="-100">
+
+        <div class="modal-dialog modal modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Product Image</h5>
+                    <button type="button" class="close" data-bs-target="#edit-product-image-modal-${row.id}" data-bs-toggle="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+
+                <div class="modal-body">
+
+                    <form asp-action="UpdateProductImage" asp-route-id="@product.Id">
+                        <input type="Hidden" asp-for="@Model.ProductImageId">
+                        <div class="form-group row mb-3">
+                            <div class="col-md-4 float-sm-left float-md-right">
+                                <micro-label asp-for="@Model.DisplayOrder"></micro-label>
+                            </div>
+
+                            <div class="col-md-8">
+                                <input asp-for="@Model.DisplayOrder"  value="@Model.DisplayOrderConverison" type="number" class="form-control" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-bs-target="#edit-product-image-modal-${row.id}"
+                            data-bs-toggle="modal">
+                        Update
+                    </button>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+*@

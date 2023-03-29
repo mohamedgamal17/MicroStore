@@ -55,7 +55,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Cart
                 LongDescription = product.LongDescription,
                 Name = product.Name,
                 Sku = product.Sku,
-                Thumbnail= product.ProductImages.FirstOrDefault()?.ImagePath,
+                Thumbnail= product.ProductImages.FirstOrDefault()?.Image,
                 Price = product.Price,
                 Weight = product.Weight,
                 Dimensions = product.Dimensions

@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products;
 using MicroStore.Client.PublicWeb.Extensions;
-using MicroStore.ShoppingGateway.ClinetSdk.Entities;
+using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
+using System;
 using System.Net;
+using Volo.Abp.BlobStoring;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
@@ -19,11 +21,14 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         private readonly CategoryService _categoryService;
 
         private readonly ILogger<ProductController> _logger;
-        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger)
+
+        private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
+        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IBlobContainer<MultiMediaBlobContainer> blobContainer)
         {
             _productService = productService;
             _categoryService = categoryService;
             _logger = logger;
+            _blobContainer = blobContainer;
         }
 
         public async Task<IActionResult> Index()
@@ -88,6 +93,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             var model = ObjectMapper.Map<Product, ProductModel>(product);
 
+            ViewBag.Product = ObjectMapper.Map<Product, ProductVM>(product);
+
             ViewBag.Categories = await BuildCategoriesSelecetListItems();
 
             return View(model);
@@ -96,11 +103,15 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ProductModel model)
         {
+
+
             if (!ModelState.IsValid)
             {
+                var product = await _productService.GetAsync(model.Id);
+
                 ViewBag.Categories = await BuildCategoriesSelecetListItems();
-                _logger.LogInformation("Model : {Model}", model);
-                _logger.LogInformation("Long description {LongDescription}", model.LongDescription);
+
+                ViewBag.Product = ObjectMapper.Map<Product, ProductVM>(product);
 
                 return View(model);
             }
@@ -124,6 +135,80 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ListProductImages(string id, ListProductImagesModel model) 
+        {
+            var productImages = await _productService.ListProductImageAsync(id);
+
+            var result = ObjectMapper.Map<List<ProductImage>, List<ProductImageVM>>(productImages);
+
+            model.Data = result;
+
+            return Json(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProductImage(string id, CreateProductImageModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(model.Image.FileName));
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await model.Image.CopyToAsync(memoryStream);
+
+                await _blobContainer.SaveAsync(imageName, memoryStream.ToArray());
+            }
+
+            var requestOptions = new ProductImageRequestCreateOptions
+            {
+                Image = HttpContext.GenerateFileLink(imageName),
+                DisplayOrder = model.DisplayOrder
+            };
+
+            var result=  await _productService.CreateProductImageAsync(id, requestOptions);
+
+            return Json(ObjectMapper.Map<Product, ProductVM>(result));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProductImage(string id, UpdateProductImageModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var requestOptions = new ProductImageRequestUpdateOptions
+            {
+                DisplayOrder = model.DisplayOrder
+            };
+
+            var result = await _productService.UpdateProductImageAsync(id, model.ProductImageId, requestOptions);
+
+            return Json(ObjectMapper.Map<Product, ProductVM>(result));
+
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveProductImage(string id, RemoveProductImageModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _productService.DeleteProductImageAsync(id, model.ProductImageId);
+
+            return Json(ObjectMapper.Map<Product, ProductVM>(result));
+
+        }
 
         private async Task<List<SelectListItem>> BuildCategoriesSelecetListItems(string[]? categoriesIds = null)
         {

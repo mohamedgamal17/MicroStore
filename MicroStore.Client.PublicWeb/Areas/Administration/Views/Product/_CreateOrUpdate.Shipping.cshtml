@@ -21,7 +21,6 @@
                 <div class="input-group">
                     <input asp-for="@Model.Weight.Value" type="number" class="form-control" placeholder="Value" />
                     <select asp-for="@Model.Weight.Unit" asp-items="@(Html.GetEnumSelectList<WeightUnit>())" class="form-control"></select>
-
                     <span asp-validation-for="@Model.Weight.Value" class="invalid-feedback"></span>
                     <span asp-validation-for="@Model.Weight.Unit" class="invalid-feedback"></span>
                     <span asp-validation-for="@Model.Weight" class="invalid-feedback"></span>

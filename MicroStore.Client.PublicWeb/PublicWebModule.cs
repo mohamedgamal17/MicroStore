@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Configuration;
 using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using Newtonsoft.Json.Converters;
@@ -9,9 +10,12 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
+using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Modularity;
 
 namespace MicroStore.Client.PublicWeb
@@ -19,7 +23,10 @@ namespace MicroStore.Client.PublicWeb
     [DependsOn(typeof(AbpAutoMapperModule),
         typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpAspNetCoreMvcModule))]
+        typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpBlobStoringModule),
+        typeof(AbpBlobStoringMinioModule),
+        typeof(AbpAspNetCoreMvcUiModule))]
     public class PublicWebModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -40,7 +47,11 @@ namespace MicroStore.Client.PublicWeb
             {
                 opt.AutoValidate = false;
             });
+
             ConfigureAutoMapper();
+
+
+            ConfigureMinioStorage(configuration);
 
             context.Services.AddRazorPages()
              .AddRazorPagesOptions(opt =>
@@ -144,5 +155,25 @@ namespace MicroStore.Client.PublicWeb
 
 
         private void ConfigureAutoMapper() => Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<PublicWebModule>());
+
+
+        private void ConfigureMinioStorage(IConfiguration config)
+        {
+            Configure<AbpBlobStoringOptions>(opt =>
+            {
+                opt.Containers.ConfigureDefault(container =>
+                {
+                    container.UseMinio(minio =>
+                    {
+                        minio.EndPoint = config.GetValue<string>("Minio:EndPoint");
+                        minio.AccessKey = config.GetValue<string>("Minio:AccessKey");
+                        minio.SecretKey = config.GetValue<string>("Minio:SecretKey");
+                        minio.BucketName = config.GetValue<string>("Minio:BucketName");
+                        minio.WithSSL = config.GetValue<bool>("Minio:WithSSL");
+                        minio.CreateBucketIfNotExists = true;
+                    });
+                });
+            });
+        }
     }
 }

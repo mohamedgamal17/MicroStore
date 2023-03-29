@@ -7,7 +7,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
         public string  Id { get; set; }
 
         [DisplayName("Product Image")]
-        public string ImagePath { get; set; }
+        public string Image { get; set; }
 
         [DisplayName("Display Order")]
         public int DisplayOrder { get; set; }

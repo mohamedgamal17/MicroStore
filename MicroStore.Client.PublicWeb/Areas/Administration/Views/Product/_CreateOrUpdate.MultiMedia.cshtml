@@ -1,0 +1,21 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductVM 
+
+@{
+    var createProductImageModel = new CreateProductImageModel();
+
+    ViewBag.ProductId = Model.Id;
+}
+<div class="card clearfixt">
+    <div class="card-header">
+        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> Multi Media</p>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <partial name="_Create.MultiMedia.Image" model="new CreateProductImageModel()" />
+        <partial name="Grids/_Grids.Product.ProductImages" model="Model" />
+    </div>
+</div>

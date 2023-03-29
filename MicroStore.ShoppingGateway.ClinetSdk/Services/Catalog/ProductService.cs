@@ -40,13 +40,17 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
             return await _clinet.MakeRequest<Product>(string.Format(BASE_URL_WITH_ID , productId), HttpMethod.Put, options, cancellationToken);
         }
 
+        public async Task<List<ProductImage>> ListProductImageAsync(string productId , CancellationToken cancellationToken = default)
+        {
+            return await _clinet.MakeRequest<List<ProductImage>>(string.Format(PRODUCT_IMAGE_URL_WITHOUT_ID, productId), HttpMethod.Get, cancellationToken);
+        }
 
-        public async Task<Product> CreateProductImageAsync(string productId, ProductImageCreateOptions options, CancellationToken cancellationToken = default)
+        public async Task<Product> CreateProductImageAsync(string productId, ProductImageRequestCreateOptions options, CancellationToken cancellationToken = default)
         {
             return await _clinet.MakeRequest<Product>(string.Format(PRODUCT_IMAGE_URL_WITHOUT_ID, productId), HttpMethod.Post, options, cancellationToken);
         }
 
-        public async Task<Product> UpdateProductImageAsync(string productId, string productImageId, ProductImageUpdateOptions options , CancellationToken  cancellationToken = default)
+        public async Task<Product> UpdateProductImageAsync(string productId, string productImageId, ProductImageRequestUpdateOptions options , CancellationToken  cancellationToken = default)
         {
             return await _clinet.MakeRequest<Product>(string.Format(PRODUCT_IMAGE_URL_WITH_ID,productId,productImageId),HttpMethod.Put, options, cancellationToken);
         }
