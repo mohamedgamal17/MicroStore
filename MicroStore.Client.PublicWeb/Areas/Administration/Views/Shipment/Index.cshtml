@@ -1,5 +1,7 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentListModel
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentListModel
 @{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ShipmentMenus.Index);
 }
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->

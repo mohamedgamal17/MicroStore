@@ -1,4 +1,10 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories.CategoryListModel
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories.CategoryListModel
+
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.CategoryMenus.Index);
+
+}
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -10,7 +16,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a asp-action="Create"  class="btn btn-info">
+                            <a asp-action="Create" class="btn btn-info">
                                 <i class="fas fa-plus-square mr-1"></i>
                                 Create Category
                             </a>
@@ -24,35 +30,33 @@
 
     <section class="content">
         <div class="container-fluid">
-            @{
-                Html.RenderPartialAsync("Grids/_Grid.Categories", Model);
-            }
+            <partial name="Grids/_Grid.Categories" model="Model" />
         </div>
     </section>
 </div>
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-            $('#categories-grid').DataTable({
-                ajax: {
-                    type: "post"
-                },
-                type: "POST",
-                processing: true,
-                serverSide: true,
-                filter: true,
+<script>
+    $(document).ready(function () {
+        $('#categories-grid').DataTable({
+            ajax: {
+                type: "post"
+            },
+            type: "POST",
+            processing: true,
+            serverSide: true,
+            filter: true,
 
-                columns: [
-                    { data: "name", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Name))' },
-                    { data: "description", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Description))' },
-                    {
-                        mRender: function (data, type, row) {
-                            return `<a  href="Category/Edit/${row.id}" asp-rout-id="${row.id}" class="btn btn-info" >Edit</a>`
-                        }
+            columns: [
+                { data: "name", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Name))' },
+                { data: "description", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Description))' },
+                {
+                    mRender: function (data, type, row) {
+                        return `<a  href="Category/Edit/${row.id}" asp-rout-id="${row.id}" class="btn btn-info" >Edit</a>`
                     }
-                ],
-            })
-        });
-    </script>
+                }
+            ],
+        })
+    });
+</script>
 }

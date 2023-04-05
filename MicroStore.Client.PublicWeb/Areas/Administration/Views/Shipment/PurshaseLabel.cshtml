@@ -1,4 +1,5 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
+@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
 @using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 @model MicroStore.Client.PublicWeb.Areas.Administration.Controllers.PurshaseLabelModel
 
@@ -7,6 +8,9 @@
     var order = ViewBag.Order as OrderVM;
 
     var shipmentRates = ViewBag.ShipmentRates as List<ShipmentRate>;
+
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ShipmentMenus.Label);
+
 }
 
 <div class="content-wrapper mr-2">

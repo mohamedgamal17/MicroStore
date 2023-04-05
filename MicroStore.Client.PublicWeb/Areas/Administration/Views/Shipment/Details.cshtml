@@ -1,5 +1,8 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentAggregateVM
-
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentAggregateVM
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ShipmentMenus.View);
+}
 <div class="content-wrapper mr-2">
     <div class="content-header clearfix p-3">
         <div class=" float-left">

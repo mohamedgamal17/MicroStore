@@ -1,11 +1,18 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductListModel
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductListModel
+
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ProductMenus.Index);
+}
+
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Dashboard v3</h1>
+                    <h1 class="m-0">Dashboard v3 </h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">

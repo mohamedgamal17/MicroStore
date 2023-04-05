@@ -1,6 +1,10 @@
-﻿@using MicroStore.ShoppingGateway.ClinetSdk.Common;
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@using MicroStore.ShoppingGateway.ClinetSdk.Common;
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductModel
 
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ProductMenus.Create);
+}
 
 <div class="content-wrapper mr-2">
     <!-- Content Header (Page header) -->

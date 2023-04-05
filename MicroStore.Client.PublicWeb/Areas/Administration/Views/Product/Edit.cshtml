@@ -1,8 +1,11 @@
-﻿@using MicroStore.ShoppingGateway.ClinetSdk.Common;
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@using MicroStore.ShoppingGateway.ClinetSdk.Common;
 @using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products
 @model ProductModel
 
 @{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ProductMenus.Edit);
+
     var product = ViewBag.Product;
 
     var updateProductImageModel = new UpdateProductImageModel();

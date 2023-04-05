@@ -1,5 +1,9 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories.CategoryModel
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories.CategoryModel
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.CategoryMenus.Create);
 
+}
 <div class="content-wrapper mr-2">
     <!-- Content Header (Page header) -->
     <form method="post" asp-action="Create">
@@ -29,7 +33,7 @@
             <div class="container-fluid">
 
                 @{
-                    await Html.RenderPartialAsync("_CreateOrUpdate.Info", Model); 
+                    await Html.RenderPartialAsync("_CreateOrUpdate.Info", Model);
                 }
 
             </div>

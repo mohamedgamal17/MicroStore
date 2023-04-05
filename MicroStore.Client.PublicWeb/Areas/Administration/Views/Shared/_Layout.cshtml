@@ -17,14 +17,17 @@
 
 </head>
 
-
 <body class="hold-transition skin-blue sidebar-mini">
 
     <div class="wrapper">
-        @{ await Html.RenderPartialAsync("_Header"); }
         @{
-            await Html.RenderPartialAsync("_Sidebar");
+            await Html.RenderPartialAsync("_Header");
         }
+
+
+        
+        @await Component.InvokeAsync("Sidebar");
+
         @RenderBody();
     </div>
 
@@ -47,6 +50,8 @@
             
            
        });
+
+      
 
     </script>
 </body>

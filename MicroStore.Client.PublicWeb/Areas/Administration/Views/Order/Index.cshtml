@@ -1,5 +1,9 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderListModel
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderListModel
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.OrderMenus.Index);
 
+}
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -21,28 +25,28 @@
 </div>
 @section Scripts{
 
-    <script>
-        $(document).ready(function () {
+<script>
+    $(document).ready(function () {
 
-            $("#orders-grid").DataTable({
-                ajax: {
-                    url: "",
-                    type: "POST"
+        $("#orders-grid").DataTable({
+            ajax: {
+                url: "",
+                type: "POST"
+            },
+
+
+            columns: [
+                { data: "orderNumber", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().OrderNumber))" },
+                        { data: "currentState", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().CurrentState))" },
+                        { data: "totalPrice", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().TotalPrice))" },
+                {
+                    mRender: function (data, type, row) {
+                        return `<a href="Order/Detail/${row.id}">`
+                    }
                 },
+            ]
+        })
 
-
-                columns: [
-                    { data: "orderNumber", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().OrderNumber))" },
-                            { data: "currentState", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().CurrentState))" },
-                            { data: "totalPrice", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().TotalPrice))" },
-                    {
-                        mRender: function (data, type, row) {
-                            return `<a href="Order/Detail/${row.id}">`
-                        }
-                    },
-                ]
-            })
-
-        });
-    </script>
+    });
+</script>
 }

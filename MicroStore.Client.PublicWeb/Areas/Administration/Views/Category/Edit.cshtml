@@ -1,5 +1,8 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories.CategoryModel
-
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories.CategoryModel
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.CategoryMenus.Edit);
+}
 <div class="content-wrapper mr-2">
     <!-- Content Header (Page header) -->
     <form method="post" asp-action="Edit" >
@@ -31,7 +34,6 @@
                  @{
                     await Html.RenderPartialAsync("_CreateOrUpdate.Info", Model); 
                 }
-
 
             </div>
         </div>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Configuration;
 using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Infrastructure;
+using MicroStore.Client.PublicWeb.Menus;
 using Newtonsoft.Json.Converters;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
@@ -17,6 +18,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Modularity;
+using Volo.Abp.UI.Navigation;
 
 namespace MicroStore.Client.PublicWeb
 {
@@ -76,7 +78,13 @@ namespace MicroStore.Client.PublicWeb
 
             context.Services.AddMicroStoreClinet()
                 .AddUserAccessTokenHandler();
+            Configure<AbpNavigationOptions>(opt =>
+            {
+                opt.MainMenuNames.Add(ApplicationMenusDefaults.BackEnd);
+                opt.MenuContributors.Add(new BackEndMenusContributor());
+            });
         }
+
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
