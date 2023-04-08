@@ -10,6 +10,7 @@ using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/categories")]
+    [ApiController]
     public class CategoryController : MicroStoreApiController
     {
         private readonly ICategoryQueryService _categoryQueryService;
@@ -25,7 +26,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<CategoryDto>)))]
-        public async Task<IActionResult> GetCatalogCategoryList(SortingParamsQueryString @params)
+        public async Task<IActionResult> GetCatalogCategoryList([FromQuery] SortingParamsQueryString @params)
         {
             var result = await  _categoryQueryService
                 .ListAsync(new SortingQueryParams { SortBy = @params.SortBy, Desc = @params.Desc});

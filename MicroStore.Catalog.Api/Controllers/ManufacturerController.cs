@@ -10,6 +10,8 @@ namespace MicroStore.Catalog.Api.Controllers
 {
 
     [Route("api/manufacturers")]
+    [ApiController]
+
     public class ManufacturerController : MicroStoreApiController
     {
         private readonly IManufacturerCommandService _manufacturerCommandService;
@@ -25,7 +27,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<ManufacturerDto>)))]
-        public async Task<IActionResult> GetManufacturerList(SortingParamsQueryString @params)
+        public async Task<IActionResult> GetManufacturerList([FromQuery] SortingParamsQueryString @params)
         {
             var result = await _manufacturerQueryService
                 .ListAsync(new SortingQueryParams { SortBy = @params.SortBy, Desc = @params.Desc });
@@ -51,7 +53,7 @@ namespace MicroStore.Catalog.Api.Controllers
         {
             var result = await _manufacturerCommandService.CreateAsync(model);
 
-            return result.ToCreatedAtAction("GetManufacturerList", new { id = result.Value.Id });
+            return result.ToCreatedAtAction("GetManufacturerList", new { id = result.Value?.Id });
         }
 
         [Route("{id}")]
