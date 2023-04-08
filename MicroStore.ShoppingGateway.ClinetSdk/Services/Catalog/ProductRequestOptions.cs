@@ -13,6 +13,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         public Weight Weight { get; set; }
         public Dimension Dimensions { get; set; }
         public string[] CategoriesIds { get; set; }
+        public string[] ManufacturersIds { get; set; }
     } 
 
 
