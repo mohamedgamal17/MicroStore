@@ -6,7 +6,6 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Manufacturers;
 using MicroStore.Catalog.Application.Models;
-
 namespace MicroStore.Catalog.Api.Controllers
 {
 
@@ -31,7 +30,7 @@ namespace MicroStore.Catalog.Api.Controllers
             var result = await _manufacturerQueryService
                 .ListAsync(new SortingQueryParams { SortBy = @params.SortBy, Desc = @params.Desc });
 
-            return Ok(result);
+            return result.ToOk();
         }
 
         [Route("{id}")]
