@@ -18,7 +18,8 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.HasOne(x => x.Manufacturer).WithMany().HasForeignKey(x => x.ManufacturerId);
 
-            builder.HasOne<Product>().WithMany().HasForeignKey(x => x.ProductId);
+            builder.HasIndex(x => x.ProductId);
+            builder.HasIndex(x => x.ManufacturerId);
         }
     }
 }

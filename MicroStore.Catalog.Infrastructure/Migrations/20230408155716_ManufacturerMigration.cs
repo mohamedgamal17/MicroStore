@@ -29,7 +29,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true, defaultValue: "")
                 },
                 constraints: table =>
                 {
@@ -42,8 +42,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     ProductId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    ManufacturerId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    ProductId1 = table.Column<string>(type: "nvarchar(256)", nullable: true)
+                    ManufacturerId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,11 +59,6 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductManufacturer_Products_ProductId1",
-                        column: x => x.ProductId1,
-                        principalTable: "Products",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -76,11 +70,6 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                 name: "IX_ProductManufacturer_ProductId",
                 table: "ProductManufacturer",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductManufacturer_ProductId1",
-                table: "ProductManufacturer",
-                column: "ProductId1");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ProductImage_Products_ProductId",

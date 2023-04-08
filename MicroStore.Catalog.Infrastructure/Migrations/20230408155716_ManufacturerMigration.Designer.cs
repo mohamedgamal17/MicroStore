@@ -12,7 +12,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20230408134234_ManufacturerMigration")]
+    [Migration("20230408155716_ManufacturerMigration")]
     partial class ManufacturerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,9 +56,10 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -183,16 +184,11 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("ProductId1")
-                        .HasColumnType("nvarchar(256)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ManufacturerId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("ProductManufacturer");
                 });
@@ -301,14 +297,10 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("MicroStore.Catalog.Domain.Entities.Product", null)
-                        .WithMany()
+                        .WithMany("ProductManufacturers")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("MicroStore.Catalog.Domain.Entities.Product", null)
-                        .WithMany("ProductManufacturers")
-                        .HasForeignKey("ProductId1");
 
                     b.Navigation("Manufacturer");
                 });
