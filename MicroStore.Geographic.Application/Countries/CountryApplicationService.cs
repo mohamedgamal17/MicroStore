@@ -44,7 +44,7 @@ namespace MicroStore.Geographic.Application.Countries
                 return  new Result<CountryDto>(new EntityNotFoundException(typeof(CountryDto), countryId)) ;
             }
 
-            var validationResult = await ValidateCountry(model, cancellationToken: cancellationToken);
+            var validationResult = await ValidateCountry(model, countryId,cancellationToken: cancellationToken);
 
             if (validationResult.IsFailure)
             {
@@ -118,19 +118,19 @@ namespace MicroStore.Geographic.Application.Countries
                 query = query.Where(x => x.Id != countryId);
             }
 
-            if(await _countryRepository.AnyAsync(x=> x.Name == model.Name))
+            if(await query.AnyAsync(x=> x.Name == model.Name))
             {
-                return new Result<Unit>(new BusinessException($"Country name : {model.Name} is already exist"));
+                return new Result<Unit>(new UserFriendlyException( $"Country name : {model.Name} is already exist"));
             }
 
-            if(await _countryRepository.AnyAsync(x=> x.TwoLetterIsoCode == model.TwoLetterIsoCode))
+            if(await query.AnyAsync(x=> x.TwoLetterIsoCode == model.TwoLetterIsoCode))
             {
-                return new Result<Unit>(new BusinessException($"Country two letter iso code : {model.TwoLetterIsoCode} is already exist"));
+                return new Result<Unit>(new UserFriendlyException($"Country two letter iso code : {model.TwoLetterIsoCode} is already exist"));
             }
 
-            if (await _countryRepository.AnyAsync(x => x.ThreeLetterIsoCode == model.ThreeLetterIsoCode))
+            if (await query.AnyAsync(x => x.ThreeLetterIsoCode == model.ThreeLetterIsoCode))
             {
-                return new Result<Unit>(new BusinessException($"Country three letter iso code : {model.ThreeLetterIsoCode} is already exist"));
+                return new Result<Unit>(new UserFriendlyException(message: $"Country three letter iso code : {model.ThreeLetterIsoCode} is already exist"));
             }
 
             return Unit.Value;

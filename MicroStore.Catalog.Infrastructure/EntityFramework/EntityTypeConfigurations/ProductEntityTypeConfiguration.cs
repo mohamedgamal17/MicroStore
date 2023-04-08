@@ -77,11 +77,15 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.HasMany(x => x.ProductImages).WithOne();
 
+            builder.HasMany(x => x.ProductManufacturers).WithOne();
+
             builder.HasIndex(x => x.Name).IsUnique();
 
             builder.HasIndex(x => x.Sku).IsUnique();
 
             builder.Navigation(x => x.ProductCategories).AutoInclude();
+
+            builder.Navigation(x => x.ProductManufacturers).AutoInclude();
 
             builder.Navigation(x => x.ProductImages).AutoInclude();
 

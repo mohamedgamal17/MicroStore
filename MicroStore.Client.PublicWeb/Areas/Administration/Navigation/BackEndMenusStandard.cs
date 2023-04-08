@@ -45,5 +45,24 @@
 
             public const string Label = "MicroStore.Sales.Shipment.Label";
         }
+
+        public static class Inventory
+        {
+            public class InventoryItemMenus
+            {
+                public const string Index = "MicroStore.Inventory.InventoryItem";
+
+                public const string Create = "MicroStore.Inventory.InventoryItem.Create";
+
+                public const string Edit = "MicroStore.Inventory.InventoryItem.Edit";
+            }
+
+            public class OrderMenus
+            {
+                public const string Index = "MicroStore.Inventory.Order";
+
+                public const string View = "MicroStore.Inventory.View";
+            }
+        }
     }
 }

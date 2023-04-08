@@ -82,7 +82,12 @@ namespace MicroStore.Catalog.Application.Products
                     .ToList();
             }
 
-
+            if(model.ManufacturersIds != null)
+            {
+                product.ProductManufacturers = model.ManufacturersIds
+                    .Select(x => new ProductManufacturer { ManufacturerId = x })
+                    .ToList();
+            }
         }
 
 
@@ -172,12 +177,12 @@ namespace MicroStore.Catalog.Application.Products
 
             if(await query.AnyAsync(x=> x.Name == model.Name))
             {
-                return new Result<Unit>(new BusinessException("Product name is already exist choose another name"));
+                return new Result<Unit>(new UserFriendlyException("Product name is already exist choose another name"));
             }
 
             if(await query.AnyAsync(x=> x.Sku == model.Sku))
             {
-                return  new Result<Unit>(new BusinessException("Product sku is already exist choose another sku"));
+                return  new Result<Unit>(new UserFriendlyException("Product sku is already exist choose another sku"));
             }
 
 

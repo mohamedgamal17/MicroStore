@@ -32,5 +32,11 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
             category.Description.Should().Be(model.Description);
         }
 
+        public static void AssertManufacturerModel(this Manufacturer manufacturer , ManufacturerModel model)
+        {
+            manufacturer.Name.Should().Be(model.Name);
+            manufacturer.Description.Should().Be(model.Description);
+        }
+
     }
 }

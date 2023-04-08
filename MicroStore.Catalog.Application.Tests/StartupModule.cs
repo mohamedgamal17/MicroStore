@@ -53,6 +53,8 @@ namespace MicroStore.Catalog.Application.Tests
                 SeedCategoriesData(dbContext);
 
                 SeedProductsData(dbContext);
+
+                SeedManufacturerData(dbContext);
             }
         }
 
@@ -91,6 +93,22 @@ namespace MicroStore.Catalog.Application.Tests
             }
         }
 
+        private void SeedManufacturerData(CatalogDbContext dbContext)
+        {
+            using (var stream = new StreamReader(@"Dummies\Manufacturers.json"))
+            {
+                var json = stream.ReadToEnd();
+
+                var dummy = JsonConvert.DeserializeObject<JsonWrapper<Manufacturer>>(json, _jsonSerilizerSettings);
+
+                if(dummy != null)
+                {
+                    dbContext.Manufacturers.AddRange(dummy.Data);
+                }
+
+                dbContext.SaveChanges();
+            }
+        }
 
         private void SeedProductsData(CatalogDbContext dbContext)
         {

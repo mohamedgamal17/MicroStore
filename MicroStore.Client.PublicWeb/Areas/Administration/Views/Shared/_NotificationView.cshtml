@@ -1,0 +1,42 @@
+﻿<script>
+    @{
+        string resolveNotifcationType(Notification notification)
+        {
+            if(notification.Type == NotificationType.Error)
+            {
+                return "error";
+            }else if(notification.Type == NotificationType.Success)
+            {
+                return "success";
+            }else if(notification.Type == NotificationType.Warning){
+                return "warning";
+            }
+            else
+            {
+                return "info";
+            }
+        }
+        while (NotificationManager.HasNotification())
+        {
+            var notification = NotificationManager.GetNotification();
+
+            <text>
+                swal.mixin({
+                            toast:true,
+                            position:'top-end',
+                            showConfirmButton:false,
+                            timer : 3000,
+                            timerProgressBar: true,
+                            didOpen : function(toast) {
+                                toast.addEventListener('mouseenter',swal.stopTimer),
+                                toast.addEventListener('mouseleave',swal.resumeTimer)
+                   }
+                }).fire({
+                    icon:"@resolveNotifcationType(notification)",
+                    title:"@notification.Message"
+                })
+            </text>
+        }
+
+    }
+</script>

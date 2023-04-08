@@ -26,7 +26,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsSuccess.Should().BeTrue();
 
-            var product = await Find<Product>(x => x.Id == result.Value.Id);
+            var product = await SingleAsync<Product>(x => x.Id == result.Value.Id);
 
             product.AssertProductModel(model);
 
@@ -43,7 +43,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsSuccess.Should().BeTrue();
 
-            var product = await Find<Product>(x => x.Id == fakeProduct.Id);
+            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
             product.AssertProductModel(model);
 
@@ -75,7 +75,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
             var result = await _productCommandService.AddProductImageAsync(fakeProduct.Id, model);
 
 
-            var product = await Find<Product>(x => x.Id == fakeProduct.Id);
+            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
             var productImage = product.ProductImages.Single(x => x.ImagePath == model.Image);
 
@@ -115,7 +115,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
             var result = await _productCommandService.UpdateProductImageAsync(fakeProduct.Id, productImageId, model);
 
 
-            var product = await Find<Product>(x => x.Id == fakeProduct.Id);
+            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
             var productImage = product.ProductImages.Single(x => x.Id == productImageId);
 
@@ -172,7 +172,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
             var result = await _productCommandService.DeleteProductImageAsync(fakeProduct.Id, productImageId);
 
 
-            var product = await Find<Product>(x => x.Id == fakeProduct.Id);
+            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
             var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
 

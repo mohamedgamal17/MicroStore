@@ -187,14 +187,14 @@ namespace MicroStore.Geographic.Application.StateProvinces
 
             if(states.Any(x=> x.Name == model.Name))
             {
-                return new Result<Unit>(new BusinessException($"State Province with name : {model.Name} is already in exist in country : {country.Name}"));
+                return new Result<Unit>(new UserFriendlyException($"State Province with name : {model.Name} is already in exist in country : {country.Name}"));
 
             }
 
 
             if(states.Any(x=> x.Abbreviation == model.Abbreviation))
             {
-                return new Result<Unit>(new BusinessException($"State Province with abbreviation : {model.Abbreviation} is already in exist in country : {country.Name}"));
+                return new Result<Unit>(new UserFriendlyException($"State Province with abbreviation : {model.Abbreviation} is already in exist in country : {country.Name}"));
             }
 
             return Unit.Value;

@@ -21,7 +21,7 @@ namespace MicroStore.Client.PublicWeb.Menus
                        .AddItem(new ApplicationMenuItem("MicroStore.Catalog.Category", "Manage Categories", icon: "far fa-dot-circle nav-icon", url: "/Administration/Category"))
               ).AddItem(
                      new ApplicationMenuItem("MicroStore.Inventory", "Inventory", icon: "nav-icon fas fa-book", requiredPermissionName: null)
-                           .AddItem(new ApplicationMenuItem("MicroStore.Inventory.Product", "Manage Products", icon: "far fa-dot-circle nav-icon", url: "/Administration/product"))
+                           .AddItem(new ApplicationMenuItem("MicroStore.Inventory.InventoryItem", "Manage Products", icon: "far fa-dot-circle nav-icon", url: "/Administration/inventoryitem"))
                            .AddItem(new ApplicationMenuItem("MicroStore.Inventory.Order", "Manage Orders", icon: "far fa-dot-circle nav-icon", url: "/Administration/product"))
               ).AddItem(
                      new ApplicationMenuItem("MicroStore.Sales", "Sales", icon: "nav-icon fas fa-book", requiredPermissionName: null)

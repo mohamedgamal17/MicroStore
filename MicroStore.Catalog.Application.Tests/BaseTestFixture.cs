@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.TestBase;
 using NUnit.Framework;
@@ -26,45 +27,67 @@ namespace MicroStore.Catalog.Application.Tests
             await StopMassTransit();
         }
 
-        public Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class, IEntity
+        public async Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
-            return WithUnitOfWork((sp) =>
-            {
-                var repository = sp.GetRequiredService<IRepository<TEntity>>();
+            using var dbContext = GetRequiredService<DbContext>();
 
-                return repository.InsertAsync(entity);
-            });
+            await dbContext.Set<TEntity>().AddAsync(entity);
+
+            await dbContext.SaveChangesAsync();
+
+            return entity;
         }
 
-        public Task InsertMany<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, IEntity
+        public async Task<IEnumerable<TEntity>> InsertMany<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, IEntity
         {
-            return WithUnitOfWork((sp) =>
-            {
-                var repository = sp.GetRequiredService<IRepository<TEntity>>();
+            using var dbContext = GetRequiredService<DbContext>();
 
-                return repository.InsertManyAsync(entities);
-            });
+            await dbContext.Set<TEntity>().AddRangeAsync(entities);
+
+            await dbContext.SaveChangesAsync();
+
+            return entities;
         }
 
 
-        public Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class, IEntity
+        public async Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class, IEntity
         {
-            return WithUnitOfWork((sp) =>
-            {
-                var repository = sp.GetRequiredService<IRepository<TEntity>>();
+            using var dbContext = GetRequiredService<DbContext>();
 
-                return repository.UpdateAsync(entity);
-            });
+            dbContext.Set<TEntity>().Update(entity);
+
+            await dbContext.SaveChangesAsync();
+
+            return entity;
+
         }
 
-        public Task<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class, IEntity
+        public async Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class, IEntity
         {
-            return WithUnitOfWork((sp) =>
-            {
-                var repository = sp.GetRequiredService<IRepository<TEntity>>();
+            using var dbContext = GetRequiredService<DbContext>();
 
-                return repository.SingleAsync(expression);
-            });
+           return await dbContext.Set<TEntity>().SingleAsync(expression);
+        }
+
+        public async Task<TEntity?> SingleOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class, IEntity
+        {
+            using var dbContext = GetRequiredService<DbContext>();
+
+            return await dbContext.Set<TEntity>().SingleOrDefaultAsync(expression);
+        }
+
+        public async Task<TEntity> First<TEntity>() where TEntity : class , IEntity
+        {
+            using var dbContext = GetRequiredService<DbContext>();
+
+            return await dbContext.Set<TEntity>().FirstAsync();
+        }
+
+        public async Task<TEntity?> FirstOrDefaut<TEntity>() where TEntity : class, IEntity
+        {
+            using var dbContext = GetRequiredService<DbContext>();
+
+            return await dbContext.Set<TEntity>().FirstOrDefaultAsync();
         }
     }
 }

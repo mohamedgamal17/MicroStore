@@ -20,7 +20,8 @@ namespace MicroStore.Catalog.Application.Mappers
                 .ForMember(x => x.OldPrice, opt => opt.MapFrom(c => c.OldPrice))
                 .ForMember(x => x.Weight, opt => opt.MapFrom(c => c.Weight))
                 .ForMember(x => x.Dimensions, opt => opt.MapFrom(c => c.Dimensions))
-                .ForMember(x => x.ProductCategories, opt => opt.MapFrom(c => c.ProductCategories));
+                .ForMember(x => x.ProductCategories, opt => opt.MapFrom(c => c.ProductCategories))
+                .ForMember(x => x.ProductManufacturers, opt => opt.MapFrom(c => c.ProductManufacturers));
 
 
 
@@ -33,6 +34,10 @@ namespace MicroStore.Catalog.Application.Mappers
                 .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.DisplayOrder, opt => opt.MapFrom(c => c.DisplayOrder))
                 .ForMember(x => x.Image, opt => opt.MapFrom(c => c.ImagePath));
+
+
+            CreateMap<ProductManufacturer, ProductManufacturerDto>()
+                .ForMember(x => x.Manufacturer, opt => opt.MapFrom(c => c.Manufacturer));
 
 
             CreateMap<Dimension, DimensionModel>()

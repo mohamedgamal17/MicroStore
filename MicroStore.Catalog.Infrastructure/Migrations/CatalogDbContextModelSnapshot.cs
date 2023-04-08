@@ -47,6 +47,28 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.Manufacturer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Description")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasDefaultValue("");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Manufacturers");
+                });
+
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.Product", b =>
                 {
                     b.Property<string>("Id")
@@ -133,6 +155,8 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                         .HasColumnType("nvarchar(600)");
 
                     b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
@@ -140,6 +164,36 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImage");
+                });
+
+            modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.ProductManufacturer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ManufacturerId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ProductId1")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManufacturerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductId1");
+
+                    b.ToTable("ProductManufacturer");
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.Product", b =>
@@ -232,7 +286,30 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                 {
                     b.HasOne("MicroStore.Catalog.Domain.Entities.Product", null)
                         .WithMany("ProductImages")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.ProductManufacturer", b =>
+                {
+                    b.HasOne("MicroStore.Catalog.Domain.Entities.Manufacturer", "Manufacturer")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MicroStore.Catalog.Domain.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MicroStore.Catalog.Domain.Entities.Product", null)
+                        .WithMany("ProductManufacturers")
+                        .HasForeignKey("ProductId1");
+
+                    b.Navigation("Manufacturer");
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.Product", b =>
@@ -240,6 +317,8 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                     b.Navigation("ProductCategories");
 
                     b.Navigation("ProductImages");
+
+                    b.Navigation("ProductManufacturers");
                 });
 #pragma warning restore 612, 618
         }

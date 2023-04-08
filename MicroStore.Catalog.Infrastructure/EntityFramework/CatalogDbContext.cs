@@ -9,12 +9,13 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Catalog.Infrastructure.EntityFramework
 {
     [ConnectionStringName("DefaultConnection")]
-    [ExposeServices(typeof(ICatalogDbContext), IncludeSelf = true)]
+    [ExposeServices(new Type[] { typeof(ICatalogDbContext), typeof(DbContext) }, IncludeSelf = true)]
     public class CatalogDbContext : AbpDbContext<CatalogDbContext>, ICatalogDbContext ,ITransientDependency
     {
 
         public DbSet<Product> Products { get; set; } 
-        public DbSet<Category> Categories { get; set; } 
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Manufacturer> Manufacturers { get ; set ; }
 
         public CatalogDbContext(DbContextOptions<CatalogDbContext> dbContextOptions)
         : base(dbContextOptions)

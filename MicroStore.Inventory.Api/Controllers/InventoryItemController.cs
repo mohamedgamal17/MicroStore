@@ -66,15 +66,13 @@ namespace MicroStore.Inventory.Api.Controllers
             return result.ToOk();
         }
 
-        [HttpPost]
-        [Route("adjustquantity/{productId}")]
+        [HttpPut]
+        [Route("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-
-
-        public async Task<IActionResult> AdjustProductInventory(string productId, [FromBody] AdjustProductInventoryModel model)
+        public async Task<IActionResult> UpdateProductInventory(string productId, [FromBody] InventoryItemModel model)
         {
 
-            var result = await _productCommandService.AdjustInventory(productId, model);
+            var result = await _productCommandService.UpdateProductAsync(productId, model);
 
             return result.ToOk();
         }

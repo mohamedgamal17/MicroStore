@@ -1,0 +1,161 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.CountryModel
+
+@{
+    var country = (CountryVM)ViewBag.Country;
+}
+<div class="content-wrapper mr-2">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Edit category details - @Model.Name</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <button class="btn btn-info" type="submit">
+                                <i class="fas
+                                fa-plus-square mr-1"></i> Save
+                            </button>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <form method="post" asp-action="Edit">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x=> x.Id)
+                <partial name="_CreateOrUpdate.Info" model="Model" />
+            </form>
+
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> State Provinces</p>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <partial name="_Create.State" model="new StateProvinceModel() {CountryId = Model.Id}" />
+                    <partial name="_Update.State" model="new StateProvinceModel(){CountryId = Model.Id}" />
+                    <partial name="Grids/_Grid.StateProvinces" model="new StateProvinceListModel()" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>
+
+
+@section Scripts{
+
+<script src="~/js/BackEnd/country.edit.js"></script>
+
+<script>
+    $(document).ready(function(){
+
+        var table = $("#stateprovinces-grid").DataTable({
+            ajax:{
+                     url: "@(Url.Action("ListStateProvinces",values: new {id = @Model.Id}))",
+                     type:"POST",
+                     requestMethod : "POST",
+                     dataSrc : "data"
+                },
+            columns : [
+                     {data :"name", name :"Name"},
+                     {data :"abbreviation", name :"Abbreviation"},
+                     {mRender :function(data, type, row){
+                         return `<button role="button" class="btn edit-state-btn btn-info" data-row-id="${row.id}"
+                                data-bs-toggle="modal" data-bs-target="#UpdateStateProvinceModal" >
+
+                                Edit
+                         </button>`
+                     }},
+                ],
+
+
+            initComplete : function(){
+                console.log("completed inited");
+
+                $("button[data-row-id]").each(function(){
+                    console.log($(this))
+
+                    $(this).on('click',function(){
+
+                        var rowId = $(this).attr("data-row-id");
+
+                        var row=  table.data().filter(function(x){return x.id == rowId})[0];
+                        console.log(row);
+
+
+                        $("#EditState_Id").val(row.id);
+
+                        $("#EditState_Name").val(row.name);
+
+                        $("#EditState_Abbreviation").val(row.abbreviation);
+
+                    })
+                })
+            }
+        })
+
+        $("#CreateStateProvinceForm").on('submit',function(event){
+
+            event.preventDefault();
+
+            $.ajax({
+                url:this.action,
+                method:this.method,
+                data : $(this).serialize(),
+                enctype : this.enctype,
+
+                success : function(result){
+                    console.log(result);
+                    $("#CreateStateProvinceModal").modal("hide");
+                },
+
+                error : function(error){
+                    console.log(error);
+                }
+            })
+        })
+
+        $("#UpdateStateProvinceForm").on('submit',function(event){
+
+            event.preventDefault();
+
+            $.ajax({
+                url:this.action,
+                method:this.method,
+                data : $(this).serialize(),
+                enctype : this.enctype,
+
+                success : function(result){
+                    console.log(result);
+                    $("#UpdateStateProvinceModal").modal("hide");
+                },
+
+                error : function(error){
+                    console.log(error);
+                }
+            })
+
+        })
+
+    });
+
+</script>
+
+}

@@ -32,7 +32,7 @@ namespace MicroStore.Inventory.Application.Consumers
                 productModel.Thumbnail = context.Message.ProductImages.OrderBy(x => x.DisplayOrder).First().ImageLink;
             }
 
-            await _productCommandService.UpdateAsync(productModel);
+            await _productCommandService.UpdateProductInfoAsync(productModel);
         }
     }
 }

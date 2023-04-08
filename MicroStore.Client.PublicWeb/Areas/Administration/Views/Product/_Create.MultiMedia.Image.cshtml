@@ -1,16 +1,16 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.CreateProductImageModel
 <div class="float-right mb-3">
-    <button type="button" id="createproductimage-btn" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#createproductimage-modal">Add Product Image</button>
+    <button type="button" id="CreateProductImageModalButton" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#CreateProductImageModal">Add Product Image</button>
 </div>
 
-<div class="modal fade" id="createproductimage-modal" aria-hidden="true" aria-labelledby="createproductimage-btn" tabindex="-1">
+<div class="modal fade" id="CreateProductImageModal" aria-hidden="true" aria-labelledby="CreateProductImageModalButton" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalToggleLabel">Add Product Image</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
-            <form enctype="multipart/form-data" asp-action="CreateProductImage" asp-route-id="@ViewBag.ProductId" onsubmit="editProductObj.createProductImage(this, event)" >
+            <form enctype="multipart/form-data" id="CreateProductImageForm" asp-action="CreateProductImage" asp-route-id="@ViewBag.ProductId" onsubmit="editProductObj.createProductImage(this, event)" >
                 @Html.AntiForgeryToken()
                 <div class="modal-body">
                     <div class="form-group row mb-3">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" data-bs-target="#createproductimage-modal" data-bs-toggle="modal">Create</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>
         </div>

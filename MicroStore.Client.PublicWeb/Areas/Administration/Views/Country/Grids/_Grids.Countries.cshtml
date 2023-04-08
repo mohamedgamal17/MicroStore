@@ -1,0 +1,23 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.CountryListModel
+
+<div class="card card-default">
+    <div class="card-body">
+
+        <table id="countries-grid"  class="table table-hover table-striped table-bordered dataTable no-footer" width="100%">
+            <thead>
+                <tr>
+
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().Name)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().TwoLetterIsoCode)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().ThreeLetterIsoCode)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().NumericIsoCode)</th>
+                    <th></th>
+                </tr>
+            </thead>
+    
+        </table>
+    </div>
+</div>
+
+
+

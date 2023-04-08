@@ -13,9 +13,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Inventory
             _microStoreClinet = microStoreClinet;
         }
 
-        public async Task<InventoryItem> UpdateAsync(string sku,InventoryItemRequestOptions options , CancellationToken cancellationToken = default)
+        public async Task<InventoryItem> UpdateAsync(string id,InventoryItemRequestOptions options , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<InventoryItem>( string.Format("{0}/{1}", BaseUrl, sku), HttpMethod.Post, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<InventoryItem>(string.Format("{0}/{1}", BaseUrl, id), HttpMethod.Put, options, cancellationToken);
         }
 
 

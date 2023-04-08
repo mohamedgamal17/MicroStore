@@ -23,11 +23,10 @@
 
                         </li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
 
     <section class="content">
         <div class="container-fluid">
@@ -45,21 +44,24 @@
                     type: "post"
                 },
                 type: "POST",
-                processing: true,
+
                 serverSide: true,
                 filter: true,
-
+                
                 columns: [
                     { data: "name", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Name))' },
                     { data: "sku", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Sku))' },
                     { data: "price", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Price))' },
                     {
                         mRender: function (data, type, row) {
-                            return `<a  href="Product/Edit/${row.id}" asp-rout-id="${row.id}" class="btn btn-info" >Edit</a>`
+                            return `<a  href="Product/Edit/${row.id}" class="btn btn-info" >Edit</a>`
                         }
                     }
                 ],
             })
+
         });
+
+        
     </script>
 }

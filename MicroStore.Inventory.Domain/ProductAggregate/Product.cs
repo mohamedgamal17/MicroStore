@@ -35,19 +35,9 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             Stock = stock;
         }
 
-        public void AdjustInventory(int adjustedStock, string reason)
+        public void UpdateInventory(int stock)
         {
-
-            Stock = adjustedStock;
-
-            AddLocalEvent(new InventoryAdjustedEvent
-            {
-                ProductId = Id,
-                AdjustedQuantity = adjustedStock - Stock,
-                AdkustedDate = DateTime.UtcNow,
-                Reason = reason
-            });
-
+            Stock = stock;
         }
 
 

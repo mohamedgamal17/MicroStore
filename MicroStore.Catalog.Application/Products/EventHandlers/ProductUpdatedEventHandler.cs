@@ -8,7 +8,7 @@ using Volo.Abp.EventBus;
 using Volo.Abp.Threading;
 namespace MicroStore.Catalog.Application.Products.EventHandlers
 {
-    public class ProductUpdatedEventHandler : ILocalEventHandler<EntityChangedEventData<Product>> , ITransientDependency
+    public class ProductUpdatedEventHandler : ILocalEventHandler<EntityUpdatedEventData<Product>> , ITransientDependency
     {
         private readonly IPublishEndpoint _publishEndPoint;
 
@@ -19,7 +19,7 @@ namespace MicroStore.Catalog.Application.Products.EventHandlers
             _cancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public Task HandleEventAsync(EntityChangedEventData<Product> eventData)
+        public Task HandleEventAsync(EntityUpdatedEventData<Product> eventData)
         {
             var integrationEvent = new ProductUpdatedIntegerationEvent
             {

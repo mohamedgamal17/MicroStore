@@ -41,7 +41,7 @@
                         { data: "totalPrice", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().TotalPrice))" },
                 {
                     mRender: function (data, type, row) {
-                        return `<a href="Order/Detail/${row.id}">`
+                        return `<a href="Order/Detail/${row.id}" class="btn btn-info"> View</a>`
                     }
                 },
             ]

@@ -22,7 +22,7 @@
     },
 
     {
-      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamPathTemplate": "/api/inventory/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

@@ -18,15 +18,18 @@ namespace MicroStore.Catalog.Application.Models
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
         public string[]? CategoriesIds { get; set; }
+        public string[]? ManufacturersIds { get; set; }
     }
 
     public class ProductModelValidator : AbstractValidator<ProductModel>
     {
         protected IRepository<Category> CategoryRepository { get; }
-        public ProductModelValidator(IRepository<Category> categoryRepository)
+
+        protected IRepository<Manufacturer> ManufacturerRepository {get; }
+        public ProductModelValidator(IRepository<Category> categoryRepository, IRepository<Manufacturer> manufacturerRepository)
         {
             CategoryRepository = categoryRepository;
-
+            ManufacturerRepository = manufacturerRepository;
             RuleFor(x => x.Name)
               .NotEmpty()
               .WithMessage("Product Name Cannot Be Empty")
@@ -109,10 +112,21 @@ namespace MicroStore.Catalog.Application.Models
             RuleForEach(x => x.CategoriesIds)
                 .MustAsync(CheckCategoryExist)
                 .When(x => x.CategoriesIds != null);
+
+
+            RuleForEach(x => x.ManufacturersIds)
+                .MustAsync(CheckManufacturerExist)
+                .When(x => x.CategoriesIds != null);
+          
         }
-        private Task<bool> CheckCategoryExist(string category, CancellationToken cancellationToken)
+        private Task<bool> CheckCategoryExist(string categoryId, CancellationToken cancellationToken)
         {
-            return CategoryRepository.AnyAsync(x => x.Id == category, cancellationToken);
+            return CategoryRepository.AnyAsync(x => x.Id == categoryId, cancellationToken);
+        }
+
+        private Task<bool> CheckManufacturerExist(string manufacturerId , CancellationToken cancellationToken)
+        {
+            return ManufacturerRepository.AnyAsync(x => x.Id == manufacturerId, cancellationToken);
         }
     }
 }

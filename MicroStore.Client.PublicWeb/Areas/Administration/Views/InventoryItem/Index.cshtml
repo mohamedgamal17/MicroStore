@@ -1,0 +1,53 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Inventory.InventoryItemListModel
+
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Inventory.InventoryItemMenus.Index);
+}
+
+
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <h1 class="m-0">Orders</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <partial name="Grids/_Grids.InventoryItems" model="Model" />
+        </div>
+    </section>
+</div>
+
+
+
+@section Scripts{
+
+<script>
+    $(document).ready(function(){
+        $("#invetoryitems-grid").DataTable({
+            ajax: {
+                url: "",
+                type: "POST"
+            },
+             columns: [
+                 {data : "thumbnail", name : "@(Html.DisplayNameFor(x=> x.Data.First().Thumbnail))" },
+                 {data : "name", name : "@(Html.DisplayNameFor(x=> x.Data.First().Name))" },
+                 {data : "sku", name : "@(Html.DisplayNameFor(x=> x.Data.First().Sku))" },
+                 {data : "stock", name : "@(Html.DisplayNameFor(x=> x.Data.First().Stock))" },
+                 {
+                     mRender : function(data, type, row){
+                         return `<a href="InventoryItem/Edit/${row.id}" class="btn btn-info">Edit</a>`
+                     }
+                 }
+            ]
+        })
+
+    })
+</script>
+}

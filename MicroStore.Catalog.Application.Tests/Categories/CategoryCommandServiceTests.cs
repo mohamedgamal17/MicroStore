@@ -32,7 +32,7 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 
             await result.IfSuccess(async (val) =>
             {
-                var category = await Find<Category>(x => x.Id == val.Id);
+                var category = await SingleAsync<Category>(x => x.Id == val.Id);
 
                 category.AssertCategoryModel(model);
             });
@@ -57,7 +57,7 @@ namespace MicroStore.Catalog.Application.Tests.Categories
 
             await result.IfSuccess(async (val) =>
             {
-                var category = await Find<Category>(x => x.Id == val.Id);
+                var category = await SingleAsync<Category>(x => x.Id == val.Id);
 
                 category.AssertCategoryModel(model);
             });

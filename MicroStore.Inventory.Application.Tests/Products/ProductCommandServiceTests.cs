@@ -23,7 +23,7 @@ namespace MicroStore.Inventory.Application.Tests.Products
             Product fakeProduct = await Insert(new Product() { Name = Guid.NewGuid().ToString(),Sku = Guid.NewGuid().ToString(), Thumbnail = Guid.NewGuid().ToString()});
 
 
-            var result = await _productCommandService.AdjustInventory(fakeProduct.Id, new AdjustProductInventoryModel { Stock = 10 });
+            var result = await _productCommandService.UpdateProductAsync(fakeProduct.Id, new InventoryItemModel { Stock = 10 });
 
     
             result.IsSuccess.Should().BeTrue();
@@ -38,7 +38,7 @@ namespace MicroStore.Inventory.Application.Tests.Products
         [Test]
         public async Task Should_return_failure_result_while_adjusting_product_quantity_when_product_is_not_exist()
         {
-            var result = await _productCommandService.AdjustInventory(Guid.NewGuid().ToString(), new AdjustProductInventoryModel { Stock = 10 });
+            var result = await _productCommandService.UpdateProductAsync(Guid.NewGuid().ToString(), new AdjustProductInventoryModel { Stock = 10 });
 
             result.IsFailure.Should().BeTrue();
 

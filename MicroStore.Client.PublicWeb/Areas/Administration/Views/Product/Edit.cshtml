@@ -28,8 +28,8 @@
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
                             <button class="btn btn-info" id="sumbiteditproductform-btn">
-                                <i class="fas
-                                fa-plus-square mr-1"></i> Save
+                                <i class="fas fa-plus-square mr-1"></i>
+                                Save
                             </button>
                         </li>
                     </ol>
@@ -55,110 +55,149 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/BackEnd/product.edit.js"></script>
 
-    <script>
 
-        $(document).ready(function () {
+<script>
 
-            $('.summernote').summernote({
-                height: 150,
-                name: 'LongDescription',
-                codemirror: { // codemirror options
-                    theme: 'monokai'
+    $(document).ready(function () {
+
+        const toast = swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: function (toast) {
+                toast.addEventListener('mouseenter', swal.stopTimer),
+                    toast.addEventListener('mouseleave', swal.resumeTimer)
+            }
+        });
+
+        $('.summernote').summernote({
+            height: 150,
+            name: 'LongDescription',
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            }
+        });
+
+        $("#category-select").select2({
+            placeholder: 'select product categories'
+        });
+
+        var table = $("#productimages-grid").DataTable({
+
+            ajax: {
+                url: '@(Url.Action("ListProductImages",new {id = Model.Id}))',
+                dataSrc: 'data',
+                type: 'POST'
+            },
+
+            columns: [
+                { data: "image", name: 'image' },
+                { data: "displayOrder", name: 'DisplayOrder' },
+                {
+                    mRender: function (data, type, row) {
+                        return `<button role="button" class="btn btn-info" data-row-edit-id="${row.id}">Edit</button>`
+                    }
+                },
+                {
+                    mRender: function (data, type, row) {
+                        return `<button role="button" class="btn btn-danger" data-row-delete-id="${row.id}">Delete</button>`
+                    }
+                },
+            ],
+
+            initComplete: function () {
+                $("button[data-row-edit-id]").each(function () {
+                    $(this).on('click', function () {
+
+                        var rowId = $(this).attr("data-row-edit-id");
+
+                        var row = table.data().filter(function (x) { return x.id == rowId });
+
+                        $("UpdateProductImage_Id").val(row.id);
+
+                        $("UpdateProductImage_DisplayOrder").val(row.displayOrder);
+
+                    });
+                });
+            }
+
+        });
+
+
+        $("#CreateProductImageForm").on('submit', function () {
+            $.ajax({
+                url: this.action,
+                method: this.method,
+                enctype: this.enctype,
+                data: $(this).serialize(),
+                processData: false,
+
+                success: function (result) {
+                    console.log(result);
+
+                    toast.fire({
+                        icon: "success",
+                        title: "product image has been created"
+                    });
+
+                    table.ajax.reload();
+                },
+
+                error: function (error) {
+
+                    toast.fire({
+                        icon: "error",
+                        title : "UnExpected Error"
+                    })
                 }
-            });
-
-            $("#category-select").select2({
-                placeholder: 'select product categories'
-            });
-
-            editProductObj.init({
-                productImageGrid : {
-                    id: "productimages-grid",
-                    ajax : {
-                        url: '@(Url.Action("ListProductImages",new {id = Model.Id}))',
-                        dataSrc : 'data',
-                        type : 'POST'
-                    },
-
-                    columns:[
-                        { data: "image", name: 'image' },
-                        { data: "displayOrder", name: 'DisplayOrder' },
-                        {
-                            mRender: function (data, type, row) {
-                                return `@{
-                                               <div>
-                                                    <button type="button" id="edit-product-image-btn-${row.id}" data-bs-toggle="modal" data-bs-target="#edit-product-image-modal-${row.id}" class="btn btn-warning">
-                                                        Edit
-                                                    </button>
-
-                                                    <div class="modal fade" id="edit-product-image-modal-${row.id}" aria-hidden="true" aria-labelledby="edit-product-image-btn-${row.id}" tabindex="-100">
-
-                                                        <div class="modal-dialog modal modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Update Product Image</h5>
-                                                                    <button type="button" class="close" data-bs-target="#edit-product-image-modal-${row.id}" data-bs-toggle="modal"
-                                                                aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-
-
-                                                                <form asp-action="UpdateProductImage" asp-route-id="@product.Id" onsubmit="editProductObj.updateProductImage(this,event)">
-                                                                    <div class="modal-body">
-                                                                              <input type="Hidden" name="ProductImageId" value="${row.id}">
-                                                                            <div class="form-group row mb-3">
-                                                                                <div class="col-md-4 float-sm-left float-md-right">
-                                                                                    <micro-label asp-for="@updateProductImageModel.DisplayOrder"></micro-label>
-                                                                                </div>
-
-                                                                                <div class="col-md-8">
-                                                                                   <input name="DisplayOrder" value="${row.displayOrder}" type="number" class="form-control" />
-                                                                                   <span class="text-danger" asp-validation-for="@updateProductImageModel.DisplayOrder"></span>
-                                                                                </div>
-                                                                            </div>
-
-
-
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="submit" class="btn btn-primary" data-bs-target="#edit-product-image-modal-${row.id}"
-                                                                    data-bs-toggle="modal">
-                                                                            Update
-                                                                        </button>
-                                                                    </div>
-                                                                </form>
-
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                 }`
-                            },
-                        },
-
-                        {
-                            mRender: function (data, type, row) {
-
-                                return `
-                                        @{
-                                            <form asp-action="RemoveProductImage" asp-route-id="@product.Id"  onsubmit="editProductObj.deleteProductImage(this,event)" >
-                                                  <input type="hidden" name="ProductImageId" value="${row.id}">
-                                                  <input type="submit" class="btn btn-danger" value="delete">
-                                            </form>
-                                        }`
-                            }
-                        },
-                    ]
-                }
-   
             })
         })
-    </script>
-   
+
+
+
+        $("#UpdateProductImageForm").on('submit', function () {
+
+            $.ajax({
+
+                url: this.action,
+                method: this.method,
+                enctype: this.enctype,
+                data: $(this).serialize(),
+                processData: false,
+
+                success: function (result) {
+
+                    console.log(result);
+
+                    $("#UpdateProductImageModa").modal("hide");
+
+                    toast.fire({
+                        icon: 'success',
+                        title: 'product image has been updated'
+                    });
+
+                    table.ajax.reload();
+                },
+
+                error : function (error) {
+
+                    console.log(error);
+
+                    toast.fire({
+                        icon: 'error',
+                        title: 'UnExpected error happen'
+                    })
+
+                    $("#UpdateProductImageModa").modal("hide");
+                }
+            })
+        })
+    })
+
+
+</script>
 }
 

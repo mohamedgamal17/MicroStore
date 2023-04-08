@@ -6,7 +6,7 @@
         public string Sku { get; set; }
         public string Name { get; set; }
         public string Thumbnail { get; set; }
-        public int Stock { get; private set; }
-        public int AllocatedStock { get; private set; }
+        public int Stock { get;  set; }
+        public int AllocatedStock { get;  set; }
     }
 }
