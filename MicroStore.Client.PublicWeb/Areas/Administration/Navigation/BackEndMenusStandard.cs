@@ -20,6 +20,15 @@
             public const string Edit = "MicroStore.Catalog.Category.Edit";
         }
 
+        public static class ManufacturerMenus
+        {
+            public const string Index = "MicroStore.Catalog.Manufacturer";
+
+            public const string Create = "MicroStore.Catalog.Manufacturer.Create";
+
+            public const string Edit = "MicroStore.Catalog.Manufacturer.Edit";
+        }
+
         public static class OrderMenus
         {
             public const string Index = "MicroStore.Sales.Order";

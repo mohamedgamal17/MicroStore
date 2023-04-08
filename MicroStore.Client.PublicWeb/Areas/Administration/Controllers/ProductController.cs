@@ -7,7 +7,6 @@ using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
-using System;
 using System.Net;
 using Volo.Abp.BlobStoring;
 
@@ -23,12 +22,15 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         private readonly ILogger<ProductController> _logger;
 
         private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
-        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IBlobContainer<MultiMediaBlobContainer> blobContainer)
+
+        private readonly ManufacturerService _manufacturerService;
+        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IBlobContainer<MultiMediaBlobContainer> blobContainer, ManufacturerService manufacturerService)
         {
             _productService = productService;
             _categoryService = categoryService;
             _logger = logger;
             _blobContainer = blobContainer;
+            _manufacturerService = manufacturerService;
         }
 
         public async Task<IActionResult> Index()
@@ -54,6 +56,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             ViewBag.Categories =  await BuildCategoriesSelecetListItems();
 
+            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems();
+
             return View(new ProductModel());
         }
 
@@ -65,6 +69,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 ViewBag.Categories = await BuildCategoriesSelecetListItems();
 
+                ViewBag.Manufacturers = await BuildManufacturersSelecetListItems(model.ManufacturersIds);
+
                 return View(model);
             }
 
@@ -74,7 +80,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 await _productService.CreateAsync(requestOptions);
 
-                return RedirectToPage("Index");
+                return RedirectToAction("Index");
 
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest) 
@@ -95,7 +101,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             ViewBag.Product = ObjectMapper.Map<Product, ProductVM>(product);
 
-            ViewBag.Categories = await BuildCategoriesSelecetListItems();
+            ViewBag.Categories = await BuildCategoriesSelecetListItems(model.CategoriesIds);
+
+            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems(model.ManufacturersIds);
 
             return View(model);
         }
@@ -109,7 +117,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 var product = await _productService.GetAsync(model.Id);
 
-                ViewBag.Categories = await BuildCategoriesSelecetListItems();
+                ViewBag.Categories = await BuildCategoriesSelecetListItems(model.CategoriesIds);
+
+                ViewBag.Manufacturers = await BuildManufacturersSelecetListItems(model.ManufacturersIds);
 
                 ViewBag.Product = ObjectMapper.Map<Product, ProductVM>(product);
 
@@ -225,43 +235,22 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             return categorySelectItems;
         }
-            
 
 
-        private List<ProductVM> LoadTestData()
+        private async Task<List<SelectListItem>> BuildManufacturersSelecetListItems(string[]? manufacturersIds = null)
         {
-            return new List<ProductVM>
-            {
-                new ProductVM
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = Guid.NewGuid().ToString(),
-                    Sku = Guid.NewGuid().ToString(),
-                    Price = 50,
-                },
-                 new ProductVM
-                {
-                     Id = Guid.NewGuid().ToString(),
-                    Name = Guid.NewGuid().ToString(),
-                    Sku = Guid.NewGuid().ToString(),
-                    Price = 50,
-                },
-                  new ProductVM
-                {
-                      Id = Guid.NewGuid().ToString(),
-                    Name = Guid.NewGuid().ToString(),
-                    Sku = Guid.NewGuid().ToString(),
-                    Price = 50,
-                },
-                 new ProductVM
-                {
-                     Id = Guid.NewGuid().ToString(),
-                    Name = Guid.NewGuid().ToString(),
-                    Sku = Guid.NewGuid().ToString(),
-                    Price = 50,
-                },
-            };
+            var manufacturerSelectItems = new List<SelectListItem>();
 
-        }
+            var manufacturers = await _manufacturerService.ListAsync(new SortingRequestOptions { Desc = true });
+
+
+            if (manufacturers != null)
+            {
+                manufacturerSelectItems = manufacturers.Select(x => new SelectListItem { Text = x.Name, Value = x.Id, Selected = manufacturersIds?.Contains(x.Id) ?? false }).ToList();
+
+            }
+
+            return manufacturerSelectItems;
+        }     
     }
 }

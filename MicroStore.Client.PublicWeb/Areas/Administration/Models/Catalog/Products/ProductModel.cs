@@ -14,7 +14,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
         [DisplayName("Product Sku")]
         public string Sku { get; set; }
 
-        public string[]? CategoriesId { get; set; }
+        public string[]? CategoriesIds { get; set; }
+
+        public string[]? ManufacturersIds { get; set; }
 
         [DisplayName("Product Short Description")]
         public string ShortDescription { get; set; }
