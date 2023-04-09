@@ -5,7 +5,6 @@ using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application.Dtos;
 using MicroStore.IdentityProvider.Identity.Application.Models;
 using Volo.Abp.Domain.Entities;
-
 namespace MicroStore.IdentityProvider.Identity.Application.Users
 {
     public class UserCommandService : IdentityApplicationService, IUserCommandService
@@ -51,11 +50,13 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
 
         private async Task PrepareUserEntity(UserModel model, ApplicationIdentityUser identityUser, CancellationToken cancellationToken)
         {
-            identityUser.FirstName = model.FirstName;
-            identityUser.LastName = model.LastName;
+            identityUser.GivenName = model.GivenName;
+
+            identityUser.FamilyName = model.FamilyName;
+
             identityUser.Email = model.Email;
+
             identityUser.PhoneNumber = model.PhoneNumber;
-            identityUser.UserClaims = model.UserClaims?.Select(x => new ApplicationIdentityUserClaim { ClaimType = x.Type, ClaimValue = x.Value }).ToList() ?? new List<ApplicationIdentityUserClaim>();
 
             if (model.UserRoles != null)
             {

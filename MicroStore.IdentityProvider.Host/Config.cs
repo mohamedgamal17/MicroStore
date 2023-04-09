@@ -148,8 +148,6 @@ namespace MicroStore.IdentityProvider.Host
             var alice = new ApplicationIdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
-                FirstName = "alice",
-                LastName = "smith",
                 UserName = "alice",
                 Email = "AliceSmith@email.com",
                 EmailConfirmed = true,
@@ -167,8 +165,6 @@ namespace MicroStore.IdentityProvider.Host
             var bob = new ApplicationIdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
-                FirstName = "bob",
-                LastName = "smith",
                 UserName = "bob",
                 Email = "BobSmith@email.com",
                 EmailConfirmed = true

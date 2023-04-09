@@ -11,7 +11,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Domain
 
         public ApplicationIdentityRole()
         {
-            Id = Guid.NewGuid().ToString("N");
+            Id = Guid.NewGuid().ToString();
         }
         public List<ApplicationIdentityRoleClaim> RoleClaims { get; set; } = new List<ApplicationIdentityRoleClaim>();
 

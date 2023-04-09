@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IdentityModel;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application.Dtos;
 
@@ -11,7 +12,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Mappers
             CreateMap<ApplicationIdentityUser, IdentityUserDto>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.UserRoles, opt => opt.MapFrom(c => c.UserRoles))
-                .ForMember(x => x.UserClaims, opt => opt.MapFrom(c => c.UserClaims))
                 .ForMember(x => x.LockoutEnd, opt => opt.MapFrom(c => c.LockoutEnd));
 
             CreateMap<ApplicationIdentityUser, IdentityUserListDto>();

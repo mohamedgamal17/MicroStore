@@ -8,8 +8,8 @@ namespace MicroStore.IdentityProvider.Identity.Application.Mappers
     {
         public ApplicationIdentityRoleProfile()
         {
-            CreateMap<ApplicationIdentityRole, IdentityRoleDto>()
-                .ForMember(x => x.RoleClaims, opt => opt.MapFrom(c => c.RoleClaims));
+            CreateMap<ApplicationIdentityRole, IdentityRoleDto>();
+               
 
         }
     }

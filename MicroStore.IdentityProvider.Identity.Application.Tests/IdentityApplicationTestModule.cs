@@ -47,25 +47,30 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
         }
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
-            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
-
-            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                    "__EFMigrationsHistory"
-                }
-            }).Result;
-
-            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
-        }
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
             using (var scope = context.ServiceProvider.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>();
 
                 db.Database.Migrate();
+
+                var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+                var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
+                {
+                    TablesToIgnore = new Table[]
+                    {
+                    "__EFMigrationsHistory"
+                    }
+                }).Result;
+
+                respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
+            }
+                
+        }
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
 
 
                 SeedData(scope.ServiceProvider);
@@ -112,8 +117,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
 
                         var identityUser = new ApplicationIdentityUser
                         {
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
                             Email = user.Email,
                             PhoneNumber = user.PhoneNumber,
                             UserName = user.UserName,

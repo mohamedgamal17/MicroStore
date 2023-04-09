@@ -14,8 +14,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             ApplicationIdentityUser user = new ApplicationIdentityUser
             {
-                FirstName = Guid.NewGuid().ToString(),
-                LastName = Guid.NewGuid().ToString(),
                 Email = $"{Guid.NewGuid().ToString()}@example.com",
                 UserName = $"{Guid.NewGuid().ToString()}@example.com",
                 PhoneNumber = "447859305608",
@@ -76,15 +74,14 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             var command = new UserModel
             {
-                FirstName = Guid.NewGuid().ToString(),
-                LastName = Guid.NewGuid().ToString(),
+                GivenName = Guid.NewGuid().ToString(),
+                FamilyName = Guid.NewGuid().ToString(),
                 Email = $"{Guid.NewGuid().ToString()}@example.com",
                 PhoneNumber = "447859305608",
                 Password = Guid.NewGuid().ToString(),
 
                 UserRoles = roles.Select(x => x.Name).ToList(),
 
-                UserClaims = CreateFakeClaims()
             };
 
             return command;

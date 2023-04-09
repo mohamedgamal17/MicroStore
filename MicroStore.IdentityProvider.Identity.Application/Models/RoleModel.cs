@@ -6,6 +6,5 @@ namespace MicroStore.IdentityProvider.Identity.Application.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<IdentityClaimModel> Claims { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application.Dtos;
@@ -53,7 +52,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Roles
 
             identityRole.Description = model.Description;
 
-            identityRole.RoleClaims = model.Claims?.Select(x => new ApplicationIdentityRoleClaim { ClaimType = x.Type, ClaimValue = x.Value }).ToList() ?? new List<ApplicationIdentityRoleClaim>();
         }
     }
 }

@@ -1,27 +1,54 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MicroStore.BuildingBlocks.Results;
 using System.Security.Claims;
-using Volo.Abp;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Domain
 {
     public class ApplicationIdentityUser : IdentityUser
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? GivenName { get; set; }
+        public string? FamilyName { get; set; }
+
+        public List<ApplicationIdentityUserClaim> UserClaims { get; set; }
+
+        public List<ApplicationIdentityUserLogin> UserLogins { get; set; }
+
+        public List<ApplicationIdentityUserToken> UserTokens { get; set; }
+
+        public List<ApplicationIdentityUserRole> UserRoles { get; set; }
 
         public ApplicationIdentityUser()
         {
-            Id = Guid.NewGuid().ToString("N");
+            Id = Guid.NewGuid().ToString();
+            UserClaims = new List<ApplicationIdentityUserClaim>();
+            UserLogins = new List<ApplicationIdentityUserLogin>();
+            UserTokens = new List<ApplicationIdentityUserToken>();
+            UserRoles = new List<ApplicationIdentityUserRole>();
         }
 
-        public List<ApplicationIdentityUserClaim> UserClaims { get; set; } = new List<ApplicationIdentityUserClaim>();
 
-        public List<ApplicationIdentityUserLogin> UserLogins { get; set; } = new List<ApplicationIdentityUserLogin>();
 
-        public List<ApplicationIdentityUserToken> UserTokens { get; set; } = new List<ApplicationIdentityUserToken>();
+        public void ReplaceClaim(Claim claim)
+        {
+            var replacedClaim = UserClaims.SingleOrDefault(x => x.ClaimType == claim.Type);
 
-        public List<ApplicationIdentityUserRole> UserRoles { get; set; } = new List<ApplicationIdentityUserRole>();
+            if(replacedClaim != null)
+            {
+                UserClaims.Remove(replacedClaim);
+            }
+
+            UserClaims.Add(new ApplicationIdentityUserClaim
+            {
+                ClaimType = claim.Type,
+                ClaimValue = claim.Value
+            });
+        }
+
+
+        public void ReplaceClaim(string type, string value)
+        {
+            ReplaceClaim(new Claim(type,value) );
+        }
+
 
     }
 

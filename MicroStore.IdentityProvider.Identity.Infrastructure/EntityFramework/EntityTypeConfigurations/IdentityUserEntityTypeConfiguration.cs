@@ -17,8 +17,8 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework.En
             builder.HasIndex(x => x.NormalizedEmail).HasDatabaseName("EmailIndex");
             builder.Property(x => x.ConcurrencyStamp).IsConcurrencyToken();
             builder.Property(x => x.UserName).HasMaxLength(256);
-            builder.Property(x => x.FirstName).HasMaxLength(256).HasDefaultValue(string.Empty);
-            builder.Property(x => x.LastName).HasMaxLength(256).HasDefaultValue(string.Empty); 
+            builder.Property(x => x.GivenName).HasMaxLength(256).IsRequired(false).HasDefaultValue(string.Empty);
+            builder.Property(x => x.FamilyName).HasMaxLength(256).IsRequired(false).HasDefaultValue(string.Empty); 
             builder.Property(x => x.NormalizedUserName).HasMaxLength(256);
             builder.Property(x => x.Email).HasMaxLength(256);
             builder.Property(x => x.PhoneNumber).HasMaxLength(30);

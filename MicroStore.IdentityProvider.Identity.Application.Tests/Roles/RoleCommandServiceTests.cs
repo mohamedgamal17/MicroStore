@@ -71,14 +71,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
             {
                 Name = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
-                Claims = new List<IdentityClaimModel>
-                {
-                    new IdentityClaimModel
-                    {
-                        Type = Guid.NewGuid().ToString(),
-                        Value = Guid.NewGuid().ToString()
-                    }
-                }
+              
             };
         }
 
