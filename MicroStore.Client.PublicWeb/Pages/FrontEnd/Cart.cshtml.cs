@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Controllers;
-using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 namespace MicroStore.Client.PublicWeb.Pages.FrontEnd

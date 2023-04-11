@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Extensions;
-using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Common;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart;
-using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Billing;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;

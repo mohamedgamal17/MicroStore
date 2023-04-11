@@ -55,8 +55,6 @@ namespace MicroStore.Client.PublicWeb
 
             builder.Services.AddControllers();
      
-            builder.Services.AddTransient<IWorkContext, DefaultWorkContext>();
-
             builder.Services.AddHttpContextAccessor();
 
      

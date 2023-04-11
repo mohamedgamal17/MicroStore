@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Configuration;
+using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Menus;
 using Newtonsoft.Json.Converters;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json.Serialization;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.UI;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -22,13 +23,15 @@ using Volo.Abp.UI.Navigation;
 
 namespace MicroStore.Client.PublicWeb
 {
-    [DependsOn(typeof(AbpAutoMapperModule),
+    [DependsOn(typeof(MicroStoreAspNetCoreUIModule),
+        typeof(AbpAutoMapperModule),
         typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringMinioModule),
-        typeof(AbpAspNetCoreMvcUiModule))]
+        typeof(AbpAspNetCoreMvcUiModule),
+        typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     public class PublicWebModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -71,8 +74,6 @@ namespace MicroStore.Client.PublicWeb
             context.Services.AddMvc();
 
             context.Services.AddControllers();
-
-            context.Services.AddTransient<IWorkContext, DefaultWorkContext>();
 
             context.Services.AddHttpContextAccessor();
 

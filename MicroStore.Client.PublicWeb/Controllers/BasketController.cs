@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
