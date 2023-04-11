@@ -1,5 +1,4 @@
-
-namespace MicroStore.IdentityProvider.Host.Pages.Logout
+namespace MicroStore.IdentityProvider.Host.Pages.Account.Logout
 {
     public class LogoutOptions
     {

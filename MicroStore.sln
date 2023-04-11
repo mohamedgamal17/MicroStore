@@ -165,6 +165,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Appli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Host", "MicroStore.Geographic.Host\MicroStore.Geographic.Host.csproj", "{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.AspNetCore.UI", "MicroStore.AspNetCore.UI\MicroStore.AspNetCore.UI.csproj", "{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -379,6 +381,10 @@ Global
 		{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -463,6 +469,7 @@ Global
 		{180F0EAF-5EB7-4716-A3FF-0493B4500123} = {7107956E-BC05-4060-8D9C-563805110605}
 		{43DE17E0-D1A6-4595-9020-1F98DB440B3A} = {180F0EAF-5EB7-4716-A3FF-0493B4500123}
 		{47684EAA-80D3-4CB1-B110-2DE2F1B8036E} = {58E8DC27-5B85-4415-B197-3EEE830AEB8D}
+		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD} = {E667C85C-80E1-4045-88A8-3BC69F2253AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}

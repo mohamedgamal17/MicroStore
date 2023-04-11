@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 
-namespace MicroStore.IdentityProvider.Host.Pages.Logout
+namespace MicroStore.IdentityProvider.Host.Pages.Account.Logout
 {
     [SecurityHeaders]
     [AllowAnonymous]

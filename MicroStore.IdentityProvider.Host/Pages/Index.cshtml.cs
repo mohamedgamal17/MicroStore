@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Reflection;
 
-namespace MicroStore.IdentityProvider.Host.Pages.Home
+namespace MicroStore.IdentityProvider.Host.Pages
 {
     [AllowAnonymous]
     public class Index : PageModel

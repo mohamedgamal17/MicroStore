@@ -2,7 +2,7 @@ using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MicroStore.IdentityProvider.Host.Pages.Logout
+namespace MicroStore.IdentityProvider.Host.Pages.Account.Logout
 {
     [SecurityHeaders]
     [AllowAnonymous]
@@ -26,7 +26,7 @@ namespace MicroStore.IdentityProvider.Host.Pages.Logout
             {
                 AutomaticRedirectAfterSignOut = LogoutOptions.AutomaticRedirectAfterSignOut,
                 PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
-                ClientName = String.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
+                ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
                 SignOutIframeUrl = logout?.SignOutIFrameUrl
             };
         }

@@ -1,4 +1,4 @@
-namespace MicroStore.IdentityProvider.Host.Pages.Login
+namespace MicroStore.IdentityProvider.Host.Pages.Account.Login
 {
     public class LoginOptions
     {

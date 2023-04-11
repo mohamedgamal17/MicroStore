@@ -1,0 +1,62 @@
+﻿@using MicroStore.AspNetCore.UI.Extensions
+@model MicroStore.AspNetCore.UI.HtmlHelpers.TreeViewRoot
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 ">
+ 
+            <div class=" text-center clearfix">
+                <a href="#" class="text-center text-lg">Micro Store Solution</a>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+
+            @(Html.CreateMenutItems(Model)
+                .RootHtmlAttributes(root=> new {@class="nav nav-pills nav-sidebar flex-column", data_widget="treeview", role="menu"})
+                .NodeHtmlAttributes(item=>
+                {
+                    bool isActive = item.ContainsName(UIMenuNavigationManager.GetCurrentMenu());
+
+                    string liClasses = $"nav-item";
+
+                    if(item.HasChildren)
+                    {
+                        liClasses += " has-treeview";
+                    }
+
+                    if(isActive)
+                    {
+                        liClasses += " menu-open";
+                    }
+
+                    return new {@class = liClasses};
+
+                }).AnchorHtmlAttributes(item=>
+                {
+                      bool isActive = item.ContainsName(UIMenuNavigationManager.GetCurrentMenu());
+
+                      string anchorClasses = "nav-link";
+
+                      if(isActive){
+                          anchorClasses += " active";
+                      }
+
+                      return new {@class=anchorClasses};
+                })
+                .NestedListHtmlAttributes(_=> new {@class="nav nav-treeview"})
+                .ParagrahpHtmlAttributes (item=> new {@data_target_paragraph = item.Name})
+                .Build()
+            )
+
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

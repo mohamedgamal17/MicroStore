@@ -19,6 +19,9 @@ using Duende.IdentityServer.EntityFramework.Mappers;
 using MicroStore.IdentityProvider.Host.Services;
 using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
 using MicroStore.IdentityProvider.Host.Extensions;
+using MicroStore.AspNetCore.UI;
+using Volo.Abp.AspNetCore.Mvc.UI;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -26,7 +29,10 @@ namespace MicroStore.IdentityProvider.Host
     [DependsOn(typeof(IdentityServerInfrastrcutreModule),
         typeof(IdentityInfrastructureModule),
         typeof(MicroStoreAspNetCoreModule),
-        typeof(AbpAutofacModule))]
+        typeof(AbpAutofacModule),
+        typeof(MicroStoreAspNetCoreUIModule),
+        typeof(AbpAspNetCoreMvcUiModule),
+        typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     public class IdentityProviderHostModule : AbpModule
     {
 
@@ -37,16 +43,25 @@ namespace MicroStore.IdentityProvider.Host
 
 
             ConfigureAspNetIdentity(context.Services);
+
             ConfigureIdentityServer(config,context.Services);
+
             ConfigureExternalAuthentication(context.Services);
+
             ConfigureSwagger(context.Services);
+
             Configure<AbpAntiForgeryOptions>(opt =>
             {
                 opt.AutoValidate = false;
             });
 
-            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<IdentityApplicationModule>());
+            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<IdentityProviderHostModule>());
 
+            context.Services.AddRazorPages();
+
+            context.Services.AddControllers().AddNewtonsoftJson();
+
+            context.Services.AddMvc();
         }
 
 

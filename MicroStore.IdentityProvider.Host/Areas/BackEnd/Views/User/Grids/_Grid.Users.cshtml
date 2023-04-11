@@ -1,0 +1,16 @@
+﻿@model MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.Users.UserListModel
+<div class="card card-default">
+    <div class="card-body">
+
+        <table id="UsersGrid" class="table table-hover table-striped table-bordered dataTable no-footer" width="100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().UserName)</th>
+                    <th>@Html.DisplayNameFor(x=> x.Data.First().Email)</th>         
+                    <th></th>
+                </tr>
+            </thead>
+    
+        </table>
+    </div>
+</div>

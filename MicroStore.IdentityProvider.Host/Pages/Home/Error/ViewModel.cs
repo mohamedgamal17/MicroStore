@@ -3,7 +3,7 @@
 
 using Duende.IdentityServer.Models;
 
-namespace MicroStore.IdentityProvider.Host.Pages.Error
+namespace MicroStore.IdentityProvider.Host.Pages.Home.Error
 {
     public class ViewModel
     {

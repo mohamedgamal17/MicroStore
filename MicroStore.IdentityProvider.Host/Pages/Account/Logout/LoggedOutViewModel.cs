@@ -1,9 +1,7 @@
-
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-
-namespace MicroStore.IdentityProvider.Host.Pages.Logout
+namespace MicroStore.IdentityProvider.Host.Pages.Account.Logout
 {
     public class LoggedOutViewModel
     {

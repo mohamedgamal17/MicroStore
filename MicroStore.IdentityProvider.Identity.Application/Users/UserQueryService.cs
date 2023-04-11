@@ -59,11 +59,11 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
             return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user);
         }
 
-        public async Task<Result<PagedResult<IdentityUserListDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<IdentityUserDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = _identityDbContext.Users
                .AsNoTracking()
-               .ProjectTo<IdentityUserListDto>(MapperAccessor.Mapper.ConfigurationProvider);
+               .ProjectTo<IdentityUserDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
 
             var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
