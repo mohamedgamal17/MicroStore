@@ -1,3 +1,6 @@
-﻿@{
-    Layout = "_Layout";
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@using MicroStore.Client.PublicWeb.Theming
+@inject IThemeManager ThemeManager
+@{
+    Layout = ThemeManager.CurrentTheme.GetLayout(StandardApplicationLayout.BackEnd);
 }

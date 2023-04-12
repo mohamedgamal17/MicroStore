@@ -1,0 +1,25 @@
+{
+  "name": "microstore-web-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamedgamal17/MicroStore.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mohamedgamal17/MicroStore/issues"
+  },
+  "homepage": "https://github.com/mohamedgamal17/MicroStore#readme",
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui": "^7.1.1",
+    "@abp/aspnetcore.mvc.ui.theme.shared": "^7.1.1",
+    "admin-lte": "^3.2.0",
+    "summernote": "^0.8.20"
+  }
+}

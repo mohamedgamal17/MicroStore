@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using MicroStore.AspNetCore.UI;
+using MicroStore.Client.PublicWeb.Bundling;
 using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Menus;
+using MicroStore.Client.PublicWeb.Theming;
 using Newtonsoft.Json.Converters;
 using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
@@ -13,6 +16,10 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -30,8 +37,7 @@ namespace MicroStore.Client.PublicWeb
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringMinioModule),
-        typeof(AbpAspNetCoreMvcUiModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class PublicWebModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -79,14 +85,48 @@ namespace MicroStore.Client.PublicWeb
 
             context.Services.AddMicroStoreClinet()
                 .AddUserAccessTokenHandler();
+
             Configure<AbpNavigationOptions>(opt =>
             {
                 opt.MainMenuNames.Add(ApplicationMenusDefaults.BackEnd);
                 opt.MenuContributors.Add(new BackEndMenusContributor());
             });
+
+            Configure<AbpThemingOptions>(opt =>
+            {
+                opt.DefaultThemeName = StandardApplicationTheme.Name;
+
+                opt.Themes.Add<StandardApplicationTheme>();
+
+            });
+
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options
+                    .StyleBundles
+                    .Configure(StandardBundles.Styles.Global, bundle => { bundle.AddContributors(typeof(ApplicationThemeGlobalStyleContributor)); });
+
+                options
+                    .ScriptBundles
+                    .Configure(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(ApplicationThemeGlobalScriptContributor)));
+            });
         }
 
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            // Remove Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared Application Part
 
+            Configure<IMvcBuilder>(opt =>
+            {
+                var appPart = opt.PartManager.ApplicationParts
+                    .SingleOrDefault(x => ((AssemblyPart)x).Assembly == typeof(AbpAspNetCoreMvcUiThemeSharedModule).Assembly);
+
+                if (appPart != null)
+                {
+                    opt.PartManager.ApplicationParts.Remove(appPart);
+                }
+            });
+        }
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -125,7 +165,7 @@ namespace MicroStore.Client.PublicWeb
         }
 
 
-       
+
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
         {

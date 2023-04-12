@@ -193,6 +193,7 @@ publish/
 PublishScripts/
 
 # Client side libraries
+**/wwwroot/libs/*
 **/wwwroot/lib/*
 
 # NuGet Packages
