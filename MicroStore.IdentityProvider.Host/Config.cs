@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
 using System.Security.Claims;
-
 namespace MicroStore.IdentityProvider.Host
 {
     public static class Config

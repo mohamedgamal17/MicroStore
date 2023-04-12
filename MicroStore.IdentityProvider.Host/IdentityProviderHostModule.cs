@@ -18,10 +18,14 @@ using Volo.Abp.AutoMapper;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using MicroStore.IdentityProvider.Host.Services;
 using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
-using MicroStore.IdentityProvider.Host.Extensions;
 using MicroStore.AspNetCore.UI;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
+using MicroStore.IdentityProvider.Host.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+using MicroStore.IdentityProvider.Host.Theming;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -31,8 +35,7 @@ namespace MicroStore.IdentityProvider.Host
         typeof(MicroStoreAspNetCoreModule),
         typeof(AbpAutofacModule),
         typeof(MicroStoreAspNetCoreUIModule),
-        typeof(AbpAspNetCoreMvcUiModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class IdentityProviderHostModule : AbpModule
     {
 
@@ -62,9 +65,42 @@ namespace MicroStore.IdentityProvider.Host
             context.Services.AddControllers().AddNewtonsoftJson();
 
             context.Services.AddMvc();
+
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options
+                    .StyleBundles
+                    .Configure(StandardBundles.Styles.Global, bundle => { bundle.AddContributors(typeof(ApplicationThemeGlobalStyleContributor)); });
+
+                options
+                    .ScriptBundles
+                    .Configure(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(ApplicationThemeGlobalScriptContributor)));
+            });
+
+            Configure<AbpThemingOptions>(opt =>
+            {
+                opt.DefaultThemeName = StandardApplicationTheme.Name;
+
+                opt.Themes.Add<StandardApplicationTheme>();
+
+            });
         }
 
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            // Remove Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared Application Part
 
+            Configure<IMvcBuilder>(opt =>
+            {
+                var appPart = opt.PartManager.ApplicationParts
+                    .SingleOrDefault(x => ((AssemblyPart)x).Assembly == typeof(AbpAspNetCoreMvcUiThemeSharedModule).Assembly);
+
+                if (appPart != null)
+                {
+                    opt.PartManager.ApplicationParts.Remove(appPart);
+                }
+            });
+        }
         public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
         {
             using (var scope = context.ServiceProvider.CreateScope())

@@ -1,7 +1,16 @@
 {
+  "name": "microstore-identitprovider",
   "version": "1.0.0",
-  "name": "asp.net",
-  "private": true,
-  "devDependencies": {
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui": "^7.1.1",
+    "@abp/aspnetcore.mvc.ui.theme.shared": "^7.1.1",
+    "admin-lte": "^3.2.0",
+    "summernote": "^0.8.20"
   }
 }
