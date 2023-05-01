@@ -19,9 +19,9 @@ namespace MicroStore.IdentityProvider.Host.Theming
         {
             return name switch
             {
-                StandardApplicationLayout.Administration => "~/Areas/Administration/Views/Shared/_Layout.cshtml",
-                StandardApplicationLayout.Account => "~/Pages/Shared/_Layout.cshtml",
-                _ => fallbackToDefault ? "~/Areas/Administration/Views/Shared/_Layout.cshtml" : string.Empty
+                StandardApplicationLayout.Administration => "/Areas/BackEnd/Views/Shared/_Layout.cshtml",
+                StandardApplicationLayout.Account => "/Pages/Shared/_Layout.cshtml",
+                _ => fallbackToDefault ? "~/Pages/Shared/_Layout.cshtml" : string.Empty
             };
         }
     }

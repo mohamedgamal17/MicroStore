@@ -8,7 +8,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Extension
     public static class AssertionExtensions
     {
 
-        public static void AssertApiResourceCommand(this ApiResource apiResource , ApiResourceModel model)
+        public static void AssertApiResourceModel(this ApiResource apiResource , ApiResourceModel model)
         {
             apiResource.Name.Should().Be(model.Name);
             apiResource.Description.Should().Be(model.Description);
@@ -34,7 +34,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Extension
         }
 
 
-        public static void AssertApiScopeCommand(this ApiScope apiScope, ApiScopeModel model)
+        public static void AssertApiScopeModel(this ApiScope apiScope, ApiScopeModel model)
         {
 
             apiScope.Name.Should().Be(apiScope.Name);
@@ -49,15 +49,15 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Extension
                 return left.Type == right;
             });
 
-            apiScope.Properties?.OrderBy(x=>x.Key).Should().Equal(model.Properties?.OrderBy(x => x), (left, right) =>
+            apiScope.Properties?.OrderBy(x=>x.Key).Should().Equal(model.Properties?.OrderBy(x => x.Key), (left, right) =>
             {
-                return left.Key == right.Key &&
-                left.Value == right.Value;
+                return left.Key == right.Key && left.Value == right.Value;
+
             });
 
         }
 
-        public static void AssertClientCommand(this Client client , ClientModel model)
+        public static void AssertClientModel(this Client client , ClientModel model)
         {
 
             client.ClientId.Should().Be(model.ClientId);
@@ -108,7 +108,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Extension
             client.IncludeJwtId.Should().Be(model.IncludeJwtId);
             client.CibaLifetime.Should().Be(model.CibaLifetime);
 
-            if (model.AllowedIdentityTokenSigningAlgorithms.Any())
+            if (model.AllowedIdentityTokenSigningAlgorithms != null && model.AllowedIdentityTokenSigningAlgorithms.Any())
             {
                 client.AllowedIdentityTokenSigningAlgorithms.Should().Be(model.AllowedIdentityTokenSigningAlgorithms.JoinAsString(","));
             }
@@ -316,5 +316,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Extension
             });
                 
         }
+
+
     }
 }

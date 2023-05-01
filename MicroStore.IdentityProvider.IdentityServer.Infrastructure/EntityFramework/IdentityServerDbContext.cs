@@ -30,14 +30,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramew
             apiResourceBuilder.Navigation(x => x.Scopes).AutoInclude(true);
 
             var apiScopeBuilder = modelBuilder.Entity<ApiScope>();
-            apiResourceBuilder.Navigation(x => x.Properties).AutoInclude(true);
-            apiResourceBuilder.Navigation(x => x.UserClaims).AutoInclude(true);
-            apiResourceBuilder.Navigation(x => x.UserClaims).AutoInclude(true);
+            apiScopeBuilder.Navigation(x => x.Properties).AutoInclude(true);
+            apiScopeBuilder.Navigation(x => x.UserClaims).AutoInclude(true);
 
             var clientBuilder = modelBuilder.Entity<Client>();
             clientBuilder.Navigation(x => x.AllowedGrantTypes).AutoInclude(true);
             clientBuilder.Navigation(x => x.RedirectUris).AutoInclude(true);
             clientBuilder.Navigation(x => x.PostLogoutRedirectUris).AutoInclude(true);
+            clientBuilder.Navigation(x => x.AllowedCorsOrigins).AutoInclude(true);
             clientBuilder.Navigation(x => x.Claims).AutoInclude(true);
             clientBuilder.Navigation(x => x.ClientSecrets).AutoInclude(true);
             clientBuilder.Navigation(x => x.Properties).AutoInclude(true);

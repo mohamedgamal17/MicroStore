@@ -1,0 +1,244 @@
+﻿@using Duende.IdentityServer.Models;
+@model MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.Clients.EditClientUIModel
+
+<abp-card>
+    <abp-card-body>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.IdentityTokenLifetime"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input asp-for="@Model.IdentityTokenLifetime" class="form-control" type="number" />
+                    <span class="input-group-text">Seconds</span>
+                </div>
+                <span class="text-danger" asp-validation-for="@Model.IdentityTokenLifetime">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.AccessTokenLifetime"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input asp-for="@Model.AccessTokenLifetime" class="form-control" type="number" />
+                    <span class="input-group-text">Seconds</span>
+                </div>
+                <span class="text-danger" asp-validation-for="@Model.AccessTokenLifetime">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.AuthorizationCodeLifetime"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input asp-for="@Model.AuthorizationCodeLifetime" class="form-control" type="number" />
+                    <span class="input-group-text">Seconds</span>
+
+                </div>
+
+                <span class="text-danger" asp-validation-for="@Model.AuthorizationCodeLifetime">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.ConsentLifetime"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input asp-for="@Model.ConsentLifetime" class="form-control" />
+                    <span class="input-group-text">Seconds</span>
+                </div>
+
+                <span class="text-danger" asp-validation-for="@Model.ConsentLifetime">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.UserSsoLifetime"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input asp-for="@Model.UserSsoLifetime" class="form-control" />
+                    <span class="input-group-text">Seconds</span>
+                </div>
+
+
+                <span class="text-danger" asp-validation-for="@Model.UserSsoLifetime">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.FrontChannelLogoutUri"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.FrontChannelLogoutUri" class="form-control" />
+
+                <span class="text-danger" asp-validation-for="@Model.FrontChannelLogoutUri">
+                </span>
+            </div>
+        </div>
+
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.BackChannelLogoutUri"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.BackChannelLogoutUri" class="form-control" />
+
+                <span class="text-danger" asp-validation-for="@Model.BackChannelLogoutUri">
+                </span>
+            </div>
+        </div>
+
+
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.PairWiseSubjectSalt"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.PairWiseSubjectSalt" class="form-control" />
+
+                <span class="text-danger" asp-validation-for="@Model.PairWiseSubjectSalt">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.AccessTokenType"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <select asp-for="@Model.AccessTokenType" class="form-control"
+                        asp-items="@Html.GetEnumSelectList<AccessTokenType>()"> </select>
+
+                <span class="text-danger" asp-validation-for="@Model.AccessTokenType">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.FrontChannelLogoutSessionRequired"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.FrontChannelLogoutSessionRequired" />
+
+                <span class="text-danger" asp-validation-for="@Model.FrontChannelLogoutSessionRequired">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.BackChannelLogoutSessionRequired"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.BackChannelLogoutSessionRequired" />
+
+                <span class="text-danger" asp-validation-for="@Model.BackChannelLogoutSessionRequired">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.IncludeJwtId"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.IncludeJwtId" />
+
+                <span class="text-danger" asp-validation-for="@Model.IncludeJwtId">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.RequirePkce"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.RequirePkce" class="" />
+
+                <span class="text-danger" asp-validation-for="@Model.RequirePkce">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.AllowPlainTextPkce"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.AllowPlainTextPkce" />
+
+                <span class="text-danger" asp-validation-for="@Model.AllowPlainTextPkce">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.AlwaysIncludeUserClaimsInIdToken"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.AlwaysIncludeUserClaimsInIdToken" />
+                <span class="text-danger" asp-validation-for="@Model.AlwaysIncludeUserClaimsInIdToken">
+                </span>
+            </div>
+        </div>
+    </abp-card-body>
+</abp-card>
+
+

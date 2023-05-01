@@ -13,6 +13,7 @@ namespace MicroStore.IdentityProvider.Host
             {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
+            
             };
 
 
@@ -56,6 +57,12 @@ namespace MicroStore.IdentityProvider.Host
         public static IEnumerable<ApiResource> ApiResources =>
             new ApiResource[]
             {
+                new ApiResource("api-sample" , "Api Sample App" )
+                {
+                    Description = "Sample APi",
+                    Scopes = { "sample.access" }
+                },
+
                 new ApiResource("api-catalog","Catalog Api")
                 {
                     Scopes = { "catalog.access" }
@@ -68,7 +75,8 @@ namespace MicroStore.IdentityProvider.Host
 
                 new ApiResource("api-ordering","Ordering Api")
                 {
-                    Scopes = {"ordering.access" , "ordering.read", "ordering.write"}
+                    Scopes = {"ordering.access" , "ordering.read", "ordering.write"},
+                    
                 },
 
                 new ApiResource("api-billing","Billing Api")
@@ -106,7 +114,9 @@ namespace MicroStore.IdentityProvider.Host
                 AllowedGrantTypes = new List<string> { "urn:ietf:params:oauth:grant-type:token-exchange"},
                 ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
-                AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read","inventory.write" , "inventory.read"},
+                AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read","inventory.write" , "inventory.read" , "api-sample"},
+               
+                
                 AllowOfflineAccess = false,
 
             },

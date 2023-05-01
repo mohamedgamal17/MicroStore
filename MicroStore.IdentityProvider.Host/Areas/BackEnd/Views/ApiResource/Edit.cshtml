@@ -1,0 +1,87 @@
+﻿@using MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.ApiResources
+@model MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.ApiResources.ApiResourceUIModel
+<div class="content-wrapper mr-2">
+    <!-- Content Header (Page header) -->
+ 
+        @Html.AntiForgeryToken()
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Create Api Resource</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <button class="btn btn-info" id="SaveButton">
+                                    <i class="fas
+                                fa-plus-square mr-1"></i> Save
+                                </button>
+                            </li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="text-center mb-3">
+                  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                </div>
+                <form asp-action="Edit" id="ApiResourceForm">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(x=> x.Id, new {id= "ApiResourceId"})
+                    <partial name="_CreateOrUpdate.Info" model = "Model" />
+                    <partial name="_Api.Scopes" model="Model" />
+                </form>
+                
+                <partial name="Grids/_Grids.ApiResourceSecrets" model="new ApiResourceSecretListUIModel()" />
+                <partial name="IdentityServer/Grids/_Grids.Property" />
+
+            </div>
+        </div>
+    
+</div>
+
+@section Scripts{
+    <script src="~/js/backend/apiresource/edit.js"> </script>
+    <script src="~/js/backend/grids/propertygrid.js"> </script>
+    <script>
+        $(document).ready(function(){
+            $("#SaveButton").on('click',function(){
+                $("#ApiResourceForm").submit();
+            });
+
+             propertyGrid.init({
+                 parentId : "@(Model.Id)",
+                listAction:{
+                    url : '@Url.Action("ListApiResourceProperties", new {id = @Model.Id})',
+                    type:"POST"
+                },
+                deleteAction:{
+                    url : '@Url.Action("DeleteProperty")',
+                    type : "POST"
+                },
+
+                createModal :{
+                    viewUrl : '@Url.Action("CreatePropertyModal")'
+                },
+
+                editModal:{
+                    viewUrl : '@Url.Action("EditPropertyModal")'
+                }
+
+            })
+
+            $("#CreateApiSecretButton").on('click',function(){
+                console.log('clicked');
+            });
+
+            $("#ScopeSelect").bootstrapDualListbox();
+        })
+
+       
+    </script>   
+}

@@ -1,10 +1,7 @@
-﻿using Duende.IdentityServer.EntityFramework.Storage;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MicroStore.IdentityProvider.IdentityServer.Application;
+using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure
@@ -14,6 +11,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             
         }
     }

@@ -6,17 +6,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 {
     public class ClientModel
     {
-        public ClientModel()
-        {
-            AllowedGrantTypes = new List<string>();
-            RedirectUris = new List<string>();
-            PostLogoutRedirectUris = new List<string>();
-            AllowedScopes = new List<string>();
-            AllowedIdentityTokenSigningAlgorithms = new List<string>();
-            AllowedCorsOrigins = new List<string>();
-            Properties = new List<PropertyModel>();
-
-        }
+      
 
         public string ClientId { get; set; }
 
@@ -34,7 +24,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 
         public bool AllowRememberConsent { get; set; } = true;
 
-        public ICollection<string> AllowedGrantTypes { get; set; }
+        public List<string>? AllowedGrantTypes { get; set; }
       
         public bool RequirePkce { get; set; } = true;
 
@@ -44,9 +34,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 
         public bool AllowAccessTokensViaBrowser { get; set; } = false;
 
-        public ICollection<string> RedirectUris { get; set; } 
+        public List<string>? RedirectUris { get; set; } 
 
-        public ICollection<string> PostLogoutRedirectUris { get; set; } 
+        public List<string>? PostLogoutRedirectUris { get; set; } 
 
         public string? FrontChannelLogoutUri { get; set; }
 
@@ -58,13 +48,13 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 
         public bool AllowOfflineAccess { get; set; } = false;
 
-        public ICollection<string> AllowedScopes { get; set; } 
+        public ICollection<string>? AllowedScopes { get; set; } 
 
         public bool AlwaysIncludeUserClaimsInIdToken { get; set; } = false;
 
         public int IdentityTokenLifetime { get; set; } = 300;
 
-        public ICollection<string> AllowedIdentityTokenSigningAlgorithms { get; set; }
+        public ICollection<string>? AllowedIdentityTokenSigningAlgorithms { get; set; }
 
         public int AccessTokenLifetime { get; set; } = 3600;
 
@@ -86,11 +76,11 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 
         public bool EnableLocalLogin { get; set; } = true;
 
-        public ICollection<string> IdentityProviderRestrictions { get; set; } = new HashSet<string>();
+        public HashSet<string>? IdentityProviderRestrictions { get; set; }
 
         public bool IncludeJwtId { get; set; } = true;
 
-        public ICollection<ClaimModel> Claims { get; set; } = new List<ClaimModel>();
+        public List<ClaimModel>? Claims { get; set; }
 
         public bool AlwaysSendClientClaims { get; set; } = false;
 
@@ -110,9 +100,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 
         public bool? CoordinateLifetimeWithUserSession { get; set; }
 
-        public ICollection<string> AllowedCorsOrigins { get; set; } = new HashSet<string>();
+        public HashSet<string>? AllowedCorsOrigins { get; set; } 
 
-        public List<PropertyModel> Properties { get; set; } = new List<PropertyModel>();
+        public List<PropertyModel>? Properties { get; set; }
 
         public bool Enabled { get; set; } = true;
 

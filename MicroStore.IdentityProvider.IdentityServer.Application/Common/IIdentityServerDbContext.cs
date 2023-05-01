@@ -2,11 +2,9 @@
 
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Common
 {
-    public interface IIdentityServerDbContext : IConfigurationDbContext, IPersistedGrantDbContext
+    public interface IApplicationConfigurationDbContext : IConfigurationDbContext 
     {
     }
-
-    public interface IApplicationConfigurationDbContext : IConfigurationDbContext { }
 
     public interface IApplicationPersistedGrantDbContext : IPersistedGrantDbContext { }
 }

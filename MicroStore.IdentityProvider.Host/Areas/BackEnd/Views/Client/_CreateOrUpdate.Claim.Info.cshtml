@@ -1,0 +1,15 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.Clients.ClientClaimUIModel
+
+
+<abp-modal>
+    <abp-modal-header title="Claim"></abp-modal-header>
+    <abp-modal-body>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x=> x.ClaimId)
+        @Html.HiddenFor(x=> x.ClientId)
+        <abp-input asp-for="@Model.Type"></abp-input>
+        <abp-input asp-for="@Model.Value"></abp-input>
+    </abp-modal-body>
+    <abp-modal-footer buttons="@AbpModalButtons.Save | @AbpModalButtons.Cancel"></abp-modal-footer>
+</abp-modal>

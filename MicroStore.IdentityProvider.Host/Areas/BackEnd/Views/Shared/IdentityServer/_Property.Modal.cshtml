@@ -1,0 +1,14 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.PropertyUIModel
+
+<abp-modal>
+    <abp-modal-header title="Property"></abp-modal-header>
+    <abp-modal-body>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x=> x.ParentId)
+        @Html.HiddenFor(x=> x.PropertyId)
+        <abp-input asp-for="@Model.Key"></abp-input>
+        <abp-input asp-for="@Model.Value"></abp-input>
+    </abp-modal-body>
+    <abp-modal-footer buttons="@AbpModalButtons.Save | @AbpModalButtons.Cancel"></abp-modal-footer>
+</abp-modal>

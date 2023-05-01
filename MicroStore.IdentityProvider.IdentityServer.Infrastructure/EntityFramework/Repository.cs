@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using System.Linq.Expressions;
+using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework
 {
-    public abstract class Repository<TContext, TEntity> : IRepository<TEntity>
-        where TContext : DbContext
+    public class Repository<TEntity> : IRepository<TEntity> 
         where TEntity : class
     {
-        protected readonly TContext DbContext;
+        protected readonly ApplicationConfigurationDbContext DbContext;
 
-        protected Repository(TContext dbContext)
+        public Repository(ApplicationConfigurationDbContext dbContext)
         {
             DbContext = dbContext;
         }
@@ -32,7 +32,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramew
             await DbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
 
             await DbContext.SaveChangesAsync(cancellationToken);
-
+            
             return entity;
         }
 

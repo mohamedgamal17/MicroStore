@@ -10,5 +10,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
     {
         Task<Result<PagedResult<ApiResourceDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default);
         Task<Result<ApiResourceDto>> GetAsync(int apiResourceId , CancellationToken cancellationToken = default);
+        Task<Result<List<ApiResourceSecretDto>>> ListApiResourceSecrets(int apiResourceId, CancellationToken cancellationToken = default);
+        Task<Result<ApiResourceSecretDto>> GetApiResourceSecret(int  apiResourceId ,int secretId ,CancellationToken cancellationToken = default);
+        Task<Result<List<ApiResourcePropertyDto>>> ListProperties(int apiResourceId, CancellationToken cancellationToken = default);
+        Task<Result<ApiResourcePropertyDto>> GetApiResourceProperty(int apiResourceId , int propertyId , CancellationToken cancellationToken = default);    
     }
 }

@@ -43,7 +43,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Dtos
     }
 
 
-    public class ClinetProperty : PropertyDto<int>
+    public class ClientPropertyDto : PropertyDto<int>
     {
         public int ClientId { get; set; }
     }

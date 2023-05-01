@@ -18,28 +18,69 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Mappers
                 .ForMember(x => x.Claims, opt => opt.MapFrom(c => c.Claims))
                 .ForMember(x => x.AllowedCorsOrigins, opt => opt.MapFrom(c => c.AllowedCorsOrigins))
                 .ForMember(x => x.IdentityProviderRestrictions, opt => opt.MapFrom(c => c.IdentityProviderRestrictions))
-                .ForMember(x => x.AllowedGrantTypes, opt => opt.MapFrom(c => c.AllowedGrantTypes));
-
+                .ForMember(x => x.AllowedGrantTypes, opt => opt.MapFrom(c => c.AllowedGrantTypes))
+                .ForMember(x => x.Properties , opt => opt.MapFrom(c => c.Properties));
 
             CreateMap<ClientRedirectUri, ClientRedirectUriDto>();
+
             CreateMap<ClientPostLogoutRedirectUri, ClientPostLogoutRedirectUriDto>();
+
             CreateMap<ClientSecret, ClientSecretDto>();
+
             CreateMap<ClientScope, ClientScopeDto>();
+
             CreateMap<ClientClaim, ClientClaimDto>();
+
             CreateMap<ClientCorsOrigin, ClientCorsOriginDto>();
+
             CreateMap<ClientIdPRestriction, ClientIdPRestrictionDto>();
+
             CreateMap<ClientGrantType, ClientGrantTypeDto>();
 
+            CreateMap<ClientProperty, ClientPropertyDto>();
 
             CreateMap<ClientModel, Client>()
-                .ForMember(x => x.AllowedGrantTypes, opt => opt.MapFrom(x => x.AllowedGrantTypes))
-                .ForMember(x => x.RedirectUris, opt => opt.MapFrom(c => c.RedirectUris))
-                .ForMember(x => x.PostLogoutRedirectUris, opt => opt.MapFrom(c => c.PostLogoutRedirectUris))
-                .ForMember(x => x.AllowedIdentityTokenSigningAlgorithms, opt => opt.ConvertUsing(AllowedSigningAlgorithmsConverter.Converter, x => x.AllowedIdentityTokenSigningAlgorithms))
-                .ForMember(x => x.IdentityProviderRestrictions, opt => opt.MapFrom(c => c.IdentityProviderRestrictions))
-                .ForMember(x => x.Claims, opt => opt.MapFrom(c => c.Claims))
-                .ForMember(x => x.AllowedCorsOrigins, opt => opt.MapFrom(c => c.AllowedCorsOrigins))
-                .ForMember(x => x.Properties, opt => opt.MapFrom(c => c.Properties));
+                .ForMember(x => x.AllowedGrantTypes, opt => 
+                {
+                    opt.Condition(src => src.AllowedGrantTypes != null);
+                    opt.MapFrom(src => src.AllowedGrantTypes);
+                })
+                .ForMember(x => x.RedirectUris, opt =>
+                {
+                    opt.Condition(src => src.RedirectUris != null);
+                    opt.MapFrom(src => src.RedirectUris);
+                })
+                .ForMember(x => x.PostLogoutRedirectUris, opt =>
+                {
+                    opt.Condition(src=> src.PostLogoutRedirectUris != null);
+                    opt.MapFrom(src => src.PostLogoutRedirectUris);
+                })
+                .ForMember(x => x.AllowedIdentityTokenSigningAlgorithms, opt =>
+                {
+                    opt.Condition(src=> src.AllowedIdentityTokenSigningAlgorithms != null);
+                    opt.ConvertUsing(AllowedSigningAlgorithmsConverter.Converter, x => x.AllowedIdentityTokenSigningAlgorithms);
+                })
+                .ForMember(x => x.IdentityProviderRestrictions, opt => 
+                { 
+                    opt.Condition(src=> src.IdentityProviderRestrictions != null);
+                    opt.MapFrom(src => src.IdentityProviderRestrictions);
+                })
+                .ForMember(x => x.Claims, opt => 
+                {
+                    opt.Condition(src => src.Claims != null);
+                    opt.MapFrom(src => src.Claims);
+                })
+                .ForMember(x => x.AllowedCorsOrigins, opt =>
+                {
+                    opt.Condition(src => src.AllowedCorsOrigins != null);
+                    opt.MapFrom(src => src.AllowedCorsOrigins);
+                })
+                .ForMember(x => x.Properties, opt =>
+                {
+                    opt.Condition(src => src.Properties != null);
+                    opt.MapFrom(src => src.Properties);
+
+                });
 
 
             CreateMap<PropertyModel, ClientProperty>()

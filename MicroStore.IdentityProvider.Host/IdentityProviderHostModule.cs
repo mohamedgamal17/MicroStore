@@ -60,11 +60,6 @@ namespace MicroStore.IdentityProvider.Host
 
             Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<IdentityProviderHostModule>());
 
-            context.Services.AddRazorPages();
-
-            context.Services.AddControllers().AddNewtonsoftJson();
-
-            context.Services.AddMvc();
 
             Configure<AbpBundlingOptions>(options =>
             {

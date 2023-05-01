@@ -78,7 +78,7 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
             if (result.IsFailure)
             {
                 _logger.LogException(result.Exception);
-                return HandleFailureResult(result, model);
+                return HandleFailureResultWithView(result, model);
             }
 
 
@@ -92,7 +92,7 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
 
             if (modelResult.IsFailure)
             {
-                return HandleFailureResult(modelResult);
+                return HandleFailureResultWithView(modelResult);
             }
 
             ViewBag.Roles = await PrepareRoleSelectedList(modelResult.Value.UserRoles);
@@ -114,7 +114,7 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
 
             if (updateReult.IsFailure)
             {
-                return HandleFailureResult(updateReult, model);
+                return HandleFailureResultWithView(updateReult, model);
             }
 
             return RedirectToAction("Index");

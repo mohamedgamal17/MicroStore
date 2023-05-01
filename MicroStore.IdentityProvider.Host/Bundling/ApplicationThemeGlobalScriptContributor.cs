@@ -12,7 +12,9 @@ namespace MicroStore.IdentityProvider.Host.Bundling
             context.Files.AddRange(new[]
             {
                 "/libs/summernote/summernote.min.js",
-                "/libs/admin-lte/js/adminlte.min.js"
+                "/libs/admin-lte/js/adminlte.min.js",
+                "/libs/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js",
+                "/js/abp.config.js"
             });
         }
     }

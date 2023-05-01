@@ -82,7 +82,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         [Route("{apiResourceId}/secrets")]
         public async Task<IActionResult> CreateApiResourceSecret(int apiResourceId, [FromBody] SecretModel model)
         {
-            var result = await _apiResourceCommandService.AddApiSecret(apiResourceId, model);
+            var result = await _apiResourceCommandService.AddSecret(apiResourceId, model);
 
             return result.ToOk();
         }
@@ -92,7 +92,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         [Route("{apiResourceId}/secrets/{secretId}")]
         public async Task<IActionResult> DeleteApiResourceSecret(int apiResourceId, int secretId)
         {
-            var result = await _apiResourceCommandService.RemoveApiSecret(apiResourceId, secretId);
+            var result = await _apiResourceCommandService.RemoveSecret(apiResourceId, secretId);
 
             return result.ToNoContent();
         }

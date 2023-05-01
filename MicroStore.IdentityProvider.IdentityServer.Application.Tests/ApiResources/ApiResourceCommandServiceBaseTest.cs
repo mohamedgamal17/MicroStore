@@ -52,6 +52,13 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
                 Name = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
                 DisplayName = Guid.NewGuid().ToString(),
+                Properties = new List<ApiResourceProperty>
+                {
+                    new ApiResourceProperty{Key = Guid.NewGuid().ToString() , Value= Guid.NewGuid().ToString()},
+                    new ApiResourceProperty{Key = Guid.NewGuid().ToString() , Value= Guid.NewGuid().ToString()},
+                    new ApiResourceProperty{Key = Guid.NewGuid().ToString() , Value= Guid.NewGuid().ToString()},
+                    new ApiResourceProperty{Key = Guid.NewGuid().ToString() , Value= Guid.NewGuid().ToString()},
+                }
             };
 
             return Insert(apiResource);
@@ -67,8 +74,8 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiResour
                 {
                     Value = Guid.NewGuid().ToString().ToSha512(),
                     Type = SecretType,
-                     Description = Guid.NewGuid().ToString()
-                }
+                    Description = Guid.NewGuid().ToString()
+                },
             };
 
             return await Update(apiResource);

@@ -21,13 +21,11 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.ApiScopes
         {
             var queryParams = new PagingQueryParams ();
 
-            var result = await _apiScopeQueryService.ListAsync(queryParams);
+            var result = await _apiScopeQueryService.ListAsync();
 
             result.IsSuccess.Should().BeTrue();
 
-            result.Value.Lenght.Should().Be(queryParams.Lenght);
-
-            result.Value.Items.Count().Should().BeLessThanOrEqualTo(queryParams.Lenght);
+            result.Value.Count.Should().BeLessThanOrEqualTo(queryParams.Lenght);         
         }
 
         [Test]

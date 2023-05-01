@@ -4,7 +4,7 @@
 }
 <div class="card">
     <div class="card-header">
-        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i>User Password</p>
+        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i>User Roles</p>
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
         </div>
@@ -12,13 +12,8 @@
     <div class="card-body">
        
          <div class="form-group row mb-3">
-            <div class="col-md-3">
-                <div style="float: right!important;">
-                    <micro-label asp-for="@Model.UserRoles"></micro-label>
-                </div>
-
-            </div>
-            <div class="col-md-9">
+    
+            <div class="col-md-12">
                 <select class="form-control" id="RoleSelect" multiple asp-for="@Model.UserRoles" asp-items="rolesSelectedList"></select>
                 <span class="text-danger" asp-validation-for="@Model.UserRoles">
                 </span>

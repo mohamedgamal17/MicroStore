@@ -53,7 +53,7 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
 
             if (result.IsFailure)
             {
-                return HandleFailureResult(result, model);
+                return HandleFailureResultWithView(result, model);
             }
 
             return RedirectToAction("Index");
@@ -65,7 +65,7 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
 
             if (editModelResult.IsFailure)
             {
-                return HandleFailureResult(editModelResult);
+                return HandleFailureResultWithView(editModelResult);
             }
 
             return View(editModelResult.Value);
@@ -84,7 +84,7 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
 
             if (result.IsFailure)
             {
-                return HandleFailureResult(result, model);
+                return HandleFailureResultWithView(result, model);
             }
 
 

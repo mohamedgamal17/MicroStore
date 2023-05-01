@@ -20,7 +20,11 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Mappers
  
             CreateMap<ApiScopeModel, ApiScope>()
                  .ForMember(x => x.UserClaims, opt => opt.MapFrom(c => c.UserClaims))
-                 .ForMember(x => x.Properties, opt => opt.MapFrom(c => c.Properties));
+                 .ForMember(x => x.Properties, opt =>
+                 {
+                     opt.Condition(src => src.Properties != null);
+                     opt.MapFrom(src => src.Properties);
+                 });
 
 
             CreateMap<string, ApiScopeClaim>()

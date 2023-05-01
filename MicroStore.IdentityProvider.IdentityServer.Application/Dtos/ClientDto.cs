@@ -5,6 +5,19 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Dtos
 {
     public class ClientDto : EntityDto<int>
     {
+        public ClientDto()
+        {
+            ClientSecrets = new List<ClientSecretDto>();
+            AllowedGrantTypes = new List<ClientGrantTypeDto>();
+            RedirectUris = new List<ClientRedirectUriDto>();
+            PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUriDto>();
+            AllowedScopes = new List<ClientScopeDto>();
+            IdentityProviderRestrictions = new List<ClientIdPRestrictionDto>();
+            Claims = new List<ClientClaimDto>();
+            AllowedCorsOrigins = new List<ClientCorsOriginDto>();
+            Properties = new List<ClientPropertyDto>();
+        }
+
         public bool Enabled { get; set; }
         public string ClientId { get; set; }
         public string ProtocolType { get; set; }
@@ -49,7 +62,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Dtos
         public string ClientClaimsPrefix { get; set; }
         public string PairWiseSubjectSalt { get; set; }
         public List<ClientCorsOriginDto> AllowedCorsOrigins { get; set; }
-        public List<ClientProperty> Properties { get; set; }
+        public List<ClientPropertyDto> Properties { get; set; }
         public int? UserSsoLifetime { get; set; }
         public string UserCodeType { get; set; }
         public int DeviceCodeLifetime { get; set; }

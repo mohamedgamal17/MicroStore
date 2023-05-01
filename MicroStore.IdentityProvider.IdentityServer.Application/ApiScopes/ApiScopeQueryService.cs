@@ -1,9 +1,6 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Duende.IdentityServer.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
@@ -19,11 +16,11 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
         {
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
-        public async Task<Result<PagedResult<ApiScopeDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<List<ApiScopeDto>>> ListAsync( CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiScopes.AsNoTracking().ProjectTo<ApiScopeDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var result = await query.ToListAsync( cancellationToken);
 
             return result;
         }
@@ -39,6 +36,35 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
             }
 
             return result;
+        }
+
+        public async Task<Result<List<ApiScopePropertyDto>>> ListProperties(int apiScopeId, CancellationToken cancellationToken = default)
+        {
+            var result = await GetAsync(apiScopeId);
+
+            if (result.IsFailure)
+            {
+                return new Result<List<ApiScopePropertyDto>>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
+            }
+
+            return result.Value.Properties;
+        }
+
+        public async Task<Result<ApiScopePropertyDto>> GetProperty(int apiScopeId, int propertyId, CancellationToken cancellationToken = default)
+        {
+            var result = await GetAsync(apiScopeId);
+
+            if (result.IsFailure)
+            {
+                return new Result<ApiScopePropertyDto>(new EntityNotFoundException(typeof(ApiScope), apiScopeId));
+            }
+
+            var property = result.Value.Properties.SingleOrDefault(x => x.Id == propertyId);
+
+            if(property == null)
+                return new Result<ApiScopePropertyDto>(new EntityNotFoundException(typeof(ApiScopeProperty), propertyId));
+
+            return property;
         }
     }
 }

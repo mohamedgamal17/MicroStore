@@ -26,7 +26,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
                      "http://exmple.com/"
                 },
 
-                AllowedCorsOrigins = new List<string>
+                AllowedCorsOrigins = new HashSet<string>
                 {
                       "http://exmple.com/"
                 },
@@ -66,6 +66,12 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
                 {
                     new PropertyModel { Key = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()}
                 },
+
+                Claims=  new List<ClaimModel>
+                {
+                    new ClaimModel  { Type = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()},
+                    new ClaimModel  { Type = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()},
+                }
             };
         }
 
@@ -79,7 +85,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
             };
         }
 
-        protected Task<Client> GenerateFakeClient()
+        protected async Task<Client> GenerateFakeClient()
         {
             var client = new Client
             {
@@ -109,10 +115,26 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
                     {
                         Scope = Guid.NewGuid().ToString()
                     }
+                },
+
+                Properties = new List<ClientProperty>
+                {
+                    new ClientProperty { Key = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()},
+                    new ClientProperty { Key = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()},
+                    new ClientProperty { Key = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()},
+                    new ClientProperty { Key = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()}
+                },
+
+                Claims = new List<ClientClaim>
+                {
+                    new ClientClaim { Type = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()},
+                    new ClientClaim { Type = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()},
+                    new ClientClaim { Type = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()},
+                    new ClientClaim { Type = Guid.NewGuid().ToString(), Value = Guid.NewGuid().ToString()}
                 }
             };
 
-            return Insert(client);
+            return await Insert(client);
         }
 
         protected async Task<Client> GenerateFakeClientWithSecret()
