@@ -71,6 +71,12 @@ namespace MicroStore.Inventory.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         public async Task<IActionResult> UpdateProductInventory(string productId, [FromBody] InventoryItemModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
 
             var result = await _productCommandService.UpdateProductAsync(productId, model);
 
