@@ -20,6 +20,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore
             });
 
 
+            
           
             context.Services.AddTransient<RequiredScopeAuthorizationHandler>();
         }

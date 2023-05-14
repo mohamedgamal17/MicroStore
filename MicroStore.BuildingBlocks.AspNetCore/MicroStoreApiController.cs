@@ -1,10 +1,46 @@
-﻿using Volo.Abp.AspNetCore.Mvc;
-
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
+using MicroStore.BuildingBlocks.AspNetCore.Extensions;
+using Volo.Abp.AspNetCore.Mvc;
 namespace MicroStore.BuildingBlocks.AspNetCore
 {
-    public class MicroStoreApiController : AbpControllerBase
+    public class MicroStoreApiController : AbpController
     {
 
+
+        protected async Task<ValidationResult> ValidateModel<TModel>(TModel model)
+        {
+            var validator = ResolveValidator<TModel>();
+
+            if (validator == null) return new ValidationResult();
+
+            var result =  await validator.ValidateAsync(model);
+
+            if (!result.IsValid)
+            {
+                result.AddToModelState(ModelState);
+            }
+
+            return result;
+        }
+
+        protected IActionResult InvalideModelState()
+        {
+
+            var details = new ValidationProblemDetails(ModelState)
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+            };
+
+            return new BadRequestObjectResult(details);
+        }
+
+
+        private IValidator<T>? ResolveValidator<T>()
+        {
+            return LazyServiceProvider.LazyGetService<IValidator<T>> ();   
+        }
 
         //[NonAction]
         //protected IActionResult ConvertErrorResult(UnitResult result)
