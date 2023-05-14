@@ -52,6 +52,13 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CategoryDto))]
         public async Task<IActionResult> Post([FromBody]CategoryModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if(!validationResult.IsValid) 
+            {
+                return InvalideModelState();
+            }
+
             var result = await _categoryCommandService.CreateAsync(model);
 
             return result.ToCreatedAtAction(nameof(GetCatalogCategory), routeValues : new { id = result.Value.Id });
@@ -62,6 +69,12 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDto))]
         public async Task<IActionResult> Put(string id, [FromBody] CategoryModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
             var result = await _categoryCommandService.UpdateAsync(id,model);
 
             return result.ToOk();

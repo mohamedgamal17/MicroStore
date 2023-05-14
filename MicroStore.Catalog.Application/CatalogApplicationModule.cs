@@ -5,13 +5,16 @@ using System.Data;
 using System.Reflection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.EventBus;
+using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
+using Volo.Abp.Validation;
 
 namespace MicroStore.Catalog.Application
 {
     [DependsOn(typeof(AbpEventBusModule),
-        typeof(AbpAutoMapperModule))]
+        typeof(AbpAutoMapperModule), 
+        typeof(AbpFluentValidationModule))]
     public class CatalogApplicationModule : AbpModule
     {
 
@@ -22,11 +25,13 @@ namespace MicroStore.Catalog.Application
                 opt.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
                 opt.IsolationLevel = IsolationLevel.ReadCommitted;
             });
+
             Configure<AbpAutoMapperOptions>(opt =>
             {
                opt.AddMaps<CatalogApplicationModule>();
 
             });
+
 
             var configuration = context.Services.GetConfiguration();
 

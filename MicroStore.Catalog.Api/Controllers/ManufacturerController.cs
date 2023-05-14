@@ -49,8 +49,15 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = (typeof(ManufacturerDto)))]
-        public async Task<IActionResult> CreateManufacturer(ManufacturerModel model) 
+        public async Task<IActionResult> CreateManufacturer(ManufacturerModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _manufacturerCommandService.CreateAsync(model);
 
             return result.ToCreatedAtAction("GetManufacturerList", new { id = result.Value?.Id });
@@ -62,6 +69,12 @@ namespace MicroStore.Catalog.Api.Controllers
 
         public async Task<IActionResult> UpdateManufacturer(string id , ManufacturerModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();  
+            }
             var result = await _manufacturerCommandService.UpdateAsync(id,model);
 
             return result.ToOk();

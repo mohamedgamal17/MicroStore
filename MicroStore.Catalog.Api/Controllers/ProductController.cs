@@ -62,6 +62,13 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProductDto))]
         public async Task<IActionResult> CreateProduct([FromBody] ProductModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _productCommandService.CreateAsync(model);
 
             return result.ToCreatedAtAction(nameof(GetCatalogProduct),new {id = result.Value?.Id});
@@ -72,6 +79,13 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] ProductModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _productCommandService.UpdateAsync(id, model);
 
             return result.ToOk();
@@ -93,6 +107,13 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         public async Task<IActionResult> AddProductImage (string productId, [FromBody] CreateProductImageModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _productCommandService.AddProductImageAsync(productId, model);
 
             return result.ToOk();
@@ -105,6 +126,13 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         public async Task<IActionResult> UpdateProductImage(string productId, string productImageId,[FromBody] UpdateProductImageModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _productCommandService.UpdateProductImageAsync(productId, productImageId,model);
             return result.ToOk();
         }
