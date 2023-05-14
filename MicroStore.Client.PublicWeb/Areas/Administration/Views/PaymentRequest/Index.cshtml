@@ -29,39 +29,17 @@
 
     <section class="content">
         <div class="container-fluid">
-            <partial name="Grids/_Grids.PaymentRequests" model="Model" />
+            <abp-card>
+                <abp-card-body>
+                    <abp-table id="PaymentRequestsTable"></abp-table>
+                </abp-card-body>
+            </abp-card>
         </div>
     </section>
 </div>
 
 
 @section Scripts{
-
-<script>
-    $(document).ready(function(){
-        $("#paymentrequests-grid").DataTable({
-            ajax :{
-                url : "",
-                type:"POST"
-            },
-
-            processing:"processing",
-
-            columns:[
-                { data: 'orderId', name: "@(Html.DisplayNameFor(x => x.Data.First().OrderId))" },
-                { data: 'orderNumber', name: "@(Html.DisplayNameFor(x => x.Data.First().OrderNumber))" },
-                { data: 'userId', name: "@(Html.DisplayNameFor(x => x.Data.First().UserId))" },
-                { data: 'totalCost', name: "@(Html.DisplayNameFor(x => x.Data.First().TotalCost))" },
-                { data: 'status', name: "@(Html.DisplayNameFor(x => x.Data.First().Status))" },
-                { data: 'createdAt', name: "@(Html.DisplayNameFor(x => x.Data.First().CreatedAt))" },
-                { mRender: function(data,type,row){
-                    return `<a href="PaymentRequest/Detail/${row.id}" class="btn btn-info">View</a>`
-                }},
-            ]
-        });
-
-
-    });
-</script>
+    <script src="~/js/BackEnd/PaymentRequest/index.js"></script>
 
 }

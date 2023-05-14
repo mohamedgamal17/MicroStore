@@ -5,12 +5,14 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
 {
     public class CreateProductImageModel
     {
+        public string  ProductId { get; set; }
         public IFormFile Image { get; set; }
         public int DisplayOrder { get; set; }
     }
 
     public class UpdateProductImageModel
     {
+        public string  ProductId { get; set; }
         public string ProductImageId { get; set; }
         public int DisplayOrder { get; set; }
 
@@ -31,6 +33,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
 
     public class RemoveProductImageModel
     {
+        public string ProductId { get; set; }
         public string ProductImageId { get; set; }
     }
 

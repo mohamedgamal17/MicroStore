@@ -31,36 +31,19 @@
 
     <section class="content">
         <div class="container-fluid">
-            <partial name="Grids/_Grid.Manufacturers" model="Model" />
+            <abp-card>
+                <abp-card-header></abp-card-header>
+                <abp-card-body>
+                    <abp-table id="ManufacturersGrid">
+                    </abp-table>
+                </abp-card-body>
+            </abp-card>
         </div>
     </section>
 </div>
 
 @section Scripts{
 
-    <script>
-        $(document).ready(function(){
-
-            $("#ManufacturersGrid").DataTable({
-                ajax :{
-                    url : '@(Url.Action("Index"))',
-                    type :"POST"
-                },
-
-                columns : [
-                    {data : "name" , name : "@Html.DisplayNameFor(x=> x.Data.First().Name)"},
-                    {data : "description" , name : "@Html.DisplayNameFor(x=> x.Data.First().Description)"},
-                    {
-                        mRender : function(data, type, row){
-                            return `
-                                <a href='Manufacturer/Edit/${row.id}' class="btn btn-info">Edit</a>
-                            `
-                        }
-                    }
-                ]
-            });
-
-        })
-    </script>
+ <script src="~/js/BackEnd/Manufacturer/index.js"></script>
 
 }

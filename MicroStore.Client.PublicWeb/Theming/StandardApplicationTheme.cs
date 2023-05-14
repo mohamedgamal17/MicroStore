@@ -21,7 +21,7 @@ namespace MicroStore.Client.PublicWeb.Theming
             {
                 StandardApplicationLayout.BackEnd => "~/Areas/Administration/Views/Shared/_Layout.cshtml",
                 StandardApplicationLayout.FrontEnd => "~/Pages/Shared/_Layout.cshtml",
-                _ =>  string.Empty
+                _ => fallbackToDefault ? "~/Areas/Administration/Views/Shared/_Layout.cshtml" : string.Empty
             };
         }
     }

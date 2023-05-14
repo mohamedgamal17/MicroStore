@@ -1,0 +1,53 @@
+﻿@using MicroStore.Client.PublicWeb.Components.Cart;
+<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+    <div class="container-fluid">
+
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="navbar-toggler-icon mr-1"></span>
+                    All Categories
+                </a>
+            </li>
+        </ul>
+
+        <button class="navbar-toggler order-1" type="button" data-toggle="collapse"
+                data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <form class="d-flex ml-auto">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-info" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item">
+    
+                        @await Component.InvokeAsync(typeof(CartWidgetViewComponent))
+           
+                </li>
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" id="btn-logout"><i class="fa fa-user"></i>Logout</a>
+                        <form method="post" asp-controller="Authentication" asp-action="Logout">
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-controller="Authentication" asp-action="Login" asp-route-returnUrl="@Context.Request.Path"><i class="fa fa-user"></i> Login</a>
+                    </li>
+                }
+            </ul>
+
+        </div>
+    </div>
+</nav>

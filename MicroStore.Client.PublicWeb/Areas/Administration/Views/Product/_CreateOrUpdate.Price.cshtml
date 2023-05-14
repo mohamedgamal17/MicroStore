@@ -1,16 +1,15 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductModel
 
-<div class="card clearfixt">
-    <div class="card-header">
-        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> Prices</p>
-        <div class="card-tools">
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title class="text-lg"><i class="fas fa-info mr-1 text-lightblue"></i> Prices</abp-card-title>
+                <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
         </div>
-    </div>
-
-    <div class="card-body">
-
-        <div class="form-group row mb-3">
+    </abp-card-header>
+    <abp-card-body>
+           <div class="form-group row mb-3">
             <div class="col-md-3">
                 <div class="float-sm-left float-md-right">
                     <micro-label asp-for="@Model.Price"></micro-label>
@@ -41,6 +40,6 @@
             </div>
 
         </div>
+    </abp-card-body>
+</abp-card>
 
-    </div>
-</div>

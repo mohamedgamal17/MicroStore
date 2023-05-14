@@ -1,0 +1,17 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.StateProvinceModel
+
+
+<form asp-action="@(Model.Id != null ? "CreateStateProvince"  : "UpdateStateProvince")">
+    <abp-modal>
+        <abp-modal-header title="Add Product Image"></abp-modal-header>
+        <abp-modal-body>
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x=> x.Id)
+            <abp-input asp-for="@Model.Name"></abp-input>
+            <abp-input asp-for="@Model.Abbreviation"></abp-input>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@AbpModalButtons.Save | @AbpModalButtons.Cancel"></abp-modal-footer>
+    </abp-modal>
+</form>

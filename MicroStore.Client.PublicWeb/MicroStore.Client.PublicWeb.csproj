@@ -17,7 +17,12 @@
     <Content Remove="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <Content Remove="Pages\Categories.cshtml" />
+    <Content Remove="Pages\Shared\Components\CartWidget\Default.cshtml" />
     <Content Remove="Pages\Shared\_AdministrationLayout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Pages\FrontEnd\index.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Shared\Components\" />
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\libs\" />
@@ -56,6 +60,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Categories.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Shared\Components\CartWidget\Default.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Shared\_AdministrationLayout.cshtml" />
   </ItemGroup>
 
@@ -64,6 +69,7 @@
     <None Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <None Include="Pages\FrontEnd\Products.cshtml" />
     <None Include="Pages\FrontEnd\ProductDetails.cshtml" />
+    <None Include="Pages\Shared\Components\CartWidget\Default.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +80,14 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Shared\_AdministrationLayout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\FrontEnd\Index.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -97,6 +111,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Shared\Components\CartWidget\Default.cshtml" />
   </ItemGroup>
 
 </Project>

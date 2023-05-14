@@ -24,18 +24,28 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 
         public async Task<IActionResult> OnGet(PagingAndSortingParamsQueryString @params)
         {
-            var pagingOptions = new PagingAndSortingRequestOptions
+            try
             {
-                Skip = @params.Skip,
-                Lenght = @params.Lenght,
-                Desc = @params.Desc
-            };
+                var pagingOptions = new PagingAndSortingRequestOptions
+                {
+                    Skip = @params.Skip,
+                    Lenght = @params.Lenght,
+                    Desc = @params.Desc
+                };
 
-    
-            Products = await _productService.ListAsync(pagingOptions); 
 
+                Products = await _productService.ListAsync(pagingOptions);
 
-            return Page();
+                return Page();
+            }
+            catch(Exception ex)
+            {
+                Products = new PagedList<Product>() { Items = new List<Product>() };
+
+                _logger.LogException(ex);
+                return Page();
+            }
+   
 
         }
     }

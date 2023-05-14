@@ -7,7 +7,7 @@
                 <div class="col-md-6">
                     <h1 class="m-0">Orders</h1>
                 </div>
-                  <div class="col-sm-6">
+                <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
                             <a asp-action="Create" class="btn btn-info">
@@ -22,7 +22,11 @@
     </div>
     <section class="content">
         <div class="container-fluid">
-            <partial name="Grids/_Grids.Countries" model="Model" />
+            <abp-card>
+                <abp-card-body>
+                    <abp-table id="CountryTable">   </abp-table>
+                </abp-card-body>
+            </abp-card>
         </div>
     </section>
 </div>
@@ -30,31 +34,6 @@
 
 
 @section Scripts{
-    <script>
-
-        $(document).ready(function(){
-            $("#countries-grid").DataTable({
-                ajax : {
-                    url:"",
-                    type: "POST"
-                },
-                columns : [
-                    { data :"name", name :"@(Html.DisplayNameFor(x=> x.Data.First().Name))" },
-                    { data :"twoLetterIsoCode", name :"@(Html.DisplayNameFor(x=> x.Data.First().TwoLetterIsoCode))" },
-                    { data :"threeLetterIsoCode", name :"@(Html.DisplayNameFor(x=> x.Data.First().ThreeLetterIsoCode))" },
-                    { data :"numericIsoCode", name :"@(Html.DisplayNameFor(x=> x.Data.First().NumericIsoCode))" },
-                    {
-                        mRender :  function(data, type, row){
-                            return `<a href="Country/Edit/${row.id}" class="btn btn-info">Edit</a>`
-                        }
-                    }                   
-                ]
-            });
-
-     
-
-        })
-        
-    </script>
+ <script src="~/js/BackEnd/Country/index.js"></script>
 
 }

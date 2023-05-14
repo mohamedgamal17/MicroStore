@@ -48,26 +48,5 @@
 </div>
 
 @section Scripts{
-    <script>
-        ///<reference path="~/lib/jquery/jquery.js" />
-
-        $(document).ready(function () {
-            $('.summernote').summernote({
-                height: 150,
-                name: 'Model.LongDescription',
-                codemirror: { // codemirror options
-                    theme: 'monokai'
-                }
-            });
-
-            $("#CategorySelect").select2({
-                placeholder: 'select product categories'
-            });
-
-
-            $("#ManufacturerSelect").select2({
-                placeholder : 'select product manufacturer'
-            });
-        });
-    </script>
+    <script src="~/js/BackEnd/Product/create.js"></script>
 }

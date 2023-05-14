@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories
 {
@@ -10,6 +11,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Catego
 
 
         [DisplayName("Category Name")]
+        [Required]
         public string Name { get; set; }
 
         [DisplayName("Category Description")]

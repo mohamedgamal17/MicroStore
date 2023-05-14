@@ -6,15 +6,14 @@
     List<SelectListItem>? manufacturers = ViewBag.Manufacturers as List<SelectListItem>;
 }
 
-
-<div class="card clearfix">
-    <div class="card-header">
-        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i>Product Info</p>
+<abp-card>
+    <abp-card-header>
+        <abp-card-title class="text-lg"><i class="fas fa-info mr-1 text-lightblue"></i> Product Info</abp-card-title>
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
         </div>
-    </div>
-    <div class="card-body">
+    </abp-card-header>
+    <abp-card-body>
         <div class="text-center mb-3">
             @Html.ValidationSummary()
         </div>
@@ -66,7 +65,7 @@
             </div>
         </div>
 
-         <div class="form-group row mb-3">
+        <div class="form-group row mb-3">
             <div class="col-md-3">
                 <div style="float: right!important;">
                     <micro-label asp-for="@Model.ManufacturersIds"></micro-label>
@@ -105,7 +104,6 @@
             </div>
             <div class="col-md-9">
                 <textarea asp-for="@Model.ShortDescription" id="@Model.ShortDescription" class="form-control" rows="4"></textarea>
-
                 <span class="text-danger" asp-validation-for="@Model.ShortDescription">
                 </span>
             </div>
@@ -127,5 +125,6 @@
                 </span>
             </div>
         </div>
-    </div>
-</div>
+    </abp-card-body>
+</abp-card>
+

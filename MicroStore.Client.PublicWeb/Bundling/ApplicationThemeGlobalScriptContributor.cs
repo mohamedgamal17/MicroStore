@@ -1,7 +1,4 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
-using Volo.Abp.Modularity;
-
 namespace MicroStore.Client.PublicWeb.Bundling
 {
 
@@ -12,7 +9,8 @@ namespace MicroStore.Client.PublicWeb.Bundling
             context.Files.AddRange(new[]
             {
                 "/libs/summernote/summernote.min.js",
-                "/lib/admin-lte/js/adminlte.min.js"
+                "/libs/admin-lte/js/adminlte.min.js",
+                "/js/abp.config.js"
             });
         }
     }

@@ -1,0 +1,140 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag["Title"]</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <abp-style-bundle name="@StandardBundles.Styles.Global" />
+</head>
+
+<body class="layout-top-nav">
+
+    <div class="wrapper">
+        <div class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+        </div>
+
+
+        <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+            <div class="container-fluid">
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="navbar-toggler-icon mr-1"></span>
+                            All Categories
+                        </a>
+                    </li>
+                </ul>
+
+                <button class="navbar-toggler order-1" type="button" data-toggle="collapse"
+                    data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <form class="d-flex ml-auto">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-info" type="submit">Search</button>
+                    </form>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <div class="abp-widget-wrapper" data-widget-name="CartWidget"
+                                data-refresh-url="/Widgets/Cart" data-widget-auto-init="true">
+                                <div id="shopping-cart" class="nav-link">
+
+                                    <div class="dropdown">
+                                        <a class="btn nav-link dropdown-toggle" id="shopping-cart-link"
+                                            style="padding:0px" data-toggle="dropdown" role="button" href="/Basket">
+                                            <span data-cart-count="" class="badge bg-info">1</span> My Cart
+                                        </a>
+
+                                        <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm cart-preview"
+                                            aria-labelledby="shopping-cart-link">
+
+                                            <div class="dropdown-item">
+
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <img class="basket-item-preview-image m-1 my-2"
+                                                            src="https://gateway-public.eshoponabp.com/product-images/beats.jpg">
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <p class="mt-2 mb-0"><strong>Beats Solo3 Wireless On-Ear
+                                                                Headphone</strong></p>
+                                                        <p>$792</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="d-grid gap-2 m-2">
+                                                    <a href="/Basket"
+                                                        class="btn btn-outline-warning text-center d-block">
+                                                        My Cart
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index3.html" class="nav-link">Account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Logout</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"
+                                data-toggle="dropdown" aria-expanded="false">
+                                Link
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-12">
+                            <h1 class="text-center mt-3 mb-3">@ViewBag["ContentHeader"]</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="container">
+                    @RenderBody()
+                 </div>                  
+            </div>
+        </div>
+    </div>
+
+    <abp-script-bundle name="@StandardBundles.Styles.Global" />
+    <script src="~/Abp/ApplicationConfigurationScript"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

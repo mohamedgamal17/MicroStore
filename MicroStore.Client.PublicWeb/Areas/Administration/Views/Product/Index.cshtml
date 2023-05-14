@@ -30,39 +30,15 @@
 
     <section class="content">
         <div class="container-fluid">
-            @{
-                await Html.RenderPartialAsync("Grids/_Grids.Products", Model);
-            }
+            <abp-card>
+                <abp-card-body>
+                     <abp-table striped-rows="true" id="ProductsTable"></abp-table>
+                </abp-card-body>
+            </abp-card>
         </div>
     </section>
 </div>
 
 @section Scripts{
-        <script>
-        $(document).ready(function () {
-            $('#product-grid').DataTable({
-                ajax: {
-                    type: "post"
-                },
-                type: "POST",
-
-                serverSide: true,
-                filter: true,
-                
-                columns: [
-                    { data: "name", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Name))' },
-                    { data: "sku", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Sku))' },
-                    { data: "price", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Price))' },
-                    {
-                        mRender: function (data, type, row) {
-                            return `<a  href="Edit/${row.id}" class="btn btn-info" >Edit</a>`
-                        }
-                    }
-                ],
-            })
-
-        });
-
-        
-    </script>
+<script src="~/js/BackEnd/Product/index.js"></script>
 }

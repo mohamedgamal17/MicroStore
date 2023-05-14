@@ -14,7 +14,6 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 
         private readonly BasketService _basketService;
         public BasketAggregate Basket { get; set; }
-
         public double SubTotal { get; set; } = 0;
         public double TotalPrice { get; set; } = 0;
 

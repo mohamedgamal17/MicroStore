@@ -157,8 +157,18 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(model);
         }
 
+        public IActionResult CreateProductImageModal(string productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return PartialView("_Create.MultiMedia.Image", new CreateProductImageModel {  ProductId = productId });
+        }
+
         [HttpPost]
-        public async Task<IActionResult> CreateProductImage(string id, CreateProductImageModel model)
+        public async Task<IActionResult> CreateProductImage( CreateProductImageModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -180,13 +190,38 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 DisplayOrder = model.DisplayOrder
             };
 
-            var result=  await _productService.CreateProductImageAsync(id, requestOptions);
+            var result=  await _productService.CreateProductImageAsync(model.ProductId, requestOptions);
 
             return Json(ObjectMapper.Map<Product, ProductVM>(result));
         }
 
+        public async Task<IActionResult> EditProductImageModal(string productId , string productImageId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _productService.ListProductImageAsync(productId);
+
+            var productImage = result.SingleOrDefault(x => x.Id == productImageId);
+
+            if(productImage == null)
+            {
+                return BadRequest("product image is not exist");
+            }
+
+            var model = new UpdateProductImageModel
+            {
+                ProductId = productImage.ProductId,
+                ProductImageId = productImage.Id,
+                DisplayOrder = productImage.DisplayOrder
+            };
+
+            return PartialView("_Edit.MultiMedia.Image", model);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> UpdateProductImage(string id, UpdateProductImageModel model)
+        public async Task<IActionResult> UpdateProductImage(UpdateProductImageModel model)
         {
 
             if (!ModelState.IsValid)
@@ -199,7 +234,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 DisplayOrder = model.DisplayOrder
             };
 
-            var result = await _productService.UpdateProductImageAsync(id, model.ProductImageId, requestOptions);
+            var result = await _productService.UpdateProductImageAsync(model.ProductId, model.ProductImageId, requestOptions);
 
             return Json(ObjectMapper.Map<Product, ProductVM>(result));
 
@@ -207,14 +242,14 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> RemoveProductImage(string id, RemoveProductImageModel model)
+        public async Task<IActionResult> RemoveProductImage([FromBody]RemoveProductImageModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _productService.DeleteProductImageAsync(id, model.ProductImageId);
+            var result = await _productService.DeleteProductImageAsync(model.ProductId, model.ProductImageId);
 
             return Json(ObjectMapper.Map<Product, ProductVM>(result));
 

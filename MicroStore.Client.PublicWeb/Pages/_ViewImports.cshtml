@@ -1,4 +1,12 @@
-﻿@using MicroStore.Client.PublicWeb
+﻿@using MicroStore.AspNetCore.UI
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 @namespace MicroStore.Client.PublicWeb.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, MicroStore.AspNetCore.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
+@inject UIMenuNavigationManager UIMenuNavigationManager;
+@inject UINotificationManager NotificationManager;

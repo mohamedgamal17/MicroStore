@@ -89,7 +89,29 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(model);
         }
 
+        public async Task<IActionResult> CreateOrEditStateModal(string countryId , string? stateId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var model = new StateProvinceModel
+            {
+                CountryId = countryId
+            };
+
+            if(stateId != null)
+            {
+                var state = await _stateProvinceService.GetAsync(countryId, stateId);
+                model.Id = state.Id;
+                model.Name = state.Name;
+                model.Abbreviation = state.Abbreviation;
+            }
+
+
+            return PartialView("_CreateOrUpdate.State", model);
+        }
         public async Task<IActionResult> GetStateProvince(string id , string stateProvinceId)
         {
             var state = await _stateProvinceService.GetAsync(id, stateProvinceId);
@@ -121,14 +143,28 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(ModelState);
+                return BadRequest(ModelState);
             }
 
             var requestOptions = ObjectMapper.Map<StateProvinceModel, StateProvinceRequestOptions>(model);
 
             var result = await _stateProvinceService.UpdateAsync(model.CountryId,model.Id, requestOptions);
 
+           
             return Json(ObjectMapper.Map<StateProvince, StateProvinceVM>(result));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveStateProvince([FromBody] RemoveStateProvinceModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await  _stateProvinceService.DeleteAsync(model.CountryId, model.StateId);
+
+            return Ok();
         }
     }
 }

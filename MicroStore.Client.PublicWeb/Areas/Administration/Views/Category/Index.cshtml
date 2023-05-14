@@ -30,33 +30,15 @@
 
     <section class="content">
         <div class="container-fluid">
-            <partial name="Grids/_Grid.Categories" model="Model" />
+            <abp-card>
+                <abp-card-body>
+                    <abp-table id="CategoriesTable"> </abp-table>
+                </abp-card-body>
+            </abp-card>
         </div>
     </section>
 </div>
 
 @section Scripts{
-<script>
-    $(document).ready(function () {
-        $('#categories-grid').DataTable({
-            ajax: {
-                type: "post"
-            },
-            type: "POST",
-            processing: true,
-            serverSide: true,
-            filter: true,
-
-            columns: [
-                { data: "name", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Name))' },
-                { data: "description", name: '@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().Description))' },
-                {
-                    mRender: function (data, type, row) {
-                        return `<a  href="Category/Edit/${row.id}" asp-rout-id="${row.id}" class="btn btn-info" >Edit</a>`
-                    }
-                }
-            ],
-        })
-    });
-</script>
+    <script src="~/js/BackEnd/Category/index.js"></script>
 }

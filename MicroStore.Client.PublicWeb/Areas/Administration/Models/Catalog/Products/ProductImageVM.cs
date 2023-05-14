@@ -6,6 +6,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
         [DisplayName("Product Image Id")]
         public string  Id { get; set; }
 
+        public string ProductId { get; set; }
+
         [DisplayName("Product Image")]
         public string Image { get; set; }
 

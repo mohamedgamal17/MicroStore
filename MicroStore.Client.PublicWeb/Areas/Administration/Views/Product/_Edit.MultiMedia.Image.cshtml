@@ -1,0 +1,17 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model PublicWeb.Areas.Administration.Models.Catalog.Products.UpdateProductImageModel
+
+<form asp-action="UpdateProductImage">
+    <abp-modal>
+        <abp-modal-header title="Add Product Image"></abp-modal-header>
+        <abp-modal-body>
+
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x=> x.ProductId)
+            @Html.HiddenFor(x=> x.ProductImageId)
+            <abp-input asp-for="@Model.DisplayOrder"></abp-input>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@AbpModalButtons.Save | @AbpModalButtons.Cancel"></abp-modal-footer>
+    </abp-modal>
+</form>

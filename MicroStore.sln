@@ -165,7 +165,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Appli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Host", "MicroStore.Geographic.Host\MicroStore.Geographic.Host.csproj", "{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.AspNetCore.UI", "MicroStore.AspNetCore.UI\MicroStore.AspNetCore.UI.csproj", "{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.AspNetCore.UI", "MicroStore.AspNetCore.UI\MicroStore.AspNetCore.UI.csproj", "{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

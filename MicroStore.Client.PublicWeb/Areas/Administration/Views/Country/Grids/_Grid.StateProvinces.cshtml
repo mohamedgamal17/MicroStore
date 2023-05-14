@@ -1,11 +1,17 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.StateProvinceListModel
-<table id="stateprovinces-grid" class="table table-hover table-striped table-bordered dataTable no-footer" width="100%">
-    <thead>
-        <tr>
+<abp-card>
+    <abp-card-header>
+        <abp-card-title class="text-lg"><i class="fas fa-info mr-1 text-lightblue"></i> State Provinces</abp-card-title>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table id="StateProvincesTable">
+        </abp-table>
+    </abp-card-body>
+    <abp-card-footer>
+        <a href="#" id="CreateStateButton" class="btn btn-info"> Add New State</a>
+    </abp-card-footer>
+</abp-card>
 
-            <th>@Html.DisplayNameFor(x=> x.Data.First().Name)</th>
-            <th>@Html.DisplayNameFor(x=> x.Data.First().Abbreviation)</th>
-            <th></th>
-        </tr>
-    </thead>
-</table>

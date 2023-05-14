@@ -22,11 +22,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         public async Task<IActionResult> Index()
         {
-            NotificationManager.Error("Test", "Kosm Modern Acedemy");
-            NotificationManager.Info("Test", "Kosm Modern Acedemy");
-
-            NotificationManager.Warning("Test", "Kosm Modern Acedemy");
-
             return View(new CategoryListModel());
         }
 

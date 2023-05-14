@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Models;
@@ -214,6 +213,8 @@ namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 
             PaymentSystems = await _paymentSystemService.ListAsync();
         }
+
+
         private async Task PrepareAvailablePaymentSystems()
         {
  

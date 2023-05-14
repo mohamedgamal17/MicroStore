@@ -1,9 +1,11 @@
 ﻿using IdentityModel;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.AspNetCore.UI
 {
-    public class DefaultWorkContext : IWorkContext
+    [ExposeServices(typeof(IWorkContext))]
+    public class DefaultWorkContext : IWorkContext , ITransientDependency
     {
         const string AnonymousUser = "anonymous_userid";
 

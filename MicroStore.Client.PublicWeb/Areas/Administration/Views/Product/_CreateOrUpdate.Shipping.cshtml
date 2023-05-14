@@ -1,17 +1,16 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductModel
 @using MicroStore.ShoppingGateway.ClinetSdk.Common
 
-<div class="card clearfixt">
-    <div class="card-header">
-        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> Shipping Info</p>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title><p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> Shipping Info</p></abp-card-title>
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
         </div>
-    </div>
-
-    <div class="card-body">
-
-        <div class="form-group row mb-3">
+    </abp-card-header>
+    <abp-card-body>
+         <div class="form-group row mb-3">
             <div class="col-md-3">
                 <div class="float-sm-left float-md-right">
                     <micro-label asp-for="@Model.Weight"></micro-label>
@@ -50,8 +49,6 @@
                     <span asp-validation-for="@Model.Dimensions.Height" class="invalid-feedback"></span>
                 </div>
             </div>
-
-
         </div>
-    </div>
-</div>
+    </abp-card-body>
+</abp-card>

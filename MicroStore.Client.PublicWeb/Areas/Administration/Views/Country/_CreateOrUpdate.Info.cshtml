@@ -1,13 +1,14 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.CountryModel
-<div class="card">
-    <div class="card-header">
-        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> Country Info</p>
-        <div class="card-tools">
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title><i class="fas fa-info mr-1 text-lightblue"></i> Country Info</abp-card-title>
+         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
         </div>
-    </div>
-    <div class="card-body">
-        <div class="text-center mb-3">
+    </abp-card-header>
+    <abp-card-body>
+         <div class="text-center mb-3">
             @Html.ValidationSummary()
         </div>
 
@@ -61,5 +62,5 @@
                 <span class="text-danger" asp-validation-for="@Model.NumericIsoCode" />            
             </div>
         </div>
-    </div>
-</div>
+    </abp-card-body>
+</abp-card>

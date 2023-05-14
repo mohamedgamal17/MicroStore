@@ -33,8 +33,9 @@ namespace MicroStore.Client.PublicWeb
     [DependsOn(typeof(MicroStoreAspNetCoreUIModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpAutofacModule),
-    typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpAspNetCoreMvcUiModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringMinioModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
@@ -64,22 +65,18 @@ namespace MicroStore.Client.PublicWeb
 
             ConfigureMinioStorage(configuration);
 
-            context.Services.AddRazorPages()
-             .AddRazorPagesOptions(opt =>
-             {
-                 opt.Conventions.AddPageRoute("/FrontEnd/Home", "");
+            //context.Services.AddRazorPages()
+            // .AddRazorPagesOptions(opt =>
+            // {
+            //     opt.Conventions.AddPageRoute("/FrontEnd/Home", "");
 
-             }).AddRazorRuntimeCompilation();
+            // }).AddRazorRuntimeCompilation();
 
-            context.Services.AddControllers().AddNewtonsoftJson(opt =>
-            {
-                var e = new StringEnumConverter();
-                opt.SerializerSettings.Converters.Add(e);
-            });
-
-            context.Services.AddMvc();
-
-            context.Services.AddControllers();
+            //context.Services.AddControllers().AddNewtonsoftJson(opt =>
+            //{
+            //    var e = new StringEnumConverter();
+            //    opt.SerializerSettings.Converters.Add(e);
+            //});
 
             context.Services.AddHttpContextAccessor();
 
@@ -112,21 +109,6 @@ namespace MicroStore.Client.PublicWeb
             });
         }
 
-        public override void PostConfigureServices(ServiceConfigurationContext context)
-        {
-            // Remove Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared Application Part
-
-            Configure<IMvcBuilder>(opt =>
-            {
-                var appPart = opt.PartManager.ApplicationParts
-                    .SingleOrDefault(x => ((AssemblyPart)x).Assembly == typeof(AbpAspNetCoreMvcUiThemeSharedModule).Assembly);
-
-                if (appPart != null)
-                {
-                    opt.PartManager.ApplicationParts.Remove(appPart);
-                }
-            });
-        }
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -142,6 +124,8 @@ namespace MicroStore.Client.PublicWeb
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAbpRequestLocalization();
 
             app.UseAuthentication();
 
@@ -194,6 +178,7 @@ namespace MicroStore.Client.PublicWeb
                options.Scope.Add("mvcgateway.shipping.read");
                options.Scope.Add("mvcgateway.inventory.read");
                options.Scope.Add("mvcgateway.inventory.write");
+               options.Scope.Add("api-sample");
                options.SaveTokens = true;
 
            });
