@@ -5,8 +5,6 @@ using MicroStore.Geographic.Application.Countries;
 using MicroStore.Geographic.Application.Dtos;
 using MicroStore.Geographic.Application.Models;
 using MicroStore.Geographic.Application.StateProvinces;
-using System.Net;
-
 namespace MicroStore.Geographic.Host.Controllers
 {
     [ApiController]
@@ -61,6 +59,13 @@ namespace MicroStore.Geographic.Host.Controllers
         [Route("")]
         public async Task<IActionResult > CreateCountry([FromBody] CountryModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result= await _countryApplicationService.CreateAsync(model);
 
             return result.ToCreatedAtAction(nameof(GetCountry), new { countryId = result.Value?.Id });
@@ -72,6 +77,13 @@ namespace MicroStore.Geographic.Host.Controllers
         [Route("{countryId}")]
         public async Task<IActionResult> UpdateCountry(string countryId , [FromBody]  CountryModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _countryApplicationService.UpdateAsync(countryId, model);
 
             return result.ToOk();
@@ -126,6 +138,13 @@ namespace MicroStore.Geographic.Host.Controllers
         [Route("{countryId}/states")]
         public async Task<IActionResult> CreateStateProvince(string countryId , [FromBody] StateProvinceModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _stateProvinceApplicationService.CreateAsync(countryId, model);
 
             return result.ToCreatedAtAction(nameof(GetCountryStateProvince), new { countryId = countryId, stateId = result.Value?.Id });
@@ -136,6 +155,13 @@ namespace MicroStore.Geographic.Host.Controllers
         [Route("{countryId}/states/{stateId}")]
         public async Task<IActionResult> UpdateStateProvince(string countryId , string stateId ,[FromBody] StateProvinceModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _stateProvinceApplicationService.UpdateAsync(countryId, stateId,model);
 
             return result.ToOk();
