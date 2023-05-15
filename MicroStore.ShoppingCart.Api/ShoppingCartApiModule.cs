@@ -10,6 +10,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
 
 namespace MicroStore.ShoppingCart.Api
@@ -18,7 +19,8 @@ namespace MicroStore.ShoppingCart.Api
             typeof(AbpAutofacModule),
             typeof(AbpAspNetCoreSerilogModule),
             typeof(AbpCachingStackExchangeRedisModule),
-            typeof(AbpAutoMapperModule))]
+            typeof(AbpAutoMapperModule),
+           typeof(AbpFluentValidationModule))]
     public class ShoppingCartApiModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
