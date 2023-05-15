@@ -6,8 +6,6 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
-using System.Net;
-
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/orders")]
@@ -75,6 +73,15 @@ namespace MicroStore.Ordering.Api.Controllers
 
         public async Task<IActionResult> SubmitOrder([FromBody]CreateOrderModel model)
         {
+
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState);
+                return InvalideModelState();
+            }
+
             var result  = await _orderCommandService.CreateOrderAsync(model);
 
             return result.ToAcceptedAtAction(nameof(RetirveOrder), new {id = result.Value?.Id});
@@ -87,6 +94,12 @@ namespace MicroStore.Ordering.Api.Controllers
 
         public async Task<IActionResult> FullfillOrder(Guid orderId,[FromBody] FullfillOrderModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
 
             var result = await _orderCommandService.FullfillOrderAsync(orderId,model);
 
@@ -98,6 +111,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         public async Task<IActionResult> CompleteOrder(Guid orderId)
         {
+            
             var result = await _orderCommandService.CompleteOrderAsync(orderId);
 
             return result.ToAcceptedAtAction(nameof(RetirveOrder), new {id = orderId});
@@ -109,6 +123,13 @@ namespace MicroStore.Ordering.Api.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         public async Task<IActionResult> CancelOrder(Guid orderId, [FromBody] CancelOrderModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _orderCommandService.CancelOrderAsync(orderId,model);
 
             return result.ToAcceptedAtAction(nameof(RetirveOrder), new { id = orderId });

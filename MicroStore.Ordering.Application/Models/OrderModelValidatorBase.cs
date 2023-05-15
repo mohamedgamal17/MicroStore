@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
+using PhoneNumbers;
 namespace MicroStore.Ordering.Application.Models
 {
-    internal abstract class OrderModelValidator : AbstractValidator<OrderModel>
+    public  class OrderModelValidatorBase<T> : AbstractValidator<T> where T : OrderModel
     {
-        public OrderModelValidator()
+        public OrderModelValidatorBase()
         {
             RuleFor(x => x.ShippingAddress)
                 .NotNull()
@@ -50,7 +51,9 @@ namespace MicroStore.Ordering.Application.Models
         }
     }
 
-    public class CreateOrderModelValidator : AbstractValidator<CreateOrderModel>
+    public class OrderModelValidator : OrderModelValidatorBase<OrderModel> { }
+
+    public class CreateOrderModelValidator : OrderModelValidatorBase<CreateOrderModel>
     {
         public CreateOrderModelValidator()
         {
@@ -72,10 +75,6 @@ namespace MicroStore.Ordering.Application.Models
                 .WithMessage("Shipment id maximum characters length is 265");
         }
     }
-
-
-  
-
 
     internal class CancelOrderCommandValidator : AbstractValidator<CancelOrderModel>
     {
@@ -106,22 +105,22 @@ namespace MicroStore.Ordering.Application.Models
                  .WithMessage("Phone must not be less than 10 characters.")
                  .MaximumLength(50)
                  .WithMessage("Phone must not exceed 50 characters.")
-                 .Matches(@"(?:(?:(\s*\(?([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*)|([2-9]1[02-9]|[2‌​-9][02-8]1|[2-9][02-8][02-9]))\)?\s*(?:[.-]\s*)?)([2-9]1[02-9]|[2-9][02-9]1|[2-9]‌​[02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})")
-                 .WithMessage("Phone is not valid");
+                 .Must(ValidatePhone)
+                 .WithMessage("Invalid phone number");
 
             RuleFor(x => x.CountryCode)
                 .NotNull()
                 .WithMessage("Country Code is required")
+                .MinimumLength(2)
+                .WithMessage("Country Code minimum lenght is 2")
                 .MaximumLength(3)
                 .WithMessage("Country Code maximum length is 3");
 
             RuleFor(x => x.State)
                 .NotNull()
                 .WithMessage("State is required")
-                .Matches(@"[a-zA-Z\u00C0-\u01FF- ]+")
-                .WithMessage("Please enter only letters and spaces, no numbers or special characters.")
-                .Length(2, 64)
-                .WithMessage("State names should be between 2 and 64 characters long.");
+                .Length(2)
+                .WithMessage("State code exact lenght is 2");
 
 
             RuleFor(x => x.City)
@@ -155,6 +154,24 @@ namespace MicroStore.Ordering.Application.Models
             RuleFor(x => x.AddressLine1)
               .Length(6, 128)
               .WithMessage("Addresses should be between 6 and 128 characters long.");
+
+        }
+
+
+        private bool ValidatePhone(AddressModel model , string phone)
+        {
+            var phoneNumberUtil = PhoneNumberUtil.GetInstance();
+
+            try
+            {
+                var phoneNumberParsed = phoneNumberUtil.Parse(phone, model.CountryCode);
+
+                return phoneNumberUtil.IsPossibleNumberForType(phoneNumberParsed, PhoneNumberType.MOBILE);
+
+            }catch 
+            { 
+                return false; 
+            }
 
         }
     }

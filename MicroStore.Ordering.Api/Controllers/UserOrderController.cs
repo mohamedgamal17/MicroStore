@@ -34,6 +34,12 @@ namespace MicroStore.Ordering.Api.Controllers
 
         public async Task<IActionResult> SubmitOrder(OrderModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
 
             var orderModel = new CreateOrderModel
             {
