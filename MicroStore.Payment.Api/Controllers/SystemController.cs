@@ -56,6 +56,13 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentSystemDto))]
         public async Task<IActionResult> UpdatePluginSystem(string systemName,[FromBody] UpdatePluginSystemModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _paymentSystemCommandService.EnablePaymentSystemAsync(systemName, model.IsEnabled);
 
             return result.ToOk();

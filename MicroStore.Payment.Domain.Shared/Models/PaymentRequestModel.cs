@@ -19,15 +19,15 @@ namespace MicroStore.Payment.Domain.Shared.Models
         public string UserId { get; set; }
     }
 
-    public class PaymentRequestModelValidator : AbstractValidator<PaymentRequestModel>
+    public class PaymentRequestModelValidatorBase<T> : AbstractValidator<T> where T : PaymentRequestModel
     {
-        public PaymentRequestModelValidator()
+        public PaymentRequestModelValidatorBase()
         {
             RuleFor(x => x.OrderId)
-           .NotEmpty()
-           .WithMessage("Order id is required")
-           .MaximumLength(265)
-           .WithMessage("Order id maximum characters is 265");
+               .NotEmpty()
+               .WithMessage("Order id is required")
+               .MaximumLength(265)
+               .WithMessage("Order id maximum characters is 265");
 
             RuleFor(x => x.OrderNumber)
                 .NotEmpty()
@@ -69,9 +69,10 @@ namespace MicroStore.Payment.Domain.Shared.Models
         }
     }
 
-    public class CreatePaymentRequestModelValidation : AbstractValidator<CreatePaymentRequestModel>
+    public class PaymentRequestModelValidator : PaymentRequestModelValidatorBase<PaymentRequestModel> { }
+    public class CreatePaymentRequestModelValidator : PaymentRequestModelValidatorBase<CreatePaymentRequestModel>
     {
-        public CreatePaymentRequestModelValidation()
+        public CreatePaymentRequestModelValidator()
         {
 
             RuleFor(x => x.UserId)

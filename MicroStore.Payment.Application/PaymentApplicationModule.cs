@@ -8,15 +8,16 @@ using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus;
+using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
 namespace MicroStore.Payment.Application
 {
-
     [DependsOn(typeof(AbpEntityFrameworkCoreModule),
         typeof(AbpEventBusModule),
         typeof(AbpDddApplicationModule),
         typeof(PaymentDomainSharedModule),
-        typeof(AbpAutoMapperModule))]
+        typeof(AbpAutoMapperModule),
+        typeof(AbpFluentValidationModule))]
     public class PaymentApplicationModule : AbpModule
     {
 

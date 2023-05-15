@@ -19,9 +19,6 @@ namespace MicroStore.Payment.Api.Controllers
     [Route("api/user/payments")]
     public class UserPaymentController : MicroStoreApiController
     {
-
-
-
         private readonly IPaymentRequestCommandService _paymentRequestCommandService;
 
         private readonly IPaymentRequestQueryService _paymentRequestQueryService;
@@ -40,6 +37,12 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
         public async Task<IActionResult> CreatePaymentRequest([FromBody] PaymentRequestModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
 
             var paymentModel = new CreatePaymentRequestModel
             {
@@ -66,6 +69,13 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentProcessResultDto))]
         public async Task<IActionResult> ProcessPaymentRequest(string paymentId, [FromBody] ProcessPaymentRequestModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _paymentRequestCommandService.ProcessPaymentAsync(paymentId, model);
 
             return result.ToOk();

@@ -84,6 +84,13 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
         public async Task<IActionResult> CreatePaymentRequest([FromBody] CreatePaymentRequestModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _paymentRequestCommandService.CreateAsync(model);
 
             return result.ToCreatedAtAction(nameof(RetrivePaymentRequest), new { paymentId = result.Value?.Id});
@@ -94,6 +101,13 @@ namespace MicroStore.Payment.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentProcessResultDto))]
         public async Task<IActionResult> ProcessPaymentRequest(string paymentId, [FromBody] ProcessPaymentRequestModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _paymentRequestCommandService.ProcessPaymentAsync(paymentId,model);
 
             return result.ToOk();
