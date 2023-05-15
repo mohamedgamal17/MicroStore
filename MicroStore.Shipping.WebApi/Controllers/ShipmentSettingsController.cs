@@ -34,6 +34,13 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShippingSettings))]
         public async Task<IActionResult> UpdateShipppingSettings([FromBody]UpdateShippingSettingsModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if(!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _applicationSettingsService.UpdateAsync(model);
 
             return Ok(result);

@@ -34,9 +34,6 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
                 .WithMessage("Dimension unit is required")
                 .Must((prop) => StandardDimensionUnit.FromValues().Contains(prop))
                 .WithMessage("Invalid dimension unit");
-
-
-
         }
     }
 }

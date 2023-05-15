@@ -25,6 +25,12 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(AddressValidationResultModel))]
         public async Task<IActionResult> ValidateAddress([FromBody] AddressModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
 
             var result = await _addressApplicationService.ValidateAddress(model);
 

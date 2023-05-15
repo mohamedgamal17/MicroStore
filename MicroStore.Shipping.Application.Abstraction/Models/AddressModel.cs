@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Domain.ValueObjects;
+using PhoneNumbers;
 
 namespace MicroStore.Shipping.Application.Abstraction.Models
 {
@@ -52,15 +53,15 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
     }
 
 
-    internal class AddressValidator : AbstractValidator<AddressModel>
+    public class AddressModelValidator : AbstractValidator<AddressModel>
     {
-        public AddressValidator()
+        public AddressModelValidator()
         {
             RuleFor(x => x.Name)
-                .NotNull()
-                .WithMessage("Address Name is required")
-                .MaximumLength(400)
-                .WithMessage("Address name maximum length is 400");
+               .NotNull()
+               .WithMessage("Address Name is required")
+               .MaximumLength(400)
+               .WithMessage("Address name maximum length is 400");
 
             RuleFor(x => x.Phone)
                  .NotNull()
@@ -69,22 +70,22 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
                  .WithMessage("Phone must not be less than 10 characters.")
                  .MaximumLength(50)
                  .WithMessage("Phone must not exceed 50 characters.")
-                 .Matches(@"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
-                 .WithMessage("Phone is not valid");
+                 .Must(ValidatePhone)
+                 .WithMessage("Invalid phone number");
 
             RuleFor(x => x.CountryCode)
                 .NotNull()
                 .WithMessage("Country Code is required")
+                .MinimumLength(2)
+                .WithMessage("Country Code minimum lenght is 2")
                 .MaximumLength(3)
                 .WithMessage("Country Code maximum length is 3");
 
             RuleFor(x => x.State)
                 .NotNull()
                 .WithMessage("State is required")
-                .Matches(@"[a-zA-Z\u00C0-\u01FF- ]+")
-                .WithMessage("Please enter only letters and spaces, no numbers or special characters.")
-                .Length(2, 64)
-                .WithMessage("State names should be between 2 and 64 characters long.");
+                .Length(2)
+                .WithMessage("State code exact lenght is 2");
 
 
             RuleFor(x => x.City)
@@ -118,6 +119,25 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
             RuleFor(x => x.AddressLine1)
               .Length(6, 128)
               .WithMessage("Addresses should be between 6 and 128 characters long.");
+
+        }
+
+
+        private bool ValidatePhone(AddressModel model, string phone)
+        {
+            var phoneNumberUtil = PhoneNumberUtil.GetInstance();
+
+            try
+            {
+                var phoneNumberParsed = phoneNumberUtil.Parse(phone, model.CountryCode);
+
+                return phoneNumberUtil.IsPossibleNumberForType(phoneNumberParsed, PhoneNumberType.MOBILE);
+
+            }
+            catch
+            {
+                return false;
+            }
 
         }
     }

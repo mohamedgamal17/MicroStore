@@ -26,6 +26,13 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<EstimatedRateDto>))]
         public async Task<IActionResult> EstimateShipmentRate([FromBody]EstimatedRateModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _rateApplicationService.EstimateRate(model);
 
             return result.ToOk();

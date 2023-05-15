@@ -70,12 +70,12 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
 
             RuleFor(x => x.Weight)
                 .NotNull()
-                .WithMessage("Item weight is required")
+                .WithMessage("weight is required")
                 .SetValidator(new WeightModelValidator());
 
             RuleFor(x => x.Dimension)
                 .NotNull()
-                .WithMessage("Item dimension is required")
+                .WithMessage("dimension is required")
                 .SetValidator(new DimesnsionModelValidator());
         }
 

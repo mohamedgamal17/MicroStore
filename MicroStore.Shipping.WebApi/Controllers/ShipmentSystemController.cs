@@ -60,6 +60,13 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(ShippingSystemDto))]
         public async Task<IActionResult> UpdateShipmentSystem(string systemName, [FromBody] UpdateShippingSystemModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _shippingSystemCommandService.EnableAsync(systemName,model.IsEnabled);
 
             return result.ToOk();

@@ -91,6 +91,13 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ShipmentDto))]
         public async Task<IActionResult> CreateShipment([FromBody] ShipmentModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if(!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _shipmentCommandService.CreateAsync(model);
 
             return result.ToCreatedAtAction( nameof(RetriveShipmentById), new {shipmentId = result.Value?.Id});
@@ -102,6 +109,12 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
         public async Task<IActionResult> FullfillShipment(string shipmentId, [FromBody] PackageModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
 
             var result = await _shipmentCommandService.FullfillAsync(shipmentId,model);
 
@@ -112,6 +125,13 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [Route("{shipmentId}/labels")]
         public async Task<IActionResult> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _shipmentCommandService.BuyLabelAsync(shipmentId, model);
 
             return result.ToOk();
