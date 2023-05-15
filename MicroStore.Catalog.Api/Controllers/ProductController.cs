@@ -31,6 +31,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductDto>))]
         public async Task<IActionResult> GetCatalogProductList([FromQuery] PagingAndSortingParamsQueryString queryParams)
         {
+
             var result = await _productQueryService.ListAsync(new PagingAndSortingQueryParams
             {
                 Skip = queryParams.Skip,

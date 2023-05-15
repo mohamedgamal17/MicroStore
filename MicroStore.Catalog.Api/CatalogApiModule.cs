@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
@@ -26,7 +27,7 @@ namespace MicroStore.Catalog.Api
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var host = context.Services.GetHostingEnvironment();
+            var env = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
 
@@ -43,6 +44,17 @@ namespace MicroStore.Catalog.Api
             Configure<AbpAntiForgeryOptions>(opt =>
             {
                 opt.AutoValidate = false;
+            });
+
+
+
+            context.Services.AddProblemDetails(opt =>
+            {
+                opt.IncludeExceptionDetails = (ctx, ex) => env.IsDevelopment() || env.IsStaging();
+                opt.ShouldLogUnhandledException = (ctx, ex, proplemDetails) => true;
+                opt.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+                opt.MapToStatusCode<HttpRequestException>(StatusCodes.Status502BadGateway);
+         
             });
 
 
@@ -97,7 +109,7 @@ namespace MicroStore.Catalog.Api
 
             }
 
-
+            app.UseProblemDetails();
             app.UseAbpRequestLocalization();
             app.UseCorrelationId();
             app.UseStaticFiles();
