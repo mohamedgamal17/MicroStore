@@ -15,6 +15,7 @@ using Volo.Abp.Data;
 using System.IdentityModel.Tokens.Jwt;
 using MicroStore.Shipping.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using Hellang.Middleware.ProblemDetails;
 
 namespace MicroStore.Shipping.Host
 {
@@ -28,7 +29,7 @@ namespace MicroStore.Shipping.Host
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var host = context.Services.GetHostingEnvironment();
+            var env = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
 
@@ -47,6 +48,14 @@ namespace MicroStore.Shipping.Host
                 opt.AutoValidate = false;
             });
 
+            context.Services.AddProblemDetails(opt =>
+            {
+                opt.IncludeExceptionDetails = (ctx, ex) => env.IsDevelopment() || env.IsStaging();
+                opt.ShouldLogUnhandledException = (ctx, ex, proplemDetails) => true;
+                opt.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+                opt.MapToStatusCode<HttpRequestException>(StatusCodes.Status502BadGateway);
+
+            });
         }
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
@@ -89,6 +98,7 @@ namespace MicroStore.Shipping.Host
 
             }
 
+            app.UseProblemDetails();
 
             app.UseAbpRequestLocalization();
 

@@ -13,7 +13,7 @@ using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
-
+using Hellang.Middleware.ProblemDetails;
 namespace MicroStore.Ordering.Api
 {
     [DependsOn(typeof(MicroStoreAspNetCoreModule),
@@ -27,7 +27,7 @@ namespace MicroStore.Ordering.Api
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var host = context.Services.GetHostingEnvironment();
+            var env = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
 
@@ -45,6 +45,15 @@ namespace MicroStore.Ordering.Api
             Configure<AbpAntiForgeryOptions>(opt =>
             {
                 opt.AutoValidate = false;
+            });
+
+            context.Services.AddProblemDetails(opt =>
+            {
+                opt.IncludeExceptionDetails = (ctx, ex) => env.IsDevelopment() || env.IsStaging();
+                opt.ShouldLogUnhandledException = (ctx, ex, proplemDetails) => true;
+                opt.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+                opt.MapToStatusCode<HttpRequestException>(StatusCodes.Status502BadGateway);
+
             });
         }
 
@@ -97,9 +106,8 @@ namespace MicroStore.Ordering.Api
 
             }
 
-
+            app.UseProblemDetails();
             app.UseAbpRequestLocalization();
-
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();

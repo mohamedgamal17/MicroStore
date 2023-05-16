@@ -13,6 +13,7 @@ using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
 using MicroStore.Inventory.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using Hellang.Middleware.ProblemDetails;
 
 namespace MicroStore.Inventory.Host
 {
@@ -24,7 +25,7 @@ namespace MicroStore.Inventory.Host
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var host = context.Services.GetHostingEnvironment();
+            var env = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
 
@@ -41,6 +42,15 @@ namespace MicroStore.Inventory.Host
             Configure<AbpAntiForgeryOptions>(opt =>
             {
                 opt.AutoValidate = false;
+            });
+
+            context.Services.AddProblemDetails(opt =>
+            {
+                opt.IncludeExceptionDetails = (ctx, ex) => env.IsDevelopment() || env.IsStaging();
+                opt.ShouldLogUnhandledException = (ctx, ex, proplemDetails) => true;
+                opt.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+                opt.MapToStatusCode<HttpRequestException>(StatusCodes.Status502BadGateway);
+
             });
 
         }
@@ -93,9 +103,8 @@ namespace MicroStore.Inventory.Host
 
             }
 
-
+            app.UseProblemDetails();
             app.UseAbpRequestLocalization();
-
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();

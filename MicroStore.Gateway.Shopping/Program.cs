@@ -1,9 +1,7 @@
+using Hellang.Middleware.ProblemDetails;
 using MicroStore.Gateway.Shopping.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using Ocelot.Values;
 using Serilog;
 using Serilog.Events;
 
@@ -35,15 +33,17 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 });
 
 
-
-
 builder.Services.ConfigureCoreServices(builder.Configuration);
 
 builder.Services.AddMvc();
 
+builder.Services.AddProblemDetails();
+
 builder.Host.UseSerilog();
 
 var app = builder.Build();
+
+app.UseProblemDetails();
 
 app.UseAuthentication();
 

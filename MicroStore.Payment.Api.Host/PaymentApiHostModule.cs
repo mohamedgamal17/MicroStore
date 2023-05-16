@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.Payment.Domain.Shared.Security;
 using MicroStore.Payment.Plugin.StripeGateway;
-using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
-
 namespace MicroStore.Payment.Api.Host
 {
 
@@ -24,7 +23,7 @@ namespace MicroStore.Payment.Api.Host
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var host = context.Services.GetHostingEnvironment();
+            var env = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
 
@@ -43,6 +42,14 @@ namespace MicroStore.Payment.Api.Host
                 opt.AutoValidate = false;
             });
 
+            context.Services.AddProblemDetails(opt =>
+            {
+                opt.IncludeExceptionDetails = (ctx, ex) => env.IsDevelopment() || env.IsStaging();
+                opt.ShouldLogUnhandledException = (ctx, ex, proplemDetails) => true;
+                opt.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+                opt.MapToStatusCode<HttpRequestException>(StatusCodes.Status502BadGateway);
+
+            });
         }
 
         private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
@@ -96,9 +103,8 @@ namespace MicroStore.Payment.Api.Host
 
             }
 
-
+            app.UseProblemDetails();
             app.UseAbpRequestLocalization();
-
             app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();
