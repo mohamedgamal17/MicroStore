@@ -4,13 +4,13 @@ using MicroStore.Catalog.Domain.Const;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
-namespace MicroStore.Catalog.Application.Models
+namespace MicroStore.Catalog.Application.Models.Products
 {
     public class ProductModel
     {
-        public string Name { get; set; } 
-        public string Sku { get; set; } 
-        public string ShortDescription { get; set; } 
+        public string Name { get; set; }
+        public string Sku { get; set; }
+        public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public bool IsFeatured { get; set; }
         public double Price { get; set; }
@@ -25,7 +25,7 @@ namespace MicroStore.Catalog.Application.Models
     {
         protected IRepository<Category> CategoryRepository { get; }
 
-        protected IRepository<Manufacturer> ManufacturerRepository {get; }
+        protected IRepository<Manufacturer> ManufacturerRepository { get; }
         public ProductModelValidator(IRepository<Category> categoryRepository, IRepository<Manufacturer> manufacturerRepository)
         {
             CategoryRepository = categoryRepository;
@@ -117,14 +117,14 @@ namespace MicroStore.Catalog.Application.Models
             RuleForEach(x => x.ManufacturersIds)
                 .MustAsync(CheckManufacturerExist)
                 .When(x => x.CategoriesIds != null);
-          
+
         }
         private Task<bool> CheckCategoryExist(string categoryId, CancellationToken cancellationToken)
         {
             return CategoryRepository.AnyAsync(x => x.Id == categoryId, cancellationToken);
         }
 
-        private Task<bool> CheckManufacturerExist(string manufacturerId , CancellationToken cancellationToken)
+        private Task<bool> CheckManufacturerExist(string manufacturerId, CancellationToken cancellationToken)
         {
             return ManufacturerRepository.AnyAsync(x => x.Id == manufacturerId, cancellationToken);
         }

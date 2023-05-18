@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.Paging\MicroStore.BuildingBlocks.Paging.csproj" />
     <ProjectReference Include="..\MicroStore.BuildingBlocks.Results\MicroStore.BuildingBlocks.Results.csproj" />
   </ItemGroup>
 

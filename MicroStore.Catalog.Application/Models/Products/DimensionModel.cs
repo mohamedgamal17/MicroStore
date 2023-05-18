@@ -1,6 +1,6 @@
 ﻿using MicroStore.Catalog.Domain.ValueObjects;
 
-namespace MicroStore.Catalog.Application.Models
+namespace MicroStore.Catalog.Application.Models.Products
 {
     public class DimensionModel
     {

@@ -6,10 +6,10 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Application.Dtos;
+using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.StateMachines;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
-
 namespace MicroStore.Ordering.Application.Orders
 {
     [DisableValidation]
@@ -81,6 +81,26 @@ namespace MicroStore.Ordering.Application.Orders
 
             return result;
         }
+
+        public async Task<Result<PagedResult<OrderDto>>> SearchByOrderNumber(OrderSearchModel model, CancellationToken cancellationToken = default)
+        {
+            var ordersQuery = _orderDbContext.Query<OrderStateEntity>()
+                .AsNoTracking()
+                .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .AsQueryable();
+
+
+            ordersQuery = from order in ordersQuery
+                             where order.OrderNumber == model.OrderNumber
+                                || order.OrderNumber.StartsWith(model.OrderNumber)
+                                || order.OrderNumber.Contains(model.OrderNumber)
+                             select order;
+
+
+            return await ordersQuery.PageResult(model.Skip, model.Lenght, cancellationToken);
+        }
+
+
 
         private IQueryable<OrderListDto> TryToSort(IQueryable<OrderListDto> query, string sortby, bool desc)
         {

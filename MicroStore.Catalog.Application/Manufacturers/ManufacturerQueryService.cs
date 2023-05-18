@@ -4,6 +4,7 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -38,6 +39,7 @@ namespace MicroStore.Catalog.Application.Manufacturers
 
             return await query.ToListAsync(cancellationToken);
         }
-   
+
+    
     }
 }

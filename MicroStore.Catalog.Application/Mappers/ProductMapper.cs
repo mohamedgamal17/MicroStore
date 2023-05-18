@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Domain.ValueObjects;
 namespace MicroStore.Catalog.Application.Mappers

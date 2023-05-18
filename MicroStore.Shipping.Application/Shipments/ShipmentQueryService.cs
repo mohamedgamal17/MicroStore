@@ -6,6 +6,7 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
+using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Domain.Entities;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -85,6 +86,22 @@ namespace MicroStore.Shipping.Application.Shipments
             var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
 
             return result;
+        }
+
+        public async Task<Result<PagedResult<ShipmentListDto>>> SearchByOrderNumber(ShipmentSearchByOrderNumberModel model, CancellationToken cancellationToken = default)
+        {
+            var shipmentsQuery = _shippingDbContext.Shipments
+                .AsNoTracking()
+                .ProjectTo<ShipmentListDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .AsQueryable();
+
+            shipmentsQuery = from shipment in shipmentsQuery
+                             where shipment.OrderNumber == model.OrderNumber
+                                || shipment.OrderNumber.StartsWith(model.OrderNumber)
+                                || shipment.OrderNumber.Contains(model.OrderNumber)
+                            select shipment;
+
+            return await shipmentsQuery.PageResult(model.Skip, model.Lenght, cancellationToken);     
         }
     }
 }
