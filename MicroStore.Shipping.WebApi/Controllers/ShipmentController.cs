@@ -148,6 +148,24 @@ namespace MicroStore.Shipping.WebApi.Controllers
         }
 
 
+        [HttpPost]
+        [Route("search")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ShipmentListDto>))]
+
+        public async Task<IActionResult> Search([FromBody]ShipmentSearchByOrderNumberModel model)
+        {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+            var result = await _shipmentQueryService.SearchByOrderNumber( model);
+
+            return result.ToOk();
+
+        }
+
 
     }
 }

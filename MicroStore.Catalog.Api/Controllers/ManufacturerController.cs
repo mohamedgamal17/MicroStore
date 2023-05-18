@@ -6,6 +6,8 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Manufacturers;
 using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Manufacturers;
+
 namespace MicroStore.Catalog.Api.Controllers
 {
 
@@ -79,7 +81,6 @@ namespace MicroStore.Catalog.Api.Controllers
 
             return result.ToOk();
         }
-
 
     }
 }

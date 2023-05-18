@@ -7,7 +7,6 @@ namespace MicroStore.Shipping.Domain.Entities
     public class Shipment :BasicAggregateRoot<string>
     {
         public string OrderId { get; set; }
-
         public string OrderNumber { get; set; }
         public string UserId { get; set; }
         public Address Address { get; set; }

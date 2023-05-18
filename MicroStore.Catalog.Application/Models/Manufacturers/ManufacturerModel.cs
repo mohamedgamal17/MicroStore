@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace MicroStore.Catalog.Application.Models
+namespace MicroStore.Catalog.Application.Models.Manufacturers
 {
     public class ManufacturerModel
     {

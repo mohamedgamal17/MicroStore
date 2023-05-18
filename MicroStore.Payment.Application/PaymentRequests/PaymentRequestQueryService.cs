@@ -7,6 +7,7 @@ using MicroStore.BuildingBlocks.Results;
 using MicroStore.Payment.Application.Common;
 using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;
+using MicroStore.Payment.Domain.Shared.Models;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Payment.Application.PaymentRequests
@@ -32,7 +33,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
                 return new Result<PaymentRequestDto>(new EntityNotFoundException(typeof(PaymentRequest), paymentId));
             }
 
-            return  result;
+            return result;
         }
 
         public async Task<Result<PaymentRequestDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
@@ -88,6 +89,23 @@ namespace MicroStore.Payment.Application.PaymentRequests
             var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
 
             return result;
+        }
+
+        public async Task<Result<PagedResult<PaymentRequestListDto>>> SearchByOrderNumber(PaymentRequestSearchModel model, CancellationToken cancellationToken = default)
+        {
+            var paymentRequestsQuery = _paymentDbContext.PaymentRequests
+                .AsNoTracking()
+                .ProjectTo<PaymentRequestListDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .AsQueryable();
+
+            paymentRequestsQuery = from paymentRequest in paymentRequestsQuery
+                                   where paymentRequest.OrderNumber == model.OrderNumber
+                                         || paymentRequest.OrderNumber.StartsWith(model.OrderNumber)
+                                         || paymentRequest.OrderNumber.Contains(model.OrderNumber)
+                                   select paymentRequest;
+
+
+            return await paymentRequestsQuery.PageResult(model.Skip, model.Lenght, cancellationToken);
         }
 
         private IQueryable<PaymentRequestListDto> TryToSort(IQueryable<PaymentRequestListDto> query, string sortBy, bool desc)

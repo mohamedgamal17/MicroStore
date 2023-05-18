@@ -25,7 +25,7 @@ namespace MicroStore.Ordering.Application.Orders
             var orderSubmitedEvent = new OrderSubmitedEvent
             {
                 OrderId = Guid.NewGuid(),
-                OrderNumber = Guid.NewGuid().ToString(),
+                OrderNumber = DateTime.UtcNow.Ticks.ToString(),
                 ShippingAddress = model.ShippingAddress,
                 BillingAddress = model.BillingAddress,
                 UserName = model.UserId,

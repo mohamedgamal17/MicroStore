@@ -6,7 +6,7 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Application.Products;
 namespace MicroStore.Catalog.Api.Controllers
 {
@@ -91,6 +91,27 @@ namespace MicroStore.Catalog.Api.Controllers
 
             return result.ToOk();
         }
+
+
+
+        [Route("Search")]
+        [HttpPost]
+        [ProducesResponseType( StatusCodes.Status200OK , Type = typeof(PagedResult<ProductDto>))]
+        public async Task<IActionResult> Search(ProductSearchModel model)
+        {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
+            var result = await _productQueryService.SearchAsync(model);
+
+            return result.ToOk();
+        }
+
+
 
         [Route("{productId}/productimages")]
         [HttpGet]

@@ -82,5 +82,22 @@ namespace MicroStore.Inventory.Api.Controllers
 
             return result.ToOk();
         }
+
+        [HttpPost]
+        [Route("search")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(PagedResult<ProductDto>))]
+        public async Task<IActionResult> Search(ProductSearchModel model)
+        {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
+            var result = await _productQueryService.Search(model);
+
+            return result.ToOk();
+        }
     }
 }

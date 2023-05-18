@@ -6,10 +6,10 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Application.Dtos;
+using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.StateMachines;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
-
 namespace MicroStore.Ordering.Application.Orders
 {
     [DisableValidation]
@@ -60,12 +60,12 @@ namespace MicroStore.Ordering.Application.Orders
             return result;
         }
 
-        public async Task<Result<PagedResult<OrderDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<OrderListDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext
                   .Query<OrderStateEntity>()
                   .AsNoTracking()
-                  .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider);
+                  .ProjectTo<OrderListDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             if(userId != null)
             {
@@ -82,7 +82,27 @@ namespace MicroStore.Ordering.Application.Orders
             return result;
         }
 
-        private IQueryable<OrderDto> TryToSort(IQueryable<OrderDto> query, string sortby, bool desc)
+        public async Task<Result<PagedResult<OrderDto>>> SearchByOrderNumber(OrderSearchModel model, CancellationToken cancellationToken = default)
+        {
+            var ordersQuery = _orderDbContext.Query<OrderStateEntity>()
+                .AsNoTracking()
+                .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .AsQueryable();
+
+
+            ordersQuery = from order in ordersQuery
+                             where order.OrderNumber == model.OrderNumber
+                                || order.OrderNumber.StartsWith(model.OrderNumber)
+                                || order.OrderNumber.Contains(model.OrderNumber)
+                             select order;
+
+
+            return await ordersQuery.PageResult(model.Skip, model.Lenght, cancellationToken);
+        }
+
+
+
+        private IQueryable<OrderListDto> TryToSort(IQueryable<OrderListDto> query, string sortby, bool desc)
         {
             return sortby.ToLower() switch
             {

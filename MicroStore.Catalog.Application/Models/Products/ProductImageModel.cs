@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS8618
-namespace MicroStore.Catalog.Application.Models
+
+namespace MicroStore.Catalog.Application.Models.Products
 {
     public class CreateProductImageModel
     {

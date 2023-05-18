@@ -2,7 +2,7 @@
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Dtos;
-
+using MicroStore.Catalog.Application.Models;
 namespace MicroStore.Catalog.Application.Categories
 {
     public interface ICategoryQueryService

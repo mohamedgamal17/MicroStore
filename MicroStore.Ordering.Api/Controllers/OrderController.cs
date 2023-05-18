@@ -2,6 +2,7 @@
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Models;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
@@ -136,6 +137,21 @@ namespace MicroStore.Ordering.Api.Controllers
 
         }
 
+        [HttpPost("search")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<OrderDto>))]
+        public async Task<IActionResult> Search([FromBody] OrderSearchModel model)
+        {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
+            var result = await _orderQueryService.SearchByOrderNumber(model);
+
+            return result.ToOk();
+        }
 
     }
 }
