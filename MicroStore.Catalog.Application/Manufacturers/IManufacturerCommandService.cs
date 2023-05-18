@@ -1,7 +1,7 @@
 ﻿
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Manufacturers;
 
 namespace MicroStore.Catalog.Application.Manufacturers
 {

@@ -1,5 +1,5 @@
 ﻿#pragma warning disable CS8618
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Products;
 using Volo.Abp.Application.Dtos;
 namespace MicroStore.Catalog.Application.Dtos
 {

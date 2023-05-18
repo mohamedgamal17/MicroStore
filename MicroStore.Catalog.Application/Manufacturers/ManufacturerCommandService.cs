@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Manufacturers;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Catalog.Application.Manufacturers
 {
     public class ManufacturerCommandService : CatalogApplicationService ,IManufacturerCommandService

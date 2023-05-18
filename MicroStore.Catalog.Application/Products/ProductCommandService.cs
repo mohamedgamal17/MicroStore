@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Domain.ValueObjects;
 using Volo.Abp;

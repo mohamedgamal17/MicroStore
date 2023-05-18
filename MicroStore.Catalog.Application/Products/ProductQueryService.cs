@@ -6,6 +6,7 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -69,6 +70,40 @@ namespace MicroStore.Catalog.Application.Products
                 .ToListAsync();
 
             return result;
+        }
+
+        public async Task<Result<PagedResult<ProductDto>>> SearchAsync(ProductSearchModel model, CancellationToken cancellationToken = default)
+        {
+            var productsQuery = _catalogDbContext.Products
+                    .AsNoTracking()
+                    .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                    .AsQueryable();
+
+            productsQuery = from product in productsQuery
+                            where product.Name.Contains(model.KeyWords) ||
+                                product.ShortDescription.Contains(model.KeyWords) ||
+                                product.LongDescription.Contains(model.KeyWords) ||
+                                product.Sku.Contains(model.KeyWords)
+                            select product;
+
+            if(model.CategoriesIds is not null)
+            {
+                productsQuery = from product in productsQuery
+                                from categoryId in model.CategoriesIds
+                                where product.ProductCategories.Any(c => c.CategoryId == categoryId)
+                                select product;
+            }
+
+            if(model.ManufactureriesIds is not null)
+            {
+                productsQuery = from product in productsQuery
+                                from manufacturerId in model.ManufactureriesIds
+                                where product.ProductManufacturers.Any(c => c.ManufacturerId == manufacturerId)
+                                select product;
+            }
+
+
+            return await productsQuery.PageResult(model.Skip, model.Lenght , cancellationToken);
         }
 
         public IQueryable<ProductDto> TryToSort(IQueryable<ProductDto> query, string sortBy, bool desc = false)

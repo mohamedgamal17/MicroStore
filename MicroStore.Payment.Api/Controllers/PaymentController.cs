@@ -112,5 +112,22 @@ namespace MicroStore.Payment.Api.Controllers
 
             return result.ToOk();
         }
+
+        [HttpPost]
+        [Route("search")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(PaymentRequestListDto))]
+        public async Task<IActionResult> Search([FromBody]PaymentRequestSearchModel model)
+        {
+            var validationResult = await ValidateModel(model);
+            
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
+            var result = await _paymentRequestQueryService.SearchByOrderNumber(model);
+
+            return result.ToOk();
+        }
     }
 }
