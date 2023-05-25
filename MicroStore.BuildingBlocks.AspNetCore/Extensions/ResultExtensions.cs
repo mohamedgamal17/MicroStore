@@ -46,7 +46,15 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
 
         };
 
+        public static IActionResult ToFailure<T>(this Result<T> result)
+        {
+            if (result.IsSuccess)
+            {
+                throw new InvalidOperationException("Result should be in failure state to preform this action");
+            }
 
+            return _exceptionHandler(result.Exception);
+        }
         public static IActionResult ToOk<T>(this Result<T> result )
         {
             return result.Match((r) =>

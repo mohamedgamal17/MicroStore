@@ -11,7 +11,7 @@ namespace MicroStore.ShoppingCart.Api.Models
     public class BasketItemModel
     {
         public string ProductId { get; set; }
-        public int Quantity { get; set; }
+        public int Quantity { get; set; } = 1;
     }
 
 
@@ -41,8 +41,29 @@ namespace MicroStore.ShoppingCart.Api.Models
         }
     }
 
-    public class RemoveBasketItemsModel
+    public class RemoveBasketItemModel
     {
-        public string[] ProductIds { get; set; }
+        public string ProductId { get; set; }
+        public int? Quantity { get; set; }
+    }
+
+    public class RemoveBasketItemModelValidator : AbstractValidator<RemoveBasketItemModel>
+    {
+        public RemoveBasketItemModelValidator()
+        {
+            RuleFor(x => x.ProductId)
+              .NotEmpty()
+              .WithMessage("Product Id cannot be null or empty")
+              .Must((productId) => Guid.TryParse(productId, out _))
+              .MaximumLength(256)
+              .WithMessage("Product Id maximum lenght is 256");
+
+            RuleFor(x => x.Quantity!.Value)
+                .GreaterThan(0)
+                .WithMessage("Removed quantity should not be negative or zero")
+                .When(x => x.Quantity != null);
+
+
+        }
     }
 }

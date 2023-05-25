@@ -1,4 +1,5 @@
 ﻿using MicroStore.BuildingBlocks.Results;
+using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.ShoppingCart.Api.Models
 {
@@ -16,8 +17,6 @@ namespace MicroStore.ShoppingCart.Api.Models
 
         public void AddProduct(string productId , int quantity)
         {
-           
-
             BasketItem? basketItem = Items.SingleOrDefault(x => x.ProductId == productId);
 
             if(basketItem == null)
@@ -39,16 +38,27 @@ namespace MicroStore.ShoppingCart.Api.Models
         }
 
 
-        public void RemoveProduct(string productId)
+        public Result<Unit> RemoveProduct(string productId , int? count )
         {
+            BasketItem? basketItem = Items.SingleOrDefault(x => x.ProductId == productId);
 
-            BasketItem? basketItem = Items?.SingleOrDefault(x => x.ProductId == productId);
-
-            if(basketItem != null)
+            if(basketItem == null)
             {
-                Items!.Remove(basketItem);
-
+                return new Result<Unit>(new EntityNotFoundException(typeof(BasketItem), productId));
             }
+
+
+            if(count == null || basketItem.Quantity <= count.Value)
+            {
+                Items.Remove(basketItem);
+            }
+            else
+            {
+                basketItem.Quantity -= count.Value;
+            }
+
+
+            return Unit.Value;
         }
 
 
