@@ -48,27 +48,6 @@ namespace MicroStore.Inventory.Application.Tests
             });
         }
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-
-            var loggerFactory = context.ServiceProvider.GetRequiredService<ILoggerFactory>();
-
-            LogContext.ConfigureCurrentLogContext(loggerFactory);
-
-            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
-
-            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                    "__EFMigrationsHistory"
-                }
-            }).Result;
-
-            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
-        }
-
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             using (var scope = context.ServiceProvider.CreateScope())
@@ -76,9 +55,6 @@ namespace MicroStore.Inventory.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<InventoryDbContext>();
 
                 dbContext.Database.Migrate();
-                SeedProductsData(dbContext);
-
-                SeedOrderData(dbContext);
             }
         }
 
@@ -95,40 +71,6 @@ namespace MicroStore.Inventory.Application.Tests
             }).Result;
 
             respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
-        }
-
-        private void SeedOrderData(InventoryDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies/Orders.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var jsonWrapper = JsonConvert.DeserializeObject<JsonWrapper<Order>>(json, _jsonSerilizerSettings);
-
-                if (jsonWrapper != null)
-                {
-                    dbContext.Orders.AddRange(jsonWrapper.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
-        }
-
-        private void SeedProductsData(InventoryDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies/Products.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var jsonWrapper = JsonConvert.DeserializeObject<JsonWrapper<Product>>(json, _jsonSerilizerSettings);
-
-                if (jsonWrapper != null)
-                {
-                    dbContext.Products.AddRange(jsonWrapper.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
         }
     }
 }

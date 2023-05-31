@@ -1,13 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
-using MicroStore.IdentityProvider.Identity.Infrastructure;
-using MicroStore.IdentityProvider.Identity.Infrastructure.Services;
 using MicroStore.TestBase;
-using System.Data;
-using System.Security.Claims;
-
 namespace MicroStore.IdentityProvider.Identity.Application.Tests
 {
     [TestFixture]
@@ -27,7 +21,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
 
             return identityRole;
         }
-
 
 
         public async Task<ApplicationIdentityUser> FindUserById(string userId)

@@ -9,7 +9,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Catalog.Infrastructure.EntityFramework
 {
     [ConnectionStringName("DefaultConnection")]
-    [ExposeServices(new Type[] { typeof(ICatalogDbContext), typeof(DbContext) }, IncludeSelf = true)]
+    [ExposeServices(new Type[] {  typeof(DbContext) }, IncludeSelf = true, IncludeDefaults = true)]
     public class CatalogDbContext : AbpDbContext<CatalogDbContext>, ICatalogDbContext ,ITransientDependency
     {
 

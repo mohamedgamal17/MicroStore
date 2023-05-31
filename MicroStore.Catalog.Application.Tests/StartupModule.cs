@@ -49,12 +49,6 @@ namespace MicroStore.Catalog.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
 
                 dbContext.Database.Migrate();
-
-                SeedCategoriesData(dbContext);
-
-                SeedProductsData(dbContext);
-
-                SeedManufacturerData(dbContext);
             }
         }
 
@@ -75,58 +69,6 @@ namespace MicroStore.Catalog.Application.Tests
                 respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
 
             }
-        }
-
-        private void SeedCategoriesData(CatalogDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies\Categories.json"))
-            {
-                var json = stream.ReadToEnd();
-                var dummy = JsonConvert.DeserializeObject<JsonWrapper<Category>>(json, _jsonSerilizerSettings);
-
-                if (dummy != null)
-                {
-                    dbContext.Categories.AddRange(dummy.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
-        }
-
-        private void SeedManufacturerData(CatalogDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies\Manufacturers.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var dummy = JsonConvert.DeserializeObject<JsonWrapper<Manufacturer>>(json, _jsonSerilizerSettings);
-
-                if(dummy != null)
-                {
-                    dbContext.Manufacturers.AddRange(dummy.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
-        }
-
-        private void SeedProductsData(CatalogDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies\Products.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var dummy = JsonConvert.DeserializeObject<JsonWrapper<Product>>(json, _jsonSerilizerSettings);
-
-                if (dummy != null)
-                {
-                    dbContext.Products.AddRange(dummy.Data);
-                }
-
-                dbContext.SaveChanges();
-
-            }
-
         }
 
     }

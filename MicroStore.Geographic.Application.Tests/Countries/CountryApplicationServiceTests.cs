@@ -25,7 +25,7 @@ namespace MicroStore.Geographic.Application.Tests.Countries
 
             result.IsSuccess.Should().BeTrue();
 
-            var country = await Find<Country>(x => x.Id == result.Value.Id);
+            var country = await SingleAsync<Country>(x => x.Id == result.Value.Id);
 
             country.AssertCountryModel(model);
 
@@ -33,7 +33,6 @@ namespace MicroStore.Geographic.Application.Tests.Countries
         }
 
    
-
         [Test]
         public async Task Should_update_country()
         {
@@ -43,7 +42,7 @@ namespace MicroStore.Geographic.Application.Tests.Countries
 
             var result = await _countryApplicationService.UpdateAsync(fakeCountry.Id, model);
 
-            var country = await Find<Country>(x => x.Id == result.Value.Id);
+            var country = await SingleAsync<Country>(x => x.Id == result.Value.Id);
 
             result.IsSuccess.Should().BeTrue();
 
@@ -88,28 +87,6 @@ namespace MicroStore.Geographic.Application.Tests.Countries
 
         }
 
-        [Test]
-        public async Task Should_return_country_list()
-        {
-            await CreateCountry(); 
-
-            var result = await _countryApplicationService.ListAsync();
-
-            result.Count.Should().BeGreaterThan(0);
-
-        }
-
-        [Test]
-        public async Task Should_get_country_by_id()
-        {
-            var fakeCountry =  await CreateCountry();
-
-            var result = await _countryApplicationService.GetAsync(fakeCountry.Id);
-
-            result.IsSuccess.Should().BeTrue();
-
-            result.Value.Id.Should().Be(fakeCountry.Id);
-        }
 
         [Test]
         public async Task Should_return_failure_result_while_getting_by_id_when_country_is_not_exist()

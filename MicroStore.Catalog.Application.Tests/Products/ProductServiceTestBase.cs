@@ -63,9 +63,13 @@ namespace MicroStore.Catalog.Application.Tests.Products
             var data = new List<Category>
             {
                 new Category {Name = Guid.NewGuid().ToString()},
+
                 new Category {Name = Guid.NewGuid().ToString()},
+
                 new Category {Name = Guid.NewGuid().ToString()},
+
                 new Category {Name = Guid.NewGuid().ToString()}
+
             };
 
             await InsertMany(data);

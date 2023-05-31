@@ -28,7 +28,7 @@ namespace MicroStore.Shipping.Application.Tests.ShippingSystems
 
             result.IsSuccess.Should().BeTrue();
 
-            var system = await Find<ShippingSystem>( x=> x.Name == systemName);
+            var system = await SingleAsync<ShippingSystem>( x=> x.Name == systemName);
 
             system.IsEnabled.Should().BeTrue();
 

@@ -42,21 +42,6 @@ namespace MicroStore.Shipping.Application.Tests
             });
         }
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
-
-            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                    "__EFMigrationsHistory"
-                }
-            }).Result;
-
-            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             using (var scope = context.ServiceProvider.CreateScope())
@@ -64,10 +49,6 @@ namespace MicroStore.Shipping.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<ShippingDbContext>();
 
                 dbContext.Database.Migrate();
-
-                SeedShipmentData(dbContext);
-
-                SeedShipmentSystemsData(dbContext);
             }
         }
 
@@ -84,39 +65,6 @@ namespace MicroStore.Shipping.Application.Tests
             }).Result;
 
             respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
-        }
-        private void SeedShipmentData(ShippingDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies\Shipments.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var data = JsonConvert.DeserializeObject<JsonWrapper<Shipment>>(json, _jsonSerilizerSettings);
-
-                if (data != null)
-                {
-                    dbContext.Shipments.AddRange(data.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
-        }
-
-        private void SeedShipmentSystemsData(ShippingDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies\ShipmentSystems.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var data = JsonConvert.DeserializeObject<JsonWrapper<ShippingSystem>>(json, _jsonSerilizerSettings);
-
-                if (data != null)
-                {
-                    dbContext.ShippingSystems.AddRange(data.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
         }
     }
 }

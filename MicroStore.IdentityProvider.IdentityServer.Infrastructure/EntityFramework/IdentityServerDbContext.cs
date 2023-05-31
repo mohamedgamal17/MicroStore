@@ -6,8 +6,8 @@ using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework
 {
-    [ExposeServices(typeof(IApplicationConfigurationDbContext))]
-    public class ApplicationConfigurationDbContext : ConfigurationDbContext<ApplicationConfigurationDbContext>, IApplicationConfigurationDbContext , IScopedDependency
+    [ExposeServices(typeof(DbContext),IncludeDefaults = true, IncludeSelf = true)]
+    public class ApplicationConfigurationDbContext : ConfigurationDbContext<ApplicationConfigurationDbContext>, IApplicationConfigurationDbContext , ITransientDependency
     {
         public ApplicationConfigurationDbContext(DbContextOptions<ApplicationConfigurationDbContext> options) : base(options)
         {
