@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.Payment.Application.Abstractions;
-using MicroStore.Payment.Domain;
+using MicroStore.Payment.Application.Common;
+using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
 using Volo.Abp;

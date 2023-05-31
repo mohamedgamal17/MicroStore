@@ -175,7 +175,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return BadRequest(ModelState);
             }
 
-            string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(model.Image.FileName));
+            string imageName = string.Format("{0}{1}", DateTime.UtcNow.Ticks.ToString(), Path.GetExtension(model.Image.FileName));
 
             using (MemoryStream memoryStream = new MemoryStream())
             {

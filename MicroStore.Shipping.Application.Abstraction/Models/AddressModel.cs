@@ -129,9 +129,13 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
 
             try
             {
-                var phoneNumberParsed = phoneNumberUtil.Parse(phone, model.CountryCode);
+                var countryCode = model.CountryCode.Length == 3
+                    ? model.CountryCode.Substring(0, 2) : model.CountryCode;
 
-                return phoneNumberUtil.IsPossibleNumberForType(phoneNumberParsed, PhoneNumberType.MOBILE);
+
+                var phoneNumberParsed = phoneNumberUtil.Parse(phone, countryCode);
+
+                return phoneNumberUtil.IsValidNumberForRegion(phoneNumberParsed, countryCode);
 
             }
             catch
@@ -142,3 +146,4 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
         }
     }
 }
+ 

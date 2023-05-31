@@ -1,0 +1,134 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart
+@model BasketAggregate
+
+@{
+    var totalCount = Model?.Items.Count ?? 0;
+    var totalPrice = Model?.Items.Sum(item => item.Quantity * item.Price) ?? 0;
+    var demoDiscountPercentage = 0;
+    var discountTotal = totalPrice * demoDiscountPercentage / 100;
+    var grandTotal = totalPrice - discountTotal;
+}
+<div>
+    @if (!Model.Items.Any())
+    {
+        <div class="basket-list">
+            <abp-row>
+                <abp-card>
+                    <abp-card-body>
+                        <h3 style="text-align: center">Basket is empty</h3>
+                        <br />
+                        <div style="text-align: center">
+                            <span>
+                                See other products <a href="/">ContinueShopping</a>
+                            </span>
+                        </div>
+
+                    </abp-card-body>
+                </abp-card>
+            </abp-row>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="basket-list flex-container vertical">
+                    @foreach (var item in Model.Items)
+                    {
+                        string imageName = item.Thumbnail ?? "/user-content/no-image.png";
+                        var price = item.Price.ToString("0.00");
+                        <div class="card basket-list-item" data-product-id="@item.ProductId">
+                            <div class="card-body">
+                                <div class="flex-container horizontal">
+                                    <div class="image-container flex-item">
+                                        <img class="basket-item-image" src="@imageName" />
+                                    </div>
+                                    <div class="flex-item">
+                                        <div class="flex-container vertical description-container">
+                                            <div class="flex-item description-header">
+                                                <span>@item.Name</span>
+                                            </div>
+                                            <div class="flex-item description-price">
+                                                <span>$@price</span>
+                                            </div>
+                                            <div class="flex-item description-cargo">
+                                                <span>
+                                                    <i class="fa fa-truck"></i>  Free Cargo
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="remove-container hide flex-item">
+                                        <i class="fa fa-trash basket-item-remove" title="RemoveFromBasket"></i>
+                                    </div>
+                                    <div class="actions-container flex-item">
+                                        <a  class="basket-item-increase">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </a>
+                                        <span class="basket-item-count">@item.Quantity</span>
+                                        <a  class="basket-item-decrease">
+                                            @{
+                                                string removeIcon = item.Quantity <= 1 ? "fa-trash" : "fa-minus-circle";
+                                            }
+                                            <i class="fa @removeIcon"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    }
+                </div>
+            </div>
+            <div class="col-lg-4 sticky">
+                <div class="card">
+                    <div class="card-body">
+                        <div style="text-align: center; padding-top: 25px">
+                            <div class="row">
+                                <h5>Total Selected (@totalCount)</h5>
+                            </div>
+                            <div class="row">
+                                <h3>$@totalPrice.ToString("0.00")</h3>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <h3>OrderSummary</h3>
+                        </div>
+                        <div class="summary">
+                            <div class="row">
+                                <div class="col-md-7">Products:</div>
+                                <div class="col-md-5 m-result text-right">@totalPrice.ToString("0.00") $</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">Cargo & Packaging:</div>
+                                <div class="col-md-5 m-result text-right">0.00 $</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">Total:</div>
+                                <div class="col-md-5 m-result text-right">@totalPrice.ToString("0.00") $</div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h5>OrderTotal:</h5>
+                            </div>
+                            <div class="col-md-5 m-result order-total text-right">
+                                <h5>@grandTotal.ToString("0.00") $</h5>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 25px; text-align: center">
+                            <form method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="model.TotalDiscountPercentage" class="total-discount" data-discount-total="@demoDiscountPercentage" value="@demoDiscountPercentage" />
+                                <abp-button type="submit" size="Large" class="basket-purchase-button" text="Complete Purshase" button-type="Warning" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>

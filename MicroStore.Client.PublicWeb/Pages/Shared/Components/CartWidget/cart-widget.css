@@ -4,8 +4,10 @@
 }
 
 .cart-preview {
-    max-height: 75vh;
+   /* max-height: 75vh;*/
     overflow: auto;
+    width:300px!important;
+    max-width:300px!important;
 }
 
     .cart-preview .basket-item-preview-image {

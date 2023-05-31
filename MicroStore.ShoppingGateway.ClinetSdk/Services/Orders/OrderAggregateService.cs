@@ -75,7 +75,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
                 TaxCost = order.TaxCost,
                 ShippingCost = order.ShippingCost,
                 SubTotal = order.SubTotal,
-                TotalPrice = order.TotalPrice,
+                TotalPrice = order.Total,
                 Items = order.Items,
                 SubmissionDate = order.SubmissionDate,
                 ShippedDate = order.ShippedDate,

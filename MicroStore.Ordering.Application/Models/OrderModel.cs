@@ -9,7 +9,7 @@ namespace MicroStore.Ordering.Application.Models
         public double TotalPrice { get; set; }
         public AddressModel ShippingAddress { get; set; }
         public AddressModel BillingAddress { get; set; }
-        public List<OrderItemModel> OrderItems { get; set; } = new List<OrderItemModel>();
+        public List<OrderItemModel> Items { get; set; } = new List<OrderItemModel>();
     }
 
     public class CreateOrderModel : OrderModel

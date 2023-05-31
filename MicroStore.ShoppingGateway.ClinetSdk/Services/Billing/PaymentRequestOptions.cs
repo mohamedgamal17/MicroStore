@@ -7,7 +7,7 @@
         public string OrderNumber { get; set; }
         public double ShippingCost { get; set; }
         public double TaxCost { get; set; }
-        public double SubtTotal { get; set; }
+        public double SubTotal { get; set; }
         public double TotalCost { get; set; }
         public List<PaymentProductCreateRequestOptions> Items { get; set; }
     }

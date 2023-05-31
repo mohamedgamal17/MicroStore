@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MicroStore.Payment.Domain;
+using MicroStore.Payment.Application.Domain;
 namespace MicroStore.Payment.Application.Common
 {
     public interface IPaymentDbContext

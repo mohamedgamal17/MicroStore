@@ -12,7 +12,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes
         public double ShippingCost { get; set; }
         public double TaxCost { get; set; }
         public double SubTotal { get; set; }
-        public double TotalPrice { get; set; }
+        public double Total { get; set; }
         public string UserId { get; set; }
         public string PaymentId { get; set; }
         public string ShipmentId { get; set; }

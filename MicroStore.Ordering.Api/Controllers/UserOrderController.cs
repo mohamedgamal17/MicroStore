@@ -49,7 +49,7 @@ namespace MicroStore.Ordering.Api.Controllers
                 TotalPrice = model.TotalPrice,
                 ShippingAddress = model.ShippingAddress,
                 BillingAddress = model.BillingAddress,
-                OrderItems = model.OrderItems,
+                Items = model.Items,
                 UserId = CurrentUser.Id.ToString()!,
             };
 
