@@ -1,4 +1,7 @@
 ﻿$(document).ready(function () {
+
+   
+
     $(".add-basket-button").click(function () {
         var $this = $(this);
         var productId = $this.attr("data-product-id");
@@ -23,7 +26,7 @@
                     })
 
 
-                abp.notify.info("Added product to your basket.", "Successfully added")
+                abp.notifiy.success("Added product to your basket.", "Successfully added")
             }
         });
 

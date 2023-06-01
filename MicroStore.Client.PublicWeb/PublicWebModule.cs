@@ -4,13 +4,10 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Bundling;
-using MicroStore.Client.PublicWeb.Components.Basket;
-using MicroStore.Client.PublicWeb.Components.Cart;
 using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Menus;
 using MicroStore.Client.PublicWeb.Theming;
-using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
 using Newtonsoft.Json.Converters;
 using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
@@ -20,11 +17,9 @@ using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -39,6 +34,8 @@ namespace MicroStore.Client.PublicWeb
         typeof(AbpAutoMapperModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpAspNetCoreMvcUiModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringMinioModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
@@ -67,6 +64,13 @@ namespace MicroStore.Client.PublicWeb
 
 
             ConfigureMinioStorage(configuration);
+
+            //context.Services.AddRazorPages()
+            // .AddRazorPagesOptions(opt =>
+            // {
+            //     opt.Conventions.AddPageRoute("/FrontEnd/Home", "");
+
+            // }).AddRazorRuntimeCompilation();
 
             //context.Services.AddControllers().AddNewtonsoftJson(opt =>
             //{
@@ -97,30 +101,12 @@ namespace MicroStore.Client.PublicWeb
             {
                 options
                     .StyleBundles
-                    .Configure(StandardBundles.Styles.Global, bundle =>
-                    {
-                        bundle.AddContributors(typeof(ApplicationThemeGlobalStyleContributor));
-                      //  bundle.AddContributors(typeof(BasketWidgetStyleContributor));
-
-                    });
-
+                    .Configure(StandardBundles.Styles.Global, bundle => { bundle.AddContributors(typeof(ApplicationThemeGlobalStyleContributor)); });
 
                 options
                     .ScriptBundles
-                    .Configure(StandardBundles.Scripts.Global, bundle =>
-                    {
-                        bundle.AddContributors(typeof(ApplicationThemeGlobalScriptContributor));
-                       // bundle.AddContributors(typeof(BasketWidgetScriptContributor));
-                    });
+                    .Configure(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(ApplicationThemeGlobalScriptContributor)));
             });
-
-            //Configure<AbpWidgetOptions>(options =>
-            //{
-            //    options.Widgets.Add(typeof(BasketWidgetViewComponent));
-            //    options.Widgets.Add(typeof(CartWidgetViewComponent));
-            //});
-
-            context.Services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -192,6 +178,7 @@ namespace MicroStore.Client.PublicWeb
                options.Scope.Add("mvcgateway.shipping.read");
                options.Scope.Add("mvcgateway.inventory.read");
                options.Scope.Add("mvcgateway.inventory.write");
+               options.Scope.Add("api-sample");
                options.SaveTokens = true;
 
            });

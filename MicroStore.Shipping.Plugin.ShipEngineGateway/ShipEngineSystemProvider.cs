@@ -212,7 +212,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
             }
             catch (ShipEngineException ex)
             {
-                return new Result<T>(new UserFriendlyException(ex.Message));
+                return new Result<T>(new BusinessException(ex.Message));
 
             }
           

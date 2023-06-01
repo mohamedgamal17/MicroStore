@@ -2,7 +2,7 @@
 
 using MicroStore.Payment.Domain.Shared.Events;
 using Volo.Abp.Domain.Entities.Auditing;
-namespace MicroStore.Payment.Application.Domain
+namespace MicroStore.Payment.Domain
 {
     public class PaymentRequest : CreationAuditedAggregateRoot<string>
     {

@@ -30,7 +30,7 @@ namespace MicroStore.Shipping.Infrastructure
 
             if (!system.IsEnabled)
             {
-                return new Result<IShipmentSystemProvider>(new UserFriendlyException($"Shipping system with name {systemName} is not enabled"));
+                return new Result<IShipmentSystemProvider>(new BusinessException($"Shipping system with name {systemName} is not enabled"));
             }
 
             var provider = _providers

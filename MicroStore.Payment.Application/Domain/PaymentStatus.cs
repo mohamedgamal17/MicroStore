@@ -1,4 +1,4 @@
-﻿namespace MicroStore.Payment.Application.Domain
+﻿namespace MicroStore.Payment.Domain
 {
     public enum PaymentStatus
     {

@@ -13,7 +13,6 @@ namespace MicroStore.Client.PublicWeb.Bundling
             {
                 "/libs/admin-lte/css/adminlte.min.css",
                 "/libs/summernote/summernote.min.css",
-                "/Pages/Shared/Components/CartWidget/cart-widget.css"
             });
         }
     }

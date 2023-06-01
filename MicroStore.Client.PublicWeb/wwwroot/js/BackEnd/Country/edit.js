@@ -25,14 +25,14 @@
                 {
                     title: "Actions",
 
-                    rowAction: {
+                    rowActions: {
                         items: [
                             {
                                 text: 'Edit',
                                 action: function (data) {
                                     stateModal.open({
-                                        countryId: data.record.countryId,
-                                        stateId: data.record.id
+                                        countryId: data.countryId,
+                                        stateId: data.id
                                     });
                                 }
                             },
@@ -67,7 +67,7 @@
 
     $("#CreateStateButton").on('click', function (event) {
         event.preventDefault();
-        stateModal.open({
+        createStateModal.open({
             countryId: countryId
         })
     })

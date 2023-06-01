@@ -68,12 +68,12 @@ namespace MicroStore.Shipping.Application.Rates
 
             if (settings.DefaultShippingSystem == null)
             {
-                return new Result<ShippingSettings>(new UserFriendlyException("Please set default shipping system"));
+                return new Result<ShippingSettings>(new BusinessException("Please set default shipping system"));
           
             }
             else if (settings.Location == null)
             {
-                return new Result<ShippingSettings>(new UserFriendlyException("Please add store location"));
+                return new Result<ShippingSettings>(new BusinessException("Please add store location"));
          
             }
 

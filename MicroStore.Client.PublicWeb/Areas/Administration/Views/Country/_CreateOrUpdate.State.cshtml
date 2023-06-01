@@ -3,12 +3,11 @@
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.StateProvinceModel
 
 
-<form asp-action="@(Model.Id == null ? "CreateStateProvince"  : "UpdateStateProvince")">
+<form asp-action="@(Model.Id != null ? "CreateStateProvince"  : "UpdateStateProvince")">
     <abp-modal>
         <abp-modal-header title="Add Product Image"></abp-modal-header>
         <abp-modal-body>
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(x=> x.CountryId)
             @Html.HiddenFor(x=> x.Id)
             <abp-input asp-for="@Model.Name"></abp-input>
             <abp-input asp-for="@Model.Abbreviation"></abp-input>

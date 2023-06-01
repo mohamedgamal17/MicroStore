@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
 
-    $("#CountryTable").DataTable(
-        abp.libs.datatables.normalizeConfiguration({
+    $("#CountriesTable").DataTable(
+        abp.libs.datatables.normailizeConfiguration({
             ajax: {
                 type: "POST"
             },

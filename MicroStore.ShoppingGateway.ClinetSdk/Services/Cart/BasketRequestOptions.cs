@@ -14,8 +14,7 @@
 
     public class BasketRemoveItemRequestOptions
     {
-        public Guid ProductId { get; set; }
-        public int? Quantity { get; set; }
+        public string[] ProductIds { get; set; }
     }
 
     public class BasketMigrateRequestOptions

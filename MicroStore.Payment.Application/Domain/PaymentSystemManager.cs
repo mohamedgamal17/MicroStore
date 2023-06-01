@@ -1,4 +1,5 @@
-﻿using MicroStore.Payment.Domain.Shared;
+﻿using MicroStore.Payment.Domain;
+using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MicroStore.Payment.Application.Domain;
+using MicroStore.Payment.Domain;
 namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfigurations
 {
     public class SettingsEntityTypeConfiguration : IEntityTypeConfiguration<SettingsEntity>

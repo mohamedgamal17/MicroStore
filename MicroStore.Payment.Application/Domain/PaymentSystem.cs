@@ -1,6 +1,6 @@
 ﻿#pragma warning disable CS8618
 using Volo.Abp.Domain.Entities;
-namespace MicroStore.Payment.Application.Domain
+namespace MicroStore.Payment.Domain
 {
     public class PaymentSystem : Entity<string>
     {

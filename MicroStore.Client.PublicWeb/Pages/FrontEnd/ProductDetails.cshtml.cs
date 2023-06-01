@@ -5,7 +5,7 @@ using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 
-namespace MicroStore.Client.PublicWeb.Pages
+namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 {
     public class ProductDetailsModel : PageModel
     {

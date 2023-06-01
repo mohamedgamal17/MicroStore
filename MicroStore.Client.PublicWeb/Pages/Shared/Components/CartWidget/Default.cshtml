@@ -9,11 +9,11 @@
 	else
 	{
 		<div class="dropdown">
-			<a class="btn nav-link dropdown-toggle" id="shopping-cart-link" data-bs-toggle="dropdown" style="padding:0px" role="button" href="#">
-				<span abp-badge="Info" data-cart-count>@Model.Items.Sum(x=> x.Quantity)</span> Cart11
+			<a class="btn nav-link dropdown-toggle" id="shopping-cart-link" style="padding:0px" role="button" href="~/Basket">
+				<span abp-badge="Info" data-cart-count>@Model.Items.Count</span> Cart
 			</a>
 
-			<div class="dropdown-menu dropdown-menu-end border-0 shadow-sm cart-preview" aria-labelledby="shopping-cart-link" style="width:300px!important; max-width300px">
+			<div class="dropdown-menu dropdown-menu-end border-0 shadow-sm cart-preview" aria-labelledby="shopping-cart-link">
 
 				@if (!Model.Items.Any())
 				{
@@ -32,13 +32,13 @@
 				{
 					foreach (var item in Model.Items)
 					{
-						string imageName = item.Thumbnail ?? "/user-content/no-image.png";
+						string imageName = item.Thumbnail;
 					    var price = item.Price.ToString("0.00");
-						<div class="dropdown-item overflow-hidden">
+						<div class="dropdown-item">
 
 							<abp-row>
-								<abp-column size="_3" class="overflow-hidden">
-									<img class="basket-item-preview-image m-1 my-2" src="@imageName" />
+								<abp-column size="_3">
+									<img class="https://gateway-public.eshoponabp.com/product-images/nikon.jpg" src="@imageName" />
 								</abp-column>
 								<abp-column size="_9">
 									<p class="mt-2 mb-0"><strong>@item.Name</strong></p>
@@ -50,7 +50,7 @@
 
 					<div>
 						<div class="d-grid gap-2 m-2">
-							<a asp-page="/Cart" class="btn btn-outline-warning text-center">
+							<a href="~/Basket" class="btn btn-outline-warning text-center">
 								My Cart
 							</a>
 						</div>

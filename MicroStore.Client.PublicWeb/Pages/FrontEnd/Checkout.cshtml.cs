@@ -10,21 +10,16 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services.Billing;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
-namespace MicroStore.Client.PublicWeb.Pages
+
+namespace MicroStore.Client.PublicWeb.Pages.FrontEnd
 {
     public class CheckoutModel : PageModel
     {
-        [BindProperty]
-        public AddressModel ShippingAddress { get; set; }
 
-        [BindProperty]
-        public bool UseAnotherBillingAddress { get; set; }
 
-        [BindProperty]
-        public AddressModel? BillingAddress { get; set; }
+        private readonly BasketAggregateService _basketAggregateService;
 
-        [BindProperty]
-        public string PaymentMethod { get; set; }
+        private readonly PaymentSystemService _paymentSystemService;
 
         private readonly IWorkContext _workContext;
 
@@ -33,20 +28,24 @@ namespace MicroStore.Client.PublicWeb.Pages
         private readonly UserPaymentRequestService _userPaymentRequestService;
 
         private readonly ShipmentRateService _shipmentRateService;
+        private readonly ILogger<CheckoutModel> _logger;
 
-        private BasketAggregateService _basketAggregateService;
-
-        public CheckoutModel(IWorkContext workContext, UserOrderService userOrderService, UserPaymentRequestService userPaymentRequestService, ShipmentRateService shipmentRateService, BasketAggregateService basketAggregateService)
+        public CheckoutModel(BasketAggregateService basketAggregateService, PaymentSystemService paymentSystemService, IWorkContext workContext, UserOrderService userOrderService, UserPaymentRequestService userPaymentRequestService, ShipmentRateService shipmentRateService, ILogger<CheckoutModel> logger)
         {
+            _basketAggregateService = basketAggregateService;
+            _paymentSystemService = paymentSystemService;
             _workContext = workContext;
             _userOrderService = userOrderService;
             _userPaymentRequestService = userPaymentRequestService;
             _shipmentRateService = shipmentRateService;
-            _basketAggregateService = basketAggregateService;
+            _logger = logger;
         }
 
-        public List<PaymentSystem> PaymentSystems { get; set; }
+        public List<PaymentSystem> PaymentSystems{ get; set; }
         public BasketAggregate Basket { get; set; }
+
+        [BindProperty]
+        public InputModel Input { get; set; }
         public double SubTotal { get; set; }
         public double Total { get; set; }
 
@@ -55,12 +54,16 @@ namespace MicroStore.Client.PublicWeb.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             var basketResponse = await _basketAggregateService
-                 .RetriveBasket(_workContext.TryToGetCurrentUserId());
+                .RetriveBasket(_workContext.TryToGetCurrentUserId());
 
             if (basketResponse.Items.Count < 1)
             {
                 return Redirect("~/frontend/cart");
             }
+
+            Basket = basketResponse;
+
+            await PrepareModel();
 
             return Page();
 
@@ -83,9 +86,8 @@ namespace MicroStore.Client.PublicWeb.Pages
             var rateRequestOptions = new ShipmentRateEstimateRequestOptions
             {
                 Items = PrepareShipmentItemEstimateRequest(Basket),
-
-                Address = MapAddress(UseAnotherBillingAddress ? ShippingAddress : BillingAddress!),
-
+                Address = MapAddress(Input.UseAnotherShippingAddress ? Input.ShippingAddress : Input.BillingAddress),
+                
             };
 
             var estimateRateResponse = await _shipmentRateService.EstimateAsync(rateRequestOptions);
@@ -93,29 +95,21 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             double shippingCost = estimateRateResponse.Where(x => x.EstaimatedDays < 7).Select(x => x.Money.Value).Min();
 
-            double subTotal = basketResponse.Items.Sum(x => x.Price * x.Quantity);
-
-            double total = subTotal + shippingCost;
-
             OrderSubmitRequestOptions submitRequestOptions = new OrderSubmitRequestOptions
             {
-                BillingAddress = MapAddress(BillingAddress),
-
-                ShippingAddress = MapAddress(UseAnotherBillingAddress ? ShippingAddress : BillingAddress),
+                BillingAddress = MapAddress(Input.BillingAddress),
+                ShippingAddress = MapAddress(Input.UseAnotherShippingAddress ? Input.ShippingAddress : Input.BillingAddress),
 
                 TaxCost = 0,
-
                 ShippingCost = shippingCost,
-
-                SubTotal = subTotal,
-
-                TotalPrice = total,
+                SubTotal = SubTotal,
+                TotalPrice = SubTotal + shippingCost,
 
                 Items = PrepareOrderItemReequest(Basket)
 
             };
 
-            var orderResponse = await _userOrderService.SubmitOrderAsync(submitRequestOptions);
+            var orderResponse =   await _userOrderService.SubmitOrderAsync(submitRequestOptions);
 
             var paymentRequestOptions = new PaymentRequestOptions
             {
@@ -123,8 +117,8 @@ namespace MicroStore.Client.PublicWeb.Pages
                 OrderNumber = orderResponse.OrderNumber,
                 ShippingCost = orderResponse.ShippingCost,
                 TaxCost = orderResponse.TaxCost,
-                SubTotal = orderResponse.SubTotal,
-                TotalCost = orderResponse.Total,
+                SubtTotal = orderResponse.SubTotal,
+                TotalCost = orderResponse.TotalPrice,
                 Items = PreparePaymentProductCreateRequest(Basket)
             };
 
@@ -132,7 +126,7 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             var processPaymentRequestOptions = new PaymentProcessRequestOptions
             {
-                GatewayName = PaymentMethod,
+                GatewayName = "stripe_gateway",
                 ReturnUrl = HttpContext.GetCurrentUrl(),
                 CancelUrl = HttpContext.GetCurrentUrl()
             };
@@ -188,7 +182,7 @@ namespace MicroStore.Client.PublicWeb.Pages
                 Sku = x.Sku,
                 Quantity = x.Quantity,
                 UnitPrice = x.Price,
-
+               
 
             }).ToList();
         }
@@ -198,7 +192,7 @@ namespace MicroStore.Client.PublicWeb.Pages
         {
             return basketAggregate.Items.Select(x => new PaymentProductCreateRequestOptions
             {
-
+          
                 ProductId = x.ProductId,
                 Image = x.Thumbnail ?? Guid.NewGuid().ToString(), // For now we will add fallback image
                 Name = x.Name,
@@ -210,5 +204,29 @@ namespace MicroStore.Client.PublicWeb.Pages
             }).ToList();
         }
 
+        private async Task PrepareModel()
+        {
+
+            SubTotal = Basket.Items.Aggregate((double)0, (t1, t2) => t1 + (t2.Price * t2.Quantity));
+
+            Total = Basket.Items.Aggregate((double)0, (t1, t2) => t1 + (t2.Price * t2.Quantity));
+
+            PaymentSystems = await _paymentSystemService.ListAsync();
+        }
+
+
+        private async Task PrepareAvailablePaymentSystems()
+        {
+ 
+        }
+
+
+
+        public class InputModel
+        {
+            public AddressModel BillingAddress { get; set; }
+            public bool UseAnotherShippingAddress { get; set; }
+            public AddressModel ShippingAddress { get; set; }
+        }
     }
 }

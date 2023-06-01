@@ -14,7 +14,6 @@ namespace MicroStore.Ordering.Application.Mappers
                 .ForMember(x => x.Id, opt => opt.MapFrom(c => c.CorrelationId))
                 .ForMember(x => x.BillingAddress, opt => opt.MapFrom(c => c.BillingAddress))
                 .ForMember(x => x.ShippingAddress, opt => opt.MapFrom(c => c.ShippingAddress))
-                .ForMember(x=> x.Total, opt=> opt.MapFrom(c=> c.TotalPrice))
                 .ForMember(x => x.CurrentState, opt => opt.MapFrom(c => c.CurrentState));
 
             CreateMap<OrderStateEntity, OrderDto>()
@@ -23,7 +22,6 @@ namespace MicroStore.Ordering.Application.Mappers
                 .ForMember(x => x.BillingAddress, opt => opt.MapFrom(c => c.BillingAddress))
                 .ForMember(x => x.ShippingAddress, opt => opt.MapFrom(c => c.ShippingAddress))
                 .ForMember(x => x.CurrentState, opt => opt.MapFrom(c => c.CurrentState))
-                .ForMember(x => x.Total, opt => opt.MapFrom(c => c.TotalPrice))
                 .ForMember(x => x.Items, opt => opt.MapFrom(c => c.OrderItems));
 
 

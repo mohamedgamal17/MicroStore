@@ -1,92 +1,26 @@
-﻿@using System.Globalization
-@using MicroStore.Client.PublicWeb.Components.Cart
-@using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
-@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
-@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Application)
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"]</title>
+    <title>@*@ViewBag["Title"]*@</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
     <abp-style-bundle name="@StandardBundles.Styles.Global" />
-
-    @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
-
-    @RenderSection("Styles", required: false)
-
-    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
+    @RenderSection("Styles")
 </head>
 
 <body class="layout-top-nav">
-    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
+
     <div class="wrapper">
         <div class="preloader flex-column justify-content-center align-items-center">
             <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
         </div>
 
-        <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
-            <div class="container-fluid">
-
-
-
-                <button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a asp-page="Home" class="nav-link">
-                                Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="Products" class="nav-link">
-                                Products
-                            </a>
-                        </li>
-                    </ul>
-                    <form class="d-flex ml-auto">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-info" type="submit">Search</button>
-                    </form>
-                    <ul class="navbar-nav ml-auto">
-
-                        <li class="nav-item">
-
-                            @await Component.InvokeAsync(typeof(CartWidgetViewComponent))
-
-                        </li>
-                        @if (User.Identity?.IsAuthenticated ?? false)
-                        {
-                            <li class="nav-item">
-                                <a asp-page="MyOrders" class="nav-link">My Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" id="btn-logout"><i class=" fa fa-user"></i>Logout</a>
-                                <form method="post" asp-controller="Authentication" asp-action="Logout" id="logout-form">
-                                    @Html.AntiForgeryToken()
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Authentication" asp-action="Login" asp-route-returnUrl="@Context.Request.Path"><i class="fa fa-user"></i> Login</a>
-                            </li>
-                        }
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
+        @await Html.PartialAsync("_Navbar")
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -94,7 +28,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-12">
-                            <h1 class="text-center mt-3 mb-3">@ViewData["ContainerTitle"]</h1>
+                            <h1 class="text-center mt-3 mb-3">Our Products</h1>
                         </div>
                     </div>
                 </div>
@@ -102,31 +36,15 @@
 
             <div class="content">
                 <div class="container">
-                    @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
                     @RenderBody()
-                    @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
                 </div>
             </div>
         </div>
     </div>
 
-
     <abp-script-bundle name="@StandardBundles.Styles.Global" />
-
-    <script src="~/Abp/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/Abp/ApplicationConfigurationScript"></script>
-    <script src="~/Abp/ServiceProxyScript"></script>
-    @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
     @await RenderSectionAsync("Scripts", required: false)
-
-    <script>
-        $(document).ready(function(){
-            $("#btn-logout").click(function(){
-                $("#logout-form").submit();
-            })
-        })
-    </script>
-
 </body>
 
 </html>

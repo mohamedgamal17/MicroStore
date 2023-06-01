@@ -60,12 +60,12 @@ namespace MicroStore.Ordering.Application.Orders
             return result;
         }
 
-        public async Task<Result<PagedResult<OrderDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<OrderListDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext
                   .Query<OrderStateEntity>()
                   .AsNoTracking()
-                  .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider);
+                  .ProjectTo<OrderListDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
             if(userId != null)
             {
@@ -82,7 +82,7 @@ namespace MicroStore.Ordering.Application.Orders
             return result;
         }
 
-        private IQueryable<OrderDto> TryToSort(IQueryable<OrderDto> query, string sortby, bool desc)
+        private IQueryable<OrderListDto> TryToSort(IQueryable<OrderListDto> query, string sortby, bool desc)
         {
             return sortby.ToLower() switch
             {

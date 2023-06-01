@@ -1,6 +1,6 @@
 ﻿using MicroStore.BuildingBlocks.Results;
-using MicroStore.Payment.Application.Common;
-using MicroStore.Payment.Application.Domain;
+using MicroStore.Payment.Application.Abstractions;
+using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;

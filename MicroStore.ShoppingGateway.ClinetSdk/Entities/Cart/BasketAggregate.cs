@@ -13,7 +13,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart
         public string ProductId { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
-        public string? Thumbnail { get; set; }
+        public string Thumbnail { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public double Price { get; set; }
