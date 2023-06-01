@@ -82,7 +82,6 @@ namespace MicroStore.Ordering.Application.Orders
             return result;
         }
 
-        private IQueryable<OrderDto> TryToSort(IQueryable<OrderDto> query, string sortby, bool desc)
         public async Task<Result<PagedResult<OrderDto>>> SearchByOrderNumber(OrderSearchModel model, CancellationToken cancellationToken = default)
         {
             var ordersQuery = _orderDbContext.Query<OrderStateEntity>()
