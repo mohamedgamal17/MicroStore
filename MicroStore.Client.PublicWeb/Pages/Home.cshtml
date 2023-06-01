@@ -1,0 +1,16 @@
+﻿@page "/"
+@using MicroStore.Client.PublicWeb.Components.ProductListWidget
+
+@model HomeModel
+@{
+    ViewData["Title"] = "Home page";
+    ViewData["ContainerTitle"] = "Home";
+}
+
+@await Component.InvokeAsync(typeof(ProductListWidgetViewComponent), new 
+    {
+        PagingUrl= Url.Page("Home"),
+        CurrentPage= Model.CurrentPage,
+        PageSize = Model.PageSize,
+        IsFeatured = true
+    })
