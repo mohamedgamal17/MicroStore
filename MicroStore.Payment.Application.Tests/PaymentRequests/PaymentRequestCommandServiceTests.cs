@@ -5,7 +5,6 @@ using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared.Models;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
-
 namespace MicroStore.Payment.Application.Tests.PaymentRequests
 {
     public class PaymentRequestCommandServiceTests : PaymentRequestCommandTestBase
@@ -24,7 +23,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             var result = await _paymentRequestCommandService.CreateAsync(model);
 
-            PaymentRequest paymentRequest = await Find<PaymentRequest>(x => x.OrderId == model.OrderId);
+            PaymentRequest paymentRequest = await SingleAsync<PaymentRequest>(x => x.OrderId == model.OrderId);
             paymentRequest.OrderId.Should().Be(model.OrderId);
             paymentRequest.OrderNumber.Should().Be(model.OrderNumber);
             paymentRequest.TaxCost.Should().Be(model.TaxCost);
@@ -152,7 +151,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             result.IsSuccess.Should().BeTrue();
 
-            var paymentRequest = await Find<PaymentRequest>(x=> x.Id== fakePaymentRequest.Id);
+            var paymentRequest = await SingleAsync<PaymentRequest>(x=> x.Id== fakePaymentRequest.Id);
 
             paymentRequest.State.Should().Be(PaymentStatus.Refunded);
         }

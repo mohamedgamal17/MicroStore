@@ -1,0 +1,20 @@
+﻿@page
+@using MicroStore.Client.PublicWeb.Components.CheckoutInformation
+@using MicroStore.Client.PublicWeb.Components.CheckoutSummary
+@model CheckoutModel
+@{
+    ViewData["Title"] = "Checkout";
+    ViewData["ContainerTitle"] = "Checkout";
+}
+<div class="container">
+    <form method="post">
+        <abp-row>
+            <abp-column size-md=_8 size-sm=_12>
+                @await Component.InvokeAsync(typeof(CheckoutInformationWidgetViewComponent), Model)
+            </abp-column>
+            <abp-column size-md=_4 size-sm=_12>
+                @await Component.InvokeAsync(typeof(CheckoutSummaryWidgetViewComponent),Model)
+            </abp-column>
+        </abp-row>
+    </form>
+</div>

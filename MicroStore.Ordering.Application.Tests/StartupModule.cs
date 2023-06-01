@@ -53,20 +53,7 @@ namespace MicroStore.Ordering.Application.Tests
                 });
             });
         }
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
-
-            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                    "__EFMigrationsHistory"
-                }
-            }).Result;
-
-            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
-        }
+  
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             using (var scope = context.ServiceProvider.CreateScope())
@@ -74,7 +61,6 @@ namespace MicroStore.Ordering.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
 
                 dbContext.Database.Migrate();
-                SeedOrdersData(dbContext);
             }
         }
 
@@ -95,22 +81,6 @@ namespace MicroStore.Ordering.Application.Tests
         }
 
 
-        private void SeedOrdersData(OrderDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies\Orders.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var data = JsonConvert.DeserializeObject<JsonWrapper<OrderStateEntity>>(json, _jsonSerilizerSettings);
-
-                if (data != null)
-                {
-                    dbContext.AddRange(data.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
-        }
 
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MicroStore.Payment.Domain;
+using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;
 
 namespace MicroStore.Payment.Application.Mappers

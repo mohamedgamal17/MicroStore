@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Application.Products;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.IntegrationEvents;
 using Volo.Abp.Domain.Entities;
-
 namespace MicroStore.Catalog.Application.Tests.Products
 {
     public class ProductCommandServiceTests : ProductServiceTestBase
@@ -182,8 +181,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
         [Test]
         public async Task Should_return_failure_result_while_adding_deleting_product_image_when_product_is_not_exist()
         {
-
-
             var result = await _productCommandService.DeleteProductImageAsync(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
             result.IsFailure.Should().BeTrue();
@@ -195,11 +192,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
         public async Task Should_return_failure_result_while_deleting_product_image_when_product_image_is_not_exist_in_current_product()
         {
             var fakeProduct = await CreateFakeProduct();
-
-            var model = new UpdateProductImageModel
-            {
-                DisplayOrder = 5
-            };
 
             var result = await _productCommandService.DeleteProductImageAsync(fakeProduct.Id, Guid.NewGuid().ToString());
 

@@ -9,7 +9,7 @@ namespace MicroStore.Ordering.Application.Orders
 
     public interface IOrderQueryService : IApplicationService
     {
-        Task<Result<PagedResult<OrderListDto>>> ListAsync(PagingAndSortingQueryParams queryParams, string? userId = null , CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<OrderDto>>> ListAsync(PagingAndSortingQueryParams queryParams, string? userId = null , CancellationToken cancellationToken = default);
         Task<Result<OrderDto>> GetAsync(Guid orderId,  CancellationToken cancellationToken =default);
         Task<Result<OrderDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
 

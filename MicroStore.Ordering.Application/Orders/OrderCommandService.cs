@@ -34,7 +34,7 @@ namespace MicroStore.Ordering.Application.Orders
                 SubTotal = model.SubTotal,
                 TotalPrice = model.TotalPrice,
                 SubmissionDate =DateTime.UtcNow,
-                OrderItems = model.OrderItems,
+                OrderItems = model.Items,
             };
 
 

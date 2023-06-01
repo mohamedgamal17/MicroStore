@@ -28,7 +28,7 @@ namespace MicroStore.Ordering.Application.Models
             RuleFor(x => x.SubTotal)
                 .GreaterThan(0)
                 .WithMessage("Sub Total must not be zero or negative value")
-                .Must((command, _) => command.SubTotal == command.OrderItems.Sum(x => x.Quantity * x.UnitPrice))
+                .Must((command, _) => command.SubTotal == command.Items.Sum(x => x.Quantity * x.UnitPrice))
                 .WithMessage("Invalid Sub Total value");
 
 
@@ -39,14 +39,14 @@ namespace MicroStore.Ordering.Application.Models
                 .WithMessage("Invalid Total price value");
 
 
-            RuleFor(x => x.OrderItems)
+            RuleFor(x => x.Items)
                 .NotNull()
                 .WithMessage("Order line items is required")
                 .Must((lineItems) => lineItems.Count > 0)
                 .WithMessage("Order line items must contain at least one item");
 
 
-            RuleForEach(x => x.OrderItems)
+            RuleForEach(x => x.Items)
                 .SetValidator(new OrderItemValidator());
         }
     }
@@ -100,8 +100,6 @@ namespace MicroStore.Ordering.Application.Models
 
             RuleFor(x => x.Phone)
                  .NotNull()
-                 .WithMessage("Phone is required.")
-                 .MinimumLength(10)
                  .WithMessage("Phone must not be less than 10 characters.")
                  .MaximumLength(50)
                  .WithMessage("Phone must not exceed 50 characters.")
@@ -166,7 +164,7 @@ namespace MicroStore.Ordering.Application.Models
             {
                 var phoneNumberParsed = phoneNumberUtil.Parse(phone, model.CountryCode);
 
-                return phoneNumberUtil.IsPossibleNumberForType(phoneNumberParsed, PhoneNumberType.MOBILE);
+                return phoneNumberUtil.IsValidNumberForRegion(phoneNumberParsed, model.CountryCode);
 
             }catch 
             { 
@@ -200,8 +198,6 @@ namespace MicroStore.Ordering.Application.Models
                 .WithMessage("Item sku maximum characters is 265");
 
             RuleFor(x => x.Thumbnail)
-                .NotNull()
-                .WithMessage("Item Thumbnaill is required")
                 .MaximumLength(265)
                 .WithMessage("Item Thumbnail maximum characters is 265");
 

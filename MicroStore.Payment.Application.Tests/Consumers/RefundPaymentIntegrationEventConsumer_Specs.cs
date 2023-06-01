@@ -23,7 +23,7 @@ namespace MicroStore.Payment.Application.Tests.Consumers
 
             Assert.That(await TestHarness.Consumed.Any<RefundPaymentIntegrationEvent>());
 
-            PaymentRequest paymentRequest = await Find<PaymentRequest>(x => x.Id == fakepaymentRequest.Id);
+            PaymentRequest paymentRequest = await SingleAsync<PaymentRequest>(x => x.Id == fakepaymentRequest.Id);
 
             paymentRequest.State.Should().Be(PaymentStatus.Refunded);
 

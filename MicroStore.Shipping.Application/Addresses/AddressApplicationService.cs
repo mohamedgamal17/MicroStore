@@ -25,7 +25,7 @@ namespace MicroStore.Shipping.Application.Addresses
 
             if (settings.DefaultShippingSystem == null)
             {
-                return new Result<AddressValidationResultModel>(new BusinessException("Please configure shipping settings first"));
+                return new Result<AddressValidationResultModel>(new UserFriendlyException("Please configure shipping settings first"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(settings.DefaultShippingSystem);

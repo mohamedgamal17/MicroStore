@@ -49,12 +49,12 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (settings.DefaultShippingSystem == null )
             {
-                 return new Result<ShipmentDto>(new BusinessException("Please configure default shipping system first"));
+                 return new Result<ShipmentDto>(new UserFriendlyException("Please configure default shipping system first"));
             }
 
             if(settings.Location == null)
             {
-                return new Result<ShipmentDto>(new BusinessException("Please configure location address first"));
+                return new Result<ShipmentDto>(new UserFriendlyException("Please configure location address first"));
             }
 
 
@@ -67,7 +67,7 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if(shipment.Status != ShipmentStatus.Created)
             {
-                return new Result<ShipmentDto>(new BusinessException($"Shipment status should be in {ShipmentStatus.Created}"));
+                return new Result<ShipmentDto>(new UserFriendlyException($"Shipment status should be in {ShipmentStatus.Created}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(settings.DefaultShippingSystem, cancellationToken);
@@ -95,7 +95,7 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (shipment.Status != ShipmentStatus.Fullfilled)
             {
-                return new Result<List<ShipmentRateDto>>(new BusinessException($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
+                return new Result<List<ShipmentRateDto>>(new UserFriendlyException($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(shipment.SystemName);
@@ -121,7 +121,7 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if (shipment.Status != ShipmentStatus.Fullfilled)
             {
-                return new Result<ShipmentDto>(new BusinessException($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
+                return new Result<ShipmentDto>(new UserFriendlyException($"Shipment status should be in {ShipmentStatus.Fullfilled}"));
             }
 
             var systemResult = await _shipmentSystemResolver.Resolve(shipment.SystemName);
@@ -143,12 +143,12 @@ namespace MicroStore.Shipping.Application.Shipments
 
             if(await query.AnyAsync(x=> x.OrderId == model.OrderId))
             {
-                return new Result<Unit>( new BusinessException($"Shipment is already created for Order with id : {model.OrderId}"));
+                return new Result<Unit>( new UserFriendlyException($"Shipment is already created for Order with id : {model.OrderId}"));
             }
 
             if(await query.AnyAsync(x=> x.OrderNumber == model.OrderNumber))
             {
-                return new Result<Unit>(new BusinessException($"Shipment is already created for Order with numer : {model.OrderNumber}"));
+                return new Result<Unit>(new UserFriendlyException($"Shipment is already created for Order with numer : {model.OrderNumber}"));
             }
 
             return Unit.Value;

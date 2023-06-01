@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp.Application.Services;
+﻿using Volo.Abp.Application.Services;
 using Volo.Abp.AutoMapper;
-
+using Volo.Abp.Validation;
 namespace MicroStore.Ordering.Application
 {
+    [DisableValidation]
     public abstract class OrderApplicationService : ApplicationService
     {
         protected IMapperAccessor MapperAccessor => LazyServiceProvider.LazyGetRequiredService<IMapperAccessor>();

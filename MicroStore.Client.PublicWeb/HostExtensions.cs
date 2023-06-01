@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using MicroStore.Client.PublicWeb.Infrastructure;
+using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace MicroStore.Client.PublicWeb

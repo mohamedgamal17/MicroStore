@@ -2,11 +2,11 @@
 using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
-using MicroStore.Payment.Domain;
 using Microsoft.EntityFrameworkCore;
 
 using MicroStore.Payment.Application.Common;
 using MicroStore.Payment.Domain.Shared;
+using MicroStore.Payment.Application.Domain;
 
 namespace MicroStore.Payment.Application.EntityFramework
 {

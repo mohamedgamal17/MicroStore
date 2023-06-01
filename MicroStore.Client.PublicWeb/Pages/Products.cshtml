@@ -1,0 +1,12 @@
+﻿@page
+@using MicroStore.Client.PublicWeb.Components.ProductListWidget
+@model ProductsModel
+@await Component.InvokeAsync(typeof(ProductListWidgetViewComponent), new 
+    {
+        PagingUrl= Url.Page("Products"),
+        CurrentPage= Model.CurrentPage,
+        PageSize = Model.PageSize,
+        IsFeatured = true,
+        Category = Model.Category,
+        Manufacturer = Model.Manufacturer
+    });

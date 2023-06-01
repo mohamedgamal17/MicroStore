@@ -1,0 +1,22 @@
+﻿@page
+@using MicroStore.Client.PublicWeb.Components.OrderWidget
+@model MyOrdersModel
+@{
+    var selectList = new List<SelectListItem>();
+    ViewData["Title"] = "Orders";
+    ViewData["ContainerTitle"] = "Orders";
+}
+
+<abp-container>
+
+    <abp-row>
+        <abp-column size=_3 offset=_9>
+            <abp-select suppress-label="true" asp-for="OrderFilter" asp-items="selectList"></abp-select>
+        </abp-column>
+
+        <abp-column size=_12>
+            @await Component.InvokeAsync(typeof(OrderWidgetViewComponent), new {CurrentPage = Model.CurrentPage});
+        </abp-column>
+    </abp-row>
+
+</abp-container>

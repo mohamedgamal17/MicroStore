@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.Geographic.Application.Domain;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Geographic.Application.EntityFramework
 {
     [ConnectionStringName("DefaultConnection")]
-    public class GeographicDbContext : AbpDbContext<GeographicDbContext>
+    [ExposeServices(typeof(DbContext),IncludeDefaults = true, IncludeSelf = true)]
+    public class GeographicDbContext : AbpDbContext<GeographicDbContext> , ITransientDependency
     {
         public DbSet<Country> Countries { get; set; }
         public DbSet<StateProvince> StateProvinces { get; set; }

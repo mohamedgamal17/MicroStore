@@ -28,7 +28,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             await TestHarness.Consumed.Any<ProductUpdatedIntegerationEvent>();
 
-            var product = await Find<Product>(x => x.Id == fakeProduct.Id);
+            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
             product.Name.Should().Be(integrationEvent.Name);
             product.Sku.Should().Be(integrationEvent.Sku);

@@ -10,7 +10,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Inventory.Infrastructure.EntityFramework
 {
     [ConnectionStringName("DefaultConnection")]
-    [ExposeServices(typeof(IInventoyDbContext), IncludeSelf = true)]
+    [ExposeServices(typeof(DbContext), IncludeSelf = true,  IncludeDefaults = true)]
     public class InventoryDbContext : AbpDbContext<InventoryDbContext> , IInventoyDbContext
     {
         public DbSet<Product> Products { get; set; }

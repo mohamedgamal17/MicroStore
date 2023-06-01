@@ -41,7 +41,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             await fakeProducts.ForEachAsync(async pr =>
             {
-                var product = await Find<Product>(x => x.Id == pr.Id);
+                var product = await SingleAsync<Product>(x => x.Id == pr.Id);
 
                 product.AllocatedStock.Should().Be(allocatedQuantity);
 
@@ -113,7 +113,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             await fakeProducts.ForEachAsync(async pr =>
             {
-                var product = await Find<Product>(x => x.Id == pr.Id);
+                var product = await SingleAsync<Product>(x => x.Id == pr.Id);
 
                 product.AllocatedStock.Should().Be(0);
 

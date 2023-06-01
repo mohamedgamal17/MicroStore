@@ -10,22 +10,10 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="Dummies\ApiResource.json" />
-    <None Remove="Dummies\ApiScope.json" />
-    <None Remove="Dummies\Client.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Dummies\ApiResource.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Dummies\ApiScope.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Dummies\Client.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

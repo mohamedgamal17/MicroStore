@@ -1,0 +1,14 @@
+﻿@page
+@using MicroStore.Client.PublicWeb.Components.Basket
+@model CartModel
+@{
+    ViewData["Title"] = "Cart";
+    ViewData["ContainerTitle"] = "Basket";
+}
+
+<div class="row">
+    <div id="BasketArea">
+        @await Component.InvokeAsync(typeof(BasketWidgetViewComponent))
+    </div>
+</div>
+

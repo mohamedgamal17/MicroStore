@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace MicroStore.Client.PublicWeb.Extensions
+﻿namespace MicroStore.Client.PublicWeb.Extensions
 {
     public static class HttpContextExtensions
     {
-        const string CDN_URL = "cdn/file";
+        const string CDN_URL = "api/cdn";
 
         public static string GetHostUrl(this HttpContext context) 
         {

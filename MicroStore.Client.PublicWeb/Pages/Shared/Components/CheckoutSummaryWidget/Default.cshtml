@@ -1,0 +1,77 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart
+@model CheckoutModel
+@{
+    var basket = (BasketAggregate)ViewBag.Basket;
+    var totalProducts = basket.Items.Sum(x => x.Quantity);
+    var subTotal = basket.Items.Sum(x => x.Quantity * x.Price);
+    var totalPrice = subTotal;
+    var availablePaymentMethods = (List<SelectListItem>)ViewBag.PaymentMethods;
+}
+<abp-card class="sticky-top">
+    <abp-card-body>
+        <div class="text-center">
+            <div class="d-block">
+                <h5>Total Selected (@totalProducts)</h5>
+            </div>
+            <div class="d-block">
+                <h4> @subTotal.ToString("0.00")</h4>
+            </div>
+        </div>
+        <abp-row>
+            <abp-column size-sm=_12 class="mb-3">
+                <h3 class="text-center">Order Summary</h3>
+            </abp-column>
+            <abp-column size-sm=_12 class="mb-3">
+                <abp-row>
+                    <abp-column size-sm=_6>
+                        <div class="text-left">
+                            <h6>Products: </h6>
+                        </div>
+                    </abp-column>
+                    <abp-column size-sm=_6>
+                        <div class="text-right">
+                            <h6>@subTotal.ToString("0.00")</h6>
+                        </div>
+                    </abp-column>
+                </abp-row>
+
+                <abp-row>
+                    <abp-column size-sm=_8>
+                        <div class="text-left">
+                            <h6>Additional shipping price: </h6>
+                        </div>
+                    </abp-column>
+                    <abp-column size-sm=_4>
+                        <div class="text-right">
+                            <h6>00.00 $</h6>
+                        </div>
+                    </abp-column>
+                </abp-row>
+                <abp-row class="mt-3">
+                    <abp-column size-sm=_6>
+                        <div class="text-left">
+                            <h4>Order Total: </h4>
+                        </div>
+                    </abp-column>
+                    <abp-column size-sm=_6>
+                        <div class="text-right">
+                            <h4>@totalPrice.ToString("0.00")</h4>
+                        </div>
+                    </abp-column>
+                </abp-row>
+            </abp-column>
+        </abp-row>
+
+
+    </abp-card-body>
+    <abp-card-footer>
+        <div class="d-block">
+            <abp-select asp-for="@Model.PaymentMethod" suppress-label="true" asp-items="availablePaymentMethods"></abp-select>
+        </div>
+        <div class="d-block text-center">
+            <input type="submit" class="btn btn-warning" value="Place Order" />
+@*            <abp-button type="submit" size="Large" button-type=Warning text="Place Order"></abp-button>
+*@        </div>
+
+    </abp-card-footer>
+</abp-card>

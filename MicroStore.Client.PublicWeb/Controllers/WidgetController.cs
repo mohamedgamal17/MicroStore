@@ -10,5 +10,11 @@ namespace MicroStore.Client.PublicWeb.Controllers
             return ViewComponent("CartWidget");
         }
 
+
+
+        public IActionResult BasketWidget()
+        {
+            return ViewComponent("BasketWidget");
+        }
     }
 }

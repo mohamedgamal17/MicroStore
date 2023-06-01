@@ -67,15 +67,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
             }
                 
         }
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-
-
-                SeedData(scope.ServiceProvider);
-            }
-        }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
@@ -91,50 +82,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
 
 
             respawner.ResetAsync(config.GetConnectionString("DefaultConnection")).Wait();
-        }
-
-
-        private void SeedData(IServiceProvider serviceProvider)
-        {
-            using (var stream = new StreamReader(@"Dummies\Data.json"))
-            {
-
-                var userManager = serviceProvider.GetRequiredService<ApplicationUserManager>();
-                var roleManager = serviceProvider.GetRequiredService<ApplicationRoleManager>();
-
-                var json = stream.ReadToEnd();
-
-                var data = JsonConvert.DeserializeObject<JsonWrapper<UserReadModel>>(json, _jsonSerilizerSettings);
-
-                if (data != null)
-                {
-                    foreach (var user in data.Data)
-                    {
-
-
-                        CreateRoles(roleManager, user.UserRoles);
-
-
-                        var identityUser = new ApplicationIdentityUser
-                        {
-                            Email = user.Email,
-                            PhoneNumber = user.PhoneNumber,
-                            UserName = user.UserName,
-                            UserClaims = user.UserClaims.Select(x => new ApplicationIdentityUserClaim { ClaimType = x.Type, ClaimValue = x.Value }).ToList()
-                        };
-
-                        var id = userManager.CreateAsync(identityUser, user.Password).Result;
-
-
-                        if (!id.Succeeded)
-                        {
-                            throw new InvalidOperationException(id.Errors.Select(x => x.Description).JoinAsString("\n"));
-                        }
-
-                        userManager.AddToRolesAsync(identityUser, user.UserRoles.Select(x => x.Name)).Wait();
-                    }
-                }
-            }
         }
 
         private void CreateRoles(ApplicationRoleManager rolemanager, List<RoleReadModel> userRoles)

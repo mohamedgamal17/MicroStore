@@ -9,7 +9,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Shipping.Infrastructure.EntityFramework
 {
     [ConnectionStringName("DefaultConnection")]
-    [ExposeServices(typeof(IShippingDbContext), IncludeDefaults = true, IncludeSelf = true)]
+    [ExposeServices(typeof(DbContext), IncludeDefaults = true, IncludeSelf = true)]
     public class ShippingDbContext : AbpDbContext<ShippingDbContext>, IShippingDbContext
     {
         public DbSet<Shipment> Shipments { get; set; }

@@ -1,0 +1,66 @@
+﻿@using MicroStore.Client.PublicWeb.Components.ProductListWidget
+@using System.Globalization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@model ProductListWidgetModel
+
+@{
+    var productCardSize = (ColumnSize)Model.ProductCardSize;
+}
+
+<abp-row>
+    @if (Model.Products != null && Model.Products.Count > 0)
+    {
+        <abp-column size=_12>
+            <abp-row>
+                @foreach (var product in Model.Products)
+                {
+                    <abp-column size-sm="_12" size-md="@productCardSize">
+
+                        @{
+
+                            var productName = product.Name;
+                            var productImage = product.ProductImages?.OrderBy(x => x.DisplayOrder).FirstOrDefault()?.Image ?? @"/user-content/no-image.png";
+                            var productsku = product.Sku;
+                            var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
+                            <div class="product-list-item" data-product-id="@product.Id.ToString()">
+                                <a href="/products/@product.Id.ToString()">
+                                    <div class="col">
+                                        <div class="product-info-box">
+                                            <h6>@product.Name</h6>
+                                            <em class="d-block text-muted">@productsku</em>
+                                        </div>
+                                    </div>
+                                    <img class="product-image object-fit-contain" src="@productImage" />
+                                </a>
+                                <div class="row mt-5 ">
+                                    <abp-button class="add-basket-button" button-type="Warning" text="Add To Basket" data-product-id="@product.Id.ToString()"></abp-button>
+                                    <div class="info-section col" style="text-align: center">
+                                        <span class="product-price">@productPrice</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </abp-column>
+
+                }
+            </abp-row>
+        </abp-column>
+        @if (Model.Pager.TotalPageCount > 1)
+        {
+            <abp-column offset=_11 size=_1 class="ml-auto">
+                <abp-paginator model="Model.Pager" show-info="false"></abp-paginator>
+            </abp-column>
+        }
+
+    }
+    else
+    {
+        <abp-column size=_12>
+            <abp-container class="text-center">
+                <h3>There is no products has been added yet</h3>
+            </abp-container>
+        </abp-column>
+    }
+
+</abp-row>

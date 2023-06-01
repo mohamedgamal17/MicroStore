@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Categories;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Categories;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities;
-
 namespace MicroStore.Catalog.Application.Tests.Categories
 {
 

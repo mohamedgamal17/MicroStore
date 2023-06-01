@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.TestBase.Json;
 using Newtonsoft.Json.Serialization;
@@ -14,7 +13,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using MicroStore.Payment.Domain;
 using MicroStore.Payment.Application.Tests.Consts;
-
 namespace MicroStore.Payment.Application.Tests
 {
     [DependsOn(typeof(PaymentApplicationModule),
@@ -44,25 +42,6 @@ namespace MicroStore.Payment.Application.Tests
             });
         }
 
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-
-            var loggerFactory = context.ServiceProvider.GetRequiredService<ILoggerFactory>();
-
-            LogContext.ConfigureCurrentLogContext(loggerFactory);
-
-            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
-
-            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                    "__EFMigrationsHistory"
-                }
-            }).Result;
-
-            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
-        }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
@@ -73,10 +52,6 @@ namespace MicroStore.Payment.Application.Tests
                 dbContext.Database.Migrate();
 
                 SeedFakePaymentMethod(dbContext);
-
-                SeedPaymentsData(dbContext);
-
-                SeedPaymentSystemsData(dbContext);
 
             }
         }
@@ -95,47 +70,10 @@ namespace MicroStore.Payment.Application.Tests
                     }
                 }).Result;
 
-
                 respawner.ResetAsync(config.GetConnectionString("DefaultConnection")).Wait();
-
-
             }
         }
 
-
-        private void SeedPaymentsData(PaymentDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies\Payments.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var data = JsonConvert.DeserializeObject<JsonWrapper<PaymentRequest>>(json, _jsonSerilizerSettings);
-
-                if (data != null)
-                {
-                    dbContext.PaymentRequests.AddRange(data.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
-        }
-
-        private void SeedPaymentSystemsData(PaymentDbContext dbContext)
-        {
-            using (var stream = new StreamReader(@"Dummies\PaymentSystems.json"))
-            {
-                var json = stream.ReadToEnd();
-
-                var data = JsonConvert.DeserializeObject<JsonWrapper<PaymentSystem>>(json, _jsonSerilizerSettings);
-
-                if (data != null)
-                {
-                    dbContext.PaymentSystems.AddRange(data.Data);
-                }
-
-                dbContext.SaveChanges();
-            }
-        }
 
         private  void SeedFakePaymentMethod(PaymentDbContext dbContext)
         {
