@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Manufacturers;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Manufacturers;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp;

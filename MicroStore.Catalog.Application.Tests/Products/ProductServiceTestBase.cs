@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Catalog.Application.Tests.Products
 {
     public class ProductServiceTestBase : BaseTestFixture

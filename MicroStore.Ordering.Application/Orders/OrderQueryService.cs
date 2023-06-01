@@ -103,6 +103,25 @@ namespace MicroStore.Ordering.Application.Orders
 
 
         private IQueryable<OrderDto> TryToSort(IQueryable<OrderDto> query, string sortby, bool desc)
+        public async Task<Result<PagedResult<OrderDto>>> SearchByOrderNumber(OrderSearchModel model, CancellationToken cancellationToken = default)
+        {
+            var ordersQuery = _orderDbContext.Query<OrderStateEntity>()
+                .AsNoTracking()
+                .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .AsQueryable();
+
+
+            ordersQuery = from order in ordersQuery
+                             where order.OrderNumber == model.OrderNumber
+                                || order.OrderNumber.StartsWith(model.OrderNumber)
+                                || order.OrderNumber.Contains(model.OrderNumber)
+                             select order;
+
+
+            return await ordersQuery.PageResult(model.Skip, model.Lenght, cancellationToken);
+        }
+
+        private IQueryable<OrderDto> TryToSort(IQueryable<OrderDto> query, string sortby, bool desc)
         {
             return sortby.ToLower() switch
             {
