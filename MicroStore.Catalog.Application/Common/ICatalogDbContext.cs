@@ -10,5 +10,7 @@ namespace MicroStore.Catalog.Application.Common
         DbSet<Category> Categories { get; set; }
 
         DbSet<Manufacturer> Manufacturers { get; set; }
+
+        DbSet<ProductReview> ProductReviews { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentSystems
 
             result.IsSuccess.Should().BeTrue();
 
-            var system = await Find<PaymentSystem>(x => x.Name == fakeSystem.Name);
+            var system = await SingleAsync<PaymentSystem>(x => x.Name == fakeSystem.Name);
 
             system.IsEnabled.Should().BeTrue();
         }

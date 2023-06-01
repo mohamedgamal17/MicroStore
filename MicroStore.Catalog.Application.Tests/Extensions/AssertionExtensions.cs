@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Categories;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Models.Categories;
+using MicroStore.Catalog.Application.Models.Manufacturers;
+using MicroStore.Catalog.Application.Models.ProductReviews;
+using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Application.Products;
 using MicroStore.Catalog.Domain.Entities;
 namespace MicroStore.Catalog.Application.Tests.Extensions
@@ -38,5 +41,17 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
             manufacturer.Description.Should().Be(model.Description);
         }
 
+        public static void AssertProductReviewModel(this ProductReview productReview,  ProductReviewModel model)
+        {
+            productReview.ReviewText.Should().Be(model.ReviewText);
+            productReview.Rating.Should().Be(model.Rating);
+            productReview.Title.Should().Be(model.Title);
+        }
+
+        public static void AssertCreateProductReviewModel(this ProductReview productReview , CreateProductReviewModel model)
+        {
+            productReview.AssertProductReviewModel(model);
+            productReview.UserId.Should().Be(model.UserId);
+        }
     }
 }

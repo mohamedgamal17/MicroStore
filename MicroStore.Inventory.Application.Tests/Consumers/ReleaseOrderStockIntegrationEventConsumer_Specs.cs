@@ -39,7 +39,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             Assert.That(await TestHarness.Consumed.Any<ReleaseOrderStockIntegrationEvent>());
 
-            var product =  await Find<Product>(x => x.Id == fakeOrder.Items.First().ProductId);
+            var product =  await SingleAsync<Product>(x => x.Id == fakeOrder.Items.First().ProductId);
 
             product.AllocatedStock.Should().Be(0);
 

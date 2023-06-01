@@ -6,6 +6,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.Ordering.Infrastructure.EntityFramework
 {
+    [ExposeServices(typeof(DbContext), IncludeSelf = true , IncludeDefaults = true)]
     public class OrderDbContext : SagaDbContext, IOrderDbContext, ITransientDependency
     {
         public OrderDbContext(DbContextOptions options) : base(options)

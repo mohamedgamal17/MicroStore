@@ -62,7 +62,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             var result = await _shipmentCommandService.FullfillAsync(fakeShipment.Id, model);
 
-            var shipment = await Find<Shipment>(x=> x.Id== fakeShipment.Id);
+            var shipment = await SingleAsync<Shipment>(x=> x.Id== fakeShipment.Id);
 
             shipment.Should().NotBeNull();
 
@@ -98,7 +98,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             var result = await _shipmentCommandService.BuyLabelAsync(fakeShipment.Id, model);
 
-            var shipment = await Find<Shipment>(x=> x.Id == result.Value.Id);
+            var shipment = await SingleAsync<Shipment>(x=> x.Id == result.Value.Id);
 
             shipment.Should().NotBeNull();
 

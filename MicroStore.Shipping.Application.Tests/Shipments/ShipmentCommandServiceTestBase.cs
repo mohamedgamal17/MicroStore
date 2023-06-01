@@ -5,7 +5,6 @@ using MicroStore.Shipping.Application.Tests.Fakes;
 using MicroStore.Shipping.Domain.Const;
 using MicroStore.Shipping.Domain.Entities;
 using MicroStore.Shipping.Domain.ValueObjects;
-
 namespace MicroStore.Shipping.Application.Tests.Shipments
 {
     public class ShipmentCommandServiceTestBase : BaseTestFixture

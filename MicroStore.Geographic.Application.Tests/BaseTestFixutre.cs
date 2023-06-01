@@ -25,87 +25,19 @@ namespace MicroStore.Geographic.Application.Tests
         }
 
 
-        public async Task<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] properties) where TEntity : class
-        {
-            using var scope = ServiceProvider.CreateScope();
-
-            var dbContext = scope.ServiceProvider.GetRequiredService<GeographicDbContext>();
-
-            var query = dbContext.Set<TEntity>().AsQueryable();
-
-            foreach (var prop in properties)
-            {
-                query = query.Include(prop);
-            }
-            return await dbContext.Set<TEntity>().SingleAsync(expression);
-        }
-
-        public async Task<TEntity> InsertAsync<TEntity>(TEntity entity) where TEntity : class
-        {
-            using var scope = ServiceProvider.CreateScope();
-
-            var dbContext = scope.ServiceProvider.GetRequiredService<GeographicDbContext>();
-
-            await dbContext.AddAsync(entity);
-
-            await dbContext.SaveChangesAsync();
-
-            return entity;
-
-        }
-
-        public async Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class
-        {
-            using var scope = ServiceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<GeographicDbContext>();
-
-            dbContext.Attach(entity);
-
-            dbContext.Update(entity);
-
-            await dbContext.SaveChangesAsync();
-
-            return entity;
-
-        }
-
-        public async Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class
-        {
-            using var scope = ServiceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<GeographicDbContext>();
-            return await dbContext.Set<TEntity>().SingleAsync(expression);
-
-        }
-
-        public async Task<TEntity?> SingleOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class
-        {
-            using var scope = ServiceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<GeographicDbContext>();
-            return await dbContext.Set<TEntity>().SingleOrDefaultAsync(expression);
-
-        }
-
-        public async Task<TEntity> FirstAsync<TEntity>() where TEntity : class
-        {
-            using var scope = ServiceProvider.CreateScope();
-
-            var dbContext = scope.ServiceProvider.GetRequiredService<GeographicDbContext>();
-
-            return await dbContext.Set<TEntity>().FirstAsync();
-        }
 
         protected async Task<Country> CreateCountry()
         {
             Country country = new Country
             {
                 Name = Guid.NewGuid().ToString(),
-                NumericIsoCode = 22,
+                NumericIsoCode = new Random().Next(0, 200),
                 TwoLetterIsoCode = RandomString(2),
                 ThreeLetterIsoCode = RandomString(3),
             };
 
 
-            return await InsertAsync(country);
+            return await Insert(country);
         }
 
         protected async Task<Country> CreateCountryWithStateProvince()
@@ -113,7 +45,7 @@ namespace MicroStore.Geographic.Application.Tests
             Country country = new Country
             {
                 Name = Guid.NewGuid().ToString(),
-                NumericIsoCode = 22,
+                NumericIsoCode = new Random().Next(0,200),
                 TwoLetterIsoCode = RandomString(2),
                 ThreeLetterIsoCode = RandomString(3),
             };
@@ -143,7 +75,7 @@ namespace MicroStore.Geographic.Application.Tests
 
 
 
-            return await InsertAsync(country);
+            return await Insert(country);
         }
     }
 
