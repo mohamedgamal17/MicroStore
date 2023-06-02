@@ -26,7 +26,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(OrderListDto))]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(OrderDto))]
         public async Task<IActionResult> RetirveOrderList([FromQuery]PagingAndSortingParamsQueryString @params ,[FromQuery(Name ="user_id")] string? userId= null)
         {
             var queryParams = new PagingAndSortingQueryParams

@@ -124,7 +124,7 @@ namespace MicroStore.Client.PublicWeb.Pages
                 ShippingCost = orderResponse.ShippingCost,
                 TaxCost = orderResponse.TaxCost,
                 SubTotal = orderResponse.SubTotal,
-                TotalCost = orderResponse.Total,
+                TotalCost = orderResponse.TotalPrice,
                 Items = PreparePaymentProductCreateRequest(Basket)
             };
 

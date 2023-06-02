@@ -34,7 +34,7 @@ namespace MicroStore.Ordering.Application.Orders
                 SubTotal = model.SubTotal,
                 TotalPrice = model.TotalPrice,
                 SubmissionDate =DateTime.UtcNow,
-                OrderItems = model.OrderItems,
+                OrderItems = model.Items,
             };
 
 
@@ -132,7 +132,7 @@ namespace MicroStore.Ordering.Application.Orders
                 ShippingCost = orderSubmitedEvent.ShippingCost,
                 TaxCost = orderSubmitedEvent.TaxCost,
                 SubTotal = orderSubmitedEvent.SubTotal,
-                Total = orderSubmitedEvent.TotalPrice,
+                TotalPrice = orderSubmitedEvent.TotalPrice,
                 SubmissionDate = orderSubmitedEvent.SubmissionDate,
                 OrderItems = orderSubmitedEvent.OrderItems
             };

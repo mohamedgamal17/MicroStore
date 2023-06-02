@@ -16,13 +16,6 @@
   <ItemGroup>
     <Content Remove="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
-    <Content Remove="Pages\Categories.cshtml" />
-    <Content Remove="Pages\Shared\Components\CartWidget\Default.cshtml" />
-    <Content Remove="Pages\Shared\_AdministrationLayout.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Pages\FrontEnd\index.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +26,7 @@
     <PackageReference Include="IdentityModel" Version="6.0.0" />
     <PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="MimeMapping" Version="2.0.0" />
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
@@ -49,45 +43,41 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Components\Purshase\" />
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\libs\" />
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Categories.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Categories.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Shared\Components\CartWidget\Default.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Shared\_AdministrationLayout.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <None Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
-    <None Include="Pages\FrontEnd\Products.cshtml" />
-    <None Include="Pages\FrontEnd\ProductDetails.cshtml" />
+    <None Include="Pages\Cart.cshtml" />
+    <None Include="Pages\Checkout.cshtml" />
+    <None Include="Pages\Error.cshtml" />
+    <None Include="Pages\Home.cshtml" />
+    <None Include="Pages\MyOrders.cshtml" />
+    <None Include="Pages\ProductDetails.cshtml" />
+    <None Include="Pages\Products.cshtml" />
+    <None Include="Pages\Shared\Components\BasketWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\CartWidget\Default.cshtml" />
+    <None Include="Pages\Shared\Components\CheckoutInformationWidget\Default.cshtml" />
+    <None Include="Pages\Shared\Components\CheckoutSummaryWidget\Default.cshtml" />
+    <None Include="Pages\Shared\Components\OrderWidget\Default.cshtml" />
+    <None Include="Pages\Shared\Components\ProductListWidget\Default.cshtml" />
+    <None Include="Pages\Shared\Components\Purchase\Defaultcshtml.cshtml" />
+    <None Include="Pages\Shared\_Layout.cshtml" />
+    <None Include="Pages\Shared\_Navbar.cshtml" />
+    <None Include="Pages\Shared\_OldLayout.cshtml" />
+    <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Pages\_ViewImports.cshtml" />
+    <None Include="Pages\_ViewStart.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.AspNetCore.UI\MicroStore.AspNetCore.UI.csproj" />
     <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
     <ProjectReference Include="..\MicroStore.ShoppingGateway.ClinetSdk\MicroStore.ShoppingGateway.ClinetSdk.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Shared\_AdministrationLayout.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Pages\FrontEnd\Index.css">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -111,10 +101,6 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Shared\Components\CartWidget\Default.cshtml" />
   </ItemGroup>
 
 </Project>

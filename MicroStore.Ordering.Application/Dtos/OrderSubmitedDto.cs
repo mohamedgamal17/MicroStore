@@ -12,7 +12,7 @@ namespace MicroStore.Ordering.Application.Dtos
         public double ShippingCost { get; set; }
         public double TaxCost { get; set; }
         public double SubTotal { get; set; }
-        public double Total { get; set; }
+        public double TotalPrice { get; set; }
         public string UserId { get; set; }
         public DateTime SubmissionDate { get; set; }
         public List<OrderItemModel> OrderItems { get; set; } = new List<OrderItemModel>();

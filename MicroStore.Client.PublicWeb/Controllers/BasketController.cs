@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.AspNetCore.UI;
-using MicroStore.Client.PublicWeb.Infrastructure;
-using MicroStore.ShoppingGateway.ClinetSdk;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 namespace MicroStore.Client.PublicWeb.Controllers
 {
@@ -36,7 +34,7 @@ namespace MicroStore.Client.PublicWeb.Controllers
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> AddBasketItem(BasketItemModel model)
+        public async Task<IActionResult> AddBasketItem([FromBody]BasketItemModel model)
         {
             var options = new BaskeItemRequestOptions
             {
@@ -57,7 +55,7 @@ namespace MicroStore.Client.PublicWeb.Controllers
 
         [HttpPut]
         [Route("")]
-        public async Task<IActionResult> UpdateBasket(BasketModel model)
+        public async Task<IActionResult> UpdateBasket([FromBody] BasketModel model)
         {
             var options = new BasketRequestOptions()
             {
@@ -73,15 +71,15 @@ namespace MicroStore.Client.PublicWeb.Controllers
         [HttpDelete]
         [Route("")]
      
-        public async Task<IActionResult> RemoveBasketItem(RemoveBasketItemModel model)
+        public async Task<IActionResult> RemoveBasketItem([FromBody] RemoveBasketItemModel model)
         {
             var options = new BasketRemoveItemRequestOptions
             {
-                ProductIds = new string[] { model.ProductId.ToString() }
+                ProductId = model.ProductId.ToString(),
+                Quantity = model.Quantity,
             };
 
             var basketResponse = await _basketService.RemoveItemsAsync(_workContext.TryToGetCurrentUserId(), options);
-
 
             return Ok(basketResponse);
         }
@@ -104,5 +102,6 @@ namespace MicroStore.Client.PublicWeb.Controllers
     public class RemoveBasketItemModel
     {
         public Guid ProductId { get; set; }
+        public int? Quantity { get; set; } 
     }
 }

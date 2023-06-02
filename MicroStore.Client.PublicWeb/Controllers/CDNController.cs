@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MimeMapping;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.BlobStoring;
-
 namespace MicroStore.Client.PublicWeb.Controllers
 {
     [Route("api/cdn")]
