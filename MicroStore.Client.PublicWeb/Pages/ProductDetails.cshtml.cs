@@ -9,23 +9,11 @@ namespace MicroStore.Client.PublicWeb.Pages
 {
     public class ProductDetailsModel : PageModel
     {
-        private readonly ILogger<ProductDetailsModel> _logger;
+        public string ProductId { get; set; }
 
-        private readonly ProductService _productService;
-
-        public Product Product { get; set; }
-        public ProductDetailsModel(ILogger<ProductDetailsModel> logger, ProductService productService)
+        public IActionResult OnGet(string id)
         {
-            _logger = logger;
-            _productService = productService;
-        }
-
-
-
-        public async Task<IActionResult> OnGet(string id)
-        {
-
-            Product = await _productService.GetAsync(id);
+            ProductId = id;
 
             return Page();
         }

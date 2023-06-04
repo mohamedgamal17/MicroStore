@@ -1,0 +1,96 @@
+﻿@model MicroStore.Client.PublicWeb.Components.ProductDetailsWidget.ProductDetailsWidgetViewModel
+
+<abp-row data-product-id="@Model.Product?.Id">
+    @if (!Model.HasError)
+    {
+
+        var productImagesCount = Model.Product.ProductImages?.Count ?? 0;
+        var productMainImage = productImagesCount > 0 ? Model.Product.ProductImages!
+        .OrderBy(x => x.DisplayOrder).First().Image : @"/user-content/no-image.png";
+
+
+        <abp-column size-md=_6 size-sm=_12>
+            <abp-row>
+                <abp-column size=_12>
+                    <abp-container>
+                        <div class="overflow-hidden"  style="">
+                            <img class="product-image product-main-image" src="@productMainImage" >
+                        </div>
+                    </abp-container>
+
+                </abp-column>
+                @if (productImagesCount > 0)
+                {
+                    <abp-column size=_12>
+                        <div class="product-image-thumbs">
+                            @foreach (var productImage in Model.Product.ProductImages!)
+                            {
+                                <div class="product-image-thumb" data-image-src="@productImage.Image">
+                                    <img  src="@productImage.Image">
+                                </div>
+                            }
+                        </div>
+                    </abp-column>
+                }
+
+            </abp-row>
+        </abp-column>
+
+
+        <abp-column size-md=_6 size-sm=_12 >
+            <div>
+                <div class="my-3">
+                    <h3 class="my-3">
+                        @Model.Product.Name
+                    </h3>
+                    <em class="d-block text-muted">@Model.Product.Sku</em>
+                </div>
+
+                <div class="my-3">
+                    @Model.Product.ShortDescription
+                </div>
+
+                <div>
+                    <abp-row class="my-3">
+                        <abp-column size=_6>
+                            <abp-button  class="d-block add-basket-button" button-type="Primary" text="Add To Cart" 
+                            data-product-id="@Model.Product.Id" />
+                        </abp-column>
+                    </abp-row>
+                </div>
+            </div>
+        </abp-column>
+
+        <abp-column size=_12 class="my-3">
+            <abp-tabs name="TabId" class="border  border-5" >
+                <abp-tab name="nav-home" active="true" title="Description">
+                    <abp-container class="my-3">
+                        @Html.Raw(Model.Product.LongDescription)
+                    </abp-container>
+                </abp-tab>
+                <abp-tab name="nav-profile" title="Reviews">
+                    Product Reviews (Coming Soon)
+                </abp-tab>
+            </abp-tabs>
+        </abp-column>
+    }
+    else
+    {
+        <abp-column size=_12>
+            <abp-container>
+                <h3 class="my-3">
+                    @Model.Error.Title
+                </h3>
+
+                @if (!string.IsNullOrEmpty(Model.Error.Detail))
+                {
+                    <p>
+                        @Model.Error.Detail
+                    </p>
+                }
+
+            </abp-container>
+        </abp-column>
+    }
+
+</abp-row>

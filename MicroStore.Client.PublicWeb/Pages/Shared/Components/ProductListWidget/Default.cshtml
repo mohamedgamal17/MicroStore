@@ -23,7 +23,7 @@
                             var productsku = product.Sku;
                             var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
                             <div class="product-list-item" data-product-id="@product.Id.ToString()">
-                                <a href="/products/@product.Id.ToString()">
+                                <a asp-page="ProductDetails" asp-route-id="@product.Id" >
                                     <div class="col">
                                         <div class="product-info-box">
                                             <h6>@product.Name</h6>

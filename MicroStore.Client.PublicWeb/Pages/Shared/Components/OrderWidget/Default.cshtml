@@ -37,7 +37,10 @@
                                         <img class="w-75" src="@(item.Thumbnail ?? "/user-content/no-image.png")" />
                                     </abp-column>
                                     <abp-column size=_6>
-                                        <div><strong>@item.Name</strong></div>
+                                        <a asp-page="ProductDetails" asp-route-id="@item.ExternalProductId">
+                                            <div><strong class="text-dark">@item.Name</strong></div>
+                                            <div><em class="text-secondary">@item.Sku</em></div>
+                                        </a>
                                         <div class="mt-3">
                                             <abp-button icon="fas fa-cart-plus" class="btn btn-warning buy-again" text="Buy Again" data-product-id="@item.ExternalProductId"></abp-button>
                                         </div>
