@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
@@ -19,7 +18,7 @@ namespace MicroStore.Inventory.Api.Controllers
 
         private readonly IOrderQueryService _orderQueryService;
 
-        public UserOrderController( IOrderQueryService orderQueryService)
+        public UserOrderController(IOrderQueryService orderQueryService)
         {
             _orderQueryService = orderQueryService;
         }
@@ -28,14 +27,8 @@ namespace MicroStore.Inventory.Api.Controllers
         [Route("")]
         [RequiredScope(InventoryScope.Order.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<OrderListDto>))]
-        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingParamsQueryString @params)
+        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingQueryParams queryParam)
         {
-            var queryParam = new PagingQueryParams
-            {
-                Lenght = @params.Lenght,
-                Skip = @params.Skip,
-            };
-
             var result = await _orderQueryService.ListOrderAsync(queryParam, CurrentUser.Id.ToString()!);
 
             return result.ToOk();

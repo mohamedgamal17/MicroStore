@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
@@ -24,10 +23,8 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetClientList([FromQuery]PagingAndSortingParamsQueryString @params)
+        public async Task<IActionResult> GetClientList([FromQuery] PagingQueryParams queryParams)
         {
-            var queryParams = new PagingQueryParams { Skip = @params.Skip, Lenght = @params.Lenght };
-
             var result = await _clientQueryService.ListAsync(queryParams);
 
             return result.ToOk();

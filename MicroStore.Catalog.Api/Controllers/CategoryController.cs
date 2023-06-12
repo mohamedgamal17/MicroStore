@@ -2,13 +2,9 @@
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Categories;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Catalog.Application.Models.Categories;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.Catalog.Application.Models;
-
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/categories")]
@@ -28,10 +24,10 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<CategoryDto>)))]
-        public async Task<IActionResult> GetCatalogCategoryList([FromQuery] SortingParamsQueryString @params)
+        public async Task<IActionResult> GetCatalogCategoryList([FromQuery] SortingQueryParams queryParams)
         {
             var result = await  _categoryQueryService
-                .ListAsync(new SortingQueryParams { SortBy = @params.SortBy, Desc = @params.Desc});
+                .ListAsync(queryParams);
 
             return result.ToOk();
         }

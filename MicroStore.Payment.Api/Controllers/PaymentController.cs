@@ -2,13 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
-using System.Net;
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
@@ -29,16 +27,8 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<PaymentRequestListDto>))]
-        public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PagingAndSortingParamsQueryString @params, [FromQuery(Name = "user_id")] string? userId = null)
+        public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PagingAndSortingQueryParams queryparams, [FromQuery(Name = "user_id")] string? userId = null)
         {
-            var queryparams = new PagingAndSortingQueryParams
-            {
-                SortBy = @params.SortBy,
-                Desc = @params.Desc,
-                Lenght = @params.Lenght,
-                Skip = @params.Skip,
-            };
-
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, userId);
 
             return result.ToOk();

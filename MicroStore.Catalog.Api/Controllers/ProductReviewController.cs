@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Catalog.Application.Dtos;
@@ -24,13 +23,9 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductReviewDto>))]
-        public async Task<IActionResult> ListProductReview(string productId ,[FromQuery] PagingParamsQueryString queryParams)
+        public async Task<IActionResult> ListProductReview(string productId ,[FromQuery] PagingQueryParams queryParams)
         {
-            var result = await _productReviewService.ListAsync(productId, new PagingQueryParams
-            {
-                Skip = queryParams.Skip,
-                Lenght = queryParams.Lenght
-            });
+            var result = await _productReviewService.ListAsync(productId, queryParams);
 
             return result.ToOk();
         }

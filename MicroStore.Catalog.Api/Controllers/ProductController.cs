@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
@@ -29,17 +28,10 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductDto>))]
-        public async Task<IActionResult> GetCatalogProductList([FromQuery] PagingAndSortingParamsQueryString queryParams)
+        public async Task<IActionResult> GetCatalogProductList([FromQuery] PagingAndSortingQueryParams queryParams)
         {
 
-            var result = await _productQueryService.ListAsync(new PagingAndSortingQueryParams
-            {
-                Skip = queryParams.Skip,
-                Lenght = queryParams.Lenght,
-                SortBy = queryParams.SortBy,
-                Desc = queryParams.Desc
-            });
-
+            var result = await _productQueryService.ListAsync(queryParams);
 
             return result.ToOk();
 

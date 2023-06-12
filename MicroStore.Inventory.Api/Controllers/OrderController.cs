@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Inventory.Application.Dtos;
@@ -30,14 +29,8 @@ namespace MicroStore.Inventory.Api.Controllers
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<OrderListDto>))]
 
-        public async Task<IActionResult> RetirveOrderList([FromQuery] PagingParamsQueryString @params , [FromQuery(Name ="user_id")] string? userId=  null)
+        public async Task<IActionResult> RetirveOrderList([FromQuery] PagingQueryParams queryParams, [FromQuery(Name ="user_id")] string? userId=  null)
         {
-            var queryParams = new PagingQueryParams
-            {
-                Lenght = @params.Lenght,
-                Skip = @params.Skip,
-            };
-
             var result = await _orderQueryService.ListOrderAsync(queryParams, userId);
 
             return result.ToOk();
