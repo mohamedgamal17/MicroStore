@@ -17,8 +17,9 @@ namespace MicroStore.Catalog.Application.Models.Products
         public double OldPrice { get; set; }
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
-        public string[]? CategoriesIds { get; set; }
-        public string[]? ManufacturersIds { get; set; }
+        public HashSet<string>? CategoriesIds { get; set; }
+        public HashSet<string>? ManufacturersIds { get; set; }
+        public HashSet<string>? ProductTags { get; set; }
     }
 
     public class ProductModelValidator : AbstractValidator<ProductModel>

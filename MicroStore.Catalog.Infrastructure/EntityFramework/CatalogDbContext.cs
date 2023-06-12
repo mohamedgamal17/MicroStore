@@ -15,6 +15,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework
         public DbSet<Category> Categories { get; set; }
         public DbSet<Manufacturer> Manufacturers { get ; set ; }
         public DbSet<ProductReview> ProductReviews { get ; set ; }
+        public DbSet<ProductTag> ProductTags { get ; set ; }
 
         public CatalogDbContext(DbContextOptions<CatalogDbContext> dbContextOptions)
         : base(dbContextOptions)

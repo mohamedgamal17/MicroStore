@@ -4,6 +4,7 @@ using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Domain.ValueObjects;
+using System.Threading;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -13,9 +14,11 @@ namespace MicroStore.Catalog.Application.Products
     {
         private readonly IRepository<Product> _productRepository;
 
-        public ProductCommandService(IRepository<Product> productRepository)
+        private readonly IRepository<ProductTag> _productTagRepository;
+        public ProductCommandService(IRepository<Product> productRepository, IRepository<ProductTag> productTagRepository)
         {
             _productRepository = productRepository;
+            _productTagRepository = productTagRepository;
         }
 
         public async Task<Result<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
@@ -29,7 +32,7 @@ namespace MicroStore.Catalog.Application.Products
 
             Product product = new Product();
 
-            PrepareProductEntity(product, model, cancellationToken);
+            await PrepareProductEntity(product, model, cancellationToken);
 
             await _productRepository.InsertAsync(product, cancellationToken: cancellationToken);
 
@@ -55,7 +58,7 @@ namespace MicroStore.Catalog.Application.Products
 
             }
 
-            PrepareProductEntity(product, model, cancellationToken);
+            await PrepareProductEntity(product, model, cancellationToken);
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 
@@ -63,7 +66,7 @@ namespace MicroStore.Catalog.Application.Products
         }
 
 
-        private void PrepareProductEntity(Product product, ProductModel model, CancellationToken cancellationToken = default)
+        private async Task PrepareProductEntity(Product product, ProductModel model, CancellationToken cancellationToken = default)
         {
             product.Sku = model.Sku;
             product.Name = model.Name;
@@ -88,6 +91,23 @@ namespace MicroStore.Catalog.Application.Products
                     .Select(x => new ProductManufacturer { ManufacturerId = x })
                     .ToList();
             }
+
+            if(model.ProductTags != null)
+            {
+                product.ProductTags = await PrepareProductTags(model.ProductTags, cancellationToken);
+            }
+        }
+
+        private async Task<List<ProductTag>> PrepareProductTags(HashSet<string> tags, CancellationToken cancellationToken )
+        {
+            var productTags = await _productTagRepository.GetListAsync(x => tags.Contains(x.Name), cancellationToken: cancellationToken);
+
+            foreach (var tag in tags.Where(x => !productTags.Select(c => c.Name).Contains(x)))
+            {
+                productTags.Add(new ProductTag { Name = tag });
+            }
+
+            return productTags;
         }
 
 

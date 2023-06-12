@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Categories;
 using MicroStore.Catalog.Application.Models.Categories;
 using MicroStore.Catalog.Application.Models.Manufacturers;
 using MicroStore.Catalog.Application.Models.ProductReviews;
 using MicroStore.Catalog.Application.Models.Products;
-using MicroStore.Catalog.Application.Products;
+using MicroStore.Catalog.Application.Models.ProductTags;
 using MicroStore.Catalog.Domain.Entities;
 namespace MicroStore.Catalog.Application.Tests.Extensions
 {
@@ -21,9 +20,20 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
             product.Weight.Should().Be(model.Weight.AsWeight());
             product.Dimensions.Should().Be(model.Dimensions.AsDimension());
             product.IsFeatured.Should().Be(model.IsFeatured);
+
             product.ProductCategories.OrderBy(x => x.CategoryId).Should().Equal(model.CategoriesIds?.OrderBy(x => x), (left, right) =>
             {
                 return left.CategoryId == right;
+            });
+
+            product.ProductManufacturers.OrderBy(x => x.ManufacturerId).Should().Equal(model.ManufacturersIds?.OrderBy(x => x), (left, right) =>
+            {
+                return left.ManufacturerId == right;
+            });
+
+            product.ProductTags.OrderBy(x => x.Name).Should().Equal(model.ProductTags?.OrderBy(x => x), (left, right) =>
+            {
+                return left.Name == right;
             });
 
         }
@@ -52,6 +62,12 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
         {
             productReview.AssertProductReviewModel(model);
             productReview.UserId.Should().Be(model.UserId);
+        }
+
+        public static void AssertProductTagModel(this ProductTag productTag, ProductTagModel model)
+        {
+            productTag.Name.Should().Be(model.Name);
+            productTag.Description.Should().Be(model.Description);
         }
     }
 }

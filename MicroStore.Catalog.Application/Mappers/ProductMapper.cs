@@ -21,7 +21,8 @@ namespace MicroStore.Catalog.Application.Mappers
                 .ForMember(x => x.Weight, opt => opt.MapFrom(c => c.Weight))
                 .ForMember(x => x.Dimensions, opt => opt.MapFrom(c => c.Dimensions))
                 .ForMember(x => x.ProductCategories, opt => opt.MapFrom(c => c.ProductCategories))
-                .ForMember(x => x.ProductManufacturers, opt => opt.MapFrom(c => c.ProductManufacturers));
+                .ForMember(x => x.ProductManufacturers, opt => opt.MapFrom(c => c.ProductManufacturers))
+                .ForMember(x => x.ProductTags, opt => opt.MapFrom(c => c.ProductTags));
 
 
 
@@ -59,7 +60,6 @@ namespace MicroStore.Catalog.Application.Mappers
                     return "kg";
                 case WeightUnit.Pound:
                     return "lb";
-
                 default:
                     return "none";
             }

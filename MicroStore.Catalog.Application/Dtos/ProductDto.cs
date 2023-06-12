@@ -17,5 +17,7 @@ namespace MicroStore.Catalog.Application.Dtos
         public List<ProductCategoryDto> ProductCategories { get; set; }
         public List<ProductManufacturerDto> ProductManufacturers { get; set; }
         public List<ProductImageDto> ProductImages { get; set; }
+
+        public List<ProductTagDto> ProductTags { get; set; }
     }
 }
