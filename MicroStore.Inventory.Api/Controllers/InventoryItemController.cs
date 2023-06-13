@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Inventory.Application.Dtos;
@@ -29,13 +28,8 @@ namespace MicroStore.Inventory.Api.Controllers
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<ProductDto>))]
 
-        public async Task<IActionResult> RetriveProductList([FromQuery] PagingParamsQueryString @params)
+        public async Task<IActionResult> RetriveProductList([FromQuery] PagingQueryParams query)
         {
-            var query = new PagingQueryParams
-            {
-                Skip = @params.Skip,
-                Lenght = @params.Lenght,
-            };
 
             var result = await _productQueryService.ListAsync(query);
 

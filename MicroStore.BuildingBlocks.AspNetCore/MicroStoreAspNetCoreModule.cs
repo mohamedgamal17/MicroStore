@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
@@ -17,11 +19,17 @@ namespace MicroStore.BuildingBlocks.AspNetCore
             {
                 config.Filters.Add(typeof(RequiredScopeAuthorizationHandler));
 
+                config.ValueProviderFactories.Add(new SnakeCaseQueryValueProviderFactory());
+
+               
             });
 
 
-            
-          
+            Configure<JsonOptions>(opt =>
+            {
+                opt.JsonSerializerOptions.PropertyNamingPolicy = SnakeCaseNamingPolicy.Instance;
+            });
+
             context.Services.AddTransient<RequiredScopeAuthorizationHandler>();
         }
 

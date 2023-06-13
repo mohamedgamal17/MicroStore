@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
@@ -24,14 +23,8 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetListApiScope([FromQuery]PagingParamsQueryString @params)
+        public async Task<IActionResult> GetListApiScope([FromQuery] PagingQueryParams queryParams)
         {
-            var queryParams = new PagingQueryParams
-            {
-                Skip = @params.Skip,
-                Lenght = @params.Lenght,
-            };
-
             var result = await _apiResourceQueryService.ListAsync(queryParams);
 
             return result.ToOk();

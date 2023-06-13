@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
@@ -64,18 +63,8 @@ namespace MicroStore.Ordering.Api.Controllers
         [Route("")]
         [ActionName(nameof(RetirveUserOrderList))]
     //    [RequiredScope(OrderingScope.Order.List)]
-        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingAndSortingParamsQueryString @params)
+        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingAndSortingQueryParams queryParams)
         {
-
-            var queryParams = new PagingAndSortingQueryParams
-            {
-
-                SortBy = @params.SortBy,
-                Desc = @params.Desc,
-                Lenght = @params.Lenght,
-                Skip = @params.Skip,
-            };
-
             var result = await _orderQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);
 
             return result.ToOk();

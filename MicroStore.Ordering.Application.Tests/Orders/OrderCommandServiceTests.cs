@@ -29,7 +29,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
                 TaxCost = 0,
                 SubTotal = 50,
                 TotalPrice = 100,
-                OrderItems = new List<OrderItemModel>
+                Items = new List<OrderItemModel>
                 {
                      new OrderItemModel
                      {

@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Manufacturers;
-using MicroStore.Catalog.Application.Models;
 using MicroStore.Catalog.Application.Models.Manufacturers;
-
 namespace MicroStore.Catalog.Api.Controllers
 {
 
@@ -29,10 +26,10 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<ManufacturerDto>)))]
-        public async Task<IActionResult> GetManufacturerList([FromQuery] SortingParamsQueryString @params)
+        public async Task<IActionResult> GetManufacturerList([FromQuery] SortingQueryParams queryParams)
         {
             var result = await _manufacturerQueryService
-                .ListAsync(new SortingQueryParams { SortBy = @params.SortBy, Desc = @params.Desc });
+                .ListAsync(queryParams);
 
             return result.ToOk();
         }

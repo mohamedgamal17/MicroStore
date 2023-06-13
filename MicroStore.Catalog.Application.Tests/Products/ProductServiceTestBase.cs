@@ -76,10 +76,57 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             return data;
         }
+
+        public async Task<List<Manufacturer>> CreateFakeManufacturers()
+        {
+            var data = new List<Manufacturer>
+            {
+                new Manufacturer{Name = Guid.NewGuid().ToString()},
+                new Manufacturer{Name = Guid.NewGuid().ToString()},
+                new Manufacturer{Name = Guid.NewGuid().ToString()}
+            };
+
+            await InsertMany(data);
+
+
+            return data;
+        }
+
+        public async Task<List<ProductTag>> CreateFakeProductTags()
+        {
+            var insertedData = new List<ProductTag>
+            {
+                new ProductTag { Name = Guid.NewGuid().ToString() },
+                new ProductTag { Name = Guid.NewGuid().ToString() },
+                new ProductTag { Name = Guid.NewGuid().ToString() },
+            };
+
+            var unInsertedData = new List<ProductTag>
+            {
+                new ProductTag { Name = Guid.NewGuid().ToString() },
+                new ProductTag { Name = Guid.NewGuid().ToString() },
+                new ProductTag { Name = Guid.NewGuid().ToString() },
+            };
+
+            await InsertMany(insertedData);
+
+            var data = new List<ProductTag>();
+
+            data.AddRange(insertedData);
+
+            data.AddRange(unInsertedData);
+
+            return data;
+        }
+        
       
         public async Task<ProductModel> GenerateProductModel()
         { 
             var categories = await CreateFakeCategories();
+
+            var manufacturers = await CreateFakeManufacturers();
+
+            var productTags = await CreateFakeProductTags();
 
             return new ProductModel
             {
@@ -104,7 +151,12 @@ namespace MicroStore.Catalog.Application.Tests.Products
                     Unit = "inch"
                 },
 
-                CategoriesIds =categories.Select(x=> x.Id).ToArray()
+                CategoriesIds =categories.Select(x=> x.Id).ToHashSet(),
+
+                ManufacturersIds  = manufacturers.Select(x=>x.Id).ToHashSet(),
+
+                ProductTags = manufacturers.Select(x=> x.Name).ToHashSet()
+
             };
         }
 
