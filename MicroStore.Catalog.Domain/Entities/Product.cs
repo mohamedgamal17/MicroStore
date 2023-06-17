@@ -18,6 +18,7 @@ namespace MicroStore.Catalog.Domain.Entities
         public List<ProductManufacturer> ProductManufacturers { get; set; }
         public List<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
         public List<ProductTag> ProductTags { get; set; } = new List<ProductTag>();
+        public List<ProductSpecificationAttribute> SpecificationAttributes { get; set; } = new List<ProductSpecificationAttribute>();
 
         public Product()
         {

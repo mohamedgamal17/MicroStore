@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS8618
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Domain.Const;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -20,6 +21,7 @@ namespace MicroStore.Catalog.Application.Models.Products
         public HashSet<string>? CategoriesIds { get; set; }
         public HashSet<string>? ManufacturersIds { get; set; }
         public HashSet<string>? ProductTags { get; set; }
+        public HashSet<ProductSpecificationAttributeModel>? SpecificationAttributes { get; set; }
     }
 
     public class ProductModelValidator : AbstractValidator<ProductModel>
@@ -27,7 +29,8 @@ namespace MicroStore.Catalog.Application.Models.Products
         protected IRepository<Category> CategoryRepository { get; }
 
         protected IRepository<Manufacturer> ManufacturerRepository { get; }
-        public ProductModelValidator(IRepository<Category> categoryRepository, IRepository<Manufacturer> manufacturerRepository)
+
+        public ProductModelValidator(IRepository<Category> categoryRepository, IRepository<Manufacturer> manufacturerRepository, IServiceProvider serviceProvider)
         {
             CategoryRepository = categoryRepository;
             ManufacturerRepository = manufacturerRepository;
@@ -118,6 +121,10 @@ namespace MicroStore.Catalog.Application.Models.Products
             RuleForEach(x => x.ManufacturersIds)
                 .MustAsync(CheckManufacturerExist)
                 .When(x => x.CategoriesIds != null);
+
+            RuleForEach(x=> x.SpecificationAttributes)
+                .SetValidator(serviceProvider.GetRequiredService<ProductSpecificationAttributeModelValidator>())
+                .When(x=> x.SpecificationAttributes != null);
 
         }
         private Task<bool> CheckCategoryExist(string categoryId, CancellationToken cancellationToken)

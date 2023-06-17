@@ -8,6 +8,8 @@ using System.Threading;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
+
 namespace MicroStore.Catalog.Application.Products
 {
     public class ProductCommandService : CatalogApplicationService, IProductCommandService
@@ -15,10 +17,13 @@ namespace MicroStore.Catalog.Application.Products
         private readonly IRepository<Product> _productRepository;
 
         private readonly IRepository<ProductTag> _productTagRepository;
-        public ProductCommandService(IRepository<Product> productRepository, IRepository<ProductTag> productTagRepository)
+
+        private readonly IRepository<SpecificationAttribute> _specificationAttributeRepository;
+        public ProductCommandService(IRepository<Product> productRepository, IRepository<ProductTag> productTagRepository, IRepository<SpecificationAttribute> specificationAttributeRepository)
         {
             _productRepository = productRepository;
             _productTagRepository = productTagRepository;
+            _specificationAttributeRepository = specificationAttributeRepository;
         }
 
         public async Task<Result<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
@@ -96,6 +101,11 @@ namespace MicroStore.Catalog.Application.Products
             {
                 product.ProductTags = await PrepareProductTags(model.ProductTags, cancellationToken);
             }
+
+            if(model.SpecificationAttributes != null)
+            {
+                product.SpecificationAttributes = await PrepareProductSpecificationAttributes(model.SpecificationAttributes,cancellationToken);
+            }
         }
 
         private async Task<List<ProductTag>> PrepareProductTags(HashSet<string> tags, CancellationToken cancellationToken )
@@ -110,6 +120,31 @@ namespace MicroStore.Catalog.Application.Products
             return productTags;
         }
 
+
+        private async Task<List<ProductSpecificationAttribute>> PrepareProductSpecificationAttributes(HashSet<ProductSpecificationAttributeModel> specificationAttributes, CancellationToken cancellationToken)
+        {
+            var query = await _specificationAttributeRepository.GetQueryableAsync();
+
+            var attributesIds = specificationAttributes.Select(x => x.AttributeId).ToList();
+
+            specificationAttributes = specificationAttributes.OrderBy(x => x.AttributeId).ToHashSet();
+
+            var attributes = await query.Include(x => x.Options).Where(x=> attributesIds.Contains(x.Id)).OrderBy(x=> x.Id).ToArrayAsync(cancellationToken);
+
+            var productSpecificationAttributes = new List<ProductSpecificationAttribute>();
+
+            foreach(var tuple in Enumerable.Zip(specificationAttributes, attributes))
+            {
+                productSpecificationAttributes.Add(new ProductSpecificationAttribute
+                {
+                    Attribute = tuple.Second,
+                    Option = tuple.Second.Options.Single(x => x.Id == tuple.First.OptionId)
+                });
+            }
+
+            return productSpecificationAttributes;
+
+        }
 
        public async Task<Result<ProductDto>> AddProductImageAsync(string productId, CreateProductImageModel model, CancellationToken cancellationToken = default)
         {
@@ -207,6 +242,58 @@ namespace MicroStore.Catalog.Application.Products
 
 
             return Unit.Value;
+        }
+
+        public async Task<Result<ProductDto>> CreateProductAttributeSpecificationAsync(string productId, ProductSpecificationAttributeModel model, CancellationToken cancellationToken = default)
+        {
+            var product = await _productRepository.SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
+
+            if(product== null)
+            {
+                return new Result<ProductDto>(new EntityNotFoundException(typeof(Product)));
+            }
+
+            var attributeQuery = await _specificationAttributeRepository.WithDetailsAsync(x=> x.Options);
+
+            var attribute = await attributeQuery.SingleAsync(x => x.Id == model.AttributeId,cancellationToken);
+
+            var option = attribute.Options.Single(x => x.Id == model.OptionId);
+
+            var productSpecificationAttrribute = new ProductSpecificationAttribute
+            {
+                Attribute = attribute,
+                Option = option
+            };
+
+            product.SpecificationAttributes.Add(productSpecificationAttrribute);
+
+            await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
+
+            return ObjectMapper.Map<Product, ProductDto>(product);
+        }
+
+        public async Task<Result<ProductDto>> RemoveProductAttributeSpecificationAsync(string productId, string attributeId, CancellationToken cancellationToken = default)
+        {
+            var product = await _productRepository.SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
+
+            if (product == null)
+            {
+                return new Result<ProductDto>(new EntityNotFoundException(typeof(Product),productId));
+            }
+
+            var productSpecificationAttribute = product.SpecificationAttributes.SingleOrDefault(x => x.Id == attributeId);
+
+            if(productSpecificationAttribute == null)
+            {
+                return new Result<ProductDto>(new EntityNotFoundException(typeof(ProductSpecificationAttribute), attributeId));
+            }
+
+
+            product.SpecificationAttributes.Remove(productSpecificationAttribute);
+
+            await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
+
+            return ObjectMapper.Map<Product, ProductDto>(product);
         }
     }
 

@@ -18,11 +18,15 @@ namespace MicroStore.Catalog.Application.Tests.Products
         }
         public async Task<Product> CreateFakeProduct()
         {
+            var attributes = await CreateFakeSpecificationAttributes();
+
+
             var fakeProduct = new Product
             {
                 Sku = Guid.NewGuid().ToString(),
                 Name = Guid.NewGuid().ToString(),
                 Price = 50,
+
                 ProductCategories = new List<ProductCategory>()
                 {
                    new ProductCategory
@@ -34,13 +38,32 @@ namespace MicroStore.Catalog.Application.Tests.Products
                    }
                 },
 
+                ProductManufacturers  = new List<ProductManufacturer>
+                {
+                    new ProductManufacturer
+                    {
+                        Manufacturer = new Manufacturer
+                        {
+                            Name = Guid.NewGuid().ToString(),
+                            Description = Guid.NewGuid().ToString()
+                        },
+                    }
+                },
+
+
                 ProductImages = new List<ProductImage>
                 {
                     new ProductImage
                     {
                         ImagePath = Guid.NewGuid().ToString()
                     }
-                }
+                },
+
+                SpecificationAttributes = attributes.Select(x=> new ProductSpecificationAttribute
+                {
+                    AttributeId = x.Id,
+                    OptionId  = x.Options.First().Id
+                }).ToList()
             };
 
             return await Insert(fakeProduct);
@@ -118,8 +141,73 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             return data;
         }
-        
-      
+
+        public async Task<List<SpecificationAttribute>> CreateFakeSpecificationAttributes()
+        {
+            var data = new List<SpecificationAttribute>{
+                new SpecificationAttribute
+                {
+                    Name = Guid.NewGuid().ToString(),
+                    Description = Guid.NewGuid().ToString(),
+                    Options = new List<SpecificationAttributeOption>
+                    {
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                    },
+                } ,
+                new SpecificationAttribute
+                {
+                    Name = Guid.NewGuid().ToString(),
+                    Description = Guid.NewGuid().ToString(),
+                    Options = new List<SpecificationAttributeOption>
+                    {
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                    },
+                },
+                new SpecificationAttribute
+                {
+                    Name = Guid.NewGuid().ToString(),
+                    Description = Guid.NewGuid().ToString(),
+                    Options = new List<SpecificationAttributeOption>
+                    {
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                        new SpecificationAttributeOption { Name = Guid.NewGuid().ToString()},
+                    },
+                }
+
+            };
+
+            await InsertMany(data);
+
+            return data;
+        }
+
+        public async Task<SpecificationAttribute> CreateFakeSpecificationAttribute()
+        {
+            var attribute = new SpecificationAttribute
+            {
+                Name = Guid.NewGuid().ToString(),
+                Description = Guid.NewGuid().ToString(),
+                Options = new List<SpecificationAttributeOption>
+                {
+                    new SpecificationAttributeOption
+                    {
+                        Name = Guid.NewGuid().ToString(),
+                    }
+                }
+            };
+
+            await Insert(attribute);
+
+            return attribute;
+        }
         public async Task<ProductModel> GenerateProductModel()
         { 
             var categories = await CreateFakeCategories();
@@ -127,6 +215,8 @@ namespace MicroStore.Catalog.Application.Tests.Products
             var manufacturers = await CreateFakeManufacturers();
 
             var productTags = await CreateFakeProductTags();
+
+            var specificationAttributes = await CreateFakeSpecificationAttributes();
 
             return new ProductModel
             {
@@ -155,7 +245,10 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
                 ManufacturersIds  = manufacturers.Select(x=>x.Id).ToHashSet(),
 
-                ProductTags = manufacturers.Select(x=> x.Name).ToHashSet()
+                ProductTags = manufacturers.Select(x=> x.Name).ToHashSet(),
+
+                SpecificationAttributes = specificationAttributes
+                .Select(x=> new ProductSpecificationAttributeModel { AttributeId = x.Id, OptionId = x.Options.First().Id}).ToHashSet()
 
             };
         }
