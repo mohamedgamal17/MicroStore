@@ -27,7 +27,6 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.OldPrice);
 
-
             builder.OwnsOne(x => x.Weight, weightNavigationBuilder =>
             {
                 weightNavigationBuilder
@@ -81,6 +80,8 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.HasMany(x => x.ProductTags).WithMany(x=> x.Products);
 
+            builder.HasMany(x => x.SpecificationAttributes).WithOne();
+
             builder.HasIndex(x => x.Name).IsUnique();
 
             builder.HasIndex(x => x.Sku).IsUnique();
@@ -92,6 +93,8 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
             builder.Navigation(x => x.ProductImages).AutoInclude();
 
             builder.Navigation(x => x.ProductTags).AutoInclude();
+
+            builder.Navigation(x => x.SpecificationAttributes).AutoInclude();
 
         }
     }

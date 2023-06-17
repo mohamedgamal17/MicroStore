@@ -4,6 +4,7 @@ using MicroStore.Catalog.Application.Models.Manufacturers;
 using MicroStore.Catalog.Application.Models.ProductReviews;
 using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Application.Models.ProductTags;
+using MicroStore.Catalog.Application.Models.SpecificationAttributes;
 using MicroStore.Catalog.Domain.Entities;
 namespace MicroStore.Catalog.Application.Tests.Extensions
 {
@@ -68,6 +69,24 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
         {
             productTag.Name.Should().Be(model.Name);
             productTag.Description.Should().Be(model.Description);
+        }
+
+
+        public static void AssertSpecificationAttributeModel(this SpecificationAttribute attribute, SpecificationAttributeModel model)
+        {
+            attribute.Name.Should().Be(model.Name);
+            attribute.Description.Should().Be(model.Description);
+
+            foreach ( var tuple in attribute.Options.OrderBy(x => x.Name).Zip(model.Options!.OrderBy(x => x.Name).ToList()))
+            {
+                tuple.First.AssertSpecificationAttributeOptionModel(tuple.Second);
+            }  
+    
+        }
+
+        public static void AssertSpecificationAttributeOptionModel(this SpecificationAttributeOption option , SpecificationAttributeOptionModel model)
+        {
+            option.Name.Should().Be(model.Name);
         }
     }
 }

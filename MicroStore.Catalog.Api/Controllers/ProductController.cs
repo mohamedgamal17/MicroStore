@@ -160,5 +160,33 @@ namespace MicroStore.Catalog.Api.Controllers
 
             return result.ToOk();
         }
+
+        [Route("{productId}/productspecificationattributes")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type =typeof(ProductDto))]
+        public async Task<IActionResult> CreateProductSpecificationAttribute(string productId , ProductSpecificationAttributeModel model)
+        {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
+            var result = await _productCommandService.CreateProductAttributeSpecificationAsync(productId, model);
+
+            return result.ToOk();
+        }
+
+        [Route("{productId}/productspecificationattributes/{productSpecfificationAttributeId}")]
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        public async Task<IActionResult> CreateProductSpecificationAttribute(string productId , string productSpecfificationAttributeId )
+        {
+            var result = await _productCommandService.RemoveProductAttributeSpecificationAsync(productId, productSpecfificationAttributeId);
+
+            return result.ToOk();
+        }
+
     }
 }

@@ -199,6 +199,100 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
+
+        [Test]
+        public async Task Should_create_product_specification_attribute()
+        {
+
+            var fakeProduct = await CreateFakeProduct();
+
+            var fakeAttribute = await CreateFakeSpecificationAttribute();
+
+            var model = new ProductSpecificationAttributeModel
+            {
+                AttributeId = fakeAttribute.Id,
+                OptionId = fakeAttribute.Options.First().Id
+            };
+
+            var result = await _productCommandService.CreateProductAttributeSpecificationAsync(fakeProduct.Id, model);
+
+            result.IsSuccess.Should().BeTrue();
+
+            var prodcut = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
+
+            var productSpecificationAttribute = prodcut.SpecificationAttributes.SingleOrDefault(x => x.AttributeId == model.AttributeId && x.OptionId == model.OptionId);
+
+            productSpecificationAttribute.Should().NotBeNull();
+        }
+
+
+        [Test]
+        public async Task Should_return_failure_result_when_create_product_specification_attribute_when_product_not_exist()
+        {
+
+            var productId = Guid.NewGuid().ToString();
+
+            var fakeAttribute = await CreateFakeSpecificationAttribute();
+
+            var model = new ProductSpecificationAttributeModel
+            {
+                AttributeId = fakeAttribute.Id,
+                OptionId = fakeAttribute.Options.First().Id
+            };
+
+            var result = await _productCommandService.CreateProductAttributeSpecificationAsync(productId, model);
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+        }
+
+        [Test]
+        public async Task Should_remove_product_specification_attribute()
+        {
+            var fakeProduct = await CreateFakeProduct();
+
+            var productSpecificationAttributeId = fakeProduct.SpecificationAttributes.First().Id;
+
+            var result = await _productCommandService.RemoveProductAttributeSpecificationAsync(fakeProduct.Id, productSpecificationAttributeId);
+
+            result.IsFailure.Should().BeTrue();
+
+            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
+
+            var productSpecificationAttribute =  product.SpecificationAttributes.SingleOrDefault(x => x.Id == productSpecificationAttributeId);
+
+            productSpecificationAttribute.Should().BeNull();
+        }
+
+        [Test]
+        public async  Task Should_return_failure_result_when_removing_product_specification_while_product_is_not_exist()
+        {
+            var productId = Guid.NewGuid().ToString();
+
+            var productSpecificationAttributeId = Guid.NewGuid().ToString();
+
+            var result = await _productCommandService.RemoveProductAttributeSpecificationAsync(productId, productSpecificationAttributeId);
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+        }
+
+        [Test]
+        public async Task Should_return_failure_result_when_removing_product_specification_while_product_specification_is_not_exist()
+        {
+            var fakeProduct = await CreateFakeProduct();
+
+            var productSpecificationAttributeId = Guid.NewGuid().ToString();
+
+            var result = await _productCommandService.RemoveProductAttributeSpecificationAsync(fakeProduct.Id, productSpecificationAttributeId);
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+        }
+
     }
 
 }
