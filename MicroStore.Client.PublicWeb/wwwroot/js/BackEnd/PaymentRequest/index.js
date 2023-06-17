@@ -1,11 +1,11 @@
 ﻿$(document).ready(function () {
-
     $("#PaymentRequestsTable").DataTable(
         abp.libs.datatables.normailizeConfiguration({
             ajax: {
                 type: "POST"
             },
-
+            paging: true,
+            serverSide: true,
             columnDefs: [
                 { title: "Order Id", data: "orderId" },
                 { title: 'Order Number', data: "orderNumber" },

@@ -68,11 +68,11 @@ namespace MicroStore.Client.PublicWeb
 
             ConfigureMinioStorage(configuration);
 
-            //context.Services.AddControllers().AddNewtonsoftJson(opt =>
-            //{
-            //    var e = new StringEnumConverter();
-            //    opt.SerializerSettings.Converters.Add(e);
-            //});
+            context.Services.AddControllers().AddNewtonsoftJson(opt =>
+            {
+                var e = new StringEnumConverter();
+                opt.SerializerSettings.Converters.Add(e);
+            });
 
             context.Services.AddHttpContextAccessor();
 

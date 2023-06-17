@@ -25,9 +25,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
 
             RuleFor(x => x.OrderNumber)
                 .NotEmpty()
-                .WithMessage("Order Number cannot be null or empty")
-                .Must((orderNumber) => Guid.TryParse(orderNumber, out _))
-                .WithMessage("Order Id must be valid guid");
+                .WithMessage("Order Number cannot be null or empty");
 
             RuleFor(x => x.UserId)
                 .NotEmpty()

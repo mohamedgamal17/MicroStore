@@ -6,7 +6,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
-        public string UserName { get; set; }
+        public string UserId { get; set; }
         public Address Address { get; set; }
         public List<ShipmentItemCreateRequestOptions> Items { get; set; }
     }

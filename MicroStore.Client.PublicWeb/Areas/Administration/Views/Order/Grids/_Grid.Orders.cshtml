@@ -1,18 +1,6 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderListModel
-<div class="card card-default">
-    <div class="card-body">
-
-        <table  id="orders-grid" class="table  table-hover table-striped  dataTable no-footer" width="100%">
-            <thead>
-
-                <tr>
-                    <th>@Html.DisplayNameFor(x=> x.Data.FirstOrDefault().OrderNumber)</th>
-                    <th>@Html.DisplayNameFor(x=> x.Data.FirstOrDefault().CurrentState)</th>
-                    <th>@Html.DisplayNameFor(x=> x.Data.FirstOrDefault().TotalPrice)</th>
-                    <th></th>
-                </tr>
-            </thead>
-        </table>
-
-    </div>
-</div>
+<abp-card>
+    <abp-card-body>
+        <abp-table id="OrderTable"></abp-table>
+    </abp-card-body>
+</abp-card>

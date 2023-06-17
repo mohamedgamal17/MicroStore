@@ -42,7 +42,10 @@ $(document).ready(function () {
             columnDefs: [
                 {
                     title: "Image",
-                    data: "image"
+                    data: "image",
+                    render: function (data) {
+                        return `<img src="${data}" class="img" style="maxwidth:45px;max-height:45px">`
+                    }
                 },
                 {
                     title: 'Display Order',
@@ -68,15 +71,17 @@ $(document).ready(function () {
                                     return "Are you sure to delete this product image ";
                                 },
 
-                                action: function (data) {
+                                action: function (dataTable) {
                                     abp.ajax({
                                         url: "/Administration/Product/RemoveProductImage",
                                         type: "POST",
                                         data: JSON.stringify({
-                                            ProductId: data.record.productId,
-                                            ProductImageId: data.record.id
-                                        })
+                                            ProductId: dataTable.record.productId,
+                                            ProductImageId: dataTable.record.id
+                                        }),
                                     })
+
+                                    dataTable.table.ajax.reload();
 
                                 }
                             }
@@ -90,11 +95,11 @@ $(document).ready(function () {
 
 
     productImageCreateModal.onResult(function () {
-        dataTable.ajax.reload();
+        productImageTable.ajax.reload();
     });
 
     productImageEditMoadl.onResult(function () {
-        dataTable.ajax.reload();
+        productImageTable.ajax.reload();
     })
 
     $("#CreateProductImageButton").on('click', function (e) {

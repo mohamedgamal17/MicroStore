@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     $("#CategoriesTable").DataTable(
         abp.libs.datatables.normalizeConfiguration({
-            serveSide: true,
             paging: true,
             processing: true,
             searching: false,

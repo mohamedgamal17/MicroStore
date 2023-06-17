@@ -1,6 +1,7 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MicroStore.ShoppingGateway.ClinetSdk;
 using System.Reflection;
-namespace Microsoft.Extensions.DependencyInjection
+namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -9,11 +10,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var config = new MicroStoreClinetConfiguration();
 
-            if(action != null)
+            if (action != null)
             {
                 action(config);
             }
-  
+
             services.AddSingleton(config);
 
             ConventionalRegistarServices(services);

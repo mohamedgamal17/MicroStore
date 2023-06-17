@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Administration\Components\Catalog\**" />
     <Compile Remove="Logs\**" />
+    <Content Remove="Areas\Administration\Components\Catalog\**" />
     <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Areas\Administration\Components\Catalog\**" />
     <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Areas\Administration\Components\Catalog\**" />
     <None Remove="Logs\**" />
   </ItemGroup>
 
@@ -43,6 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Administration\Views\Shared\Components\Catalog\" />
     <Folder Include="Components\Purshase\" />
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\img\" />

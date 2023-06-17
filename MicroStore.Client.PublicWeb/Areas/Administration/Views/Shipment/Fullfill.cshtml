@@ -8,8 +8,9 @@
 }
 <div class="content-wrapper mr-2">
     <!-- Content Header (Page header) -->
-    <form method="post" asp-action="Fullfill" asp-route-shipmentId="@Model.ShipmentId">
+    <form method="post" asp-action="Fullfill" >
         @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="@Model.ShipmentId" />
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">

@@ -38,7 +38,7 @@
                     {data : "userId",  name: '@(Html.DisplayNameFor(x=> x.Data.First().UserId))'},
                     { data: "status", name: '@(Html.DisplayNameFor(x => x.Data.First().Status))' },
                     {mRender : function(data, type, raw){
-                        return `<a href="Shipment/Detail/${raw.id}">View</a>`
+                        return `<a href="Shipment/Details/${raw.id}">View</a>`
                     }}
                 ]
             })

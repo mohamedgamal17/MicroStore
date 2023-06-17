@@ -37,7 +37,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             var pagingOptions = new PagingReqeustOptions
             {
-                Skip = model.PageNumber,
+                Skip = model.Skip,
                 Lenght = model.PageSize
             };
 
@@ -50,9 +50,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(model);
         }
 
-        public async Task<IActionResult> Details(string shipmentId)
+        public async Task<IActionResult> Details(string id)
         {
-            var shipmentAggregate = await _shipmentAggregateService.GetAsync(shipmentId);
+            var shipmentAggregate = await _shipmentAggregateService.GetAsync(id);
 
             return View(ObjectMapper.Map<ShipmentAggregate, ShipmentAggregateVM>(shipmentAggregate));
         }
@@ -75,7 +75,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         [HttpPost]
 
-        public async Task<IActionResult> Fullfill(string shipmentId , ShipmentPackageModel model)
+        public async Task<IActionResult> Fullfill(ShipmentPackageModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -86,9 +86,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 var requestOptions = ObjectMapper.Map<ShipmentPackageModel, ShipmentFullfillRequestOptions>(model);
 
-                await _shipmentService.FullfillAsync(shipmentId, requestOptions);
+                await _shipmentService.FullfillAsync(model.ShipmentId, requestOptions);
 
-                return RedirectToAction("PurshaseLabel" , new  { shipmentId = shipmentId });
+                return RedirectToAction("PurshaseLabel" , new  { shipmentId = model.ShipmentId });
 
             }catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {

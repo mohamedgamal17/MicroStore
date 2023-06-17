@@ -34,7 +34,7 @@ namespace MicroStore.Client.PublicWeb.Components.OrderWidget
             var model = new OrderWidgetViewModel
             {
                 Orders = response.Items,
-                Pager = new PagerModel(response.TotalCount, PAGE_SIZE, response.PageNumber, response.PageSize, "/myorders")
+                Pager = new PagerModel(response.TotalCount, response.TotalCount, response.PageNumber, response.PageSize, "/myorders")
             };
 
             return View(model);

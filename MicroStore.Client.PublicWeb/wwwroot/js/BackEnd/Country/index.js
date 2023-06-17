@@ -5,7 +5,6 @@
             ajax: {
                 type: "POST"
             },
-
             columnDefs: [
                 {
                     title: "Name",

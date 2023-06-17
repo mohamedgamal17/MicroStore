@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MicroStore.BuildingBlocks.AspNetCore.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 

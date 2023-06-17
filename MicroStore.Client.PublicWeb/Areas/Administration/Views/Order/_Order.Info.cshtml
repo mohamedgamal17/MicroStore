@@ -1,14 +1,31 @@
 ﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 @using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
+@{
+    string orderStateBadge = string.Empty;
 
+    switch (Model.CurrentState)
+    {
+        case OrderState.Completed:
+            orderStateBadge = "bg-success";
+            break;
+        case OrderState.Cancelled:
+            orderStateBadge = "bg-error";
+            break;
+        default:
+            orderStateBadge = "bg-info";
+            break;
+    }
+
+
+
+}
 <div class="card ">
-
     <div class="card-body ">
         <div class="card card-light mb-3 shadow">
             <div class="card-header border-0">
                 <h1 class="card-title text-md text-lg ">
-                                                
+
                     Order Info
                 </h1>
                 <div class="card-tools">
@@ -128,10 +145,27 @@
 
                     </div>
                     <div class="col-md-9">
-                        <div class="form-text text-lg" style="padding-top: 2px">
-                            @Model.CurrentState
-                        </div>
+                        <div class="input-group input-group-short">
+                            <div class="input-group-text text-md align-items-start bg-info">
+                                @Model.CurrentState
+                            </div>
 
+                            <div class="input-group-btn ml-2">
+                                @if (Model.CurrentState != OrderState.Cancelled)
+                                {
+                                    <abp-button button-type=Danger text="Cancel"></abp-button>
+                                }
+
+                                @if(Model.CurrentState == OrderState.Fullfilled)
+                                {
+                                    <abp-button button-type=Danger text="Complete"></abp-button>
+                                }
+                            </div>
+
+
+
+
+                        </div>
 
                     </div>
                 </div>

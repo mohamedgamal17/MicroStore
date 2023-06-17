@@ -53,7 +53,7 @@ namespace MicroStore.Shipping.Application.Consumers
                     Dimension = new Abstraction.Models.DimensionModel
                     {
                         Height = x.Dimension.Height,
-                        Lenght = x.Dimension.Lenght,
+                        Length = x.Dimension.Lenght,
                         Width = x.Dimension.Width,
                         Unit = x.Dimension.Unit,
                     },

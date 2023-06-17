@@ -22,10 +22,10 @@
                         {
                             <li class="breadcrumb-item">
 
-                                <form asp-page-handler="CreateOrderShipment" method="post" asp-route-orderId="@Model.Id">
+                                <form asp-action="CreateOrderShipment"  method="post" >
 
                                     @Html.AntiForgeryToken()
-
+                                    <input type="hidden" name="OrderId" value="@Model.Id">
                                     <button class="btn btn-info" type="submit">
                                         <i class="fas fa-plus-square mr-1"></i>
                                           Create Order Shipment

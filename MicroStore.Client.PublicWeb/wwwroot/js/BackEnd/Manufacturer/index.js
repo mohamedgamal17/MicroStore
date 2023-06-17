@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-
     $("#ManufacturersGrid").DataTable(
         abp.libs.datatables.normalizeConfiguration({
             ajax: {

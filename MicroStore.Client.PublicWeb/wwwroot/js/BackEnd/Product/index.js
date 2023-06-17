@@ -7,6 +7,7 @@
                 type: "POST"
             },
 
+            paging: true,
             serverSide: true,
             searching: false,
             columnDefs: [

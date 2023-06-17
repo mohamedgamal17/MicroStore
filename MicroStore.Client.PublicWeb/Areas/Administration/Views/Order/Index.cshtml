@@ -5,18 +5,15 @@
 
 }
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1 class="m-0">Orders</h1>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
-
     <section class="content">
         <div class="container-fluid">
             <partial name="Grids/_Grid.Orders" model="Model" />
@@ -24,29 +21,5 @@
     </section>
 </div>
 @section Scripts{
-
-<script>
-    $(document).ready(function () {
-
-        $("#orders-grid").DataTable({
-            ajax: {
-                url: "",
-                type: "POST"
-            },
-
-
-            columns: [
-                { data: "orderNumber", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().OrderNumber))" },
-                        { data: "currentState", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().CurrentState))" },
-                        { data: "totalPrice", name: "@(Html.DisplayNameFor(x => x.Data.FirstOrDefault().TotalPrice))" },
-                {
-                    mRender: function (data, type, row) {
-                        return `<a href="Order/Detail/${row.id}" class="btn btn-info"> View</a>`
-                    }
-                },
-            ]
-        })
-
-    });
-</script>
+    <script src="~/js/BackEnd/Order/index.js"></script>
 }

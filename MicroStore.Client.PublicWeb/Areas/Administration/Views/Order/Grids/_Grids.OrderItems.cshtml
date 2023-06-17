@@ -1,4 +1,5 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
+﻿@using System.Globalization
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
 <div class="card card-light shadow mt-3">
     <div class="card-header border-0">
         <h1 class="card-title text-md  text-lg font-weight-bold">
@@ -18,7 +19,6 @@
             <thead>
                 <tr>
                     <th>@Html.DisplayNameFor(x=> x.Items.First().Thumbnail)</th>
-                    <th>@Html.DisplayNameFor(x=> x.Items.First().ExternalProductId)</th>
                     <th>@Html.DisplayNameFor(x=> x.Items.First().Name)</th>
                     <th>@Html.DisplayNameFor(x=> x.Items.First().Sku)</th>
                     <th>@Html.DisplayNameFor(x=> x.Items.First().Quantity)</th>
@@ -29,12 +29,15 @@
                 @foreach (var item in Model.Items)
                 {
                     <tr>
-                        <td>@item.Thumbnail</td>
-                        <td>@item.ExternalProductId</td>
+                        @{
+                            var itemImage = item.Thumbnail ?? @"/user-content/no-image.png";
+                            var productPrice = item.UnitPrice.ToString("C", new CultureInfo("en-US"));
+                        }
+                        <td><img src="@itemImage" style="max-width:45px; max-height:45px;"> </td>
                         <td>@item.Name</td>
                         <td>@item.Sku</td>
                         <td>@item.Quantity</td>
-                        <td>$@item.UnitPrice</td>
+                        <td>@productPrice</td>
                     </tr>
                 }
             </tbody>

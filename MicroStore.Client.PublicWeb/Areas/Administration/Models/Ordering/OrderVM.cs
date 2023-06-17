@@ -1,7 +1,6 @@
 ﻿using MicroStore.Client.PublicWeb.Areas.Administration.Models.Common;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering
 {
@@ -10,7 +9,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering
         public Guid Id { get; set; }
         public string OrderNumber { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]      
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public OrderState CurrentState { get; set; }
         public AddressModel ShippingAddress { get; set; }
         public AddressModel BillingAddress { get; set; }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MicroStore.Payment.Domain;
+using MicroStore.Payment.Application.Domain;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfigurations
 {

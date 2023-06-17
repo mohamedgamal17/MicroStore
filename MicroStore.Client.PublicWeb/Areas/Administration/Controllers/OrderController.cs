@@ -10,8 +10,6 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
 using System.Net;
-using Volo.Abp.ObjectMapping;
-
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
     public class OrderController : AdministrationController
@@ -56,21 +54,21 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(model);
         }
 
-        public async Task<IActionResult> Details(Guid orderId)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var orderAggregate = await _orderAggregateService.GetAsync(orderId);
+            var orderAggregate = await _orderAggregateService.GetAsync(id);
 
             return View(ObjectMapper.Map<OrderAggregate, OrderAggregateVM>(orderAggregate));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrderShipment(Guid orderId)
+        public async Task<IActionResult> CreateOrderShipment(CreateOrderShipmmentModel model)
         {
 
             try
             {
 
-                var requestOptions = await PrepareShipmentCreateRequestOptions(orderId);
+                var requestOptions = await PrepareShipmentCreateRequestOptions(model.OrderId);
 
                 var shipment = await _shipmentService.CreateAsync(requestOptions);
 
@@ -80,7 +78,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 ex.Erorr.MapToModelState(ModelState);
 
-                return RedirectToAction("Details", new {orderId = orderId});
+                return RedirectToAction("Details", new {orderId = model.OrderId});
             }
         }
 
@@ -94,7 +92,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 Address = order.ShippingAddress,
                 OrderId = order.Id.ToString(),
                 OrderNumber = order.OrderNumber,
-                UserName = order.UserId,
+                UserId = order.UserId,
                 Items = new List<ShipmentItemCreateRequestOptions>()
             };
 

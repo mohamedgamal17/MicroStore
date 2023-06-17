@@ -22,7 +22,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
         {
             ContractResolver = new DefaultContractResolver
             {
-                NamingStrategy = new CamelCaseNamingStrategy()
+                NamingStrategy = new SnakeCaseNamingStrategy()
             }
 
         };

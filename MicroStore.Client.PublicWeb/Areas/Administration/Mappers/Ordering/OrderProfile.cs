@@ -23,6 +23,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Ordering
                 .ForMember(x => x.ShippingAddress, opt => opt.MapFrom(c => c.ShippingAddress))
                 .ForMember(x => x.Items, opt => opt.MapFrom(c => c.Items));
 
+            CreateMap<OrderItem, OrderItemVM>();
+                
+
             CreateMap<PagedList<Order>, PagedList<OrderVM>>();
         }
 

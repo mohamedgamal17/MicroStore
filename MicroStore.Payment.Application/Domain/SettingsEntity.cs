@@ -1,5 +1,5 @@
 ﻿using Volo.Abp.Domain.Entities;
-namespace MicroStore.Payment.Domain
+namespace MicroStore.Payment.Application.Domain
 {
     public class SettingsEntity : Entity<Guid>
     {

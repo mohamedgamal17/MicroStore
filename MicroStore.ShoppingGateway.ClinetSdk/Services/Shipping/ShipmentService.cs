@@ -22,7 +22,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 
         public async Task<Shipment> FullfillAsync(string shipmentId ,ShipmentFullfillRequestOptions options , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest< Shipment>( string.Format("{0}/fullfill/{1}", BaseUrl, shipmentId), HttpMethod.Post, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<Shipment>( string.Format("{0}/fullfill/{1}", BaseUrl, shipmentId), HttpMethod.Post, options, cancellationToken);
         }
 
         public Task<PagedList<Shipment>> ListAsync(PagingReqeustOptions options, CancellationToken cancellationToken = default)
