@@ -59,7 +59,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
         {
             var query = _applicationConfigurationDbContext.Clients.AsNoTracking().ProjectTo<ClientDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
 

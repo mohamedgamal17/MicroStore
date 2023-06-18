@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
+using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Application.Tests.Consts;
-using MicroStore.Payment.Domain;
 using MicroStore.Payment.Domain.Shared.Models;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;

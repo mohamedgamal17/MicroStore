@@ -63,7 +63,7 @@ namespace MicroStore.Inventory.Application.Products
              .AsNoTracking()
              .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
         }
@@ -80,7 +80,7 @@ namespace MicroStore.Inventory.Application.Products
                                   product.Sku.Contains(model.KeyWords)
                             select product;
 
-            return await productsQuery.PageResult(model.Skip, model.Lenght, cancellationToken);
+            return await productsQuery.PageResult(model.Skip, model.Length, cancellationToken);
         }
     }
 }

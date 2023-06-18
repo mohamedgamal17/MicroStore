@@ -39,7 +39,7 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
             var pagingParams = new PagingQueryParams
             {
                 Skip = model.Skip,
-                Lenght = model.Length
+                Length = model.Length
             };
 
             var result = await _userQueryService.ListAsync(pagingParams);

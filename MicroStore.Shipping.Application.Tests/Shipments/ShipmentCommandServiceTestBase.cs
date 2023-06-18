@@ -41,7 +41,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
                 {
                     Height = 5,
                     Width = 5,
-                    Lenght = 5,
+                    Length = 5,
                     Unit = StandardDimensionUnit.Inch
                 },
 
@@ -85,7 +85,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
                         {
                             Height = 5,
                             Width = 5,
-                            Lenght = 5,
+                            Length = 5,
                             Unit = "inch"
                         },
                         Weight = new WeightModel

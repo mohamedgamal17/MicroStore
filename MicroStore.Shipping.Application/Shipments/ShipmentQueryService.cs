@@ -83,7 +83,7 @@ namespace MicroStore.Shipping.Application.Shipments
                 query = query.Where(x=> x.Id == userId);
             }
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
         }
@@ -101,7 +101,7 @@ namespace MicroStore.Shipping.Application.Shipments
                                 || shipment.OrderNumber.Contains(model.OrderNumber)
                             select shipment;
 
-            return await shipmentsQuery.PageResult(model.Skip, model.Lenght, cancellationToken);     
+            return await shipmentsQuery.PageResult(model.Skip, model.Length, cancellationToken);     
         }
     }
 }

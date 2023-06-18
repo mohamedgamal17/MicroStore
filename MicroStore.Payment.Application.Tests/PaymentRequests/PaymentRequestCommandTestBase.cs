@@ -1,5 +1,5 @@
-﻿using MicroStore.Payment.Application.Tests.Consts;
-using MicroStore.Payment.Domain;
+﻿using MicroStore.Payment.Application.Domain;
+using MicroStore.Payment.Application.Tests.Consts;
 using MicroStore.Payment.Domain.Shared.Models;
 
 namespace MicroStore.Payment.Application.Tests.PaymentRequests

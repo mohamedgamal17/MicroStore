@@ -31,7 +31,7 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
         [HttpPost]
         public async Task<IActionResult> Index(ApiResourceListUIModel model)
         {
-            var pagingOptions  = new PagingQueryParams { Lenght = model.PageSize  , Skip = model.Skip};
+            var pagingOptions  = new PagingQueryParams { Length = model.PageSize  , Skip = model.Skip};
 
             var result = await _apiResourceQueryService.ListAsync(pagingOptions);
 

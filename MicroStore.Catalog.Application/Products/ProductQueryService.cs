@@ -45,7 +45,7 @@ namespace MicroStore.Catalog.Application.Products
 
             query = ApplyQueryFilteration(query, queryParams);
 
-            var pagingResult = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var pagingResult = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return pagingResult;
         }
@@ -83,7 +83,7 @@ namespace MicroStore.Catalog.Application.Products
                                 product.ProductManufacturers.Any(x=> x.Manufacturer.Name.Contains(model.KeyWords))
                             select product;
 
-            return await productsQuery.PageResult(model.Skip, model.Lenght , cancellationToken);
+            return await productsQuery.PageResult(model.Skip, model.Length , cancellationToken);
         }
 
         

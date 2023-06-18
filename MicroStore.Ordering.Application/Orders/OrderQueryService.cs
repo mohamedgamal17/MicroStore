@@ -77,7 +77,7 @@ namespace MicroStore.Ordering.Application.Orders
                 query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
             }
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
         }
@@ -97,7 +97,7 @@ namespace MicroStore.Ordering.Application.Orders
                              select order;
 
 
-            return await ordersQuery.PageResult(model.Skip, model.Lenght, cancellationToken);
+            return await ordersQuery.PageResult(model.Skip, model.Length, cancellationToken);
         }
         private IQueryable<OrderDto> TryToSort(IQueryable<OrderDto> query, string sortby, bool desc)
         {

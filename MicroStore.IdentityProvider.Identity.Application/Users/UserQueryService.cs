@@ -66,7 +66,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
                .ProjectTo<IdentityUserDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
         }

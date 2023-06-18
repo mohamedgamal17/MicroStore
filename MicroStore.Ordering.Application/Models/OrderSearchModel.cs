@@ -24,7 +24,7 @@ namespace MicroStore.Ordering.Application.Models
                 .WithMessage("Skip cannot be negative number");
 
 
-            RuleFor(x => x.Lenght)
+            RuleFor(x => x.Length)
                 .GreaterThan(0)
                 .WithMessage("Lenght cannot be zero or negative");
         }

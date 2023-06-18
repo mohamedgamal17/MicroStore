@@ -127,7 +127,7 @@ namespace MicroStore.Catalog.Application.ProductReviews
                 .ProjectTo<ProductReviewDto>(MapperAccessor.Mapper.ConfigurationProvider)
                 .AsQueryable();
 
-            var productReviews = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var productReviews = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
 
             return productReviews;

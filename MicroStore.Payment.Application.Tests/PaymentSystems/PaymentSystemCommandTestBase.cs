@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Payment.Domain;
+using MicroStore.Payment.Application.Domain;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Payment.Application.Tests.PaymentSystems

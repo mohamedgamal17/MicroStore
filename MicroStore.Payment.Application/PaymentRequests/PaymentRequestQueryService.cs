@@ -86,7 +86,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
                 query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
             }
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
         }
@@ -105,7 +105,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
                                    select paymentRequest;
 
 
-            return await paymentRequestsQuery.PageResult(model.Skip, model.Lenght, cancellationToken);
+            return await paymentRequestsQuery.PageResult(model.Skip, model.Length, cancellationToken);
         }
 
         private IQueryable<PaymentRequestListDto> TryToSort(IQueryable<PaymentRequestListDto> query, string sortBy, bool desc)

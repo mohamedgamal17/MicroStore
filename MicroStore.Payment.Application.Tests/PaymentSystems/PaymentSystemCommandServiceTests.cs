@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Application.PaymentSystems;
-using MicroStore.Payment.Domain;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Payment.Application.Tests.PaymentSystems

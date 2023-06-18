@@ -11,8 +11,9 @@ using Respawn.Graph;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
-using MicroStore.Payment.Domain;
 using MicroStore.Payment.Application.Tests.Consts;
+using MicroStore.Payment.Application.Domain;
+
 namespace MicroStore.Payment.Application.Tests
 {
     [DependsOn(typeof(PaymentApplicationModule),

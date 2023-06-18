@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Application.Tests.Consts;
-using MicroStore.Payment.Domain;
 using MicroStore.Payment.IntegrationEvents;
 namespace MicroStore.Payment.Application.Tests.Consumers
 {
