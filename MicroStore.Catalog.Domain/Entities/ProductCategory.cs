@@ -6,7 +6,7 @@ namespace MicroStore.Catalog.Domain.Entities
     {
         public Category Category { get;  set; }
         public string CategoryId { get; set; }
-
+        public string ProductId { get; set; }
         public ProductCategory()
         {
             Id = Guid.NewGuid().ToString();

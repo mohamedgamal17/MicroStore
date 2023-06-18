@@ -28,7 +28,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductDto>))]
-        public async Task<IActionResult> GetCatalogProductList([FromQuery] PagingAndSortingQueryParams queryParams)
+        public async Task<IActionResult> GetCatalogProductList([FromQuery] ProductListQueryModel queryParams)
         {
 
             var result = await _productQueryService.ListAsync(queryParams);

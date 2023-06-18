@@ -6,7 +6,7 @@ namespace MicroStore.Catalog.Application.Dtos
     {
         public SpecificationAttributeListDto Attribute { get; set; }
         public SpecificationAttributeOptionDto Option { get; set; }
-
-
+        public string AttributeId { get; set; }
+        public string OptionId { get; set; }
     }
 }

@@ -9,12 +9,10 @@ namespace MicroStore.Catalog.Domain.Entities
         public string Name { get;  set; }
         public string Description { get;  set; } = string.Empty;
 
-
         public Category()
         {
             Id = Guid.NewGuid().ToString();
         }
-  
-     
+   
     }
 }

@@ -44,7 +44,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.Manufacturer", b =>
@@ -66,7 +66,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Manufacturers");
+                    b.ToTable("Manufacturers", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.Product", b =>
@@ -114,7 +114,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                     b.HasIndex("Sku")
                         .IsUnique();
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.ProductCategory", b =>
@@ -137,7 +137,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategory");
+                    b.ToTable("ProductCategory", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.ProductImage", b =>
@@ -163,7 +163,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImage");
+                    b.ToTable("ProductImage", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.ProductManufacturer", b =>
@@ -188,7 +188,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductManufacturer");
+                    b.ToTable("ProductManufacturer", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.ProductReview", b =>
@@ -230,7 +230,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProductReviews");
+                    b.ToTable("ProductReviews", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.ProductSpecificationAttribute", b =>
@@ -260,7 +260,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSpecificationAttribute");
+                    b.ToTable("ProductSpecificationAttribute", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.ProductTag", b =>
@@ -282,7 +282,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ProductTags");
+                    b.ToTable("ProductTags", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.SpecificationAttribute", b =>
@@ -304,7 +304,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("SpecificationAttributes");
+                    b.ToTable("SpecificationAttributes", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.SpecificationAttributeOption", b =>
@@ -325,7 +325,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasIndex("SpecificationAttributeId");
 
-                    b.ToTable("SpecificationAttributeOption");
+                    b.ToTable("SpecificationAttributeOption", (string)null);
                 });
 
             modelBuilder.Entity("ProductProductTag", b =>
@@ -340,12 +340,12 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("ProductProductTag");
+                    b.ToTable("ProductProductTag", (string)null);
                 });
 
             modelBuilder.Entity("MicroStore.Catalog.Domain.Entities.Product", b =>
                 {
-                    b.OwnsOne("MicroStore.Catalog.Domain.ValueObjects.Dimension", "Dimensions", b1 =>
+                    b.OwnsOne("MicroStore.Catalog.Domain.Entities.Product.Dimensions#MicroStore.Catalog.Domain.ValueObjects.Dimension", "Dimensions", b1 =>
                         {
                             b1.Property<string>("ProductId")
                                 .HasColumnType("nvarchar(256)");
@@ -376,13 +376,13 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                             b1.HasKey("ProductId");
 
-                            b1.ToTable("Products");
+                            b1.ToTable("Products", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId");
                         });
 
-                    b.OwnsOne("MicroStore.Catalog.Domain.ValueObjects.Weight", "Weight", b1 =>
+                    b.OwnsOne("MicroStore.Catalog.Domain.Entities.Product.Weight#MicroStore.Catalog.Domain.ValueObjects.Weight", "Weight", b1 =>
                         {
                             b1.Property<string>("ProductId")
                                 .HasColumnType("nvarchar(256)");
@@ -401,7 +401,7 @@ namespace MicroStore.Catalog.Infrastructure.Migrations
 
                             b1.HasKey("ProductId");
 
-                            b1.ToTable("Products");
+                            b1.ToTable("Products", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId");

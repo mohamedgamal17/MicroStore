@@ -15,5 +15,6 @@ namespace MicroStore.Catalog.Application.Dtos
     public class SpecificationAttributeOptionDto : EntityDto<string>
     {
         public string Name { get; set; }
+        public string AttributeId { get; set; }
     }
 }

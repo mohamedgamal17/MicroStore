@@ -6,6 +6,8 @@ namespace MicroStore.Catalog.Domain.Entities
     {
         public SpecificationAttribute Attribute { get; set; }
         public SpecificationAttributeOption Option { get; set; }
+
+        public string ProductId { get; set; }
         public string AttributeId { get; set; }
         public string OptionId { get; set; }
 

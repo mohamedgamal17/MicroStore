@@ -7,7 +7,6 @@ namespace MicroStore.Catalog.Domain.Entities
         public string  ProductId { get; set; }
         public string  ManufacturerId { get; set; }
         public Manufacturer Manufacturer { get; set; }
-
         public ProductManufacturer()
         {
             Id = Guid.NewGuid().ToString();

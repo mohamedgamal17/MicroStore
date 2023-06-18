@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
@@ -33,22 +32,18 @@ namespace MicroStore.Catalog.Application.Products
             if (product == null)
             {
                 return new Result<ProductDto>(new EntityNotFoundException(typeof(Product), id));
-
             }
 
             return product;
         }
 
-        public async Task<Result<PagedResult<ProductDto>>> ListAsync(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ProductDto>>> ListAsync(ProductListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
             var query = _catalogDbContext.Products.AsQueryable()
                          .AsNoTracking()
                          .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            if (queryParams.SortBy != null)
-            {
-                query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
-            }
+            query = ApplyQueryFilteration(query, queryParams);
 
             var pagingResult = await query.PageResult(queryParams.Skip, queryParams.Lenght, cancellationToken);
 
@@ -83,28 +78,58 @@ namespace MicroStore.Catalog.Application.Products
                             where product.Name.Contains(model.KeyWords) ||
                                 product.ShortDescription.Contains(model.KeyWords) ||
                                 product.LongDescription.Contains(model.KeyWords) ||
-                                product.Sku.Contains(model.KeyWords)
+                                product.Sku.Contains(model.KeyWords) ||
+                                product.ProductCategories.Any(x=> x.Category.Name.Contains(model.KeyWords)) ||
+                                product.ProductManufacturers.Any(x=> x.Manufacturer.Name.Contains(model.KeyWords))
                             select product;
-
-            if(model.CategoriesIds is not null)
-            {
-                productsQuery = from product in productsQuery
-                                from categoryId in model.CategoriesIds
-                                where product.ProductCategories.Any(c => c.CategoryId == categoryId)
-                                select product;
-            }
-
-            if(model.ManufactureriesIds is not null)
-            {
-                productsQuery = from product in productsQuery
-                                from manufacturerId in model.ManufactureriesIds
-                                where product.ProductManufacturers.Any(c => c.ManufacturerId == manufacturerId)
-                                select product;
-            }
-
 
             return await productsQuery.PageResult(model.Skip, model.Lenght , cancellationToken);
         }
+
+        
+
+        private IQueryable<ProductDto> ApplyQueryFilteration(IQueryable<ProductDto> query , ProductListQueryModel model)
+        {
+            if (!string.IsNullOrEmpty(model.Categories))
+            {
+                var categories = model.Categories.Split(',');
+
+                query = query.Where(x => x.ProductCategories.Any(x => categories.Contains(x.Category.Name)));
+            }
+
+            if (!string.IsNullOrEmpty(model.Manufacturers))
+            {
+                var manufacturers = model.Manufacturers.Split(',');
+
+                query = query.Where(x => x.ProductManufacturers.Any(x => manufacturers.Contains(x.Manufacturer.Name)));
+            }
+
+            if (!string.IsNullOrEmpty(model.Tags))
+            {
+                var tags = model.Tags.Split(",");
+                query = query.Where(x => x.ProductTags.Any(x => tags.Contains(x.Name)));
+            }
+
+
+            if(model.MinPrice != null)
+            {
+                query = query.Where(x => x.Price >= model.MinPrice);
+            }
+
+            if(model.MaxPrice != null)
+            {
+                query = query.Where(x => x.Price <= model.MaxPrice);
+            }
+
+            if(model.SortBy != null)
+            {
+                query = TryToSort(query, model.SortBy, model.Desc);
+            }
+
+            return query;
+
+        }
+
 
         public IQueryable<ProductDto> TryToSort(IQueryable<ProductDto> query, string sortBy, bool desc = false)
         {

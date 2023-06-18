@@ -17,7 +17,7 @@ namespace MicroStore.Catalog.Domain.Entities
     public class SpecificationAttributeOption : Entity<string>
     {
         public string Name { get; set; }
-
+        public string SpecificationAttributeId { get; set; }
         public SpecificationAttributeOption()
         {
             Id = Guid.NewGuid().ToString();

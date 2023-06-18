@@ -12,7 +12,8 @@ namespace MicroStore.Catalog.Application.Mappers
             CreateMap<SpecificationAttribute, SpecificationAttributeDto>()
                 .ForMember(x => x.Options, opt => opt.MapFrom(src => src.Options));
 
-            CreateMap<SpecificationAttributeOption, SpecificationAttributeOptionDto>();               
+            CreateMap<SpecificationAttributeOption, SpecificationAttributeOptionDto>()
+                .ForMember(x => x.AttributeId, opt => opt.MapFrom(c => c.SpecificationAttributeId));
         }
     }
 }

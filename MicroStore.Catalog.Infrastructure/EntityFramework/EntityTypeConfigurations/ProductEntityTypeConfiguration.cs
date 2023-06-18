@@ -72,15 +72,15 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
             });
 
 
-            builder.HasMany(x => x.ProductCategories).WithOne();
+            builder.HasMany(x => x.ProductCategories).WithOne().HasForeignKey(x=> x.ProductId);
 
-            builder.HasMany(x => x.ProductImages).WithOne();
+            builder.HasMany(x => x.ProductImages).WithOne().HasForeignKey(x=> x.ProductId);
 
             builder.HasMany(x => x.ProductManufacturers).WithOne().HasForeignKey(x=> x.ProductId);
 
             builder.HasMany(x => x.ProductTags).WithMany(x=> x.Products);
 
-            builder.HasMany(x => x.SpecificationAttributes).WithOne();
+            builder.HasMany(x => x.SpecificationAttributes).WithOne().HasForeignKey(x=> x.ProductId);
 
             builder.HasIndex(x => x.Name).IsUnique();
 
