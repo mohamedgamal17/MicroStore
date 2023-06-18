@@ -112,6 +112,8 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework.EntityTypeConfigura
             builder.HasIndex(x => x.ShipmentLabelExternalId);
 
             builder.HasIndex(x => x.SystemName);
+
+            builder.Navigation(x => x.Items).AutoInclude();
         }
     }
 }

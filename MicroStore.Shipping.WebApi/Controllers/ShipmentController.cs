@@ -29,9 +29,9 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type= typeof(PagedResult<ShipmentListDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK,Type= typeof(PagedResult<ShipmentDto>))]
 
-        public async Task<IActionResult> RetriveShipmentList([FromQuery] PagingQueryParams queryParams,  string? userId=  null)
+        public async Task<IActionResult> RetriveShipmentList([FromQuery] ShipmentListQueryModel queryParams,  string? userId=  null)
         {
             var result = await _shipmentQueryService.ListAsync(queryParams, userId);
 

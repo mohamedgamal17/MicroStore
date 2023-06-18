@@ -4,8 +4,8 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
+using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Shipments;
 using MicroStore.Shipping.Domain.Security;
 
@@ -29,7 +29,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [RequiredScope(ShippingScope.Shipment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ShipmentDto>))]
 
-        public async Task<IActionResult> RetriveUserShipmentList( [FromQuery] PagingQueryParams queryParams)
+        public async Task<IActionResult> RetriveUserShipmentList( [FromQuery] ShipmentListQueryModel queryParams)
         {
             var result = await _shipmentQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);
 

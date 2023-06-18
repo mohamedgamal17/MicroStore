@@ -9,11 +9,11 @@ namespace MicroStore.Shipping.Application.Shipments
 {
     public interface IShipmentQueryService : IApplicationService
     {
-        Task<Result<PagedResult<ShipmentListDto>>> ListAsync(PagingQueryParams queryParams,string? userId  = null,CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ShipmentDto>>> ListAsync(ShipmentListQueryModel queryParams,string? userId  = null,CancellationToken cancellationToken = default);
         Task<Result<ShipmentDto>> GetAsync(string shipmentId, CancellationToken cancellationToken = default);
         Task<Result <ShipmentDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default);
         Task<Result<ShipmentDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
 
-        Task<Result<PagedResult<ShipmentListDto>>> SearchByOrderNumber(ShipmentSearchByOrderNumberModel model, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ShipmentDto>>> SearchByOrderNumber(ShipmentSearchByOrderNumberModel model, CancellationToken cancellationToken = default);
     }
 }

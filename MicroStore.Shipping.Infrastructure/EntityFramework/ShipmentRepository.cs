@@ -19,8 +19,6 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework
             return await query.Include(x => x.Items)
                 .SingleAsync(x => x.Id == id, cancellationToken);
 
-        }
-
-      
+        }   
     }
 }

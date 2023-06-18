@@ -5,8 +5,6 @@ using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Rates;
-using System.Net;
-
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]

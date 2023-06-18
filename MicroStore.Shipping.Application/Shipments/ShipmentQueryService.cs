@@ -72,27 +72,25 @@ namespace MicroStore.Shipping.Application.Shipments
             return result;
         }
 
-        public async Task<Result<PagedResult<ShipmentListDto>>> ListAsync(PagingQueryParams queryParams,string? userId = null ,CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ShipmentDto>>> ListAsync(ShipmentListQueryModel queryParams, string? userId = null ,CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
                  .AsNoTracking()
-                 .ProjectTo<ShipmentListDto>(MapperAccessor.Mapper.ConfigurationProvider);
+                 .ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                 .AsQueryable();
 
-            if(userId != null)
-            {
-                query = query.Where(x=> x.Id == userId);
-            }
+            query =  ApplyQueryFilter(query, queryParams, userId);
 
             var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<PagedResult<ShipmentListDto>>> SearchByOrderNumber(ShipmentSearchByOrderNumberModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ShipmentDto>>> SearchByOrderNumber(ShipmentSearchByOrderNumberModel model, CancellationToken cancellationToken = default)
         {
             var shipmentsQuery = _shippingDbContext.Shipments
                 .AsNoTracking()
-                .ProjectTo<ShipmentListDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider)
                 .AsQueryable();
 
             shipmentsQuery = from shipment in shipmentsQuery
@@ -102,6 +100,35 @@ namespace MicroStore.Shipping.Application.Shipments
                             select shipment;
 
             return await shipmentsQuery.PageResult(model.Skip, model.Length, cancellationToken);     
+        }
+
+        private IQueryable<ShipmentDto> ApplyQueryFilter(IQueryable<ShipmentDto> query , ShipmentListQueryModel model ,string?userId = null )
+        {
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                query = query.Where(x => x.UserId == userId);
+            }
+
+            if (!string.IsNullOrEmpty(model.States))
+            {
+                var states = model.States.Split(',');
+
+                query = query.Where(x => states.Contains(x.Status));
+            }
+
+            if (!string.IsNullOrEmpty(model.Country))
+            {
+                query = query.Where(x => x.Address.CountryCode == model.Country);
+            }
+
+            if (!string.IsNullOrEmpty(model.State))
+            {
+                query = query.Where(x => x.Address.State == model.State);
+            }
+
+            return query;
+
         }
     }
 }
