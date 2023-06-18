@@ -63,8 +63,9 @@ namespace MicroStore.Ordering.Api.Controllers
         [Route("")]
         [ActionName(nameof(RetirveUserOrderList))]
     //    [RequiredScope(OrderingScope.Order.List)]
-        public async Task<IActionResult> RetirveUserOrderList([FromQuery] PagingAndSortingQueryParams queryParams)
+        public async Task<IActionResult> RetirveUserOrderList([FromQuery] OrderListQueryModel queryParams)
         {
+
             var result = await _orderQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);
 
             return result.ToOk();

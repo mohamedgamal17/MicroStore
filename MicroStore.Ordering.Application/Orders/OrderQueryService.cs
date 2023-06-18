@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Application.Dtos;
@@ -42,7 +41,7 @@ namespace MicroStore.Ordering.Application.Orders
             return result;
         }
 
-        public async Task<Result<OrderDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default )
+        public async Task<Result<OrderDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext
               .Query<OrderStateEntity>()
@@ -60,22 +59,15 @@ namespace MicroStore.Ordering.Application.Orders
             return result;
         }
 
-        public async Task<Result<PagedResult<OrderDto>>> ListAsync(PagingAndSortingQueryParams queryParams , string? userId = null , CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<OrderDto>>> ListAsync(OrderListQueryModel queryParams , string? userId = null, CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext
                   .Query<OrderStateEntity>()
                   .AsNoTracking()
                   .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            if(userId != null)
-            {
-                query = query.Where(x=> x.UserId== userId);
-            }
 
-            if (queryParams.SortBy != null)
-            {
-                query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
-            }
+            query = ApplyQueryFilter(query, queryParams);
 
             var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
@@ -91,10 +83,10 @@ namespace MicroStore.Ordering.Application.Orders
 
 
             ordersQuery = from order in ordersQuery
-                             where order.OrderNumber == model.OrderNumber
-                                || order.OrderNumber.StartsWith(model.OrderNumber)
-                                || order.OrderNumber.Contains(model.OrderNumber)
-                             select order;
+                          where order.OrderNumber == model.OrderNumber
+                             || order.OrderNumber.StartsWith(model.OrderNumber)
+                             || order.OrderNumber.Contains(model.OrderNumber)
+                          select order;
 
 
             return await ordersQuery.PageResult(model.Skip, model.Length, cancellationToken);
@@ -107,6 +99,40 @@ namespace MicroStore.Ordering.Application.Orders
                     : query.OrderBy(x => x.SubmissionDate),
                 _ => query
             };
+        }
+
+
+        private IQueryable<OrderDto> ApplyQueryFilter(IQueryable<OrderDto> query, OrderListQueryModel model, string? userId = null)
+        {
+            if (!string.IsNullOrEmpty(userId))
+            {
+                query = query.Where(x=> x.UserId == userId);
+            }
+
+            if (!string.IsNullOrEmpty(model.States))
+            {
+                var states = model.States.Split(',');
+
+                query = query.Where(x => states.Contains(x.CurrentState));
+            }
+
+            if (model.StartSubmissionDate != null)
+            {
+                query = query.Where(x => x.SubmissionDate >= model.StartSubmissionDate);
+            }
+
+            if (model.EndSubmissionDate != null)
+            {
+                query = query.Where(x => x.SubmissionDate <= model.EndSubmissionDate);
+            }
+
+
+            if (!string.IsNullOrEmpty(model.SortBy))
+            {
+                query = TryToSort(query, model.SortBy, model.Desc);
+            }
+
+            return query;
         }
     }
 }

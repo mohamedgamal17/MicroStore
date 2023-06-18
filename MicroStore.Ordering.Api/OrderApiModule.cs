@@ -129,6 +129,7 @@ namespace MicroStore.Ordering.Api
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
+                options.OperationFilter<SnakeCaseParamsOperationFilter>();
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,

@@ -26,9 +26,9 @@ namespace MicroStore.Ordering.Api.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(OrderDto))]
-        public async Task<IActionResult> RetirveOrderList([FromQuery] PagingAndSortingQueryParams queryParams,  string? userId= null)
+        public async Task<IActionResult> RetirveOrderList([FromQuery] OrderListQueryModel queryParams, string? userId = null)
         {
-            var result = await _orderQueryService.ListAsync(queryParams, userId);
+            var result = await _orderQueryService.ListAsync(queryParams,userId);
 
             return result.ToOk();
         }
