@@ -27,7 +27,7 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<PaymentRequestListDto>))]
-        public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PagingAndSortingQueryParams queryparams, [FromQuery(Name = "user_id")] string? userId = null)
+        public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PaymentRequestListQueryModel queryparams, [FromQuery(Name = "user_id")] string? userId = null)
         {
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, userId);
 

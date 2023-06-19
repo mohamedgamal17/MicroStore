@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Payment.Application.Common;
 using MicroStore.Payment.Application.Domain;
@@ -70,21 +69,14 @@ namespace MicroStore.Payment.Application.PaymentRequests
             return result;
         }
 
-        public async Task<Result<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PagingAndSortingQueryParams queryParams, string? userId = null, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PaymentRequestListQueryModel queryParams, string? userId = null, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
               .AsNoTracking()
               .ProjectTo<PaymentRequestListDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
-            if (userId != null)
-            {
-                query = query.Where(x => x.UserId == userId);
-            }
 
-            if (queryParams.SortBy != null)
-            {
-                query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
-            }
+            query = ApplyFilter(query, queryParams, userId);
 
             var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
@@ -113,8 +105,42 @@ namespace MicroStore.Payment.Application.PaymentRequests
             return sortBy.ToLower() switch
             {
                 "creation" => desc ? query.OrderByDescending(x => x.CreationTime) : query.OrderBy(x => x.CreationTime),
+                "price" => desc ? query.OrderByDescending(x=>x.TotalCost): query.OrderBy(x=> x.TotalCost),
                 _ => query
             };
+        }
+
+
+        private IQueryable<PaymentRequestListDto> ApplyFilter(IQueryable<PaymentRequestListDto> query, PaymentRequestListQueryModel model , string? userId = null)
+        {
+            if (userId != null)
+            {
+                query = query.Where(x => x.UserId == userId);
+            }
+
+            if (!string.IsNullOrEmpty(model.States))
+            {
+                var states = model.States.Split(',');
+
+                query = query.Where(x => states.Contains(x.Status));
+            }
+
+            if(model.MinPrice != null)
+            {
+                query = query.Where(x => x.TotalCost >= model.MinPrice);
+            }
+
+            if(model.MaxPrice != null)
+            {
+                query= query.Where(x=>x.TotalCost <=model.MaxPrice);
+            }
+
+            if (model.SortBy != null)
+            {
+                query = TryToSort(query, model.SortBy, model.Desc);
+            }
+
+            return query;
         }
     }
 }
