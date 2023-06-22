@@ -7,21 +7,12 @@
 <div class="content-wrapper mr-2">
     <div class="content-header clearfix p-3">
         <div class=" float-left">
-            <h1 class="text-xl">View payment request details - 3</h1>
-        </div>
-        <div class="float-right ml-3">
-            <a class="btn btn-info text-lg ml-3">
-                <i class="fas
-                                fa-plus-square mr-1"></i> Save
-            </a>
+            <h6 class="text-xl">View payment request details - @Model.Id</h6>
         </div>
     </div>
-
     <div class="content">
         <div class="container-fluid">
-
-            <div class="cards clearfix">
-      
+            <div class="cards clearfix">     
                 <partial name="_PaymentRequest.Info" model="Model" />
                 <partial name="Grids/_Grids.PaymentRequestProducts" model="Model" />
 
