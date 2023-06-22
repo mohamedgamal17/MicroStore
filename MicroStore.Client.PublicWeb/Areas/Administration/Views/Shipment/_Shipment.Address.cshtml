@@ -1,24 +1,19 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentAggregateVM
-<div class="card card-light shadow mt-3">
-    <div class="card-header border-0">
-        <h1 class="card-title text-md  text-lg font-weight-bold">
-
-            Shipping Address
-        </h1>
+<abp-card>
+    <abp-card-header>
+        <abp-card-title class="text-lg">
+            <i class="fas fa-info mr-1 text-lightblue"></i> Shipping Address
+        </abp-card-title>
         <div class="card-tools">
-            <button type="button" class="btn  btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus text-lg"></i>
-
-            </button>
+            <abp-button class="btn-tool" data-card-widget="collapse">  <i class="fas fa-minus text-lg"></i></abp-button>
         </div>
-    </div>
-    <div class="card-body">
-        <table class="table table-hover text-lg  table-bordered">
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" border-style=Bordered>
             <thead>
                 <tr>
                     <th colspan="2">
-                        Billing
-                        Address
+                        Shipping Address                    
                     </th>
                 </tr>
             </thead>
@@ -40,9 +35,6 @@
                         @Model.Address.Phone
                     </td>
                 </tr>
-
-
-
                 <tr>
                     <td>
                         @Html.DisplayNameFor(x=> x.Address.Country.Name)
@@ -76,6 +68,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
-    </div>
-</div>
+        </abp-table>
+    </abp-card-body>
+</abp-card>
+

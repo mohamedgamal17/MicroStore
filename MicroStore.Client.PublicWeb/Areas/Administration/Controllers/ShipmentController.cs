@@ -60,16 +60,16 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
 
 
-        public async Task<IActionResult> Fullfill(string shipmentId)
+        public async Task<IActionResult> Fullfill(string id)
         {
-            var shipment = await _shipmentService.GetAsync(shipmentId);
+            var shipment = await _shipmentService.GetAsync(id);
 
             if (shipment.Status != ShipmentStatus.Created)
             {
-                return RedirectToPage("Details" , new {shipmentId = shipmentId});
+                return RedirectToPage("Details" , new {shipmentId = id});
             }
 
-            return View(new ShipmentPackageModel() {ShipmentId = shipmentId }); 
+            return View(new ShipmentPackageModel() {Id = id }); 
         }
 
 
@@ -86,9 +86,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 var requestOptions = ObjectMapper.Map<ShipmentPackageModel, ShipmentFullfillRequestOptions>(model);
 
-                await _shipmentService.FullfillAsync(model.ShipmentId, requestOptions);
+                await _shipmentService.FullfillAsync(model.Id, requestOptions);
 
-                return RedirectToAction("PurshaseLabel" , new  { shipmentId = model.ShipmentId });
+                return RedirectToAction("PurshaseLabel" , new  { id = model.Id });
 
             }catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {
@@ -100,31 +100,30 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
 
-        public async Task<IActionResult> PurshaseLabel(string shipmentId)
+        public async Task<IActionResult> PurshaseLabel(string id)
         {
 
-            var shipment = await _shipmentService.GetAsync(shipmentId);
+            var shipment = await _shipmentService.GetAsync(id);
 
             if (shipment.Status != ShipmentStatus.Fullfilled)
             {
-                return RedirectToPage("Details", new { shipmentId = shipmentId });
+                return RedirectToAction(nameof(Details), new { id = id });
             }
-
-            await PrepareShipmentOrderViewModel(shipment.Id);
+            ViewBag.Shipment = shipment;
 
             await PrepareShipmentRates(shipment.Id);
 
-            return View(new PurshaseLabelModel { ShipmentId = shipmentId});
+            return View(new PurshaseLabelModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> PurshaseLabel(string shipmentId, PurshaseLabelModel model)
+        public async Task<IActionResult> PurshaseLabel(string id, PurshaseLabelModel model)
         {
             if (!ModelState.IsValid)
             {
-                var shipment = await _shipmentService.GetAsync(shipmentId);
+                var shipment = await _shipmentService.GetAsync(id);
 
-                await PrepareShipmentOrderViewModel(shipment.Id);
+                ViewBag.Shipment = shipment;
 
                 await PrepareShipmentRates(shipment.Id);
 
@@ -136,15 +135,15 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 var requestOptions = new PurchaseLabelRequestOptions { ShipmentRateId = model.ShipmentRateId };
 
-                await _shipmentService.PurchaseLabelAsync(shipmentId, requestOptions);
+                await _shipmentService.PurchaseLabelAsync(id, requestOptions);
 
-                return RedirectToAction("Details", new {shipmentId = shipmentId });
+                return RedirectToAction("Details", new {id = id });
             }
             catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                var shipment = await _shipmentService.GetAsync(shipmentId);
+                var shipment = await _shipmentService.GetAsync(id);
 
-                await PrepareShipmentOrderViewModel(shipment.Id);
+                await PrepareShipmentOrderViewModel(shipment.OrderId);
 
                 await PrepareShipmentRates(shipment.Id);
 
@@ -155,7 +154,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
 
-        private async Task PrepareShipmentOrderViewModel( string orderId) 
+        private async Task PrepareShipmentOrderViewModel(string orderId) 
         {
 
            var order = await _orderService.GetAsync(Guid.Parse(orderId));
@@ -174,8 +173,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
     public class PurshaseLabelModel
     {
-        [BindNever]
-        public string ShipmentId { get; set; }
         public string ShipmentRateId { get; set; }
   
     }

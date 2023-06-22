@@ -1,4 +1,5 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentAggregateVM
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ShipmentMenus.View);
@@ -6,21 +7,28 @@
 <div class="content-wrapper mr-2">
     <div class="content-header clearfix p-3">
         <div class=" float-left">
-            <h1 class="text-xl">View payment request details - 3</h1>
+            <h6 class="text-xl">View shipment details -  @Model.Id</h6>
         </div>
         <div class="float-right ml-3">
-            <a class="btn btn-info text-lg ml-3">
-                <i class="fas fa-plus-square mr-1"></i> Save
-            </a>
+            @if (Model.Status == ShipmentStatus.Created)
+            {
+                <a asp-action="Fullfill" asp-route-id="@Model.Id" class="btn btn-info text-lg ml-3" >
+                    <i class="fas fa-plus-square mr-2"></i> Full Fill
+                </a>
+            }else if(Model.Status == ShipmentStatus.Fullfilled)
+            {
+                <a asp-action="PurshaseLabel" asp-route-id="@Model.Id" class="btn btn-info text-lg ml-3" >
+                    <i class="fas fa-plus-square mr-2"></i> Purshase Label
+                </a>
+            }
+
         </div>
     </div>
 
     <div class="content">
         <div class="container-fluid">
-
             <div class="cards clearfix">
-             
-                <partial name="_Shipment.Info"  model="Model"/>
+                <partial name="_Shipment.Info" model="Model" />
                 <partial name="_Shipment.Address" model="Model" />
                 <partial name="Grids/_Grids.ShipmentItems" model="Model" />
 

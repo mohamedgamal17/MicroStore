@@ -72,7 +72,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 var shipment = await _shipmentService.CreateAsync(requestOptions);
 
-                return RedirectToAction("Fullfill", "Shipment",new { shipmentId = shipment.Id });
+                return RedirectToAction("Fullfill", "Shipment",new { id = shipment.Id });
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {

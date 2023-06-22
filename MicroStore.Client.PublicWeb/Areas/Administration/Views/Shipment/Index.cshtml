@@ -4,13 +4,12 @@
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ShipmentMenus.Index);
 }
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Shipments</h1>
-                </div><!-- /.col -->
+                </div>
             </div>
         </div>
     </div>
@@ -22,27 +21,5 @@
 </div>
 
 @section Scripts{
-    <script>
-        $(document).ready(function(){
-            $("#shipments-grid").DataTable({
-                ajax : {
-                    url:"",
-                    type:"POST"
-                },
-
-                processing : "processing",
-
-                columns:[
-                    {data : "orderId",  name: '@(Html.DisplayNameFor(x=> x.Data.First().OrderId))'},
-                    {data : "orderNumber",  name: '@(Html.DisplayNameFor(x=> x.Data.First().OrderNumber))'},
-                    {data : "userId",  name: '@(Html.DisplayNameFor(x=> x.Data.First().UserId))'},
-                    { data: "status", name: '@(Html.DisplayNameFor(x => x.Data.First().Status))' },
-                    {mRender : function(data, type, raw){
-                        return `<a href="Shipment/Details/${raw.id}">View</a>`
-                    }}
-                ]
-            })
-
-        });
-     </script>
+    <abp-script src="/js/BackEnd/Shipment/index.js"></abp-script>
 }
