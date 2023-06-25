@@ -10,11 +10,13 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <h1 class="m-0">
                         View order details - @Model.Id
                     </h1>
-                </div><!-- /.col -->
+                    <input type="hidden" value="@Model.Id" id="Id" />
+
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
 
@@ -22,13 +24,13 @@
                         {
                             <li class="breadcrumb-item">
 
-                                <form asp-action="CreateOrderShipment"  method="post" >
+                                <form asp-action="CreateOrderShipment" method="post">
 
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="OrderId" value="@Model.Id">
                                     <button class="btn btn-info" type="submit">
                                         <i class="fas fa-plus-square mr-1"></i>
-                                          Create Order Shipment
+                                        Create Order Shipment
                                     </button>
                                 </form>
                             </li>
@@ -44,16 +46,24 @@
             <div class="cards clearfix">
                 <partial name="_Order.Info" model="Model" />
 
-                    <partial name="_Order.Addresses" model="Model" />
+                <partial name="_Order.Addresses" model="Model" />
 
-                    <partial name="Grids/_Grids.OrderItems" model=" Model" />
+                <partial name="Grids/_Grids.OrderItems" model=" Model" />
 
-                    <partial name="_Order.Payment" model=" Model" />
+                <partial name="_Order.Payment" model=" Model" />
 
-                    <partial name="_Order.Shipment" model=" Model" />
+                <partial name="_Order.Shipment" model=" Model" />
+
+                <form asp-action="CompleteOrder" asp-controller="Order" id="completeOrderForm">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts{
+<script src="~/js/BackEnd/Order/details.js"></script>
+}
 
 

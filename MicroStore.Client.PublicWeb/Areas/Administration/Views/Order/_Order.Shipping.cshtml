@@ -1,9 +1,9 @@
 ﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 @using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
-<div class="card">
-    <div class="card-body">
-        <table class="table table-hover   table-bordered">
+<abp-card>
+    <abp-card-body>
+        <abp-table>
             <thead>
                 <tr>
                     <th colspan="2">
@@ -40,20 +40,22 @@
                         @Model.ShippingAddress.Country.Name
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(x=> x.ShippingAddress.State.Name)
-                    </td>
-                    <td>
-                        @Model.ShippingAddress.State.Name
-                    </td>
-                </tr>
+
+
                 <tr>
                     <td>
                         @Html.DisplayNameFor(x=> x.ShippingAddress.City)
                     </td>
                     <td>
                         @Model.ShippingAddress.City
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(x=> x.ShippingAddress.State.Name)
+                    </td>
+                    <td>
+                        @Model.ShippingAddress.State.Name
                     </td>
                 </tr>
                 <tr>
@@ -73,6 +75,6 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
-    </div>
-</div>
+        </abp-table>
+    </abp-card-body>
+</abp-card>
