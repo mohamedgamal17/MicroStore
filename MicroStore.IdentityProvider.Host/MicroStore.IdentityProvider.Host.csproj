@@ -6,6 +6,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\js\backend\user\index.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\js\backend\user\index.js" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.2.0" />
 
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.0" />
@@ -36,6 +44,10 @@
 		<ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
 		<ProjectReference Include="..\MicroStore.IdentityProvider.Identity.Infrastructure\MicroStore.IdentityProvider.Identity.Infrastructure.csproj" />
 		<ProjectReference Include="..\MicroStore.IdentityProvider.IdentityServer.Infrastructure\MicroStore.IdentityProvider.IdentityServer.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\js\backend\user\index.js" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties NpmRestoreOnPackageJsonSave="True" NpmRestoreOnProjectOpen="True" /></VisualStudio></ProjectExtensions>

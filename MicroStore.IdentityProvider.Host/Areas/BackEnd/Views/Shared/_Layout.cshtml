@@ -31,8 +31,6 @@
             await Html.RenderPartialAsync("_Header");
         }
 
-
-
         @await Component.InvokeAsync("Sidebar");
 
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
