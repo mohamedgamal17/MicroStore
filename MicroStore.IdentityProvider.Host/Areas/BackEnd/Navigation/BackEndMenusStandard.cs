@@ -4,20 +4,20 @@
     {
         public static class UserMenus
         {
-            public const string Index = "MicroStore.Identity.User";
+            public const string Index = "MicroStore.IdentityManagment.User";
 
-            public const string Create = "MicroStore.Identity.User.Create";
+            public const string Create = "MicroStore.IdentityManagment.User.Create";
 
-            public const string Edit = "MicroStore.Identity.User.Edit";
+            public const string Edit = "MicroStore.IdentityManagment.User.Edit";
         }
 
         public static class RoleMenus
         {
-            public const string Index = "MicroStore.Identity.Role";
+            public const string Index = "MicroStore.IdentityManagment.Role";
 
-            public const string Create = "MicroStore.Identity.Role.Create";
+            public const string Create = "MicroStore.IdentityManagment.Role.Create";
 
-            public const string Edit = "MicroStore.Identity.Role.Edit";
+            public const string Edit = "MicroStore.IdentityManagment.Role.Edit";
         }
 
         public static class ApiResourceMenus

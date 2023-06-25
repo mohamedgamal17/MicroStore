@@ -16,9 +16,9 @@ namespace MicroStore.IdentityProvider.Host.Menus
         private Task ConfigureBackEndMenuAsync(MenuConfigurationContext context)
         {
             context.Menu.AddItem(
-                 new ApplicationMenuItem("MicroStore.Identity", "Identity", icon: "nav-icon fas fa-book", requiredPermissionName: null)
-                       .AddItem(new ApplicationMenuItem("MicroStore.Identity.User", "Manage Users", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/User"))
-                       .AddItem(new ApplicationMenuItem("MicroStore.Identity.Role", "Manage Roles", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/Role"))
+                 new ApplicationMenuItem("MicroStore.IdentityManagment", "Identity", icon: "nav-icon fas fa-book", requiredPermissionName: null)
+                       .AddItem(new ApplicationMenuItem("MicroStore.IdentityManagment.User", "Manage Users", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/User"))
+                       .AddItem(new ApplicationMenuItem("MicroStore.IdentityManagment.Role", "Manage Roles", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/Role"))
               ).AddItem(
                      new ApplicationMenuItem("MicroStore.IdentityServer", "Identity Server", icon: "nav-icon fas fa-book", requiredPermissionName: null)
                            .AddItem(new ApplicationMenuItem("MicroStore.IdentityServer.Client", "Manage Clients", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/Client"))
