@@ -1,42 +1,35 @@
 ﻿@model MicroStore.IdentityProvider.Identity.Application.Models.RoleModel
-<div class="card">
-    <div class="card-header">
-        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> Role Info</p>
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <i class="fas fa-info mr-1 text-lightblue"></i>  Role Info
+        </abp-card-title>
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
         </div>
-    </div>
-    <div class="card-body">
+    </abp-card-header>
+    <abp-card-body>
         <div class="text-center mb-3">
             @Html.ValidationSummary()
         </div>
-
-        <div class="form-group row mb-3">
-            <div class="col-sm-3">
-                <div class="float-sm-left float-md-right">
-                  <micro-label asp-for="@Model.Name"></micro-label>
-                </div>
-
-            </div>
-            <div class="col-sm-8">
+        <abp-row class="mb-3">
+            <abp-column size-sm="_3" class="text-right">
+                <micro-label asp-for="@Model.Name"></micro-label>
+            </abp-column>
+            <abp-column size-sm="_9">
                 <input asp-for="@Model.Name" id="name" class="form-control" />
+                <span class="text-danger" asp-validation-for="@Model.Name"> </span>               
+            </abp-column>
+        </abp-row>
+        <abp-row class="mb-3">
+            <abp-column size-sm="_3" class="text-right">
+                <micro-label asp-for="@Model.Description"></micro-label>
+            </abp-column>
+            <abp-column size-sm="_9">
+                <input asp-for="@Model.Description" id="name" class="form-control" />
+                <span class="text-danger" asp-validation-for="@Model.Description"> </span>
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>
 
-                <span class="text-danger" asp-validation-for="@Model.Name">
-                </span>
-            </div>
-        </div>
-        <div class="form-group row mb-3">
-            <div class="col-sm-3">
-                <div class="float-sm-left float-md-right">
-                    <micro-label asp-for="@Model.Description"></micro-label>
-                </div>
-
-            </div>
-            <div class="col-sm-8">
-                <input asp-for="@Model.Description" id="ShortDescription" class="form-control" />
-                <span class="text-danger" asp-validation-for="@Model.Description">
-                </span>
-            </div>
-        </div>
-    </div>
-</div>
