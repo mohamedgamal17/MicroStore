@@ -26,6 +26,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using MicroStore.IdentityProvider.Host.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using MicroStore.IdentityProvider.Host.Theming;
+using Volo.Abp.UI.Navigation;
+using MicroStore.IdentityProvider.Host.Menus;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -60,6 +62,13 @@ namespace MicroStore.IdentityProvider.Host
 
             Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<IdentityProviderHostModule>());
 
+
+            Configure<AbpNavigationOptions>(opt =>
+            {
+                opt.MainMenuNames.Add(ApplicationMenusDefaults.BackEnd);
+
+                opt.MenuContributors.Add(new BackEndMenusContributor());
+            });
 
             Configure<AbpBundlingOptions>(options =>
             {
