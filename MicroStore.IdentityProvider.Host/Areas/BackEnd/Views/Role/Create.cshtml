@@ -1,4 +1,10 @@
 ﻿@model MicroStore.IdentityProvider.Identity.Application.Models.RoleModel
+@{
+
+    ViewData["Title"] = "Create Role / BackEnd";
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.RoleMenus.Create);
+    
+}
 <div class="content-wrapper mr-2">
     <form method="post" asp-action="Create">
         @Html.AntiForgeryToken()

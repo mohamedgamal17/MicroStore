@@ -1,4 +1,8 @@
 ﻿@model MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.Roles.EditRoleModel
+@{
+    ViewData["Title"] = "Edit Role / BackEnd";
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.RoleMenus.Index);
+}
 <div class="content-wrapper mr-2">
     <!-- Content Header (Page header) -->
     <form method="post" asp-action="Edit">
