@@ -7,7 +7,6 @@
         </div>
     </abp-card-header>
     <abp-card-body>
-
         <div class="form-group row mb-3">
             <div class="col-sm-3">
                 <div class="float-sm-left float-md-right">
@@ -63,8 +62,9 @@
 
             </div>
             <div class="col-sm-8">
-                <input asp-for="@Model.ShowInDiscoveryDocument"   class="check-box"/>
-
+                <div class="form-switch">
+                    <input asp-for="@Model.ShowInDiscoveryDocument" class="form-check-input" type="checkbox">
+                </div>
                 <span class="text-danger" asp-validation-for="@Model.ShowInDiscoveryDocument">
                 </span>
             </div>
@@ -79,8 +79,9 @@
 
             </div>
             <div class="col-sm-8">
-                <input asp-for="@Model.RequireResourceIndicator" class="check-box" />
-
+                <div class="form-switch">
+                    <input asp-for="@Model.RequireResourceIndicator" class="form-check-input" type="checkbox">
+                </div>
                 <span class="text-danger" asp-validation-for="@Model.RequireResourceIndicator">
                 </span>
             </div>

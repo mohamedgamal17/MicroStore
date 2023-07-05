@@ -16,20 +16,23 @@
 
     }).ToList();
 }
-<div class="card h-100">
-    <div class="card-header">
-        <p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i>Client Allowed Scopes</p>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+           <p> <i class="fas fa-info mr-1 text-lightblue"></i>Client Allowed Scopes</p>
+        </abp-card-title>
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
         </div>
-    </div>
-    <div class="card-body">
-         <div class="form-group row mb-3"> 
+    </abp-card-header>
+    <abp-card-body>
+        <div class="form-group row mb-3">
             <div class="col-md-12">
-                <select class="form-control h-75   " id="ScopeSelect" multiple asp-for="@Model.AllowedScopes" asp-items="scopeListItem"></select>
+                <select class="form-control h-75" id="ScopeSelect" multiple asp-for="@Model.AllowedScopes" asp-items="scopeListItem"></select>
                 <span class="text-danger" asp-validation-for="@Model.AllowedScopes">
                 </span>
             </div>
-        </div>  
-    </div>
-</div>
+        </div>
+    </abp-card-body>
+</abp-card>
