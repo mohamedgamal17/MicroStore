@@ -16,7 +16,7 @@
                 Billing.Write,
                 Shipping.Access,
                 Shipping.Read,
-                 Inventory.Access,
+                Inventory.Access,
                 Inventory.Read,
                 Inventory.Write
             };

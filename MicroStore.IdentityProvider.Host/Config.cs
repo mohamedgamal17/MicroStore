@@ -128,12 +128,20 @@ namespace MicroStore.IdentityProvider.Host
                 ClientId = "microstoreinteractiveclient",
                 ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
-                AllowedGrantTypes = new List<string> { OpenIdConnectGrantTypes.AuthorizationCode ,"urn:ietf:params:oauth:grant-type:token-exchange" },
+                AllowedGrantTypes = new List<string> { OpenIdConnectGrantTypes.AuthorizationCode , OpenIdConnectGrantTypes.RefreshToken,"urn:ietf:params:oauth:grant-type:token-exchange" },
+
+                AccessTokenLifetime = 120,
+
+                RefreshTokenExpiration = TokenExpiration.Absolute,
+
+                RefreshTokenUsage=  TokenUsage.OneTimeOnly,
 
                 ClientName ="Micro Store Interactive Client",
 
                 RedirectUris = { "https://localhost:7020/signin-oidc" },
+
                 FrontChannelLogoutUri = "https://localhost:7020/signout-oidc",
+
                 PostLogoutRedirectUris = { "https://localhost:7020/signout-callback-oidc" },
 
                 AllowOfflineAccess = true,

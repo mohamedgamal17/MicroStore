@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using IdentityModel.AspNetCore.AccessTokenManagement;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
@@ -193,6 +194,7 @@ namespace MicroStore.Client.PublicWeb
                options.Scope.Add("mvcgateway.inventory.read");
                options.Scope.Add("mvcgateway.inventory.write");
                options.SaveTokens = true;
+             
 
            });
 
