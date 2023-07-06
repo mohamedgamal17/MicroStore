@@ -39,9 +39,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
 
-        public async Task<IActionResult> Details(string paymentRequestId)
+        public async Task<IActionResult> Details(string id)
         {
-            var payments = await _paymentRequestService.GetAsync(paymentRequestId);
+            var payments = await _paymentRequestService.GetAsync(id);
 
             return View(ObjectMapper.Map<PaymentRequest, PaymentRequestVM>(payments));
         }

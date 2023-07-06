@@ -1,0 +1,16 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model CancelOrderModel
+
+<form asp-action="CancelOrder" asp-controller="Order">
+    <abp-modal>
+        <abp-modal-header title="Cancel Order"></abp-modal-header>
+        <abp-modal-body>
+            <abp-input type="hidden" asp-for="Id"></abp-input>
+            <abp-input asp-for="Reason"></abp-input>
+
+        </abp-modal-body>
+        <abp-modal-footer buttons="@AbpModalButtons.Save | @AbpModalButtons.Cancel">
+        </abp-modal-footer>
+    </abp-modal>
+</form>

@@ -72,7 +72,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 var shipment = await _shipmentService.CreateAsync(requestOptions);
 
-                return RedirectToAction("Fullfill", "Shipment",new { shipmentId = shipment.Id });
+                return RedirectToAction("Fullfill", "Shipment",new { id = shipment.Id });
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
@@ -115,6 +115,113 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
 
             return requestOptions;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CompleteOrder(Guid id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var order = await _orderService.GetAsync(id);
+
+                if (order.CurrentState != OrderState.Fullfilled)
+                {
+                    return BadRequest("Order State must be fullfilled");
+                }
+
+                await _orderService.CompleteAsync(id);
+
+                return RedirectToAction("Details", new { id = id });
+
+            }
+            catch (MicroStoreClientException ex)
+            {
+                if(ex.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return BadRequest(ex.Erorr);
+                }
+
+                if(ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+
+                throw ex;
+            }
+          
+        }
+
+
+        public async Task<IActionResult> CancelOrderModal(Guid id)
+        {
+            try
+            {
+                var order = await _orderService.GetAsync(id);
+
+                var ordervm = ObjectMapper.Map<Order, OrderVM>(order);
+
+                ViewBag.Order = ordervm;
+
+                var model = new CancelOrderModel
+                {
+                    Id = order.Id
+                };
+
+                return PartialView("_CancelOrderModal", model);
+
+            }
+            catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> CancelOrder(CancelOrderModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var order = await _orderService.GetAsync(model.Id);
+
+                if (order.CurrentState == OrderState.Submited || order.CurrentState == OrderState.Accepted)
+                {
+                    return BadRequest("Order cannot be cancelled yet");
+                }
+
+                var requestOptions = new OrderCancelRequestOptions
+                {
+                    Reason = model.Reason
+                };
+
+                await _orderService.CancelAsync(model.Id, requestOptions);
+
+                return RedirectToAction("Details", new { id = model.Id });
+
+            }
+            catch (MicroStoreClientException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return BadRequest(ex.Erorr);
+                }
+
+                if (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+
+                throw ex;
+            }
         }
     }
 

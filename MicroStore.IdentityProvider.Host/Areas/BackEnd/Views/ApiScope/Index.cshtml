@@ -1,14 +1,17 @@
 ﻿@model MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.ApiScopes.ApiScopeListUIModel
+@{
+    ViewData["Title"] = "ApiScopes / Backend";
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ApiScopeMenus.Index);
+}
 
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Dashboard v3</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
+            <abp-row class="mb-2">
+                <abp-column size-sm="_6">
+                    <h1 class="m-0">Api Scope</h1>
+                </abp-column>
+                <abp-column size-sm="_6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
                             <a asp-action="Create" class="btn btn-info">
@@ -17,15 +20,17 @@
                             </a>
                         </li>
                     </ol>
-                </div>
-            </div>
+                </abp-column>
+            </abp-row>
         </div>
     </div>
-    <!-- /.content-header -->
-
     <section class="content">
         <div class="container-fluid">
-            <abp-table striped-rows="true" id="ApiScopeTable"></abp-table>
+            <abp-card>
+                <abp-card-body>
+                    <abp-table id="ApiScopeTable"></abp-table>
+                </abp-card-body>
+            </abp-card>      
         </div>
     </section>
 </div>

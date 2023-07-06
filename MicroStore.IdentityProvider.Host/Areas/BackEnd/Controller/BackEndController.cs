@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.Results;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Text.Json;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Domain.Entities;
@@ -80,6 +83,14 @@ namespace MicroStore.IdentityProvider.Host.Areas.BackEnd.Controller
                 });
             }
 
+        }
+
+        public override JsonResult Json(object data)
+        {
+            return base.Json(data , new JsonSerializerOptions
+            {
+                PropertyNamingPolicy =  JsonNamingPolicy.CamelCase
+            });
         }
 
     }

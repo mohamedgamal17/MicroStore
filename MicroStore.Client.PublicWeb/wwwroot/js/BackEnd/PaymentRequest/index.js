@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     $("#PaymentRequestsTable").DataTable(
-        abp.libs.datatables.normailizeConfiguration({
+        abp.libs.datatables.normalizeConfiguration({
             ajax: {
                 type: "POST"
             },
@@ -9,14 +9,14 @@
             columnDefs: [
                 { title: "Order Id", data: "orderId" },
                 { title: 'Order Number', data: "orderNumber" },
-                { title: 'User Id', name: "userId" },
-                { title: 'Total Cost', name: "totalCost" },
-                { title: 'Status', name: "status" },
-                { title: 'Created At', name: "createdAt" },
+                { title: 'User Id', data: "userId" },
+                { title: 'Total Cost', data: "totalCost" },
+                { title: 'Status', data: "status" },
+                { title: 'Created At', data: "createdAt" },
                 {
                     title: "Actions",
                     render: function (data, type, row) {
-                        return `<a href="PaymentRequest/Detail/${row.id}" class="btn btn-info">View</a>`
+                        return `<a href="PaymentRequest/Details/${row.id}" class="btn btn-info">View</a>`
                     }
                 }
             ]

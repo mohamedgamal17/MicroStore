@@ -1,14 +1,13 @@
 ﻿@model MicroStore.IdentityProvider.Host.Areas.BackEnd.Models.Clients.EditClientUIModel
 
 <div class="content-wrapper mr-2">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
+            <abp-row class=" mb-2">
+                <abp-column size-sm="_6">
                     <h1 class="m-0">Edit Client</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
+                </abp-column>
+                <abp-column size-sm="_6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
                             <button class="btn btn-info" type="button" id="EditFormButton">
@@ -17,12 +16,10 @@
                             </button>
                         </li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </abp-column>
+            </abp-row>
+        </div>
     </div>
-    <!-- /.content-header -->
-
     <div class="content">
         <div class="container-fluid">
             <form method="post" asp-action="Edit" id="EditForm">

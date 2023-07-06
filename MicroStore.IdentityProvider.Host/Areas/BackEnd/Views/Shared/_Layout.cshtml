@@ -1,40 +1,52 @@
-﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
+﻿@using MicroStore.IdentityProvider.Host.Bundling;
+@using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - MicroStore.Client.PublicWeb</title>
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Application)
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <abp-style-bundle name="@StandardBundles.Styles.Global" />
+    <abp-style-bundle name="@ApplicationStandardBundles.Styles.Global" />
 
-       <abp-style-bundle name="@StandardBundles.Styles.Global" />
+
+    @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
+
+    @RenderSection("Styles", required: false)
+
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
     <div class="wrapper">
         @{
             await Html.RenderPartialAsync("_Header");
         }
 
-
-        
         @await Component.InvokeAsync("Sidebar");
 
-        @RenderBody();
+        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
+        @RenderBody()
+        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
     </div>
 
-    
     <abp-script-bundle name="@StandardBundles.Styles.Global" />
-
-     <script src="~/Abp/ApplicationConfigurationScript"></script>
+    <abp-style-bundle name="@ApplicationStandardBundles.Scripts.Global" />
+    <script src="~/Abp/ApplicationConfigurationScript"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    @*@{ await Html.RenderPartialAsync("_NotificationView"); }*@
 
-
-  
+    @*  @await Html.RenderPartialAsync("_NotificationView");  *@
+   
+ 
 </body>
 
 </html>
