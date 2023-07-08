@@ -6,6 +6,7 @@ using MicroStore.Gateway.Shopping.Config;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using MicroStore.Gateway.Shopping.Services;
+using MicroStore.Gateway.Shopping.Exceptions;
 
 namespace MicroStore.Gateway.Shopping.TokenHandlers
 {
@@ -57,6 +58,8 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
 
 
             await _clientAccessTokenCache.SetAsync(cacheKey, accessToken, expiresIn, tokenParam, cancellationToken);
+
+            
             return accessToken;
         }
 
@@ -105,7 +108,12 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
 
             if (tokenResponse.IsError)
             {
-                throw new Exception(tokenResponse.Error);
+                throw new InvalidTokenException(tokenResponse.Error, tokenResponse.ErrorType.ToString(), tokenResponse.ErrorDescription);
+            }
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Token Exchanged : {Token}", tokenResponse.AccessToken);
             }
 
             return (tokenResponse.AccessToken, tokenResponse.ExpiresIn);

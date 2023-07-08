@@ -8,6 +8,8 @@
         {
             return new List<string>
             {
+                Catalog.Access,
+                Basket.Access,
                 Ordering.Access,
                 Ordering.Read,
                 Ordering.Write,
@@ -20,6 +22,16 @@
                 Inventory.Read,
                 Inventory.Write
             };
+        }
+
+        public static class Catalog
+        {
+            public const string Access = "catalog.access";
+        }
+
+        public static class Basket
+        {
+            public const string Access = "basket.access";
         }
 
         public static class Ordering

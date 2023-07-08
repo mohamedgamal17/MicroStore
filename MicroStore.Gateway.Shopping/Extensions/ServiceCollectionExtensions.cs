@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using MicroStore.Gateway.Shopping.Config;
 using MicroStore.Gateway.Shopping.Services;
 using MicroStore.Gateway.Shopping.TokenHandlers;
@@ -51,6 +52,16 @@ namespace MicroStore.Gateway.Shopping.Extensions
                 {
                     opt.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                     opt.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = true,
+                        ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                        ValidateIssuer = true,
+                        ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                        ValidateLifetime = true,
+
+                    };
+
                 });
 
             return services;

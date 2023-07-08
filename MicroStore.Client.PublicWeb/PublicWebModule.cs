@@ -185,7 +185,8 @@ namespace MicroStore.Client.PublicWeb
                options.GetClaimsFromUserInfoEndpoint = true;
                options.UsePkce = true;
                options.ResponseType = "code";
-               options.Scope.Add("shoppinggateway.access");
+               options.Scope.Add("offline_access"); 
+               options.Scope.Add("shoppinggateway.access");         
                options.Scope.Add("mvcgateway.ordering.read");
                options.Scope.Add("mvcgateway.ordering.write");
                options.Scope.Add("mvcgateway.billing.read");

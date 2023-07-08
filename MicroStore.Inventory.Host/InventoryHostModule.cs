@@ -14,6 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using MicroStore.Inventory.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Hellang.Middleware.ProblemDetails;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MicroStore.Inventory.Host
 {
@@ -73,6 +74,14 @@ namespace MicroStore.Inventory.Host
             {
                 options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                    ValidateLifetime = true,
+                };
             });
 
             services.AddAuthorization();

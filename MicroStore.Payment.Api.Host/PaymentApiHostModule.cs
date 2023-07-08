@@ -1,6 +1,7 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.Payment.Application.EntityFramework;
@@ -63,6 +64,14 @@ namespace MicroStore.Payment.Api.Host
             {
                 options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                    ValidateLifetime = true,
+                };
             });
             services.AddAuthorization();
         }

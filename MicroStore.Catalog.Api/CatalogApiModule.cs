@@ -1,6 +1,7 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
@@ -73,6 +74,14 @@ namespace MicroStore.Catalog.Api
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
                 options.MapInboundClaims = true;
 
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                    ValidateAudience = true,
+                    ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                    ValidateLifetime = true,
+                };
             });
 
         }
@@ -108,6 +117,7 @@ namespace MicroStore.Catalog.Api
                 app.UseHsts();
 
             }
+        
 
             app.UseProblemDetails();
             app.UseAbpRequestLocalization();

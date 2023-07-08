@@ -14,6 +14,8 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Hellang.Middleware.ProblemDetails;
+using Microsoft.IdentityModel.Tokens;
+
 namespace MicroStore.Geographic.Host
 {
     [DependsOn(typeof(GeographicApplicationModule),
@@ -113,6 +115,14 @@ namespace MicroStore.Geographic.Host
             {
                 options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
                 options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                    ValidateLifetime = true,
+                };
             });
 
             services.AddAuthorization();
