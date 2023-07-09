@@ -14,7 +14,7 @@ namespace MicroStore.IdentityProvider.Host
             {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
-            
+
             };
 
 
@@ -45,7 +45,7 @@ namespace MicroStore.IdentityProvider.Host
 
                 new ApiScope("mvcgateway.ordering.read","allowing ordering read operation on micro store shopping api gateway"),
                 new ApiScope("mvcgateway.ordering.write","allowing ordering write operation on micro store shopping api gateway"),
-                new ApiScope("mvcgateway.billing.read","allowing billing read operation on micro store shopping api gateway"),        
+                new ApiScope("mvcgateway.billing.read","allowing billing read operation on micro store shopping api gateway"),
                 new ApiScope("mvcgateway.billing.write","allowing billing write operation on micro store shopping api gateway"),
                 new ApiScope("mvcgateway.shipping.read","allowing shipping read operation on micro store shopping api gateway"),
                 new ApiScope("mvcgateway.inventory.read","allowing inventory read operation on micro store shopping api gateway"),
@@ -77,7 +77,7 @@ namespace MicroStore.IdentityProvider.Host
                 new ApiResource("api-ordering","Ordering Api")
                 {
                     Scopes = {"ordering.access" , "ordering.read", "ordering.write"},
-                    
+
                 },
 
                 new ApiResource("api-billing","Billing Api")
@@ -117,8 +117,8 @@ namespace MicroStore.IdentityProvider.Host
                     ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
                     AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read","inventory.write" , "inventory.read" , "api-sample"},
-               
-                
+
+
                     AllowOfflineAccess = false,
 
                 },
@@ -126,7 +126,7 @@ namespace MicroStore.IdentityProvider.Host
                 // interactive client using code flow + pkce
                 new Client
                 {
-                
+
                     ClientId = "microstoreinteractiveclient",
                     ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
@@ -152,11 +152,11 @@ namespace MicroStore.IdentityProvider.Host
                     RequirePkce = true,
 
                     RequireConsent = true,
-               
+
 
 
                 },
-                new Client
+                 new Client
                 {
                     ClientId = "catalogapiinteractiveclient",
                     ClientName ="Catalog api tester client",
@@ -169,6 +169,18 @@ namespace MicroStore.IdentityProvider.Host
                     AccessTokenLifetime = 240
 
 
+                },
+                new Client
+                {
+                    ClientId = "basketapiintercativeclient",
+                    ClientName= "Basket api tester client",
+                    ClientSecrets = {new Secret ("3e3e0d26-75e5-463f-80f0-cd0b3a3a7f99".Sha512()) } ,
+                    AllowedGrantTypes =new List<string> { OpenIdConnectGrantTypes.AuthorizationCode ,  OpenIdConnectGrantTypes.ClientCredentials},
+                    AllowedCorsOrigins = new List<string> { "https://localhost:7268/"},
+                    RedirectUris = { "https://localhost:7268/swagger/oauth2-redirect.html" },
+                    AllowedScopes ={ "openid" , "profile" ,"basket.access" },
+                    RequirePkce = true,
+                    AccessTokenLifetime = 240
                 }
             };
 
