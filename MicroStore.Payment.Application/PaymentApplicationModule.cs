@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Payment.Application.Configuration;
 using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.Payment.Domain.Shared;
 using System.Reflection;
@@ -20,14 +21,19 @@ namespace MicroStore.Payment.Application
         typeof(AbpFluentValidationModule))]
     public class PaymentApplicationModule : AbpModule
     {
-
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var config = context.Services.GetConfiguration();
+            var appsettings = config.Get<ApplicationSettings>();
+            context.Services.AddSingleton(appsettings);
+        }
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var config = context.Services.GetConfiguration();
 
             Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<PaymentApplicationModule>());
 
-            ConfigureMassTransit(context.Services, config);
+            ConfigureMassTransit(context.Services);
 
             ConfigureEntityFramework(context.Services);
 
@@ -49,8 +55,10 @@ namespace MicroStore.Payment.Application
 
 
         }
-        private void ConfigureMassTransit(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureMassTransit(IServiceCollection services)
         {
+
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
 
             services.AddMassTransit((busRegisterConfig) =>
             {
@@ -58,10 +66,10 @@ namespace MicroStore.Payment.Application
 
                 busRegisterConfig.UsingRabbitMq((context, rabbitMqConfig) =>
                 {
-                    rabbitMqConfig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
+                    rabbitMqConfig.Host(appsettings.MassTransit.Host, cfg =>
                     {
-                        cfg.Username(configuration.GetValue<string>("MassTransitConfig:UserName"));
-                        cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
+                        cfg.Username(appsettings.MassTransit.UserName);
+                        cfg.Password(appsettings.MassTransit.Password);
                     });
 
                     rabbitMqConfig.ConfigureEndpoints(context);

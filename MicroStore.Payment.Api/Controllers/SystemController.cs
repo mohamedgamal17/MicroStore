@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Payment.Application.PaymentSystems;
+using MicroStore.Payment.Application.Security;
 using MicroStore.Payment.Domain.Shared.Dtos;
 namespace MicroStore.Payment.Api.Controllers
 {
@@ -54,6 +56,7 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpPut]
         [Route("{systemName}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentSystemDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> UpdatePluginSystem(string systemName,[FromBody] UpdatePluginSystemModel model)
         {
             var validationResult = await ValidateModel(model);

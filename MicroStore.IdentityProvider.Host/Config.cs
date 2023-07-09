@@ -181,6 +181,18 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedScopes ={ "openid" , "profile" ,"basket.access" },
                     RequirePkce = true,
                     AccessTokenLifetime = 240
+                },
+                new Client
+                {
+                    ClientId= "paymentapiswaggerclient",
+                    ClientName= "Payment api tester client",
+                    ClientSecrets = {new Secret ("6cd3c508-df1e-44d2-8dc6-a39925cbd263".Sha512()) } ,
+                    AllowedGrantTypes =new List<string> { OpenIdConnectGrantTypes.AuthorizationCode ,  OpenIdConnectGrantTypes.ClientCredentials},
+                    AllowedCorsOrigins = new List<string> { "https://localhost:7092"},
+                    RedirectUris = { "https://localhost:7092/swagger/oauth2-redirect.html" },
+                    AllowedScopes ={ "openid" , "profile" ,"billing.access" , "billing.read" , "billing.write" },
+                    RequirePkce = true,
+                    AccessTokenLifetime = 240
                 }
             };
 
