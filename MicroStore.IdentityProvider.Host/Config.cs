@@ -18,9 +18,6 @@ namespace MicroStore.IdentityProvider.Host
             };
 
 
-
-
-
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
@@ -193,6 +190,19 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedScopes ={ "openid" , "profile" ,"billing.access" , "billing.read" , "billing.write" },
                     RequirePkce = true,
                     AccessTokenLifetime = 240
+                },
+                new Client
+                {
+                    ClientId = "shippingapiswaggerclient",
+                    ClientName = "Shipping api tester client",
+                    ClientSecrets = {new Secret("63742dbe-4e3a-4456-8b03-c3a93491a413".Sha512()) },
+                    AllowedGrantTypes = new List<string> { OpenIdConnectGrantTypes.AuthorizationCode ,  OpenIdConnectGrantTypes.ClientCredentials},
+                    AllowedCorsOrigins = { "https://localhost:7162" },
+                    RedirectUris= { "https://localhost:7162/swagger/oauth2-redirect.html" },
+                    AllowedScopes ={ "openid" , "profile" ,"shipping.access" , "shipping.read" },
+                    RequirePkce=  true,
+                    AccessTokenLifetime = 240
+
                 }
             };
 
