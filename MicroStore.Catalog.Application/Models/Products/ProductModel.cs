@@ -123,7 +123,7 @@ namespace MicroStore.Catalog.Application.Models.Products
                 .When(x => x.CategoriesIds != null);
 
             RuleForEach(x=> x.SpecificationAttributes)
-                .SetValidator(serviceProvider.GetRequiredService<ProductSpecificationAttributeModelValidator>())
+                .SetValidator(serviceProvider.GetRequiredService<IValidator<ProductSpecificationAttributeModel>>())
                 .When(x=> x.SpecificationAttributes != null);
 
         }

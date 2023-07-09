@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
+using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Application.Models.SpecificationAttributes;
 using MicroStore.Catalog.Application.SpecificationAttributes;
 namespace MicroStore.Catalog.Api.Controllers
@@ -38,6 +40,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> CreateAsync(SpecificationAttributeModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -55,6 +58,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpPut]
         [Route("{attributeId}")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> UpdateAsync(string attributeId , SpecificationAttributeModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -71,6 +75,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpDelete]
         [Route("{attributeId}")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> RemoveAsync(string attributeId)
         {
             var result = await _specificationAttributeApplicationService.RemoveAsync(attributeId);
@@ -82,6 +87,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpGet]
         [Route("{attributeId}/options")]
+
         public async Task<IActionResult> ListOptionsAsync(string attributeId)
         {
             var result = await _specificationAttributeApplicationService.ListOptionsAsync(attributeId);
@@ -100,6 +106,8 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpPost]
         [Route("{attributeId}/options")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+
         public async Task<IActionResult> CreateOptionAsync(string attributeId, SpecificationAttributeOptionModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -116,6 +124,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpPut]
         [Route("{attributeId}/options/{optionId}")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> UpdateOptionAsync(string attributeId, string optionId, SpecificationAttributeOptionModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -132,6 +141,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpDelete]
         [Route("{attributeId}/options/{optionId}")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> RemoveOptionAsync(string attributeId, string optionId)
         {
             var result = await _specificationAttributeApplicationService.RemoveOptionAsync(attributeId, optionId);

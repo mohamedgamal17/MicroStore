@@ -118,7 +118,7 @@ namespace MicroStore.IdentityProvider.Host
                 {
                      await SeedIdentityServerConfigurationData(context.ServiceProvider);
 
-                    await SeedIdentityData(context.ServiceProvider);
+                     await SeedIdentityData(context.ServiceProvider);
                 }
 
             }
@@ -223,6 +223,7 @@ namespace MicroStore.IdentityProvider.Host
             using (var scope = serviceProvider.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>();
+
                 var usermanager = scope.ServiceProvider.GetRequiredService<ApplicationUserManager>();
 
                 if (!await context.Users.AnyAsync())

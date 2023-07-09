@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
+using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.ProductReviews;
 using MicroStore.Catalog.Application.ProductReviews;
@@ -43,6 +45,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductReviewDto))]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> CreateProductReview(string productId ,[FromBody] CreateProductReviewModel model)
         {
             var result = await _productReviewService.CreateAsync(productId, model);
@@ -54,6 +57,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{productReviewId}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductReviewDto))]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> UpdateProductReview(string productId ,string productReviewId ,[FromBody] ProductReviewModel model)
         {
             var result = await _productReviewService.UpdateAsync(productId, productReviewId, model);
@@ -64,6 +68,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{productReviewId}/replay")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductReviewDto))]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> ReplayOnProductReview(string productId , string productReviewId, [FromBody] ProductReviewReplayModel model)
         {
             var result = await _productReviewService.ReplayAsync(productId, productReviewId, model);
@@ -74,6 +79,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{productReviewId}")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductReviewDto))]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> RemvoeProductReview(string productId , string productReviewId)
         {
             var result = await _productReviewService.DeleteAsync(productId, productReviewId);
