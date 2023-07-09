@@ -2,8 +2,8 @@
 {
     public class SecuritySettings
     {
-        public JwtSettings Jwt { get; set; }
-        public SwaggerClientSettings SwaggerClient { get; set; }
+        public JwtSettings Jwt { get; set; } = new JwtSettings();
+        public SwaggerClientSettings SwaggerClient { get; set; } = new SwaggerClientSettings();
     }
 
     public class JwtSettings
