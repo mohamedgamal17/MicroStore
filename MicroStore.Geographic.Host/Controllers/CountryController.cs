@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Geographic.Application.Countries;
 using MicroStore.Geographic.Application.Dtos;
 using MicroStore.Geographic.Application.Models;
+using MicroStore.Geographic.Application.Security;
 using MicroStore.Geographic.Application.StateProvinces;
 namespace MicroStore.Geographic.Host.Controllers
 {
@@ -57,6 +59,7 @@ namespace MicroStore.Geographic.Host.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CountryDto))]
         [HttpPost]
         [Route("")]
+        [Authorize(Policy =ApplicationSecurityPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult > CreateCountry([FromBody] CountryModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -75,6 +78,8 @@ namespace MicroStore.Geographic.Host.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CountryDto))]
         [HttpPut]
         [Route("{countryId}")]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> UpdateCountry(string countryId , [FromBody]  CountryModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -93,6 +98,8 @@ namespace MicroStore.Geographic.Host.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(CountryDto))]
         [HttpDelete]
         [Route("{countryId}")]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> DeleteCountry(string countryId)
         {
             var result = await _countryApplicationService.DeleteAsync(countryId);
@@ -136,6 +143,8 @@ namespace MicroStore.Geographic.Host.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StateProvinceDto))]
         [HttpPost]
         [Route("{countryId}/states")]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> CreateStateProvince(string countryId , [FromBody] StateProvinceModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -153,6 +162,8 @@ namespace MicroStore.Geographic.Host.Controllers
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(StateProvinceDto))]
         [HttpPut]
         [Route("{countryId}/states/{stateId}")]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> UpdateStateProvince(string countryId , string stateId ,[FromBody] StateProvinceModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -171,6 +182,7 @@ namespace MicroStore.Geographic.Host.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(StateProvinceDto))]
         [HttpDelete]
         [Route("{countryId}/states/{stateId}")]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> UpdateStateProvince(string countryId, string stateId)
         {
             var result = await _stateProvinceApplicationService.DeleteAsync(countryId, stateId);

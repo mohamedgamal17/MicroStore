@@ -15,7 +15,12 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.IdentityModel.Tokens;
-
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using MicroStore.Geographic.Host.OpenApi;
+using MicroStore.Geographic.Application.Configuration;
+using MicroStore.Geographic.Application.Security;
+using IdentityModel;
 namespace MicroStore.Geographic.Host
 {
     [DependsOn(typeof(GeographicApplicationModule),
@@ -31,9 +36,7 @@ namespace MicroStore.Geographic.Host
 
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureAuthentication(context.Services, configuration);
-
-            ConfigureSwagger(context.Services, configuration);
+            ConfigureAuthentication(context.Services);
 
             Configure<AbpExceptionHandlingOptions>(options =>
             {
@@ -45,6 +48,9 @@ namespace MicroStore.Geographic.Host
             {
                 opt.AutoValidate = false;
             });
+
+            context.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>()
+                .AddAbpSwaggerGen();
 
             context.Services.AddProblemDetails(opt =>
             {
@@ -65,27 +71,26 @@ namespace MicroStore.Geographic.Host
                 await dbContext.Database.MigrateAsync();
 
             }
-
-
         }
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
             var config = context.GetConfiguration();
+            var appsettings = context.ServiceProvider.GetRequiredService<ApplicationSettings>();
 
             if (env.IsDevelopment())
             {
-
-
                 app.UseSwagger();
 
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Inventory API");
-                    options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
-                    options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
-                    options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
+                    options.OAuthClientId(appsettings.Security.SwaggerClient.ClientId);
+                    options.OAuthClientSecret(appsettings.Security.SwaggerClient.ClientSecret);
+                    options.OAuthScopeSeparator(" ");
+                    options.OAuthUsePkce();
+                    
                 });
 
 
@@ -103,8 +108,10 @@ namespace MicroStore.Geographic.Host
 
             //app.MapControllers();
         }
-        private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureAuthentication(IServiceCollection services)
         {
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
+
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
@@ -113,30 +120,24 @@ namespace MicroStore.Geographic.Host
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
-                options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                options.Authority = appsettings.Security.Jwt.Authority;
+                options.Audience = appsettings.Security.Jwt.Audience;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
-                    ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                    ValidAudience = appsettings.Security.Jwt.Audience,
                     ValidateIssuer = true,
-                    ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                    ValidIssuer = appsettings.Security.Jwt.Authority,
                     ValidateLifetime = true,
                 };
             });
 
-            services.AddAuthorization();
-        }
-
-        private void ConfigureSwagger(IServiceCollection serviceCollection, IConfiguration configuration)
-        {
-            serviceCollection.AddSwaggerGen((options) =>
+            services.AddAuthorization(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Geographic Api", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
-                
+                options.AddPolicy(ApplicationSecurityPolicies.RequireAuthenticatedUser,
+                        policyBuilder => policyBuilder.RequireAuthenticatedUser()
+                            .RequireClaim(JwtClaimTypes.Scope, ApplicationResourceScopes.Access)
+                    );
             });
         }
     }

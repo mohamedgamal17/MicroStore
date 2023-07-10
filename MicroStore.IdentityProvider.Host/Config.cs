@@ -29,6 +29,7 @@ namespace MicroStore.IdentityProvider.Host
                 new ApiScope("shipping.access","access shipping api"),
                 new ApiScope("billing.access","access billing api"),
                 new ApiScope("inventory.access","access inventory api"),
+                new ApiScope("geographic.access", "access geogrpahic api"),
 
 
                 new ApiScope("ordering.read","allowing read user orders operations"),
@@ -38,6 +39,8 @@ namespace MicroStore.IdentityProvider.Host
                 new ApiScope("shipping.read","allowing read on user shipments operations"),
                 new ApiScope("inventory.write","allowing write on user orders operations"),
                 new ApiScope("inventory.read","allowing read on user orders operations"),
+               
+
 
 
                 new ApiScope("mvcgateway.ordering.read","allowing ordering read operation on micro store shopping api gateway"),
@@ -92,6 +95,11 @@ namespace MicroStore.IdentityProvider.Host
                     Scopes = {"inventory.access","inventory.read", "inventory.write" }
                 },
 
+                new ApiResource("api-geographic","Geographic Api")
+                {
+                    Scopes = {"geographic.access"}
+                },
+
                 new ApiResource("api-gateway","Shopping gateway")
                 {
                     Scopes ={ "shoppinggateway.access" , "mvcgateway.ordering.read" , "mvcgateway.ordering.write" , "mvcgateway.billing.read" ,
@@ -113,7 +121,7 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedGrantTypes = new List<string> { "urn:ietf:params:oauth:grant-type:token-exchange"},
                     ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
-                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read","inventory.write" , "inventory.read" , "api-sample"},
+                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read","inventory.write" , "inventory.read" , "api-sample" , "geogrpahic.access"},
 
 
                     AllowOfflineAccess = false,
@@ -214,6 +222,18 @@ namespace MicroStore.IdentityProvider.Host
                     RedirectUris = { "https://localhost:7226/swagger/oauth2-redirect.html" },
                     AllowedScopes = { "openid" , "profile"  , "ordering.access" , "ordering.read", "ordering.write" },
                     RequirePkce = true,
+                    AccessTokenLifetime = 240
+                },
+                new Client
+                {
+                    ClientId="geographicapiinteractiveclient",
+                    ClientName = "Geographic api tester client",
+                    ClientSecrets = {new Secret ("c8b398e6-71c5-4004-99da-d872bf020851".Sha512()) },
+                    AllowedGrantTypes = { OpenIdConnectGrantTypes.AuthorizationCode, OpenIdConnectGrantTypes.ClientCredentials },
+                    AllowedCorsOrigins = { "https://localhost:7018" },
+                    RedirectUris = { "https://localhost:7018/swagger/oauth2-redirect.html" },
+                    AllowedScopes = { "openid", "profile"  , "geographic.access"},
+                    RequirePkce= true,
                     AccessTokenLifetime = 240
                 }
             };
