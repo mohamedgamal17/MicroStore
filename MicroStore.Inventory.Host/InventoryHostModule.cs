@@ -15,6 +15,12 @@ using MicroStore.Inventory.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.IdentityModel.Tokens;
+using MicroStore.Inventory.Domain.Configuration;
+using IdentityModel;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using MicroStore.Geographic.Host.OpenApi;
 
 namespace MicroStore.Inventory.Host
 {
@@ -30,9 +36,7 @@ namespace MicroStore.Inventory.Host
 
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureAuthentication(context.Services, configuration);
-
-            ConfigureSwagger(context.Services, configuration);
+            ConfigureAuthentication(context.Services);
 
             Configure<AbpExceptionHandlingOptions>(options =>
             {
@@ -54,6 +58,9 @@ namespace MicroStore.Inventory.Host
 
             });
 
+            context.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>()
+                .AddSwaggerGen();
+
         }
         public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
         {
@@ -64,27 +71,35 @@ namespace MicroStore.Inventory.Host
             await dbContext.Database.MigrateAsync();
 
         }
-        private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureAuthentication(IServiceCollection services)
         {
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
-                options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                options.Authority = appsettings.Security.Jwt.Authority;
+                options.Audience = appsettings.Security.Jwt.Audience;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
-                    ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                    ValidAudience = appsettings.Security.Jwt.Audience,
                     ValidateIssuer = true,
-                    ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                    ValidIssuer = appsettings.Security.Jwt.Authority,
                     ValidateLifetime = true,
                 };
             });
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(ApplicationSecurityPolicies.RequireAuthenticatedUser,
+                        policyBuilder => policyBuilder.RequireAuthenticatedUser()
+                            .RequireClaim(JwtClaimTypes.Scope, ApplicationResourceScopes.Access)
+                    );
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -92,6 +107,7 @@ namespace MicroStore.Inventory.Host
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
             var config = context.GetConfiguration();
+            var appsettings = context.ServiceProvider.GetRequiredService<ApplicationSettings>();
 
             if (env.IsDevelopment())
             {
@@ -102,11 +118,10 @@ namespace MicroStore.Inventory.Host
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Inventory API");
-                    options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
-                    options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
-                    options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
-                    options.OAuthScopeSeparator(",");
-                    options.OAuthScopes(InventoryScope.List().ToArray());
+                    options.OAuthClientId(appsettings.Security.SwaggerClient.ClientId);
+                    options.OAuthClientSecret(appsettings.Security.SwaggerClient.ClientSecret);
+                    options.OAuthScopeSeparator(" ");
+                    options.OAuthUsePkce();
                 });
 
 
@@ -125,35 +140,5 @@ namespace MicroStore.Inventory.Host
             //app.MapControllers();
         }
 
-
-
-
-
-        private void ConfigureSwagger(IServiceCollection serviceCollection, IConfiguration configuration)
-        {
-            serviceCollection.AddSwaggerGen((options) =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Inventory Api", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        ClientCredentials = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")!),
-                            TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")!),
-
-                        },
-
-                    }
-
-                });
-            });
-        }
     }
 }

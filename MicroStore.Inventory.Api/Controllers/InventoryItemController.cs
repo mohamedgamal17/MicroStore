@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
@@ -7,10 +8,11 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Products;
+using MicroStore.Inventory.Domain.Security;
+
 namespace MicroStore.Inventory.Api.Controllers
 {
     [ApiController]
-   // [Authorize]
     [Route("api/inventory/products")]
     public class InventoryItemController : MicroStoreApiController
     {
@@ -63,6 +65,7 @@ namespace MicroStore.Inventory.Api.Controllers
         [HttpPut]
         [Route("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> UpdateProductInventory(string productId, [FromBody] InventoryItemModel model)
         {
             var validationResult = await ValidateModel(model);

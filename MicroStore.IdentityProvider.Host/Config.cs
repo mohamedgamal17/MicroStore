@@ -37,8 +37,7 @@ namespace MicroStore.IdentityProvider.Host
                 new ApiScope("billing.read","allowing read user payments operations"),
                 new ApiScope("billing.write","allowing write on user payments operations"),
                 new ApiScope("shipping.read","allowing read on user shipments operations"),
-                new ApiScope("inventory.write","allowing write on user orders operations"),
-                new ApiScope("inventory.read","allowing read on user orders operations"),
+
                
 
 
@@ -92,7 +91,7 @@ namespace MicroStore.IdentityProvider.Host
 
                 new ApiResource("api-inventory" ,"Inventory APi")
                 {
-                    Scopes = {"inventory.access","inventory.read", "inventory.write" }
+                    Scopes = {"inventory.access" }
                 },
 
                 new ApiResource("api-geographic","Geographic Api")
@@ -121,7 +120,7 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedGrantTypes = new List<string> { "urn:ietf:params:oauth:grant-type:token-exchange"},
                     ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
-                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read","inventory.write" , "inventory.read" , "api-sample" , "geogrpahic.access"},
+                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read", "api-sample" , "geogrpahic.access"},
 
 
                     AllowOfflineAccess = false,
@@ -235,6 +234,16 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedScopes = { "openid", "profile"  , "geographic.access"},
                     RequirePkce= true,
                     AccessTokenLifetime = 240
+                }, 
+                new Client
+                {
+                    ClientId = "inventoryapiswaggerclient",
+                    ClientName = "Inventory api tester client",
+                    ClientSecrets = { new Secret("d2de8b36-a72f-4c0c-897d-3a6cc4669f7e".Sha512()) },
+                    AllowedGrantTypes = {OpenIdConnectGrantTypes.AuthorizationCode, OpenIdConnectGrantTypes.ClientCredentials },
+                    AllowedCorsOrigins = { "https://localhost:7054" },
+                    RedirectUris = { "https://localhost:7054/swagger/oauth2-redirect.html" },
+                    AllowedScopes = { "openid", "profile" , "inventory.access"}
                 }
             };
 
