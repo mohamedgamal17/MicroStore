@@ -203,6 +203,18 @@ namespace MicroStore.IdentityProvider.Host
                     RequirePkce=  true,
                     AccessTokenLifetime = 240
 
+                },
+                new Client
+                {
+                    ClientId ="orderingapiswaggerclient",
+                    ClientName ="Ordering api tester client",
+                    ClientSecrets = { new Secret("4216cce5-d583-4f66-887e-69801078f50c".Sha512()) },
+                    AllowedGrantTypes =  new List<string>{ OpenIdConnectGrantTypes.AuthorizationCode ,  OpenIdConnectGrantTypes.ClientCredentials},
+                    AllowedCorsOrigins = { "https://localhost:7226" },
+                    RedirectUris = { "https://localhost:7226/swagger/oauth2-redirect.html" },
+                    AllowedScopes = { "openid" , "profile"  , "ordering.access" , "ordering.read", "ordering.write" },
+                    RequirePkce = true,
+                    AccessTokenLifetime = 240
                 }
             };
 

@@ -1,12 +1,11 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Ordering.Application;
+using MicroStore.Ordering.Application.Configuration;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Infrastructure.EntityFramework;
 using Volo.Abp.Modularity;
-
 namespace MicroStore.Ordering.Infrastructure
 {
     [DependsOn(typeof(OrderApplicationModule))]
@@ -14,24 +13,25 @@ namespace MicroStore.Ordering.Infrastructure
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var config = context.Services.GetConfiguration();
 
-            ConfigureEntityFramework(context.Services, config);
+            ConfigureEntityFramework(context.Services);
 
-            ConfigureMassTransit(context.Services, config);
+            ConfigureMassTransit(context.Services);
         }
 
-        private void ConfigureEntityFramework(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureEntityFramework(IServiceCollection services)
         {
-            services.AddDbContext<OrderDbContext>(builder => builder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), cfg =>
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
+            services.AddDbContext<OrderDbContext>(builder => builder.UseSqlServer(appsettings.ConnectionStrings.DefaultConnection, cfg =>
             {
                 cfg.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                 cfg.MigrationsAssembly(typeof(OrderDbContext).Assembly.FullName);
             }));
         }
 
-        private void ConfigureMassTransit(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureMassTransit(IServiceCollection services)
         {
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
 
 
             services.AddMassTransit(busRegisterConfig =>
@@ -53,10 +53,10 @@ namespace MicroStore.Ordering.Infrastructure
 
                 busRegisterConfig.UsingRabbitMq((context, rabbitmqConfig) =>
                 {
-                    rabbitmqConfig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
+                    rabbitmqConfig.Host(appsettings.MassTransit.Host, cfg =>
                     {
-                        cfg.Username(configuration.GetValue<string>("MassTransitConfig:UserName"));
-                        cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
+                        cfg.Username(appsettings.MassTransit.UserName);
+                        cfg.Password(appsettings.MassTransit.Password);
 
                     });
 

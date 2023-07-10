@@ -1,4 +1,7 @@
-﻿using Volo.Abp.Application;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Ordering.Application.Configuration;
+using Volo.Abp.Application;
 using Volo.Abp.Authorization;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FluentValidation;
@@ -14,6 +17,12 @@ namespace MicroStore.Ordering.Application
         typeof(AbpDddApplicationModule))]
     public class OrderApplicationModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var config = context.Services.GetConfiguration();
+            var appsettings = config.Get<ApplicationSettings>();
+            context.Services.AddSingleton(appsettings);
+        }
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<OrderApplicationModule>());

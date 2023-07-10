@@ -15,6 +15,13 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.IdentityModel.Tokens;
+using MicroStore.Ordering.Application.Configuration;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using MicroStore.Ordering.Api.OpenApi;
+using MicroStore.Ordering.Application.Security;
+using IdentityModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MicroStore.Ordering.Api
 {
@@ -33,9 +40,7 @@ namespace MicroStore.Ordering.Api
 
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureAuthentication(context.Services,configuration);
-
-            ConfigureSwagger(context.Services,configuration);
+            ConfigureAuthentication(context.Services);
 
 
             Configure<AbpExceptionHandlingOptions>(options =>
@@ -49,6 +54,9 @@ namespace MicroStore.Ordering.Api
                 opt.AutoValidate = false;
             });
 
+            context.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>()
+                .AddSwaggerGen();
+
             context.Services.AddProblemDetails(opt =>
             {
                 opt.IncludeExceptionDetails = (ctx, ex) => env.IsDevelopment() || env.IsStaging();
@@ -59,8 +67,10 @@ namespace MicroStore.Ordering.Api
             });
         }
 
-        private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureAuthentication(IServiceCollection services)
         {
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,17 +78,38 @@ namespace MicroStore.Ordering.Api
 
             }).AddJwtBearer(options =>
             {
-                options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
-                options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                options.Authority = appsettings.Security.Jwt.Authority;
+                options.Audience = appsettings.Security.Jwt.Audience;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
-                    ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                    ValidAudience = appsettings.Security.Jwt.Audience,
                     ValidateIssuer = true,
-                    ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                    ValidIssuer = appsettings.Security.Jwt.Authority,
                     ValidateLifetime = true,
                 };
 
+
+            });
+
+            services.AddAuthorization(options =>
+            {
+                var requireAuthenticatedUserPolicy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .RequireClaim(JwtClaimTypes.Scope, ApplicationResourceScopes.Access)
+                            .Build();
+
+                options.AddPolicy(ApplicationSecurityPolicies.RequireAuthenticatedUser, requireAuthenticatedUserPolicy);
+
+                options.AddPolicy(ApplicationSecurityPolicies.RequireOrderReadScope,
+                        policyBuilder => policyBuilder.Combine(requireAuthenticatedUserPolicy)
+                            .RequireClaim(ApplicationResourceScopes.Order.Read)
+                    );
+
+                options.AddPolicy(ApplicationSecurityPolicies.RequireOrderWriteScope,
+                        policyBuilder => policyBuilder.Combine(requireAuthenticatedUserPolicy)
+                            .RequireClaim(ApplicationResourceScopes.Order.Write)
+                    );
 
             });
         }
@@ -97,6 +128,7 @@ namespace MicroStore.Ordering.Api
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
             var config = context.ServiceProvider.GetService<IConfiguration>();
+            var appsettings = context.ServiceProvider.GetRequiredService<ApplicationSettings>();
             if (env.IsDevelopment())
             {
 
@@ -105,11 +137,11 @@ namespace MicroStore.Ordering.Api
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Order API");
 
-                    options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
-                    options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
-                    options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
-                    options.OAuthScopeSeparator(",");
-                  });
+                    options.OAuthClientId(appsettings.Security.SwaggerClient.ClientId);
+                    options.OAuthClientSecret(appsettings.Security.SwaggerClient.ClientSecret);
+                    options.OAuthScopeSeparator(" ");
+                    options.OAuthUsePkce();
+                });
 
 
                 app.UseHsts();
@@ -128,38 +160,5 @@ namespace MicroStore.Ordering.Api
 
             //app.MapControllers();
         }
-
-
-
-        private void ConfigureSwagger(IServiceCollection serviceCollection, IConfiguration configuration)
-        {
-            serviceCollection.AddSwaggerGen((options) =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Order Api", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
-                options.OperationFilter<SnakeCaseParamsOperationFilter>();
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        ClientCredentials = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")),
-                            TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")),
-
-                        },
-
-                    }
-
-                });
-            });
-        }
-
-
-        
     }
 }

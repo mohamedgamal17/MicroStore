@@ -6,12 +6,13 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
+using MicroStore.Ordering.Application.Security;
 using System.Net;
 
 namespace MicroStore.Ordering.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+
     [Route("api/user/orders")]
     public class UserOrderController : MicroStoreApiController
     {
@@ -29,7 +30,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpPost]
         [Route("")]
-  //      [RequiredScope(OrderingScope.Order.Submit)]
+        [Authorize(Policy =ApplicationSecurityPolicies.RequireOrderWriteScope)]
 
         public async Task<IActionResult> SubmitOrder(OrderModel model)
         {
@@ -62,7 +63,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [HttpGet]
         [Route("")]
         [ActionName(nameof(RetirveUserOrderList))]
-    //    [RequiredScope(OrderingScope.Order.List)]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireOrderReadScope)]
         public async Task<IActionResult> RetirveUserOrderList([FromQuery] OrderListQueryModel queryParams)
         {
 
@@ -77,7 +78,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [ActionName(nameof(RetirveUserOrder))]
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
-        //      [RequiredScope(OrderingScope.Order.Read)]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireOrderReadScope)]
         public async Task<IActionResult> RetirveUserOrder(Guid orderId)
         {
 
@@ -89,7 +90,7 @@ namespace MicroStore.Ordering.Api.Controllers
         [HttpGet]
         [Route("order_number/{orderId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
-        //      [RequiredScope(OrderingScope.Order.Read)]
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireOrderReadScope)]
         public async Task<IActionResult> RetirveOrderByNumber(string orderNumber)
         {
 

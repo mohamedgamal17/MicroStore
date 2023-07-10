@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
+using MicroStore.Ordering.Application.Security;
+
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/orders")]
     [ApiController]
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class OrderController : MicroStoreApiController
     {
         private readonly IOrderCommandService _orderCommandService;
