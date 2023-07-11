@@ -22,7 +22,7 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if(request.Headers.Authorization?.Parameter != null && (HttpContext.User.Identity?.IsAuthenticated ?? false))
+            if(request.Headers.Authorization?.Parameter != null)
             {
                 var incomingToken = request.Headers.Authorization!.Parameter!;
 

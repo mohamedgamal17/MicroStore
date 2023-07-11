@@ -19,8 +19,6 @@
                 Shipping.Access,
                 Shipping.Read,
                 Inventory.Access,
-                Inventory.Read,
-                Inventory.Write
             };
         }
 
@@ -63,9 +61,7 @@
         public static class Inventory
         {
             public const string Access = "inventory.access";
-            public const string Read = "inventory.read";
 
-            public const string Write = "inventory.write";
 
         }
     }
