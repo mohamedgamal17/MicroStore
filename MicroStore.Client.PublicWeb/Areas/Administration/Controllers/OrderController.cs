@@ -118,7 +118,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CompleteOrder(Guid id)
+        public async Task<IActionResult> CompleteOrder(CompleteOrderModel model)
         {
             try
             {
@@ -127,16 +127,16 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var order = await _orderService.GetAsync(id);
+                var order = await _orderService.GetAsync(model.Id);
 
                 if (order.CurrentState != OrderState.Fullfilled)
                 {
                     return BadRequest("Order State must be fullfilled");
                 }
 
-                await _orderService.CompleteAsync(id);
+                await _orderService.CompleteAsync(model.Id);
 
-                return RedirectToAction("Details", new { id = id });
+                return RedirectToAction("Details", new { id = model.Id });
 
             }
             catch (MicroStoreClientException ex)
@@ -156,7 +156,30 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
           
         }
 
+        public async Task<IActionResult> CompleteOrderModal(Guid id)
+        {
+            try
+            {
+                var order = await _orderService.GetAsync(id);
 
+                if (order.CurrentState != OrderState.Fullfilled) return BadRequest();
+
+                var ordervm = ObjectMapper.Map<Order, OrderVM>(order);
+
+                ViewBag.Order = ordervm;
+
+                var model = new CompleteOrderModel
+                {
+                    Id = order.Id
+                };
+
+                return PartialView("_CompleteOrderModal", model);
+            }
+            catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+        }
         public async Task<IActionResult> CancelOrderModal(Guid id)
         {
             try
@@ -179,7 +202,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 return NotFound();
             }
-
         }
         [HttpPost]
         public async Task<IActionResult> CancelOrder(CancelOrderModel model)

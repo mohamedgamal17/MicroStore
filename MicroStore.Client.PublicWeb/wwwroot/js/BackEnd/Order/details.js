@@ -5,6 +5,10 @@
         viewUrl : "/Administration/Order/CancelOrderModal" 
     })
 
+    var completeOrderModal = new abp.ModalManager({
+        viewUrl: "/Administration/Order/CompleteOrderModal"
+    })
+
     $("#cancelOrderButton").click(function () {
         cancelOrderModal.open({
             id : orderId
@@ -12,10 +16,16 @@
     })
 
     $("#completeOrderButton").click(function () {
-        $("#completeOrderForm").submit()
+        completeOrderModal.open({
+            id: orderId
+        })
     })
 
     cancelOrderModal.onResult(function () {
+        location.reload()
+    })
+
+    completeOrderModal.onResult(function () {
         location.reload()
     })
 })

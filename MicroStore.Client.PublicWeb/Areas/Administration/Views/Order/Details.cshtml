@@ -1,6 +1,8 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
 @using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 @using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+@using System.Globalization
+@using Microsoft.Extensions.Localization
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.OrderMenus.View);
@@ -10,9 +12,9 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <h1 class="m-0">
-                        View order details - @Model.Id
+                        View order details -  @Model.OrderNumber
                     </h1>
                     <input type="hidden" value="@Model.Id" id="Id" />
 
@@ -53,10 +55,6 @@
                 <partial name="_Order.Payment" model=" Model" />
 
                 <partial name="_Order.Shipment" model=" Model" />
-
-                <form asp-action="CompleteOrder" asp-controller="Order" id="completeOrderForm">
-                    <input type="hidden" name="Id" value="@Model.Id" />
-                </form>
             </div>
         </div>
     </div>
