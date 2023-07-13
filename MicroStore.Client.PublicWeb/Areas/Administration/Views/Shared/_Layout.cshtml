@@ -46,6 +46,14 @@
     @{
         await Html.RenderPartialAsync("_NotificationView");
     }
+
+     <script>
+        $(document).ready(function(){
+            $("#btn-logout").click(function(){
+                $("#logout-form").submit();
+            })
+        })
+    </script>
 </body>
 
 </html>

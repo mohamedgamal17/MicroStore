@@ -272,6 +272,25 @@ namespace MicroStore.IdentityProvider.Host
         {
             var usermanager = serviceProvider.GetRequiredService<ApplicationUserManager>();
 
+            var roleManager = serviceProvider.GetRequiredService<ApplicationRoleManager>();
+
+            var adminRole = new ApplicationIdentityRole
+            {
+                Name = "Admin",
+                Description = "Administration role"
+            };
+
+            var superAdminRole = new ApplicationIdentityRole
+            {
+                Name = "SuperAdmin",
+                Description = "SuperAdmin Role for manage whole application"
+
+            };
+
+
+            await roleManager.CreateAsync(adminRole);
+
+            await roleManager.CreateAsync(superAdminRole);
 
             var alice = new ApplicationIdentityUser
             {
@@ -285,12 +304,9 @@ namespace MicroStore.IdentityProvider.Host
 
             await usermanager.CreateAsync(alice, "pass123$");
 
-            await usermanager.AddClaimsAsync(alice, new Claim[]{
-                            new Claim(JwtClaimTypes.Name, "alice"),
-                            new Claim(JwtClaimTypes.GivenName, "Alice"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                   });
+            await usermanager.AddToRoleAsync(alice, adminRole.Name);
+
+            await usermanager.AddToRoleAsync(alice, superAdminRole.Name);
 
             var bob = new ApplicationIdentityUser
             {
@@ -304,13 +320,8 @@ namespace MicroStore.IdentityProvider.Host
 
             await usermanager.CreateAsync(bob, "pass123$");
 
-            await usermanager.AddClaimsAsync(bob, new Claim[]{
-                            new Claim(JwtClaimTypes.Name, "bob"),
-                            new Claim(JwtClaimTypes.GivenName, "Bob"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                            new Claim("location", "somewhere")
-                        });
+
+
         }
     }
 }

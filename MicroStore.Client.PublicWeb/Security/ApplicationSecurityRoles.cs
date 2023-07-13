@@ -2,6 +2,6 @@
 {
     public class ApplicationSecurityRoles
     {
-       public const string Admin = nameof(Admin);
+        public const string Admin = "Admin";
     }
 }
