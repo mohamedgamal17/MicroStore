@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing;
+using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Billing;
+using System.Data;
+
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
     public class PaymentRequestController : AdministrationController
     {
         private readonly PaymentRequestService _paymentRequestService;

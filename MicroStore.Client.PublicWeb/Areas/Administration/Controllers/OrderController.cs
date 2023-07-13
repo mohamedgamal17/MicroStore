@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
 using MicroStore.Client.PublicWeb.Extensions;
+using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
@@ -9,9 +11,11 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
+using System.Data;
 using System.Net;
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
     public class OrderController : AdministrationController
     {
 

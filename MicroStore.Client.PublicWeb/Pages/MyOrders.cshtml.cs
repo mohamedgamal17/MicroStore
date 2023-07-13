@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 
 namespace MicroStore.Client.PublicWeb.Pages
 {
+    [Authorize]
     public class MyOrdersModel : PageModel
     {
         public string OrderFilter { get; set; }

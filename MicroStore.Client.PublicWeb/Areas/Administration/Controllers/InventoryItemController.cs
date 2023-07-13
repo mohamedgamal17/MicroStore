@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Inventory;
+using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Inventory;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Inventory;
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
     public class InventoryItemController : AdministrationController
     {
         private readonly InventoryItemService _inventoryItemService;
