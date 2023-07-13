@@ -1,6 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Catalog.Domain;
+using MicroStore.Catalog.Domain.Configuration;
 using System.Data;
 using System.Reflection;
 using Volo.Abp.AutoMapper;
@@ -8,11 +10,11 @@ using Volo.Abp.EventBus;
 using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
-using Volo.Abp.Validation;
-
 namespace MicroStore.Catalog.Application
 {
-    [DependsOn(typeof(AbpEventBusModule),
+    [DependsOn(
+        typeof(CatalogDomainModule),
+        typeof(AbpEventBusModule),
         typeof(AbpAutoMapperModule), 
         typeof(AbpFluentValidationModule))]
     public class CatalogApplicationModule : AbpModule
@@ -40,6 +42,7 @@ namespace MicroStore.Catalog.Application
 
         private void ConfigureMassTransit(IServiceCollection services, IConfiguration configuration)
         {
+            var appSettings = services.GetSingletonInstance<ApplicationSettings>(); 
 
             services.AddMassTransit(transitConfig =>
             {
@@ -48,10 +51,10 @@ namespace MicroStore.Catalog.Application
 
                 transitConfig.UsingRabbitMq((ctx, rabbitConfig) =>
                 {
-                    rabbitConfig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
+                    rabbitConfig.Host(configuration.GetValue<string>(appSettings.MassTransit.Host), cfg =>
                     {
-                        cfg.Username(configuration.GetValue<string>("MassTransitConfig:UserName"));
-                        cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
+                        cfg.Username(configuration.GetValue<string>(appSettings.MassTransit.UserName));
+                        cfg.Password(configuration.GetValue<string>(appSettings.MassTransit.Password));
 
                     });
 

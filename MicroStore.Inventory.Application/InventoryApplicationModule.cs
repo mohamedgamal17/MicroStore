@@ -1,6 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Inventory.Domain;
+using MicroStore.Inventory.Domain.Configuration;
 using System.Reflection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FluentValidation;
@@ -8,7 +10,8 @@ using Volo.Abp.Modularity;
 
 namespace MicroStore.Inventory.Application
 {
-    [DependsOn(typeof(AbpFluentValidationModule),
+    [DependsOn(typeof(InventoryDomainModule),
+        typeof(AbpFluentValidationModule),
         typeof(AbpAutoMapperModule))]
     public class InventoryApplicationModule  : AbpModule
     {
@@ -20,13 +23,15 @@ namespace MicroStore.Inventory.Application
                 opt.AddMaps<InventoryApplicationModule>();
             });
 
-            ConfigureMassTranstit(context.Services, context.Services.GetConfiguration());
+            ConfigureMassTranstit(context.Services);
 
         }
 
 
-        private void ConfigureMassTranstit(IServiceCollection services , IConfiguration configuration)
+        private void ConfigureMassTranstit(IServiceCollection services )
         {
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
+
             services.AddMassTransit(busRegisterConfig =>
             {
                 busRegisterConfig.AddConsumers(Assembly.GetExecutingAssembly());
@@ -35,10 +40,10 @@ namespace MicroStore.Inventory.Application
                 busRegisterConfig.UsingRabbitMq((context, rabbitMqbusConig) =>
                 {
 
-                    rabbitMqbusConig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
+                    rabbitMqbusConig.Host(appsettings.MassTransit.Host, cfg =>
                     {
-                        cfg.Username(configuration.GetValue<string>("MassTransitConfig:UserName"));
-                        cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
+                        cfg.Username(appsettings.MassTransit.UserName);
+                        cfg.Password(appsettings.MassTransit.Password);
                     });
 
                     rabbitMqbusConig.ConfigureEndpoints(context);

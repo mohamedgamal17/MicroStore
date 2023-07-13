@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Settings;
 using MicroStore.Shipping.Domain.Entities;
+using MicroStore.Shipping.Domain.Security;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {
@@ -21,6 +23,8 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(ShippingSettings))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> GetShipmentSettings()
         {
             var result = await _applicationSettingsService.GetAsync();
@@ -32,6 +36,8 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShippingSettings))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> UpdateShipppingSettings([FromBody]UpdateShippingSettingsModel model)
         {
             var validationResult = await ValidateModel(model);

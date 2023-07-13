@@ -46,7 +46,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             product.AssertProductModel(model);
 
-            Assert.That(await TestHarness.Published.Any<ProductCreatedIntegrationEvent>());
+            Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
         }
         [Test]
         public async Task Should_return_failure_result_while_updating_product_when_product_is_not_exist()
@@ -256,7 +256,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             var result = await _productCommandService.RemoveProductAttributeSpecificationAsync(fakeProduct.Id, productSpecificationAttributeId);
 
-            result.IsFailure.Should().BeTrue();
+            result.IsSuccess.Should().BeTrue();
 
             var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 

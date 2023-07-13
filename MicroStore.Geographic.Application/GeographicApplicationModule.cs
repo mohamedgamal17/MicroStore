@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Geographic.Application.Configuration;
 using MicroStore.Geographic.Application.EntityFramework;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.EntityFrameworkCore;
@@ -18,6 +20,13 @@ namespace MicroStore.Geographic.Application
         {
 
         }
+
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var config = context.Services.GetConfiguration();
+            var appsettings = config.Get<ApplicationSettings>();
+            context.Services.AddSingleton(appsettings);
+        }
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
 
@@ -33,11 +42,6 @@ namespace MicroStore.Geographic.Application
                 opt.UseSqlServer(builder => builder.MigrationsAssembly(typeof(GeographicDbContext).Assembly.FullName));
             });
 
-            //Configure<AbpUnitOfWorkDefaultOptions>(options =>
-            //{
-            //    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
-            //    options.IsolationLevel = System.Data.IsolationLevel.ReadCommitted;
-            //});
         }
     }
 }

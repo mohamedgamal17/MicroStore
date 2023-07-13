@@ -1,30 +1,32 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using IdentityModel.AspNetCore.AccessTokenManagement;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Bundling;
 using MicroStore.Client.PublicWeb.Components.Basket;
 using MicroStore.Client.PublicWeb.Components.Cart;
+using MicroStore.Client.PublicWeb.Configuration;
 using MicroStore.Client.PublicWeb.Consts;
+using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Menus;
+using MicroStore.Client.PublicWeb.Security;
 using MicroStore.Client.PublicWeb.Theming;
 using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
 using Newtonsoft.Json.Converters;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -32,7 +34,6 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
-
 namespace MicroStore.Client.PublicWeb
 {
     [DependsOn(typeof(MicroStoreAspNetCoreUIModule),
@@ -44,13 +45,21 @@ namespace MicroStore.Client.PublicWeb
         typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class PublicWebModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var config = context.Services.GetConfiguration();
+
+            var appsettings = config.Get<ApplicationSettings>();
+
+            context.Services.AddSingleton(appsettings);
+        }
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var host = context.Services.GetHostingEnvironment();
 
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureAuthentication(context.Services, configuration);
+            ConfigureAuthentication(context.Services);
 
             Configure<AbpExceptionHandlingOptions>(options =>
             {
@@ -66,7 +75,7 @@ namespace MicroStore.Client.PublicWeb
             ConfigureAutoMapper();
 
 
-            ConfigureMinioStorage(configuration);
+            ConfigureMinioStorage(context.Services);
 
             context.Services.AddControllers().AddNewtonsoftJson(opt =>
             {
@@ -165,38 +174,50 @@ namespace MicroStore.Client.PublicWeb
 
 
 
-        private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureAuthentication(IServiceCollection services)
         {
-            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
 
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme =OpenIdConnectDefaults.AuthenticationScheme;
+         
 
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
            {
                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-               options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
-               options.ClientId = configuration.GetValue<string>("IdentityProvider:ClientId");
-               options.ClientSecret = configuration.GetValue<string>("IdentityProvider:ClientSecret");
+               options.Authority = appsettings.Security.Client.Authority;
+               options.ClientId = appsettings.Security.Client.ClientId;
+               options.ClientSecret = appsettings.Security.Client.ClientSecret;
                options.GetClaimsFromUserInfoEndpoint = true;
                options.UsePkce = true;
                options.ResponseType = "code";
-               options.Scope.Add("shoppinggateway.access");
-               options.Scope.Add("mvcgateway.ordering.read");
-               options.Scope.Add("mvcgateway.ordering.write");
-               options.Scope.Add("mvcgateway.billing.read");
-               options.Scope.Add("mvcgateway.billing.write");
-               options.Scope.Add("mvcgateway.shipping.read");
-               options.Scope.Add("mvcgateway.inventory.read");
-               options.Scope.Add("mvcgateway.inventory.write");
+               options.ClaimActions.MapInBoundCustomClaims();
+               appsettings.Security.Client.Scopes.ForEach((scp) => options.Scope.Add(scp));
                options.SaveTokens = true;
 
            });
 
             services.AddAccessTokenManagement();
+
+
+            services.AddAuthorization(options =>
+            {
+                var requireAuthenticatedUserPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                var requireAdminRolePolicy = new AuthorizationPolicyBuilder()
+                    .Combine(requireAuthenticatedUserPolicy)
+                    .RequireClaim(ClaimTypes.Role, ApplicationSecurityRoles.Admin)
+                    .Build();
+
+                options.AddPolicy(ApplicationSecurityPolicies.RequireAuthenticatedUser, requireAuthenticatedUserPolicy);
+
+                options.AddPolicy(ApplicationSecurityPolicies.RequireAdminRole, requireAdminRolePolicy);
+            });
 
         }
 
@@ -204,19 +225,21 @@ namespace MicroStore.Client.PublicWeb
         private void ConfigureAutoMapper() => Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<PublicWebModule>());
 
 
-        private void ConfigureMinioStorage(IConfiguration config)
+        private void ConfigureMinioStorage(IServiceCollection services)
         {
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
+
             Configure<AbpBlobStoringOptions>(opt =>
             {
                 opt.Containers.ConfigureDefault(container =>
                 {
                     container.UseMinio(minio =>
                     {
-                        minio.EndPoint = config.GetValue<string>("Minio:EndPoint");
-                        minio.AccessKey = config.GetValue<string>("Minio:AccessKey");
-                        minio.SecretKey = config.GetValue<string>("Minio:SecretKey");
-                        minio.BucketName = config.GetValue<string>("Minio:BucketName");
-                        minio.WithSSL = config.GetValue<bool>("Minio:WithSSL");
+                        minio.EndPoint = appsettings.Minio.EndPoint;
+                        minio.AccessKey = appsettings.Minio.AccessKey;
+                        minio.SecretKey = appsettings.Minio.SecretKey;
+                        minio.BucketName = appsettings.Minio.BucketName;
+                        minio.WithSSL = appsettings.Minio.WithSSL;
                         minio.CreateBucketIfNotExists = true;
                     });
                 });

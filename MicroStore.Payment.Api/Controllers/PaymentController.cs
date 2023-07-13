@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Payment.Application.PaymentRequests;
+using MicroStore.Payment.Application.Security;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
 namespace MicroStore.Payment.Api.Controllers
@@ -27,6 +29,7 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<PaymentRequestListDto>))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PaymentRequestListQueryModel queryparams, [FromQuery(Name = "user_id")] string? userId = null)
         {
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, userId);
@@ -38,6 +41,7 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpGet]
         [Route("order_id/{orderId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
 
         public async Task<IActionResult> RetrivePaymentRequestWithOrderId(string orderId)
         {
@@ -50,6 +54,7 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpGet]
         [Route("order_number/{orderNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
 
         public async Task<IActionResult> RetrivePaymentRequestWithOrderNumber(string orderNumber)
         {
@@ -62,6 +67,8 @@ namespace MicroStore.Payment.Api.Controllers
         [Route("{paymentId}")]
         [ActionName(nameof(RetrivePaymentRequest))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> RetrivePaymentRequest(string paymentId)
         {
             var result = await _paymentRequestQueryService.GetAsync(paymentId);
@@ -72,6 +79,8 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> CreatePaymentRequest([FromBody] CreatePaymentRequestModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -89,6 +98,8 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpPost]
         [Route("process/{paymentId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentProcessResultDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> ProcessPaymentRequest(string paymentId, [FromBody] ProcessPaymentRequestModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -106,6 +117,8 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpPost]
         [Route("search")]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(PaymentRequestListDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> Search([FromBody]PaymentRequestSearchModel model)
         {
             var validationResult = await ValidateModel(model);

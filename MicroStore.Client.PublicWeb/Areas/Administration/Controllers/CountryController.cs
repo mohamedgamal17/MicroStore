@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic;
+using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
     public class CountryController : AdministrationController
     {
         private readonly CountryService _countryService;

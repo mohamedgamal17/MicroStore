@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.ShippingSystems;
+using MicroStore.Shipping.Domain.Security;
 using System.Net;
 
 namespace MicroStore.Shipping.WebApi.Controllers
@@ -58,6 +60,8 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpPut]
         [Route("{systemName}")]
         [ProducesResponseType(StatusCodes.Status202Accepted,Type = typeof(ShippingSystemDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+
         public async Task<IActionResult> UpdateShipmentSystem(string systemName, [FromBody] UpdateShippingSystemModel model)
         {
             var validationResult = await ValidateModel(model);

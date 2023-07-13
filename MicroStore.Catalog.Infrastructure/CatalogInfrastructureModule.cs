@@ -29,29 +29,7 @@ namespace MicroStore.Catalog.Infrastructure
                 opt.UseSqlServer(builder => builder.MigrationsAssembly(typeof(CatalogDbContext).Assembly.FullName));
 
             });
-
-            ConfigureMinio(configuration);
         }
 
-
-        private void ConfigureMinio(IConfiguration configuration)
-        {
-            Configure<AbpBlobStoringOptions>(options =>
-            {
-                options.Containers.ConfigureDefault(container =>
-                {
-                    container.UseMinio(minio =>
-                    {
-                        minio.EndPoint = configuration.GetValue<string>("Minio:EndPoint");
-                        minio.AccessKey = configuration.GetValue<string>("Minio:AccessKey");
-                        minio.SecretKey = configuration.GetValue<string>("Minio:SecretKey");
-                        minio.BucketName = configuration.GetValue<string>("Minio:Bucket");
-                        minio.CreateBucketIfNotExists = true;
-                        minio.WithSSL = configuration.GetValue<bool>("Minio:UseSsl");
-                       
-                    });
-                });
-            });
-        }
     }
 }

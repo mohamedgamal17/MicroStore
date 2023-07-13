@@ -11,16 +11,25 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
     {
         const string CacheKey = "mvcgatewaytodownstreamtokenexchangeclient";
 
-        public DefaultTokenExchangeDelegatingHandler(IHttpClientFactory httpClinetFactory, IClientAccessTokenCache clientAccessTokenCache, IOptions<IdentityProviderOptions> identityProviderOptions, IOptions<GatewayClientOptions> gatewayClientOptions, ILogger<DefaultTokenExchangeDelegatingHandler> logger, HttpContextClaimsPrincibalAccessor claimsPrincibalAccessor) : base(httpClinetFactory, clientAccessTokenCache, identityProviderOptions, gatewayClientOptions, logger, claimsPrincibalAccessor)
+        public DefaultTokenExchangeDelegatingHandler(IHttpClientFactory httpClinetFactory, IClientAccessTokenCache clientAccessTokenCache, IOptions<IdentityProviderOptions> identityProviderOptions, IOptions<GatewayClientOptions> gatewayClientOptions, ILogger<DefaultTokenExchangeDelegatingHandler> logger, HttpContextClaimsPrincibalAccessor claimsPrincibalAccessor, IHttpContextAccessor httpContextAccessor) : base(httpClinetFactory, clientAccessTokenCache, identityProviderOptions, gatewayClientOptions, logger, claimsPrincibalAccessor)
         {
+            HttpContext = httpContextAccessor.HttpContext!;
         }
 
         protected override List<string> RequiredScopes => ShoppingGatewayScopes.List();
+
+        protected HttpContext HttpContext { get; }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             if(request.Headers.Authorization?.Parameter != null)
             {
+                if (Logger.IsEnabled(LogLevel.Debug))
+                {
+                    Logger.LogDebug("User Claims : {Claims}", HttpContext.User.Claims);
+                }
+               
+
                 var incomingToken = request.Headers.Authorization!.Parameter!;
 
                 request.SetBearerToken(await GetAccessToken(incomingToken, CacheKey, cancellationToken));

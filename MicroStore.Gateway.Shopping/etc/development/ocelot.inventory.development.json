@@ -1,27 +1,6 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/inventory/uesr/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7054
-        }
-      ],
-
-      "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/mvcgateway/inventor/user/{everything}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.inventory.read" ]
-      },
-      "DelegatingHandlers": [
-        "DefaultTokenExchangeDelegatingHandler"
-      ]
-    },
-
-    {
       "DownstreamPathTemplate": "/api/inventory/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -33,6 +12,12 @@
 
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       "UpstreamPathTemplate": "/mvcgateway/inventory/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "Admin"
+      },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
