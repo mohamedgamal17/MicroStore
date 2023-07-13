@@ -12,8 +12,15 @@ namespace MicroStore.IdentityProvider.Host
         public static IEnumerable<IdentityResource> IdentityResources =>
             new IdentityResource[]
             {
-            new IdentityResources.OpenId(),
-            new IdentityResources.Profile(),
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+                new IdentityResource
+                {
+                    Name = "access_control",
+                    DisplayName = "Access Control Resources",
+                    ShowInDiscoveryDocument= true,
+                    UserClaims = {JwtClaimTypes.Role },
+                }
 
             };
 
@@ -104,6 +111,18 @@ namespace MicroStore.IdentityProvider.Host
                     Scopes ={ "shoppinggateway.access" , "mvcgateway.ordering.read" , "mvcgateway.ordering.write" , "mvcgateway.billing.read" ,
                           "mvcgateway.billing.write" , "mvcgateway.shipping.read", "mvcgateway.inventory.read","mvcgateway.inventory.write" ,
                           IdentityServerConstants.StandardScopes.OfflineAccess
+                    },
+
+                    ApiSecrets =  { new Secret("8832bcf5-6970-48f5-b9eb-86a62d104838".Sha512())},
+
+                    UserClaims =
+                    {
+                        JwtClaimTypes.GivenName,
+                        JwtClaimTypes.FamilyName,
+                        JwtClaimTypes.Email,
+                        JwtClaimTypes.BirthDate,
+                        JwtClaimTypes.Name,
+                        JwtClaimTypes.Role
                     }
                 }
             };
@@ -136,6 +155,7 @@ namespace MicroStore.IdentityProvider.Host
 
                     AllowedGrantTypes = new List<string> { OpenIdConnectGrantTypes.AuthorizationCode , OpenIdConnectGrantTypes.RefreshToken,"urn:ietf:params:oauth:grant-type:token-exchange" },
 
+                    AccessTokenType  = AccessTokenType.Reference,
                     AccessTokenLifetime = 120,
 
                     RefreshTokenExpiration = TokenExpiration.Absolute,
@@ -151,7 +171,7 @@ namespace MicroStore.IdentityProvider.Host
                     PostLogoutRedirectUris = { "https://localhost:7020/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "shoppinggateway.access" ,"mvcgateway.ordering.read" , "mvcgateway.ordering.write", "mvcgateway.billing.read","mvcgateway.billing.write","mvcgateway.shipping.read","mvcgateway.inventory.read","mvcgateway.inventory.write" },
+                    AllowedScopes = { "openid", "profile", "access_control", "shoppinggateway.access" ,"mvcgateway.ordering.read" , "mvcgateway.ordering.write", "mvcgateway.billing.read","mvcgateway.billing.write","mvcgateway.shipping.read","mvcgateway.inventory.read","mvcgateway.inventory.write" },
 
                     RequirePkce = true,
 
@@ -258,6 +278,8 @@ namespace MicroStore.IdentityProvider.Host
                 Id = Guid.NewGuid().ToString(),
                 UserName = "alice",
                 Email = "AliceSmith@email.com",
+                GivenName = "alice",
+                FamilyName = "smith",
                 EmailConfirmed = true,
             };
 
@@ -273,6 +295,8 @@ namespace MicroStore.IdentityProvider.Host
             var bob = new ApplicationIdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
+                GivenName = "Bob",
+                FamilyName = "Smith",
                 UserName = "bob",
                 Email = "BobSmith@email.com",
                 EmailConfirmed = true

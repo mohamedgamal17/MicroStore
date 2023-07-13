@@ -24,7 +24,6 @@ namespace MicroStore.IdentityProvider.Host.Services
                     "Invalid grant.");
                 return;
             }
-
             var subjectToken = context.Request.Raw.Get("subject_token");
             if (string.IsNullOrWhiteSpace(subjectToken))
             {

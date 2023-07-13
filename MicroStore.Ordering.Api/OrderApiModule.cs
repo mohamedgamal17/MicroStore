@@ -89,6 +89,7 @@ namespace MicroStore.Ordering.Api
                     ValidateLifetime = true,
                 };
 
+                options.MapInboundClaims = false;
 
             });
 
@@ -103,12 +104,12 @@ namespace MicroStore.Ordering.Api
 
                 options.AddPolicy(ApplicationSecurityPolicies.RequireOrderReadScope,
                         policyBuilder => policyBuilder.Combine(requireAuthenticatedUserPolicy)
-                            .RequireClaim(ApplicationResourceScopes.Order.Read)
+                            .RequireClaim(JwtClaimTypes.Scope,ApplicationResourceScopes.Order.Read)
                     );
 
                 options.AddPolicy(ApplicationSecurityPolicies.RequireOrderWriteScope,
                         policyBuilder => policyBuilder.Combine(requireAuthenticatedUserPolicy)
-                            .RequireClaim(ApplicationResourceScopes.Order.Write)
+                            .RequireClaim(JwtClaimTypes.Scope, ApplicationResourceScopes.Order.Write)
                     );
 
             });

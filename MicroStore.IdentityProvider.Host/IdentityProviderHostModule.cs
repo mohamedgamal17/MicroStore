@@ -28,6 +28,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using MicroStore.IdentityProvider.Host.Theming;
 using Volo.Abp.UI.Navigation;
 using MicroStore.IdentityProvider.Host.Menus;
+using IdentityModel;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -45,9 +46,6 @@ namespace MicroStore.IdentityProvider.Host
         {
 
             var config = context.Services.GetConfiguration();
-
-
-            ConfigureAspNetIdentity(context.Services);
 
             ConfigureIdentityServer(config,context.Services);
 
@@ -231,28 +229,6 @@ namespace MicroStore.IdentityProvider.Host
                     await Config.SeedIdentityUsers(scope.ServiceProvider);
                 }
             }
-        }
-
-        private void ConfigureAspNetIdentity(IServiceCollection services)
-        {
-            services.AddIdentity<ApplicationIdentityUser, ApplicationIdentityRole>(opt =>
-            {
-                opt.Stores.ProtectPersonalData = false;
-                opt.User.RequireUniqueEmail = true;
-                opt.Password.RequireDigit = true;
-                opt.Password.RequiredLength = 6;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireNonAlphanumeric = false;
-               // opt.ClaimsIdentity.MapClaimIdentity();
-            }).AddRoleManager<ApplicationRoleManager>()
-            .AddUserManager<ApplicationUserManager>()
-            .AddDefaultTokenProviders();
-
-            services.AddDataProtection();
-
-
-
         }
 
         private void ConfigureIdentityServer(IConfiguration configuration ,IServiceCollection services)

@@ -10,10 +10,10 @@ namespace MicroStore.IdentityProvider.Host.Services
 {
     public class ApplicationProfileService : DefaultProfileService
     {
-        private readonly UserClaimsPrincipalFactory<ApplicationIdentityUser, ApplicationIdentityRole> _userClaimsPrincipalFactory;
+        private readonly IUserClaimsPrincipalFactory<ApplicationIdentityUser> _userClaimsPrincipalFactory;
 
         private readonly ApplicationUserManager _applicationUserManager;
-        public ApplicationProfileService(ILogger<ApplicationProfileService> logger, ApplicationUserManager applicationUserManager, UserClaimsPrincipalFactory<ApplicationIdentityUser, ApplicationIdentityRole> userClaimsPrincipalFactory) : base(logger)
+        public ApplicationProfileService(ILogger<ApplicationProfileService> logger, ApplicationUserManager applicationUserManager, IUserClaimsPrincipalFactory<ApplicationIdentityUser> userClaimsPrincipalFactory) : base(logger)
         {
             _applicationUserManager = applicationUserManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
@@ -29,6 +29,8 @@ namespace MicroStore.IdentityProvider.Host.Services
             Logger.LogInformation("Requested Claims {Claims}", context.RequestedClaimTypes);
 
             var user = await _applicationUserManager.FindByIdAsync(context.Subject.GetSubjectId());
+
+            var bol = _applicationUserManager.SupportsUserRole;
 
             var claimPrincipal = await _userClaimsPrincipalFactory.CreateAsync(user);
 

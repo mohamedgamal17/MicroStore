@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using IdentityModel.AspNetCore.OAuth2Introspection;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MicroStore.Gateway.Shopping.Config;
+using MicroStore.Gateway.Shopping.Helpers;
 using MicroStore.Gateway.Shopping.Services;
 using MicroStore.Gateway.Shopping.TokenHandlers;
 using Ocelot.DependencyInjection;
@@ -43,27 +46,38 @@ namespace MicroStore.Gateway.Shopping.Extensions
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+
             services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
-                {
-                    opt.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
-                    opt.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
-                    opt.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = true,
-                        ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
-                        ValidateIssuer = true,
-                        ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
-                        ValidateLifetime = true,
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+              {
+                  opt.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
+                  opt.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
+                  opt.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidateAudience = true,
+                      ValidAudience = configuration.GetValue<string>("IdentityProvider:Audience"),
+                      ValidateIssuer = true,
+                      ValidIssuer = configuration.GetValue<string>("IdentityProvider:Authority"),
+                      ValidateLifetime = true,
+                      ValidTypes = new[] { "at+jwt" },
+                  };
 
-                    };
+                  opt.ForwardDefaultSelector = Selector.ForwardReferenceToken();
+              })
+            .AddOAuth2Introspection("introspection", opt =>
+              {
+                  opt.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
 
-                });
+                  opt.ClientId = configuration.GetValue<string>("IdentityProvider:Audience");
+                  opt.ClientSecret = configuration.GetValue<string>("IdentityProvider:ApiSecret");
+                  opt.SaveToken = true;
+                  opt.ClaimsIssuer = configuration.GetValue<string>("IdentityProvider:Authority");
+              });
 
+            services.AddSingleton<IClaimsTransformation, ScopeClaimsTransformer>();
             return services;
         }
 

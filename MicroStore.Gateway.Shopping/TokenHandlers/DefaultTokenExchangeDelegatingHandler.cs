@@ -24,6 +24,12 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
         {
             if(request.Headers.Authorization?.Parameter != null)
             {
+                if (Logger.IsEnabled(LogLevel.Debug))
+                {
+                    Logger.LogDebug("User Claims : {Claims}", HttpContext.User.Claims);
+                }
+               
+
                 var incomingToken = request.Headers.Authorization!.Parameter!;
 
                 request.SetBearerToken(await GetAccessToken(incomingToken, CacheKey, cancellationToken));
