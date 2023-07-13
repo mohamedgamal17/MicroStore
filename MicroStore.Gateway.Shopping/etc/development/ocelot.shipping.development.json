@@ -53,6 +53,12 @@
       ],
       "UpstreamPathTemplate": "/mvcgateway/shipping/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "Admin"
+      },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]

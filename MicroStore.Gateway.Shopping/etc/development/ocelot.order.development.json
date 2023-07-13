@@ -55,9 +55,13 @@
       ],
       "Priority": 0,
       "UpstreamPathTemplate": "/mvcgateway/ordering/{everything}",
-
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
-
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "Admin"
+      },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]

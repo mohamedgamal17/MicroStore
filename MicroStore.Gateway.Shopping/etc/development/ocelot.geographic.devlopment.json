@@ -11,7 +11,29 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/geographic/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "UpstreamHttpMethod": [ "GET" ],
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7018
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/geographic/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "PATCH", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "Admin"
+      },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
