@@ -39,8 +39,6 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
 
         public async Task<TResponse> MakeRequest<TResponse>(string path, HttpMethod httpMethod, object request = null, CancellationToken cancellationToken = default)
         {
-
-
             HttpRequestMessage httpRequest = new HttpRequestMessage
             {
                 RequestUri = new Uri(string.Format("{0}{1}", _httpClient.BaseAddress?.AbsoluteUri, path)),

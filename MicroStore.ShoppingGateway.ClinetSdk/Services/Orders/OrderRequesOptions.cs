@@ -38,4 +38,12 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
         public double UnitPrice { get; set; }
         public int Quantity { get; set; }
     }
+
+    public class OrderListRequestOptions : PagingAndSortingRequestOptions
+    {
+        public string OrderNumber { get; set; }
+        public string States { get; set; }
+        public DateTime? StartSubmissionDate { get; set; }
+        public DateTime? EndSubmissionDate { get; set; }
+    }
 }

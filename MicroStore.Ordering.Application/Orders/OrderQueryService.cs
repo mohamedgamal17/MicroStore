@@ -126,6 +126,14 @@ namespace MicroStore.Ordering.Application.Orders
                 query = query.Where(x => x.SubmissionDate <= model.EndSubmissionDate);
             }
 
+            if(model.OrderNumber != null)
+            {
+                query = from order in query
+                        where order.OrderNumber == model.OrderNumber
+                                 || order.OrderNumber.StartsWith(model.OrderNumber)
+                                 || order.OrderNumber.Contains(model.OrderNumber)
+                              select order;
+            }
 
             if (!string.IsNullOrEmpty(model.SortBy))
             {
