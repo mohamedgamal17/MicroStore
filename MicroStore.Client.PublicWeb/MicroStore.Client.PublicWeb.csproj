@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Administration\Components\Catalog\**" />
+    <Compile Remove="Ex\**" />
     <Compile Remove="Logs\**" />
     <Content Remove="Areas\Administration\Components\Catalog\**" />
+    <Content Remove="Ex\**" />
     <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Areas\Administration\Components\Catalog\**" />
+    <EmbeddedResource Remove="Ex\**" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Areas\Administration\Components\Catalog\**" />
+    <None Remove="Ex\**" />
     <None Remove="Logs\**" />
   </ItemGroup>
 
@@ -50,7 +54,6 @@
   <ItemGroup>
     <Folder Include="Areas\Administration\Views\Shared\Components\Catalog\" />
     <Folder Include="Components\Purshase\" />
-    <Folder Include="Ex\" />
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\libs\" />

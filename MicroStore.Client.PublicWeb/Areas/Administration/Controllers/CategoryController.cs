@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
-using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using System.Net;
 
@@ -45,13 +45,14 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             return Json(responseModel);
         }
-
+        [RuleSetForClientSideMessages("*")]
         public IActionResult Create()
         {
             return View(new CategoryModel());
         }
 
         [HttpPost]
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Create(CategoryModel model)
         {
             if (!ModelState.IsValid)
@@ -76,7 +77,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
 
-     
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit(string id)
         {
             var category = await _categoryService.GetAsync(id);
@@ -89,6 +90,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
 
         [HttpPost]
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit(CategoryModel model)
         {
             if (!ModelState.IsValid)

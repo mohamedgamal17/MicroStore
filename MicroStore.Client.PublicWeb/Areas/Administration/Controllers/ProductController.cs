@@ -8,7 +8,6 @@ using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
-using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using System.Data;
 using System.Net;
@@ -79,6 +78,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(model);
         }
 
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Create()
         {
             ControllerContext.SetRulesetForClientsideMessages("*");
@@ -93,6 +93,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
 
         [HttpPost]
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Create(ProductModel model)
         {
             if (!ModelState.IsValid)
@@ -125,6 +126,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
         }
 
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit(string id)
         {
             var product = await _productService.GetAsync(id);
@@ -141,6 +143,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
         [HttpPost]
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit(ProductModel model)
         {
             if (!ModelState.IsValid)
@@ -189,6 +192,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(model);
         }
 
+        [RuleSetForClientSideMessages("*")]
         public IActionResult CreateProductImageModal(string productId)
         {
             if (!ModelState.IsValid)
@@ -228,6 +232,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(ObjectMapper.Map<Product, ProductVM>(result));
         }
 
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> EditProductImageModal(string productId, string productImageId)
         {
             if (!ModelState.IsValid)

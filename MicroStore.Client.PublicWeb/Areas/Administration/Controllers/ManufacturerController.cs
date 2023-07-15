@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Manufacturers;
 using MicroStore.Client.PublicWeb.Security;
@@ -41,13 +42,16 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             return Json(responseModel);
         }
-        public  IActionResult Create()
+
+        [RuleSetForClientSideMessages("*")]
+        public IActionResult Create()
         {
             return View(new ManufacturerModel());
         }
 
 
         [HttpPost]
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Create(ManufacturerModel model)
         {
             if (!ModelState.IsValid)
@@ -62,7 +66,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return RedirectToAction("Index");
         }
 
-        
+
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit(string id)
         {
             var manufacturer = await _manufacturerService.GetAsync(id);
@@ -75,6 +80,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
         [HttpPost]
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit(string id , ManufacturerModel model)
         {
             if (!ModelState.IsValid)

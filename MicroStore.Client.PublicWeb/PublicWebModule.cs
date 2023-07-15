@@ -33,6 +33,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using FluentValidation.AspNetCore;
 using Volo.Abp.FluentValidation;
+using MicroStore.Client.PublicWeb.Extensions;
 
 namespace MicroStore.Client.PublicWeb
 {
