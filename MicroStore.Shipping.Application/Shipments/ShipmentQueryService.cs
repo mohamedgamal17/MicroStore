@@ -138,6 +138,18 @@ namespace MicroStore.Shipping.Application.Shipments
                 query = query.Where(x => x.Address.State == model.State);
             }
 
+            if(model.StartDate != null)
+            {
+                var startDate = model.StartDate.Value;
+                query = query.Where(x => x.CreationTime >= startDate);
+            }
+
+            if (model.EndDate != null)
+            {
+                var endDate = model.EndDate.Value;
+                query = query.Where(x => x.CreationTime <= endDate);
+            }
+
 
             return query;
 
