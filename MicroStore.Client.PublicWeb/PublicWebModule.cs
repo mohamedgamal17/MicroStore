@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.Extensions.Configuration;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Bundling;
-using MicroStore.Client.PublicWeb.Components.Basket;
 using MicroStore.Client.PublicWeb.Components.Cart;
 using MicroStore.Client.PublicWeb.Consts;
-using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Menus;
 using MicroStore.Client.PublicWeb.Theming;
 using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
@@ -15,16 +11,11 @@ using Newtonsoft.Json.Converters;
 using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -32,6 +23,8 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
+using FluentValidation.AspNetCore;
+using Volo.Abp.FluentValidation;
 
 namespace MicroStore.Client.PublicWeb
 {
@@ -41,7 +34,8 @@ namespace MicroStore.Client.PublicWeb
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringMinioModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpFluentValidationModule))]
     public class PublicWebModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -120,6 +114,8 @@ namespace MicroStore.Client.PublicWeb
             //    options.Widgets.Add(typeof(CartWidgetViewComponent));
             //});
 
+            context.Services.AddFluentValidationAutoValidation();
+            context.Services.AddFluentValidationClientsideAdapters();
             context.Services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 

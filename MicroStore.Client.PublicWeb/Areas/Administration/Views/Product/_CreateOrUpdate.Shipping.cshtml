@@ -10,19 +10,25 @@
         </div>
     </abp-card-header>
     <abp-card-body>
-         <div class="form-group row mb-3">
+        <div class="form-group row mb-3">
             <div class="col-md-3">
                 <div class="float-sm-left float-md-right">
                     <micro-label asp-for="@Model.Weight"></micro-label>
                 </div>
             </div>
-            <div class="col-md-9">
-                <div class="input-group">
-                    <input asp-for="@Model.Weight.Value" type="number" class="form-control" placeholder="Value" />
-                    <select asp-for="@Model.Weight.Unit" asp-items="@(Html.GetEnumSelectList<WeightUnit>())" class="form-control"></select>
-                    <span asp-validation-for="@Model.Weight.Value" class="invalid-feedback"></span>
-                    <span asp-validation-for="@Model.Weight.Unit" class="invalid-feedback"></span>
-                    <span asp-validation-for="@Model.Weight" class="invalid-feedback"></span>
+            <div class="col-md-9 row">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <input asp-for="@Model.Weight.Value" type="number" class="form-control" placeholder="Value" />
+                        <select asp-for="@Model.Weight.Unit" asp-items="@(Html.GetEnumSelectList<WeightUnit>())" 
+                            class="form-control"></select>
+
+                    </div>
+                </div>
+                <div class="col-sm-12 row">
+                    <span asp-validation-for="@Model.Weight.Value" class="invalid-feedback d-inline"></span>
+                    <span asp-validation-for="@Model.Weight.Unit" class="invalid-feedback d-inline"></span>
+
                 </div>
 
 
@@ -37,16 +43,19 @@
                 </div>
             </div>
 
-            <div class="col-md-9">
-                <div class="input-group">
+            <div class="col-md-9 row">
+                <div class="col-sm-12 input-group">
                     <input asp-for="@Model.Dimensions.Length" type="number" class="form-control" placeholder="Lenght" />
                     <input asp-for="@Model.Dimensions.Width" type="number" class="form-control" placeholder="Width" />
                     <input asp-for="@Model.Dimensions.Height" type="number" class="form-control" placeholder="Height" />
-                                             <select asp-for="@Model.Dimensions.Unit" asp-items="@(Html.GetEnumSelectList<DimensionUnit>())" class="form-control"></select>
+                    <select asp-for="@Model.Dimensions.Unit" asp-items="@(Html.GetEnumSelectList<DimensionUnit>())"                             class="form-control"></select>
+                </div>
 
-                    <span asp-validation-for="@Model.Dimensions.Length" class="invalid-feedback"></span>
-                    <span asp-validation-for="@Model.Dimensions.Width" class="invalid-feedback"></span>
-                    <span asp-validation-for="@Model.Dimensions.Height" class="invalid-feedback"></span>
+                <div class="col-sm-12 row">
+                    <span asp-validation-for="@Model.Dimensions.Length" class="invalid-feedback  d-inline"></span>
+                    <span asp-validation-for="@Model.Dimensions.Width" class="invalid-feedback  d-inline"></span>
+                    <span asp-validation-for="@Model.Dimensions.Height" class="invalid-feedback  d-inline"></span>
+
                 </div>
             </div>
         </div>

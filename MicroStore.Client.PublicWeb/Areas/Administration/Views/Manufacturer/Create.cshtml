@@ -6,7 +6,6 @@
 }
 
 <div class="content-wrapper mr-2">
-    <!-- Content Header (Page header) -->
     <form method="post" asp-action="Create">
         @Html.AntiForgeryToken()
         <div class="content-header">
@@ -14,7 +13,7 @@
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1 class="m-0">Edit manufacturer details - @Model.Name</h1>
-                    </div><!-- /.col -->
+                    </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
@@ -24,12 +23,10 @@
                                 </button>
                             </li>
                         </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /.content-header -->
-
         <div class="content">
             <div class="container-fluid">
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products;
 using MicroStore.Client.PublicWeb.Extensions;
@@ -54,6 +55,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         public async Task<IActionResult> Create()
         {
+            ControllerContext.SetRulesetForClientsideMessages("*");
+
             ViewBag.Categories =  await BuildCategoriesSelecetListItems();
 
             ViewBag.Manufacturers = await BuildManufacturersSelecetListItems();
@@ -67,12 +70,14 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
+        
                 ViewBag.Categories = await BuildCategoriesSelecetListItems();
 
                 ViewBag.Manufacturers = await BuildManufacturersSelecetListItems(model.ManufacturersIds);
 
                 return View(model);
             }
+
 
             try
             {
@@ -111,10 +116,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ProductModel model)
         {
-
-
             if (!ModelState.IsValid)
             {
+
                 var product = await _productService.GetAsync(model.Id);
 
                 ViewBag.Categories = await BuildCategoriesSelecetListItems(model.CategoriesIds);
@@ -172,6 +176,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
+
                 return BadRequest(ModelState);
             }
 
@@ -223,9 +228,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProductImage(UpdateProductImageModel model)
         {
-
             if (!ModelState.IsValid)
             {
+
                 return BadRequest(ModelState);
             }
 
@@ -246,6 +251,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
+
                 return BadRequest(ModelState);
             }
 
