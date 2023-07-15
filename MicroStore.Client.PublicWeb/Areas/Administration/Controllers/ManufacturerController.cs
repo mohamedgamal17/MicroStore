@@ -19,20 +19,27 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         public IActionResult Index()
         {
-            return View(new ManufacturerListModel());
+            return View(new ManufacturerSearchModel());
         }
 
         
         [HttpPost]
-        public async Task<IActionResult> Index(ManufacturerListModel model)
+        public async Task<IActionResult> Index(ManufacturerSearchModel model)
         {
-            var requestOptions = new SortingRequestOptions();
+            var requestOptions = new ManufacturerListRequestOptions()
+            {
+                Name = model.Name
+            };
 
             var result = await _manufacturerService.ListAsync(requestOptions);
 
-            model.Data = ObjectMapper.Map<List<Manufacturer>, List<ManufacturerVM>>(result);
+            var responseModel = new ManufacturerListModel
+            {
+                Data = ObjectMapper.Map<List<Manufacturer>, List<ManufacturerVM>>(result),
+                Draw = model.Draw
+            };
 
-            return Json(model);
+            return Json(responseModel);
         }
         public  IActionResult Create()
         {

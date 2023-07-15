@@ -25,7 +25,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
             return await _clinet.MakeRequest<Product>( BASE_URL_WITHOUT_ID, HttpMethod.Post ,options, cancellationToken);
         }
 
-        public Task<PagedList<Product>> ListAsync(PagingAndSortingRequestOptions options, CancellationToken cancellationToken = default)
+        public Task<PagedList<Product>> ListAsync(ProductListRequestOptions options, CancellationToken cancellationToken = default)
         {
             return _clinet.MakeRequest<PagedList<Product>>(BASE_URL_WITHOUT_ID,HttpMethod.Get, options, cancellationToken);
         }

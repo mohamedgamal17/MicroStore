@@ -40,28 +40,49 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         public async Task<IActionResult> Index()
         {
-                 
-            return View(new ProductListModel());
-            
+
+            ViewBag.Categories = await BuildCategoriesSelecetListItems();
+
+            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems();
+
+            return View(new ProductSearchModel());
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(ProductListModel model)
+        public async Task<IActionResult> Index(ProductSearchModel model)
         {
-            var data = await _productService.ListAsync(new PagingAndSortingRequestOptions { Skip = model.Skip, Lenght = model.Length });
+            var requestOptions = new ProductListRequestOptions
+            {
+                Name = model.Name,
+                Category = model.Category,
+                Manufacturer = model.Manufacturer,
+                Tag = model.Tag,
+                MinPrice = model.MinPrice,
+                MaxPrice = model.MaxPrice,
+                Skip = model.Skip,
+                Lenght = model.Length
+            };
 
-            model.Data = ObjectMapper.Map<List<Product>, List<ProductVM>>(data.Items);
+            var data = await _productService.ListAsync(requestOptions);
 
-            model.RecordsTotal = data.TotalCount;
+            var responseModel = new ProductListModel
+            {
+                Start = model.Start,
+                Length = model.Length,
+                Draw = model.Draw,
+                RecordsTotal = model.RecordsTotal,
+                Data = ObjectMapper.Map<List<Product>, List<ProductVM>>(data.Items)
+            };
 
             return Json(model);
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Categories =  await BuildCategoriesSelecetListItems();
+            ViewBag.Categories = await BuildCategoriesSelecetListItems(idDefaultValue: false );
 
-            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems();
+            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems(idDefaultValue: false);
 
             return View(new ProductModel());
         }
@@ -88,7 +109,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return RedirectToAction("Index");
 
             }
-            catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest) 
+            catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
                 ex.Erorr.MapToModelState(ModelState);
 
@@ -136,11 +157,12 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 var requestOptions = ObjectMapper.Map<ProductModel, ProductRequestOptions>(model);
 
-                await _productService.UpdateAsync(model.Id,requestOptions);
+                await _productService.UpdateAsync(model.Id, requestOptions);
 
                 return RedirectToAction("Index");
 
-            }catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
+            }
+            catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
                 ex.Erorr.MapToModelState(ModelState);
 
@@ -151,7 +173,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ListProductImages(string id, ListProductImagesModel model) 
+        public async Task<IActionResult> ListProductImages(string id, ListProductImagesModel model)
         {
             var productImages = await _productService.ListProductImageAsync(id);
 
@@ -169,11 +191,11 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return BadRequest(ModelState);
             }
 
-            return PartialView("_Create.MultiMedia.Image", new CreateProductImageModel {  ProductId = productId });
+            return PartialView("_Create.MultiMedia.Image", new CreateProductImageModel { ProductId = productId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProductImage( CreateProductImageModel model)
+        public async Task<IActionResult> CreateProductImage(CreateProductImageModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -195,12 +217,12 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 DisplayOrder = model.DisplayOrder
             };
 
-            var result=  await _productService.CreateProductImageAsync(model.ProductId, requestOptions);
+            var result = await _productService.CreateProductImageAsync(model.ProductId, requestOptions);
 
             return Json(ObjectMapper.Map<Product, ProductVM>(result));
         }
 
-        public async Task<IActionResult> EditProductImageModal(string productId , string productImageId)
+        public async Task<IActionResult> EditProductImageModal(string productId, string productImageId)
         {
             if (!ModelState.IsValid)
             {
@@ -210,7 +232,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             var productImage = result.SingleOrDefault(x => x.Id == productImageId);
 
-            if(productImage == null)
+            if (productImage == null)
             {
                 return BadRequest("product image is not exist");
             }
@@ -247,7 +269,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> RemoveProductImage([FromBody]RemoveProductImageModel model)
+        public async Task<IActionResult> RemoveProductImage([FromBody] RemoveProductImageModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -260,16 +282,37 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         }
 
-        private async Task<List<SelectListItem>> BuildCategoriesSelecetListItems(string[]? categoriesIds = null)
+        private async Task<List<SelectListItem>> BuildCategoriesSelecetListItems(string[]? categoriesValues = null , bool idDefaultValue  = true)
         {
-            var categorySelectItems =  new List<SelectListItem>();
+            var categorySelectItems = new List<SelectListItem>();
 
-            var categories = await _categoryService.ListAsync(new SortingRequestOptions { Desc = true });
+            var categories = await _categoryService.ListAsync(new CategoryListRequestOptions { Desc = true });
 
-         
+
             if (categories != null)
             {
-                categorySelectItems = categories.Select(x => new SelectListItem { Text = x.Name, Value = x.Id, Selected = categoriesIds?.Contains(x.Id) ?? false }).ToList();
+                if (idDefaultValue)
+                {
+                    categorySelectItems = categories
+                        .Select(x => new SelectListItem 
+                        { Text = x.Name, 
+                            Value = x.Id, Selected = 
+                            categoriesValues?.Contains(x.Id) ?? false 
+                        }).ToList();
+
+                }
+                else
+                {
+                    categorySelectItems = categories
+                     .Select(x => new SelectListItem
+                     {
+                         Text = x.Name,
+                         Value = x.Name,
+                         Selected =
+                         categoriesValues?.Contains(x.Name) ?? false
+                     }).ToList();
+                }
+               
 
             }
 
@@ -277,20 +320,40 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
 
-        private async Task<List<SelectListItem>> BuildManufacturersSelecetListItems(string[]? manufacturersIds = null)
+        private async Task<List<SelectListItem>> BuildManufacturersSelecetListItems(string[]? manufacturersValues = null , bool idDefaultValue = true)
         {
             var manufacturerSelectItems = new List<SelectListItem>();
 
-            var manufacturers = await _manufacturerService.ListAsync(new SortingRequestOptions { Desc = true });
+            var manufacturers = await _manufacturerService.ListAsync(new ManufacturerListRequestOptions { Desc = true });
 
 
             if (manufacturers != null)
             {
-                manufacturerSelectItems = manufacturers.Select(x => new SelectListItem { Text = x.Name, Value = x.Id, Selected = manufacturersIds?.Contains(x.Id) ?? false }).ToList();
+                if (idDefaultValue)
+                {
+                    manufacturerSelectItems = manufacturers
+                        .Select(x => new SelectListItem 
+                        { 
+                            Text = x.Name, 
+                            Value = x.Id, 
+                            Selected = manufacturersValues?.Contains(x.Id) ?? false 
+                        }).ToList();
+                }
+                else
+                {
+                    manufacturerSelectItems = manufacturers
+                     .Select(x => new SelectListItem
+                     {
+                         Text = x.Name,
+                         Value = x.Name,
+                         Selected = manufacturersValues?.Contains(x.Name) ?? false
+                     }).ToList();
+                }
 
+             
             }
 
             return manufacturerSelectItems;
-        }     
+        }
     }
 }

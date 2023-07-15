@@ -6,4 +6,9 @@
         public string Description { get; set; }
     }
 
+
+    public class CategoryListRequestOptions : SortingRequestOptions
+    {
+        public string Name { get; set; }
+    }
 }

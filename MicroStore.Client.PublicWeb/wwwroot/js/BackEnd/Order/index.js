@@ -9,16 +9,6 @@
                     data.orderNumber = $("#OrderNumber").val();
                     data.states = $("#States").val();
                     console.log($("#States").val())
-                },
-                fnServerParams: function (data) {
-                    var startSubmissionDate = $("#StartSubmissionDate").val();
-                    var endSubmissionDate = $("#EndSubmissionDate").val();
-                    var orderNumber = $("#OrderNumber").val();
-                    var states = $("#States").val();
-                    data.push({ name: "startSubmissionDate", value: startSubmissionDate })
-                    data.push({ name: "endSubmissionDate", value: endSubmissionDate })
-                    data.push({ name: "orderNumber", value: orderNumber })
-                    data.push({ name: "states", value: states })
                 }
             },
             paging: true,

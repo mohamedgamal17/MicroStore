@@ -21,7 +21,7 @@ namespace MicroStore.Client.PublicWeb.Components.ProductListWidget
 
         public async Task<IViewComponentResult> InvokeAsync(string pagingUrl,int currentPage = 1 ,int pageSize = 12,bool isFeatured = false,string? category = null,string? manufacturer = null, int productCardSize = 4)
         {
-            var requestOptions = new PagingAndSortingRequestOptions
+            var requestOptions = new ProductListRequestOptions
             {
                 Skip = (currentPage - 1) * pageSize,
                 Lenght = pageSize,

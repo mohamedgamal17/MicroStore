@@ -90,26 +90,20 @@ namespace MicroStore.Catalog.Application.Products
 
         private IQueryable<ProductDto> ApplyQueryFilteration(IQueryable<ProductDto> query , ProductListQueryModel model)
         {
-            if (!string.IsNullOrEmpty(model.Categories))
+            if (!string.IsNullOrEmpty(model.Category))
             {
-                var categories = model.Categories.Split(',');
-
-                query = query.Where(x => x.ProductCategories.Any(x => categories.Contains(x.Category.Name)));
+                query = query.Where(x => x.ProductCategories.Any(x => model.Category == x.Category.Name));
             }
 
-            if (!string.IsNullOrEmpty(model.Manufacturers))
+            if (!string.IsNullOrEmpty(model.Manufacturer))
             {
-                var manufacturers = model.Manufacturers.Split(',');
-
-                query = query.Where(x => x.ProductManufacturers.Any(x => manufacturers.Contains(x.Manufacturer.Name)));
+                query = query.Where(x => x.ProductManufacturers.Any(x => model.Manufacturer == x.Manufacturer.Name));
             }
 
-            if (!string.IsNullOrEmpty(model.Tags))
+            if (!string.IsNullOrEmpty(model.Tag))
             {
-                var tags = model.Tags.Split(",");
-                query = query.Where(x => x.ProductTags.Any(x => tags.Contains(x.Name)));
+                query = query.Where(x => x.ProductTags.Any(x => model.Tag == x.Name));
             }
-
 
             if(model.MinPrice != null)
             {
@@ -124,6 +118,15 @@ namespace MicroStore.Catalog.Application.Products
             if(model.SortBy != null)
             {
                 query = TryToSort(query, model.SortBy, model.Desc);
+            }
+
+            if(!string.IsNullOrEmpty(model.Name) )
+            {
+                var name = model.Name.ToLower();
+
+                 query = from product in query
+                            where product.Name.ToLower().Contains(name)
+                            select product;
             }
 
             return query;

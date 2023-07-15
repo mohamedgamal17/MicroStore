@@ -19,7 +19,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
             return await _microStoreClinet.MakeRequest<Category>(BASE_URL, HttpMethod.Post, options,  cancellationToken );
         }
 
-        public async Task<List<Category>> ListAsync(SortingRequestOptions options , CancellationToken cancellationToken =default )
+        public async Task<List<Category>> ListAsync(CategoryListRequestOptions options , CancellationToken cancellationToken =default )
         {
             return await _microStoreClinet.MakeRequest<List<Category>>(BASE_URL, HttpMethod.Get, options, cancellationToken);
         }

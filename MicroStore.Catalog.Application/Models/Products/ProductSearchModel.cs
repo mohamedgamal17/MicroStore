@@ -2,8 +2,6 @@
 
 namespace MicroStore.Catalog.Application.Models.Products
 {
-
-
     public class ProductSearchModel : PagingQueryParams
     {
         public string KeyWords { get; set; }

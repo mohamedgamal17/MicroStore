@@ -51,10 +51,10 @@ namespace MicroStore.Catalog.Application
 
                 transitConfig.UsingRabbitMq((ctx, rabbitConfig) =>
                 {
-                    rabbitConfig.Host(configuration.GetValue<string>(appSettings.MassTransit.Host), cfg =>
+                    rabbitConfig.Host(appSettings.MassTransit.Host, cfg =>
                     {
-                        cfg.Username(configuration.GetValue<string>(appSettings.MassTransit.UserName));
-                        cfg.Password(configuration.GetValue<string>(appSettings.MassTransit.Password));
+                        cfg.Username(appSettings.MassTransit.UserName);
+                        cfg.Password(appSettings.MassTransit.Password);
 
                     });
 

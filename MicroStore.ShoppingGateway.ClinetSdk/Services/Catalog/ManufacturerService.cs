@@ -15,7 +15,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
             _microStoreClient = microStoreClient;
         }
 
-        public async Task<List<Manufacturer>> ListAsync(SortingRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<List<Manufacturer>> ListAsync(ManufacturerListRequestOptions options, CancellationToken cancellationToken = default)
         {
             return await _microStoreClient.MakeRequest<List<Manufacturer>>(BASE_URL, HttpMethod.Get, options, cancellationToken);
         }

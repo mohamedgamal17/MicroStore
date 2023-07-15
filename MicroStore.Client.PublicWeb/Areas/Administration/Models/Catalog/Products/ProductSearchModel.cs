@@ -1,8 +1,6 @@
-﻿using MicroStore.BuildingBlocks.Paging.Params;
-
-namespace MicroStore.Catalog.Application.Models.Products
+﻿namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products
 {
-    public class ProductListQueryModel  : PagingAndSortingQueryParams
+    public class ProductSearchModel : BasePagedListModel
     {
         public string? Name { get; set; }
         public string? Category { get; set; }

@@ -1,5 +1,5 @@
-﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
-@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductListModel
+﻿ @using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductSearchModel
 
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ProductMenus.Index);
@@ -7,13 +7,12 @@
 
 
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Dashboard v3 </h1>
-                </div><!-- /.col -->
+                    <h1 class="m-0">Products</h1>
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
@@ -30,6 +29,7 @@
 
     <section class="content">
         <div class="container-fluid">
+            <partial name="_Product.AdvancedSearch" model="Model" />
             <abp-card>
                 <abp-card-body>
                      <abp-table striped-rows="true" id="ProductsTable"></abp-table>

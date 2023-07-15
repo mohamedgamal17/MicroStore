@@ -24,18 +24,26 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(new CategoryListModel());
+            return View(new CategorySearchModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(CategoryListModel model)
+        public async Task<IActionResult> Index(CategorySearchModel model)
         {
-            var data = await _categoryService.ListAsync(new SortingRequestOptions ());
+            var requestOptions = new CategoryListRequestOptions
+            {
+                Name = model.Name
+            };
 
-            model.Data = ObjectMapper.Map<List<Category>, List<CategoryVM>>(data);
+            var data = await _categoryService.ListAsync(requestOptions);
 
+            var responseModel = new CategoryListModel
+            {
+                Data = ObjectMapper.Map<List<Category>, List<CategoryVM>>(data),
+                Draw = model.Draw
+            };
 
-            return Json(model);
+            return Json(responseModel);
         }
 
         public IActionResult Create()

@@ -28,7 +28,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(List<ManufacturerDto>)))]
-        public async Task<IActionResult> GetManufacturerList([FromQuery] SortingQueryParams queryParams)
+        public async Task<IActionResult> GetManufacturerList([FromQuery] ManufacturerListQueryModel queryParams)
         {
             var result = await _manufacturerQueryService
                 .ListAsync(queryParams);
