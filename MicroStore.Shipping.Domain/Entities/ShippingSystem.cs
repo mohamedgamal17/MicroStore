@@ -1,8 +1,8 @@
 ﻿#pragma warning disable CS8618
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 namespace MicroStore.Shipping.Domain.Entities
 {
-    public class ShippingSystem : Entity<string>
+    public class ShippingSystem : AuditedEntity<string>
     {
         public string  Name { get; set; }
         public string DisplayName { get; set; }

@@ -1,10 +1,10 @@
 ﻿#pragma warning disable CS8618
 using MicroStore.Shipping.Domain.ValueObjects;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Domain.Entities.Events;
 namespace MicroStore.Shipping.Domain.Entities
 {
-    public class Shipment :BasicAggregateRoot<string>
+    public class Shipment : AuditedAggregateRoot<string>
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }

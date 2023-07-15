@@ -4,6 +4,7 @@ using MicroStore.Shipping.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Shipping.Infrastructure.Migrations
 {
     [DbContext(typeof(ShippingDbContext))]
-    partial class ShippingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230715215323_EnableAuditingMigration")]
+    partial class EnableAuditingMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

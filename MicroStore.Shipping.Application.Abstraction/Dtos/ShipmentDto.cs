@@ -2,7 +2,7 @@
 
 namespace MicroStore.Shipping.Application.Abstraction.Dtos
 {
-    public class ShipmentDto : EntityDto<string>
+    public class ShipmentDto : AuditedEntityDto<string>
     {
         public string OrderId { get; set; }
         public string UserId { get; set; }
