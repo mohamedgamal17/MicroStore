@@ -118,6 +118,13 @@ namespace MicroStore.Payment.Application.PaymentRequests
                 query = query.Where(x => x.UserId == userId);
             }
 
+            if (!string.IsNullOrEmpty(model.OrderNumber))
+            {
+                var orderNumber = model.OrderNumber.ToLower();
+
+                query = query.Where(x => x.OrderNumber.ToLower().Contains(orderNumber));
+            }
+
             if (!string.IsNullOrEmpty(model.States))
             {
                 var states = model.States.Split(',');
@@ -133,6 +140,18 @@ namespace MicroStore.Payment.Application.PaymentRequests
             if(model.MaxPrice != null)
             {
                 query= query.Where(x=>x.TotalCost <=model.MaxPrice);
+            }
+
+            if (model.StartDate != null)
+            {
+                var startDate = model.StartDate.Value;
+                query = query.Where(x => x.CreationTime >= startDate);
+            }
+
+            if(model.EndDate != null)
+            {
+                var endDate = model.EndDate.Value;
+                query = query.Where(x => x.CreationTime <= endDate);
             }
 
             if (model.SortBy != null)
