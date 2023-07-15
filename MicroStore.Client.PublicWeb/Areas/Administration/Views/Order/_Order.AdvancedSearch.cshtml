@@ -1,0 +1,77 @@
+﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderSearchModel
+<abp-card>
+    <form id="AdvancedSearchForm">
+        <abp-card-header>
+            <abp-card-title><i class="fas fa-search mr-2 text-lightblue"></i><span class="text-lg"> Search</span> </abp-card-title>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus text-lg"></i>
+                </button>
+            </div>
+        </abp-card-header>
+        <abp-card-body>
+            <abp-row>
+                <abp-column size-md="_6">
+                    <abp-row class="form-group mb-3">
+                        <abp-column size-sm="_4">
+                            <div class="float-sm-left float-md-right">
+                                <micro-label class="col-form-label" asp-for="@Model.StartSubmissionDate"></micro-label>
+                            </div>
+
+                        </abp-column>
+                        <abp-column size-sm="_8">
+                            <input asp-for="@Model.StartSubmissionDate" id="@Html.IdFor(x=> x.StartSubmissionDate)" class="form-control" />
+                            <span class="text-danger" asp-validation-for="@Model.StartSubmissionDate" />
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="form-group mb-3">
+                        <abp-column size-sm="_4">
+                            <div class="float-sm-left float-md-right">
+                                <micro-label class="col-form-label" asp-for="@Model.EndSubmissionDate"></micro-label>
+                            </div>
+
+                        </abp-column>
+                        <abp-column size-sm="_8">
+                            <input asp-for="@Model.EndSubmissionDate" id="@Html.IdFor(x=> x.EndSubmissionDate)" class="form-control" />
+                            <span class="text-danger" asp-validation-for="@Model.EndSubmissionDate" />
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+                <abp-column size-md="_6">
+                    <abp-row class="form-group mb-3">
+                        <abp-column size-sm="_4">
+                            <div class="float-sm-left float-md-right">
+                                <micro-label class="col-form-label" asp-for="@Model.OrderNumber"></micro-label>
+                            </div>
+
+                        </abp-column>
+                        <abp-column size-sm="_8">
+                            <input asp-for="@Model.OrderNumber" id="@Html.IdFor(x=> x.OrderNumber)" class="form-control" />
+                            <span class="text-danger" asp-validation-for="@Model.OrderNumber" />
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="form-group mb-3">
+                        <abp-column size-sm="_4">
+                            <div class="float-sm-left float-md-right">
+                                <micro-label class="col-form-label" asp-for="@Model.States"></micro-label>
+                            </div>
+
+                        </abp-column>
+                        <abp-column size-sm="_8">
+                            <select asp-for="@Model.States" class="form-control" id="@Html.IdFor(x=> x.States)" asp-items="@(Html.GetEnumSelectList<OrderState>())">
+                            </select>
+                            <span class="text-danger" asp-validation-for="@Model.States" />
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+                <abp-column size-md="_12" class="mt-3">
+                    <div class="text-center">
+                        <abp-button type="submit" button-type="Info"><i class="fas fa-search mr-1 text-white"></i><span class=""> Search</span> </abp-button>
+                    </div>
+                </abp-column>
+
+            </abp-row>
+        </abp-card-body>
+    </form>
+</abp-card>

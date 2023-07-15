@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
@@ -13,6 +14,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
     [Route("api/user/shipments")]
+    [Authorize(Policy = ApplicationPolicies.RequireShippingReadScope)]
     public class UserShipmentController : MicroStoreApiController
     {
         private readonly IShipmentQueryService _shipmentQueryService;
@@ -26,7 +28,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpGet]
         [Route("")]
-        [RequiredScope(ShippingScope.Shipment.Read)]
+        [RequiredScope(ApplicationResourceScopes.Shipment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ShipmentDto>))]
 
         public async Task<IActionResult> RetriveUserShipmentList( [FromQuery] ShipmentListQueryModel queryParams)

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
 using MicroStore.Client.PublicWeb.Extensions;
-using MicroStore.ShoppingGateway.ClinetSdk.Entities;
+using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
@@ -10,8 +11,11 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
 using System.Net;
+using static IdentityModel.OidcConstants;
+
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
     public class OrderController : AdministrationController
     {
 
@@ -32,26 +36,35 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(new OrderListModel());
+            return View(new OrderSearchModel());
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Index(OrderListModel model)
+        public async Task<IActionResult> Index(OrderSearchModel model)
         {
-            var pagingOptions = new PagingAndSortingRequestOptions
+            var requestOptions = new OrderListRequestOptions
             {
                 Lenght = model.PageSize,
                 Skip = model.PageNumber,
+                StartSubmissionDate = model.StartSubmissionDate,
+                EndSubmissionDate = model.EndSubmissionDate,
+                OrderNumber  = model.OrderNumber,
+                States = model.States != null && model.States.Length > 1 ? model.States.Select(x=>x.ToString()).JoinAsString(",") : null,
             };
 
-            var data = await _orderService.ListAsync(pagingOptions);
+            var data = await _orderService.ListAsync(requestOptions);
 
-            model.Data = ObjectMapper.Map<List<Order>, List<OrderVM>>(data.Items);
+            var responseModel = new OrderListModel
+            {
+                Draw = model.Draw,
+                Length = model.Length,
+                Start = model.Start,
+                RecordsTotal = model.RecordsTotal,
+                Data = ObjectMapper.Map<List<Order>, List<OrderVM>>(data.Items)
+            };
 
-            model.RecordsTotal = data.TotalCount;
-
-            return Json(model);
+            return Json(responseModel);
         }
 
         public async Task<IActionResult> Details(Guid id)

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories;
 using MicroStore.Client.PublicWeb.Extensions;
+using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
@@ -9,7 +11,7 @@ using System.Net;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
-
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser , Roles = ApplicationSecurityRoles.Admin)]
     public class CategoryController : AdministrationController
     {
 

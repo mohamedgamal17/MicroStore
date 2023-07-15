@@ -3,9 +3,13 @@ using MicroStore.BuildingBlocks.Paging.Params;
 
 namespace MicroStore.Ordering.Application.Models
 {
-    public class OrderSearchModel : PagingQueryParams
+    public class OrderSearchModel : PagingAndSortingQueryParams
     {
         public string OrderNumber { get; set; }
+        public string[]? States { get; set; }
+        public DateTime? StartSubmissionDate { get; set; }
+        public DateTime? EndSubmissionDate { get; set; }
+
     }
 
 
@@ -18,6 +22,12 @@ namespace MicroStore.Ordering.Application.Models
                 .WithMessage("Order Number cannot be null or empty")
                 .MaximumLength(256)
                 .WithMessage("Order Number maximum lenght is 256");
+
+            RuleFor(x => x.States)
+                .Must(x => x!.Length > 0)
+                .WithMessage("States should at least contain one state to filter on it")
+                .ForEach(x => x.MaximumLength(256))
+                .When(x => x.States != null);
 
             RuleFor(x => x.Skip)
                 .GreaterThanOrEqualTo(0)

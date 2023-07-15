@@ -4,15 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Payment.Application.PaymentRequests;
+using MicroStore.Payment.Application.Security;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
 using System.Linq.Dynamic.Core;
 namespace MicroStore.Payment.Api.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/user/payments")]
     public class UserPaymentController : MicroStoreApiController
     {
@@ -30,7 +29,6 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPost]
         [Route("")]
-     //   [RequiredScope(BillingScope.Payment.Write)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
         public async Task<IActionResult> CreatePaymentRequest([FromBody] PaymentRequestModel model)
         {
@@ -62,8 +60,9 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPost]
         [Route("process/{paymentId}")]
-   //     [RequiredScope(BillingScope.Payment.Write)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentProcessResultDto))]
+        [Authorize(Policy = ApplicationPolicies.RequirePaymentReadScope)]
+
         public async Task<IActionResult> ProcessPaymentRequest(string paymentId, [FromBody] ProcessPaymentRequestModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -82,8 +81,8 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("")]
-    //    [RequiredScope(BillingScope.Payment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<PaymentRequestListDto>))]
+        [Authorize(Policy = ApplicationPolicies.RequirePaymentReadScope)]
         public async Task<IActionResult> RetriveUserPaymentRequestList([FromQuery] PaymentRequestListQueryModel queryparams)
         {
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, CurrentUser.Id.ToString()!);
@@ -93,8 +92,8 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("order_id/{orderId}")]
-      //  [RequiredScope(BillingScope.Payment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        [Authorize(Policy = ApplicationPolicies.RequirePaymentReadScope)]
         public async Task<IActionResult> RetrivePaymentRequestWithOrderId(string orderId)
         {
             var result = await _paymentRequestQueryService.GetByOrderIdAsync(orderId);
@@ -104,8 +103,8 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("order_number/{orderId}")]
-        //  [RequiredScope(BillingScope.Payment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        [Authorize(Policy = ApplicationPolicies.RequirePaymentReadScope)]
         public async Task<IActionResult> RetrivePaymentRequestWithOrderNumber(string orderNumber)
         {
             var result = await _paymentRequestQueryService.GetByOrderNumberAsync(orderNumber);
@@ -116,8 +115,8 @@ namespace MicroStore.Payment.Api.Controllers
         [HttpGet]
         [Route("{paymentId}")]
         [ActionName(nameof(RetrivePaymentRequest))]
-      //  [RequiredScope(BillingScope.Payment.Read)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        [Authorize(Policy = ApplicationPolicies.RequirePaymentReadScope)]
         public async Task<IActionResult> RetrivePaymentRequest(string paymentId)
         {
             var result = await _paymentRequestQueryService.GetAsync(paymentId);

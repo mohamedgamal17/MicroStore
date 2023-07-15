@@ -7,13 +7,14 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Orders;
+using MicroStore.Inventory.Domain.Security;
 using System.Net;
 
 namespace MicroStore.Inventory.Api.Controllers
 {
     [ApiController]
     [Route("api/inventory/orders")]
-    //[Authorize]
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class OrderController : MicroStoreApiController
     {
 

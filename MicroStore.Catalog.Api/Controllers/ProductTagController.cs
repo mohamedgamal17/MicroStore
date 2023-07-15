@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
+using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Application.Models.ProductTags;
 using MicroStore.Catalog.Application.ProductTags;
 namespace MicroStore.Catalog.Api.Controllers
@@ -36,6 +38,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> CreateAsync(ProductTagModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -52,6 +55,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpPut]
         [Route("{id}")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> UpdateAsync(string id , ProductTagModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -68,6 +72,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> DeleteAsync(string id)
         {
             var result = await _productTagApplicationService.RemoveAsync(id);

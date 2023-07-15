@@ -1,5 +1,6 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
-@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderListModel
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderSearchModel
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.OrderMenus.Index);
 
@@ -16,6 +17,9 @@
     </div>
     <section class="content">
         <div class="container-fluid">
+
+            <partial name="_Order.AdvancedSearch" model="Model" />
+
             <partial name="Grids/_Grid.Orders" model="Model" />
         </div>
     </section>

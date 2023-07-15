@@ -6,12 +6,15 @@ using MicroStore.Gateway.Shopping.Config;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using MicroStore.Gateway.Shopping.Services;
+using MicroStore.Gateway.Shopping.Exceptions;
 
 namespace MicroStore.Gateway.Shopping.TokenHandlers
 {
     public abstract class BaseTokenExchangeDelegatingHandler : DelegatingHandler
     {
         protected abstract List<string> RequiredScopes { get;}
+
+        protected ILogger Logger { get; }
 
         private readonly IHttpClientFactory _httpClinetFactory;
 
@@ -20,8 +23,6 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
         private readonly IdentityProviderOptions _identityProviderOptions;
 
         private readonly GatewayClientOptions _gatewayClientOptions;
-
-        private readonly ILogger _logger;
 
         private readonly HttpContextClaimsPrincibalAccessor _claimsPrincibalAccessor;
 
@@ -32,7 +33,7 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
  
             _identityProviderOptions = identityProviderOptions.Value;
             _gatewayClientOptions = gatewayClientOptions.Value;
-            this._logger = logger;
+            Logger = logger;
             _claimsPrincibalAccessor = claimsPrincibalAccessor;
         }
 
@@ -43,7 +44,7 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
                 Resource = string.Format("clinetId:{0}_sub:{1}", FindClaim(JwtClaimTypes.ClientId)?.Value ?? string.Empty, FindClaim(JwtClaimTypes.Subject)?.Value ?? string.Empty)
             };
 
-            _logger.LogDebug("Access token cache key : {TokenCacheKey}", tokenParam.Resource);
+            Logger.LogDebug("Access token cache key : {TokenCacheKey}", tokenParam.Resource);
             
             var cachedItem = await _clientAccessTokenCache.GetAsync(cacheKey, tokenParam, cancellationToken);
 
@@ -57,6 +58,8 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
 
 
             await _clientAccessTokenCache.SetAsync(cacheKey, accessToken, expiresIn, tokenParam, cancellationToken);
+
+            
             return accessToken;
         }
 
@@ -105,7 +108,12 @@ namespace MicroStore.Gateway.Shopping.TokenHandlers
 
             if (tokenResponse.IsError)
             {
-                throw new Exception(tokenResponse.Error);
+                throw new InvalidTokenException(tokenResponse.Error, tokenResponse.ErrorType.ToString(), tokenResponse.ErrorDescription);
+            }
+
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                Logger.LogDebug("Token Exchanged : {Token}", tokenResponse.AccessToken);
             }
 
             return (tokenResponse.AccessToken, tokenResponse.ExpiresIn);

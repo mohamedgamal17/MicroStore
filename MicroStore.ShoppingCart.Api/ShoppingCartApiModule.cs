@@ -1,8 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
+using MicroStore.ShoppingCart.Api.Configuration;
 using MicroStore.ShoppingCart.Api.Models;
+using MicroStore.ShoppingCart.Api.OpenApi;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
@@ -23,6 +29,12 @@ namespace MicroStore.ShoppingCart.Api
            typeof(AbpFluentValidationModule))]
     public class ShoppingCartApiModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            var config = context.Services.GetConfiguration();
+            var appSettings = config.Get<ApplicationSettings>();
+            context.Services.AddSingleton(appSettings);
+        }
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var host = context.Services.GetHostingEnvironment();
@@ -38,13 +50,17 @@ namespace MicroStore.ShoppingCart.Api
                 opt.AutoValidate = false;
             });
 
-            ConfigureAuthentication(context.Services, configuration);
+            context.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>()
+            .AddSwaggerGen()
+            .AddHttpClient();
 
-            ConfigureSwagger(context.Services,configuration);
+            ConfigureAuthentication(context.Services);
         }
 
-        private void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
+        private void ConfigureAuthentication(IServiceCollection services)
         {
+            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,47 +68,27 @@ namespace MicroStore.ShoppingCart.Api
 
             }).AddJwtBearer(options =>
             {
-                options.Authority = configuration.GetValue<string>("IdentityProvider:Authority");
-                options.Audience = configuration.GetValue<string>("IdentityProvider:Audience");
-            });
-        }
-
-        private void ConfigureSwagger(IServiceCollection services , IConfiguration configuration)
-        {
-            services.AddSwaggerGen((options) =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket Api", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
-
-
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                options.Authority = appsettings.Security.Jwt.Authority;
+                options.Audience = appsettings.Security.Jwt.Audience;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    Type = SecuritySchemeType.OAuth2,
-
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        ClientCredentials = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(configuration.GetValue<string>("IdentityProvider:Authority")),
-                            TokenUrl = new Uri(configuration.GetValue<string>("IdentityProvider:TokenEndpoint")),
-                            
-                        },
-                        
-                    }
-                    
-
-                    
-                });
+                    ValidateAudience = true,
+                    ValidAudience = appsettings.Security.Jwt.Audience,
+                    ValidateIssuer = true,
+                    ValidIssuer = appsettings.Security.Jwt.Authority,
+                    ValidateLifetime = true,
+                };
             });
         }
+
+
 
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
+            var appsettings = context.ServiceProvider.GetRequiredService<ApplicationSettings>();
 
             var config = context.GetConfiguration();
 
@@ -104,10 +100,10 @@ namespace MicroStore.ShoppingCart.Api
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Basket API");
-                    options.OAuthClientId(config.GetValue<string>("SwaggerClinet:Id"));
-                    options.OAuthClientSecret(config.GetValue<string>("SwaggerClinet:Secret"));
-                    options.UseRequestInterceptor("(req) => { if (req.url.endsWith('oauth/token') && req.body) req.body += '&audience=" + config.GetValue<string>("IdentityProvider:Audience") + "'; return req; }");
-                    options.OAuthScopeSeparator(",");
+                    options.OAuthClientId(appsettings.Security.SwaggerClient.ClientId);
+                    options.OAuthClientSecret(appsettings.Security.SwaggerClient.ClientSecret);
+                    options.OAuthUsePkce();
+                    options.OAuthScopeSeparator(" ");
 
                 });
 

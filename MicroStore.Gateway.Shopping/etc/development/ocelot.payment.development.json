@@ -49,8 +49,6 @@
 
     },
 
-
-
     {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
@@ -64,8 +62,12 @@
       "Priority": 0,
       "UpstreamPathTemplate": "/mvcgateway/billing/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
-
-
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "Admin"
+      },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]

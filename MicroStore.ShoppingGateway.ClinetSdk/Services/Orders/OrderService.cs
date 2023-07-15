@@ -18,7 +18,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             return await _microStoreClinet.MakeRequest<Order>(BaseUrl, HttpMethod.Post, options, cancellationToken);
         }
 
-        public async Task<PagedList<Order>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
+        public async Task<PagedList<Order>> ListAsync(OrderListRequestOptions options , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<PagedList<Order>>(BaseUrl,HttpMethod.Get, options, cancellationToken);  
         }

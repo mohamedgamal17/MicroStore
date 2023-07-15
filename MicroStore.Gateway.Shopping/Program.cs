@@ -1,10 +1,12 @@
 using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Mvc;
+using MicroStore.Gateway.Shopping;
+using MicroStore.Gateway.Shopping.Exceptions;
 using MicroStore.Gateway.Shopping.Extensions;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Serilog;
 using Serilog.Events;
-
 Log.Logger = new LoggerConfiguration()
 #if DEBUG
     .MinimumLevel.Debug()
@@ -26,10 +28,10 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
         .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
         .AddJsonFile("appsettings.json", true, true)
         .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
-        .AddOcelot($"etc/{hostingContext.HostingEnvironment.EnvironmentName.ToLower()}",hostingContext.HostingEnvironment)
+        .AddOcelot($"etc/{hostingContext.HostingEnvironment.EnvironmentName.ToLower()}", hostingContext.HostingEnvironment)
         .AddEnvironmentVariables();
 
-   
+
 });
 
 
@@ -37,7 +39,23 @@ builder.Services.ConfigureCoreServices(builder.Configuration);
 
 builder.Services.AddMvc();
 
-builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails(config =>
+{
+    config.MapToStatusCode<InvalidTokenException>(StatusCodes.Status400BadRequest);
+
+    config.Map<InvalidTokenException>((ex) =>
+    {
+        return new ProblemDetails
+        {
+            Type = ex.ErrorType,
+            Title = ex.Error,
+            Detail = ex.ErrorDesceription,
+            Status = StatusCodes.Status400BadRequest,
+        };
+    });
+
+
+});
 
 builder.Host.UseSerilog();
 
@@ -47,8 +65,20 @@ app.UseProblemDetails();
 
 app.UseAuthentication();
 
-app.UseOcelot().Wait();
+
+await app.UseOcelot(config =>
+{
+    config.PreQueryStringBuilderMiddleware = async (context, next) =>
+    {
+        var contextAccessor = context.RequestServices.GetRequiredService<IHttpContextAccessor>();
+        contextAccessor.HttpContext = context;
+        await next.Invoke();
+    };
+});
+
+
 
 app.MapGet("/", () => "Hello World!");
 
 app.Run();
+

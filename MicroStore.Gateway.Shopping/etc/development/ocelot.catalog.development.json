@@ -11,10 +11,32 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/catalog/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "UpstreamHttpMethod": [ "GET"],
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
-    }   
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/catalog/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "PATCH", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey":  "Bearer",
+      },
+      "RouteClaimsRequirement": {
+        "role" : "Admin" 
+      },
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+    }
   ]
 }

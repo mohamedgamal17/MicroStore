@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Shipping.Application.Abstraction;
+using MicroStore.Shipping.Domain;
 using MicroStore.Shipping.Domain.Entities;
 using System.Reflection;
 using Volo.Abp.Application;
@@ -9,7 +10,8 @@ using Volo.Abp.Modularity;
 
 namespace MicroStore.Shipping.Application
 {
-    [DependsOn(typeof(ShippingApplicationAbstractionModule),
+    [DependsOn(typeof(ShippingDomainModule),
+        typeof(ShippingApplicationAbstractionModule),
         typeof(AbpDddApplicationModule))]
     public class ShippingApplicationModule : AbpModule
     {
