@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
@@ -104,10 +103,22 @@ namespace MicroStore.Shipping.Application.Shipments
 
         private IQueryable<ShipmentDto> ApplyQueryFilter(IQueryable<ShipmentDto> query , ShipmentListQueryModel model ,string?userId = null )
         {
-
             if (!string.IsNullOrEmpty(userId))
             {
                 query = query.Where(x => x.UserId == userId);
+            }
+
+            if (!string.IsNullOrEmpty(model.OrderNumber))
+            {
+                var orderNumber = model.OrderNumber.ToLower();
+                query = query.Where(x => x.OrderNumber.ToLower().Contains(orderNumber));
+            }
+
+            if (!string.IsNullOrEmpty(model.TrackingNumber))
+            {
+                var tracknumber = model.TrackingNumber.ToLower();
+
+                query = query.Where(x => x.TrackingNumber.ToLower().Contains(tracknumber));
             }
 
             if (!string.IsNullOrEmpty(model.States))
@@ -126,6 +137,7 @@ namespace MicroStore.Shipping.Application.Shipments
             {
                 query = query.Where(x => x.Address.State == model.State);
             }
+
 
             return query;
 
