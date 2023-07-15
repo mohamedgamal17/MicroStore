@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="jQuery" Version="3.6.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.5" />
@@ -49,6 +50,7 @@
   <ItemGroup>
     <Folder Include="Areas\Administration\Views\Shared\Components\Catalog\" />
     <Folder Include="Components\Purshase\" />
+    <Folder Include="Ex\" />
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\libs\" />

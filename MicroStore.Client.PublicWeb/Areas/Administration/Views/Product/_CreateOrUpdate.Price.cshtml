@@ -18,6 +18,8 @@
             <div class="col-md-9">
                 <div class="input-group">
                     <input asp-for="@Model.Price" type="number" class="form-control" placeholder="Value" />
+                     <span class="text-danger" asp-validation-for="@Model.Price">
+                    </span>
                 </div>
 
 
@@ -34,6 +36,8 @@
             <div class="col-md-9">
                 <div class="input-group">
                     <input asp-for="@Model.OldPrice" type="number" class="form-control" placeholder="Value" />
+                      <span class="text-danger" asp-validation-for="@Model.OldPrice">
+                    </span>
                 </div>
 
 

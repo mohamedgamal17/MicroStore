@@ -7,12 +7,9 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Bundling;
-using MicroStore.Client.PublicWeb.Components.Basket;
 using MicroStore.Client.PublicWeb.Components.Cart;
 using MicroStore.Client.PublicWeb.Configuration;
 using MicroStore.Client.PublicWeb.Consts;
-using MicroStore.Client.PublicWeb.Extensions;
-using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Menus;
 using MicroStore.Client.PublicWeb.Security;
 using MicroStore.Client.PublicWeb.Theming;
@@ -34,6 +31,9 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
+using FluentValidation.AspNetCore;
+using Volo.Abp.FluentValidation;
+
 namespace MicroStore.Client.PublicWeb
 {
     [DependsOn(typeof(MicroStoreAspNetCoreUIModule),
@@ -42,7 +42,8 @@ namespace MicroStore.Client.PublicWeb
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringMinioModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpFluentValidationModule))]
     public class PublicWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -129,6 +130,8 @@ namespace MicroStore.Client.PublicWeb
             //    options.Widgets.Add(typeof(CartWidgetViewComponent));
             //});
 
+            context.Services.AddFluentValidationAutoValidation();
+            context.Services.AddFluentValidationClientsideAdapters();
             context.Services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 

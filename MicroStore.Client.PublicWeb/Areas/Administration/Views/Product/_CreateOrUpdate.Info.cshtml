@@ -14,18 +14,12 @@
         </div>
     </abp-card-header>
     <abp-card-body>
-        <div class="text-center mb-3">
-            @Html.ValidationSummary()
-        </div>
 
         <div class="form-group row mb-3">
             <div class="col-md-3">
                 <div class="float-sm-left float-md-right">
-
-
-                    <micro-label class="col-form-label"
-                                 asp-for="@Model.Name" />
-
+                    <micro-label class="col-form-label" asp-for="@Model.Name" />
+                               
                 </div>
 
             </div>
@@ -47,7 +41,7 @@
             <div class="col-md-9">
                 <input asp-for="@Model.Sku" id="name" class="form-control" />
 
-                <span class="text-danger" asp-validation-for="@Model.Name">
+                <span class="text-danger" asp-validation-for="@Model.Sku">
                 </span>
             </div>
         </div>
@@ -81,8 +75,7 @@
 
         <div class="form-group row mb-3">
             <div class="col-md-3">
-                <div style="float:
-                                                right!important;">
+                <div style="float:right!important;">                                               
                     <micro-label asp-for="@Model.IsFeatured"></micro-label>
                 </div>
 
@@ -90,7 +83,7 @@
             <div class="col-md-9">
                 <input asp-for="@Model.IsFeatured" id="name" class="check-box" />
 
-                <span class="text-danger" asp-validation-for="@Model.Name">
+                <span class="text-danger" asp-validation-for="@Model.IsFeatured">
                 </span>
             </div>
         </div>

@@ -1,21 +1,30 @@
-﻿#nullable disable
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.ComponentModel;
+﻿using FluentValidation;
 using System.ComponentModel.DataAnnotations;
-
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Categories
 {
     public class CategoryModel
     {
         public string Id { get; set; }
-
-
-        [DisplayName("Category Name")]
-        [Required]
         public string Name { get; set; }
+        public string? Description { get; set; }
+    }
 
-        [DisplayName("Category Description")]
-        public string Description { get; set; }
+    public class CatagoryModelValidator: AbstractValidator<CategoryModel>
+    {
+        public CatagoryModelValidator()
+        {
+            RuleFor(x => x.Id)
+                .NotEmpty();
+
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .MaximumLength(256);
+
+            RuleFor(x => x.Description)
+                .MaximumLength(500)
+                .When(x => !string.IsNullOrEmpty(x.Description));
+                
+        }
     }
 
 }

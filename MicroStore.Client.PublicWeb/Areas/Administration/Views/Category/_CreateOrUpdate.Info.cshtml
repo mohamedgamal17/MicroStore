@@ -8,15 +8,11 @@
         </div>
     </abp-card-header>
     <abp-card-body>
-        <div class="text-center mb-3">
-            @Html.ValidationSummary()
-        </div>
-
         <div class="form-group row mb-3">
             <div class="col-md-3">
                 <div class="float-sm-left float-md-right">
-                    <label class="col-form-label"
-                           asp-for="@Model.Name">Category Name <i class="fas fa-question-circle text-lightblue "></i></label>
+                    <micro-label asp-for="@Model.Name"/>
+                          
                 </div>
 
             </div>
@@ -29,8 +25,8 @@
         <div class="form-group row mb-3">
             <div class="col-md-3">
                 <div class="float-sm-left float-md-right">
-                    <label class="col-form-label"
-                           asp-for="@Model.Description">Short description <i class="fas fa-question-circle text-lightblue "></i></label>
+                   <micro-label asp-for="@Model.Description"/>
+                           
                 </div>
 
             </div>
