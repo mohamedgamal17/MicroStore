@@ -11,9 +11,9 @@ namespace MicroStore.Payment.Application.PaymentRequests
         Task<Result<PaymentRequestDto>> GetAsync(string paymentId, CancellationToken cancellationToken = default);
         Task<Result<PaymentRequestDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default);
         Task<Result<PaymentRequestDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
-        Task<Result<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PaymentRequestListQueryModel queryParams, string? userId = null, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<PaymentRequestDto>>> ListPaymentAsync(PaymentRequestListQueryModel queryParams, string? userId = null, CancellationToken cancellationToken = default);
 
-        Task<Result<PagedResult<PaymentRequestListDto>>> SearchByOrderNumber(PaymentRequestSearchModel model , CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<PaymentRequestDto>>> SearchByOrderNumber(PaymentRequestSearchModel model , CancellationToken cancellationToken = default);
 
     }
 }

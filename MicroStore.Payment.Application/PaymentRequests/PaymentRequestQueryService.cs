@@ -69,11 +69,11 @@ namespace MicroStore.Payment.Application.PaymentRequests
             return result;
         }
 
-        public async Task<Result<PagedResult<PaymentRequestListDto>>> ListPaymentAsync(PaymentRequestListQueryModel queryParams, string? userId = null, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<PaymentRequestDto>>> ListPaymentAsync(PaymentRequestListQueryModel queryParams, string? userId = null, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
               .AsNoTracking()
-              .ProjectTo<PaymentRequestListDto>(MapperAccessor.Mapper.ConfigurationProvider);
+              .ProjectTo<PaymentRequestDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
 
             query = ApplyFilter(query, queryParams, userId);
@@ -83,11 +83,11 @@ namespace MicroStore.Payment.Application.PaymentRequests
             return result;
         }
 
-        public async Task<Result<PagedResult<PaymentRequestListDto>>> SearchByOrderNumber(PaymentRequestSearchModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<PaymentRequestDto>>> SearchByOrderNumber(PaymentRequestSearchModel model, CancellationToken cancellationToken = default)
         {
             var paymentRequestsQuery = _paymentDbContext.PaymentRequests
                 .AsNoTracking()
-                .ProjectTo<PaymentRequestListDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .ProjectTo<PaymentRequestDto>(MapperAccessor.Mapper.ConfigurationProvider)
                 .AsQueryable();
 
             paymentRequestsQuery = from paymentRequest in paymentRequestsQuery
@@ -100,7 +100,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
             return await paymentRequestsQuery.PageResult(model.Skip, model.Length, cancellationToken);
         }
 
-        private IQueryable<PaymentRequestListDto> TryToSort(IQueryable<PaymentRequestListDto> query, string sortBy, bool desc)
+        private IQueryable<PaymentRequestDto> TryToSort(IQueryable<PaymentRequestDto> query, string sortBy, bool desc)
         {
             return sortBy.ToLower() switch
             {
@@ -111,7 +111,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
         }
 
 
-        private IQueryable<PaymentRequestListDto> ApplyFilter(IQueryable<PaymentRequestListDto> query, PaymentRequestListQueryModel model , string? userId = null)
+        private IQueryable<PaymentRequestDto> ApplyFilter(IQueryable<PaymentRequestDto> query, PaymentRequestListQueryModel model , string? userId = null)
         {
             if (userId != null)
             {

@@ -28,7 +28,7 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<PaymentRequestListDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<PaymentRequestDto>))]
         [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PaymentRequestListQueryModel queryparams, [FromQuery(Name = "user_id")] string? userId = null)
         {
@@ -116,7 +116,7 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPost]
         [Route("search")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(PaymentRequestListDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(PaymentRequestDto))]
         [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
 
         public async Task<IActionResult> Search([FromBody]PaymentRequestSearchModel model)

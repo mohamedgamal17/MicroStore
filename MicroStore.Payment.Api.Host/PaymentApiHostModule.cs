@@ -8,7 +8,6 @@ using MicroStore.Payment.Api.Host.OpenApi;
 using MicroStore.Payment.Application.Configuration;
 using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.Payment.Application.Security;
-using MicroStore.Payment.Domain.Shared.Security;
 using MicroStore.Payment.Plugin.StripeGateway;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Volo.Abp;

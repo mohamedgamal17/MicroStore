@@ -81,7 +81,7 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<PaymentRequestListDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<PaymentRequestDto>))]
         [Authorize(Policy = ApplicationPolicies.RequirePaymentReadScope)]
         public async Task<IActionResult> RetriveUserPaymentRequestList([FromQuery] PaymentRequestListQueryModel queryparams)
         {
