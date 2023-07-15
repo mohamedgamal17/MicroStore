@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic;
 using MicroStore.Client.PublicWeb.Security;
@@ -31,12 +32,15 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             return Json(model);
         }
+
+        [RuleSetForClientSideMessages("*")]
         public IActionResult Create()
         {
             return View(new CountryModel());
         }
 
         [HttpPost]
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Create(CountryModel model)
         {
             if (!ModelState.IsValid)
@@ -51,6 +55,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return RedirectToAction("Index");
         }
 
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit(string id)
         {
             var country = await _countryService.GetAsync(id);
@@ -64,6 +69,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
 
         [HttpPost]
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit(CountryModel model)
         {
             if (!ModelState.IsValid)
@@ -92,6 +98,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(model);
         }
 
+        [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> CreateOrEditStateModal(string countryId , string? stateId)
         {
             if (!ModelState.IsValid)
