@@ -1,5 +1,9 @@
 ﻿@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderSearchModel
+@{
+    var states = Enum.GetNames<OrderState>().Select(x => new SelectListItem { Text = x, Value = x });
+
+}
 <abp-card>
     <form id="AdvancedSearchForm">
         <abp-card-header>
@@ -59,7 +63,7 @@
 
                         </abp-column>
                         <abp-column size-sm="_8">
-                            <select asp-for="@Model.States" class="form-control" id="@Html.IdFor(x=> x.States)" asp-items="@(Html.GetEnumSelectList<OrderState>())">
+                            <select asp-for="@Model.States" class="form-control" id="@Html.IdFor(x=> x.States)" asp-items="@states">
                             </select>
                             <span class="text-danger" asp-validation-for="@Model.States" />
                         </abp-column>

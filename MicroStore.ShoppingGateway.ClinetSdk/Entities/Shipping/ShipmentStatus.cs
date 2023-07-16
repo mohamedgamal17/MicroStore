@@ -2,12 +2,12 @@
 {
     public enum ShipmentStatus
     {
-        Created ,
+        Created = 0,
 
-        Fullfilled ,
+        Fullfilled = 5,
 
-        Shipping ,
+        Shipping = 10,
 
-        Completed,
+        Completed = 15
     }
 }

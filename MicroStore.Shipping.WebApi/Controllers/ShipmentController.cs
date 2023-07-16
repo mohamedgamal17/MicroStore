@@ -146,7 +146,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("search")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ShipmentListDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ShipmentDto>))]
         [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> Search([FromBody]ShipmentSearchByOrderNumberModel model)
         {

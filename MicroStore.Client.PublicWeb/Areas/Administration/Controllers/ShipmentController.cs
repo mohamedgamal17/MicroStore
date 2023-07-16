@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments;
 using MicroStore.Client.PublicWeb.Extensions;
@@ -8,7 +8,7 @@ using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
-using MicroStore.ShoppingGateway.ClinetSdk.Services;
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
 using System.Data;
@@ -24,34 +24,48 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         private readonly OrderService _orderService;
 
-        public ShipmentController(ShipmentService shipmentService, ShipmentAggregateService shipmentAggregateService, OrderService orderService)
+        private readonly CountryService _countryService;
+        public ShipmentController(ShipmentService shipmentService, ShipmentAggregateService shipmentAggregateService, OrderService orderService, CountryService countryService)
         {
             _shipmentService = shipmentService;
             _shipmentAggregateService = shipmentAggregateService;
             _orderService = orderService;
+            _countryService = countryService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(new ShipmentListModel ());
+            ViewBag.Countries = await PrepareCountryList();
+
+            return View(new ShipmentSearchModel ());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(ShipmentListModel model) 
+        public async Task<IActionResult> Index(ShipmentSearchModel model) 
         {
-            var pagingOptions = new PagingReqeustOptions
+            var pagingOptions = new ShipmentListRequestOptions
             {
+                OrderNumber = model.OrderNumber,
+                TrackingNumber=  model.TrackingNumber,
+                Status = model.Status ,
+                Country = model.Country,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
                 Skip = model.Skip,
                 Lenght = model.PageSize
             };
 
             var data = await _shipmentService.ListAsync(pagingOptions);
 
-            model.Data = ObjectMapper.Map<List<Shipment>, List<ShipmentVM>>(data.Items);
-
-            model.RecordsTotal = data.TotalCount;
-
-            return Json(model);
+            var responseModel = new ShipmentListModel
+            {
+                Start = model.Start,
+                RecordsTotal = model.RecordsTotal,
+                Length = model.Length,
+                Draw = model.Draw,
+                Data = ObjectMapper.Map<List<Shipment>, List<ShipmentVM>>(data.Items)
+            };
+            return Json(responseModel);
         }
 
         public async Task<IActionResult> Details(string id)
@@ -60,9 +74,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             return View(ObjectMapper.Map<ShipmentAggregate, ShipmentAggregateVM>(shipmentAggregate));
         }
-
-
-
 
         public async Task<IActionResult> Fullfill(string id)
         {
@@ -172,6 +183,18 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
 
+        private async Task<List<SelectListItem>> PrepareCountryList()
+        {
+            var countries = await _countryService.ListAsync();
+
+            var selectListItems = countries.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.ThreeLetterIsoCode
+            }).ToList();
+
+            return selectListItems;
+        }
 
     }
 

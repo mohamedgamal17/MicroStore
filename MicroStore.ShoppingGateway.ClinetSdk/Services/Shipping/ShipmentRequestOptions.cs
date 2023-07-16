@@ -2,6 +2,8 @@
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 {
+
+
     public class ShipmentCreateRequestOptions
     {
         public string OrderId { get; set; }
@@ -19,7 +21,6 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
     }
 
 
-
     public class ShipmentItemCreateRequestOptions
     {
         public string Name { get; set; }
@@ -30,5 +31,14 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
         public double UnitPrice { get; set; }
         public Weight Weight { get; set; }
         public Dimension Dimension { get; set; }
+    }
+    public class ShipmentListRequestOptions : PagingAndSortingRequestOptions
+    {
+        public string OrderNumber { get; set; }
+        public string TrackingNumber { get; set; }
+        public int? Status { get; set; }
+        public string Country { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

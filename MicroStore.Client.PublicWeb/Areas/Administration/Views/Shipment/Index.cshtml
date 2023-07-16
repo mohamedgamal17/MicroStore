@@ -1,5 +1,5 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
-@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentListModel
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentSearchModel
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ShipmentMenus.Index);
 }
@@ -15,7 +15,8 @@
     </div>
     <section class="content">
         <div class="container-fluid">
-            <partial name="Grids/_Grid.Shipments" model="Model" />
+            <partial name="_Shipment.AdvancedSearch" model="Model" />
+            <partial name="Grids/_Grid.Shipments"  />
         </div>
     </section>
 </div>

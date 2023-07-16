@@ -6,9 +6,8 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
     {
         public string OrderNumber { get; set; }
         public string TrackingNumber { get; set; }
-        public string States { get; set; }
+        public int? Status { get; set; }
         public string Country { get; set; }
-        public string State { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }

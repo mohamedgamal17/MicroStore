@@ -75,12 +75,12 @@ namespace MicroStore.Shipping.Application.Shipments
         {
             var query = _shippingDbContext.Shipments
                  .AsNoTracking()
-                 .ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider)
                  .AsQueryable();
 
             query =  ApplyQueryFilter(query, queryParams, userId);
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
+            var result = await query.ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
         }
@@ -101,7 +101,7 @@ namespace MicroStore.Shipping.Application.Shipments
             return await shipmentsQuery.PageResult(model.Skip, model.Length, cancellationToken);     
         }
 
-        private IQueryable<ShipmentDto> ApplyQueryFilter(IQueryable<ShipmentDto> query , ShipmentListQueryModel model ,string?userId = null )
+        private IQueryable<Shipment> ApplyQueryFilter(IQueryable<Shipment> query , ShipmentListQueryModel model ,string?userId = null )
         {
             if (!string.IsNullOrEmpty(userId))
             {
@@ -121,21 +121,16 @@ namespace MicroStore.Shipping.Application.Shipments
                 query = query.Where(x => x.TrackingNumber.ToLower().Contains(tracknumber));
             }
 
-            if (!string.IsNullOrEmpty(model.States))
+            if (model.Status != null)
             {
-                var states = model.States.Split(',');
+                var state = (ShipmentStatus)model.Status;
 
-                query = query.Where(x => states.Contains(x.Status));
+                query = query.Where(x => x.Status == state);
             }
 
             if (!string.IsNullOrEmpty(model.Country))
             {
                 query = query.Where(x => x.Address.CountryCode == model.Country);
-            }
-
-            if (!string.IsNullOrEmpty(model.State))
-            {
-                query = query.Where(x => x.Address.State == model.State);
             }
 
             if(model.StartDate != null)
