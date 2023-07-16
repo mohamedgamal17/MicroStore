@@ -41,4 +41,14 @@
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
     }
+
+    public class PaymentListRequestOptions : PagingAndSortingRequestOptions
+    {
+        public string OrderNumber { get; set; }
+        public string Status { get; set; }
+        public double? MinPrice { get; set; }
+        public double? MaxPrice { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
 }

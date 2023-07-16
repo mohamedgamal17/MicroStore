@@ -1,5 +1,5 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
-@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing.PaymentRequestListModel
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing.PaymentRequestSearchModel
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.PaymentRequestMenus.Index);
 
@@ -17,6 +17,7 @@
 
     <section class="content">
         <div class="container-fluid">
+            <partial name="_PaymentRequest.AdvancedSearch" model="Model" />
             <abp-card>
                 <abp-card-body>
                     <abp-table id="PaymentRequestsTable"></abp-table>

@@ -72,13 +72,15 @@ namespace MicroStore.Payment.Application.PaymentRequests
         public async Task<Result<PagedResult<PaymentRequestDto>>> ListPaymentAsync(PaymentRequestListQueryModel queryParams, string? userId = null, CancellationToken cancellationToken = default)
         {
             var query = _paymentDbContext.PaymentRequests
-              .AsNoTracking()
-              .ProjectTo<PaymentRequestDto>(MapperAccessor.Mapper.ConfigurationProvider);
+              .AsNoTracking();
+              
 
 
             query = ApplyFilter(query, queryParams, userId);
 
-            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
+            var result = await query
+                .ProjectTo<PaymentRequestDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
             return result;
         }
@@ -97,10 +99,11 @@ namespace MicroStore.Payment.Application.PaymentRequests
                                    select paymentRequest;
 
 
-            return await paymentRequestsQuery.PageResult(model.Skip, model.Length, cancellationToken);
+            return await paymentRequestsQuery
+                .PageResult(model.Skip, model.Length, cancellationToken);
         }
 
-        private IQueryable<PaymentRequestDto> TryToSort(IQueryable<PaymentRequestDto> query, string sortBy, bool desc)
+        private IQueryable<PaymentRequest> TryToSort(IQueryable<PaymentRequest> query, string sortBy, bool desc)
         {
             return sortBy.ToLower() switch
             {
@@ -111,7 +114,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
         }
 
 
-        private IQueryable<PaymentRequestDto> ApplyFilter(IQueryable<PaymentRequestDto> query, PaymentRequestListQueryModel model , string? userId = null)
+        private IQueryable<PaymentRequest> ApplyFilter(IQueryable<PaymentRequest> query, PaymentRequestListQueryModel model , string? userId = null)
         {
             if (userId != null)
             {
@@ -125,11 +128,11 @@ namespace MicroStore.Payment.Application.PaymentRequests
                 query = query.Where(x => x.OrderNumber.ToLower().Contains(orderNumber));
             }
 
-            if (!string.IsNullOrEmpty(model.States))
+            if (model.Status != null)
             {
-                var states = model.States.Split(',');
+                var status = (PaymentStatus)model.Status;
 
-                query = query.Where(x => states.Contains(x.Status));
+                query = query.Where(x => x.State == status);
             }
 
             if(model.MinPrice != null)

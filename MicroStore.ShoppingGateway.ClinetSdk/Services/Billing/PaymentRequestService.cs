@@ -26,7 +26,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Billing
 
       
 
-        public async Task<PagedList<PaymentRequest>> ListAsync(PagingReqeustOptions options , CancellationToken cancellationToken = default)
+        public async Task<PagedList<PaymentRequest>> ListAsync(PaymentListRequestOptions options , CancellationToken cancellationToken = default)
         {
             return await _microStoreClinet.MakeRequest<PagedList<PaymentRequest>>(BaseUrl, HttpMethod.Get, options,cancellationToken);
         }

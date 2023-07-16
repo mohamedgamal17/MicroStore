@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing;
 using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
-using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Billing;
-using System.Data;
-
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
     [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
@@ -17,30 +14,38 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             _paymentRequestService = paymentRequestService;
         }
-
-
         public async Task<IActionResult> Index()
-        {
-        
-            return View(new PaymentRequestListModel());
+        {       
+            return View(new PaymentRequestSearchModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(PaymentRequestListModel model)
+        public async Task<IActionResult> Index(PaymentRequestSearchModel model)
         {
-            var pagingOptions = new PagingReqeustOptions
+            var pagingOptions = new PaymentListRequestOptions
             {
+                OrderNumber = model.OrderNumber,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                MinPrice = model.MinPrice,
+                MaxPrice = model.MaxPrice,
+                Status = model.Status,
                 Skip = model.PageNumber,
                 Lenght = model.PageSize,
             };
 
             var data = await _paymentRequestService.ListAsync(pagingOptions);
 
-            model.Data = ObjectMapper.Map<List<PaymentRequest>, List<PaymentRequestVM>>(data.Items);
+            var responseModel = new PaymentRequestListModel
+            {
+                Start = model.Start,
+                RecordsTotal = model.RecordsTotal,
+                Length = model.Length,
+                Draw = model.Draw,
+                Data = ObjectMapper.Map<List<PaymentRequest>, List<PaymentRequestVM>>(data.Items),
+            };
 
-            model.RecordsTotal = data.TotalCount;
-
-            return Json(model);
+            return Json(responseModel);
         }
 
 
