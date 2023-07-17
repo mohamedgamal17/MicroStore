@@ -1,0 +1,91 @@
+﻿@using System.Globalization
+@using MicroStore.Client.PublicWeb.Components.Cart
+@using MicroStore.Client.PublicWeb.Theming;
+@using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Application)
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="multikart">
+    <meta name="keywords" content="multikart">
+    <meta name="author" content="multikart">
+
+    <!--icons-->
+    <link rel="icon" href="../assets/images/favicon/1.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/images/favicon/1.png" type="image/x-icon">
+
+    <title>@ViewData["Title"]</title>
+
+    <!--Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
+
+    <abp-style-bundle name="@StandardBundles.Styles.Global" />
+
+    <abp-style-bundle name="@StandardApplicationLayout.FrontEnd" />
+
+    @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
+
+    @RenderSection("Styles", required: false)
+
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
+
+    <style>
+        .wrap-main{
+            overflow:auto;
+            padding-bottom:150px;
+            height:100%;
+        }
+    </style>
+</head>
+
+<body class="theme-color-1">
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
+
+    <div class="wrap-main">
+
+        @await Html.PartialAsync("_Loader")
+
+        @await Html.PartialAsync("_Header")
+
+        @RenderBody()
+
+
+        @await Html.PartialAsync("_CartComponent")
+
+        @await Html.PartialAsync("_CategoryComponent")
+    </div>
+
+
+    @await Html.PartialAsync("_Footer")
+
+
+    <abp-script-bundle name="@StandardBundles.Styles.Global" />
+
+    <abp-script-bundle name="@StandardApplicationLayout.FrontEnd"></abp-script-bundle>
+
+    <script src="~/Abp/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
+    <script src="~/Abp/ApplicationConfigurationScript"></script>
+    <script src="~/Abp/ServiceProxyScript"></script>
+    @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            $("#btn-logout").click(function () {
+                $("#logout-form").submit();
+            })
+        })
+    </script>
+
+</body>
+
+</html>

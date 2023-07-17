@@ -55,9 +55,8 @@
   <ItemGroup>
     <Folder Include="Areas\Administration\Views\Shared\Components\Catalog\" />
     <Folder Include="Components\Purshase\" />
-    <Folder Include="wwwroot\fonts\" />
-    <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\libs\" />
+    <Folder Include="wwwroot\backend\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -83,6 +82,10 @@
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />
     <None Include="Pages\_ViewStart.cshtml" />
+    <None Include="wwwroot\images\icon\service1.svg" />
+    <None Include="wwwroot\images\icon\service2.svg" />
+    <None Include="wwwroot\images\icon\service3.svg" />
+    <None Include="wwwroot\images\icon\service4.svg" />
   </ItemGroup>
 
   <ItemGroup>

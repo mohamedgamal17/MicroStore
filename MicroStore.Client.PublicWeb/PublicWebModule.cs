@@ -115,15 +115,31 @@ namespace MicroStore.Client.PublicWeb
 
                     });
 
+               options
+                .ScriptBundles
+                .Configure(StandardBundles.Scripts.Global, bundle =>
+                {
+                    bundle.AddContributors(typeof(ApplicationThemeGlobalScriptContributor));
+
+                });
 
                 options
-                    .ScriptBundles
-                    .Configure(StandardBundles.Scripts.Global, bundle =>
+                    .StyleBundles
+                    .Configure(StandardApplicationLayout.FrontEnd, bundle =>
                     {
-                        bundle.AddContributors(typeof(ApplicationThemeGlobalScriptContributor));
-                    
+                        bundle.AddContributors(typeof(FrontEndThemeStyleContributor));
                     });
+
+                options
+                   .ScriptBundles
+                   .Configure(StandardApplicationLayout.FrontEnd, bundle =>
+                   {
+                       bundle.AddContributors(typeof(FronEndThemeScriptContributor));
+                   });
+
             });
+
+
 
             //Configure<AbpWidgetOptions>(options =>
             //{

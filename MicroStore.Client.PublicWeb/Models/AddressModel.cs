@@ -43,7 +43,7 @@ namespace MicroStore.Client.PublicWeb.Models
         {
             RuleFor(x => x.FirstName)
                .NotNull()
-               .MaximumLength(150);    
+               .MaximumLength(150);
             RuleFor(x => x.LastName)
                .NotNull()
                .MaximumLength(150);
@@ -121,3 +121,4 @@ namespace MicroStore.Client.PublicWeb.Models
         }
 
     }
+}
