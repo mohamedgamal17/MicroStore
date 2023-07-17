@@ -29,7 +29,10 @@ namespace MicroStore.Client.PublicWeb.Menus
                            .AddItem(new ApplicationMenuItem("MicroStore.Sales.Order", "Manage Orders", icon: "far fa-dot-circle nav-icon", url: "/Administration/order"))
                            .AddItem(new ApplicationMenuItem("MicroStore.Sales.Shipment", "Manage Shipments", icon: "far fa-dot-circle nav-icon", url: "/Administration/shipment"))
                            .AddItem(new ApplicationMenuItem("MicroStore.Sales.PaymentRequest", "Manage Payments", icon: "far fa-dot-circle nav-icon", url: "/Administration/paymentRequest"))
-              );
+              ).AddItem(
+                     new ApplicationMenuItem("MicroStore.Configuation", "Configuration", icon: "nav-icon fas fa-book", requiredPermissionName: null)
+                        .AddItem(new ApplicationMenuItem("MicroStore.Configuation.Country", "Countries", icon: "far fa-dot-circle nav-icon ", url: "/Administration/Country"))
+                );
 
             return Task.CompletedTask;
         }

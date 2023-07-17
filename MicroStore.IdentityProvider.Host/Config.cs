@@ -139,7 +139,7 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedGrantTypes = new List<string> { "urn:ietf:params:oauth:grant-type:token-exchange"},
                     ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
-                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read", "api-sample" , "geogrpahic.access"},
+                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read", "api-sample" , "geographic.access"},
 
 
                     AllowOfflineAccess = false,

@@ -19,6 +19,7 @@
                 Shipping.Access,
                 Shipping.Read,
                 Inventory.Access,
+                Geographic.Access
             };
         }
 
@@ -61,8 +62,11 @@
         public static class Inventory
         {
             public const string Access = "inventory.access";
+        }
 
-
+        public static class Geographic
+        {
+            public const string Access = "geographic.access";
         }
     }
 }

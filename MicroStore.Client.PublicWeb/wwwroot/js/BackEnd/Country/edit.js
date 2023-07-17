@@ -1,18 +1,18 @@
-﻿$(document).ready(function () {
+﻿$(function () {
 
     var countryId = $("#CountryId").val();
 
-    var stateModal = new abp.ModalManager({
+    var createStateModal = new abp.ModalManager({
         viewUrl: '/Administration/Country/CreateOrEditStateModal'
     });
 
-    var table = $("#StateProvincesTable").DataTable(
+    var stateProvinceTable = $("#StateProvincesTable").DataTable(
         abp.libs.datatables.normalizeConfiguration({
             ajax: {
                 url: "/Administration/Country/ListStateProvinces/" + countryId,
                 type: "POST",
             },
-
+            processing:true,
             columnDefs: [
                 {
                     title: "Name",
@@ -25,14 +25,14 @@
                 {
                     title: "Actions",
 
-                    rowActions: {
+                    rowAction: {
                         items: [
                             {
                                 text: 'Edit',
                                 action: function (data) {
-                                    stateModal.open({
-                                        countryId: data.countryId,
-                                        stateId: data.id
+                                    createStateModal.open({
+                                        countryId: data.record.countryId,
+                                        stateId: data.record.id
                                     });
                                 }
                             },
@@ -45,16 +45,19 @@
                                 },
 
                                 action: function (data) {
-                                    abp.libs.ajax({
+                                    abp.ajax({
                                         url: "/Administration/Country/RemoveStateProvince",
                                         type: "POST",
                                         data: JSON.stringify({
                                             countryId: data.record.countryId,
                                             stateId: data.record.id
-                                        })
+                                        }),
+                                        success: function (response, status) {                                       
+                                            abp.notify.info("Successfully deleted!");
+                                            stateProvinceTable.ajax.reload() 
+                                        }
                                     })
-
-                                    data.table.ajax.reload();
+                                                             
                                 }
                             }
 
@@ -72,8 +75,8 @@
         })
     })
 
-    stateModal.onResult(function (data) {
-        table.ajax.reload();
+    createStateModal.onResult(function (data) {
+        stateProvinceTable.ajax.reload();
     })
 
 

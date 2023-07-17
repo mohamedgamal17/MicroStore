@@ -136,7 +136,6 @@ namespace MicroStore.Geographic.Host
             {
                 options.AddPolicy(ApplicationSecurityPolicies.RequireAuthenticatedUser,
                         policyBuilder => policyBuilder.RequireAuthenticatedUser()
-                            .RequireClaim(JwtClaimTypes.Scope, ApplicationResourceScopes.Access)
                     );
             });
         }

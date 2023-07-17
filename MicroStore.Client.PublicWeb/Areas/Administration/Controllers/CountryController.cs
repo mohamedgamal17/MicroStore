@@ -174,7 +174,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             await  _stateProvinceService.DeleteAsync(model.CountryId, model.StateId);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
