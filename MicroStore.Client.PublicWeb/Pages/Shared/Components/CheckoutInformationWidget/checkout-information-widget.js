@@ -4,11 +4,8 @@
         var widgetmanager = $wrapper.data("abp-widget-manager");
 
         var init = function (filter) {
-            console.log("Checkout cmp")
-            $()
             $wrapper.find("select[data-address-select='Country']")
                 .change(function () {
-                    console.log("clicked")
                     var countryElement = $(this);
                     var countryIsoCode = countryElement.val();
                     var stateProvinceELement =countryElement
@@ -42,10 +39,6 @@
                     });
                 });
 
-            $("#UseAnotherBillingAddress")
-                .click(function () {
-                    $("#BillingAddress").toggleClass("d-none");
-                });
         };
 
 

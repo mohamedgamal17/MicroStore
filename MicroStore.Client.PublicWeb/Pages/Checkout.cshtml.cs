@@ -21,7 +21,7 @@ namespace MicroStore.Client.PublicWeb.Pages
         public bool UseAnotherBillingAddress { get; set; }
 
         [BindProperty]
-        public AddressModel? BillingAddress { get; set; }
+        public AddressModel BillingAddress { get; set; }
 
         [BindProperty]
         public string PaymentMethod { get; set; }
@@ -70,6 +70,11 @@ namespace MicroStore.Client.PublicWeb.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
             var basketResponse = await _basketAggregateService
               .RetriveBasket(_workContext.TryToGetCurrentUserId());
 
@@ -84,7 +89,7 @@ namespace MicroStore.Client.PublicWeb.Pages
             {
                 Items = PrepareShipmentItemEstimateRequest(Basket),
 
-                Address = MapAddress(UseAnotherBillingAddress ? ShippingAddress : BillingAddress!),
+                Address = MapAddress(ShippingAddress),
 
             };
 
@@ -101,7 +106,7 @@ namespace MicroStore.Client.PublicWeb.Pages
             {
                 BillingAddress = MapAddress(BillingAddress),
 
-                ShippingAddress = MapAddress(UseAnotherBillingAddress ? ShippingAddress : BillingAddress),
+                ShippingAddress = MapAddress(ShippingAddress),
 
                 TaxCost = 0,
 

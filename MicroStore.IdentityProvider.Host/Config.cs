@@ -4,7 +4,6 @@ using IdentityModel;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Application.Domain;
-using System.Security.Claims;
 namespace MicroStore.IdentityProvider.Host
 {
     public static class Config
@@ -23,7 +22,6 @@ namespace MicroStore.IdentityProvider.Host
                 }
 
             };
-
 
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
@@ -161,6 +159,8 @@ namespace MicroStore.IdentityProvider.Host
                     RefreshTokenExpiration = TokenExpiration.Absolute,
 
                     RefreshTokenUsage=  TokenUsage.OneTimeOnly,
+
+                    AbsoluteRefreshTokenLifetime = TimeSpan.FromDays(30).Seconds,
 
                     ClientName ="Micro Store Interactive Client",
 

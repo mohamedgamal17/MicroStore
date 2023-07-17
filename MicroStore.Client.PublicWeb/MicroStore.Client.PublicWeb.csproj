@@ -49,6 +49,7 @@
     <PackageReference Include="Volo.Abp.AutoMapper" Version="6.0.2" />
     <PackageReference Include="Volo.Abp.BlobStoring.Minio" Version="6.0.2" />
     <PackageReference Include="Volo.Abp.Core" Version="6.0.2" />
+	<PackageReference Include="libphonenumber-csharp" Version="8.13.11" />
   </ItemGroup>
 
   <ItemGroup>
