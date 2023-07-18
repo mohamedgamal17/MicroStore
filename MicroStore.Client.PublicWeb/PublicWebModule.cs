@@ -1,13 +1,8 @@
-﻿using IdentityModel.AspNetCore.AccessTokenManagement;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.Extensions.Configuration;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Bundling;
-using MicroStore.Client.PublicWeb.Components.Cart;
 using MicroStore.Client.PublicWeb.Configuration;
 using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Menus;
@@ -15,7 +10,6 @@ using MicroStore.Client.PublicWeb.Security;
 using MicroStore.Client.PublicWeb.Theming;
 using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
 using Newtonsoft.Json.Converters;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.ExceptionHandling;
@@ -111,8 +105,6 @@ namespace MicroStore.Client.PublicWeb
                     .Configure(StandardBundles.Styles.Global, bundle =>
                     {
                         bundle.AddContributors(typeof(ApplicationThemeGlobalStyleContributor));
-                        bundle.AddContributors(typeof(CartWidgetStyleContributor));
-
                     });
 
                options
@@ -138,14 +130,6 @@ namespace MicroStore.Client.PublicWeb
                    });
 
             });
-
-
-
-            //Configure<AbpWidgetOptions>(options =>
-            //{
-            //    options.Widgets.Add(typeof(BasketWidgetViewComponent));
-            //    options.Widgets.Add(typeof(CartWidgetViewComponent));
-            //});
 
             context.Services.AddFluentValidationAutoValidation();
             context.Services.AddFluentValidationClientsideAdapters();

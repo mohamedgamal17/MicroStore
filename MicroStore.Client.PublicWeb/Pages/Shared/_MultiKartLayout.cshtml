@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-@using MicroStore.Client.PublicWeb.Components.Cart
+@using MicroStore.Client.PublicWeb.Components.CartWidget
 @using MicroStore.Client.PublicWeb.Components.CategoryWidget
 @using MicroStore.Client.PublicWeb.Theming;
 @using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
@@ -60,7 +60,7 @@
         @RenderBody()
 
 
-        @await Html.PartialAsync("_CartComponent")
+        @await Component.InvokeAsync(typeof(CartWidgetViewComponent))
 
         @await Component.InvokeAsync(typeof(CategoryWidgetViewComponent))
     </div>

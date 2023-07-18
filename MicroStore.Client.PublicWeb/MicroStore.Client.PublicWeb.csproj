@@ -79,8 +79,6 @@
     <None Include="Pages\Shared\Components\OrderWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\ProductListWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\Purchase\Defaultcshtml.cshtml" />
-    <None Include="Pages\Shared\_Layout.cshtml" />
-    <None Include="Pages\Shared\_Navbar.cshtml" />
     <None Include="Pages\Shared\_OldLayout.cshtml" />
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />

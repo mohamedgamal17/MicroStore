@@ -26,22 +26,21 @@ namespace MicroStore.ShoppingCart.Api.Controllers
             _basketRepository = basketRepository;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
-
-        public async Task<IActionResult> GetUserBasket(string userId)
+        public async Task<IActionResult> GetUserBasket(string id)
         {
-            var basket = await _basketRepository.GetAsync(userId);
+            var basket = await _basketRepository.GetAsync(id);
 
             return Success(StatusCodes.Status200OK, _objectMapper.Map<Basket, BasketDto>(basket));
         }
 
 
-        [HttpPut("{userId}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Update(string userId, BasketModel model)
+        public async Task<IActionResult> Update(string id, BasketModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -50,7 +49,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
                 return InvalideModelState();
             }
 
-            var userBasket = await _basketRepository.GetAsync(userId);
+            var userBasket = await _basketRepository.GetAsync(id);
 
             userBasket.Items = model.Items.Select(x => new BasketItem { ProductId = x.ProductId, Quantity = x.Quantity }).ToList();
 
@@ -60,11 +59,11 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
         }
 
-        [HttpPost("{userId}")]
+        [HttpPost("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> AddProduct(string userId, BasketItemModel model)
+        public async Task<IActionResult> AddProduct(string id, BasketItemModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -73,7 +72,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
                 return InvalideModelState();
             }
 
-            var basket = await _basketRepository.GetAsync(userId);
+            var basket = await _basketRepository.GetAsync(id);
 
             basket.AddProduct(model.ProductId, model.Quantity);
 
@@ -83,11 +82,11 @@ namespace MicroStore.ShoppingCart.Api.Controllers
 
         }
 
-        [HttpDelete("{userId}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasketDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> RemoveProduct(string userId, RemoveBasketItemModel model)
+        public async Task<IActionResult> RemoveProduct(string id, RemoveBasketItemModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -96,7 +95,7 @@ namespace MicroStore.ShoppingCart.Api.Controllers
                 return InvalideModelState();
             }
 
-            var basket = await _basketRepository.GetAsync(userId);
+            var basket = await _basketRepository.GetAsync(id);
 
             var result = basket.RemoveProduct(model.ProductId, model.Quantity);
 

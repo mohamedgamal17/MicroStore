@@ -22,7 +22,8 @@ namespace MicroStore.Client.PublicWeb.Bundling
             context.Files.AddRange(new[]{
                 "/frontend/js/menu.js",
                 "/libs/lazysizes/lazysizes.min.js",
-                "/frontend/js/script.js"
+                "/frontend/js/script.js",
+                "/frontend/js/main.js"
             });
 
         }
