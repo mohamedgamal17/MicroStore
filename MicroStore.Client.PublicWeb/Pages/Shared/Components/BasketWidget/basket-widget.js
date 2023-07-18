@@ -1,16 +1,12 @@
 ﻿(function () {
     abp.widgets.BasketWidget = function ($wrapper) {
         var widgetManager = $wrapper.data("abp-widget-manager");
-
         var init = function (filters) {
-            console.log("inited");
             $wrapper
                 .find(".basket-item-remove")
                 .click(function () {
                     var $this = $(this);
-                    console.log($this.parents(".basket-list-item"))
                     var productId = $this.parents(".basket-list-item").attr("data-product-id");
-
                     abp.ajax({
                         url: "/api/basket",
                         method: "DELETE",
@@ -30,12 +26,10 @@
                 });
 
             $wrapper
-                .find(".basket-item-increase")
+                .find(".quantity-right-plus")
                 .click(function () {
                     var $this = $(this);
-                    console.log($this.parents(".basket-list-item"))
                     var productId = $this.parents(".basket-list-item").attr("data-product-id");
-                    console.log(productId);
                     abp.ajax({
                         url: "/api/basket",
                         method: "POST",
@@ -55,11 +49,10 @@
                 });
 
             $wrapper
-                .find(".basket-item-decrease")
+                .find(".quantity-left-minus")
                 .click(function () {
                     var $this = $(this);
                     var productId = $this.parents(".basket-list-item").attr("data-product-id");
-
                     abp.ajax({
                         url: "/api/basket",
                         method: "DELETE",

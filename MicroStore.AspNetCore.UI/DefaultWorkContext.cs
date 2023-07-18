@@ -1,5 +1,6 @@
 ﻿using IdentityModel;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.AspNetCore.UI
@@ -22,7 +23,7 @@ namespace MicroStore.AspNetCore.UI
 
             if (context?.User.Identity?.IsAuthenticated == true)
             {
-                return context.User.Claims.Single(x => x.Type == JwtClaimTypes.Subject).Value;
+                return context.User.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
             }
 

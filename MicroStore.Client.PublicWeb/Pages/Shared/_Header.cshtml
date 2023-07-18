@@ -16,7 +16,18 @@
                             <i class="fa fa-user" aria-hidden="true"></i>
                             My Account
                             <ul class="onhover-show-div">
-                                <li><a href="login.html">Login</a></li>
+                                @if(User.Identity?.IsAuthenticated ?? false)
+                                {
+                                    <li><a href="javascript:void(0)" id="btn-logout">Logout</a></li>
+                                    <form method="post" asp-controller="Authentication" asp-action="Logout" id="logout-form">
+                                        @Html.AntiForgeryToken()
+                                    </form>
+                                }
+                                else
+                                {
+                                    <li><a asp-controller="Authentication" asp-action="Login">Login</a></li>
+                                }
+                                
                             </ul>
                         </li>
                     </ul>

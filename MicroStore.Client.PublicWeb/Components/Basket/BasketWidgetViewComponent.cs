@@ -33,42 +33,5 @@ namespace MicroStore.Client.PublicWeb.Components.Basket
 
         }
 
-
-        private BasketAggregate GenerateBasket()
-        {
-            return new BasketAggregate
-            {
-                Items = new List<BasketItemAggregate>
-                {
-                    new BasketItemAggregate
-                    {
-                        ProductId = Guid.NewGuid().ToString(),
-                        Name = Guid.NewGuid().ToString(),
-                        Price  = 50,
-                        Quantity = 5,
-                        Thumbnail = Guid.NewGuid().ToString(),
-
-                    },
-                      new BasketItemAggregate
-                    {
-                        ProductId = Guid.NewGuid().ToString(),
-                        Name = Guid.NewGuid().ToString(),
-                        Price  = 50,
-                        Quantity = 5,
-                        Thumbnail = Guid.NewGuid().ToString(),
-
-                    },
-                        new BasketItemAggregate
-                    {
-                        ProductId = Guid.NewGuid().ToString(),
-                        Name = Guid.NewGuid().ToString(),
-                        Price  = 50,
-                        Quantity = 5,
-                        Thumbnail = Guid.NewGuid().ToString(),
-
-                    }
-                }
-            };
-        }
     }
 }

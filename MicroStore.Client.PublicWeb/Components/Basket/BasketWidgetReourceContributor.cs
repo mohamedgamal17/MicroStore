@@ -1,7 +1,4 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
-using Volo.Abp.Modularity;
-
 namespace MicroStore.Client.PublicWeb.Components.Basket
 {
     public class BasketWidgetStyleContributor : BundleContributor
@@ -12,7 +9,6 @@ namespace MicroStore.Client.PublicWeb.Components.Basket
         }
     }
 
-    [DependsOn(typeof(SignalRBrowserScriptContributor))]
     public class BasketWidgetScriptContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
