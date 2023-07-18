@@ -31,7 +31,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
     {
         public ProductModelValidator()
         {
-            RuleFor(x => x.Id).NotEmpty();
 
             RuleFor(x => x.Name)
                 .MinimumLength(3)

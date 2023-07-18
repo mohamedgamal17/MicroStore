@@ -93,6 +93,9 @@ $(document).ready(function () {
         })
     );
 
+    $("#SubmitProductForm").click(function () {
+        $("#EditProductForm").submit();
+    });
 
     productImageCreateModal.onResult(function () {
         productImageTable.ajax.reload();

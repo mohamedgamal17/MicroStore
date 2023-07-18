@@ -45,7 +45,7 @@
                                 </abp-column>
                                 <abp-column size-sm="_8">
                                     <select asp-for="@Model.Category" id="@Html.IdFor(x=> x.Category)" class="form-control" asp-items="categories">
-                                        <option selected>All</option>
+                                        <option selected value="">All</option>
                                     </select>
                                     <span class="text-danger" asp-validation-for="@Model.Name" />
                                 </abp-column>
@@ -61,7 +61,7 @@
                                 </abp-column>
                                 <abp-column size-sm="_8">
                                     <select asp-for="@Model.Manufacturer" id="@Html.IdFor(x=> x.Manufacturer)" class="form-control" asp-items="manufacturers">
-                                        <option selected>All</option>
+                                        <option selected value="">All</option>
                                     </select>
                                     <span class="text-danger" asp-validation-for="@Model.Manufacturer" />
                                 </abp-column>

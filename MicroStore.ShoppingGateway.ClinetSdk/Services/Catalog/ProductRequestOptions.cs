@@ -10,6 +10,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         public string LongDescription { get; set; } 
         public double Price { get; set; }
         public double OldPrice { get; set; }
+        public bool IsFeatured { get; set; }
         public Weight Weight { get; set; }
         public Dimension Dimensions { get; set; }
         public string[] CategoriesIds { get; set; }

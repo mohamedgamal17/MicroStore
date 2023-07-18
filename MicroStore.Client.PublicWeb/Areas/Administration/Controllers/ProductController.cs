@@ -41,9 +41,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         public async Task<IActionResult> Index()
         {
 
-            ViewBag.Categories = await BuildCategoriesSelecetListItems();
+            ViewBag.Categories = await BuildCategoriesSelecetListItems(idDefaultValue : false);
 
-            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems();
+            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems(idDefaultValue: false);
 
             return View(new ProductSearchModel());
 
@@ -75,7 +75,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 Data = ObjectMapper.Map<List<Product>, List<ProductVM>>(data.Items)
             };
 
-            return Json(model);
+            return Json(responseModel);
         }
 
         [RuleSetForClientSideMessages("*")]
@@ -84,9 +84,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             ControllerContext.SetRulesetForClientsideMessages("*");
 
             ViewBag.Categories =  await BuildCategoriesSelecetListItems();
-            ViewBag.Categories = await BuildCategoriesSelecetListItems(idDefaultValue: false );
+            ViewBag.Categories = await BuildCategoriesSelecetListItems();
 
-            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems(idDefaultValue: false);
+            ViewBag.Manufacturers = await BuildManufacturersSelecetListItems();
 
             return View(new ProductModel());
         }
@@ -99,7 +99,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             if (!ModelState.IsValid)
             {
         
-                ViewBag.Categories = await BuildCategoriesSelecetListItems();
+                ViewBag.Categories = await BuildCategoriesSelecetListItems(model.CategoriesIds);
 
                 ViewBag.Manufacturers = await BuildManufacturersSelecetListItems(model.ManufacturersIds);
 
@@ -307,9 +307,11 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 {
                     categorySelectItems = categories
                         .Select(x => new SelectListItem 
-                        { Text = x.Name, 
-                            Value = x.Id, Selected = 
-                            categoriesValues?.Contains(x.Id) ?? false 
+                        { 
+                            Text = x.Name, 
+                            Value = x.Id, 
+                            Selected = categoriesValues?.Contains(x.Id) ?? false
+
                         }).ToList();
 
                 }
@@ -319,9 +321,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                      .Select(x => new SelectListItem
                      {
                          Text = x.Name,
-                         Value = x.Name,
-                         Selected =
-                         categoriesValues?.Contains(x.Name) ?? false
+                         Value = x.Name,                      
+                         Selected = categoriesValues?.Contains(x.Name) ?? false
+
                      }).ToList();
                 }
                

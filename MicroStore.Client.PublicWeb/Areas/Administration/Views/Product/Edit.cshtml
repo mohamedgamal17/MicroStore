@@ -24,7 +24,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <button class="btn btn-info" id="sumbiteditproductform-btn">
+                            <button class="btn btn-info" id="SubmitProductForm">
                                 <i class="fas fa-plus-square mr-1"></i>
                                 Save
                             </button>
@@ -37,7 +37,7 @@
 
     <div class="content">
         <div class="container-fluid">
-            <form id="editproduct-form" method="post" asp-action="Edit">
+            <form id="EditProductForm" method="post" asp-action="Edit">
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(x=> x.Id)
                 <partial name="_CreateOrUpdate.Info" model="Model" />
