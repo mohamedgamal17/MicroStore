@@ -25,6 +25,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         public string Tag { get; set; }
         public double? MinPrice { get; set; }
         public double? MaxPrice { get; set; }
+        public bool IsFeatured { get; set; }
     }
 
 }

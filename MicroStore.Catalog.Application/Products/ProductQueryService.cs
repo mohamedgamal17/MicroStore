@@ -115,10 +115,16 @@ namespace MicroStore.Catalog.Application.Products
                 query = query.Where(x => x.Price <= model.MaxPrice);
             }
 
-            if(model.SortBy != null)
+            if (model.IsFeatured)
+            {
+                query = query.Where(x => x.IsFeatured);
+            }
+
+            if (model.SortBy != null)
             {
                 query = TryToSort(query, model.SortBy, model.Desc);
             }
+
 
             if(!string.IsNullOrEmpty(model.Name) )
             {
