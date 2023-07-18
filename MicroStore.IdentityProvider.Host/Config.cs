@@ -154,13 +154,16 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedGrantTypes = new List<string> { OpenIdConnectGrantTypes.AuthorizationCode , OpenIdConnectGrantTypes.RefreshToken,"urn:ietf:params:oauth:grant-type:token-exchange" },
 
                     AccessTokenType  = AccessTokenType.Reference,
+
                     AccessTokenLifetime = 120,
 
-                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
 
                     RefreshTokenUsage=  TokenUsage.OneTimeOnly,
+                    
+                    AbsoluteRefreshTokenLifetime =(int) TimeSpan.FromDays(30).TotalSeconds,
 
-                    AbsoluteRefreshTokenLifetime = TimeSpan.FromDays(30).Seconds,
+                    SlidingRefreshTokenLifetime =(int) TimeSpan.FromDays(15).TotalSeconds,
 
                     ClientName ="Micro Store Interactive Client",
 
