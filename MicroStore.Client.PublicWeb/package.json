@@ -21,6 +21,7 @@
     "@abp/aspnetcore.mvc.ui.theme.shared": "^7.1.1",
     "admin-lte": "^3.2.0",
     "animate.css": "^4.1.1",
+    "ion-rangeslider": "^2.3.1",
     "lazysizes": "^5.3.2",
     "summernote": "^0.8.20"
   }

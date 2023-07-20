@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="cart_media">
-            <ul class="cart_product">
+            <ul class="cart_product" data-item-count="@Model.Items.Count">
                 @if (Model.Items.Count > 0)
                 {
                     @foreach (var item in Model.Items)
@@ -44,7 +44,7 @@
                 }
                 else
                 {
-                    <li>
+                    <li class="empty-cart_text">
                         <div class="media">
                             <div class="media-body text-center">
                                 <a href="#">

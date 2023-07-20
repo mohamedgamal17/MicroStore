@@ -8,7 +8,9 @@ namespace MicroStore.Client.PublicWeb.Bundling
         {
             context.Files.AddRange(new[]{
                 "/libs/animate.css/animate.min.css",
-                "/frontend/css/themify-icons.css",
+                "/libs/ion-rangeslider/css/ion.rangeSlider.min.css",
+                "/frontend/css/vendors/font-awesome.css",
+                "/frontend/css/vendors/themify-icons.css",
                 "/frontend/css/style.css"
             });
 
@@ -22,6 +24,7 @@ namespace MicroStore.Client.PublicWeb.Bundling
             context.Files.AddRange(new[]{
                 "/frontend/js/menu.js",
                 "/libs/lazysizes/lazysizes.min.js",
+                "/libs/ion-rangeslider/js/ion.rangeSlider.min.js",
                 "/frontend/js/script.js",
                 "/frontend/js/main.js"
             });

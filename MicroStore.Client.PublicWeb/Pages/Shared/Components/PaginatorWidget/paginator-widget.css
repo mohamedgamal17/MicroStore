@@ -1,0 +1,14 @@
+﻿.product-pagination .pagination .page-item span {
+    padding: 18px;
+    border-bottom: 0;
+    border-top: 0;
+    color: #777;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.product-pagination .pagination .page-item.active span {
+    color: var(--theme-color);
+    background-color: #fff;
+    border-color: #ddd;
+}

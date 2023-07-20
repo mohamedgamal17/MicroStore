@@ -82,10 +82,15 @@
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />
     <None Include="Pages\_ViewStart.cshtml" />
-    <None Include="wwwroot\images\icon\service1.svg" />
-    <None Include="wwwroot\images\icon\service2.svg" />
-    <None Include="wwwroot\images\icon\service3.svg" />
-    <None Include="wwwroot\images\icon\service4.svg" />
+    <None Include="wwwroot\frontend\css\vendors\font-awesome\brands.css.map" />
+    <None Include="wwwroot\frontend\css\vendors\font-awesome\fontawesome.css.map" />
+    <None Include="wwwroot\frontend\css\vendors\font-awesome\regular.css.map" />
+    <None Include="wwwroot\frontend\css\vendors\font-awesome\solid.css.map" />
+    <None Include="wwwroot\frontend\css\vendors\font-awesome\v4-shims.css.map" />
+    <None Include="wwwroot\frontend\images\icon\service1.svg" />
+    <None Include="wwwroot\frontend\images\icon\service2.svg" />
+    <None Include="wwwroot\frontend\images\icon\service3.svg" />
+    <None Include="wwwroot\frontend\images\icon\service4.svg" />
   </ItemGroup>
 
   <ItemGroup>

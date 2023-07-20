@@ -1,66 +1,140 @@
-﻿@using MicroStore.Client.PublicWeb.Components.ProductListWidget
+﻿@using MicroStore.Client.PublicWeb.Components.PaginatorWidget;
+@using MicroStore.Client.PublicWeb.Components.ProductListWidget
 @using System.Globalization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 @model ProductListWidgetModel
 
 @{
-    var productCardSize = (ColumnSize)Model.ProductCardSize;
-}
-
-<abp-row>
-    @if (Model.Products != null && Model.Products.Count > 0)
+    var pagingOptions = new List<SelectListItem>
     {
-        <abp-column size=_12>
-            <abp-row>
-                @foreach (var product in Model.Products)
-                {
-                    <abp-column size-sm="_12" size-md="@productCardSize">
+        new SelectListItem
+        {
+            Text = "24 Products Per Page",
+            Value = "24",
+            Selected = Model.Pager.PageSize == 24,
+        },
+        new SelectListItem
+        {
+            Text = "50 Products Per Page",
+            Value = "50",
+            Selected = Model.Pager.PageSize == 50,
+        },
+        new SelectListItem
+        {
+            Text = "100 Products Per Page",
+            Value = "100",
+             Selected = Model.Pager.PageSize == 100,
+        },
+    };
+}
+<div class="collection-product-wrapper">
+    <div class="product-top-filter">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="filter-main-btn">
+                    <span class="filter-btn btn btn-theme">
+                        <i class="fa fa-filter" aria-hidden="true"></i> Filter
 
-                        @{
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @if (Model.Products != null && Model.Products.Count > 0)
+            {
+                <div class="col-12">
+                    <div class="product-filter-content">
+                        <div class="search-count">
+                            <h5>@string.Format("Showing Entries {0}-{1} of {2} Results",@Model.Pager.ShowingFrom, @Model.Pager.ShowingTo,Model.Pager.TotalItemsCount)</h5>
+                        </div>
+ 
+                        <div class="collection-grid-view">
+                            <ul>
+                                <li>
+                                    <img src="/images/icon/2.png" alt="" class="product-2-layout-view">
+                                </li>
+                                <li>
+                                    <img src="./images/icon/3.png" alt=""
+                                         class="product-3-layout-view">
+                                </li>
+                                <li>
+                                    <img src="/images/icon/4.png" alt=""
+                                         class="product-4-layout-view">
+                                </li>
+                                <li>
+                                    <img src="/images/icon/6.png" alt=""
+                                         class="product-6-layout-view">
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="product-page-per-view">
 
-                            var productName = product.Name;
-                            var productImage = product.ProductImages?.OrderBy(x => x.DisplayOrder).FirstOrDefault()?.Image ?? @"/user-content/no-image.png";
-                            var productsku = product.Sku;
-                            var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
-                            <div class="product-list-item" data-product-id="@product.Id.ToString()">
-                                <a asp-page="ProductDetails" asp-route-id="@product.Id" >
-                                    <div class="col">
-                                        <div class="product-info-box">
-                                            <h6>@product.Name</h6>
-                                            <em class="d-block text-muted">@productsku</em>
-                                        </div>
-                                    </div>
-                                    <img class="product-image object-fit-contain" src="@productImage" />
+                        <select name="Length" asp-items="pagingOptions">
+                         </select>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+    <div class="product-wrapper-grid product-m no-arrow">
+        <div class="row margin-res">
+            @foreach (var product in Model.Products)
+            {
+                var productName = product.Name;
+                var productImage = product.ProductImages?.OrderBy(x => x.DisplayOrder)
+                .FirstOrDefault()?.Image ?? @"/user-content/no-image.png";
+                var productsku = product.Sku;
+                var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
+                bool isItemInBasket = Model.UserBasket.Items?.Any(x => x.ProductId == product.Id) ?? false;
+                var quantityBoxClass = isItemInBasket ? "open" : "";
+
+                <div class="col-xl-3 col-6 col-grid-box">
+                    <div class="product-box product-wrap" style="width: 100%; display: inline-block;" data-product-id="@product.Id">
+                        <div class="img-wrapper">
+                            <div class="front">
+                                <a href="ProductDetails/@product.Id">
+                                    <img src="@productImage" class="img-fluid blur-up lazyload bg-img" alt="">
                                 </a>
-                                <div class="row mt-5 ">
-                                    <abp-button class="add-basket-button" button-type="Warning" text="Add To Basket" data-product-id="@product.Id.ToString()"></abp-button>
-                                    <div class="info-section col" style="text-align: center">
-                                        <span class="product-price">@productPrice</span>
+                            </div>
+                            <div class="addtocart_btn">
+                                <button class="add-button add_cart" title="Add to cart" tabindex="0">
+                                    Add to Cart
+                                </button>
+                                <div class="qty-box cart_qty @quantityBoxClass">
+                                    <div class="input-group">
+                                        <button type="button" class="btn quantity-left-minus" data-type="minus"
+                                                data-field="" tabindex="0">
+                                            <i class="fa fa-minus" aria-hidden="true"></i>
+                                        </button>
+                                        <input type="text" class="form-control input-number qty-input" value="1"
+                                               tabindex="0" disabled>
+                                        <button type="button" class="btn quantity-right-plus" data-type="plus"
+                                                data-field="" tabindex="0">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        }
+                        </div>
+                        <div class="product-detail text-center">
+                            <a href="product-page(no-sidebar).html" tabindex="0">
+                                <h6>@productName</h6>
+                            </a>
+                            <h4>@productPrice</h4>
+                        </div>
+                    </div>
+                </div>
 
-                    </abp-column>
+            }
 
-                }
-            </abp-row>
-        </abp-column>
-        @if (Model.Pager.TotalPageCount > 1)
-        {
-            <abp-column offset=_11 size=_1 class="ml-auto">
-                <abp-paginator model="Model.Pager" show-info="false"></abp-paginator>
-            </abp-column>
-        }
+        </div>
+    </div>
 
-    }
-    else
-    {
-        <abp-column size=_12>
-            <abp-container class="text-center">
-                <h3>There is no products has been added yet</h3>
-            </abp-container>
-        </abp-column>
-    }
-
-</abp-row>
+    <div class="product-pagination mt-3">
+        <div class="theme-paggination-block">
+            @await Component.InvokeAsync(typeof(PaginatorWidgetViewComponent), new {model = Model.Pager} )
+        </div>
+    </div>
+</div>

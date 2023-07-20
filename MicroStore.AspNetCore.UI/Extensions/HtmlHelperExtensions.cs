@@ -18,7 +18,7 @@ namespace MicroStore.AspNetCore.UI.Extensions
             {
                 return null;
             }
-
+            
             return HtmlHelper.AnonymousObjectToHtmlAttributes(obj);
         }
 

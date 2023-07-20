@@ -15,7 +15,17 @@
                             productId: productId
                         }),
                         success: function () {
+
                             widgetManager.refresh();
+
+                            $(document).trigger("top_cart.item.removed", {
+                                source: "top_cart",
+                                productId: productId,
+                                occuredAt: Date.now()
+                            });
+
+                       
+
                             abp.notify.info("Removed the product from your basket.", "Removed basket item");
                         }
                     })
