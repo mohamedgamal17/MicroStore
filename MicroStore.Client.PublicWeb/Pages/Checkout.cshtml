@@ -4,17 +4,24 @@
 @model CheckoutModel
 @{
     ViewData["Title"] = "Checkout";
-    ViewData["ContainerTitle"] = "Checkout";
 }
-<div class="container">
-    <form method="post">
-        <abp-row>
-            <abp-column size-md=_8 size-sm=_12>
-                @await Component.InvokeAsync(typeof(CheckoutInformationWidgetViewComponent), Model)
-            </abp-column>
-            <abp-column size-md=_4 size-sm=_12>
-                @await Component.InvokeAsync(typeof(CheckoutSummaryWidgetViewComponent),Model)
-            </abp-column>
-        </abp-row>
-    </form>
-</div>
+
+<section class="section-b-space">
+    <div class="container">
+        <div class="checkout-page">
+            <div class="checkout-form">
+                <form method="post">
+                    <abp-row>
+                        <abp-column size-md="_6" size-sm="_12">
+                            @await Component.InvokeAsync(typeof(CheckoutInformationWidgetViewComponent), Model)
+                        </abp-column>      
+                        <abp-column size-md="_6" size-sm="_12">
+                            @await Component.InvokeAsync(typeof(CheckoutSummaryWidgetViewComponent),Model)
+                        </abp-column>
+                    </abp-row>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+

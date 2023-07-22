@@ -3,75 +3,94 @@
     var countrylist = (List<SelectListItem>)ViewBag.Countries;
 
 }
-
-
 <abp-row>
-    <abp-column size=_12>
-        <abp-card id="@Html.IdFor(x=> x.ShippingAddress)" data-address="@Html.NameFor(x=> x.ShippingAddress)">
-            <abp-card-header>
-                <abp-card-title>
-                    <h5>Shipping Address</h5>
-                </abp-card-title>
-            </abp-card-header>
-            <abp-card-body>
+    <div class="checkout-title">
+        <h3>Shipping Details</h3>
+    </div>
+    <abp-column size=_12 data-address="@Html.NameFor(x=> x.ShippingAddress)">
+        <abp-row class="check=out">
+            <abp-column class="form-group" size-md="_6" size-sm="_12">
                 <abp-input asp-for="@Model.ShippingAddress.FirstName"></abp-input>
+            </abp-column>
+            <abp-column class="form-group" size-md="_6" size-sm="_12">
+                <abp-input asp-for="@Model.ShippingAddress.FirstName"></abp-input>
+            </abp-column>
+
+            <abp-column class="form-group" size-md="_6" size-sm="_12">
                 <abp-input asp-for="@Model.ShippingAddress.LastName"></abp-input>
-                <div class="mb-3">
-                    <label asp-for="@Model.ShippingAddress.Country"> </label>
-                    <select class="form-select" asp-for="@Model.ShippingAddress.Country" data-address-select="Country">
-                        <option selected>Please select country</option>
-                        @foreach (var country in countrylist)
-                        {
-                            <option value="@country.Value">@country.Text</option>
-                        }
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="@Model.ShippingAddress.StateProvince"> </label>
-                    <select class="form-select" asp-for="@Model.ShippingAddress.StateProvince" data-address-select="StateProvince"></select>
-                </div>
-                <abp-input asp-for="@Model.ShippingAddress.City"></abp-input>
-                <abp-input asp-for="@Model.ShippingAddress.AddressLine1"></abp-input>
-                <abp-input asp-for="@Model.ShippingAddress.AddressLine2"></abp-input>
-                <abp-input asp-for="@Model.ShippingAddress.ZipCode"></abp-input>
-                <abp-input asp-for="@Model.ShippingAddress.PostalCode"></abp-input>
+            </abp-column>
+            <abp-column class="form-group" size-md="_12" >
                 <abp-input asp-for="@Model.ShippingAddress.PhoneNumber"></abp-input>
-            </abp-card-body>
-            <abp-card-footer>
-                <abp-input asp-for="@Model.UseAnotherBillingAddress"></abp-input>
-            </abp-card-footer>
-        </abp-card>
+            </abp-column>
+            <abp-column size="_12" class="form-group mb-3">
+                <label asp-for="@Model.ShippingAddress.Country"> </label>
+                <select class="form-select" asp-for="@Model.ShippingAddress.Country" data-address-select="Country">
+                    <option selected>Please select country</option>
+                    @foreach (var country in countrylist)
+                    {
+                        <option value="@country.Value">@country.Text</option>
+                    }
+                </select>
+            </abp-column>
+            <abp-column size="_12" class="form-group mb-3">
+                <label asp-for="@Model.ShippingAddress.StateProvince"> </label>
+                <select class="form-select" asp-for="@Model.ShippingAddress.StateProvince" data-address-select="StateProvince"></select>
+            </abp-column>
+
+            <abp-column class="form-group" size-md="_12">
+                <abp-input asp-for="@Model.ShippingAddress.City"></abp-input>
+            </abp-column>
+            <abp-column class="form-group" size-md="_12">
+                <abp-input asp-for="@Model.ShippingAddress.ZipCode"></abp-input>
+            </abp-column>
+            <abp-column class="form-group" size-md="_12">
+                <abp-input asp-for="@Model.ShippingAddress.PostalCode"></abp-input>
+            </abp-column>
+        </abp-row>
     </abp-column>
-    <abp-column>
-        <abp-card id="@Html.IdFor(x=> x.BillingAddress)" data-address="@Html.NameFor(x=> x.BillingAddress)">
-            <abp-card-header>
-                <abp-card-title>Billing Address</abp-card-title>
-            </abp-card-header>
-            <abp-card-body>
+
+    <abp-column size=_12 data-address="@Html.NameFor(x=> x.BillingAddress)">
+        <div class="checkout-title">
+            <h3>Billing Details</h3>
+        </div>
+        <abp-row class="check=out">
+            <abp-column class="form-group" size-md="_6" size-sm="_12">
                 <abp-input asp-for="@Model.BillingAddress.FirstName"></abp-input>
+            </abp-column>
+            <abp-column class="form-group" size-md="_6" size-sm="_12">
+                <abp-input asp-for="@Model.BillingAddress.FirstName"></abp-input>
+            </abp-column>
+
+            <abp-column class="form-group" size-md="_6" size-sm="_12">
                 <abp-input asp-for="@Model.BillingAddress.LastName"></abp-input>
-                <div class="mb-3">
-                    <label asp-for="@Model.BillingAddress.Country"></label>
-                    <select class="form-select" asp-for="@Model.BillingAddress.Country" data-address-select="Country">
-                        <option selected>Please select country</option>
-                        @foreach (var country in countrylist)
-                        {
-                            <option value="@country.Value">@country.Text</option>
-                        }
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="@Model.BillingAddress.StateProvince"></label>
-                    <select class="form-select" asp-for="@Model.BillingAddress.StateProvince" data-address-select="StateProvince"></select>
-                </div>
-                <abp-input asp-for="@Model.BillingAddress.City"></abp-input>
-                <abp-input asp-for="@Model.BillingAddress.AddressLine1"></abp-input>
-                <abp-input asp-for="@Model.BillingAddress.AddressLine2"></abp-input>
-                <abp-input asp-for="@Model.BillingAddress.ZipCode"></abp-input>
-                <abp-input asp-for="@Model.BillingAddress.PostalCode"></abp-input>
+            </abp-column>
+            <abp-column class="form-group" size-md="_12">
                 <abp-input asp-for="@Model.BillingAddress.PhoneNumber"></abp-input>
-            </abp-card-body>
-        </abp-card>
+            </abp-column>
+            <abp-column size="_12" class="form-group mb-3">
+                <label asp-for="@Model.BillingAddress.Country"> </label>
+                <select class="form-select" asp-for="@Model.BillingAddress.Country" data-address-select="Country">
+                    <option selected>Please select country</option>
+                    @foreach (var country in countrylist)
+                    {
+                        <option value="@country.Value">@country.Text</option>
+                    }
+                </select>
+            </abp-column>
+            <abp-column size="_12" class="form-group mb-3">
+                <label asp-for="@Model.BillingAddress.StateProvince"> </label>
+                <select class="form-select" asp-for="@Model.BillingAddress.StateProvince" data-address-select="StateProvince"></select>
+            </abp-column>
+
+            <abp-column class="form-group" size-md="_12">
+                <abp-input asp-for="@Model.BillingAddress.City"></abp-input>
+            </abp-column>
+            <abp-column class="form-group" size-md="_12">
+                <abp-input asp-for="@Model.BillingAddress.ZipCode"></abp-input>
+            </abp-column>
+            <abp-column class="form-group" size-md="_12">
+                <abp-input asp-for="@Model.BillingAddress.PostalCode"></abp-input>
+            </abp-column>
+        </abp-row>
     </abp-column>
 </abp-row>
-

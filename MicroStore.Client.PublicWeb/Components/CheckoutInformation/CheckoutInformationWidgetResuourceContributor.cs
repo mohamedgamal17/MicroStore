@@ -4,7 +4,6 @@ using Volo.Abp.Modularity;
 
 namespace MicroStore.Client.PublicWeb.Components.CheckoutInformation
 {
-    [DependsOn(typeof(SignalRBrowserScriptContributor))]
     public class CheckoutInformationWidgetScriptContrinutor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
