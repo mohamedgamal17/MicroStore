@@ -262,6 +262,28 @@
 
 
 
+    /* ===============================
+        13-Slick Slider
+     =================================*/
+
+    $('.product-slick').slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+        fade: true,
+        asNavFor: '.slider-nav'
+    });
+
+    $('.slider-nav').slick({
+        vertical: false,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        asNavFor: '.product-slick',
+        arrows: false,
+        dots: false,
+        focusOnSelect: true
+    });
+
 
     /*=====================
      15.Header z-index js

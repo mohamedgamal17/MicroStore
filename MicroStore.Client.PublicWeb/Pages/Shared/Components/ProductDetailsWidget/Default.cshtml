@@ -1,96 +1,142 @@
 ﻿@model MicroStore.Client.PublicWeb.Components.ProductDetailsWidget.ProductDetailsWidgetViewModel
-
-<abp-row data-product-id="@Model.Product?.Id">
-    @if (!Model.HasError)
-    {
-
-        var productImagesCount = Model.Product.ProductImages?.Count ?? 0;
-        var productMainImage = productImagesCount > 0 ? Model.Product.ProductImages!
-        .OrderBy(x => x.DisplayOrder).First().Image : @"/user-content/no-image.png";
-
-
-        <abp-column size-md=_6 size-sm=_12>
-            <abp-row>
-                <abp-column size=_12>
-                    <abp-container>
-                        <div class="overflow-hidden"  style="">
-                            <img class="product-image product-main-image" src="@productMainImage" >
-                        </div>
-                    </abp-container>
-
-                </abp-column>
-                @if (productImagesCount > 0)
-                {
-                    <abp-column size=_12>
-                        <div class="product-image-thumbs">
-                            @foreach (var productImage in Model.Product.ProductImages!)
-                            {
-                                <div class="product-image-thumb" data-image-src="@productImage.Image">
-                                    <img  src="@productImage.Image">
-                                </div>
-                            }
-                        </div>
-                    </abp-column>
+<section>
+    <div class="collection-wrapper" data-product-id="@Model.Product.Id">
+        <div class="container">
+            <div class="row">
+                @{
+                    var productImages = Model.Product.ProductImages;
+                    var fallbackImage = @"/user-content/no-image.png";
+                    var productPrice = Model.Product.Price;
+                    var productOldPrice = Model.Product.OldPrice;
+                    var hasPriceDiscount = Model.Product.Price > Model.Product.OldPrice;
+                    int priceDiscount = 0;
+                    if (hasPriceDiscount)
+                    {
+                        priceDiscount = 100 - (int)Math.Round(productOldPrice / productPrice);
+                    }
                 }
+                <div class="col-lg-6">
+                    <div class="product-slick" >
+                        @if (productImages != null && productImages.Count > 0)
+                        {
+                            int index = 0;
+                            @foreach (var image in productImages)
+                            {
+                                <div>
+                                    <img src="@image.Image" alt=""
+                                         class="img-fluid blur-up lazyload image_zoom_cls-@index">
+                                </div>
 
-            </abp-row>
-        </abp-column>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <div>
+                                <img src="@fallbackImage" class="img-fluid blur-up lazyload image_zoom_cls-0">
+                            </div>
+   
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-12 p-0">
+                            <div class="slider-nav">
+                                @if (productImages != null && productImages.Count > 1)
+                                {
+                                    @foreach (var image in productImages)
+                                    {
+                                        <div>
+                                            <img src="@image.Image" alt=""
+                                                 class="img-fluid blur-up lazyload">
+                                        </div>
 
-
-        <abp-column size-md=_6 size-sm=_12 >
-            <div>
-                <div class="my-3">
-                    <h3 class="my-3">
-                        @Model.Product.Name
-                    </h3>
-                    <em class="d-block text-muted">@Model.Product.Sku</em>
+                                    }
+                                }
+                               
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div class="col-lg-6 rtl-text">
+                    <div class="product-right">
+                        <h2>@Model.Product.Name</h2>
 
-                <div class="my-3">
-                    @Model.Product.ShortDescription
-                </div>
+                        <h3 class="price-detail">
+                            $32.96
+                            @if (hasPriceDiscount)
+                            {
+                                <del>@productOldPrice</del>
+                                if (priceDiscount != 0)
+                                {
+                                    <span>@priceDiscount% off</span>
+                                }
+                            }
 
-                <div>
-                    <abp-row class="my-3">
-                        <abp-column size=_6>
-                            <abp-button  class="d-block add-basket-button" button-type="Primary" text="Add To Cart" 
-                            data-product-id="@Model.Product.Id" />
-                        </abp-column>
-                    </abp-row>
+
+                        </h3>
+                        <div id="selectSize" class="addeffect-section product-description border-product">
+                            <h6 class="product-title">quantity</h6>
+                            <div class="qty-box">
+                                <div class="input-group">
+                                    <span class="input-group-prepend">
+                                        <button type="button" class="btn quantity-left-minus" data-type="minus" data-field="">
+                                            <i class="ti-angle-left"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" name="quantity" class="form-control input-number" value="1">
+                                    <span class="input-group-prepend">
+                                        <button type="button"
+                                                class="btn quantity-right-plus" data-type="plus" data-field="">
+                                            <i class="ti-angle-right"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-buttons">
+                            <a href="javascript:void(0)" id="cartEffect" class="btn btn-solid hover-solid btn-animation add-basket-button">
+                                <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> add to cart
+                            </a>
+
+
+                        </div>
+                        <div class="border-product">
+                            <h6 class="product-title">Description</h6>
+                            <div class="shipping-info">
+                                <p>
+                                    @Model.Product.ShortDescription
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </abp-column>
+        </div>
+    </div>
+</section>
 
-        <abp-column size=_12 class="my-3">
-            <abp-tabs name="TabId" class="border  border-5" >
-                <abp-tab name="nav-home" active="true" title="Description">
-                    <abp-container class="my-3">
-                        @Html.Raw(Model.Product.LongDescription)
-                    </abp-container>
-                </abp-tab>
-                <abp-tab name="nav-profile" title="Reviews">
-                    Product Reviews (Coming Soon)
-                </abp-tab>
-            </abp-tabs>
-        </abp-column>
-    }
-    else
-    {
-        <abp-column size=_12>
-            <abp-container>
-                <h3 class="my-3">
-                    @Model.Error.Title
-                </h3>
-
-                @if (!string.IsNullOrEmpty(Model.Error.Detail))
-                {
-                    <p>
-                        @Model.Error.Detail
-                    </p>
-                }
-
-            </abp-container>
-        </abp-column>
-    }
-
-</abp-row>
+<section class="tab-product m-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="top-home-tab" data-bs-toggle="tab"
+                           href="#top-home" role="tab" aria-selected="true">
+                            <i class="icofont icofont-ui-home"></i>Details
+                        </a>
+                        <div class="material-border"></div>
+                    </li>
+                </ul>
+                <div class="tab-content nav-material" id="top-tabContent">
+                    <div class="tab-pane fade show active" id="top-home" role="tabpanel"
+                         aria-labelledby="top-home-tab">
+                        <div class="product-tab-discription">
+                            @Html.Raw(Model.Product.LongDescription)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

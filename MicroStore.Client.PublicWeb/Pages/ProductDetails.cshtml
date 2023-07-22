@@ -2,4 +2,7 @@
 @using MicroStore.Client.PublicWeb.Components.ProductDetailsWidget
 @model ProductDetailsModel
 
+@{
+   ViewData["Title"] = "Product Details";
+}
 @await Component.InvokeAsync(typeof(ProductDetailsWidgetViewComponent) , new {ProductId = Model.ProductId})
