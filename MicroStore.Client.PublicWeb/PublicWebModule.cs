@@ -28,6 +28,9 @@ using Volo.Abp.UI.Navigation;
 using FluentValidation.AspNetCore;
 using Volo.Abp.FluentValidation;
 using MicroStore.Client.PublicWeb.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using MicroStore.Client.PublicWeb.Infrastructure;
+using Microsoft.AspNetCore.Builder;
 
 namespace MicroStore.Client.PublicWeb
 {
@@ -134,6 +137,9 @@ namespace MicroStore.Client.PublicWeb
             context.Services.AddFluentValidationAutoValidation();
             context.Services.AddFluentValidationClientsideAdapters();
             context.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+
+
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -141,6 +147,10 @@ namespace MicroStore.Client.PublicWeb
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
             var config = context.GetConfiguration();
+
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseAbpRequestLocalization();
 
@@ -188,7 +198,11 @@ namespace MicroStore.Client.PublicWeb
                 options.DefaultChallengeScheme =OpenIdConnectDefaults.AuthenticationScheme;
          
 
-            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.LoginPath = "/Authentication/Login";
+                options.LogoutPath = "/Authentication/Logout";
+            })
            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
            {
                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;

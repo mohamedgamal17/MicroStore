@@ -22,34 +22,20 @@ namespace MicroStore.Client.PublicWeb.Components.ProductDetailsWidget
 
         public async Task<IViewComponentResult> InvokeAsync(string productId)
         {
-            try
-            {
-                var product = await _productService.GetAsync(productId);
+            var product = await _productService.GetAsync(productId);
 
-                var model = new ProductDetailsWidgetViewModel
-                {
-                    Product = product,
-                };
-
-                return View(model);
-            }
-            catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.NotFound)
+            var model = new ProductDetailsWidgetViewModel
             {
-                return View(new ProductDetailsWidgetViewModel 
-                { 
-                    HasError = true ,
-                    Error = ex.Erorr
-                });
-            }
-         
+                Product = product,
+            };
+
+            return View(model);
+
         }
     }
 
     public class ProductDetailsWidgetViewModel
     {
         public Product Product { get; set; }
-        public bool HasError { get; set; }
-
-        public MicroStoreError Error{ get; set; }
     }
 }

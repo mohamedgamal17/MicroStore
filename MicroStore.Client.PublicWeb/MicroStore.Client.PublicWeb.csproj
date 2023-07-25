@@ -28,6 +28,7 @@
   <ItemGroup>
     <Content Remove="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
+    <Content Remove="Pages\NotFound.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,9 +68,9 @@
     <None Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <None Include="Pages\Cart.cshtml" />
     <None Include="Pages\Checkout.cshtml" />
-    <None Include="Pages\Error.cshtml" />
     <None Include="Pages\Home.cshtml" />
     <None Include="Pages\MyOrders.cshtml" />
+    <None Include="Pages\NotFound.cshtml" />
     <None Include="Pages\ProductDetails.cshtml" />
     <None Include="Pages\Products.cshtml" />
     <None Include="Pages\Shared\Components\BasketWidget\Default.cshtml" />
@@ -120,6 +121,14 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\NotFound.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\NotFound.cshtml" />
   </ItemGroup>
 
 </Project>
