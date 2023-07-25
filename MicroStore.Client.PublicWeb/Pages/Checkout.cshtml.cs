@@ -138,8 +138,8 @@ namespace MicroStore.Client.PublicWeb.Pages
             var processPaymentRequestOptions = new PaymentProcessRequestOptions
             {
                 GatewayName = PaymentMethod,
-                ReturnUrl = HttpContext.GetCurrentUrl(),
-                CancelUrl = HttpContext.GetCurrentUrl()
+                ReturnUrl = Url.Page("OrderSuccess") ,
+                CancelUrl = HttpContext.GetHostUrl()
             };
 
             var paymentProcessResponse = await _userPaymentRequestService.ProcessAsync(paymentResponse.Id, processPaymentRequestOptions);

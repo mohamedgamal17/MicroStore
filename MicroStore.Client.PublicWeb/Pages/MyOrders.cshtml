@@ -1,22 +1,105 @@
 ﻿@page
 @using MicroStore.Client.PublicWeb.Components.OrderWidget
+@using MicroStore.Client.PublicWeb.Components.PaginatorWidget;
+@using System.Globalization;
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
 @model MyOrdersModel
 @{
     var selectList = new List<SelectListItem>();
     ViewData["Title"] = "Orders";
     ViewData["ContainerTitle"] = "Orders";
+    var pager = new PagerModel(100, 10, 1, 10, Url.Page("MyOrders"), "desc");
+
+
+    string GetOrderStatusCssClass(OrderState currentState)
+    {
+        string orderStatusCssClass = string.Empty;
+
+        if (currentState == OrderState.Cancelled)
+        {
+            orderStatusCssClass = "order-error";
+        }
+        else if (currentState == OrderState.Submited)
+        {
+            orderStatusCssClass = "order-warning";
+        }
+        else if (currentState == OrderState.Approved)
+        {
+            orderStatusCssClass = "order-primary";
+        }
+        else
+        {
+            orderStatusCssClass = "order-info";
+        }
+
+        return orderStatusCssClass;
+    }
 }
-
 <abp-container>
+    <abp-card>
+        <abp-card-body>
+            <abp-table border-style="Bordered">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Order Date</th>
+                        <th>Order Status</th>
+                        <th>Payment Status</th>
+                        <th>Amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Orders.Count > 0)
+                    {
+                        @foreach (var order in Model.Orders)
+                        {
+                            var orderNumber = Enumerable.Range(0, order.OrderNumber.Length)
+                            .Select(x => order.OrderNumber.Substring(x * 3, 3))
+                            .JoinAsString(" ");
 
-    <abp-row>
-        <abp-column size=_3 offset=_9>
-            <abp-select suppress-label="true" asp-for="OrderFilter" asp-items="selectList"></abp-select>
-        </abp-column>
+                            var paymentStatus = order.PaymentId != null ? "Paid" : "UnPaid";
 
-        <abp-column size=_12>
-            @await Component.InvokeAsync(typeof(OrderWidgetViewComponent), new {CurrentPage = Model.CurrentPage})
-        </abp-column>
-    </abp-row>
+                            var paymentStatusCssClass = order.PaymentId != "null" ? "order-error" : "order-success";
 
+                            var orderStatus = order.CurrentState;
+
+                            string orderStatusCssClass = GetOrderStatusCssClass(order.CurrentState);
+
+                            var submissionDate = order.SubmissionDate.ToString("dd MMMM yyyy");
+
+                            var totaAmount = order.TotalPrice.ToString("C", new CultureInfo("en-US"));
+
+                            <tr>
+                                <td><a asp-page="OrderDetails" asp-route-id="@order.Id">@orderNumber</a></td>
+                                <td>@submissionDate</td>
+                                <td class="@orderStatusCssClass">@orderStatus</td>
+                                <td class="@paymentStatusCssClass">@paymentStatus</td>
+                                <td>totaAmount</td>
+                                <td><a asp-page="OrderDetails" asp-route-id="@order.Id"><i class="fa fa-eye text-theme"></i></a></td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </abp-table>
+            <div class="theme-paggination">
+                @if (Model.Pager != null)
+                {
+                    <abp-paginator model="@Model.Pager" show-info="true"></abp-paginator>
+                }
+              
+            </div>
+        </abp-card-body>
+    </abp-card>
 </abp-container>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+        </div>
+    </div>
+</div>
+
+

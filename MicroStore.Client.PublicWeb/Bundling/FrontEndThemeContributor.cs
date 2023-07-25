@@ -13,7 +13,8 @@ namespace MicroStore.Client.PublicWeb.Bundling
                 "/libs/slick/slick-theme.css",
                 "/frontend/css/vendors/font-awesome.css",
                 "/frontend/css/vendors/themify-icons.css",
-                "/frontend/css/style.css"
+                "/frontend/css/style.css",
+                "/frontend/css/custom-pagination.css"
             });
 
         }

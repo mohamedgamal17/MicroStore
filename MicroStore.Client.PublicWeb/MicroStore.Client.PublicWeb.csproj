@@ -29,6 +29,7 @@
     <Content Remove="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <Content Remove="Pages\NotFound.cshtml" />
+    <Content Remove="Pages\OrderSuccess.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +60,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Administration\Views\Shared\Components\Catalog\" />
+    <Folder Include="Components\OrderListWidget\" />
+    <Folder Include="wwwroot\css\frontend\" />
     <Folder Include="wwwroot\libs\" />
     <Folder Include="wwwroot\backend\" />
   </ItemGroup>
@@ -71,6 +74,7 @@
     <None Include="Pages\Home.cshtml" />
     <None Include="Pages\MyOrders.cshtml" />
     <None Include="Pages\NotFound.cshtml" />
+    <None Include="Pages\OrderSuccess.cshtml" />
     <None Include="Pages\ProductDetails.cshtml" />
     <None Include="Pages\Products.cshtml" />
     <None Include="Pages\Shared\Components\BasketWidget\Default.cshtml" />
@@ -129,6 +133,11 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\NotFound.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\OrderSuccess.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\OrderSuccess.cshtml" />
   </ItemGroup>
 
 </Project>
