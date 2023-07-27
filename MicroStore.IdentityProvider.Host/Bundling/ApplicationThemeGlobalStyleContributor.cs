@@ -13,7 +13,8 @@ namespace MicroStore.IdentityProvider.Host.Bundling
             {
                 "/libs/admin-lte/css/adminlte.min.css",
                 "/libs/summernote/summernote.min.css",
-                "/libs/bootstrap4-duallistbox/bootstrap-duallistbox.min.css"
+                "/libs/bootstrap4-duallistbox/bootstrap-duallistbox.min.css",
+                "/css/site.css"
             });
         }
     }

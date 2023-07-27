@@ -1,11 +1,6 @@
 ﻿using Duende.IdentityServer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
 using MicroStore.IdentityProvider.Identity.Application;
-using MicroStore.IdentityProvider.Identity.Infrastructure;
-using MicroStore.IdentityProvider.IdentityServer.Infrastructure;
 using MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework;
 using Serilog;
 using Volo.Abp;
@@ -14,11 +9,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
-using Volo.Abp.AutoMapper;
 using Duende.IdentityServer.EntityFramework.Mappers;
-using MicroStore.IdentityProvider.Host.Services;
-using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
-using MicroStore.AspNetCore.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -28,16 +19,17 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using MicroStore.IdentityProvider.Host.Theming;
 using Volo.Abp.UI.Navigation;
 using MicroStore.IdentityProvider.Host.Menus;
-using IdentityModel;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using MicroStore.IdentityProvider.Identity.Web;
+using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
+using MicroStore.IdentityProvider.IdentityServer.Web;
 
 namespace MicroStore.IdentityProvider.Host
 {
 
-    [DependsOn(typeof(IdentityServerInfrastrcutreModule),
-        typeof(IdentityInfrastructureModule),
-        typeof(MicroStoreAspNetCoreModule),
+    [DependsOn(typeof(IdentityWebModule),
+        typeof(IdentityServerWebModule),
         typeof(AbpAutofacModule),
-        typeof(MicroStoreAspNetCoreUIModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class IdentityProviderHostModule : AbpModule
     {
@@ -46,8 +38,6 @@ namespace MicroStore.IdentityProvider.Host
         {
 
             var config = context.Services.GetConfiguration();
-
-            ConfigureIdentityServer(config,context.Services);
 
             ConfigureExternalAuthentication(context.Services);
 
@@ -58,7 +48,7 @@ namespace MicroStore.IdentityProvider.Host
                 opt.AutoValidate = false;
             });
 
-            Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<IdentityProviderHostModule>());
+         
 
 
             Configure<AbpNavigationOptions>(opt =>
@@ -86,6 +76,10 @@ namespace MicroStore.IdentityProvider.Host
                 opt.Themes.Add<StandardApplicationTheme>();
 
             });
+
+            context.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            context.Services.AddTransient<IEmailSender, FakeEmailSender>();
         }
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
@@ -107,30 +101,30 @@ namespace MicroStore.IdentityProvider.Host
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                await PrepareDataBaseMigration(scope.ServiceProvider);
+                //await PrepareDataBaseMigration(scope.ServiceProvider);
 
 
                 var env = context.GetEnvironment();
 
                 if (env.IsDevelopment())
                 {
-                     await SeedIdentityServerConfigurationData(context.ServiceProvider);
+                    //await SeedIdentityServerConfigurationData(context.ServiceProvider);
 
-                     await SeedIdentityData(context.ServiceProvider);
+                    //await SeedIdentityData(context.ServiceProvider);
                 }
 
             }
-       
 
-       }
 
-       
+        }
+
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
 
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
-                
+
             app.UseSerilogRequestLogging();
 
             if (env.IsDevelopment())
@@ -146,19 +140,19 @@ namespace MicroStore.IdentityProvider.Host
             }
 
 
-         //   app.UseCorrelationId();
+            //   app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseIdentityServer();   
+           // app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseConfiguredEndpoints();
         }
 
-       
+
         private async Task PrepareDataBaseMigration(IServiceProvider service)
         {
-            using(var scope = service.CreateScope())
+            using (var scope = service.CreateScope())
             {
                 var identityDbContext = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>();
                 var identityServerConfiguraytionDbContext = scope.ServiceProvider.GetRequiredService<ApplicationConfigurationDbContext>();
@@ -177,7 +171,7 @@ namespace MicroStore.IdentityProvider.Host
             {
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationConfigurationDbContext>();
 
-                if (! await context.Clients.AnyAsync())
+                if (!await context.Clients.AnyAsync())
                 {
                     foreach (var client in Config.Clients)
                     {
@@ -185,7 +179,7 @@ namespace MicroStore.IdentityProvider.Host
                     }
                     context.SaveChanges();
                 }
-                if (! await context.IdentityResources.AnyAsync())
+                if (!await context.IdentityResources.AnyAsync())
                 {
                     foreach (var resource in Config.IdentityResources)
                     {
@@ -194,7 +188,7 @@ namespace MicroStore.IdentityProvider.Host
                     context.SaveChanges();
                 }
 
-                if (! await context.ApiScopes.AnyAsync())
+                if (!await context.ApiScopes.AnyAsync())
                 {
                     foreach (var resource in Config.ApiScopes)
                     {
@@ -203,7 +197,7 @@ namespace MicroStore.IdentityProvider.Host
                     context.SaveChanges();
                 }
 
-                if(!await context.ApiResources.AnyAsync())
+                if (!await context.ApiResources.AnyAsync())
                 {
                     foreach (var resource in Config.ApiResources)
                     {
@@ -231,54 +225,7 @@ namespace MicroStore.IdentityProvider.Host
             }
         }
 
-        private void ConfigureIdentityServer(IConfiguration configuration ,IServiceCollection services)
-        {
-            services
-                .AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-                    options.EmitStaticAudienceClaim = true;
-                })
-                .AddServerSideSessions()
-                .AddConfigurationStore<ApplicationConfigurationDbContext>(cfg =>
-                {
-                    cfg.DefaultSchema = IdentityServerDbConsts.ConfigurationSchema;
-
-                    cfg.ConfigureDbContext = (builder) =>
-                    {
-                        builder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), sqlServerOpt =>
-                        {
-                            sqlServerOpt.MigrationsAssembly(typeof(IdentityServerInfrastrcutreModule).Assembly.FullName)
-                                .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-
-                        });
-
-
-                    };
-                })
-                .AddOperationalStore<ApplicationPersistedGrantDbContext>(cfg =>
-                {
-
-                    cfg.DefaultSchema = IdentityServerDbConsts.OperationalSchema;
-
-                    cfg.ConfigureDbContext = (builder) =>
-                    {
-                        builder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), sqlServerOpt =>
-                        {
-                            sqlServerOpt.MigrationsAssembly(typeof(IdentityServerInfrastrcutreModule).Assembly.FullName)
-                                .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-
-                        });
-                    };
-                }).AddAspNetIdentity<ApplicationIdentityUser>()
-                .AddExtensionGrantValidator<TokenExchangeExtensionGrantValidator>()
-                .AddProfileService<ApplicationProfileService>();
-        }
-
-
+       
         private void ConfigureExternalAuthentication(IServiceCollection services)
         {
             services.AddAuthentication()
@@ -306,6 +253,6 @@ namespace MicroStore.IdentityProvider.Host
 
             });
         }
- 
+
     }
 }

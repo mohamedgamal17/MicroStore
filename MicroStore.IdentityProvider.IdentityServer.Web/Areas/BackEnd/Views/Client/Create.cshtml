@@ -1,0 +1,88 @@
+﻿@using MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients;
+@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.CreateClientUIModel
+@{
+    ViewData["Title"] = "Create Client / Backend";
+    UIMenuNavigationManager.SetCurrentMenu(IdentityServerMenuStandard.ClientMenu.Create);
+}
+<div class="content-wrapper mr-2">
+    <form method="post" asp-action="Create">
+        @Html.AntiForgeryToken()
+        <div class="content-header">
+            <div class="container-fluid">
+                <abp-row class="mb-2">
+                    <abp-column size-sm="_6">
+                        <h1 class="m-0">Create Client</h1>
+                    </abp-column>
+                    <abp-column size-sm="_6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <button class="btn btn-info" type="submit">
+                                    <i class="fas fa-plus-square mr-1"></i> Save                    
+                                </button>
+                            </li>
+                        </ol>
+                    </abp-column>
+                </abp-row>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="text-center mb-3">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                </div>
+                <abp-card>
+                    <abp-card-body>
+                        <div class="form-group row mb-3">
+                            <div class="col-sm-3">
+                                <div class="float-sm-left float-md-right">
+                                    <micro-label asp-for="@Model.ClientId"></micro-label>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-8">
+                                <input asp-for="@Model.ClientId" id="name" class="form-control" />
+
+                                <span class="text-danger" asp-validation-for="@Model.ClientId">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <div class="col-sm-3">
+                                <div class="float-sm-left float-md-right">
+                                    <micro-label asp-for="@Model.ClientName"></micro-label>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-8">
+                                <input asp-for="@Model.ClientName" id="name" class="form-control" />
+
+                                <span class="text-danger" asp-validation-for="@Model.ClientName">
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row mb-3">
+                            <div class="col-sm-3">
+                                <div class="float-sm-left float-md-right">
+                                    <micro-label asp-for="@Model.Type"></micro-label>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-8">
+                                <select asp-for="@Model.Type" class="form-select" asp-items="Html.GetEnumSelectList<ClientType>()">
+                                    <option selected="selected" value="">Please select</option>
+                                </select>
+                                <span class="text-danger" asp-validation-for="@Model.ClientName">
+                                </span>
+                            </div>
+                        </div>
+                    </abp-card-body>
+                </abp-card>
+
+            </div>
+        </div>
+    </form>
+
+</div>

@@ -1,6 +1,6 @@
 ﻿using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Application.Common;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using MicroStore.IdentityProvider.Identity.Infrastructure.Extensions;
 using Volo.Abp.DependencyInjection;
 

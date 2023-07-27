@@ -1,6 +1,6 @@
 ﻿using MicroStore.BuildingBlocks.Results;
-using MicroStore.IdentityProvider.Identity.Application.Dtos;
-using MicroStore.IdentityProvider.Identity.Application.Models;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 using Volo.Abp.Application.Services;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Roles

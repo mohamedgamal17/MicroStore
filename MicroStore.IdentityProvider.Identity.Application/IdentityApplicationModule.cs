@@ -1,12 +1,9 @@
-﻿using Volo.Abp.Application;
+﻿using MicroStore.IdentityProvider.Identity.Domain.Shared;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.FluentValidation;
 using Volo.Abp.Modularity;
 namespace MicroStore.IdentityProvider.Identity.Application
 {
-    [DependsOn(typeof(AbpDddApplicationModule),
-        typeof(AbpFluentValidationModule),
-        typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(IdentityDomainSharedModule))]
     public class IdentityApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

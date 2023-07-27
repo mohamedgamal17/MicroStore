@@ -1,5 +1,4 @@
-﻿using MicroStore.IdentityProvider.Identity.Application.Domain;
-using System.Linq.Expressions;
+﻿using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Common
 {

@@ -3,7 +3,8 @@ using Duende.IdentityServer.Models;
 using IdentityModel;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MicroStore.IdentityProvider.Identity.Application;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
+
 namespace MicroStore.IdentityProvider.Host
 {
     public static class Config
@@ -43,7 +44,7 @@ namespace MicroStore.IdentityProvider.Host
                 new ApiScope("billing.write","allowing write on user payments operations"),
                 new ApiScope("shipping.read","allowing read on user shipments operations"),
 
-               
+
 
 
 
@@ -160,14 +161,14 @@ namespace MicroStore.IdentityProvider.Host
                     RefreshTokenExpiration = TokenExpiration.Sliding,
 
                     RefreshTokenUsage=  TokenUsage.OneTimeOnly,
-                    
+
                     AbsoluteRefreshTokenLifetime =(int) TimeSpan.FromDays(30).TotalSeconds,
 
                     SlidingRefreshTokenLifetime =(int) TimeSpan.FromDays(15).TotalSeconds,
 
                     ClientName ="Micro Store Interactive Client",
 
-                    RedirectUris = { "https://localhost:7020/signin-oidc" },
+                    RedirectUris = { "https://localhost:702s/signin-oidc" },
 
                     FrontChannelLogoutUri = "https://localhost:7020/signout-oidc",
 
@@ -257,7 +258,7 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedScopes = { "openid", "profile"  , "geographic.access"},
                     RequirePkce= true,
                     AccessTokenLifetime = 240
-                }, 
+                },
                 new Client
                 {
                     ClientId = "inventoryapiswaggerclient",
@@ -298,7 +299,7 @@ namespace MicroStore.IdentityProvider.Host
             var alice = new ApplicationIdentityUser
             {
                 Id = Guid.NewGuid().ToString(),
-                UserName = "alice",
+                UserName = "AliceSmith@email.com",
                 Email = "AliceSmith@email.com",
                 GivenName = "alice",
                 FamilyName = "smith",
@@ -316,7 +317,7 @@ namespace MicroStore.IdentityProvider.Host
                 Id = Guid.NewGuid().ToString(),
                 GivenName = "Bob",
                 FamilyName = "Smith",
-                UserName = "bob",
+                UserName = "BobSmith@email.com",
                 Email = "BobSmith@email.com",
                 EmailConfirmed = true
             };

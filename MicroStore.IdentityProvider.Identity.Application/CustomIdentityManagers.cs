@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.IdentityProvider.Identity.Application

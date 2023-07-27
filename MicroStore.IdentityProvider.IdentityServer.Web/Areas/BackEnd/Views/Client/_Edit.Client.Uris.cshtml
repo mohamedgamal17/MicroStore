@@ -1,0 +1,46 @@
+﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.EditClientUIModel
+
+<abp-card>
+    <abp-card-body>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.RedirectUris"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <textarea asp-for="@Model.RedirectUris" id="name" class="form-control" rows="5" ></textarea>
+                <span class="text-danger" asp-validation-for="@Model.RedirectUris">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.PostLogoutRedirectUris"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <textarea asp-for="@Model.PostLogoutRedirectUris" id="name" class="form-control" rows="5" ></textarea>
+                <span class="text-danger" asp-validation-for="@Model.PostLogoutRedirectUris">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.AllowedCorsOrigins"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <textarea asp-for="@Model.AllowedCorsOrigins" id="name" class="form-control" rows="5" ></textarea>
+                <span class="text-danger" asp-validation-for="@Model.AllowedCorsOrigins">
+                </span>
+            </div>
+        </div>
+    </abp-card-body>
+</abp-card>

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.Identity.Application.Common;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
-using MicroStore.IdentityProvider.Identity.Application.Dtos;
-using MicroStore.IdentityProvider.Identity.Application.Models;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.IdentityProvider.Identity.Application.Users
 {
@@ -32,6 +32,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
             return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser);
         }
 
+
         public async Task<Result<IdentityUserDto>> UpdateUserAsync(string userId, UserModel model, CancellationToken cancellationToken = default)
         {
             var applicationUser = await _identityUserRepository.FindById(userId, cancellationToken);
@@ -47,6 +48,8 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
 
             return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser);
         }
+
+
 
         private async Task PrepareUserEntity(UserModel model, ApplicationIdentityUser identityUser, CancellationToken cancellationToken)
         {

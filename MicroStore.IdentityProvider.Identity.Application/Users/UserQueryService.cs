@@ -5,8 +5,8 @@ using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.Identity.Application.Common;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
-using MicroStore.IdentityProvider.Identity.Application.Dtos;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Users

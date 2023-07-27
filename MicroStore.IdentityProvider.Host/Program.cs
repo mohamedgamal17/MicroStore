@@ -1,4 +1,4 @@
-﻿using MicroStore.IdentityProvider.Host;
+using MicroStore.IdentityProvider.Host;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -28,8 +28,8 @@ try
 
     await app.InitializeApplicationAsync();
 
-    app.MapRazorPages()
-        .RequireAuthorization();
+    app.MapRazorPages();
+
 
 
     await app.RunAsync();

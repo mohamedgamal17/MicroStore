@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Options;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection;
 using MicroStore.IdentityProvider.Identity.Infrastructure.Consts;
 using Volo.Abp.DependencyInjection;
 using MicroStore.IdentityProvider.Identity.Application.Common;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 
 namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework
 {

@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <OutputType>Library</OutputType>
+	  <RootNamespace>MicroStore.IdentityProvider.Identity.Web</RootNamespace>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+	  <EmbeddedResource Include="Pages\**\*.css" />
+	  <EmbeddedResource Include="Pages\**\*.js" />
+	  <EmbeddedResource Include="wwwroot\**\*.*" />
+	  <Content Remove="Pages\**\*.css" />
+	  <Content Remove="Pages\**\*.js" />
+	  <Content Remove="wwwroot\**\*.*" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.10" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="6.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.10" />
+	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MicroStore.AspNetCore.UI\MicroStore.AspNetCore.UI.csproj" />
+    <ProjectReference Include="..\MicroStore.IdentityProvider.Identity.Infrastructure\MicroStore.IdentityProvider.Identity.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MicroStore.BuildingBlocks.AspNetCore">
+      <HintPath>..\MicroStore.BuildingBlocks.AspNetCore\obj\Debug\net6.0\ref\MicroStore.BuildingBlocks.AspNetCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Bundling\" />
+  </ItemGroup>
+
+
+</Project>
