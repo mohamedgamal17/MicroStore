@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
-using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 using MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models;
@@ -16,12 +13,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
         private readonly IApiResourceQueryService _apiResourceQueryService;
 
-        private readonly IApiScopeQueryService _apiScopeQueryService;
-        public ApiResourceController(IApiResourceCommandService apiResourceCommandService, IApiResourceQueryService apiResourceQueryService, IApiScopeQueryService apiScopeQueryService)
+        public ApiResourceController(IApiResourceCommandService apiResourceCommandService, IApiResourceQueryService apiResourceQueryService)
         {
             _apiResourceCommandService = apiResourceCommandService;
             _apiResourceQueryService = apiResourceQueryService;
-            _apiScopeQueryService = apiScopeQueryService;
         }
         public IActionResult Index()
         {
@@ -29,36 +24,48 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(ApiResourceListUIModel model)
+        public async Task<IActionResult> Index(ApiResourceSearchModel model)
         {
-            var pagingOptions = new PagingQueryParams { Length = model.PageSize, Skip = model.Skip };
+            var queryParams = new ApiResourceListQueryModel 
+            { 
+                Length = model.PageSize,
+                Skip = model.Skip ,
+                Name = model.Name
+            };
 
-            var result = await _apiResourceQueryService.ListAsync(pagingOptions);
+            var result = await _apiResourceQueryService.ListAsync(queryParams);
 
             if (result.IsFailure)
             {
                 return HandleFailureResultWithJson(result);
             }
 
-            model.Data = result.Value.Items;
+            var viewModel = new ApiResourceListViewModel
+            {
+                Start = result.Value.Skip,
+                Length = result.Value.Lenght,
+                Draw = model.Draw,
+                RecordsTotal = result.Value.TotalCount,
+                Data = result.Value.Items
+            };
 
-            return Json(model);
+            return Json(viewModel);
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            return View(new ApiResourceUIModel());
+            return View(new CreateOrEditApiResourceModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ApiResourceUIModel model)
+        public async Task<IActionResult> Create(CreateOrEditApiResourceModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var apiResourceModel = ObjectMapper.Map<ApiResourceUIModel, ApiResourceModel>(model);
+            var apiResourceModel = ObjectMapper.Map<CreateOrEditApiResourceModel, ApiResourceModel>(model);
 
             var result = await _apiResourceCommandService.CreateAsync(apiResourceModel);
 
@@ -82,20 +89,20 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return HandleFailureResultWithView(result);
             }
 
-            var model = ObjectMapper.Map<ApiResourceDto, ApiResourceUIModel>(result.Value);
+            var model = ObjectMapper.Map<ApiResourceDto, CreateOrEditApiResourceModel>(result.Value);
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(ApiResourceUIModel model)
+        public async Task<IActionResult> Edit(CreateOrEditApiResourceModel model)
         {
             if (!ModelState.IsValid)
             {
 
                 return View(model);
             }
-            var apiResourceModel = ObjectMapper.Map<ApiResourceUIModel, ApiResourceModel>(model);
+            var apiResourceModel = ObjectMapper.Map<CreateOrEditApiResourceModel, ApiResourceModel>(model);
 
             var result = await _apiResourceCommandService.UpdateAsync(model.Id, apiResourceModel);
 
@@ -128,7 +135,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> ListApiResourceSecrets(int id, ApiResourceSecretListUIModel model)
+        public async Task<IActionResult> ListApiResourceSecrets(int id, ListModel model)
         {
             var result = await _apiResourceQueryService.ListApiResourceSecrets(id);
 
@@ -137,20 +144,24 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return HandleFailureResultWithJson(result);
             }
 
-            model.Data = result.Value;
+            var viewModel = new ApiResourceSecretListViewModel
+            {
+                Data = result.Value,
+                Draw = model.Draw
+            };
 
-            return Json(model);
+            return Json(viewModel);
         }
 
 
 
         public IActionResult CreateApiResourceSecretModel(int apiResourceId)
         {
-            return PartialView("_Create.ApiResourceSecretModal", new ApiResourceSecretUIModel { ApiResourceId = apiResourceId });
+            return PartialView("_Create.ApiResourceSecretModal", new CreateApiResourceSecretModel { ApiResourceId = apiResourceId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateApiResourceSecret(ApiResourceSecretUIModel model)
+        public async Task<IActionResult> CreateApiResourceSecret(CreateApiResourceSecretModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -158,7 +169,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
             }
 
-            var apiResourceSecretModel = ObjectMapper.Map<ApiResourceSecretUIModel, SecretModel>(model);
+            var apiResourceSecretModel = ObjectMapper.Map<CreateApiResourceSecretModel, SecretModel>(model);
 
             var result = await _apiResourceCommandService.AddSecret(model.ApiResourceId, apiResourceSecretModel);
 
@@ -171,14 +182,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteApiResourceSecret([FromBody] RemoveApiResourceSecretUIModel model)
+        public async Task<IActionResult> DeleteApiResourceSecret([FromBody] RemoveApiResourceSecretModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(model);
             }
 
-            var result = await _apiResourceCommandService.RemoveSecret(model.ApiResourceId, model.ApiResourceSecretId);
+            var result = await _apiResourceCommandService.RemoveSecret(model.ApiResourceId, model.SecretId);
 
             if (result.IsFailure)
             {
@@ -191,7 +202,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
 
         [HttpPost]
-        public async Task<IActionResult> ListApiResourceProperties(int id, ApiResourcePropertyListUIModel model)
+        public async Task<IActionResult> ListApiResourceProperties(int id, ListModel model)
         {
             var result = await _apiResourceQueryService.ListProperties(id);
 
@@ -200,10 +211,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return HandleFailureResultWithView(result);
             }
 
+            var viewModel = new ApiResourcePropertyListViewModel
+            {
+                Data = ObjectMapper.Map<List<ApiResourcePropertyDto>, List<PropertyViewModel>>(result.Value),
+                Draw = model.Draw
+            };
 
-            model.Data = result.Value;
 
-            return Json(model);
+            return Json(viewModel);
         }
 
         public IActionResult CreatePropertyModal(int parentId)
@@ -271,7 +286,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteProperty(RemovePropertyModel model)
+        public async Task<IActionResult> DeleteProperty([FromBody]RemovePropertyModel model)
         {
 
             if (!ModelState.IsValid)

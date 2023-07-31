@@ -7,6 +7,7 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
+using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
 {
@@ -19,9 +20,17 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiResources
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
 
-        public async Task<Result<PagedResult<ApiResourceDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ApiResourceDto>>> ListAsync(ApiResourceListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
-            var query = _applicationConfigurationDbContext.ApiResources.AsNoTracking().ProjectTo<ApiResourceDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var query = _applicationConfigurationDbContext.ApiResources
+                .AsNoTracking()
+                .ProjectTo<ApiResourceDto>(MapperAccessor.Mapper.ConfigurationProvider);
+
+
+            if (!string.IsNullOrEmpty(queryParams.Name))
+            {
+                query = query.Where(x => x.Name.Contains(queryParams.Name));
+            }
 
             var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 

@@ -1,7 +1,6 @@
 ﻿using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
 using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;

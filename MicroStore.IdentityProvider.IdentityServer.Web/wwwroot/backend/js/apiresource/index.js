@@ -2,11 +2,17 @@
     var apiResourceTable = $("#ApiResourceTable").DataTable(
         abp.libs.datatables.normalizeConfiguration({
             ajax: {
-                type : "POST"
+                type: "POST",
+               data: function (data) {
+                    data.name = $("#Name").val();
+                },
             },
-
+            searching: false,
+            serverSide: true,
+            processing: true,
+            ordering: false,
             columnDefs: [
-                {title : "Name" , data : "name"},
+                { title: "Name", data: "name" },
                 { title: "Display Name", data: "displayName" },
                 {
                     title: "Actions",
@@ -22,7 +28,7 @@
 
                             {
                                 text: "Delete",
-                                confirmMessage:  function(data) {
+                                confirmMessage: function (data) {
                                     return "Are you sure to delete this api scope ";
                                 },
 
@@ -30,9 +36,12 @@
                                     abp.ajax({
                                         url: "/BackEnd/ApiResource/Delete/" + data.record.id,
                                         type: "POST",
+                                        success: function () {
+                                            apiResourceTable.ajax.reload();
+                                        }
                                     });
 
-                                   data.ajax.reload();
+                              
                                 }
                             }
                         ]

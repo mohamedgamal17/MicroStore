@@ -1,7 +1,7 @@
-﻿ @model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources.ApiResourceUIModel
+﻿ @model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources.CreateOrEditApiResourceModel
 <abp-card>
     <abp-card-header>
-        <abp-card-title><i class="fas fa-info mr-1 text-lightblue"></i>Api Scope Info</p></abp-card-title>
+        <abp-card-title><i class="fas fa-info mr-1 text-lightblue"></i>Api Resource Info</p></abp-card-title>
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
         </div>
@@ -15,8 +15,7 @@
 
             </div>
             <div class="col-sm-8">
-                <input asp-for="@Model.Name"  class="form-control" />
-
+                <input asp-for="@Model.Name" class="form-control" />
                 <span class="text-danger" asp-validation-for="@Model.Name">
                 </span>
             </div>

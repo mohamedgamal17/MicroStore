@@ -1,4 +1,4 @@
-﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources.ApiResourceListUIModel
+﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources.ApiResourceSearchModel
 @{
     ViewData["Title"] = "ApiResources / Backend";
     UIMenuNavigationManager.SetCurrentMenu(IdentityServerMenuStandard.ApiResourceMenu.Index);
@@ -23,9 +23,9 @@
             </abp-row>
         </div>
     </div>
-    <!-- /.content-header -->
     <section class="content">
         <div class="container-fluid">
+            <partial name="_ApiResource.AdvacnedSearch" model="Model" />
             <abp-card>
                 <abp-card-body>
                     <abp-table id="ApiResourceTable"></abp-table>

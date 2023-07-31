@@ -10,9 +10,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Mappers.I
     {
         public ApiResourceProfile()
         {
-            CreateMap<ApiResourceUIModel, ApiResourceModel>();
+            CreateMap<CreateOrEditApiResourceModel, ApiResourceModel>();
 
-            CreateMap<ApiResourceDto, ApiResourceUIModel>()
+            CreateMap<ApiResourceDto, CreateOrEditApiResourceModel>()
                 .ForMember(x => x.Scopes, opt => opt.MapFrom(c => c.Scopes))
                 .ForMember(x => x.UserClaims, opt => opt.MapFrom(c => c.UserClaims));
 
@@ -27,7 +27,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Mappers.I
                 .ForMember(x => x.PropertyId, opt => opt.MapFrom(src => src.Id));
 
 
-            CreateMap<ApiResourceSecretUIModel, SecretModel>();
+            CreateMap<CreateApiResourceSecretModel, SecretModel>();
 
 
         }

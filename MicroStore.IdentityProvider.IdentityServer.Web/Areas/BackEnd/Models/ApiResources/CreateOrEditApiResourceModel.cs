@@ -2,7 +2,7 @@
 
 namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources
 {
-    public class ApiResourceUIModel
+    public class CreateOrEditApiResourceModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -73,6 +73,7 @@
 
                 type: "POST"
             },
+
             columnDefs: [
                 { title: "Type", data: "type" },
                 { title: "Description", data: "description" },

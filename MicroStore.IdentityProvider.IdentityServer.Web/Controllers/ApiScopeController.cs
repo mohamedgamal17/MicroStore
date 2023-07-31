@@ -13,19 +13,19 @@ namespace MicroStore.IdentityProvider.Host.Controllers
     {
         private readonly IApiScopeCommandService _apiScopeCommandService;
 
-        private readonly IApiResourceQueryService _apiResourceQueryService;
+        private readonly IApiScopeQueryService _apiScopeQueryService;
 
-        public ApiScopeController(IApiScopeCommandService apiScopeCommandService, IApiResourceQueryService apiResourceQueryService)
+        public ApiScopeController(IApiScopeCommandService apiScopeCommandService, IApiScopeQueryService apiResourceQueryService)
         {
             _apiScopeCommandService = apiScopeCommandService;
-            _apiResourceQueryService = apiResourceQueryService;
+            _apiScopeQueryService = apiResourceQueryService;
         }
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetListApiScope([FromQuery] PagingQueryParams queryParams)
+        public async Task<IActionResult> GetListApiScope()
         {
-            var result = await _apiResourceQueryService.ListAsync(queryParams);
+            var result = await _apiScopeQueryService.ListAsync();
 
             return result.ToOk();
         }
@@ -37,7 +37,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
         public async Task<IActionResult> GetApiScope(int apiScopeId)
         {
 
-            var result = await _apiResourceQueryService.GetAsync(apiScopeId);
+            var result = await _apiScopeQueryService.GetAsync(apiScopeId);
 
             return result.ToOk();
         }

@@ -2,8 +2,8 @@
 
 namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources
 {
-    public class ApiResourceSecretListUIModel
+    public class ApiResourceListViewModel : PagedListModel
     {
-        public List<ApiResourceSecretDto> Data { get; set; }
+        public IEnumerable<ApiResourceDto> Data { get; set; }
     }
 }

@@ -1,18 +1,17 @@
-﻿console.log("Hello");
-
-$(document).ready(function () {
-    console.log("Hello");
+﻿$(document).ready(function () {
     var apiResourceId = $("#ApiResourceId").val();
-    var apiResourceTable = $("#ApiResourceSecrets").DataTable(
+    var apiResourceSecretTable = $("#ApiResourceSecrets").DataTable(
         abp.libs.datatables.normalizeConfiguration({
-
             ajax: {
                 type: "POST",
                 url: "/BackEnd/ApiResource/ListApiResourceSecrets/" + apiResourceId
             },
-
+            searching: false,
+            processing: true,
+            ordering: false,
             columnDefs: [
-                { title: "Description", data: "description" },
+                { title: "Type", data: "type" },
+                { title: "Description", data: "description" },  
                 {
                     title: "Acitons",
 
@@ -29,12 +28,13 @@ $(document).ready(function () {
                                         url: "/BackEnd/ApiResource/DeleteApiResourceSecret",
                                         type: "POST",
                                         data: JSON.stringify({
-                                            apiResourceId: apiResourceId,
-                                            apiResourceSecretId: data.record.id
-                                        })
+                                            api_resource_id: apiResourceId,
+                                            secret_id: data.record.id
+                                        }),
+                                        success: function () {
+                                            apiResourceSecretTable.ajax.reload()
+                                        }
                                     });
-
-                                    data.ajax.reload();
                                 }
                             }
                         ]
@@ -50,13 +50,12 @@ $(document).ready(function () {
 
 
     $("#CreateApiSecretButton").on('click', function () {
-        console.log('clicked111');
         createApiSecretModal.open({
             apiResourceId: apiResourceId
         });
     });
 
     createApiSecretModal.onResult(function (data) {
-        apiResourceTable.ajax.reload();
+        apiResourceSecretTable.ajax.reload();
     });
 })

@@ -2,17 +2,18 @@
 
 namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources
 {
-    public class ApiResourceSecretUIModel
+    public class CreateApiResourceSecretModel
+
     {
         public int ApiResourceId { get; set; }
         public string Value { get; set; }
         public string Description { get; set; }
     }
 
-    public class RemoveApiResourceSecretUIModel
+    public class RemoveApiResourceSecretModel
     {
         public int ApiResourceId { get; set; }
 
-        public int ApiResourceSecretId { get; set; }
+        public int SecretId { get; set; }
     }
 }

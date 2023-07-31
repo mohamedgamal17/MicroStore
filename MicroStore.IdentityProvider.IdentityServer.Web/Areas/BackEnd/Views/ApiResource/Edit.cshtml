@@ -1,5 +1,5 @@
 ﻿@using MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources;
-@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources.ApiResourceUIModel
+@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiResources.CreateOrEditApiResourceModel
 @{
     ViewData["Title"] = "Edit ApiResource / Backend";
     UIMenuNavigationManager.SetCurrentMenu(IdentityServerMenuStandard.ApiResourceMenu.Edit);
@@ -37,7 +37,7 @@
                     <partial name="_Api.Scopes" model="Model" />
                 </form>
                 
-                <partial name="Grids/_Grids.ApiResourceSecrets" model="new ApiResourceSecretListUIModel()" />
+                <partial name="Grids/_Grids.ApiResourceSecrets" model="new ApiResourceSecretListViewModel()" />
                 <partial name="_Grids.Property" />
 
             </div>
@@ -74,10 +74,6 @@
                 }
 
             })
-
-            $("#CreateApiSecretButton").on('click',function(){
-                console.log('clicked');
-            });
 
             $("#ScopeSelect").bootstrapDualListbox();
         })
