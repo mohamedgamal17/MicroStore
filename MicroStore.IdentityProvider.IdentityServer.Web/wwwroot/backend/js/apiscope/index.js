@@ -2,15 +2,19 @@
     var apiScopeTable = $("#ApiScopeTable").DataTable(
         abp.libs.datatables.normalizeConfiguration({
             ajax: {
-                type : "POST"
+                type: "POST",
+                data: function (data) {
+                    data.name = $("#Name").val();
+                },
             },
 
             pagination : false,
-            searching  : false,
+            searching: false,
+            processing: true,
+            ordering: false,
             columnDefs: [
-                { title : "Name" , data : "name"},
-                { title: "Description", data: "description" },
-
+                { title: "Name", data: "name" },
+                { title: "Display Name", data: "displayName" }, 
                 {
                     title: "Actions",
                     rowAction: {
@@ -19,7 +23,7 @@
                                 text: "Edit",
                                 action: function (data) {
 
-                                    location.href=  `ApiScope/Edit/${data.record.id}`
+                                    location.href=  `/BackEnd/ApiScope/Edit/${data.record.id}`
                                 }
                             },
 
@@ -33,6 +37,10 @@
                                     abp.ajax({
                                         url: "/BackEnd/ApiScope/Delete/" + record.id,
                                         type: "POST",
+
+                                        success: function () {
+                                            apiScopeTable.ajax.reload();
+                                        }
                                     });
                                 }
                             }
@@ -42,5 +50,10 @@
             ]
         })
     )
+
+    $("#AdvancedSearchForm").on('submit', function (evt) {
+        evt.preventDefault();
+        apiScopeTable.ajax.reload();
+    })
 
 })

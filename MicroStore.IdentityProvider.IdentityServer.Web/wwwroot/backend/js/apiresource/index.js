@@ -22,7 +22,7 @@
                             {
                                 text: "Edit",
                                 action: function (data) {
-                                    location.href = `ApiResource/Edit/${data.record.id}`
+                                    location.href = `/BackEnd/ApiResource/Edit/${data.record.id}`
                                 }
                             },
 
@@ -51,4 +51,8 @@
         })
     )
 
+    $("#AdvancedSearchForm").on('submit', function (evt) {
+        evt.preventDefault();
+        apiResourceTable.ajax.reload();
+    })
 })

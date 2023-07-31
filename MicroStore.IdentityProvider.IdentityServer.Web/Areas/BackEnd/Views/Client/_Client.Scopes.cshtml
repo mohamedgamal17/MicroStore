@@ -1,7 +1,7 @@
 ﻿@model  MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.EditClientModel
 @inject MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes.IApiScopeQueryService ApiScopeQueryService
 @{
-    var result = await ApiScopeQueryService.ListAsync();
+    var result = await ApiScopeQueryService.ListAsync(new Application.Models.ApiScopeListQueryModel());
 
     if (result.IsFailure)
     {

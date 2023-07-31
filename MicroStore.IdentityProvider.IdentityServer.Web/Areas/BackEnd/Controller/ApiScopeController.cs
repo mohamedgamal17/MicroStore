@@ -26,35 +26,45 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(ApiScopeListUIModel model)
+        public async Task<IActionResult> Index(ApiScopeSearchModel model)
         {
-            var result = await _apiScopeQueryService.ListAsync();
+            var queryParams = new ApiScopeListQueryModel
+            {
+                Name = model.Name
+            };
+
+            var result = await _apiScopeQueryService.ListAsync(queryParams);
 
             if (result.IsFailure)
             {
                 return HandleFailureResultWithView(result);
             }
 
-            model.Data = result.Value;
+            var viewModel = new ApiScopeListViewModel
+            {
+                Data = result.Value,
+                Draw = model.Draw
+            };
 
-            return Json(model);
+
+            return Json(viewModel);
 
         }
         public IActionResult Create()
         {
-            return View(new ApiScopeUIModel());
+            return View(new CreateOrEditApiScopeModel());
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(ApiScopeUIModel model)
+        public async Task<IActionResult> Create(CreateOrEditApiScopeModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var apiScopeModel = ObjectMapper.Map<ApiScopeUIModel, ApiScopeModel>(model);
+            var apiScopeModel = ObjectMapper.Map<CreateOrEditApiScopeModel, ApiScopeModel>(model);
 
             var result = await _apiScopeCommandService.CreateAsync(apiScopeModel);
 
@@ -76,20 +86,20 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return HandleFailureResultWithView(result);
             }
 
-            var model = ObjectMapper.Map<ApiScopeDto, ApiScopeUIModel>(result.Value);
+            var model = ObjectMapper.Map<ApiScopeDto, CreateOrEditApiScopeModel>(result.Value);
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, ApiScopeUIModel model)
+        public async Task<IActionResult> Edit(int id, CreateOrEditApiScopeModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var apiScopeModel = ObjectMapper.Map<ApiScopeUIModel, ApiScopeModel>(model);
+            var apiScopeModel = ObjectMapper.Map<CreateOrEditApiScopeModel, ApiScopeModel>(model);
 
             var result = await _apiScopeCommandService.UpdateAsync(id, apiScopeModel);
 
@@ -122,7 +132,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> ListApiScopeProperties(int id, ApiScopePropertyListUIModel model)
+        public async Task<IActionResult> ListApiScopeProperties(int id, ListModel model)
         {
             var result = await _apiScopeQueryService.ListProperties(id);
 
@@ -131,9 +141,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return HandleFailureResultWithJson(result);
             }
 
-            model.Data = result.Value;
 
-            return Json(model);
+            var viewModel = new ApiScopePropertyListViewModel
+            {
+                Data = ObjectMapper.Map<List<ApiScopePropertyDto>, List<PropertyViewModel>>(result.Value),
+                Draw = model.Draw
+            };
+
+            return Json(viewModel);
         }
 
         public IActionResult CreatePropertyModal(int parentId)

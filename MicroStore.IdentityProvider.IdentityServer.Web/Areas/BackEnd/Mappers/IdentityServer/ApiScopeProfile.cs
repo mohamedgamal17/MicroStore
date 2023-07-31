@@ -10,9 +10,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Mappers.I
     {
         public ApiScopeProfile()
         {
-            CreateMap<ApiScopeUIModel, ApiScopeModel>();
+            CreateMap<CreateOrEditApiScopeModel, ApiScopeModel>();
 
-            CreateMap<ApiScopeDto, ApiScopeUIModel>();
+            CreateMap<ApiScopeDto, CreateOrEditApiScopeModel>();
 
             CreateMap<ApiScopePropertyDto, PropertyViewModel>()
                .ForMember(x => x.ParentId, opt => opt.MapFrom(src => src.ScopeId))

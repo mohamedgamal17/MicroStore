@@ -49,7 +49,7 @@
     )
 
 
-    $("#AdvancedForm").on('submit', function (evt) {
+    $("#AdvancedSearchForm").on('submit', function (evt) {
         evt.preventDefault();
         clientTable.ajax.reload();
     })

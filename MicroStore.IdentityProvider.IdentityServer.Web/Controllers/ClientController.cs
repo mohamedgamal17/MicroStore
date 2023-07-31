@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 namespace MicroStore.IdentityProvider.Host.Controllers

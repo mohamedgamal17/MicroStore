@@ -23,9 +23,9 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetListApiScope()
+        public async Task<IActionResult> GetListApiScope(ApiScopeListQueryModel model)
         {
-            var result = await _apiScopeQueryService.ListAsync();
+            var result = await _apiScopeQueryService.ListAsync(model);
 
             return result.ToOk();
         }

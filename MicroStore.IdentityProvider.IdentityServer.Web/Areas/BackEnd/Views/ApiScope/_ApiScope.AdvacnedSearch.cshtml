@@ -1,0 +1,36 @@
+﻿@model IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiScopes.ApiScopeSearchModel
+
+<abp-card>
+    <form id="AdvancedSearchForm">
+        <abp-card-header>
+            <abp-card-title><i class="fas fa-search mr-2 text-lightblue"></i><span class="text-lg"> Search</span> </abp-card-title>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
+            </div>
+        </abp-card-header>
+        <abp-card-body>
+            <abp-row>
+                <abp-column size-md="_6" class="align-self-center">
+                    <abp-row class="form-group mb-3">
+                        <abp-column size-sm="_4">
+                            <div class="float-sm-left float-md-right">
+                                <micro-label class="col-form-label" asp-for="@Model.Name"></micro-label>
+                            </div>
+                        </abp-column>
+                        <abp-column size-sm="_8">
+                            <input asp-for="@Model.Name" id="@Html.IdFor(x=> x.Name)" class="form-control" />
+                            <span class="text-danger" asp-validation-for="@Model.Name" />
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+
+                <abp-column size-md="_12" class="mt-3">
+                    <div class="text-center">
+                        <abp-button type="submit" button-type="Info"><i class="fas fa-search mr-1 text-white"></i><span class=""> Search</span> </abp-button>
+                    </div>
+                </abp-column>
+
+            </abp-row>
+        </abp-card-body>
+    </form>
+</abp-card>

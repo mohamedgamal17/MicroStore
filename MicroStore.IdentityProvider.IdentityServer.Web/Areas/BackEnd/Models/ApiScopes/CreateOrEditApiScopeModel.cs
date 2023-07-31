@@ -2,7 +2,7 @@
 
 namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiScopes
 {
-    public class ApiScopeUIModel
+    public class CreateOrEditApiScopeModel
     {
         public int? Id { get; set; }
         public string Name { get; set; }

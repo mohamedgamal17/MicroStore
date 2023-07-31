@@ -34,7 +34,12 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         public async Task<IActionResult> Index(ClientSearchModel model)
         {
 
-            var pagingOptions = new ClientListQueryModel { Length = model.PageSize, Skip = model.Skip };
+            var pagingOptions = new ClientListQueryModel 
+            { 
+                ClientId=  model.ClientId,
+                Length = model.PageSize, 
+                Skip = model.Skip
+            };
 
             var result = await _clientQueryService.ListAsync(pagingOptions);
 
@@ -459,7 +464,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
         private async Task<List<SelectListItem>> PrepareClientScopes(EditClientModel model)
         {
-            var result = await _apiScopeQueryService.ListAsync();
+            var result = await _apiScopeQueryService.ListAsync(new ApiScopeListQueryModel());
 
             if (result.IsFailure)
             {

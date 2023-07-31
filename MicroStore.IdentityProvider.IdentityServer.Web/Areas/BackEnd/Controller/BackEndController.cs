@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.Results;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System.Text.Json;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;

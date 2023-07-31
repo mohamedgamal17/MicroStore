@@ -1,4 +1,4 @@
-﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiScopes.ApiScopeListUIModel
+﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiScopes.ApiScopeListViewModel
 @{
     ViewData["Title"] = "ApiScopes / Backend";
     UIMenuNavigationManager.SetCurrentMenu(IdentityServerMenuStandard.ApiScopeMenu.Index);
@@ -26,6 +26,7 @@
     </div>
     <section class="content">
         <div class="container-fluid">
+            <partial name="_ApiScope.AdvacnedSearch" model="Model" />
             <abp-card>
                 <abp-card-body>
                     <abp-table id="ApiScopeTable"></abp-table>

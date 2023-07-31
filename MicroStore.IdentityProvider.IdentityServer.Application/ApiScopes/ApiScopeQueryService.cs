@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
+using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
@@ -16,9 +17,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes
         {
             _applicationConfigurationDbContext = applicationConfigurationDbContext;
         }
-        public async Task<Result<List<ApiScopeDto>>> ListAsync( CancellationToken cancellationToken = default)
+        public async Task<Result<List<ApiScopeDto>>> ListAsync(ApiScopeListQueryModel queryParamss ,CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.ApiScopes.AsNoTracking().ProjectTo<ApiScopeDto>(MapperAccessor.Mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrEmpty(queryParamss.Name))
+            {
+                query = query.Where(x => x.Name.Contains(queryParamss.Name));
+            }
 
             var result = await query.ToListAsync( cancellationToken);
 
