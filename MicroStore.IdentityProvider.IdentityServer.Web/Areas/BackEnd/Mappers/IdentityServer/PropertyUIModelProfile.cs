@@ -8,7 +8,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Mappers.I
     {
         public PropertyUIModelProfile()
         {
-            CreateMap<PropertyUIModel, PropertyModel>();
+            CreateMap<PropertyViewModel, PropertyModel>();
 
         }
     }

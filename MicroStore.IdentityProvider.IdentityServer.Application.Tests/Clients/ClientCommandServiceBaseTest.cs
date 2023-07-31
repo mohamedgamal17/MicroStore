@@ -114,7 +114,27 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
                     new Duende.IdentityServer.EntityFramework.Entities.ClientScope
                     {
                         Scope = Guid.NewGuid().ToString()
-                    }
+                    },
+
+                    new Duende.IdentityServer.EntityFramework.Entities.ClientScope
+                    {
+                        Scope = Guid.NewGuid().ToString()
+                    },
+
+                    new Duende.IdentityServer.EntityFramework.Entities.ClientScope
+                    {
+                        Scope = Guid.NewGuid().ToString()
+                    },
+
+                    new Duende.IdentityServer.EntityFramework.Entities.ClientScope
+                    {
+                        Scope = Guid.NewGuid().ToString()
+                    },
+
+                    new Duende.IdentityServer.EntityFramework.Entities.ClientScope
+                    {
+                        Scope = Guid.NewGuid().ToString()
+                    },
                 },
 
                 Properties = new List<ClientProperty>

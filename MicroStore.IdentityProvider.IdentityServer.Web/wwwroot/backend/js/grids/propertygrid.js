@@ -33,7 +33,7 @@ $(document).ready(function () {
                                     action: function (data) {
                                         editModal.open({
                                             parentId: options.parentId,
-                                            propertyId: data.record.id
+                                            propertyId: data.record.propertyId
                                         })
                                     }
                                 },
@@ -44,20 +44,19 @@ $(document).ready(function () {
                                     },
                                     action: function (data) {
                                         abp.ajax({
-
                                             url: options.deleteAction.url,
                                             type: options.deleteAction.type,
                                             data: JSON.stringify({
-                                                parentId: data.record.scopeId,
-                                                propertyId: data.record.id
+                                                "parent_id": data.record.parentId,
+                                                "property_id": data.record.propertyId
                                             }),
 
                                             success: function () {
-                                                data.table.ajax.reload();
+                                                proertyTable.ajax.reload();
                                             }
                                         });
                                         
-                                       
+                                     
                                     }
                                 }
                             ]

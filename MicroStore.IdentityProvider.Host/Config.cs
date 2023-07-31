@@ -142,6 +142,7 @@ namespace MicroStore.IdentityProvider.Host
 
 
                     AllowOfflineAccess = false,
+                    PairWiseSubjectSalt =  ""
 
                 },
 

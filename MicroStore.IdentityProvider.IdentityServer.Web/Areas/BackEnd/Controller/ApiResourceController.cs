@@ -208,7 +208,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
         public IActionResult CreatePropertyModal(int parentId)
         {
-            return PartialView("_Create.Property", new PropertyUIModel { ParentId = parentId });
+            return PartialView("_Create.Property", new PropertyViewModel { ParentId = parentId });
         }
 
         public async Task<IActionResult> EditPropertyModal(int parentId, int propertyId)
@@ -220,7 +220,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return HandleFailureResultWithView(result);
             }
 
-            return PartialView("_Edit.Property", new PropertyUIModel
+            return PartialView("_Edit.Property", new PropertyViewModel
             {
                 ParentId = result.Value.ApiResourceId,
                 PropertyId = result.Value.Id,
@@ -230,14 +230,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProperty(PropertyUIModel model)
+        public async Task<IActionResult> CreateProperty(PropertyViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var propertyModel = ObjectMapper.Map<PropertyUIModel, PropertyModel>(model);
+            var propertyModel = ObjectMapper.Map<PropertyViewModel, PropertyModel>(model);
 
             var result = await _apiResourceCommandService.AddProperty(model.ParentId, propertyModel);
 
@@ -251,14 +251,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProperty(PropertyUIModel model)
+        public async Task<IActionResult> UpdateProperty(PropertyViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var propertyModel = ObjectMapper.Map<PropertyUIModel, PropertyModel>(model);
+            var propertyModel = ObjectMapper.Map<PropertyViewModel, PropertyModel>(model);
 
             var result = await _apiResourceCommandService.UpdateProperty(model.ParentId, model.PropertyId, propertyModel);
 
@@ -271,7 +271,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteProperty(RemovePropertyUIModel model)
+        public async Task<IActionResult> DeleteProperty(RemovePropertyModel model)
         {
 
             if (!ModelState.IsValid)

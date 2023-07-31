@@ -1,4 +1,4 @@
-﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.EditClientUIModel
+﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.EditClientModel
 @{
     ViewData["Title"] = "Edit Client / Backend";
     UIMenuNavigationManager.SetCurrentMenu(IdentityServerMenuStandard.ClientMenu.Edit);
@@ -32,14 +32,15 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 </div>
                 <partial name="_Edit.Client.Info" model="Model" />
-                <partial name="_Edit.Client.Uris" model="Model" />
-                
-                <partial name="_Edit.Client.Advanced" model="Model" />
+                <partial name="_Edit.Client.Uris" model="Model" />            
+                <partial name="_Edit.Client.Token" model="Model" />
+                <partial name="_Edit.Client.Grants" model="Model" />
                 <partial name="_Client.Scopes" model="Model" />
             </form>
-
+                <partial name="Grids/_Grids.Secrets"  />
+                 <partial name="Grids/_Grids.Claims" />
                 <partial name="_Grids.Property"  />
-                <partial name="Grids/_Grids.Claims"   />
+           
         </div>
     </div>
 
@@ -52,14 +53,11 @@
 
 <script>
     $(document).ready(function(){
-        $("SaveButton").on('click',function(){
-            $("#ApiScopeForm").submit();
-        })
 
         propertyGrid.init({
             parentId : "@(Model.Id)",
             listAction:{
-                url : '@Url.Action("ListProperties", new {id = @Model.Id})',
+                url : '@Url.Action("ListProperties", new {parentId = @Model.Id})',
                 type:"POST"
             },
             deleteAction:{
@@ -78,7 +76,7 @@
         });
 
         $("#EditFormButton").on('click',function(){
-            $("#EditForm").submit();
+              $("#EditForm").submit();
         })
 
         $("#ScopeSelect").bootstrapDualListbox();

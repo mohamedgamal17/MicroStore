@@ -1,7 +1,10 @@
 ﻿using Duende.IdentityServer.EntityFramework.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
+using MicroStore.IdentityProvider.IdentityServer.Application.Tests.Fakes;
 using MicroStore.IdentityProvider.IdentityServer.Infrastructure;
 using MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramework;
 using MicroStore.TestBase.Json;
@@ -27,55 +30,15 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests
             },
         };
 
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddTransient<IUserClaimsPrincipalFactory<ApplicationIdentityUser>, FakeUserClaimPrincibalFactory>();
+        }
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var config = context.Services.GetConfiguration();
 
-            context.Services.AddIdentityServer().AddConfigurationStore<ApplicationConfigurationDbContext>(cfg =>
-            {
-                cfg.DefaultSchema = IdentityServerDbConsts.ConfigurationSchema;
-
-                cfg.ConfigureDbContext = (builder) =>
-                {
-                    builder.UseSqlServer(config.GetConnectionString("DefaultConnection"), sqlServerOpt =>
-                    {
-                        sqlServerOpt.MigrationsAssembly(typeof(IdentityServerInfrastrcutreModule).Assembly.FullName)
-                            .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-
-                    });
-
-
-                };
-            }).AddOperationalStore<ApplicationPersistedGrantDbContext>(cfg =>
-                {
-
-                    cfg.DefaultSchema = IdentityServerDbConsts.OperationalSchema;
-
-                    cfg.ConfigureDbContext = (builder) =>
-                    {
-                        builder.UseSqlServer(config.GetConnectionString("DefaultConnection"), sqlServerOpt =>
-                        {
-                            sqlServerOpt.MigrationsAssembly(typeof(IdentityServerInfrastrcutreModule).Assembly.FullName)
-                                .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-
-                        });
-                    };
-                });
-        }
-
-        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
-        {
-            var config = context.ServiceProvider.GetRequiredService<IConfiguration>();
-
-            var respawner = Respawner.CreateAsync(config.GetConnectionString("DefaultConnection")!, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                    "__EFMigrationsHistory"
-                }
-            }).Result;
-
-            respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
+      
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

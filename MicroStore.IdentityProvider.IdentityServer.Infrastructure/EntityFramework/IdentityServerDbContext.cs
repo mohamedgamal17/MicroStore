@@ -38,6 +38,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramew
             clientBuilder.Navigation(x => x.RedirectUris).AutoInclude(true);
             clientBuilder.Navigation(x => x.PostLogoutRedirectUris).AutoInclude(true);
             clientBuilder.Navigation(x => x.AllowedCorsOrigins).AutoInclude(true);
+            clientBuilder.Navigation(x => x.AllowedScopes).AutoInclude(true);
             clientBuilder.Navigation(x => x.Claims).AutoInclude(true);
             clientBuilder.Navigation(x => x.ClientSecrets).AutoInclude(true);
             clientBuilder.Navigation(x => x.Properties).AutoInclude(true);

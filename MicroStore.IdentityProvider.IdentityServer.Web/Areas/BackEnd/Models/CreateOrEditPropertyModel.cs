@@ -1,6 +1,6 @@
 ﻿namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models
 {
-    public class PropertyUIModel
+    public class PropertyViewModel
     {
         public int PropertyId { get; set; }
         public int ParentId { get; set; }
@@ -8,8 +8,7 @@
         public string Value { get; set; }
     }
 
-
-    public class RemovePropertyUIModel
+    public class RemovePropertyModel
     {
         public int PropertyId { get; set; }
         public int ParentId { get; set; }

@@ -1,5 +1,11 @@
-﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.EditClientUIModel
+﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.EditClientModel
 <abp-card>
+    <abp-card-header>
+        <abp-card-title class="text-lg"><i class="fas fa-info mr-1 text-lightblue"></i> Client Info</abp-card-title>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
+        </div>
+    </abp-card-header>
     <abp-card-body>
         <div class="form-group row mb-3">
             <div class="col-sm-3">
@@ -67,12 +73,132 @@
 
             </div>
             <div class="col-sm-8">
-                <textarea asp-for="@Model.Description" id="name" class="form-control" rows="4" > </textarea>
-
+                <textarea asp-for="@Model.Description" id="name" class="form-control" rows="4"> </textarea>
                 <span class="text-danger" asp-validation-for="@Model.Description">
                 </span>
             </div>
         </div>
+
+
+
+
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.FrontChannelLogoutUri"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.FrontChannelLogoutUri" class="form-control" />
+
+                <span class="text-danger" asp-validation-for="@Model.FrontChannelLogoutUri">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.FrontChannelLogoutSessionRequired"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="form-switch">
+                    <input asp-for="@Model.FrontChannelLogoutSessionRequired" class="form-check-input" type="checkbox">
+                </div>
+                <span class="text-danger" asp-validation-for="@Model.FrontChannelLogoutSessionRequired">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.BackChannelLogoutUri"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <input asp-for="@Model.BackChannelLogoutUri" class="form-control" />
+
+                <span class="text-danger" asp-validation-for="@Model.BackChannelLogoutUri">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.BackChannelLogoutSessionRequired"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="form-switch">
+                    <input asp-for="@Model.BackChannelLogoutSessionRequired" class="form-check-input" type="checkbox">
+                </div>
+
+                <span class="text-danger" asp-validation-for="@Model.BackChannelLogoutSessionRequired">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.RequirePkce"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="form-switch">
+                    <input asp-for="@Model.RequirePkce" class="form-check-input" type="checkbox">
+                </div>
+
+                <span class="text-danger" asp-validation-for="@Model.RequirePkce">
+                </span>
+            </div>
+        </div>
+
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.AuthorizationCodeLifetime"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input asp-for="@Model.AuthorizationCodeLifetime" class="form-control" type="number" />
+                    <span class="input-group-text">Seconds</span>
+
+                </div>
+
+                <span class="text-danger" asp-validation-for="@Model.AuthorizationCodeLifetime">
+                </span>
+            </div>
+        </div>
+
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.UserSsoLifetime"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input asp-for="@Model.UserSsoLifetime" class="form-control" />
+                    <span class="input-group-text">Seconds</span>
+                </div>
+                <span class="text-danger" asp-validation-for="@Model.UserSsoLifetime">
+                </span>
+            </div>
+        </div>
+
 
         <div class="form-group row mb-3">
             <div class="col-sm-3">
@@ -82,14 +208,14 @@
 
             </div>
             <div class="col-sm-8">
-                <input asp-for="@Model.RequireConsent" id="name" class="form-control" />
+                <div class="form-switch">
+                    <input asp-for="@Model.RequireConsent" id="name" class="form-check-input" />
+                </div>
 
                 <span class="text-danger" asp-validation-for="@Model.RequireConsent">
                 </span>
             </div>
         </div>
-
-
         <div class="form-group row mb-3">
             <div class="col-sm-3">
                 <div class="float-sm-left float-md-right">
@@ -98,12 +224,31 @@
 
             </div>
             <div class="col-sm-8">
-                <input asp-for="@Model.AllowRememberConsent" id="name" class="form-control" />
-
+                <div class="form-switch">
+                    <input asp-for="@Model.AllowRememberConsent" id="name" class="form-check-input" />
+                </div>
                 <span class="text-danger" asp-validation-for="@Model.AllowRememberConsent">
                 </span>
             </div>
         </div>
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.ConsentLifetime"></micro-label>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input asp-for="@Model.ConsentLifetime" class="form-control" />
+                    <span class="input-group-text">Seconds</span>
+                </div>
+
+                <span class="text-danger" asp-validation-for="@Model.ConsentLifetime">
+                </span>
+            </div>
+        </div>
+
     </abp-card-body>
 
 </abp-card>

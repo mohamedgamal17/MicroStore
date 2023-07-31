@@ -1,6 +1,6 @@
 ﻿namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients
 {
-    public class ClientClaimUIModel
+    public class CreateOrEditClientClaimModel
     {
         public int ClientId { get; set; }
 
@@ -11,7 +11,7 @@
         public string Value { get; set; }
     }
 
-    public class RemoveClientClaimUIModel
+    public class RemoveClientClaimModel
     {
         public int ClientId { get; set; }
 

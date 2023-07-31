@@ -7,6 +7,7 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
+using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
 {
@@ -55,9 +56,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Clients
         }
 
      
-        public async Task<Result<PagedResult<ClientDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ClientDto>>> ListAsync(ClientListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
             var query = _applicationConfigurationDbContext.Clients.AsNoTracking().ProjectTo<ClientDto>(MapperAccessor.Mapper.ConfigurationProvider);
+
+            if(queryParams.ClientId != null)
+            {
+                query = query.Where(x => x.ClientId.Contains(queryParams.ClientId));
+            }
 
             var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 

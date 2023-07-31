@@ -1,14 +1,10 @@
 ﻿#pragma warning disable CS8618
-using AutoMapper;
-using Duende.IdentityServer.EntityFramework.Entities;
 using Duende.IdentityServer.Models;
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 {
     public class ClientModel
     {
-      
-
-        public string ClientId { get; set; }
+       public string ClientId { get; set; }
 
         public bool RequireClientSecret { get; set; } = true;
 

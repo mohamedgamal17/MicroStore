@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Duende.IdentityServer.EntityFramework.Entities;
+using Microsoft.EntityFrameworkCore;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
+using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 using System.Linq.Expressions;
 using Volo.Abp.DependencyInjection;
 
@@ -35,6 +37,50 @@ namespace MicroStore.IdentityProvider.IdentityServer.Infrastructure.EntityFramew
             
             return entity;
         }
+
+        //private async Task RemoveClientRelationsAsync(Client client, ClientModel model)
+        //{
+        //    //Remove old allowed scopes
+
+        //    if()
+
+        //    var clientScopes = await DbContext.ClientScopes.Where(x => x.Client.Id == client.Id).ToListAsync();
+        //    DbContext.ClientScopes.RemoveRange(clientScopes);
+
+        //    //Remove old grant types
+        //    var clientGrantTypes = await DbContext.ClientGrantTypes.Where(x => x.Client.Id == client.Id).ToListAsync();
+        //    DbContext.ClientGrantTypes.RemoveRange(clientGrantTypes);
+
+        //    //Remove old redirect uri
+        //    var clientRedirectUris = await DbContext.ClientRedirectUris.Where(x => x.Client.Id == client.Id).ToListAsync();
+        //    DbContext.ClientRedirectUris.RemoveRange(clientRedirectUris);
+
+        //    //Remove old client cors
+        //    var clientCorsOrigins = await DbContext.ClientCorsOrigins.Where(x => x.Client.Id == client.Id).ToListAsync();
+        //    DbContext.ClientCorsOrigins.RemoveRange(clientCorsOrigins);
+
+        //    //Remove old client id restrictions
+        //    var clientIdPRestrictions = await DbContext.ClientIdPRestrictions.Where(x => x.Client.Id == client.Id).ToListAsync();
+        //    DbContext.ClientIdPRestrictions.RemoveRange(clientIdPRestrictions);
+
+        //    //Remove old client post logout redirect
+        //    var clientPostLogoutRedirectUris = await DbContext.ClientPostLogoutRedirectUris.Where(x => x.Client.Id == client.Id).ToListAsync();
+        //    DbContext.ClientPostLogoutRedirectUris.RemoveRange(clientPostLogoutRedirectUris);
+
+        //    //Remove old client claims
+        //    if (updateClientClaims)
+        //    {
+        //        var clientClaims = await DbContext.ClientClaims.Where(x => x.Client.Id == client.Id).ToListAsync();
+        //        DbContext.ClientClaims.RemoveRange(clientClaims);
+        //    }
+
+        //    //Remove old client properties
+        //    if (updateClientProperties)
+        //    {
+        //        var clientProperties = await DbContext.ClientProperties.Where(x => x.Client.Id == client.Id).ToListAsync();
+        //        DbContext.ClientProperties.RemoveRange(clientProperties);
+        //    }
+        //}
 
         public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {

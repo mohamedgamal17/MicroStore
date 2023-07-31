@@ -23,7 +23,7 @@ namespace MicroStore.IdentityProvider.Host.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetClientList([FromQuery] PagingQueryParams queryParams)
+        public async Task<IActionResult> GetClientList([FromQuery] ClientListQueryModel queryParams)
         {
             var result = await _clientQueryService.ListAsync(queryParams);
 

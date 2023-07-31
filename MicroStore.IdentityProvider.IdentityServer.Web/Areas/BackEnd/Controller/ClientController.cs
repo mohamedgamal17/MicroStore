@@ -32,10 +32,10 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(ClientListUIModel model)
+        public async Task<IActionResult> Index(ClientSearchModel model)
         {
 
-            var pagingOptions = new PagingQueryParams { Length = model.PageSize, Skip = model.Skip };
+            var pagingOptions = new ClientListQueryModel { Length = model.PageSize, Skip = model.Skip };
 
             var result = await _clientQueryService.ListAsync(pagingOptions);
 
@@ -44,21 +44,26 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 throw new InvalidOperationException(result.Exception.Message);
             }
 
-            model.Data = result.Value.Items;
+            var clientListvm = new ClientListViewModel
+            {
+                Data = result.Value.Items,
+                Start = result.Value.Skip,
+                Length = result.Value.Lenght,
+                RecordsTotal = result.Value.TotalCount,
+                Draw = model.Draw
+            }; 
 
-            model.RecordsTotal = result.Value.TotalCount;
-
-            return Json(model);
+            return Json(clientListvm);
         }
 
 
         public IActionResult Create()
         {
-            return View(new CreateClientUIModel());
+            return View(new CreateClientModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateClientUIModel model)
+        public async Task<IActionResult> Create(CreateClientModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -88,7 +93,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return HandleFailureResultWithView(result);
             }
 
-            var model = ObjectMapper.Map<ClientDto, EditClientUIModel>(result.Value);
+            var model = ObjectMapper.Map<ClientDto, EditClientModel>(result.Value);
 
             ViewBag.ApiScopes = await PrepareClientScopes(model);
 
@@ -96,7 +101,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditClientUIModel model)
+        public async Task<IActionResult> Edit(int id ,EditClientModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -105,7 +110,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return View(model);
             }
 
-            var clientModel = ObjectMapper.Map<EditClientUIModel, ClientModel>(model);
+            var clientModel = ObjectMapper.Map<EditClientModel, ClientModel>(model);
 
             var result = await _clientCommandService.UpdateAsync(model.Id, clientModel);
 
@@ -134,31 +139,32 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
 
         [HttpPost]
-        public async Task<IActionResult> ListClientSecrets(int id, ClientSecretListUIModel model)
+        public async Task<IActionResult> ListClientSecrets(int clientId)
         {
-            var result = await _clientQueryService.ListClientSecrets(id);
+            var result = await _clientQueryService.ListClientSecrets(clientId);
 
             if (result.IsFailure)
             {
                 return HandleFailureResultWithJson(result);
             }
 
-            model.Data = result.Value;
+            var viewModel = new ClientSecretListViewModel
+            {
+                Data = result.Value
+            };
 
-            model.RecordsTotal = result.Value.Count;
-
-            return Json(model);
+            return Json(viewModel);
         }
 
 
-        public IActionResult CreateClientSecretModal(int clientId)
+        public IActionResult CreateSecretModal(int clientId)
         {
-            return PartialView("", new ClientSecretUIModel { ClientId = clientId });
+            return PartialView("_Create.Secret", new CreateClientSecretModel { ClientId = clientId });
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateClientSecret(ClientSecretUIModel model)
+        public async Task<IActionResult> CreateSecret(CreateClientSecretModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -177,7 +183,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
 
         [HttpPost]
-        public async Task<IActionResult> RemoveClientSecret([FromBody] RemoveClientSecretUIModel model)
+        public async Task<IActionResult> RemoveSecret([FromBody] RemoveClientSecretModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -195,7 +201,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> ListClaims(int clientId, ClientClaimListModel model)
+        public async Task<IActionResult> ListClaims(int clientId)
         {
             var result = await _clientQueryService.ListClaims(clientId);
 
@@ -204,14 +210,17 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 throw new InvalidOperationException(result.Exception.Message);
             }
 
-            model.Data = result.Value;
+            var viewModel = new ClientClaimListViewModel
+            {
+                Data = result.Value
+            };
 
-            return Json(model);
+            return Json(viewModel);
         }
 
         public IActionResult CreateClaimModal(int clientId)
         {
-            return PartialView("_Create.Claim", new ClientClaimUIModel { ClientId = clientId });
+            return PartialView("_Create.Claim", new CreateOrEditClientClaimModel { ClientId = clientId });
         }
 
         public async Task<IActionResult> EditClaimModal(int clientId, int claimId)
@@ -222,8 +231,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
             {
                 return HandleFailureResultWithView(result);
             }
-
-            var model = new ClientClaimUIModel
+            var model = new CreateOrEditClientClaimModel
             {
                 ClientId = result.Value.ClientId,
                 ClaimId = result.Value.Id,
@@ -235,7 +243,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateClaim(ClientClaimUIModel model)
+        public async Task<IActionResult> CreateClaim(CreateOrEditClientClaimModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -258,7 +266,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateClaim(ClientClaimUIModel model)
+        public async Task<IActionResult> UpdateClaim(CreateOrEditClientClaimModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -285,8 +293,9 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveClaim([FromBody] RemoveClientClaimUIModel model)
+        public async Task<IActionResult> RemoveClaim([FromBody] RemoveClientClaimModel model)
         {
+            var body = Request.Body;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -304,24 +313,28 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
 
         [HttpPost]
-        public async Task<IActionResult> ListProperties(int id, ClientPropertyListModel model)
+        public async Task<IActionResult> ListProperties(int parentId, ListModel model)
         {
-            var result = await _clientQueryService.ListProperties(id);
+            var result = await _clientQueryService.ListProperties(parentId);
 
             if (result.IsFailure)
             {
                 return HandleFailureResultWithJson(result);
             }
 
+            var viewModel = new ClientPropertyListModel
+            {
+                Data = ObjectMapper.Map<List<ClientPropertyDto>, List<PropertyViewModel>>(result.Value),
+                Draw = model.Draw
+            };
 
-            model.Data = result.Value;
 
-            return Json(model);
+            return Json(viewModel);
         }
 
         public IActionResult CreatePropertyModal(int parentId)
         {
-            return PartialView("_Create.Property", new PropertyUIModel { ParentId = parentId });
+            return PartialView("_Create.Property", new PropertyViewModel { ParentId = parentId });
         }
 
         public async Task<IActionResult> EditPropertyModal(int parentId, int propertyId)
@@ -333,7 +346,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
                 return HandleFailureResultWithView(result);
             }
 
-            return PartialView("_Edit.Property", new PropertyUIModel
+            return PartialView("_Edit.Property", new PropertyViewModel
             {
                 ParentId = result.Value.ClientId,
                 PropertyId = result.Value.Id,
@@ -343,14 +356,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProperty(PropertyUIModel model)
+        public async Task<IActionResult> CreateProperty(PropertyViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var propertyModel = ObjectMapper.Map<PropertyUIModel, PropertyModel>(model);
+            var propertyModel = ObjectMapper.Map<PropertyViewModel, PropertyModel>(model);
 
             var result = await _clientCommandService.AddProperty(model.ParentId, propertyModel);
 
@@ -364,14 +377,14 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProperty(PropertyUIModel model)
+        public async Task<IActionResult> UpdateProperty(PropertyViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var propertyModel = ObjectMapper.Map<PropertyUIModel, PropertyModel>(model);
+            var propertyModel = ObjectMapper.Map<PropertyViewModel, PropertyModel>(model);
 
             var result = await _clientCommandService.UpdateProperty(model.ParentId, model.PropertyId, propertyModel);
 
@@ -384,7 +397,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteProperty([FromBody] RemovePropertyUIModel model)
+        public async Task<IActionResult> DeleteProperty([FromBody]RemovePropertyModel model)
         {
 
             if (!ModelState.IsValid)
@@ -403,7 +416,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
         }
 
 
-        private ClientModel PrepareClientModel(CreateClientUIModel model)
+        private ClientModel PrepareClientModel(CreateClientModel model)
         {
             var clientModel = new ClientModel()
             {
@@ -445,7 +458,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controlle
             return clientModel;
         }
 
-        private async Task<List<SelectListItem>> PrepareClientScopes(EditClientUIModel model)
+        private async Task<List<SelectListItem>> PrepareClientScopes(EditClientModel model)
         {
             var result = await _apiScopeQueryService.ListAsync();
 

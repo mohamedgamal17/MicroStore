@@ -40,6 +40,11 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Tests.Clients
 
             var model = PrepareClientModel();
 
+            foreach (var scope in fakeClient.AllowedScopes)
+            {
+                model.AllowedScopes!.Add(scope.Scope);
+            }
+
             var result = await _clientCommandService.UpdateAsync(fakeClient.Id, model);
 
             result.IsSuccess.Should().BeTrue();

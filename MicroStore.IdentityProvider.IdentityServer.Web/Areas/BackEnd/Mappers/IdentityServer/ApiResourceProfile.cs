@@ -22,7 +22,7 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Mappers.I
             CreateMap<ApiResourceClaimDto, string>()
                 .ConvertUsing(r => r.Type);
 
-            CreateMap<ApiResourcePropertyDto, PropertyUIModel>()
+            CreateMap<ApiResourcePropertyDto, PropertyViewModel>()
                 .ForMember(x => x.ParentId, opt => opt.MapFrom(src => src.ApiResourceId))
                 .ForMember(x => x.PropertyId, opt => opt.MapFrom(src => src.Id));
 

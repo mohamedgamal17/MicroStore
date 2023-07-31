@@ -1,13 +1,13 @@
 ﻿namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models
 {
-    public abstract class BaseListModel
+    public  class ListModel
     {
         public string Draw { get; set; }
     }
 
-    public abstract class BasePagedListModel : BaseListModel
+    public  class PagedListModel : ListModel
     {
-        public BasePagedListModel()
+        public PagedListModel()
         {
             Length = 10;
         }

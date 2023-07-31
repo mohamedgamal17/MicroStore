@@ -1,4 +1,4 @@
-﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.ClientListUIModel
+﻿@model MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients.ClientListViewModel
 @{
     ViewData["Title"] = "Clients / Backend";
     UIMenuNavigationManager.SetCurrentMenu(IdentityServerMenuStandard.ClientMenu.Index);
@@ -25,6 +25,7 @@
     </div>
     <section class="content">
         <div class="container-fluid">
+            <partial name="_Client.AdvacnedSearch" model="Model" />
             <abp-card>
                 <abp-card-body>
                     <abp-table id="ClientTable"></abp-table>
@@ -36,5 +37,5 @@
 </div>
 
 @section Scripts{
-   <script src="~/js/backend/client/index.js"></script>
+   <script src="~/backend/js/client/index.js"></script>
 }
