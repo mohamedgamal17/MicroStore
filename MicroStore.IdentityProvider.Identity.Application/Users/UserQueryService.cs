@@ -7,6 +7,7 @@ using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Users
@@ -59,12 +60,22 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
             return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user);
         }
 
-        public async Task<Result<PagedResult<IdentityUserDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<IdentityUserDto>>> ListAsync(UserListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
             var query = _identityDbContext.Users
                .AsNoTracking()
                .ProjectTo<IdentityUserDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
+
+            if (!string.IsNullOrEmpty(queryParams.UserName))
+            {
+                query = query.Where(x => x.UserName.Contains(queryParams.UserName));
+            }
+
+            if (!string.IsNullOrEmpty(queryParams.Role))
+            {
+                query = query.Where(x => x.UserRoles.Any(x => x.Name == queryParams.Role));
+            }
 
             var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 

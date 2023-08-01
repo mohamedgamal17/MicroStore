@@ -1,4 +1,4 @@
-﻿@model UserListModel
+﻿@model UserSearchModel
 @{
     ViewData["Title"] = "Users / Backend";
     UIMenuNavigationManager.SetCurrentMenu(IdentityMenuStandard.UserMenu.Index);
@@ -25,6 +25,7 @@
     </div>
     <section class="content">
         <div class="container-fluid">
+            <partial name="_User.AdvacnedSearch" model="Model" />
             <partial name="Grids/_Grid.Users" model="Model" />
         </div>
     </section>

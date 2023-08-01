@@ -29,31 +29,36 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(new UserListModel());
+            ViewBag.Roles = await PrepareRoleSelectedList();
+
+            return View(new UserSearchModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(UserListModel model)
+        public async Task<IActionResult> Index(UserSearchModel model)
         {
-            var pagingParams = new PagingQueryParams
+            var queryParams = new UserListQueryModel
             {
+                UserName  = model.UserName,
+                Role = model.Role,
                 Skip = model.Skip,
                 Length = model.Length
             };
 
-            var result = await _userQueryService.ListAsync(pagingParams);
+            var result = await _userQueryService.ListAsync(queryParams);
 
-            var pagedList = result.Value!;
+            var viewModel = new UserListViewModel
+            {
+                Start = result.Value.Skip,
+                Length = result.Value.Lenght,
+                RecordsTotal = result.Value.TotalCount,
+                Draw = model.Draw,
+                Data = result.Value.Items
+            };
 
-            model.Data = pagedList.Items;
-
-            model.Length = pagedList.Lenght;
-
-            model.RecordsTotal = pagedList.TotalCount;
-
-            return Json(model);
+            return Json(viewModel);
         }
 
         public async Task<IActionResult> Create()

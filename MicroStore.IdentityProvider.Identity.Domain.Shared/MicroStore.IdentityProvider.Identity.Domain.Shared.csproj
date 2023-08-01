@@ -16,4 +16,10 @@
     <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="6.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="MicroStore.BuildingBlocks.Paging">
+      <HintPath>..\MicroStore.BuildingBlocks.Paging\obj\Debug\net6.0\ref\MicroStore.BuildingBlocks.Paging.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
