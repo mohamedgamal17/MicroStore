@@ -23,7 +23,7 @@ namespace MicroStore.IdentityProvider.Identity.Web.Controllers
         [Route("")]
         public async Task<IActionResult> GetRoleList()
         {
-            var result = await _roleQueryService.ListAsync();
+            var result = await _roleQueryService.ListAsync(new RoleListQueryModel());
 
             return result.ToOk();
         }

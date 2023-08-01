@@ -4,7 +4,6 @@ using MicroStore.IdentityProvider.Identity.Application.Roles;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 using MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Models.Roles;
-
 namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
 {
     public class RoleController : BackEndController
@@ -22,17 +21,26 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
 
         public IActionResult Index()
         {
-            return View(new RoleListModel());
+            return View(new RoleSearchModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(RoleListModel model)
+        public async Task<IActionResult> Index(RoleSearchModel model)
         {
-            var result = await _roleQueryService.ListAsync();
+            var queryParams = new RoleListQueryModel
+            {
+                Name = model.Name
+            };
 
-            model.Data = result.Value;
+            var result = await _roleQueryService.ListAsync(queryParams);
 
-            return Json(model);
+            var viewModel = new RoleListViewModel
+            {
+                Data = result.Value,
+                Draw = model.Draw
+            };
+
+            return Json(viewModel);
         }
 
         public IActionResult Create()
@@ -88,6 +96,24 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
 
 
             return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var  result = await _roleCommandService.RemoveAsync(id);
+
+            if (result.IsFailure)
+            {
+                return HandleFailureResultWithJson(result);
+            }
+            return NoContent();
         }
 
         private async Task<Result<EditRoleModel>> PrepareEditRoleModel(string id)

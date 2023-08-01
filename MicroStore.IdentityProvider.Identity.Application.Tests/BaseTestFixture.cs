@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using MicroStore.TestBase;
 namespace MicroStore.IdentityProvider.Identity.Application.Tests
 {
@@ -8,38 +8,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
     public abstract class BaseTestFixture : ApplicationTestBase<IdentityApplicationTestModule>
     {
         
-
-        public async Task<ApplicationIdentityRole> UpdateRoleAsync(ApplicationIdentityRole identityRole)
-        {
-            using var scope = ServiceProvider.CreateScope();
-
-            var rolemanager = scope.ServiceProvider.GetRequiredService<ApplicationRoleManager>();
-
-            var identityResult = await rolemanager.UpdateAsync(identityRole);
-
-            ThrowIfFailureResult(identityResult);
-
-            return identityRole;
-        }
-
-
-        public async Task<ApplicationIdentityUser> FindUserById(string userId)
-        {
-            using var scope = ServiceProvider.CreateScope();
-
-            var usermanager = scope.ServiceProvider.GetRequiredService<ApplicationUserManager>();
-
-            return await usermanager.FindByIdAsync(userId);
-        }
-
-        public async Task<ApplicationIdentityRole> FindRoleById(string roleId)
-        {
-            using var scope = ServiceProvider.CreateScope();
-
-            var rolemanager = scope.ServiceProvider.GetRequiredService<ApplicationRoleManager>();
-
-            return await rolemanager.FindByIdAsync(roleId);
-        }
 
 
 

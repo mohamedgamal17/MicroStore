@@ -2,7 +2,7 @@
 
 namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Models.Users
 {
-    public class UserListModel : BasePagedListModel
+    public class UserListModel : PagedListModel
     {
         public IEnumerable<IdentityUserDto> Data { get; set; }
     }

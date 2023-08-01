@@ -139,7 +139,7 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
 
         private async Task<List<SelectListItem>> PrepareRoleSelectedList(List<string> selectedRoles = null)
         {
-            var result = await _roleQueryService.ListAsync();
+            var result = await _roleQueryService.ListAsync(new RoleListQueryModel());
 
             var roles = result.Value!;
 

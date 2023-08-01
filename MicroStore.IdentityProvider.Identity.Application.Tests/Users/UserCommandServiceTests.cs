@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using MicroStore.IdentityProvider.Identity.Application.Tests.Extensions;
 using MicroStore.IdentityProvider.Identity.Application.Users;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
@@ -24,7 +25,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsSuccess.Should().BeTrue();
 
-            var user = await FindUserById(result.Value.Id);
+            var user = await SingleAsync<ApplicationIdentityUser>(x=> x.Id == result.Value.Id);
 
             user.AssertUser(model);
 
@@ -44,7 +45,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsSuccess.Should().BeTrue();
 
-            var user = await FindUserById(result.Value.Id);
+            var user = await  SingleAsync<ApplicationIdentityUser>(x => x.Id == result.Value.Id);
 
             user.AssertUser(model);
 

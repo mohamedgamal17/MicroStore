@@ -38,6 +38,7 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework
             return role;
         }
 
+
         public async Task<ApplicationIdentityRole> UpdateAsync(ApplicationIdentityRole role, CancellationToken cancellationToken = default)
         {
             var result = await _applicationRoleManager.UpdateAsync(role);

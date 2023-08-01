@@ -1,4 +1,4 @@
-﻿@model  RoleListModel
+﻿@model  RoleSearchModel
 @{
     ViewData["Title"] = "Roles / BackEnd";
     UIMenuNavigationManager.SetCurrentMenu(IdentityMenuStandard.RoleMenu.Index);
@@ -25,7 +25,8 @@
     </div>
     <section class="content">
         <div class="container-fluid">
-            <partial name="Grids/_Grid.Roles" model="Model" />
+            <partial name="_Role.AdvacnedSearch" model="Model" />
+            <partial name="Grids/_Grid.Roles" model="Model" />     
         </div>
     </section>
 </div>

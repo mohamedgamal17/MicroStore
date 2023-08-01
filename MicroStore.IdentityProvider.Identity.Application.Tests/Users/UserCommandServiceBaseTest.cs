@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
-using MicroStore.IdentityProvider.Identity.Application.Models;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 {

@@ -24,6 +24,9 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure
                 opt.EnableSensitiveDataLogging();
             },ServiceLifetime.Transient);
 
+
+            context.Services.AddTransient<DbContext, ApplicationIdentityDbContext>();
+
             context.Services.AddDataProtection();
         }
 

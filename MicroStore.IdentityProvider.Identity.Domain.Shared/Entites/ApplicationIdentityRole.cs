@@ -5,8 +5,7 @@ namespace MicroStore.IdentityProvider.Identity.Domain.Shared.Entites
 {
     public class ApplicationIdentityRole : IdentityRole<string>
     {
-
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
 
         public ApplicationIdentityRole()

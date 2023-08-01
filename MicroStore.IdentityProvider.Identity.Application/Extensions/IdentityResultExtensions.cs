@@ -1,25 +1,18 @@
-﻿//using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
-//namespace MicroStore.IdentityProvider.Identity.Application.Extensions
-////{
-////    public static class IdentityResultExtensions
-////    {
+namespace MicroStore.IdentityProvider.Identity.Application.Extensions
+{
+    public static class IdentityResultExtensions
+    {
+        public static void ThorwIfInvalidResult(this IdentityResult result)
+        {
+            if (result.Succeeded)
+            {
+                return;
+            }
 
-////        public static ErrorInfo SerializeIdentityResultErrors(this IdentityResult identityResult)
-////        {
-////            if (identityResult.Succeeded)
-////            {
-////                throw new InvalidOperationException("identity result dose not contain any error to serialize");
-////            }
 
-////            return new ErrorInfo
-////            {
-////                Message = "Error while creating role see validation error for more details",
-////                //ValidationErrors = identityResult.Errors.Select(x => new ValidationErrorInfo
-////                //{
-////                //    Message = x.Description
-////                //}).ToArray()
-////            };
-////        }
-////    }
-//}
+            throw new InvalidOperationException(result.Errors.Select(x => x.Description).JoinAsString(", "));
+        }
+    }
+}

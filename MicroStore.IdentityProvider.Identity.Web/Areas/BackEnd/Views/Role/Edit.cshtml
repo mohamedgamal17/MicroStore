@@ -4,7 +4,6 @@
     UIMenuNavigationManager.SetCurrentMenu(IdentityMenuStandard.RoleMenu.Index);
 }
 <div class="content-wrapper mr-2">
-    <!-- Content Header (Page header) -->
     <form method="post" asp-action="Edit">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x=> x.Id)

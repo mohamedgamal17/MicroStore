@@ -1,6 +1,4 @@
 ﻿#pragma warning disable CS8618
-
-
 namespace MicroStore.IdentityProvider.Identity.Domain.Shared.Models
 {
     public class UserModel

@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
-using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
-using MicroStore.IdentityProvider.Identity.Application.Dtos;
-using MicroStore.IdentityProvider.Identity.Application.Models;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 using System.Data;
 namespace MicroStore.IdentityProvider.Identity.Application.Tests.Extensions
 {

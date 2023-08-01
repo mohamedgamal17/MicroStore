@@ -1,35 +1,53 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
-using MicroStore.IdentityProvider.Identity.Application.Models;
 using MicroStore.IdentityProvider.Identity.Application.Roles;
 using MicroStore.IdentityProvider.Identity.Application.Tests.Extensions;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
+using NUnit.Framework;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
-{ 
+{
     public class RoleCommandServiceTests : BaseTestFixture
     {
         private readonly IRoleCommandService _roleCommandService;
 
         public RoleCommandServiceTests()
         {
-            _roleCommandService= GetRequiredService<IRoleCommandService>();
+            _roleCommandService = GetRequiredService<IRoleCommandService>();
         }
         [Test]
         public async Task Should_create_role()
         {
-            var model = PreapreRoleModel();
+            var model = PrepareRoleModel();
 
             var result = await _roleCommandService.CreateAsync(model);
 
             result.IsSuccess.Should().BeTrue();
 
-            var role = await FindRoleById(result.Value.Id);
+            var role = await SingleAsync<ApplicationIdentityRole>(x => x.Id == result.Value.Id);
 
             role.AssertRole(model);
 
             role.AssertRoleDto(result.Value);
+        }
+
+        [Test]
+        public async Task Should_return_failure_result_while_creating_role_when_role_name_is_already_exist()
+        {
+            var role = await CreateRole();
+
+            var model = PrepareRoleModel();
+
+            model.Name = role.Name;
+
+            var result = await _roleCommandService.CreateAsync(model);
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Exception.Should().BeOfType<UserFriendlyException>();
         }
 
 
@@ -38,13 +56,13 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
         {
             var fakeRole = await CreateRole();
 
-            var model = PreapreRoleModel();
+            var model = PrepareRoleModel();
 
-            var result = await _roleCommandService.UpdateAsync(fakeRole.Id,model);
+            var result = await _roleCommandService.UpdateAsync(fakeRole.Id, model);
 
             result.IsSuccess.Should().BeTrue();
 
-            var role = await FindRoleById(fakeRole.Id);
+            var role = await SingleOrDefaultAsync<ApplicationIdentityRole>(x => x.Id == fakeRole.Id);
 
             role.AssertRole(model);
 
@@ -55,7 +73,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
         [Test]
         public async Task Should_reuturn_failure_result_while_updating_role_when_role_is_not_exit()
         {
-            var model = PreapreRoleModel();
+            var model = PrepareRoleModel();
 
             var result = await _roleCommandService.UpdateAsync(Guid.NewGuid().ToString(), model);
 
@@ -65,13 +83,62 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
         }
 
 
-        protected RoleModel PreapreRoleModel()
+        [Test]
+        public async Task Should_return_failure_result_while_updating_role_when_role_name_is_already_exist()
+        {
+            var firstRole = await CreateRole();
+
+            var secondRole = await CreateRole();
+
+            var model = PrepareRoleModel();
+
+            model.Name = secondRole.Name;
+
+            var result = await _roleCommandService.UpdateAsync(firstRole.Id, model);
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Exception.Should().BeOfType<UserFriendlyException>();
+        }
+
+
+        [Test]
+        public async Task Should_remove_role()
+        {
+            var fakeRole = await CreateRole();
+
+            var model = PrepareRoleModel();
+
+            var result = await _roleCommandService.RemoveAsync(fakeRole.Id);
+
+            result.IsSuccess.Should().BeTrue();
+
+            var role = await SingleOrDefaultAsync<ApplicationIdentityRole>(x => x.Id == fakeRole.Id);
+
+            role.Should().BeNull();
+        }
+
+
+        [Test]
+        public async Task Should_return_failure_result_while_removing_rule_when_rule_is_not_exist()
+        {
+            var roleId = Guid.NewGuid().ToString();
+
+            var result = await _roleCommandService.RemoveAsync(roleId);
+
+            result.IsFailure.Should().BeFalse();
+
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+        }
+
+
+        protected RoleModel PrepareRoleModel()
         {
             return new RoleModel
             {
                 Name = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
-              
+
             };
         }
 

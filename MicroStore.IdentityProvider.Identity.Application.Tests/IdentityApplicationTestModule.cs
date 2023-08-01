@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.IdentityProvider.Identity.Application.Domain;
+using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using MicroStore.IdentityProvider.Identity.Infrastructure;
 using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
 using MicroStore.TestBase.Json;
