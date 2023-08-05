@@ -1,5 +1,8 @@
 ﻿#pragma warning disable CS8618
 using Duende.IdentityServer.Models;
+using FluentValidation;
+using System.Text.RegularExpressions;
+
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 {
     public class ClientModel
@@ -102,6 +105,105 @@ namespace MicroStore.IdentityProvider.IdentityServer.Application.Models
 
         public bool Enabled { get; set; } = true;
 
+    }
+
+
+    internal class ClientModelValidation : AbstractValidator<ClientModel>
+    {
+        const string URI_REGEX_PATTERN = @"(https:[/][/]|http:[/][/]|www.)[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\\-\\._\\?\\,\\'/\\\\\\+&amp;%\\$#\\=~])*$";
+        public ClientModelValidation()
+        {
+            RuleFor(x => x.ClientId)
+                .MaximumLength(200)
+                .NotNull();
+
+            RuleFor(x => x.ClientName)
+                .MaximumLength(200)
+                .When(x => x.ClientName != null);
+
+            RuleFor(x => x.ClientUri)
+                .MaximumLength(200)
+                .Matches(URI_REGEX_PATTERN)
+                .When(x => x.ClientUri != null);
+
+            RuleFor(x => x.LogoUri)
+                .MaximumLength(200)
+                .Matches(URI_REGEX_PATTERN)
+                .When(x => x.ClientUri != null);
+
+            RuleForEach(x => x.AllowedGrantTypes)
+                .MaximumLength(200)
+                .When(x => x.AllowedGrantTypes != null);
+
+            RuleFor(x => x.IdentityTokenLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleForEach(x => x.AllowedIdentityTokenSigningAlgorithms)
+                .MaximumLength(200)
+                .When(x => x.AllowedIdentityTokenSigningAlgorithms != null);
+
+
+            RuleFor(x => x.AccessTokenLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.AuthorizationCodeLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.AbsoluteRefreshTokenLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.SlidingRefreshTokenLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.ConsentLifetime)
+               .GreaterThanOrEqualTo(0)
+               .When(x => x.ConsentLifetime != null);
+
+            RuleForEach(x => x.IdentityProviderRestrictions)
+                .MaximumLength(200)
+                .When(x => x.IdentityProviderRestrictions != null);
+
+            RuleForEach(x => x.Claims)
+                .SetValidator(new ClaimModelValidator())
+                .When(x => x.Claims != null);
+
+            RuleFor(x => x.ClientClaimsPrefix)
+                .MaximumLength(200);
+
+            RuleFor(x => x.PairWiseSubjectSalt)
+             .MaximumLength(200)
+             .When(x => x.PairWiseSubjectSalt != null);
+
+            RuleFor(x => x.UserSsoLifetime)
+              .GreaterThan(0)
+              .When(x => x.UserSsoLifetime != null);
+
+
+            RuleFor(x => x.UserCodeType)
+              .MaximumLength(200)
+              .When(x => x.UserCodeType != null);
+
+            RuleFor(x => x.DeviceCodeLifetime)
+              .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.CibaLifetime)
+               .GreaterThanOrEqualTo(0)
+               .When(x => x.CibaLifetime != null);
+
+            RuleFor(x => x.PollingInterval)
+              .GreaterThanOrEqualTo(0)
+              .When(x => x.PollingInterval != null);
+
+
+            RuleForEach(x => x.AllowedCorsOrigins)
+                .Matches(URI_REGEX_PATTERN)
+                .MaximumLength(200)
+                .When(x => x.AllowedCorsOrigins != null);
+
+            RuleForEach(x => x.Properties)
+                .SetValidator(new PropertyModelValidator())
+                .When(x => x.Properties != null);
+        }
     }
 
 }

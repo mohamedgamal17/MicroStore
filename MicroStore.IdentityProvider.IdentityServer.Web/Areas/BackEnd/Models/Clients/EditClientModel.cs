@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityServer.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Clients
@@ -72,7 +73,60 @@ namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Cl
 
         #endregion
 
+    }
+
+    internal class EditClientModelValidator : AbstractValidator<EditClientModel>
+    {
+        const string URI_REGEX_PATTERN = @"(https:[/][/]|http:[/][/]|www.)[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\\-\\._\\?\\,\\'/\\\\\\+&amp;%\\$#\\=~])*$";
+        public EditClientModelValidator()
+        {
+            RuleFor(x => x.ClientId)
+                .MaximumLength(200)
+                .NotNull();
+
+            RuleFor(x => x.ClientName)
+                .MaximumLength(200)
+                .When(x => x.ClientName != null);
+
+            RuleFor(x => x.ClientUri)
+                .MaximumLength(200)
+                .Matches(URI_REGEX_PATTERN)
+                .When(x => x.ClientUri != null);
+
+            RuleFor(x => x.LogoUri)
+                .MaximumLength(200)
+                .Matches(URI_REGEX_PATTERN)
+                .When(x => x.ClientUri != null);
 
 
+            RuleFor(x => x.IdentityTokenLifetime)
+                .GreaterThanOrEqualTo(0);
+
+
+            RuleFor(x => x.AccessTokenLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.AuthorizationCodeLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.AbsoluteRefreshTokenLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.SlidingRefreshTokenLifetime)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(x => x.ConsentLifetime)
+               .GreaterThanOrEqualTo(0)
+               .When(x => x.ConsentLifetime != null);
+
+            RuleFor(x => x.PairWiseSubjectSalt)
+             .MaximumLength(200)
+             .When(x => x.PairWiseSubjectSalt != null);
+
+            RuleFor(x => x.UserSsoLifetime)
+              .GreaterThan(0)
+              .When(x => x.UserSsoLifetime != null);
+
+        }
     }
 }

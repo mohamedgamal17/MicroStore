@@ -16,7 +16,7 @@
                     <abp-row class="form-group mb-3">
                         <abp-column size-sm="_4">
                             <div class="float-sm-left float-md-right">
-                                <micro-label class="col-form-label" asp-for="@Model.UserName"></micro-label>
+                                <micro-label class="col-form-label" asp-for="@Model.Role"></micro-label>
                             </div>
 
                         </abp-column>
@@ -24,7 +24,7 @@
                             <select asp-for="Role" class="form-control" asp-items="roles" id="@Html.IdFor(x=> x.Role)">
                                 <option value="" selected>Select Role</option>
                             </select>
-                            <span class="text-danger" asp-validation-for="@Model.UserName" />
+                            <span class="text-danger" asp-validation-for="@Model.Role" />
                         </abp-column>
                     </abp-row>
                 </abp-column>

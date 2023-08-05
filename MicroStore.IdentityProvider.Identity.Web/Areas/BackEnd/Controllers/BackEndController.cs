@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.Results;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using NUglify.Helpers;
 using System.Text.Json;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Http;
+using Volo.Abp.Validation;
 
 namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
 {
@@ -14,7 +14,6 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
     public class BackEndController : AbpController
     {
         protected ILogger<BackEndController> Logger => LazyServiceProvider.LazyGetRequiredService<ILogger<BackEndController>>();
-
 
         [NonAction]
         protected IActionResult HandleFailureResultWithView<T>(Result<T> result, object model = null)
@@ -37,6 +36,17 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
                 ModelState.AddModelError("", result.Exception.Message);
 
                 return View(model);
+
+            }else if(result.Exception is AbpValidationException)
+            {
+                var exception =(AbpValidationException) result.Exception;
+
+                exception.ValidationErrors.ForEach(error =>
+                {
+                    ModelState.AddModelError("", error.ErrorMessage!);
+                });
+
+                return View(model);
             }
             else
             {
@@ -57,8 +67,6 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
             }
 
             Logger.LogException(result.Exception);
-
-
 
             if (result.Exception is EntityNotFoundException)
             {

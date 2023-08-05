@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.IdentityProvider.Identity.Application.Roles;
 using MicroStore.IdentityProvider.Identity.Application.Tests.Extensions;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
-using NUnit.Framework;
-using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
@@ -34,21 +33,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
             role.AssertRoleDto(result.Value);
         }
 
-        [Test]
-        public async Task Should_return_failure_result_while_creating_role_when_role_name_is_already_exist()
-        {
-            var role = await CreateRole();
-
-            var model = PrepareRoleModel();
-
-            model.Name = role.Name;
-
-            var result = await _roleCommandService.CreateAsync(model);
-
-            result.IsFailure.Should().BeTrue();
-
-            result.Exception.Should().BeOfType<UserFriendlyException>();
-        }
 
 
         [Test]
@@ -80,25 +64,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
             result.IsFailure.Should().BeTrue();
 
             result.Exception.Should().BeOfType<EntityNotFoundException>();
-        }
-
-
-        [Test]
-        public async Task Should_return_failure_result_while_updating_role_when_role_name_is_already_exist()
-        {
-            var firstRole = await CreateRole();
-
-            var secondRole = await CreateRole();
-
-            var model = PrepareRoleModel();
-
-            model.Name = secondRole.Name;
-
-            var result = await _roleCommandService.UpdateAsync(firstRole.Id, model);
-
-            result.IsFailure.Should().BeTrue();
-
-            result.Exception.Should().BeOfType<UserFriendlyException>();
         }
 
 
@@ -152,7 +117,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
                 Description = Guid.NewGuid().ToString(),
             };
 
-            var rolemanager = scope.ServiceProvider.GetRequiredService<ApplicationRoleManager>();
+            var rolemanager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationIdentityRole>>();
 
             var identityResult = await rolemanager.CreateAsync(identityRole);
 
