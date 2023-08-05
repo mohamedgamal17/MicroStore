@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 using MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models;
 using MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiScopes;
-
 namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controller
 {
+    [Authorize]
     public class ApiScopeController : BackEndController
     {
 

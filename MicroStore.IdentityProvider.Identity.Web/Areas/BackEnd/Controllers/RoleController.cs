@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.Identity.Application.Roles;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
@@ -6,6 +7,7 @@ using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 using MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Models.Roles;
 namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
 {
+    [Authorize]
     public class RoleController : BackEndController
     {
 

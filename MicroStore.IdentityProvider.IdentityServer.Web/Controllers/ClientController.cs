@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.IdentityProvider.IdentityServer.Application.Clients;
@@ -6,6 +7,7 @@ using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/clients")]
     public class ClientController : MicroStoreApiController
     {

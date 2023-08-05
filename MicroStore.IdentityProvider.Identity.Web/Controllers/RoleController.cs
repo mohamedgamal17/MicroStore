@@ -53,6 +53,11 @@ namespace MicroStore.IdentityProvider.Identity.Web.Controllers
         [Route("")]
         public async Task<IActionResult> CreateRole([FromBody] RoleModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _roleCommandService.CreateAsync(model);
 
             return result.ToCreatedAtAction(nameof(GetRoleById), new { roleId = result.Value?.Id });
@@ -62,9 +67,27 @@ namespace MicroStore.IdentityProvider.Identity.Web.Controllers
         [Route("{roleId}")]
         public async Task<IActionResult> UpdateRole(string roleId, [FromBody] RoleModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _roleCommandService.UpdateAsync(roleId, model);
 
             return result.ToOk();
+        }
+        [HttpDelete]
+        [Route("{roleId}")]
+        public async Task<IActionResult> DeleteRole(string roleId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _roleCommandService.RemoveAsync(roleId);
+
+            return result.ToNoContent();
         }
 
 

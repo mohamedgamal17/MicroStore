@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityServer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiScopes;
@@ -10,6 +11,7 @@ using MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.Client
 
 namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controller
 {
+    [Authorize]
     public class ClientController : BackEndController
     {
 

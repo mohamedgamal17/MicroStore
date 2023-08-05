@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 namespace MicroStore.IdentityProvider.Host.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/apiresources")]
+
     public class ApiResourceController : MicroStoreApiController
     {
         private readonly IApiResourceCommandService _apiResourceCommandService;

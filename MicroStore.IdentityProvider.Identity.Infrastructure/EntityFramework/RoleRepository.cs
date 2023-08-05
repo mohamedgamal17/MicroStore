@@ -1,4 +1,4 @@
-﻿using MicroStore.IdentityProvider.Identity.Application;
+﻿using Microsoft.AspNetCore.Identity;
 using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using MicroStore.IdentityProvider.Identity.Infrastructure.Extensions;
@@ -8,9 +8,9 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework
 {
     public class RoleRepository : IRoleRepository , ITransientDependency
     {
-        private readonly ApplicationRoleManager _applicationRoleManager;
+        private readonly RoleManager<ApplicationIdentityRole> _applicationRoleManager;
 
-        public RoleRepository(ApplicationRoleManager applicationRoleManager)
+        public RoleRepository(RoleManager<ApplicationIdentityRole> applicationRoleManager)
         {
             _applicationRoleManager = applicationRoleManager;
         }

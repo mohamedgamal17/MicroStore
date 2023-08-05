@@ -64,6 +64,11 @@ namespace MicroStore.IdentityProvider.Identity.Web.Controllers
         [Route("")]
         public async Task<IActionResult> CreateUser([FromBody] UserModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _userCommandService.CreateUserAsync(model);
 
             return result.ToCreatedAtAction(nameof(GetUserById), new { userId = result.Value?.Id });
@@ -73,6 +78,11 @@ namespace MicroStore.IdentityProvider.Identity.Web.Controllers
         [Route("{userId}")]
         public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _userCommandService.UpdateUserAsync(userId, model);
 
             return result.ToOk();

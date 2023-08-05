@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.IdentityProvider.Identity.Application.Roles;
 using MicroStore.IdentityProvider.Identity.Application.Users;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 using MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Models.Users;
-
 namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
 {
+    [Authorize]
     public class UserController : BackEndController
     {
 
@@ -76,6 +76,7 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
                 ViewBag.Roles = await PrepareRoleSelectedList();
 
                 _logger.LogWarning("{ModelState}", ModelState);
+
                 return View(model);
             }
 
@@ -83,7 +84,8 @@ namespace MicroStore.IdentityProvider.Identity.Web.Areas.BackEnd.Controllers
 
             if (result.IsFailure)
             {
-                _logger.LogException(result.Exception);
+                ViewBag.Roles = await PrepareRoleSelectedList();
+
                 return HandleFailureResultWithView(result, model);
             }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.IdentityProvider.IdentityServer.Application.ApiResources;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
@@ -7,6 +8,7 @@ using MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Models.ApiRes
 
 namespace MicroStore.IdentityProvider.IdentityServer.Web.Areas.BackEnd.Controller
 {
+    [Authorize]
     public class ApiResourceController : BackEndController
     {
         private readonly IApiResourceCommandService _apiResourceCommandService;

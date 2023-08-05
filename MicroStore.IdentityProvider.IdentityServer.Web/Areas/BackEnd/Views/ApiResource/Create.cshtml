@@ -27,10 +27,10 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <div class="text-center mb-3">
-                  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <div asp-validation-summary="All" class="text-danger"></div>
                 </div>
-                <partial name="_CreateOrUpdate.Info" model = "Model" />
+                <partial name="_CreateOrUpdate.Info" model="Model" />
                 <partial name="_Api.Scopes" model="Model" />
             </div>
         </div>
@@ -39,7 +39,7 @@
 
 @section Scripts{
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $("#ScopeSelect").bootstrapDualListbox();
         })
     </script>

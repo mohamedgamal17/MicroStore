@@ -1,6 +1,7 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using IdentityModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
@@ -277,7 +278,7 @@ namespace MicroStore.IdentityProvider.Host
         {
             var usermanager = serviceProvider.GetRequiredService<ApplicationUserManager>();
 
-            var roleManager = serviceProvider.GetRequiredService<ApplicationRoleManager>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationIdentityRole>>();
 
             var adminRole = new ApplicationIdentityRole
             {

@@ -37,7 +37,7 @@ namespace MicroStore.IdentityProvider.Identity.Web
                 opt.ClaimsIdentity.EmailClaimType = JwtClaimTypes.Email;
                 
                 
-            }).AddRoleManager<ApplicationRoleManager>()
+            })
             .AddUserManager<ApplicationUserManager>()
             .AddClaimsPrincipalFactory<ApplicationClaimPrincipalFactory>()
             .AddDefaultTokenProviders();

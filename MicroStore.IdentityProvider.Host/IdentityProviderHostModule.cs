@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using MicroStore.IdentityProvider.Identity.Web;
 using MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework;
 using MicroStore.IdentityProvider.IdentityServer.Web;
+using FluentValidation.AspNetCore;
 
 namespace MicroStore.IdentityProvider.Host
 {
@@ -76,6 +77,10 @@ namespace MicroStore.IdentityProvider.Host
                 opt.Themes.Add<StandardApplicationTheme>();
 
             });
+
+            context.Services.AddFluentValidationAutoValidation();
+
+            context.Services.AddFluentValidationClientsideAdapters();
 
             context.Services.AddRazorPages().AddRazorRuntimeCompilation();
 

@@ -14,15 +14,34 @@ namespace MicroStore.IdentityProvider.Identity.Application
 
         }
 
-        public override Task<IdentityResult> AddToRolesAsync(ApplicationIdentityUser user, IEnumerable<string> roles)
+        public async Task<IdentityResult> UpdateAsync(ApplicationIdentityUser user, string? password = null)
         {
-            return base.AddToRolesAsync(user, roles);
+            ThrowIfDisposed();
+
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+
+            if (password != null)
+            {
+                var passwordStore = GetPasswordStore();
+
+                var result = await UpdatePasswordHash(user,password,true);
+
+                if (!result.Succeeded)
+                {
+                    return result;
+                }
+
+            }
+
+            return await UpdateUserAsync(user);
+
         }
 
-        public override Task<IdentityResult> AddPasswordAsync(ApplicationIdentityUser user, string password)
-        {
-            return base.AddPasswordAsync(user, password);
-        }
+
         public async Task<IdentityResult> UpdateUserPasswordAsync(ApplicationIdentityUser user, string password)
         {
             var passwordStore = GetPasswordStore();
@@ -47,13 +66,5 @@ namespace MicroStore.IdentityProvider.Identity.Application
         }
     }
 
-    [ExposeServices(typeof(RoleManager<ApplicationIdentityRole>), IncludeSelf = true)]
-    public class ApplicationRoleManager : RoleManager<ApplicationIdentityRole> , ITransientDependency
-    {
-         
-        public ApplicationRoleManager(IRoleStore<ApplicationIdentityRole> store, IEnumerable<IRoleValidator<ApplicationIdentityRole>> roleValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<RoleManager<ApplicationIdentityRole>> logger) : base(store, roleValidators, keyNormalizer, errors, logger)
-        {
-        }
 
-    }
 }

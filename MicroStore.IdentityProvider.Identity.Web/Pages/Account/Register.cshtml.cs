@@ -5,6 +5,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -64,13 +65,16 @@ namespace MicroStore.IdentityProvider.Identity.Web.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
-            [Display(Name ="First Name")]
-            public string FamilyName { get; set; }
 
             [Required]
-            [Display(Name = "Last Name")]
+            [Display(Name = "First Name")]
             public string GivenName { get; set; }
+
+            [Required]
+            [Display(Name ="Last Name")]
+            public string FamilyName { get; set; }
+
+
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -80,6 +84,13 @@ namespace MicroStore.IdentityProvider.Identity.Web.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+
+            [Required]
+            [MinLength(3)]
+            [MaxLength(256)]
+            [RegularExpression(@"^([a-zA-Z]+)[0-9]*\\.*[a-zA-Z0-9]+$|^[a-zA-Z]+[0-9]*$", ErrorMessage ="Invalid user name")]
+            public string UserName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -119,7 +130,7 @@ namespace MicroStore.IdentityProvider.Identity.Web.Pages.Account
                     GivenName = Input.GivenName,
                     FamilyName = Input.FamilyName,
                     Email = Input.Email,
-                    UserName = Input.Email
+                    UserName = Input.UserName
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

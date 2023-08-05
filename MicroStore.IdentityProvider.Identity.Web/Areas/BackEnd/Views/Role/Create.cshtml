@@ -29,6 +29,9 @@
         </div>
         <div class="content">
             <div class="container-fluid">
+                <div class="mb-3">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </div>
                 @{
                     await Html.RenderPartialAsync("_CreateOrUpdate.Role", Model);
                 }

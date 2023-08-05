@@ -29,11 +29,20 @@
         </abp-row>
         <abp-row class="form-group mb-3">
             <abp-column size-sm="_3" class="text-right">
+                <micro-label asp-for="@Model.UserName"></micro-label>
+            </abp-column>
+            <abp-column size-sm="_9">
+                <input asp-for="@Model.UserName" id="name" class="form-control" />
+                <span class="text-danger" asp-validation-for="@Model.UserName">  </span>
+            </abp-column>
+        </abp-row>
+        <abp-row class="form-group mb-3">
+            <abp-column size-sm="_3" class="text-right">
                 <micro-label asp-for="@Model.Email"></micro-label>
             </abp-column>
             <abp-column size-sm="_9">
-                <input asp-for="@Model.Email" id="name" class="form-control" />
-                <span class="text-danger" asp-validation-for="@Model.FamilyName">  </span>
+                <input asp-for="@Model.Email" id="name" class="form-control"  />
+                <span class="text-danger" asp-validation-for="@Model.Email">  </span>
             </abp-column>
         </abp-row>
         <abp-row class="form-group mb-3">
