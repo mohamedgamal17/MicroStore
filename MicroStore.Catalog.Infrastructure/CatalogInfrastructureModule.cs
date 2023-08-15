@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
+using MicroStore.Catalog.Infrastructure.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.EntityFrameworkCore;
@@ -29,6 +30,10 @@ namespace MicroStore.Catalog.Infrastructure
                 opt.UseSqlServer(builder => builder.MigrationsAssembly(typeof(CatalogDbContext).Assembly.FullName));
 
             });
+
+            Configure<ImageDescriptorOptions>(opt =>
+                    opt.Bins = new int[] { 8, 12, 3 }
+                );
         }
 
     }
