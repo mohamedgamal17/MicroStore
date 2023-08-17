@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Application.Dtos;
@@ -66,7 +65,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
             var result = await _productCommandService.CreateAsync(model);
 
-            return result.ToCreatedAtAction(nameof(GetCatalogProduct),new {id = result.Value?.Id});
+            return result.ToCreatedAtAction(nameof(GetCatalogProduct), new { id = result.Value?.Id });
         }
 
         [Route("{id}")]
@@ -91,7 +90,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("Search")]
         [HttpPost]
-        [ProducesResponseType( StatusCodes.Status200OK , Type = typeof(PagedResult<ProductDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductDto>))]
         public async Task<IActionResult> Search(ProductSearchModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -107,6 +106,15 @@ namespace MicroStore.Catalog.Api.Controllers
         }
 
 
+        [Route("search-by-image")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProductDto>))]
+        public async Task<IActionResult> SearchByImage(ProductSearchByImageModel model)
+        {
+            var result = await _productQueryService.SearchByImage(model);
+
+            return result.ToOk();
+        }
 
         [Route("{productId}/productimages")]
         [HttpGet]
@@ -123,7 +131,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> AddProductImage (string productId, [FromBody] CreateProductImageModel model)
+        public async Task<IActionResult> AddProductImage(string productId, [FromBody] CreateProductImageModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -143,7 +151,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> UpdateProductImage(string productId, string productImageId,[FromBody] UpdateProductImageModel model)
+        public async Task<IActionResult> UpdateProductImage(string productId, string productImageId, [FromBody] UpdateProductImageModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -152,7 +160,7 @@ namespace MicroStore.Catalog.Api.Controllers
                 return InvalideModelState();
             }
 
-            var result = await _productCommandService.UpdateProductImageAsync(productId, productImageId,model);
+            var result = await _productCommandService.UpdateProductImageAsync(productId, productImageId, model);
             return result.ToOk();
         }
 
@@ -169,9 +177,9 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{productId}/productspecificationattributes")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type =typeof(ProductDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> CreateProductSpecificationAttribute(string productId , ProductSpecificationAttributeModel model)
+        public async Task<IActionResult> CreateProductSpecificationAttribute(string productId, ProductSpecificationAttributeModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -189,12 +197,14 @@ namespace MicroStore.Catalog.Api.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> CreateProductSpecificationAttribute(string productId , string productSpecfificationAttributeId )
+        public async Task<IActionResult> CreateProductSpecificationAttribute(string productId, string productSpecfificationAttributeId)
         {
             var result = await _productCommandService.RemoveProductAttributeSpecificationAsync(productId, productSpecfificationAttributeId);
 
             return result.ToOk();
         }
+
+
 
     }
 }
