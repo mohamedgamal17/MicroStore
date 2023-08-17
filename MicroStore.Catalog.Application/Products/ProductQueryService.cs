@@ -16,9 +16,12 @@ namespace MicroStore.Catalog.Application.Products
     public class ProductQueryService : CatalogApplicationService, IProductQueryService
     {
         private readonly ICatalogDbContext _catalogDbContext;
-        public ProductQueryService(ICatalogDbContext catalogDbContext)
+
+        private readonly IImageService _imageService;
+        public ProductQueryService(ICatalogDbContext catalogDbContext, IImageService imageService)
         {
             _catalogDbContext = catalogDbContext;
+            _imageService = imageService;
         }
 
         public async Task<Result<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
@@ -149,6 +152,21 @@ namespace MicroStore.Catalog.Application.Products
                 "old_price" => desc ? query.OrderByDescending(x => x.OldPrice) : query.OrderBy(x => x.OldPrice),
                 _ => query
             };
+        }
+
+        public async Task<Result<List<ProductDto>>> SearchByImage(ProductSearchByImageModel model, CancellationToken cancellationToken = default)
+        {
+            var relatedImages = await _imageService.SearchByImage(model.Image);
+
+            var query = _catalogDbContext.Products
+                .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider)
+                .AsQueryable();
+
+            var products = from product in query
+                           where relatedImages.Select(x => x.ProductId).Contains(product.Id)
+                           select product ;
+
+            return products.ToList();
         }
     }
 
