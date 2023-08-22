@@ -25,8 +25,10 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\MicroStore.Catalog.Application.Operations\MicroStore.Catalog.Application.Operations.csproj" />
     <ProjectReference Include="..\MicroStore.Catalog.Application\MicroStore.Catalog.Application.csproj" />
     <ProjectReference Include="..\MicroStore.Catalog.Domain\MicroStore.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\MicroStore.Catalog.Entities.ElasticSearch\MicroStore.Catalog.Entities.ElasticSearch.csproj" />
   </ItemGroup>
   
   <ItemGroup>

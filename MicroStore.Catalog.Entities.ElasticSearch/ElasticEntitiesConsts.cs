@@ -8,7 +8,7 @@
 
         public static string ManufacturerIndex = "catalog-manufacturer-index";
 
-        public static string TagIndex = "catalog-tag-index";
+        public static string ProductTagIndex = "catalog-tag-index";
 
         public static string SpecificationAttributeIndex = "catalog-specification-index";
 

@@ -2,6 +2,7 @@
 using Emgu.CV;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 
 namespace MicroStore.Catalog.Infrastructure.Services
 {
@@ -43,7 +44,7 @@ namespace MicroStore.Catalog.Infrastructure.Services
 
             var features = _imageDescriptor.Descripe(imageMat);
 
-            ImageVector imageVector = new ImageVector
+            ElasticImageVector imageVector = new ElasticImageVector
             {
                 ProductId = productId,
                 ImageId = imageId,
@@ -54,7 +55,7 @@ namespace MicroStore.Catalog.Infrastructure.Services
             await _elasticSearchClient.IndexAsync(imageVector);
         }
 
-        public async Task<List<ImageVector>> SearchByImage(byte[] buffer)
+        public async Task<List<ElasticImageVector>> SearchByImage(byte[] buffer)
         {
             var imageMat = new Mat();
 
@@ -64,7 +65,7 @@ namespace MicroStore.Catalog.Infrastructure.Services
 
             var features = _imageDescriptor.Descripe(imageMat);
 
-            var response = await _elasticSearchClient.SearchAsync<ImageVector>(sr => sr
+            var response = await _elasticSearchClient.SearchAsync<ElasticImageVector>(sr => sr
                      .Knn(k => k
                          .QueryVector(features)
                          .k(100)
@@ -78,7 +79,7 @@ namespace MicroStore.Catalog.Infrastructure.Services
                 return response.Documents.ToList();
             }
 
-            return new List<ImageVector>();
+            return new List<ElasticImageVector>();
         }
     }
 }

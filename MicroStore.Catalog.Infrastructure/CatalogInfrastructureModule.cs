@@ -4,8 +4,10 @@ using Emgu.CV.Ocl;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application;
+using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Domain.Configuration;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using MicroStore.Catalog.Infrastructure.ElasticSearch;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
 using MicroStore.Catalog.Infrastructure.Services;
@@ -16,7 +18,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 namespace MicroStore.Catalog.Infrastructure
 {
-    [DependsOn(typeof(CatalogApplicationModule),
+    [DependsOn(typeof(CatalogApplicationOperationsModule),
         typeof(AbpEntityFrameworkCoreModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpBlobStoringMinioModule))]
@@ -73,6 +75,19 @@ namespace MicroStore.Catalog.Infrastructure
                 var elasticClient = scope.ServiceProvider.GetRequiredService<ElasticsearchClient>();
 
                 await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ImageVectorMappings());
+
+                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.ProductIndex);
+
+                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.CategoryIndex);
+
+                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.ManufacturerIndex);
+
+                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.ProductReviewIndex);
+
+                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.SpecificationAttributeIndex);
+
+                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.ImageVectorIndex);
+
             }
         }
 

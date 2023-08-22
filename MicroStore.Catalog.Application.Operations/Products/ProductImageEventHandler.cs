@@ -3,7 +3,7 @@ using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 
-namespace MicroStore.Catalog.Application.Products.EventHandlers
+namespace MicroStore.Catalog.Application.Operations.Products
 {
     public class ProductImageEventHandler : ILocalEventHandler<EntityCreatedEventData<ProductImage>>
     {
