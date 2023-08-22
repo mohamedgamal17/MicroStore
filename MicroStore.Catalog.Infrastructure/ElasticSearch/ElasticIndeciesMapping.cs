@@ -10,7 +10,7 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
 
         public static CreateIndexRequestDescriptor<ElasticImageVector> ImageVectorMappings()
         {
-            return new CreateIndexRequestDescriptor<ElasticImageVector>(ImageVector.INDEX_NAME)
+            return new CreateIndexRequestDescriptor<ElasticImageVector>(ElasticEntitiesConsts.ImageVectorIndex)
                 .Mappings(mp => mp
                     .Properties(pr => pr
                         .DenseVector(x => x.Features, cf => cf.Index(true).Similarity("l2_norm"))

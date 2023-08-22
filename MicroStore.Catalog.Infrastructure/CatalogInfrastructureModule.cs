@@ -60,7 +60,14 @@ namespace MicroStore.Catalog.Infrastructure
         private void ConfigureElasticSearch(IServiceCollection services, ApplicationSettings applicationSettings)
         {
             var connectionSettings = new ElasticsearchClientSettings(new Uri(applicationSettings.ElasticSearch.Uri))
-                .DefaultMappingFor<ImageVector>(m => m.IndexName(ImageVector.INDEX_NAME));
+                .DefaultMappingFor<ElasticImageVector>(m => m.IndexName(ElasticEntitiesConsts.ImageVectorIndex))
+                .DefaultMappingFor<ElasticProduct>(m => m.IndexName(ElasticEntitiesConsts.ProductIndex))
+                .DefaultMappingFor<ElasticCategory>(m => m.IndexName(ElasticEntitiesConsts.CategoryIndex))
+                .DefaultMappingFor<ElasticManufacturer>(m => m.IndexName(ElasticEntitiesConsts.ManufacturerIndex))
+                .DefaultMappingFor<ElasticProductTag>(m => m.IndexName(ElasticEntitiesConsts.ProductTagIndex))
+                .DefaultMappingFor<ElasticSpecificationAttribute>(m => m.IndexName(ElasticEntitiesConsts.SpecificationAttributeIndex))
+                .DefaultMappingFor<ElasticProductReview>(m => m.IndexName(ElasticEntitiesConsts.ProductReviewIndex)); 
+
 
 
             services.AddSingleton(connectionSettings);

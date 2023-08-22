@@ -76,7 +76,7 @@ namespace MicroStore.Catalog.Application.Operations.Products
                 Sku = product.Sku.ToString(),
                 Name = product.Name,
                 Description = product.ShortDescription,
-                Price = product.Price,
+                UnitPrice = product.Price,
 
             };
 
