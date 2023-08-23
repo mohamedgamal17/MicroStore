@@ -27,7 +27,7 @@ namespace MicroStore.Catalog.Application.Operations
         {
             services.AddHangfire(config =>
             {
-                config.UseSqlServerStorage(configuration.GetConnectionString("HangFire"));
+                config.UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection"));
             });
         }
     }

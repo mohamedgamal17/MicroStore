@@ -14,8 +14,11 @@
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+		<PackageReference Include="Microsoft.ML" Version="2.0.1" />
+		<PackageReference Include="Microsoft.ML.DataView" Version="2.0.1" />
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="6.0.2" />
 		<PackageReference Include="Volo.Abp.BackgroundJobs.HangFire" Version="6.0.2" />
+		<PackageReference Include="Volo.Abp.BackgroundWorkers.Hangfire" Version="6.0.2" />
 		<PackageReference Include="Volo.Abp.BlobStoring" Version="6.0.2" />
 		<PackageReference Include="Volo.Abp.Ddd.Application" Version="6.0.2" />
 		<PackageReference Include="Volo.Abp.EventBus" Version="6.0.2" />
