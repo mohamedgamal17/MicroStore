@@ -1,9 +1,14 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Models.ProductReviews;
+using MicroStore.Catalog.Application.Operations.Etos;
+using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Application.ProductReviews;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Events.Distributed;
+using MicroStore.Catalog.Entities.ElasticSearch;
+
 namespace MicroStore.Catalog.Application.Tests.ProductReviews
 {
     public class ProductReviewService_Tests : BaseTestFixture
@@ -25,10 +30,24 @@ namespace MicroStore.Catalog.Application.Tests.ProductReviews
 
             result.IsSuccess.Should().BeTrue();
 
-            var productReview = await SingleAsync<ProductReview>(x => x.Id == result.Value.Id && x.ProductId == fakeProduct.Id);
 
-            productReview.AssertCreateProductReviewModel(model);
+            await result.IfSuccess(async val =>
+            {
+                var productReview = await SingleAsync<ProductReview>(x => x.Id == val.Id && x.ProductId == fakeProduct.Id);
 
+                productReview.AssertCreateProductReviewModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<ProductReviewEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<ProductReviewEto>>());
+
+                var elasticEntity = await FindElasticDoc<ElasticProductReview>(val.Id);
+
+                elasticEntity.Should().NotBeNull();
+
+                elasticEntity!.AssertElasticProductReview(productReview);
+            });
+;
         }
 
         [Test]
@@ -57,9 +76,24 @@ namespace MicroStore.Catalog.Application.Tests.ProductReviews
 
             result.IsSuccess.Should().BeTrue();
 
-            var productReview = await SingleAsync<ProductReview>(x => x.Id == result.Value.Id && x.ProductId == fakeProductReview.ProductId);
+            await result.IfSuccess(async val =>
+            {
+                var productReview = await SingleAsync<ProductReview>(x => x.Id == val.Id && x.ProductId == fakeProductReview.ProductId);
 
-            productReview.AssertProductReviewModel(model);
+                productReview.AssertProductReviewModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductReviewEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductReviewEto>>());
+
+                var elasticEntity = await FindElasticDoc<ElasticProductReview>(val.Id);
+
+                elasticEntity.Should().NotBeNull();
+
+                elasticEntity!.AssertElasticProductReview(productReview);
+            });
+
+
         }
 
         [Test]

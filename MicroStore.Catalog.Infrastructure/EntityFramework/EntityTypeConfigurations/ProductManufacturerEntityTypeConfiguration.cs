@@ -21,6 +21,8 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
             builder.HasIndex(x => x.ProductId);
 
             builder.HasIndex(x => x.ManufacturerId);
+
+            builder.Navigation(x => x.Manufacturer).AutoInclude();
         }
     }
 }

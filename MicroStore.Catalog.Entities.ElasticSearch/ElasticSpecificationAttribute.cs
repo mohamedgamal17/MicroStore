@@ -8,7 +8,7 @@
 
     }
 
-    public class ElasticSpecificationAttributeOption
+    public class ElasticSpecificationAttributeOption : ElasticEntity
     {
         public string Value { get; set; }
     }

@@ -1,44 +1,62 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using MassTransit;
+using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.IntegrationEvents;
 using MicroStore.Catalog.IntegrationEvents.Models;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus;
+using Volo.Abp.ObjectMapping;
+
 namespace MicroStore.Catalog.Application.Operations.Products
 {
     public class ProductEventHandler :
         ILocalEventHandler<EntityCreatedEventData<Product>>,
-        ILocalEventHandler<EntityUpdatedEventData<Product>>
+        ILocalEventHandler<EntityUpdatedEventData<Product>>,
+        ITransientDependency
     {
+        private readonly IObjectMapper _objectMapper;
+
         private readonly IPublishEndpoint _publishEndPoint;
 
-        private readonly IBackgroundJobManager _backgroundJobManager;
-        public ProductEventHandler(IPublishEndpoint publishEndPoint, IBackgroundJobManager backgroundJobManager)
+        private readonly IRepository<Product> _productsRepository;
+        public ProductEventHandler(IObjectMapper objectMapper, IPublishEndpoint publishEndPoint, IRepository<Product> productsRepository)
         {
+            _objectMapper = objectMapper;
             _publishEndPoint = publishEndPoint;
-            _backgroundJobManager = backgroundJobManager;
+            _productsRepository = productsRepository;
         }
 
         public async Task HandleEventAsync(EntityCreatedEventData<Product> eventData)
         {
-            var args = new EntityCreatedArgs<Product>(eventData.Entity);
+            var product = await _productsRepository.SingleAsync(x=> x.Id == eventData.Entity.Id);
+
+            var eto = _objectMapper.Map<Product, ProductEto>(product);
+
+          
+            var synchronizationEvent =   new EntityCreatedEvent<ProductEto>(eto);
 
             var integrationEvent = PrepareProductCreatedIntegrationEvent(eventData.Entity);
 
-            await _backgroundJobManager.EnqueueAsync(args);
+            await _publishEndPoint.Publish(synchronizationEvent);
 
             await _publishEndPoint.Publish(integrationEvent);
         }
 
         public async Task HandleEventAsync(EntityUpdatedEventData<Product> eventData)
         {
-            var args = new EntityUpdatedArgs<Product>(eventData.Entity);
+            var product = await _productsRepository.SingleAsync(x => x.Id == eventData.Entity.Id);
+
+            var eto = _objectMapper.Map<Product, ProductEto>(product);
+
+            var synchronizationEvent = new EntityUpdatedEvent<ProductEto>(eto);
 
             var integrationEvent = PreapreProductUpdateIntegrationEvent(eventData.Entity);
 
-            await _backgroundJobManager.EnqueueAsync(args);
+            await _publishEndPoint.Publish(synchronizationEvent);
 
             await _publishEndPoint.Publish(integrationEvent);
         }

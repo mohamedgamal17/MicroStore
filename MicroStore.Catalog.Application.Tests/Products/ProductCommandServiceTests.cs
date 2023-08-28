@@ -1,8 +1,11 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Models.Products;
+using MicroStore.Catalog.Application.Operations.Etos;
+using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Application.Products;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using MicroStore.Catalog.IntegrationEvents;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Application.Tests.Products
@@ -25,10 +28,24 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsSuccess.Should().BeTrue();
 
-            var product = await SingleAsync<Product>(x => x.Id == result.Value.Id);
+            await result.IfSuccess(async val =>
+            {
+                var product = await SingleAsync<Product>(x => x.Id == val.Id);
 
-            product.AssertProductModel(model);
+                product.AssertProductModel(model);
 
+                Assert.That(await TestHarness.Published.Any<ProductCreatedIntegrationEvent>());
+
+                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<ProductEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<ProductEto>>());
+
+                var elasticProduct = await FindElasticDoc<ElasticProduct>(val.Id);
+
+                elasticProduct.Should().NotBeNull();
+
+                elasticProduct!.AssertElasticProduct(product);
+            });
         }
 
         [Test]
@@ -42,11 +59,26 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsSuccess.Should().BeTrue();
 
-            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
+            await result.IfSuccess(async val =>
+            {
 
-            product.AssertProductModel(model);
+                var product = await SingleAsync<Product>(x => x.Id == val.Id);
 
-            Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
+                product.AssertProductModel(model);
+
+                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
+
+                var elasticProduct = await FindElasticDoc<ElasticProduct>(result.Value.Id);
+
+                elasticProduct.Should().NotBeNull();
+
+                elasticProduct!.AssertElasticProduct(product);
+            });
+
         }
         [Test]
         public async Task Should_return_failure_result_while_updating_product_when_product_is_not_exist()
@@ -73,14 +105,26 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             var result = await _productCommandService.AddProductImageAsync(fakeProduct.Id, model);
 
+            result.IsSuccess.Should().BeTrue();
 
-            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
+            await result.IfSuccess(async _ =>
+            {
 
-            var productImage = product.ProductImages.Single(x => x.ImagePath == model.Image);
+                var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
-            productImage.ImagePath.Should().Be(model.Image);
+                var productImage = product.ProductImages.Single(x => x.ImagePath == model.Image);
 
-            productImage.DisplayOrder.Should().Be(model.DisplayOrder);
+                productImage.ImagePath.Should().Be(model.Image);
+
+                productImage.DisplayOrder.Should().Be(model.DisplayOrder);
+
+                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
+            });
+
         }
 
         [Test]
@@ -113,12 +157,21 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             var result = await _productCommandService.UpdateProductImageAsync(fakeProduct.Id, productImageId, model);
 
+            await result.IfSuccess(async _ =>
+            {
+                var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
-            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
+                var productImage = product.ProductImages.Single(x => x.Id == productImageId);
 
-            var productImage = product.ProductImages.Single(x => x.Id == productImageId);
+                productImage.DisplayOrder.Should().Be(model.DisplayOrder);
 
-            productImage.DisplayOrder.Should().Be(model.DisplayOrder);
+                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
+            });
+
         }
 
         [Test]
@@ -170,12 +223,24 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             var result = await _productCommandService.DeleteProductImageAsync(fakeProduct.Id, productImageId);
 
+            result.IsSuccess.Should().BeTrue();
 
-            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
+            await result.IfSuccess(async _ =>
+            {
+                var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
-            var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
+                var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
 
-            productImage.Should().BeNull();
+                productImage.Should().BeNull();
+
+                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
+            });
+
+
         }
 
         [Test]
@@ -218,11 +283,22 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsSuccess.Should().BeTrue();
 
-            var prodcut = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
+            await result.IfSuccess(async _ =>
+            {
+                var prodcut = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
-            var productSpecificationAttribute = prodcut.SpecificationAttributes.SingleOrDefault(x => x.AttributeId == model.AttributeId && x.OptionId == model.OptionId);
+                var productSpecificationAttribute = prodcut.SpecificationAttributes.SingleOrDefault(x => x.AttributeId == model.AttributeId && x.OptionId == model.OptionId);
 
-            productSpecificationAttribute.Should().NotBeNull();
+                productSpecificationAttribute.Should().NotBeNull();
+
+                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
+            });
+
+  
         }
 
 
@@ -258,11 +334,21 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             result.IsSuccess.Should().BeTrue();
 
-            var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
+            await result.IfSuccess(async _ =>
+            {
+                var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
-            var productSpecificationAttribute =  product.SpecificationAttributes.SingleOrDefault(x => x.Id == productSpecificationAttributeId);
+                var productSpecificationAttribute = product.SpecificationAttributes.SingleOrDefault(x => x.Id == productSpecificationAttributeId);
 
-            productSpecificationAttribute.Should().BeNull();
+                productSpecificationAttribute.Should().BeNull();
+
+                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
+            });
+   
         }
 
         [Test]

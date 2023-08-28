@@ -1,41 +1,53 @@
-﻿using MicroStore.Catalog.Domain.Entities;
-using Volo.Abp.BackgroundJobs;
+﻿using MassTransit;
+using MicroStore.Catalog.Application.Operations.Etos;
+using MicroStore.Catalog.Domain.Entities;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-
+using Volo.Abp.ObjectMapping;
 namespace MicroStore.Catalog.Application.Operations.Manufacturers
 {
     public class ManfuactureEventHandler : 
-        ILocalEventHandler<EntityCreatedEventData<ElasticManufacturerProfile>>,
-        ILocalEventHandler<EntityUpdatedArgs<ElasticManufacturerProfile>>,
-        ILocalEventHandler<EntityDeletedArgs<ElasticManufacturerProfile>>
+        ILocalEventHandler<EntityCreatedEventData<Manufacturer>>,
+        ILocalEventHandler<EntityUpdatedEventData<Manufacturer>>,
+        ILocalEventHandler<EntityDeletedEventData<Manufacturer>>,
+        ITransientDependency
     {
-        private readonly IBackgroundJobManager _backgroundJopManager;
 
-        public ManfuactureEventHandler(IBackgroundJobManager backgroundJopManager)
+        private readonly IObjectMapper _objectMapper;
+        private readonly IPublishEndpoint _publishEndPoint;
+
+        public ManfuactureEventHandler(IObjectMapper objectMapper, IPublishEndpoint publishEndPoint)
         {
-            _backgroundJopManager = backgroundJopManager;
+            _objectMapper = objectMapper;
+            _publishEndPoint = publishEndPoint;
         }
 
-        public async Task HandleEventAsync(EntityCreatedEventData<ElasticManufacturerProfile> eventData)
+        public async Task HandleEventAsync(EntityCreatedEventData<Manufacturer> eventData)
         {
-            var args = new EntityCreatedArgs<ElasticManufacturerProfile>(eventData.Entity);
+            var eto = _objectMapper.Map<Manufacturer, ManufacturerEto>(eventData.Entity);
+
+            var synchronizationEvent = new EntityCreatedEvent<ManufacturerEto>(eto);
  
-            await _backgroundJopManager.EnqueueAsync(args);
+            await _publishEndPoint.Publish(synchronizationEvent);
         }
 
-        public async Task HandleEventAsync(EntityUpdatedArgs<ElasticManufacturerProfile> eventData)
+        public async Task HandleEventAsync(EntityUpdatedEventData<Manufacturer> eventData)
         {
-            var args = new EntityUpdatedArgs<ElasticManufacturerProfile>(eventData.Entity);
+            var eto = _objectMapper.Map<Manufacturer, ManufacturerEto>(eventData.Entity);
 
-            await _backgroundJopManager.EnqueueAsync(args);
+            var synchronizationEvent = new EntityUpdatedEvent<ManufacturerEto>(eto);
+
+            await _publishEndPoint.Publish(synchronizationEvent);
         }
 
-        public async Task HandleEventAsync(EntityDeletedArgs<ElasticManufacturerProfile> eventData)
+        public async Task HandleEventAsync(EntityDeletedEventData<Manufacturer> eventData)
         {
-            var args = new EntityDeletedArgs<ElasticManufacturerProfile>(eventData.Entity);
+            var eto = _objectMapper.Map<Manufacturer, ManufacturerEto>(eventData.Entity);
 
-            await _backgroundJopManager.EnqueueAsync(args);
+            var synchronizationEvent = new EntityDeletedEvent<ManufacturerEto>(eto);
+
+            await _publishEndPoint.Publish(synchronizationEvent);
         }
     }
 }

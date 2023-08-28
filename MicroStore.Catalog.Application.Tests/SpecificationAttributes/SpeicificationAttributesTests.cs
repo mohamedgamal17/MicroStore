@@ -1,11 +1,13 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Models.SpecificationAttributes;
+using MicroStore.Catalog.Application.Operations;
+using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.SpecificationAttributes;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
-
 namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 {
     public class SpeicificationAttributesTests : BaseTestFixture
@@ -27,9 +29,24 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
             result.IsSuccess.Should().BeTrue();
 
-            var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == result.Value.Id,x=> x.Options);
+            await result.IfSuccess(async (val) =>
+            {
+                var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == val.Id, x => x.Options);
 
-            attribute.AssertSpecificationAttributeModel(model);
+                attribute.AssertSpecificationAttributeModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<SpecificationAttributeEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<SpecificationAttributeEto>>());
+
+                var elasticSpecificationAttribute = await FindElasticDoc<ElasticSpecificationAttribute>(attribute.Id);
+
+                elasticSpecificationAttribute.Should().NotBeNull();
+
+                elasticSpecificationAttribute!.AssertElasticSpecificationAttribute(attribute);
+            });
+
+
         }
 
         [Test]
@@ -57,9 +74,26 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
             var result = await _sut.UpdateAsync(fakeAttribute.Id, model);
 
-            var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == result.Value.Id, x => x.Options);
+            result.IsSuccess.Should().BeTrue();
 
-            attribute.AssertSpecificationAttributeModel(model);
+            await result.IfSuccess(async (val) =>
+            {
+                var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == val.Id, x => x.Options);
+
+                attribute.AssertSpecificationAttributeModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+
+                var elasticSpecificationAttribute = await FindElasticDoc<ElasticSpecificationAttribute>(val.Id);
+
+                elasticSpecificationAttribute.Should().NotBeNull();
+
+                elasticSpecificationAttribute!.AssertElasticSpecificationAttribute(attribute);
+            });
+
+      
         }
 
         [Test]
@@ -94,7 +128,7 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
         }
 
         [Test]
-        public async Task Should_return_remove_specification_attribute()
+        public async Task Should_remove_specification_attribute()
         {
             var fakeAttribute = await CreateFakeSpecificationAttribute();
 
@@ -102,9 +136,20 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
             result.IsSuccess.Should().BeTrue();
 
-            var attribute = await SingleOrDefaultAsync<SpecificationAttribute>(x => x.Id == fakeAttribute.Id);
+            await result.IfSuccess(async _ =>
+            {
+                var attribute = await SingleOrDefaultAsync<SpecificationAttribute>(x => x.Id == fakeAttribute.Id);
 
-            attribute.Should().BeNull();
+                attribute.Should().BeNull();
+
+                Assert.That(await TestHarness.Published.Any<EntityDeletedEvent<SpecificationAttributeEto>>());
+
+                var elasticSpecificationAttribute = await FindElasticDoc<ElasticSpecificationAttribute>(fakeAttribute.Id);
+
+                elasticSpecificationAttribute.Should().BeNull();
+            });
+
+
         }
 
         [Test]
@@ -130,11 +175,18 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
             result.IsSuccess.Should().BeTrue();
 
-            var attibute = await SingleAsync<SpecificationAttribute>(x => x.Id == fakeAttribute.Id, x => x.Options);
+            await result.IfSuccess(async _ =>
+            {
+                var attibute = await SingleAsync<SpecificationAttribute>(x => x.Id == fakeAttribute.Id, x => x.Options);
 
-            var option = attibute.Options.Single(x => x.Name == model.Name);
+                var option = attibute.Options.Single(x => x.Name == model.Name);
 
-            option.AssertSpecificationAttributeOptionModel(model);
+                option.AssertSpecificationAttributeOptionModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+            });    
         }
 
 
@@ -179,11 +231,20 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
             result.IsSuccess.Should().BeTrue();
 
-            var attribute= await SingleAsync<SpecificationAttribute>(x => x.Id == fakeAttribute.Id, x => x.Options);
+            await result.IfSuccess(async _ =>
+            {
+                var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == fakeAttribute.Id, x => x.Options);
 
-            var option = attribute.Options.Single(x=> x.Id == optionId);
+                var option = attribute.Options.Single(x => x.Id == optionId);
 
-            option.AssertSpecificationAttributeOptionModel(model);
+                option.AssertSpecificationAttributeOptionModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+            });
+
+
         }
 
         [Test]
@@ -247,11 +308,20 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
             result.IsSuccess.Should().BeTrue();
 
-            var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == fakeAttribute.Id, x => x.Options);
 
-            var option = attribute.Options.SingleOrDefault(x => x.Id == optionId);
+            await result.IfSuccess(async _ =>
+            {
+                var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == fakeAttribute.Id, x => x.Options);
 
-            option.Should().BeNull();
+                var option = attribute.Options.SingleOrDefault(x => x.Id == optionId);
+
+                option.Should().BeNull();
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+            });
+   
         }
 
         [Test]

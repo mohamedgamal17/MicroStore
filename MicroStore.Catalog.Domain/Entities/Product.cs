@@ -15,7 +15,7 @@ namespace MicroStore.Catalog.Domain.Entities
         public Weight Weight { get; set; }
         public Dimension Dimensions { get; set; }
         public List<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
-        public List<ProductManufacturer> ProductManufacturers { get; set; }
+        public List<ProductManufacturer> ProductManufacturers { get; set; } = new List<ProductManufacturer>();
         public List<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
         public List<ProductTag> ProductTags { get; set; } = new List<ProductTag>();
         public List<ProductSpecificationAttribute> SpecificationAttributes { get; set; } = new List<ProductSpecificationAttribute>();

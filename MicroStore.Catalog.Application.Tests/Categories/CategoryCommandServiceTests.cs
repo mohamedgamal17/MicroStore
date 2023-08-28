@@ -1,8 +1,11 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Categories;
 using MicroStore.Catalog.Application.Models.Categories;
+using MicroStore.Catalog.Application.Operations;
+using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Application.Tests.Categories
 {
@@ -34,6 +37,17 @@ namespace MicroStore.Catalog.Application.Tests.Categories
                 var category = await SingleAsync<Category>(x => x.Id == val.Id);
 
                 category.AssertCategoryModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<CategoryEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<CategoryEto>>());
+
+                var elasticCategory = await FindElasticDoc<ElasticCategory>(category.Id);
+
+                elasticCategory.Should().NotBeNull();
+
+                elasticCategory!.AssertElasticCategory(category);
+
             });
         }
 
@@ -59,6 +73,16 @@ namespace MicroStore.Catalog.Application.Tests.Categories
                 var category = await SingleAsync<Category>(x => x.Id == val.Id);
 
                 category.AssertCategoryModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<CategoryEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<CategoryEto>>());
+
+                var elasticCategory = await FindElasticDoc<ElasticCategory>(category.Id);
+
+                elasticCategory.Should().NotBeNull();
+
+                elasticCategory!.AssertElasticCategory(category);
             });
         }
 

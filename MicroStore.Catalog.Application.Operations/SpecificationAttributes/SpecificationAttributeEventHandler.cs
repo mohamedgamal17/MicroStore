@@ -1,41 +1,56 @@
-﻿using MicroStore.Catalog.Domain.Entities;
+﻿using MassTransit;
+using MicroStore.Catalog.Application.Operations.Etos;
+using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-namespace MicroStore.Catalog.Application.Operations.ProductTags
+using Volo.Abp.ObjectMapping;
+
+namespace MicroStore.Catalog.Application.Operations.SpecificationAttributes
 {
     public class SpecificationAttributeEventHandler :
         ILocalEventHandler<EntityCreatedEventData<SpecificationAttribute>>,
         ILocalEventHandler<EntityUpdatedEventData<SpecificationAttribute>>,
-        ILocalEventHandler<EntityDeletedEventData<SpecificationAttribute>>
+        ILocalEventHandler<EntityDeletedEventData<SpecificationAttribute>>,
+        ITransientDependency
 
     {
-        private readonly IBackgroundJobManager _backgroundJopManager;
+        private readonly IObjectMapper _objectMapper;
 
-        public SpecificationAttributeEventHandler(IBackgroundJobManager backgroundJopManager)
+        private readonly IPublishEndpoint _publishEndPoint;
+
+        public SpecificationAttributeEventHandler(IObjectMapper objectMapper, IPublishEndpoint publishEndPoint)
         {
-            _backgroundJopManager = backgroundJopManager;
+            _objectMapper = objectMapper;
+            _publishEndPoint = publishEndPoint;
         }
 
         public async Task HandleEventAsync(EntityCreatedEventData<SpecificationAttribute> eventData)
         {
-            var args = new EntityCreatedArgs<SpecificationAttribute>(eventData.Entity);
+            var eto = _objectMapper.Map<SpecificationAttribute, SpecificationAttributeEto>(eventData.Entity);
 
-            await _backgroundJopManager.EnqueueAsync(args);
+            var synchroinzationEvent = new EntityCreatedEvent<SpecificationAttributeEto>(eto);
+
+            await _publishEndPoint.Publish(synchroinzationEvent);
         }
 
         public async Task HandleEventAsync(EntityUpdatedEventData<SpecificationAttribute> eventData)
         {
-            var args = new EntityUpdatedEventData<SpecificationAttribute>(eventData.Entity);
+            var eto = _objectMapper.Map<SpecificationAttribute, SpecificationAttributeEto>(eventData.Entity);
 
-            await _backgroundJopManager.EnqueueAsync(args);
+            var synchroinzationEvent = new EntityUpdatedEvent<SpecificationAttributeEto>(eto);
+
+            await _publishEndPoint.Publish(synchroinzationEvent);
         }
 
         public async Task HandleEventAsync(EntityDeletedEventData<SpecificationAttribute> eventData)
         {
-            var args = new EntityDeletedEventData<SpecificationAttribute>(eventData.Entity);
+            var eto = _objectMapper.Map<SpecificationAttribute, SpecificationAttributeEto>(eventData.Entity);
 
-            await _backgroundJopManager.EnqueueAsync(args);
+            var synchroinzationEvent = new EntityDeletedEvent<SpecificationAttributeEto>(eto);
+
+            await _publishEndPoint.Publish(synchroinzationEvent);
         }
     }
 }

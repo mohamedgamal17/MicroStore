@@ -6,7 +6,6 @@ namespace MicroStore.Catalog.Application.Operations.Recommandations
 {
     public class MatrixFactorizationSynchronizationWorker : HangfireBackgroundWorkerBase
     {
-
         private readonly ICollaborativeFilterMLTrainer _collaborativeFilterMLTrainer;
         public MatrixFactorizationSynchronizationWorker(ICollaborativeFilterMLTrainer collaborativeFilterMLTrainer)
         {

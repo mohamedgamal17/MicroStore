@@ -1,12 +1,10 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
-using Emgu.CV.Ocl;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Catalog.Application;
 using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Domain.Configuration;
-using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using MicroStore.Catalog.Infrastructure.ElasticSearch;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
@@ -32,6 +30,8 @@ namespace MicroStore.Catalog.Infrastructure
             var appSettings = configuration.Get<ApplicationSettings>();
 
 
+            ConfigureMassTransit(context.Services, configuration);
+
             ConfigureElasticSearch(context.Services, appSettings);
 
             context.Services.AddAbpDbContext<CatalogDbContext>(opt =>
@@ -51,6 +51,29 @@ namespace MicroStore.Catalog.Infrastructure
         }
 
 
+        private void ConfigureMassTransit(IServiceCollection services, IConfiguration configuration)
+        {
+            var appSettings = services.GetSingletonInstance<ApplicationSettings>();
+
+            services.AddMassTransit(transitConfig =>
+            {
+                transitConfig.AddConsumers(typeof(CatalogApplicationOperationsModule).Assembly);
+
+                transitConfig.UsingRabbitMq((ctx, rabbitConfig) =>
+                {
+                    rabbitConfig.Host(appSettings.MassTransit.Host, cfg =>
+                    {
+                        cfg.Username(appSettings.MassTransit.UserName);
+                        cfg.Password(appSettings.MassTransit.Password);
+
+                    });
+
+                    rabbitConfig.ConfigureEndpoints(ctx);
+
+                });
+
+            });
+        }
         public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
         {
             await InitializeElasticSearch(context.ServiceProvider);
@@ -60,21 +83,27 @@ namespace MicroStore.Catalog.Infrastructure
         private void ConfigureElasticSearch(IServiceCollection services, ApplicationSettings applicationSettings)
         {
             var connectionSettings = new ElasticsearchClientSettings(new Uri(applicationSettings.ElasticSearch.Uri))
+                .DefaultIndex(ElasticEntitiesConsts.ProductIndex)
                 .DefaultMappingFor<ElasticImageVector>(m => m.IndexName(ElasticEntitiesConsts.ImageVectorIndex))
                 .DefaultMappingFor<ElasticProduct>(m => m.IndexName(ElasticEntitiesConsts.ProductIndex))
                 .DefaultMappingFor<ElasticCategory>(m => m.IndexName(ElasticEntitiesConsts.CategoryIndex))
                 .DefaultMappingFor<ElasticManufacturer>(m => m.IndexName(ElasticEntitiesConsts.ManufacturerIndex))
                 .DefaultMappingFor<ElasticProductTag>(m => m.IndexName(ElasticEntitiesConsts.ProductTagIndex))
                 .DefaultMappingFor<ElasticSpecificationAttribute>(m => m.IndexName(ElasticEntitiesConsts.SpecificationAttributeIndex))
-                .DefaultMappingFor<ElasticProductReview>(m => m.IndexName(ElasticEntitiesConsts.ProductReviewIndex)); 
+                .DefaultMappingFor<ElasticProductReview>(m => m.IndexName(ElasticEntitiesConsts.ProductReviewIndex))
+                .DefaultMappingFor<ElasticProductExpectedRating>(m => m.IndexName(ElasticEntitiesConsts.ProductExpectedRatingIndex));
+
 
 
 
             services.AddSingleton(connectionSettings);
 
-            services.AddTransient<ElasticsearchClient>();
+            services.AddTransient((sp) => 
+            new ElasticsearchClient(sp.GetRequiredService<ElasticsearchClientSettings>()));
 
         }
+
+     
         private async Task InitializeElasticSearch(IServiceProvider serviceProvider)
         {
             using (var scope= serviceProvider.CreateScope())
@@ -83,17 +112,19 @@ namespace MicroStore.Catalog.Infrastructure
 
                 await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ImageVectorMappings());
 
-                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.ProductIndex);
+                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticProductMappings());
 
-                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.CategoryIndex);
+                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticCategoryMappings());
 
-                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.ManufacturerIndex);
+                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticManufacturerMappings());
 
-                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.ProductReviewIndex);
+                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticProductReviewMappings());
 
-                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.SpecificationAttributeIndex);
+                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticSpecificationAttributeMappings());
 
-                await elasticClient.Indices.CreateAsync(ElasticEntitiesConsts.ImageVectorIndex);
+                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticProductTagMappings());
+
+                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticProductExpectedRatingMappings());
 
             }
         }

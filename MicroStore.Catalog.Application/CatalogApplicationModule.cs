@@ -36,33 +36,8 @@ namespace MicroStore.Catalog.Application
 
 
             var configuration = context.Services.GetConfiguration();
-
-            ConfigureMassTransit(context.Services, configuration);
         }
 
-        private void ConfigureMassTransit(IServiceCollection services, IConfiguration configuration)
-        {
-            var appSettings = services.GetSingletonInstance<ApplicationSettings>(); 
-
-            services.AddMassTransit(transitConfig =>
-            {
-                transitConfig.AddConsumers(Assembly.GetExecutingAssembly());
-
-
-                transitConfig.UsingRabbitMq((ctx, rabbitConfig) =>
-                {
-                    rabbitConfig.Host(appSettings.MassTransit.Host, cfg =>
-                    {
-                        cfg.Username(appSettings.MassTransit.UserName);
-                        cfg.Password(appSettings.MassTransit.Password);
-
-                    });
-
-                    rabbitConfig.ConfigureEndpoints(ctx);
-
-                });
-
-            });
-        }
+    
     }
 }

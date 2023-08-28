@@ -2,6 +2,8 @@
 {
     public class ElasticEntitiesConsts
     {
+        public static string DefaultIndex = "catalog-default-index";
+
         public static string ProductIndex = "catalog-product-index";
 
         public static string CategoryIndex = "catalog-category-index";
@@ -15,6 +17,8 @@
         public static string ProductReviewIndex = "catalog-product-review-index";
 
         public static string ImageVectorIndex = "catalog-image-vector-index";
+
+        public static string ProductExpectedRatingIndex = "catalog-product-expceted-rating-index";
 
     }
 }

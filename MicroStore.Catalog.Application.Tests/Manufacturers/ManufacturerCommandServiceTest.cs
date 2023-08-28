@@ -1,8 +1,11 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Manufacturers;
 using MicroStore.Catalog.Application.Models.Manufacturers;
+using MicroStore.Catalog.Application.Operations;
+using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Application.Tests.Manufacturers
@@ -29,9 +32,23 @@ namespace MicroStore.Catalog.Application.Tests.Manufacturers
 
             result.IsSuccess.Should().BeTrue();
 
-            var manufacturer = await SingleAsync<Manufacturer>(x => x.Id == result.Value.Id);
+            await result.IfSuccess(async _ =>
+            {
+                var manufacturer = await SingleAsync<Manufacturer>(x => x.Id == result.Value.Id);
 
-            manufacturer.AssertManufacturerModel(model);
+                manufacturer.AssertManufacturerModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<ManufacturerEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<ManufacturerEto>>());
+
+                var elasticManufacturer = await FindElasticDoc<ElasticManufacturer>(manufacturer.Id);
+
+                elasticManufacturer.Should().NotBeNull();
+
+                elasticManufacturer!.AssertElasticManufacturer(manufacturer);
+            });
+
         }
 
         [Test]
@@ -68,9 +85,25 @@ namespace MicroStore.Catalog.Application.Tests.Manufacturers
 
             result.IsSuccess.Should().BeTrue();
 
-            var manufacturer = await SingleAsync<Manufacturer>(x => x.Id == fakeManufacturer.Id);
+            await result.IfSuccess(async _ =>
+            {
+                var manufacturer = await SingleAsync<Manufacturer>(x => x.Id == fakeManufacturer.Id);
 
-            manufacturer.AssertManufacturerModel(model);
+                manufacturer.AssertManufacturerModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ManufacturerEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ManufacturerEto>>());
+
+                var elasticManufacturer = await FindElasticDoc<ElasticManufacturer>(manufacturer.Id);
+
+                elasticManufacturer.Should().NotBeNull();
+
+                elasticManufacturer!.AssertElasticManufacturer(manufacturer);
+
+            });
+
+
         }
 
         [Test]

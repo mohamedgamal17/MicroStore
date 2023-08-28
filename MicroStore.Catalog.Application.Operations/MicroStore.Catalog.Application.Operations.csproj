@@ -17,7 +17,9 @@
 		<PackageReference Include="Microsoft.ML" Version="2.0.1" />
 		<PackageReference Include="Microsoft.ML.DataView" Version="2.0.1" />
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="6.0.2" />
+		<PackageReference Include="Volo.Abp.BackgroundJobs.Abstractions" Version="6.0.2" />
 		<PackageReference Include="Volo.Abp.BackgroundJobs.HangFire" Version="6.0.2" />
+		<PackageReference Include="Volo.Abp.BackgroundWorkers" Version="6.0.2" />
 		<PackageReference Include="Volo.Abp.BackgroundWorkers.Hangfire" Version="6.0.2" />
 		<PackageReference Include="Volo.Abp.BlobStoring" Version="6.0.2" />
 		<PackageReference Include="Volo.Abp.Ddd.Application" Version="6.0.2" />

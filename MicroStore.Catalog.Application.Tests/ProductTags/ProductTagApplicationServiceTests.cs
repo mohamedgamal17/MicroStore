@@ -1,9 +1,12 @@
 ﻿using FluentAssertions;
 using MicroStore.Catalog.Application.Models.ProductTags;
+using MicroStore.Catalog.Application.Operations;
+using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.ProductReviews;
 using MicroStore.Catalog.Application.ProductTags;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
@@ -27,9 +30,24 @@ namespace MicroStore.Catalog.Application.Tests.ProductTags
 
             result.IsSuccess.Should().BeTrue();
 
-            var productTag = await SingleAsync<ProductTag>(x => x.Id == result.Value.Id);
+            await result.IfSuccess(async (val) =>
+            {
 
-            productTag.AssertProductTagModel(model);
+                var productTag = await SingleAsync<ProductTag>(x => x.Id == val.Id);
+
+                productTag.AssertProductTagModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<ProductTagEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<ProductTagEto>>());
+
+                var elasticProductTag = await FindElasticDoc<ElasticProductTag>(val.Id);
+
+                elasticProductTag.Should().NotBeNull();
+
+                elasticProductTag!.AssertElasticProductTag(productTag);
+            });
+
         }
 
         [Test]
@@ -58,9 +76,24 @@ namespace MicroStore.Catalog.Application.Tests.ProductTags
 
             result.IsSuccess.Should().BeTrue();
 
-            var productTag = await SingleAsync<ProductTag>(x => x.Id == fakeProductTag.Id);
+            await result.IfSuccess(async val =>
+            {
 
-            productTag.AssertProductTagModel(model);    
+                var productTag = await SingleAsync<ProductTag>(x => x.Id == val.Id);
+
+                productTag.AssertProductTagModel(model);
+
+                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductTagEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductTagEto>>());
+
+                var elasticProductTag = await FindElasticDoc<ElasticProductTag>(val.Id);
+
+                elasticProductTag.Should().NotBeNull();
+
+                elasticProductTag!.AssertElasticProductTag(productTag);
+            });
+
         }
 
         [Test]
@@ -103,9 +136,20 @@ namespace MicroStore.Catalog.Application.Tests.ProductTags
 
             result.IsSuccess.Should().BeTrue();
 
-            var productTag = await SingleOrDefaultAsync<ProductTag>(x => x.Id == fakeProductTag.Id);
+            await result.IfSuccess(async _ =>
+            {
+                var productTag = await SingleOrDefaultAsync<ProductTag>(x => x.Id == fakeProductTag.Id);
 
-            productTag.Should().BeNull();
+                productTag.Should().BeNull();
+
+                Assert.That(await TestHarness.Published.Any<EntityDeletedEvent<ProductTagEto>>());
+
+                Assert.That(await TestHarness.Consumed.Any<EntityDeletedEvent<ProductTagEto>>());
+
+                var elasticProductTag = await FindElasticDoc<ElasticProductTag>(fakeProductTag.Id);
+
+                elasticProductTag.Should().BeNull();
+            });
         }
 
         [Test]
