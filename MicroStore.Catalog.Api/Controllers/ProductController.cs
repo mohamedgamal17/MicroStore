@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Application.Products;
+using MicroStore.Catalog.Entities.ElasticSearch;
+
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/products")]
@@ -178,7 +181,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{productId}/productspecificationattributes")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-        //[Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> CreateProductSpecificationAttribute(string productId, ProductSpecificationAttributeModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -204,7 +207,16 @@ namespace MicroStore.Catalog.Api.Controllers
             return result.ToOk();
         }
 
+        [Route("user-recommendation")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ElasticProduct>))]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+        public async Task<IActionResult> UserRecommendation(PagingQueryParams queryParams)
+        {
+            var result = await _productQueryService.GetUserRecommendation(CurrentUser.Id.ToString()!, queryParams);
 
+            return result.ToOk();
+
+        }
 
     }
 }

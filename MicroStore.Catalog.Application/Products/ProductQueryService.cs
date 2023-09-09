@@ -3,6 +3,7 @@ using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
+using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
@@ -41,6 +42,7 @@ namespace MicroStore.Catalog.Application.Products
 
             return response.Source!;
         }
+
 
         public async Task<Result<PagedResult<ElasticProduct>>> ListAsync(ProductListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
@@ -105,6 +107,33 @@ namespace MicroStore.Catalog.Application.Products
         }
 
 
+
+        public async Task<Result<PagedResult<ElasticProduct>>> GetUserRecommendation(string userId,
+            PagingQueryParams  pagingParams, CancellationToken cancellationToken)
+        {
+            var (expectedProducts ,count) = await GetUserRecommandedProduct(userId, pagingParams.Skip, pagingParams.Length);
+
+            var productIds = expectedProducts?.Select(x => FieldValue.String(x.Id)).ToList();
+
+
+            var productsResponse = await _elasticSearchClient.SearchAsync<ElasticProduct>(desc => desc
+                .Query(qr => qr
+                    .Terms(tr => tr
+                    .Field(x => x.Id)
+                    .Terms(new Elastic.Clients.Elasticsearch.QueryDsl.TermsQueryField(productIds))
+  
+                    )
+                )
+                .Size(pagingParams.Length)
+            );
+
+
+            return new PagedResult<ElasticProduct>(productsResponse.Documents, count, pagingParams.Skip, pagingParams.Length);
+
+        }
+
+
+
         private SearchRequestDescriptor<ElasticProduct> PreapreSearchRequestDescriptor(ProductListQueryModel queryParams)
         {
 
@@ -159,6 +188,38 @@ namespace MicroStore.Catalog.Application.Products
 
                 );
                 
+        }
+
+        private async Task<(IEnumerable<ElasticProductExpectedRating>, long)> GetUserRecommandedProduct(string userId, int skip , int length)
+        {
+            var productRatingResponse = await _elasticSearchClient.SearchAsync<ElasticProductExpectedRating>(desc => desc
+               .Query(q => q
+                   .Match(mt => mt
+                       .Field(x => x.UserId)
+                       .Query(userId)
+                   )
+               )
+               .Sort(srt => srt
+                   .Field(x => x.Score, cfg => cfg.Order(SortOrder.Desc))
+
+               )
+               .From(skip)
+               .Size(length)              
+            );
+
+
+            var totalCountResponse = await _elasticSearchClient.CountAsync<ElasticProductExpectedRating>(
+                    desc => desc
+                        .Query(qr => qr
+                            .Match(mt => mt
+                                .Field(x => x.UserId)
+                                .Query(userId)
+                            )
+                        )
+                );
+
+
+            return (productRatingResponse.Documents, totalCountResponse.Count);
         }
     }
 
