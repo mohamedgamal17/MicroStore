@@ -178,7 +178,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{productId}/productspecificationattributes")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+        //[Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> CreateProductSpecificationAttribute(string productId, ProductSpecificationAttributeModel model)
         {
             var validationResult = await ValidateModel(model);

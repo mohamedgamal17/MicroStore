@@ -1,10 +1,11 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.SpecificationAttributes;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -16,10 +17,12 @@ namespace MicroStore.Catalog.Application.SpecificationAttributes
 
         private readonly ICatalogDbContext _catalogDbContext;
 
-        public SpecificationAttributeApplicationService(IRepository<SpecificationAttribute> specificationAttributeRepository, ICatalogDbContext catalogDbContext)
+        private readonly ElasticsearchClient _elasticSearchClient;
+        public SpecificationAttributeApplicationService(IRepository<SpecificationAttribute> specificationAttributeRepository, ICatalogDbContext catalogDbContext, ElasticsearchClient elasticSearchClient)
         {
             _specificationAttributeRepository = specificationAttributeRepository;
             _catalogDbContext = catalogDbContext;
+            _elasticSearchClient = elasticSearchClient;
         }
 
         public async Task<Result<SpecificationAttributeDto>> CreateAsync(SpecificationAttributeModel model, CancellationToken cancellationToken = default)
@@ -173,79 +176,71 @@ namespace MicroStore.Catalog.Application.SpecificationAttributes
 
         }
 
-        public async Task<Result<List<SpecificationAttributeDto>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<List<ElasticSpecificationAttribute>>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.SpecificationAttributes
-                .AsNoTracking()
-                .Include(x => x.Options)
-                .ProjectTo<SpecificationAttributeDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.SearchAsync<ElasticSpecificationAttribute>(desc => desc
+                .Query(qr => qr.MatchAll())
+                .Size(1000)
+            );
 
+            if (!response.IsValidResponse)
+            {
+                return new List<ElasticSpecificationAttribute>();
+            }
 
-            return await query.ToListAsync(cancellationToken);
+            return response.Documents.ToList();
         }
 
-        public async Task<Result<SpecificationAttributeDto>> GetAsync(string attributeId, CancellationToken cancellationToken = default)
+        public async Task<Result<ElasticSpecificationAttribute>> GetAsync(string attributeId, CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.SpecificationAttributes
-                  .AsNoTracking()
-                  .Include(x => x.Options)
-                  .ProjectTo<SpecificationAttributeDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.GetAsync<ElasticSpecificationAttribute>(attributeId,cancellationToken);
 
-
-            var attribute = await query.SingleOrDefaultAsync(x => x.Id == attributeId, cancellationToken);
-
-            if(attribute == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<SpecificationAttributeDto>(new EntityNotFoundException(typeof(SpecificationAttributeOption), attributeId));
+                return new Result<ElasticSpecificationAttribute>(new EntityNotFoundException(typeof(ElasticSpecificationAttribute), attributeId));
             }
 
-            return attribute;
+
+            return response.Source!;
         }
 
 
-        public async Task<Result<List<SpecificationAttributeOptionDto>>> ListOptionsAsync(string attributeId, CancellationToken cancellationToken = default)
+        public async Task<Result<List<ElasticSpecificationAttributeOption>>> ListOptionsAsync(string attributeId, CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.SpecificationAttributes
-                .AsNoTracking()
-                .Include(x => x.Options)
-                .ProjectTo<SpecificationAttributeDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.GetAsync<ElasticSpecificationAttribute>(attributeId, cancellationToken);
 
-
-            var attribute = await query.SingleOrDefaultAsync(x => x.Id == attributeId, cancellationToken);
-
-            if (attribute == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<List<SpecificationAttributeOptionDto>>(new EntityNotFoundException(typeof(SpecificationAttributeOption), attributeId));
+                return new Result<List<ElasticSpecificationAttributeOption>>(new EntityNotFoundException(typeof(ElasticSpecificationAttribute), attributeId));
             }
 
+            var source = response.Source!;
 
-            return attribute.Options;
+            return source.Options;
         }
 
-        public async Task<Result<SpecificationAttributeOptionDto>> GetOptionAsync(string attributeId, string optionId, CancellationToken cancellationToken = default)
+        public async Task<Result<ElasticSpecificationAttributeOption>> GetOptionAsync(string attributeId, string optionId, CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.SpecificationAttributes
-               .AsNoTracking()
-               .Include(x => x.Options)
-               .ProjectTo<SpecificationAttributeDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.GetAsync<ElasticSpecificationAttribute>(attributeId, cancellationToken);
 
-
-            var attribute = await query.SingleOrDefaultAsync(x => x.Id == attributeId, cancellationToken);
-
-            if (attribute == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<SpecificationAttributeOptionDto>(new EntityNotFoundException(typeof(SpecificationAttributeOption), attributeId));
+                return new Result<ElasticSpecificationAttributeOption>(new EntityNotFoundException(typeof(ElasticSpecificationAttribute), attributeId));
             }
-
-            var option = attribute.Options.SingleOrDefault(x => x.Id == optionId);
-
-
-            if(option == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<SpecificationAttributeOptionDto>(new EntityNotFoundException(typeof(SpecificationAttributeOption), optionId));
+                return new Result<ElasticSpecificationAttributeOption>(new EntityNotFoundException(typeof(ElasticSpecificationAttribute), attributeId));
             }
 
 
+            var source = response.Source!;
+
+            var option = source.Options.SingleOrDefault(x => x.Id == optionId);
+
+            if (option == null)
+            {
+                return new Result<ElasticSpecificationAttributeOption>(new EntityNotFoundException(typeof(ElasticSpecificationAttributeOption), attributeId));
+            }
             return option;
         }
 

@@ -1,62 +1,65 @@
-﻿using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Elastic.Clients.Elasticsearch;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.Catalog.Application.Common;
-using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Application.Extensions;
 using MicroStore.Catalog.Application.Models.Manufacturers;
-using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Manufacturers
 {
     public class ManufacturerQueryService : CatalogApplicationService, IManufacturerQueryService
     {
-
-        private readonly ICatalogDbContext _catalogDbContext;
-        public ManufacturerQueryService( ICatalogDbContext catalogDbContext)
+        private readonly ElasticsearchClient _elasticSearchClient;
+        public ManufacturerQueryService( ElasticsearchClient elasticSearchClient)
         {
-            _catalogDbContext = catalogDbContext;
+            _elasticSearchClient = elasticSearchClient;
         }
 
-        public async Task<Result<ManufacturerDto>> GetAsync(string manufacturerId, CancellationToken cancellationToken = default)
+        public async Task<Result<ElasticManufacturer>> GetAsync(string manufacturerId, CancellationToken cancellationToken = default)
         {
-            var manufacturer = await _catalogDbContext.Manufacturers.SingleOrDefaultAsync(x => x.Id == manufacturerId, cancellationToken);
+            var response = await _elasticSearchClient.GetAsync<ElasticManufacturer>(manufacturerId,cancellationToken);
 
-            if(manufacturer == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<ManufacturerDto>(new EntityNotFoundException(typeof(Manufacturer), manufacturerId));
+                return new Result<ElasticManufacturer>(new EntityNotFoundException(typeof(ElasticManufacturer), manufacturerId));
             }
 
-            return ObjectMapper.Map<Manufacturer, ManufacturerDto>(manufacturer);
+            return response.Source!;
         }
 
-        public async Task<Result<List<ManufacturerDto>>> ListAsync(ManufacturerListQueryModel queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<List<ElasticManufacturer>>> ListAsync(ManufacturerListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
-            var query =  _catalogDbContext.Manufacturers.AsNoTracking()
-                .ProjectTo<ManufacturerDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.SearchAsync(PreapreSearchRequestDescriptor(queryParams));
 
-            if (!string.IsNullOrEmpty(queryParams.Name))
+            if (!response.IsValidResponse)
             {
-                var name = queryParams.Name.ToLower();
-
-                query = query.Where(x => x.Name.ToLower().Contains(name));
+                return new List<ElasticManufacturer>();
             }
 
-            if (queryParams.SortBy != null)
-            {
-                query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
-            }
-
-            return await query.ToListAsync(cancellationToken);
+            return response.Documents.ToList();     
         }
-        private IQueryable<ManufacturerDto> TryToSort(IQueryable<ManufacturerDto> query, string sortBy , bool desc)
+        private SearchRequestDescriptor<ElasticManufacturer> PreapreSearchRequestDescriptor(ManufacturerListQueryModel queryParams)
         {
-            return sortBy.ToLower() switch
-            {
-                "name" => desc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
-                _ => query
-            };
+            return new SearchRequestDescriptor<ElasticManufacturer>()
+                .Query(desc => desc
+                    .Bool(bl => bl
+                        .Must(mst => mst
+                            .When(!string.IsNullOrEmpty(queryParams.Name), act => act
+                                .MatchPhrase(mt => mt
+                                    .Field(x => x.Name)
+                                    .Query(queryParams.Name!)
+                                )
+                            )
+                        )
+                    )
+                )
+                .Size(1000)
+                .When(!string.IsNullOrEmpty(queryParams.SortBy), act => act
+                    .Sort(srt => srt
+                        .When(queryParams.Name == "name", act => act
+                            .Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc))
+                        )
+                    )
+                );
         }
-
     }
 }

@@ -3,9 +3,7 @@ using MassTransit;
 using Microsoft.Extensions.Logging;
 using MicroStore.Catalog.Application.Operations.Categories;
 using MicroStore.Catalog.Application.Operations.Etos;
-using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
-using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
 namespace MicroStore.Catalog.Application.Operations.SpecificationAttributes

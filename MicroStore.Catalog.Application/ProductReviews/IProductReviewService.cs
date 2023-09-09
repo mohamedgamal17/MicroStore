@@ -3,6 +3,7 @@ using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.ProductReviews;
+using MicroStore.Catalog.Entities.ElasticSearch;
 
 namespace MicroStore.Catalog.Application.ProductReviews
 {
@@ -16,8 +17,8 @@ namespace MicroStore.Catalog.Application.ProductReviews
 
         Task<Result<Unit>> DeleteAsync(string productId, string productReviewId, CancellationToken cancellationToken = default);
 
-        Task<Result<PagedResult<ProductReviewDto>>> ListAsync(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ElasticProductReview>>> ListAsync(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default);
 
-        Task<Result<ProductReviewDto>> GetAsync(string productId, string productReviewId, CancellationToken cancellationToken = default);
+        Task<Result<ElasticProductReview>> GetAsync(string productId, string productReviewId, CancellationToken cancellationToken = default);
     }
 }

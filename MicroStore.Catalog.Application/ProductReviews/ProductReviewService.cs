@@ -1,13 +1,15 @@
 ﻿using AutoMapper.QueryableExtensions;
+using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Application.Extensions;
 using MicroStore.Catalog.Application.Models.ProductReviews;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.ProductReviews
@@ -19,11 +21,14 @@ namespace MicroStore.Catalog.Application.ProductReviews
         private readonly IRepository<Product> _productRepository;
 
         private readonly ICatalogDbContext _catalogDbContext;
-        public ProductReviewService(IRepository<ProductReview> productReviewRepository, IRepository<Product> productRepository, ICatalogDbContext catalogDbContext)
+
+        private readonly ElasticsearchClient _elasticSearchClient;
+        public ProductReviewService(IRepository<ProductReview> productReviewRepository, IRepository<Product> productRepository, ICatalogDbContext catalogDbContext, ElasticsearchClient elasticSearchClient)
         {
             _productReviewRepository = productReviewRepository;
             _productRepository = productRepository;
             _catalogDbContext = catalogDbContext;
+            _elasticSearchClient = elasticSearchClient;
         }
 
         public async Task<Result<ProductReviewDto>> CreateAsync(string productId, CreateProductReviewModel model, CancellationToken cancellationToken = default)
@@ -115,45 +120,57 @@ namespace MicroStore.Catalog.Application.ProductReviews
             return await _productRepository.AnyAsync(x => x.Id == productId, cancellationToken);
         }
 
-        public async Task<Result<PagedResult<ProductReviewDto>>> ListAsync(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ElasticProductReview>>> ListAsync(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             if (!await CheckProductExist(productId, cancellationToken))
             {
-                return new Result<PagedResult<ProductReviewDto>>(new EntityNotFoundException(typeof(Product), productId));
+                return new Result<PagedResult<ElasticProductReview>>(new EntityNotFoundException(typeof(Product), productId));
             }
 
-            var query = _catalogDbContext.ProductReviews
-                .AsNoTracking()
-                .ProjectTo<ProductReviewDto>(MapperAccessor.Mapper.ConfigurationProvider)
-                .AsQueryable();
+            var response = await _elasticSearchClient.SearchAsync<ElasticProductReview>(desc => desc
+                .Query(qr => qr
+                    .Term(x => x.ProductId, productId)
+                )
+            );
 
-            var productReviews = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
+            if (!response.IsValidResponse)
+            {
+                return new PagedResult<ElasticProductReview>(null,0,0,0);
+            }
 
-
-            return productReviews;
+            return await response.ToPagedResultAsync(queryParams.Skip,queryParams.Length,_elasticSearchClient);
 
         }
 
-        public async Task<Result<ProductReviewDto>> GetAsync(string productId, string productReviewId, CancellationToken cancellationToken = default)
+        public async Task<Result<ElasticProductReview>> GetAsync(string productId, string productReviewId, CancellationToken cancellationToken = default)
         {
             if (!await CheckProductExist(productId, cancellationToken))
             {
-                return new Result<ProductReviewDto>(new EntityNotFoundException(typeof(Product), productId));
+                return new Result<ElasticProductReview>(new EntityNotFoundException(typeof(Product), productId));
             }
 
-            var query = _catalogDbContext.ProductReviews
-               .AsNoTracking()
-               .ProjectTo<ProductReviewDto>(MapperAccessor.Mapper.ConfigurationProvider)
-               .AsQueryable();
+            var response = await _elasticSearchClient.SearchAsync<ElasticProductReview>(desc => desc
+                    .Query(qr => qr
+                        .Bool(bl => bl
+                            .Must(mt => mt
+                                .Term(x => x.ProductId, productId)
+                                .Term(x => x.Id, productReviewId)
+                            )
+                        )
+                    )
+                );
 
-            var productReview = await query.SingleOrDefaultAsync(x => x.Id == productReviewId && x.ProductId == productId);
-
-            if (productReview == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<ProductReviewDto>(new EntityNotFoundException(typeof(ProductReview), productReviewId));
+                return new Result<ElasticProductReview>(new EntityNotFoundException(typeof(ElasticProductReview), productReviewId));
             }
 
-            return productReview;
+            if(response.Documents.Count == 0)
+            {
+                return new Result<ElasticProductReview>(new EntityNotFoundException(typeof(ElasticProductReview), productReviewId));
+            }
+       
+            return response.Documents.ToArray()[0];
         }
     }
 }

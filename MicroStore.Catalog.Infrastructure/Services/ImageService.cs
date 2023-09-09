@@ -1,12 +1,11 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Emgu.CV;
 using MicroStore.Catalog.Application.Common;
-using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
-
+using Volo.Abp.DependencyInjection;
 namespace MicroStore.Catalog.Infrastructure.Services
 {
-    public class ImageService : IImageService
+    public class ImageService : IImageService , ITransientDependency
     {
         private readonly IImageDescriptor _imageDescriptor;
 

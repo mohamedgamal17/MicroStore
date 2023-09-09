@@ -52,17 +52,16 @@ namespace MicroStore.Catalog.Application.Operations.Manufacturers
             var queryDescriptor = new UpdateByQueryRequestDescriptor<ElasticProduct>(IndexName.From<ElasticProduct>())
                 .Script(new Script(new InlineScript
                 {
-                    Source = @"""
-                            for(int i =0; i< ctx._source.productManufacturers.length; i++)
+                    Source = @"
+                            for(int i =0; i< ctx._source.productManufacturers.size(); i++)
                             {
                                 if(ctx._source.productManufacturers[i].id == params.id)
                                 {
                                     ctx._source.productManufacturers[i].name = params.name;
                                     ctx._source.productManufacturers[i].description = params.description;
-                                    break;
                                 }
                             }
-                        """,
+                         ",
                     Params = new Dictionary<string, object>()
                     {
                         {"id",elasticEntity.Id },

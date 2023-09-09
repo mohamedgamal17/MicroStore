@@ -2,9 +2,10 @@
 using Microsoft.Extensions.Logging;
 using MicroStore.Catalog.Application.Common;
 using Volo.Abp.BackgroundWorkers.Hangfire;
+using Volo.Abp.DependencyInjection;
 namespace MicroStore.Catalog.Application.Operations.Recommandations
 {
-    public class MatrixFactorizationSynchronizationWorker : HangfireBackgroundWorkerBase
+    public class MatrixFactorizationSynchronizationWorker : HangfireBackgroundWorkerBase 
     {
         private readonly ICollaborativeFilterMLTrainer _collaborativeFilterMLTrainer;
         public MatrixFactorizationSynchronizationWorker(ICollaborativeFilterMLTrainer collaborativeFilterMLTrainer)

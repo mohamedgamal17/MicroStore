@@ -62,9 +62,6 @@ namespace MicroStore.Catalog.Api
          
             });
 
-           
-
-
         }
 
 

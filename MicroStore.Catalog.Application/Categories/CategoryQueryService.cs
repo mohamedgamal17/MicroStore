@@ -1,69 +1,73 @@
-﻿using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Paging.Params;
+﻿using Elastic.Clients.Elasticsearch;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.Catalog.Application.Common;
-using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models;
+using MicroStore.Catalog.Application.Extensions;
 using MicroStore.Catalog.Application.Models.Categories;
-using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Categories
 {
     public class CategoryQueryService : CatalogApplicationService, ICategoryQueryService
     {
-        private readonly ICatalogDbContext _catalogDbContext;
 
-        public CategoryQueryService(ICatalogDbContext catalogDbContext)
+        private readonly ElasticsearchClient _elasticsearchClient;
+
+        public CategoryQueryService(ElasticsearchClient elasticsearchClient)
         {
-            _catalogDbContext = catalogDbContext;
+            _elasticsearchClient = elasticsearchClient;
         }
 
-        public async Task<Result<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Result<ElasticCategory>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            Category? category = await _catalogDbContext.Categories
-                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+            var response = await _elasticsearchClient.GetAsync<ElasticCategory>(id);
 
-            if (category == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<CategoryDto>(new EntityNotFoundException(typeof(Category), id));
-
+                return new Result<ElasticCategory>(new EntityNotFoundException(typeof(ElasticCategory), id));
             }
 
-            return ObjectMapper.Map<Category, CategoryDto>(category);
+            return response.Source!;
         }
 
-        public async Task<Result<List<CategoryDto>>> ListAsync(CategoryListQueryModel queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<List<ElasticCategory>>> ListAsync(CategoryListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.Categories.AsNoTracking().ProjectTo<CategoryDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticsearchClient.SearchAsync(PreapreSearchRequestDescriptor(queryParams));
 
-            if (!string.IsNullOrEmpty(queryParams.Name))
+            if(!response.IsValidResponse)
             {
-                var name = queryParams.Name.ToLower();
-
-                query = query.Where(x => x.Name.ToLower().Contains(name));
+                return new List<ElasticCategory>();
             }
 
-
-            if (queryParams.SortBy != null)
-            {
-                query = TryToSort(query, queryParams.SortBy, queryParams.Desc);
-            }
-
-            var result = await query.ToListAsync(cancellationToken);
-
-
-            return result;
+            return response.Documents.ToList() ;
         }
 
-        private IQueryable<CategoryDto> TryToSort(IQueryable<CategoryDto> query, string sortBy, bool desc)
+
+        private SearchRequestDescriptor<ElasticCategory> PreapreSearchRequestDescriptor(CategoryListQueryModel queryParams)
         {
-            return sortBy.ToLower() switch
-            {
-                "name" => desc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
-                _ => query
-            };
+            return new SearchRequestDescriptor<ElasticCategory>()
+                .Query(desc => desc
+                    .Bool(bl => bl
+                        .Must(mt => mt
+                            .When(!string.IsNullOrEmpty(queryParams.Name), act => act
+                                .MatchPhrasePrefix(mat => mat
+                                    .Field(x => x.Name)
+                                    .Query(queryParams.Name!)
+                                )
+                            )
+                        )
+                    )
+                )
+                .Size(1000)
+                .When(queryParams.SortBy != null, act=> act
+                    .Sort(srt => srt
+                        .When(queryParams.SortBy!.ToLower() == "name", act => act
+                            .Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc))
+                        )
+
+                    )            
+                );
         }
     }
+
+
+
 }

@@ -1,10 +1,11 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.ProductTags;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -15,10 +16,13 @@ namespace MicroStore.Catalog.Application.ProductTags
         private readonly IRepository<ProductTag> _productTagRepository;
 
         private readonly ICatalogDbContext _catalogDbContext;
-        public ProductTagApplicationService(IRepository<ProductTag> productTagRepository, ICatalogDbContext catalogDbContext)
+
+        private readonly ElasticsearchClient _elasticSearchClient;
+        public ProductTagApplicationService(IRepository<ProductTag> productTagRepository, ICatalogDbContext catalogDbContext, ElasticsearchClient elasticSearchClient)
         {
             _productTagRepository = productTagRepository;
             _catalogDbContext = catalogDbContext;
+            _elasticSearchClient = elasticSearchClient;
         }
 
         public async Task<Result<ProductTagDto>> CreateAsync(ProductTagModel model, CancellationToken cancellationToken = default)
@@ -42,31 +46,31 @@ namespace MicroStore.Catalog.Application.ProductTags
 
         }
 
-        public async Task<Result<ProductTagDto>> GetAsync(string productTagId, CancellationToken cancellationToken = default)
+        public async Task<Result<ElasticProductTag>> GetAsync(string productTagId, CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.ProductTags
-              .AsNoTracking()
-              .ProjectTo<ProductTagDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.GetAsync<ElasticProductTag>(productTagId, cancellationToken);
 
-            var productTag = await query.SingleOrDefaultAsync(x => x.Id == productTagId, cancellationToken);
-
-            if (productTag == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<ProductTagDto>(new EntityNotFoundException(typeof(ProductTag), productTagId));
+                return new Result<ElasticProductTag>(new EntityNotFoundException(typeof(ElasticProductTag), productTagId));
             }
-
-
-            return productTag;
-
+           
+            return response.Source!;
         }
 
-        public async Task<Result<List<ProductTagDto>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<List<ElasticProductTag>>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.ProductTags
-                .AsNoTracking()
-                .ProjectTo<ProductTagDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.SearchAsync<ElasticProductTag>(desc => desc
+                .Query(qr => qr.MatchAll())
+                .Size(5000)
+            );
 
-            return await query.ToListAsync(cancellationToken);
+            if (!response.IsValidResponse)
+            {
+                return new List<ElasticProductTag>();
+            }
+
+            return response.Documents.ToList();
 
         }
 

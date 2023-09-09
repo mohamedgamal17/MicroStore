@@ -1,12 +1,15 @@
 ﻿using AutoMapper.QueryableExtensions;
+using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
+using MicroStore.Catalog.Application.Extensions;
 using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Validation;
@@ -18,56 +21,53 @@ namespace MicroStore.Catalog.Application.Products
         private readonly ICatalogDbContext _catalogDbContext;
 
         private readonly IImageService _imageService;
-        public ProductQueryService(ICatalogDbContext catalogDbContext, IImageService imageService)
+
+        private readonly ElasticsearchClient _elasticSearchClient;
+        public ProductQueryService(ICatalogDbContext catalogDbContext, IImageService imageService, ElasticsearchClient elasticSearchClient)
         {
             _catalogDbContext = catalogDbContext;
             _imageService = imageService;
+            _elasticSearchClient = elasticSearchClient;
         }
 
-        public async Task<Result<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Result<ElasticProduct>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.Products
-                 .AsNoTracking()
-                 .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.GetAsync<ElasticProduct>(id);
 
-            var product = await query.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-            if (product == null)
+            if (!response.IsValidResponse)
             {
-                return new Result<ProductDto>(new EntityNotFoundException(typeof(Product), id));
+                return new Result<ElasticProduct>(new EntityNotFoundException(typeof(ElasticProduct), id));
             }
 
-            return product;
+            return response.Source!;
         }
 
-        public async Task<Result<PagedResult<ProductDto>>> ListAsync(ProductListQueryModel queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ElasticProduct>>> ListAsync(ProductListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
-            var query = _catalogDbContext.Products.AsQueryable()
-                         .AsNoTracking()
-                         .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var response = await _elasticSearchClient.SearchAsync(PreapreSearchRequestDescriptor(queryParams));
 
-            query = ApplyQueryFilteration(query, queryParams);
-
-            var pagingResult = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
-
-            return pagingResult;
-        }
-
-        public async Task<Result<List<ProductImageDto>>> ListProductImagesAsync(string productid, CancellationToken cancellationToken = default)
-        {
-            var isProductExist = await _catalogDbContext.Products.AnyAsync(x => x.Id == productid, cancellationToken);
-
-            if (!isProductExist)
+            if (!response.IsValidResponse)
             {
-                return new Result<List<ProductImageDto>>(new EntityNotFoundException(typeof(Product), productid));
+                return new PagedResult<ElasticProduct>(null, 0, 0, 0);
             }
 
 
-            var result = await _catalogDbContext.Products.Where(x => x.Id == productid).SelectMany(x => x.ProductImages)
-                .ProjectTo<ProductImageDto>(MapperAccessor.Mapper.ConfigurationProvider)
-                .ToListAsync();
+            return await response.ToPagedResultAsync(queryParams.Skip, queryParams.Length, _elasticSearchClient) ;
+        }
 
-            return result;
+        public async Task<Result<List<ElasticProductImage>>> ListProductImagesAsync(string productid, CancellationToken cancellationToken = default)
+        {
+
+            var response = await _elasticSearchClient.GetAsync<ElasticProduct>(productid);
+
+            if (!response.IsValidResponse)
+            {
+                return new Result<List<ElasticProductImage>>(new EntityNotFoundException(typeof(ElasticProduct), productid));
+            }
+
+            var product = response.Source!;
+
+            return product.ProductImages;
         }
 
         public async Task<Result<PagedResult<ProductDto>>> SearchAsync(ProductSearchModel model, CancellationToken cancellationToken = default)
@@ -88,72 +88,7 @@ namespace MicroStore.Catalog.Application.Products
 
             return await productsQuery.PageResult(model.Skip, model.Length , cancellationToken);
         }
-
-        
-
-        private IQueryable<ProductDto> ApplyQueryFilteration(IQueryable<ProductDto> query , ProductListQueryModel model)
-        {
-            if (!string.IsNullOrEmpty(model.Category))
-            {
-                query = query.Where(x => x.ProductCategories.Any(x => model.Category == x.Category.Name));
-            }
-
-            if (!string.IsNullOrEmpty(model.Manufacturer))
-            {
-                query = query.Where(x => x.ProductManufacturers.Any(x => model.Manufacturer == x.Manufacturer.Name));
-            }
-
-            if (!string.IsNullOrEmpty(model.Tag))
-            {
-                query = query.Where(x => x.ProductTags.Any(x => model.Tag == x.Name));
-            }
-
-            if(model.MinPrice != null)
-            {
-                query = query.Where(x => x.Price >= model.MinPrice);
-            }
-
-            if(model.MaxPrice != null)
-            {
-                query = query.Where(x => x.Price <= model.MaxPrice);
-            }
-
-            if (model.IsFeatured)
-            {
-                query = query.Where(x => x.IsFeatured);
-            }
-
-            if (model.SortBy != null)
-            {
-                query = TryToSort(query, model.SortBy, model.Desc);
-            }
-
-
-            if(!string.IsNullOrEmpty(model.Name) )
-            {
-                var name = model.Name.ToLower();
-
-                 query = from product in query
-                            where product.Name.ToLower().Contains(name)
-                            select product;
-            }
-
-            return query;
-
-        }
-
-
-        public IQueryable<ProductDto> TryToSort(IQueryable<ProductDto> query, string sortBy, bool desc = false)
-        {
-            return sortBy.ToLower() switch
-            {
-                "name" => desc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
-                "price" => desc ? query.OrderByDescending(x => x.Price) : query.OrderBy(x => x.Price),
-                "old_price" => desc ? query.OrderByDescending(x => x.OldPrice) : query.OrderBy(x => x.OldPrice),
-                _ => query
-            };
-        }
-
+     
         public async Task<Result<List<ProductDto>>> SearchByImage(ProductSearchByImageModel model, CancellationToken cancellationToken = default)
         {
             var relatedImages = await _imageService.SearchByImage(model.Image);
@@ -167,6 +102,63 @@ namespace MicroStore.Catalog.Application.Products
                            select product ;
 
             return products.ToList();
+        }
+
+
+        private SearchRequestDescriptor<ElasticProduct> PreapreSearchRequestDescriptor(ProductListQueryModel queryParams)
+        {
+
+            return new SearchRequestDescriptor<ElasticProduct>()
+                .Query(qr => qr
+                    .Bool(bl => bl
+                        .Must(mt => mt
+                            .When(queryParams.Name != null, act => act
+                                .MatchPhrasePrefix(mt => mt
+                                    .Field(x => x.Name)
+                                    .Query(queryParams.Name!)
+                                )
+                            )
+                        )
+                        .Filter(flt => flt
+                            .When(queryParams.Category != null, act => act
+                                .Term(x => x.ProductCategories.First().Name, queryParams.Category!)
+                            )
+                            .When(queryParams.Manufacturer != null, act => act
+                                .Term(x => x.ProductManufacturers.First().Name, queryParams.Manufacturer!)
+                            )
+                            .When(queryParams.MinPrice != null || queryParams.MaxPrice != null, act => act
+                                .Range(rng => rng
+                                    .NumberRange(numrang => numrang
+                                        .When(queryParams.MinPrice != null, act =>
+                                            act.Field(x => x.Price).Gte(queryParams.MinPrice!)
+                                        )
+                                        .When(queryParams.MaxPrice != null, act =>
+                                            act.Field(x => x.Price).Lte(queryParams.MaxPrice!)
+                                        )
+                                    )
+                                )
+
+                            ).When(queryParams.IsFeatured, act => act
+                                .Term(x => x.IsFeatured, true)
+                            )
+                        )
+                    )
+
+                )
+                .Size(queryParams.Length)
+                .From(queryParams.Skip)
+                .When(queryParams.SortBy != null, act => act
+                    .Sort(srt => srt
+                        .When(queryParams.SortBy!.ToLower() == "name", act => act
+                            .Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc))
+                        )
+                        .When(queryParams.SortBy!.ToLower() == "price", act => act
+                            .Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc))
+                        )
+                    )
+
+                );
+                
         }
     }
 

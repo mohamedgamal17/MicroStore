@@ -4,16 +4,18 @@ using Emgu.CV;
 using MicroStore.Catalog.Domain.Entities;
 using System.Drawing;
 using System.Collections;
+using MicroStore.Catalog.Application.Common;
+using Microsoft.Extensions.Options;
 
 namespace MicroStore.Catalog.Infrastructure.Services
 {
-    public abstract class ImageDescriptor
+    public abstract class ImageDescriptor : IImageDescriptor
     {
         public ImageDescriptorOptions Options { get; protected set; }
 
-        protected ImageDescriptor(ImageDescriptorOptions options)
+        protected ImageDescriptor(IOptions<ImageDescriptorOptions> options)
         {
-            Options = options;
+            Options = options.Value;
         }
 
         public abstract int[] Channels { get; protected set; }

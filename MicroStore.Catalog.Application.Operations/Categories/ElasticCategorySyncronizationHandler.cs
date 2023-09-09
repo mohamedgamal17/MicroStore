@@ -11,7 +11,7 @@ namespace MicroStore.Catalog.Application.Operations.Categories
         IConsumer<EntityCreatedEvent<CategoryEto>>,
         IConsumer<EntityUpdatedEvent<CategoryEto>>,
         IConsumer<EntityDeletedEvent<CategoryEto>>,
-             ITransientDependency
+        ITransientDependency
     {
         private readonly ElasticsearchClient _elasticsearchClient;
 
@@ -43,6 +43,9 @@ namespace MicroStore.Catalog.Application.Operations.Categories
 
             var response  =  await _elasticsearchClient.UpdateByQueryAsync(productQueryDescriptor);
 
+            _logger.LogInformation("Complete Synchronizing Category After Update");
+            _logger.LogInformation(response.DebugInformation);
+
 
         }
         public async Task Consume(ConsumeContext<EntityDeletedEvent<CategoryEto>> context)
@@ -56,17 +59,14 @@ namespace MicroStore.Catalog.Application.Operations.Categories
             var queryDescriptor = new UpdateByQueryRequestDescriptor<ElasticProduct>(IndexName.From<ElasticProduct>())
                 .Script(new Script(new InlineScript
                 {
-                    Source = @"""
-                            for(int i =0; i< ctx._source.productCategories.length; i++)
-                            {
-                                if(ctx._source.productCategories[i].id == params.id)
-                                {
-                                    ctx._source.productCategories[i].name = params.name;
-                                    ctx._source.productCategories[i].description = params.description;
-                                    break;
-                                }
-                            }
-                        """,
+                    Source = @" 
+                        for(int i = 0; i < ctx._source.productCategories.size(); i++){
+                          if(ctx._source.productCategories[i].id == params.id){
+                                ctx._source.productCategories[i].name =params.name;
+                                ctx._source.productCategories[i].description= params.description;
+                           }
+                         }
+                        ",
                     Params = new Dictionary<string, object>()
                     {
                         {"id",elasticEntity.Id },

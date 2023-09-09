@@ -3,9 +3,7 @@ using MassTransit;
 using Microsoft.Extensions.Logging;
 using MicroStore.Catalog.Application.Operations.Categories;
 using MicroStore.Catalog.Application.Operations.Etos;
-using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
-using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
 namespace MicroStore.Catalog.Application.Operations.ProductTags
@@ -56,8 +54,8 @@ namespace MicroStore.Catalog.Application.Operations.ProductTags
             var queryDescriptor = new UpdateByQueryRequestDescriptor<ElasticProduct>(IndexName.From<ElasticProduct>())
                 .Script(new Script(new InlineScript
                 {
-                    Source = @"""
-                            for(int i =0; i< ctx._source.productTags.length; i++)
+                    Source = @"
+                            for(int i =0; i< ctx._source.productTags.size(); i++)
                             {
                                 if(ctx._source.productTags[i].id == params.id)
                                 {
@@ -66,7 +64,7 @@ namespace MicroStore.Catalog.Application.Operations.ProductTags
                                     break;
                                 }
                             }
-                        """,
+                        ",
                     Params = new Dictionary<string, object>()
                     {
                         {"id",elasticEntity.Id },

@@ -8,9 +8,10 @@ using Microsoft.ML.Trainers;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging;
+using Volo.Abp.DependencyInjection;
 namespace MicroStore.Catalog.Infrastructure.Services
 {
-    internal class CollaborativeFilterMLTrainer : ICollaborativeFilterMLTrainer
+    internal class CollaborativeFilterMLTrainer : ICollaborativeFilterMLTrainer , ITransientDependency
     {
         private readonly ElasticsearchClient _elasticSearchClient;
 

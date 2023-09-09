@@ -1,6 +1,8 @@
 ﻿using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.SpecificationAttributes;
+using MicroStore.Catalog.Entities.ElasticSearch;
+
 namespace MicroStore.Catalog.Application.SpecificationAttributes
 {
     public interface ISpecificationAttributeApplicationService
@@ -11,9 +13,9 @@ namespace MicroStore.Catalog.Application.SpecificationAttributes
         Task<Result<SpecificationAttributeDto>> CreateOptionAsync(string attributeId, SpecificationAttributeOptionModel model, CancellationToken cancellationToken = default);
         Task<Result<SpecificationAttributeDto>> UpdateOptionAsync(string attributeId, string optionId, SpecificationAttributeOptionModel model, CancellationToken cancellationToken = default);
         Task<Result<SpecificationAttributeDto>> RemoveOptionAsync(string attributeId, string optionId, CancellationToken cancellationToken = default);
-        Task<Result<List<SpecificationAttributeDto>>> ListAsync(CancellationToken cancellationToken = default);
-        Task<Result<SpecificationAttributeDto>> GetAsync(string attributeId, CancellationToken cancellationToken = default);
-        Task<Result<List<SpecificationAttributeOptionDto>>> ListOptionsAsync(string attributeId, CancellationToken cancellationToken = default);
-        Task<Result<SpecificationAttributeOptionDto>> GetOptionAsync(string attributeId, string optionId, CancellationToken cancellationToken = default);
+        Task<Result<List<ElasticSpecificationAttribute>>> ListAsync(CancellationToken cancellationToken = default);
+        Task<Result<ElasticSpecificationAttribute>> GetAsync(string attributeId, CancellationToken cancellationToken = default);
+        Task<Result<List<ElasticSpecificationAttributeOption>>> ListOptionsAsync(string attributeId, CancellationToken cancellationToken = default);
+        Task<Result<ElasticSpecificationAttributeOption>> GetOptionAsync(string attributeId, string optionId, CancellationToken cancellationToken = default);
     }
 }
