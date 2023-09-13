@@ -5,7 +5,7 @@ namespace MicroStore.Catalog.Domain.ValueObjects
 {
     public class Weight : ValueObject<Weight>
     {
-        public static readonly Weight Empty = new Weight(0, WeightUnit.None);
+        public static readonly Weight Empty = new Weight(0, WeightUnit.Gram);
 
         private readonly double _value;
 
@@ -56,9 +56,10 @@ namespace MicroStore.Catalog.Domain.ValueObjects
 
     public enum WeightUnit
     {
-        None = 0,
-        Gram = 5,
+        Gram = 0,
+
+        Pound = 5,
+
         KiloGram = 10,
-        Pound = 15,
     }
 }

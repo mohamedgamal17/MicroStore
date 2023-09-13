@@ -99,7 +99,7 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
         {
             elasticWeight.Value.Should().Be(model.Value);
 
-            elasticWeight.Unit.Should().Be(model.Unit.ToString());
+            elasticWeight.Unit.Should().Be(model.Unit);
         }
 
         public static void AssertElasticDimension(this ElasticDimension elasticDimension, Dimension model)
@@ -110,7 +110,7 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
 
             elasticDimension.Height.Should().Be(model.Height);
 
-            elasticDimension.Unit.Should().Be(model.Unit.ToString());
+            elasticDimension.Unit.Should().Be(model.Unit);
         }
 
 

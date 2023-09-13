@@ -48,13 +48,11 @@ namespace MicroStore.Catalog.Application.Mappers
 
 
             CreateMap<Dimension, DimensionModel>()
-                .ForMember(x => x.Unit, opt => opt.MapFrom(c => ConvertDimensionUnit(c.Unit)));
+                .ForMember(x => x.Unit, opt => opt.MapFrom(c => c.Unit.ToString()));
 
             CreateMap<Weight, WeightModel>()
-                .ForMember(x => x.Unit, opt => opt.MapFrom(c => ConvertWeightUnit(c.Unit)));
+                .ForMember(x => x.Unit, opt => opt.MapFrom(c => c.Unit.ToString()));
         }
-
-
 
         public static string ConvertWeightUnit(WeightUnit unit)
         {

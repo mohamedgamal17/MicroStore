@@ -1,6 +1,7 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +13,7 @@ using MicroStore.Catalog.Domain.Configuration;
 using MicroStore.Catalog.Infrastructure;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Text.Json.Serialization;
 using Volo.Abp;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.ExceptionHandling;
@@ -60,6 +62,12 @@ namespace MicroStore.Catalog.Api
                 opt.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
                 opt.MapToStatusCode<HttpRequestException>(StatusCodes.Status502BadGateway);
          
+            });
+
+
+            Configure<JsonOptions>(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
         }

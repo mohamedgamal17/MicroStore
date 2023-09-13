@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Domain.ValueObjects;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Tests.Products
 {
@@ -230,7 +231,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 Weight = new WeightModel
                 {
                     Value = 50,
-                    Unit = "g"
+                    Unit = WeightUnit.Gram.ToString()
                 },
 
                 Dimensions = new DimensionModel
@@ -238,7 +239,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
                     Height = 5,
                     Width = 5,
                     Length = 5,
-                    Unit = "inch"
+                    Unit = DimensionUnit.Inch.ToString()
                 },
 
                 CategoriesIds =categories.Select(x=> x.Id).ToHashSet(),

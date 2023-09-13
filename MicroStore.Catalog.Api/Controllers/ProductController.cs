@@ -207,16 +207,7 @@ namespace MicroStore.Catalog.Api.Controllers
             return result.ToOk();
         }
 
-        [Route("user-recommendation")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ElasticProduct>))]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> UserRecommendation(PagingQueryParams queryParams)
-        {
-            var result = await _productQueryService.GetUserRecommendation(CurrentUser.Id.ToString()!, queryParams);
-
-            return result.ToOk();
-
-        }
+  
 
     }
 }

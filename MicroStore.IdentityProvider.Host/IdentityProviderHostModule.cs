@@ -106,16 +106,16 @@ namespace MicroStore.IdentityProvider.Host
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                //await PrepareDataBaseMigration(scope.ServiceProvider);
+                await PrepareDataBaseMigration(scope.ServiceProvider);
 
 
                 var env = context.GetEnvironment();
 
                 if (env.IsDevelopment())
                 {
-                    //await SeedIdentityServerConfigurationData(context.ServiceProvider);
+                    await SeedIdentityServerConfigurationData(context.ServiceProvider);
 
-                    //await SeedIdentityData(context.ServiceProvider);
+                    await SeedIdentityData(context.ServiceProvider);
                 }
 
             }
@@ -145,10 +145,10 @@ namespace MicroStore.IdentityProvider.Host
             }
 
 
-            //   app.UseCorrelationId();
+            app.UseCorrelationId();
             app.UseStaticFiles();
             app.UseRouting();
-           // app.UseIdentityServer();
+            app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseConfiguredEndpoints();

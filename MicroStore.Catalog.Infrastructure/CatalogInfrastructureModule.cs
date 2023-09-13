@@ -82,16 +82,17 @@ namespace MicroStore.Catalog.Infrastructure
 
         private void ConfigureElasticSearch(IServiceCollection services, ApplicationSettings applicationSettings)
         {
+
             var connectionSettings = new ElasticsearchClientSettings(new Uri(applicationSettings.ElasticSearch.Uri))
-                .DefaultIndex(ElasticEntitiesConsts.ProductIndex)
-                .DefaultMappingFor<ElasticImageVector>(m => m.IndexName(ElasticEntitiesConsts.ImageVectorIndex))
-                .DefaultMappingFor<ElasticProduct>(m => m.IndexName(ElasticEntitiesConsts.ProductIndex))
-                .DefaultMappingFor<ElasticCategory>(m => m.IndexName(ElasticEntitiesConsts.CategoryIndex))
-                .DefaultMappingFor<ElasticManufacturer>(m => m.IndexName(ElasticEntitiesConsts.ManufacturerIndex))
-                .DefaultMappingFor<ElasticProductTag>(m => m.IndexName(ElasticEntitiesConsts.ProductTagIndex))
-                .DefaultMappingFor<ElasticSpecificationAttribute>(m => m.IndexName(ElasticEntitiesConsts.SpecificationAttributeIndex))
-                .DefaultMappingFor<ElasticProductReview>(m => m.IndexName(ElasticEntitiesConsts.ProductReviewIndex))
-                .DefaultMappingFor<ElasticProductExpectedRating>(m => m.IndexName(ElasticEntitiesConsts.ProductExpectedRatingIndex));
+                .DefaultIndex(applicationSettings.ElasticSearch.ProductIndex)
+                .DefaultMappingFor<ElasticImageVector>(m => m.IndexName(applicationSettings.ElasticSearch.ImageVectorIndex))
+                .DefaultMappingFor<ElasticProduct>(m => m.IndexName(applicationSettings.ElasticSearch.ProductIndex))
+                .DefaultMappingFor<ElasticCategory>(m => m.IndexName(applicationSettings.ElasticSearch.CategoryIndex))
+                .DefaultMappingFor<ElasticManufacturer>(m => m.IndexName(applicationSettings.ElasticSearch.ManufacturerIndex))
+                .DefaultMappingFor<ElasticProductTag>(m => m.IndexName(applicationSettings.ElasticSearch.ProductTagIndex))
+                .DefaultMappingFor<ElasticSpecificationAttribute>(m => m.IndexName(applicationSettings.ElasticSearch.SpecificationAttributeIndex))
+                .DefaultMappingFor<ElasticProductReview>(m => m.IndexName(applicationSettings.ElasticSearch.ProductReviewIndex))
+                .DefaultMappingFor<ElasticProductExpectedRating>(m => m.IndexName(applicationSettings.ElasticSearch.ProductExpectedRatingIndex));
 
 
 

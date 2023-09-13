@@ -1,8 +1,8 @@
 ﻿#pragma warning disable CS8618
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Catalog.Domain.Const;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Domain.ValueObjects;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Models.Products
@@ -81,7 +81,7 @@ namespace MicroStore.Catalog.Application.Models.Products
                         .WithMessage("Weight unit cannot be null or empty")
                         .MaximumLength(15)
                         .WithMessage("Weight unit max lenght is 15")
-                        .Must(x => StandardWeightUnit.GetStandWeightUnit().Contains(x))
+                        .Must(x => Enum.TryParse(typeof(WeightUnit), x, true, out var _))
                         .WithMessage("Invalid weight unit");
 
                 })
@@ -108,7 +108,7 @@ namespace MicroStore.Catalog.Application.Models.Products
                         .MaximumLength(15)
                         .WithMessage("Dimension unit max lenght is 15")
                         .WithMessage("Dimension unit cannot be null or empty")
-                        .Must(x => StandardDimensionUnit.GetStandardDimensionUnit().Contains(x))
+                        .Must(x => Enum.TryParse(typeof(DimensionUnit), x, true, out var _))
                         .WithMessage("Invalid dimension unit");
                 })
                 .When(x => x.Dimensions != null);

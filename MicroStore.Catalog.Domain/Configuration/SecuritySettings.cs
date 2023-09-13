@@ -18,6 +18,6 @@
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
-        public Dictionary<string, string> Scopes { get; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Scopes { get; set; } = new Dictionary<string, string>();
     }
 }
