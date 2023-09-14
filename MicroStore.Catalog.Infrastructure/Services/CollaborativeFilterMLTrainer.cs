@@ -86,15 +86,16 @@ namespace MicroStore.Catalog.Infrastructure.Services
         {
             var matrixFactorizationOptions = new MatrixFactorizationTrainer.Options
             {
-                MatrixColumnIndexColumnName = "UserId",
-                MatrixRowIndexColumnName = "ProductId",
+                MatrixColumnIndexColumnName = "UserIdEncoded",
+                MatrixRowIndexColumnName = "ProductIdEncoded",
                 LabelColumnName = "Label",
-                NumberOfIterations = 150,
-                ApproximationRank = 20
+                NumberOfIterations = 400,
+                ApproximationRank = 100
             };
 
-            var pipline = _mlContext.Transforms.Categorical.OneHotEncoding("UserId")
-                .Append(_mlContext.Transforms.Categorical.OneHotEncoding("ProductId"))
+            var pipline = _mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "UserIdEncoded", inputColumnName: "UserId")
+                .Append(_mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "ProductIdEncoded", inputColumnName: "ProductId"))
+                .Append(_mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName:"Rating"))
                 .Append(_mlContext.Recommendation().Trainers.MatrixFactorization(matrixFactorizationOptions));
 
             return pipline;
