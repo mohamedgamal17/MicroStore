@@ -90,25 +90,6 @@ namespace MicroStore.Catalog.Api.Controllers
         }
 
 
-
-        [Route("Search")]
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductDto>))]
-        public async Task<IActionResult> Search(ProductSearchModel model)
-        {
-            var validationResult = await ValidateModel(model);
-
-            if (!validationResult.IsValid)
-            {
-                return InvalideModelState();
-            }
-
-            var result = await _productQueryService.SearchAsync(model);
-
-            return result.ToOk();
-        }
-
-
         [Route("search-by-image")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProductDto>))]

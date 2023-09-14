@@ -5,11 +5,10 @@ namespace MicroStore.Catalog.Application.Extensions
 {
     public static class ElasticSearchPagedResultExtensions
     {
-        public static async Task<PagedResult<T>> ToPagedResultAsync<T>(this SearchResponse<T> response,int skip , int size ,ElasticsearchClient elasticsearchClient)
+        public static  PagedResult<T> ToPagedResult<T>(this SearchResponse<T> response,int skip , int size )
         {
-            var countResponse = await elasticsearchClient.CountAsync<T>(desc=> desc.Query(qr=> qr.MatchAll()));
 
-            return new PagedResult<T>(response.Documents, countResponse.Count, skip, size);
+            return new PagedResult<T>(response.Documents,response.Total, skip, size);
         }
     }
 }

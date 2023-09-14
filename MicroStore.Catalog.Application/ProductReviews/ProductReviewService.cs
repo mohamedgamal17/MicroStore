@@ -138,7 +138,7 @@ namespace MicroStore.Catalog.Application.ProductReviews
                 return new PagedResult<ElasticProductReview>(null,0,0,0);
             }
 
-            return await response.ToPagedResultAsync(queryParams.Skip,queryParams.Length,_elasticSearchClient);
+            return  response.ToPagedResult(queryParams.Skip,queryParams.Length);
 
         }
 

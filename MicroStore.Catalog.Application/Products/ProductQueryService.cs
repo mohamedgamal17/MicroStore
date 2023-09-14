@@ -1,5 +1,7 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.Core.Search;
+using Elastic.Clients.Elasticsearch.QueryDsl;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
@@ -53,8 +55,7 @@ namespace MicroStore.Catalog.Application.Products
                 return new PagedResult<ElasticProduct>(null, 0, 0, 0);
             }
 
-
-            return await response.ToPagedResultAsync(queryParams.Skip, queryParams.Length, _elasticSearchClient) ;
+            return response.ToPagedResult(queryParams.Skip, queryParams.Length);
         }
 
         public async Task<Result<List<ElasticProductImage>>> ListProductImagesAsync(string productid, CancellationToken cancellationToken = default)
@@ -72,25 +73,6 @@ namespace MicroStore.Catalog.Application.Products
             return product.ProductImages;
         }
 
-        public async Task<Result<PagedResult<ProductDto>>> SearchAsync(ProductSearchModel model, CancellationToken cancellationToken = default)
-        {
-            var productsQuery = _catalogDbContext.Products
-                    .AsNoTracking()
-                    .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider)
-                    .AsQueryable();
-
-            productsQuery = from product in productsQuery
-                            where product.Name.Contains(model.KeyWords) ||
-                                product.ShortDescription.Contains(model.KeyWords) ||
-                                product.LongDescription.Contains(model.KeyWords) ||
-                                product.Sku.Contains(model.KeyWords) ||
-                                product.ProductCategories.Any(x=> x.Category.Name.Contains(model.KeyWords)) ||
-                                product.ProductManufacturers.Any(x=> x.Manufacturer.Name.Contains(model.KeyWords))
-                            select product;
-
-            return await productsQuery.PageResult(model.Skip, model.Length , cancellationToken);
-        }
-     
         public async Task<Result<List<ProductDto>>> SearchByImage(ProductSearchByImageModel model, CancellationToken cancellationToken = default)
         {
             var relatedImages = await _imageService.SearchByImage(model.Image);
@@ -101,7 +83,7 @@ namespace MicroStore.Catalog.Application.Products
 
             var products = from product in query
                            where relatedImages.Select(x => x.ProductId).Contains(product.Id)
-                           select product ;
+                           select product;
 
             return products.ToList();
         }
@@ -109,9 +91,9 @@ namespace MicroStore.Catalog.Application.Products
 
 
         public async Task<Result<PagedResult<ElasticProduct>>> GetUserRecommendation(string userId,
-            PagingQueryParams  pagingParams, CancellationToken cancellationToken)
+            PagingQueryParams pagingParams, CancellationToken cancellationToken)
         {
-            var (expectedProducts ,count) = await GetUserRecommandedProduct(userId, pagingParams.Skip, pagingParams.Length);
+            var (expectedProducts, count) = await GetUserRecommandedProduct(userId, pagingParams.Skip, pagingParams.Length);
 
             var productIds = expectedProducts?.Select(x => FieldValue.String(x.Id)).ToList();
 
@@ -121,7 +103,6 @@ namespace MicroStore.Catalog.Application.Products
                     .Terms(tr => tr
                     .Field(x => x.Id)
                     .Terms(new Elastic.Clients.Elasticsearch.QueryDsl.TermsQueryField(productIds))
-  
                     )
                 )
                 .Size(pagingParams.Length)
@@ -130,6 +111,19 @@ namespace MicroStore.Catalog.Application.Products
 
             return new PagedResult<ElasticProduct>(productsResponse.Documents, count, pagingParams.Skip, pagingParams.Length);
 
+        }
+
+
+        public async Task<Result<PagedResult<ElasticProduct>>> GetSimilarItems(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        {
+            var response = await _elasticSearchClient.SearchAsync(PreapreSimilarItemsSearchQuery(productId, queryParams.Skip, queryParams.Length));
+
+            if (!response.IsValidResponse)
+            {
+                return new PagedResult<ElasticProduct>(null, 0, 0, 0);
+            }
+
+            return response.ToPagedResult(queryParams.Skip, queryParams.Length);
         }
 
 
@@ -174,6 +168,7 @@ namespace MicroStore.Catalog.Application.Products
                     )
 
                 )
+                .TrackTotalHits(new TrackHits(true))
                 .Size(queryParams.Length)
                 .From(queryParams.Skip)
                 .When(queryParams.SortBy != null, act => act
@@ -187,10 +182,10 @@ namespace MicroStore.Catalog.Application.Products
                     )
 
                 );
-                
+
         }
 
-        private async Task<(IEnumerable<ElasticProductExpectedRating>, long)> GetUserRecommandedProduct(string userId, int skip , int length)
+        private async Task<(IEnumerable<ElasticProductExpectedRating>, long)> GetUserRecommandedProduct(string userId, int skip, int length)
         {
             var productRatingResponse = await _elasticSearchClient.SearchAsync<ElasticProductExpectedRating>(desc => desc
                .Query(q => q
@@ -203,24 +198,42 @@ namespace MicroStore.Catalog.Application.Products
                    .Field(x => x.Score, cfg => cfg.Order(SortOrder.Desc))
 
                )
+               .TrackTotalHits(new TrackHits(true))
                .From(skip)
-               .Size(length)              
+               .Size(length)
             );
 
 
-            var totalCountResponse = await _elasticSearchClient.CountAsync<ElasticProductExpectedRating>(
-                    desc => desc
-                        .Query(qr => qr
-                            .Match(mt => mt
-                                .Field(x => x.UserId)
-                                .Query(userId)
-                            )
-                        )
-                );
 
 
-            return (productRatingResponse.Documents, totalCountResponse.Count);
+            return (productRatingResponse.Documents, productRatingResponse.Total);
         }
+
+        private SearchRequestDescriptor<ElasticProduct> PreapreSimilarItemsSearchQuery(string productId, int skip, int length)
+        {
+            return new SearchRequestDescriptor<ElasticProduct>()
+                .Query(qr => qr
+                    .MoreLikeThis(mr => mr
+                        .Fields(
+                            Infer.Fields<ElasticProduct>(
+                                    x => x.Name,
+                                    x => x.ShortDescription,
+                                    x => x.ProductCategories.First().Name,
+                                    x => x.ProductManufacturers.First().Name,
+                                    x => x.ProductTags.First().Name
+                               )
+                         )
+                        .Like(new List<Like> { new Like(new LikeDocument() { Id = productId }) })
+                        .MinTermFreq(1)
+                        .MaxQueryTerms(20)
+                 )
+              )
+              .TrackTotalHits(new TrackHits(true))
+              .Size(length)
+              .From(skip);
+
+        }
+
     }
 
 

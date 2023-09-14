@@ -9,27 +9,36 @@ using MicroStore.Catalog.Entities.ElasticSearch;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 namespace MicroStore.Catalog.Api.Controllers
 {
-    [Route("api/user-recommandation")]
+    [Route("api/product-recommandation")]
     [ApiController]
-    public class UserRecommandation : MicroStoreApiController
+    public class ProductRecommandation : MicroStoreApiController
     {
         private readonly IProductQueryService _productQueryService;
 
-        public UserRecommandation(IProductQueryService productQueryService)
+        public ProductRecommandation(IProductQueryService productQueryService)
         {
             _productQueryService = productQueryService;
         }
 
-        [Route("products")]
+        [Route("user-recommandation")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ElasticProduct>))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> GetProductRecommendation(PagingQueryParams queryParams)
+        public async Task<IActionResult> GetProductRecommendation([FromQuery] PagingQueryParams queryParams)
         {
             var result = await _productQueryService.GetUserRecommendation(CurrentUser.Id.ToString()!, queryParams);
 
             return result.ToOk();
         }
 
+        [Route("similar-items/{productId}")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ElasticProduct>))]
+        public async Task<IActionResult> GetSimilarItems(string productId , [FromQuery] PagingQueryParams queryParams)
+        {
+            var result = await _productQueryService.GetSimilarItems(productId, queryParams);
+
+            return result.ToOk();
+        }
     }
 }
