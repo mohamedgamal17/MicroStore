@@ -5,7 +5,7 @@ namespace MicroStore.Shipping.Domain.ValueObjects
 {
     public class Dimension : ValueObject<Dimension>
     {
-        public static readonly Dimension Empty = new Dimension(0, 0, 0, DimensionUnit.None);
+        public static readonly Dimension Empty = new Dimension(0, 0, 0, DimensionUnit.CentiMeter);
 
         private readonly double _width;
 
@@ -127,8 +127,7 @@ namespace MicroStore.Shipping.Domain.ValueObjects
 
     public enum DimensionUnit
     {
-        None = 0,
-        CentiMeter = 5,
-        Inch = 10
+        CentiMeter = 0,
+        Inch = 5
     }
 }

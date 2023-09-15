@@ -32,7 +32,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
             RuleFor(x => x.Unit)
                 .NotEmpty()
                 .WithMessage("Dimension unit is required")
-                .Must((prop) => StandardDimensionUnit.FromValues().Contains(prop))
+                .Must((prop) => Enum.TryParse<DimensionUnit>(prop,true,out var _))
                 .WithMessage("Invalid dimension unit");
         }
     }

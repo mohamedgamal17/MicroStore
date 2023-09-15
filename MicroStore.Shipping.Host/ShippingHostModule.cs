@@ -19,6 +19,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using MicroStore.Shipping.Host.OpenApi;
 using MicroStore.Shipping.Domain.Security;
 using IdentityModel;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MicroStore.Shipping.Host
 {
@@ -61,6 +63,11 @@ namespace MicroStore.Shipping.Host
 
             context.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>()
                 .AddSwaggerGen();
+
+            Configure<JsonOptions>(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
         }
 
         private void ConfigureAuthentication(IServiceCollection services)

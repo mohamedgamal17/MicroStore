@@ -24,7 +24,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
             RuleFor(x => x.Unit)
                 .NotEmpty()
                 .WithMessage("Weigh unit is required")
-                .Must((prop) => StandardWeightUnit.FromValues().Contains(prop))
+                .Must((prop) => Enum.TryParse<WeightUnit>(prop,true,out var _))
                 .WithMessage("Invalid weight unit");
         }
     }
