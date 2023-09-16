@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Runtime.Serialization;
-
 namespace MicroStore.ShoppingGateway.ClinetSdk.Common
 {
     [Serializable]
@@ -20,15 +18,8 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Common
 
     public enum DimensionUnit
     {
-        [EnumMember(Value = "none")]
-        None ,
+        CentiMeter,
 
-        [EnumMember(Value = "cm")]
-        Centimeters,
-
-        [EnumMember(Value = "inch")]
-        Inch,
-
-
+        Inch 
     }
 }

@@ -15,13 +15,10 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Common
 
     public enum WeightUnit
     {
-        [EnumMember(Value = "g")]
-        Gram = 0,
+        Gram ,
 
-        [EnumMember (Value = "kg")]
-        KiloGram = 1,
+        Pound ,
 
-        [EnumMember(Value ="lb")]
-        Pound = 2
+        KiloGram ,
     }
 }
