@@ -1,6 +1,6 @@
 ﻿namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
 {
-    public class CreateProductReviewRequestOption
+    public class ProductReviewRequestOption
     {
         public string Title { get; set; }
 
