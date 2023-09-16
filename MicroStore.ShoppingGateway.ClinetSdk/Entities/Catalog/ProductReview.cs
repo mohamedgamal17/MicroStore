@@ -1,6 +1,6 @@
 ﻿namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog
 {
-    public class ProductRevivew : BaseEntity<string>
+    public class ProductReview : BaseEntity<string>
     {
         public string UserId { get; set; }
 
