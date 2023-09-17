@@ -61,7 +61,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 MinPrice = model.MinPrice,
                 MaxPrice = model.MaxPrice,
                 Skip = model.Skip,
-                Lenght = model.Length
+                Length = model.Length
             };
 
             var data = await _productService.ListAsync(requestOptions);

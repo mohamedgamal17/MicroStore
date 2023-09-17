@@ -31,7 +31,6 @@ namespace MicroStore.ShoppingCart.Api.Models
             RuleFor(x => x.ProductId)
                 .NotEmpty()
                 .WithMessage("Product Id cannot be null or empty")
-                .Must((productId) => Guid.TryParse(productId, out _))
                 .MaximumLength(256)
                 .WithMessage("Product Id maximum lenght is 256");
 

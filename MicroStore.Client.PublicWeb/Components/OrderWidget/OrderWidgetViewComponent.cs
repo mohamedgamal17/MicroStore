@@ -26,7 +26,7 @@ namespace MicroStore.Client.PublicWeb.Components.OrderWidget
             var requestOptions = new PagingReqeustOptions
             {
                 Skip = (currentPage - 1) * PAGE_SIZE,
-                Lenght = PAGE_SIZE
+                Length = PAGE_SIZE
             };
 
             var response = await _userOrderService.ListAsync(requestOptions);

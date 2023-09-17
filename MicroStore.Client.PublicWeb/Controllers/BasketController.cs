@@ -36,6 +36,12 @@ namespace MicroStore.Client.PublicWeb.Controllers
         [Route("")]
         public async Task<IActionResult> AddBasketItem([FromBody]BasketItemModel model)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var options = new BaskeItemRequestOptions
             {
                 ProductId = model.ProductId.ToString(),
@@ -88,7 +94,7 @@ namespace MicroStore.Client.PublicWeb.Controllers
 
     public class BasketItemModel
     {
-        public Guid ProductId { get; set; }
+        public string ProductId { get; set; }
         public int Quantity { get; set; }
     }
 

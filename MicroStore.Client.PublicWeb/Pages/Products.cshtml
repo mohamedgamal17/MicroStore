@@ -22,6 +22,9 @@
                                 @await Component.InvokeAsync(typeof(ProductListWidgetViewComponent),new{
                                     category = Model.Category,
                                     manufacturer = Model.Manufacturer,
+                                    currentPage = Model.CurrentPage,
+                                    minPrice = Model.MinPrice,
+                                    maxPrice = Model.MaxPrice
                                 })
                             </div>
                         </div>

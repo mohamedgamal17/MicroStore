@@ -23,61 +23,11 @@
         {
             Text = "100 Products Per Page",
             Value = "100",
-             Selected = Model.Pager.PageSize == 100,
+            Selected = Model.Pager.PageSize == 100,
         },
     };
 }
 <div class="collection-product-wrapper">
-    <div class="product-top-filter">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="filter-main-btn">
-                    <span class="filter-btn btn btn-theme">
-                        <i class="fa fa-filter" aria-hidden="true"></i> Filter
-
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            @if (Model.Products != null && Model.Products.Count > 0)
-            {
-                <div class="col-12">
-                    <div class="product-filter-content">
-                        <div class="search-count">
-                            <h5>@string.Format("Showing Entries {0}-{1} of {2} Results",@Model.Pager.ShowingFrom, @Model.Pager.ShowingTo,Model.Pager.TotalItemsCount)</h5>
-                        </div>
- 
-                        <div class="collection-grid-view">
-                            <ul>
-                                <li>
-                                    <img src="/images/icon/2.png" alt="" class="product-2-layout-view">
-                                </li>
-                                <li>
-                                    <img src="./images/icon/3.png" alt=""
-                                         class="product-3-layout-view">
-                                </li>
-                                <li>
-                                    <img src="/images/icon/4.png" alt=""
-                                         class="product-4-layout-view">
-                                </li>
-                                <li>
-                                    <img src="/images/icon/6.png" alt=""
-                                         class="product-6-layout-view">
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-page-per-view">
-
-                        <select name="Length" asp-items="pagingOptions">
-                         </select>
-                        </div>
-                    </div>
-                </div>
-            }
-
-        </div>
-    </div>
     <div class="product-wrapper-grid product-m no-arrow">
         <div class="row margin-res">
             @foreach (var product in Model.Products)
@@ -94,7 +44,7 @@
                     <div class="product-box product-wrap" style="width: 100%; display: inline-block;" data-product-id="@product.Id">
                         <div class="img-wrapper">
                             <div class="front">
-                                <a href="ProductDetails/@product.Id">
+                                <a href="ProductDetails/?id=@product.Id">
                                     <img src="@productImage" class="img-fluid blur-up lazyload bg-img" alt="">
                                 </a>
                             </div>

@@ -60,7 +60,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Administration\Views\Shared\Components\Catalog\" />
-    <Folder Include="Components\OrderListWidget\" />
     <Folder Include="wwwroot\css\frontend\" />
     <Folder Include="wwwroot\libs\" />
     <Folder Include="wwwroot\backend\" />

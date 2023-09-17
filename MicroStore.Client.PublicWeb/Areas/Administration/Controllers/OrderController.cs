@@ -45,7 +45,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             var requestOptions = new OrderListRequestOptions
             {
-                Lenght = model.PageSize,
+                Length = model.PageSize,
                 Skip = model.PageNumber,
                 StartSubmissionDate = model.StartSubmissionDate,
                 EndSubmissionDate = model.EndSubmissionDate,

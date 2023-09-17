@@ -4,64 +4,103 @@
 <div class="title1 section-t-space">
     <h2 class="title-inner1">Featured products</h2>
 </div>
-<section class="section-b-space pt-0 ratio_asos">
+<section class="section-b-space addtocart_count ratio_asos">
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="theme-tab">
-                    <div class="tab-content-cls">
-                        <div id="tab-4" class="tab-content active default d-block">
-                            <div class="no-slider row">
-                                @if (Model.Products.Count > 0)
-                                {
+                <div class="collection-product-wrapper">
+                    <div id="tab-4" class="product-wrapper-grid product-m no-arrow">
+                        <div class="row margin-res">
+                            @if (Model.Products.Count > 0)
+                            {
 
-                                    @foreach (var product in Model.Products)
-                                    {
-                                        var frontImage = product.ProductImages.FirstOrDefault()?.Image ?? "/user-content/no-image.png";
-                                        var backImage = product.ProductImages.Count > 1 ? product.ProductImages[1].Image : frontImage;
-                                        var productName = product.Name;
-                                        var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
-                                        <div class="product-box" data-product-id="@product.Id">
+                                @foreach (var product in Model.Products)
+                                {
+                                    var frontImage = product.ProductImages.FirstOrDefault()?.Image ?? "/user-content/no-image.png";
+                                    var backImage = product.ProductImages.Count > 1 ? product.ProductImages[1].Image : frontImage;
+                                    var productName = product.Name;
+                                    var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
+                                    bool isItemInBasket = Model.UserBasket.Items?.Any(x => x.ProductId == product.Id) ?? false;
+                                    var quantityBoxClass = isItemInBasket ? "open" : "";
+                                    @*                    <div class="product-box" data-product-id="@product.Id">
+                            <div class="img-wrapper">
+                            <div class="front">
+                            <a asp-page="ProductDetails" asp-route-id="@product.Id">
+                            <img src="@frontImage"
+                            class="img-fluid blur-up lazyload bg-img" alt="">
+                            </a>
+                            </div>
+                            <div class="back">
+                            <a asp-page="ProductDetails" asp-route-id="@product.Id">
+                            <img src="@backImage"
+                            class="img-fluid blur-up lazyload bg-img" alt="">
+                            </a>
+                            </div>
+                            <div class="cart-info cart-wrap">
+                            <button class="add-to-cart" title="Add to cart">
+                            <i class="ti-shopping-cart"></i>
+                            </button>
+                            </div>
+                            </div>
+                            <div class="product-detail">
+                            <a href="product-page(no-sidebar).html">
+                            <h6>@productName</h6>
+                            </a>
+                            <h4>@productPrice</h4>
+                            </div>
+                            </div>
+                            *@
+                                    <div class="col-xl-3 col-6 col-grid-box">
+
+                                        <div class="product-box product-wrap" style="width: 100%; display: inline-block;" data-product-id="@product.Id">
                                             <div class="img-wrapper">
                                                 <div class="front">
-                                                    <a asp-page="ProductDetails" asp-route-id="@product.Id">
-                                                        <img src="@frontImage"
-                                                     class="img-fluid blur-up lazyload bg-img" alt="">
+                                                    <a href="ProductDetails/?id=@product.Id">
+                                                        <img src="@frontImage" class="img-fluid blur-up lazyload bg-img" alt="">
                                                     </a>
                                                 </div>
-                                                <div class="back">
-                                                    <a asp-page="ProductDetails" asp-route-id="@product.Id">
-                                                        <img src="@backImage"
-                                                     class="img-fluid blur-up lazyload bg-img" alt="">
-                                                    </a>
-                                                </div>
-                                                <div class="cart-info cart-wrap">
-                                                    <button class="add-to-cart" title="Add to cart">
-                                                        <i class="ti-shopping-cart"></i>
+                                                <div class="addtocart_btn">
+                                                    <button class="add-button add_cart" title="Add to cart" tabindex="0">
+                                                        Add to Cart
                                                     </button>
+                                                    <div class="qty-box cart_qty @quantityBoxClass">
+                                                        <div class="input-group">
+                                                            <button type="button" class="btn quantity-left-minus" data-type="minus"
+                                                                    data-field="" tabindex="0">
+                                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                                            </button>
+                                                            <input type="text" class="form-control input-number qty-input" value="1"
+                                                                   tabindex="0" disabled>
+                                                            <button type="button" class="btn quantity-right-plus" data-type="plus"
+                                                                    data-field="" tabindex="0">
+                                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="product-detail">
-                                                <a href="product-page(no-sidebar).html">
+                                            <div class="product-detail text-center">
+                                                <a href="product-page(no-sidebar).html" tabindex="0">
                                                     <h6>@productName</h6>
                                                 </a>
                                                 <h4>@productPrice</h4>
                                             </div>
                                         </div>
-                                    }
-
-                                }
-                                else
-                                {
-                                    <div class="container text-center mt-3">
-                                        <h3 class="mt-3">Sorry there is no featured products yet </h3>
                                     </div>
                                 }
 
-                            </div>
+                            }
+                            else
+                            {
+                                <div class="container text-center mt-3">
+                                    <h3 class="mt-3">Sorry there is no featured products yet </h3>
+                                </div>
+                            }
+
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

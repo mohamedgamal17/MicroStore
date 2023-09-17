@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MicroStore.AspNetCore.UI;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
@@ -11,9 +13,14 @@ namespace MicroStore.Client.PublicWeb.Components.FeatureProductListWidget
     {
         private readonly ProductService _productService;
 
-        public FeaturedProductListWidgetViewComponent(ProductService productService)
+        private readonly BasketService _basketService;
+
+        private readonly IWorkContext _workContext;
+        public FeaturedProductListWidgetViewComponent(ProductService productService, BasketService basketService, IWorkContext workContext)
         {
             _productService = productService;
+            _basketService = basketService;
+            _workContext = workContext;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(int lenght = 6)
@@ -21,14 +28,17 @@ namespace MicroStore.Client.PublicWeb.Components.FeatureProductListWidget
             var requestOptions = new ProductListRequestOptions
             {
                 IsFeatured = true,
-                Lenght = lenght,
+                Length = lenght,
             };
 
-            var result = await _productService.ListAsync(requestOptions);
+            var productResult = await _productService.ListAsync(requestOptions);
+
+            var basket = await _basketService.RetrieveAsync(_workContext.TryToGetCurrentUserId());
 
             var model = new FeaturedProductListWidgetModel
             {
-                Products = result.Items
+                Products = productResult.Items,
+                UserBasket = basket,
             };
 
             return View(model);
@@ -38,5 +48,7 @@ namespace MicroStore.Client.PublicWeb.Components.FeatureProductListWidget
     public class FeaturedProductListWidgetModel
     {
         public List<Product> Products { get; set; } = new List<Product>();
+
+        public MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart.Basket UserBasket { get; set; }
     }
 }

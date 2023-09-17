@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using MicroStore.AspNetCore.UI;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
@@ -32,7 +33,7 @@ namespace MicroStore.Client.PublicWeb.Components.ProductListWidget
             var requestOptions = new ProductListRequestOptions
             {
                 Skip = (currentPage - 1) * pageSize,
-                Lenght = pageSize,
+                Length = pageSize,
                 Category = category,
                 Manufacturer = manufacturer,
                 IsFeatured = isFeatured,
@@ -45,10 +46,21 @@ namespace MicroStore.Client.PublicWeb.Components.ProductListWidget
 
             var userBasket = await _basketService.RetrieveAsync(_workContext.TryToGetCurrentUserId());
 
+            var queryDictionary = new Dictionary<string, string>();
+
+            queryDictionary.Add(nameof(isFeatured), isFeatured.ToString());
+            if (category != null) queryDictionary.Add(nameof(category), category);
+            if (manufacturer != null) queryDictionary.Add(nameof(manufacturer), manufacturer);
+            if (minPrice != null) queryDictionary.Add(nameof(minPrice), minPrice.ToString()!);
+            if (maxPrice != null) queryDictionary.Add(nameof(maxPrice), maxPrice.ToString()!);
+  
+
+            string url = QueryHelpers.AddQueryString("/Products", queryDictionary);
+
             var model = new ProductListWidgetModel
             {
                 Products = productResult.Items,
-                Pager = new PagerModel(productResult.TotalCount, pageSize, productResult.PageNumber, pageSize, "/Products"),
+                Pager = new PagerModel(productResult.TotalCount, pageSize, productResult.PageNumber, pageSize, url),
                 UserBasket = userBasket
             };
 

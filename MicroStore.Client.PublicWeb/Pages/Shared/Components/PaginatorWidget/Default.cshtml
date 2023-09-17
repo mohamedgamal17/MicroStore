@@ -2,7 +2,7 @@
 
 @model PagerModel
 @{
-    var urlTemplate = Model.Pages.First() + "?currentPage={0}&sort={1}";
+    var urlTemplate = Model.PageUrl.Contains("?") ? Model.PageUrl + "&currentPage={0}&sort={1}" : Model.PageUrl + "?currentPage={0}&sort={1}" ;
 }
 
 <div class="row">

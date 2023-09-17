@@ -26,7 +26,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             var requestOptions = new PagingAndSortingRequestOptions
             {
-                Lenght = model.Length,
+                Length = model.Length,
                 Skip = model.Skip,
             };
 

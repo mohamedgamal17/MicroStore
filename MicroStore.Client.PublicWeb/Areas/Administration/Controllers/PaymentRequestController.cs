@@ -31,7 +31,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 MaxPrice = model.MaxPrice,
                 Status = model.Status,
                 Skip = model.PageNumber,
-                Lenght = model.PageSize,
+                Length = model.PageSize,
             };
 
             var data = await _paymentRequestService.ListAsync(pagingOptions);

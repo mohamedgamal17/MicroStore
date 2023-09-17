@@ -25,7 +25,7 @@ namespace MicroStore.Client.PublicWeb.Pages
             var requestOptions = new PagingReqeustOptions
             {
                 Skip = (currentPage - 1) * 10,
-                Lenght = 10
+                Length = 10
             };
 
             var response = await _userOrderService.ListAsync(requestOptions);

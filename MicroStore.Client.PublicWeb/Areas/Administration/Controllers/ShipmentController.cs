@@ -52,7 +52,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
                 Skip = model.Skip,
-                Lenght = model.PageSize
+                Length = model.PageSize
             };
 
             var data = await _shipmentService.ListAsync(pagingOptions);
