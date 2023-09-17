@@ -52,7 +52,7 @@ namespace MicroStore.Catalog.Application.Products
 
             if (!response.IsValidResponse)
             {
-                return new PagedResult<ElasticProduct>(null, 0, 0, 0);
+                return new PagedResult<ElasticProduct>(new List<ElasticProduct>(), 0, 0, 0);
             }
 
             return response.ToPagedResult(queryParams.Skip, queryParams.Length);
@@ -120,7 +120,7 @@ namespace MicroStore.Catalog.Application.Products
 
             if (!response.IsValidResponse)
             {
-                return new PagedResult<ElasticProduct>(null, 0, 0, 0);
+                return new PagedResult<ElasticProduct>(new List<ElasticProduct>(), 0, 0, 0);
             }
 
             return response.ToPagedResult(queryParams.Skip, queryParams.Length);

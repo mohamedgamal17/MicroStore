@@ -11,9 +11,8 @@
                 <div class="collection-product-wrapper">
                     <div id="tab-4" class="product-wrapper-grid product-m no-arrow">
                         <div class="row margin-res">
-                            @if (Model.Products.Count > 0)
+                            @if (Model.Products != null && Model.Products.Count > 0)
                             {
-
                                 @foreach (var product in Model.Products)
                                 {
                                     var frontImage = product.ProductImages.FirstOrDefault()?.Image ?? "/user-content/no-image.png";
@@ -22,34 +21,6 @@
                                     var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
                                     bool isItemInBasket = Model.UserBasket.Items?.Any(x => x.ProductId == product.Id) ?? false;
                                     var quantityBoxClass = isItemInBasket ? "open" : "";
-                                    @*                    <div class="product-box" data-product-id="@product.Id">
-                            <div class="img-wrapper">
-                            <div class="front">
-                            <a asp-page="ProductDetails" asp-route-id="@product.Id">
-                            <img src="@frontImage"
-                            class="img-fluid blur-up lazyload bg-img" alt="">
-                            </a>
-                            </div>
-                            <div class="back">
-                            <a asp-page="ProductDetails" asp-route-id="@product.Id">
-                            <img src="@backImage"
-                            class="img-fluid blur-up lazyload bg-img" alt="">
-                            </a>
-                            </div>
-                            <div class="cart-info cart-wrap">
-                            <button class="add-to-cart" title="Add to cart">
-                            <i class="ti-shopping-cart"></i>
-                            </button>
-                            </div>
-                            </div>
-                            <div class="product-detail">
-                            <a href="product-page(no-sidebar).html">
-                            <h6>@productName</h6>
-                            </a>
-                            <h4>@productPrice</h4>
-                            </div>
-                            </div>
-                            *@
                                     <div class="col-xl-3 col-6 col-grid-box">
 
                                         <div class="product-box product-wrap" style="width: 100%; display: inline-block;" data-product-id="@product.Id">
@@ -105,4 +76,3 @@
         </div>
     </div>
 </section>
-<!-- Tab product end -->
