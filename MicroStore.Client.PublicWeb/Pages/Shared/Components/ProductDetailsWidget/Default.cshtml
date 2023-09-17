@@ -1,4 +1,5 @@
-﻿@model MicroStore.Client.PublicWeb.Components.ProductDetailsWidget.ProductDetailsWidgetViewModel
+﻿@using MicroStore.Client.PublicWeb.Components.RelatedProductListWidget;
+@model MicroStore.Client.PublicWeb.Components.ProductDetailsWidget.ProductDetailsWidgetViewModel
 <section>
     <div class="collection-wrapper" data-product-id="@Model.Product.Id">
         <div class="container">
@@ -140,3 +141,5 @@
         </div>
     </div>
 </section>
+
+@await Component.InvokeAsync(typeof(RelatedProductListWidgetViewComponent), new { productId = Model.Product.Id} )
