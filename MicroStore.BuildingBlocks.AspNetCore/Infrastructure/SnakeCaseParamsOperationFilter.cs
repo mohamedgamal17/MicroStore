@@ -11,7 +11,10 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Infrastructure
             {
                 foreach (var item in operation.Parameters)
                 {
-                    item.Name = item.Name.ToSnakeCase();
+                    if (!item.Required)
+                    {
+                        item.Name = item.Name.ToSnakeCase();
+                    }                   
                 }
             }
         }
