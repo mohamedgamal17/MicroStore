@@ -133,7 +133,14 @@
                     <div class="tab-pane fade show active" id="top-home" role="tabpanel"
                          aria-labelledby="top-home-tab">
                         <div class="product-tab-discription">
-                            @Html.Raw(Model.Product.LongDescription)
+                            @if(Model.Product.LongDescription != null)
+                            {
+                                @Html.Raw(Model.Product.LongDescription)
+                            }else
+                            {
+                                <p>There is no description for this product</p>
+                            }
+
                         </div>
                     </div>
                 </div>

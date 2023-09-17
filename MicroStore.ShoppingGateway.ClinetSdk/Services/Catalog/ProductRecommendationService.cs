@@ -6,7 +6,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
     public class ProductRecommendationService
     {
 
-        const string BASE_URL = "/product-recommandation";
+        const string BASE_URL = "/catalog/product-recommandation";
 
         private readonly MicroStoreClinet _microStoreClient;
 

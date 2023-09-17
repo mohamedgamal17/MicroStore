@@ -1,70 +1,55 @@
 ﻿@using System.Globalization;
 @model MicroStore.Client.PublicWeb.Components.RelatedProductListWidget.RelatedProductListWidgetModel
 
-@if(Model.Products.Count > 0)
+
+@if (Model.Products.Count > 0)
 {
-    <div class="title1 section-t-space">
-        <h2 class="title-inner1">Featured products</h2>
-    </div>
-    <section class="section-b-space pt-0 ratio_asos">
+
+    <section class="section-b-space ratio_asos mt-3">
         <div class="container">
             <div class="row">
-                <div class="col">
-                    <div class="theme-tab">
-                        <div class="tab-content-cls">
-                            <div id="tab-4" class="tab-content active default d-block">
-                                <div class="no-slider row">
-                                    @if (Model.Products.Count > 0)
-                                    {
+                <div class="col-12 product-related">
+                    <h2>related products</h2>
+                </div>
+            </div>
+            <div class="row search-product">
+                @foreach (var product in Model.Products)
+                {
+                    var frontImage = product.ProductImages.FirstOrDefault()?.Image ?? "/user-content/no-image.png";
+                    var backImage = product.ProductImages.Count > 1 ? product.ProductImages[1].Image : frontImage;
+                    var productName = product.Name;
+                    var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
 
-                                        @foreach (var product in Model.Products)
-                                        {
-                                            var frontImage = product.ProductImages.FirstOrDefault()?.Image ?? "/user-content/no-image.png";
-                                            var backImage = product.ProductImages.Count > 1 ? product.ProductImages[1].Image : frontImage;
-                                            var productName = product.Name;
-                                            var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
-                                            <div class="product-box" data-product-id="@product.Id">
-                                                <div class="img-wrapper">
-                                                    <div class="front">
-                                                        <a asp-page="ProductDetails" asp-route-id="@product.Id">
-                                                            <img src="@frontImage"
-                                                                 class="img-fluid blur-up lazyload bg-img" alt="">
-                                                        </a>
-                                                    </div>
-                                                    <div class="back">
-                                                        <a asp-page="ProductDetails" asp-route-id="@product.Id">
-                                                            <img src="@backImage"
-                                                                 class="img-fluid blur-up lazyload bg-img" alt="">
-                                                        </a>
-                                                    </div>
-                                                    <div class="cart-info cart-wrap">
-                                                        <button class="add-to-cart" title="Add to cart">
-                                                            <i class="ti-shopping-cart"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="product-detail">
-                                                    <a href="product-page(no-sidebar).html">
-                                                        <h6>@productName</h6>
-                                                    </a>
-                                                    <h4>@productPrice</h4>
-                                                </div>
-                                            </div>
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        <div class="container text-center mt-3">
-                                            <h3 class="mt-3">Sorry there is no featured products yet </h3>
-                                        </div>
-                                    }
-
+                    <div class="col-xl-2 col-md-4 col-6">
+                        <div class="product-box" data-product-id="@product.Id">
+                            <div class="img-wrapper">
+                                <div class="front">
+                                    <a asp-page="ProductDetails" asp-route-id="@product.Id">
+                                        <img src="@frontImage"
+                                             class="img-fluid blur-up lazyload bg-img" alt="">
+                                    </a>
                                 </div>
+                                <div class="back">
+                                    <a asp-page="ProductDetails" asp-route-id="@product.Id">
+                                        <img src="@backImage"
+                                             class="img-fluid blur-up lazyload bg-img" alt="">
+                                    </a>
+                                </div>
+                                <div class="cart-info cart-wrap">
+                                    <button class="add-to-cart" title="Add to cart">
+                                        <i class="ti-shopping-cart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="product-detail">
+                                <a href="product-page(no-sidebar).html">
+                                    <h6>@productName</h6>
+                                </a>
+                                <h4>@productPrice</h4>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
     </section>

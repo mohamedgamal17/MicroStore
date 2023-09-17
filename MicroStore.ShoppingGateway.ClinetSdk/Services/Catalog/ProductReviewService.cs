@@ -5,9 +5,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
 {
     public class ProductReviewService
     {
-        const string BASE_URL = "/products/{productId}/productreviews";
+        const string BASE_URL = "/catalog/products/{productId}/productreviews";
 
-        const string BASE_URL_WITH_ID = "products/{productId}/productreviews/{reviewId}";
+        const string BASE_URL_WITH_ID = "/catalog/products/{productId}/productreviews/{reviewId}";
 
         private readonly MicroStoreClinet _microStoreClient;
 

@@ -1,5 +1,5 @@
 ﻿(function () {
-    abp.widgets.FeaturedProductListWidget = function ($wrapper) {
+    abp.widgets.RelatedProductListWidget = function ($wrapper) {
         var widgetManager = $wrapper.data("abp-widget-manager");
         var init = function ($filters) {
             $wrapper
