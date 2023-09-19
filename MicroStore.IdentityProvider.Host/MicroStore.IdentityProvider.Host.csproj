@@ -6,6 +6,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Services\**" />
+	  <Content Remove="Services\**" />
+	  <EmbeddedResource Remove="Services\**" />
+	  <None Remove="Services\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.2.0" />
 
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.0" />
@@ -40,10 +47,6 @@
 		<ProjectReference Include="..\MicroStore.IdentityProvider.Identity.Web\MicroStore.IdentityProvider.Identity.Web.csproj" />
 		<ProjectReference Include="..\MicroStore.IdentityProvider.IdentityServer.Infrastructure\MicroStore.IdentityProvider.IdentityServer.Infrastructure.csproj" />
 		<ProjectReference Include="..\MicroStore.IdentityProvider.IdentityServer.Web\MicroStore.IdentityProvider.IdentityServer.Web.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Services\" />
 	</ItemGroup>
 
 	<ItemGroup>

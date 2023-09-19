@@ -170,7 +170,7 @@ namespace MicroStore.IdentityProvider.Host
 
                     ClientName ="Micro Store Interactive Client",
 
-                    RedirectUris = { "https://localhost:702s/signin-oidc" },
+                    RedirectUris = { "https://localhost:7020/signin-oidc" },
 
                     FrontChannelLogoutUri = "https://localhost:7020/signout-oidc",
 
