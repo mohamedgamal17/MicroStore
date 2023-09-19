@@ -1,5 +1,6 @@
 ﻿@page
 @using MicroStore.Client.PublicWeb.Components.ProductDetailsWidget
+@using MicroStore.Client.PublicWeb.Components.RecommandedProductListWidget;
 @using MicroStore.Client.PublicWeb.Components.RelatedProductListWidget;
 @model ProductDetailsModel
 
@@ -32,7 +33,7 @@
             Value=  "4"
         },new SelectListItem
         {
-            Text = "Very Good",
+            Text = "Excellent",
             Value=  "5"
         },
     };
@@ -326,9 +327,10 @@
         </div>
     </div>
 </section>
+
+@await Component.InvokeAsync(typeof(RecommandedProductListWidgetViewComponent))
+
 @await Component.InvokeAsync(typeof(RelatedProductListWidgetViewComponent), new { productId = Model.Product.Id} )
-
-
 
 
 @section  Scripts{
