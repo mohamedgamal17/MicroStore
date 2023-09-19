@@ -1,66 +1,83 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Newtonsoft.Json;
+using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.AspNetCore.UI
 {
     public class UINotificationManager : IScopedDependency
     {
+        const string NOTIFICATION_KEY = "MicroStoreUINotification";
 
-        private readonly Queue<Notification> _notifications;
 
-        public UINotificationManager()
+        private readonly ITempDataDictionary _tempData;
+
+
+        public UINotificationManager(IHttpContextAccessor httpContextAccessor , ITempDataDictionaryFactory tempDataDictionaryFactory )
         {
-            _notifications = new Queue<Notification>();
+            _tempData = tempDataDictionaryFactory.GetTempData(httpContextAccessor.HttpContext);
         }
 
 
-        public void Notifiy(Notification notification) => _notifications.Enqueue(notification);
+        public void Notifiy(Notification notification)
+        {
+            var notificationList =  _tempData.ContainsKey(NOTIFICATION_KEY) 
+                   ? JsonConvert.DeserializeObject<List<Notification>>(_tempData[NOTIFICATION_KEY]!.ToString()!)!  :
+                   new List<Notification>();
+
+            notificationList.Add(notification);
+
+            _tempData[NOTIFICATION_KEY] = JsonConvert.SerializeObject(notificationList);
+        }
 
 
-        public void Info(string title, string message)
+        public void Info(string message)
             => Notifiy(new Notification
             {
-                Title = title,
                 Message = message,
                 Type = NotificationType.Info
             });
 
-        public void Success(string title, string message)
+        public void Success(string message)
             => Notifiy(new Notification
             {
-                Title = title,
                 Message = message,
                 Type = NotificationType.Success
             });
-        public void Warning(string title, string message)
+        public void Warning(string message)
             => Notifiy(new Notification
             {
-                Title = title,
                 Message = message,
                 Type = NotificationType.Warning
             });
 
-        public void Error(string title, string message)
+        public void Error( string message)
             => Notifiy(new Notification
             {
-                Title = title,
                 Message = message,
                 Type = NotificationType.Error
             });
 
 
-        public bool HasNotification()
+        public bool HasNotifications()
         {
-            return _notifications.Any();
+            return GetNotifications().Any();
         }
 
-        public int Count() => _notifications.Count;
+        public int Count() => GetNotifications().Count;
 
-        public Notification GetNotification() => _notifications.Dequeue();
+
+        public List<Notification> GetNotifications()
+        {
+            return _tempData.ContainsKey(NOTIFICATION_KEY)
+                       ? JsonConvert.DeserializeObject<List<Notification>>(_tempData[NOTIFICATION_KEY]!.ToString()!)! :
+                       new List<Notification>();
+        }
     }
 
+    [Serializable]
     public class Notification
     {
-        public string Title { get; set; }
         public string Message { get; set; }
         public NotificationType Type { get; set; }
 

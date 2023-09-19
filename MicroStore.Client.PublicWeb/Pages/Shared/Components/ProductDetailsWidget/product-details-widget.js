@@ -3,9 +3,25 @@
 
         var init = function (filter) {
 
-            $(".quantity-left-minus").prop('disabled', true);
-             
+            $("#SubmitReviewForm").validate({
+                rules: {
+                    Rating: "required",
+                    ReviewTitle: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 256
+                    },
+                    ReviewText: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 1000
+                    }
+                }
+            });
 
+            var stars = new StarRating('.star-rating');
+            
+            $(".quantity-left-minus").prop('disabled', true);            
             $wrapper
                 .find(".quantity-left-minus")
                 .click(function (){
@@ -75,6 +91,31 @@
                     var imageSrc = $this.attr("data-image-src");
                     $(".product-image").attr("src", imageSrc);
                 })
+
+            $("#SubmitReviewForm").on("submit", function (evt) {
+                evt.preventDefault();
+
+                var submitUrl = $("#SubmitReviewForm").attr("form-url");
+
+                var formData = {               
+                    Rating: $("input[name='Rating']").val(),
+                    ReviewTitle: $("input[name='ReveiwTitle']").val(),
+                    ReviewText: $("input[name='ReviewText']").val(),
+                    ProductId: $("input[name='ProductId']").val()
+                }
+
+
+                abp.ajax({
+                    type: "POST",
+                    url: submitUrl,
+                    data: formData,
+                    success: function () {
+                        abp.notify.info("Review", "Your reveiw has been submited.")
+                        $(".abp-widget-wrapper[data-widget-name='ProductDetailsWidget']")
+                            .refresh()
+                    }
+                })
+            })
 
 
         };

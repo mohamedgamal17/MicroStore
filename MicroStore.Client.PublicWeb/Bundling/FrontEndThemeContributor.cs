@@ -11,10 +11,12 @@ namespace MicroStore.Client.PublicWeb.Bundling
                 "/libs/ion-rangeslider/css/ion.rangeSlider.min.css",
                 "/libs/slick/slick.css",
                 "/libs/slick/slick-theme.css",
+                "/libs/star-rating.js/dist/star-rating.min.css",
                 "/frontend/css/vendors/font-awesome.css",
                 "/frontend/css/vendors/themify-icons.css",
                 "/frontend/css/style.css",
-                "/frontend/css/custom-pagination.css"
+                "/frontend/css/main.css",
+                
             });
 
         }
@@ -29,6 +31,7 @@ namespace MicroStore.Client.PublicWeb.Bundling
                 "/libs/lazysizes/lazysizes.min.js",
                 "/libs/ion-rangeslider/js/ion.rangeSlider.min.js",
                 "/libs/slick/slick.js",
+                "/libs/star-rating.js/dist/star-rating.min.js",
                 "/frontend/js/script.js",
                 "/frontend/js/main.js"
             });

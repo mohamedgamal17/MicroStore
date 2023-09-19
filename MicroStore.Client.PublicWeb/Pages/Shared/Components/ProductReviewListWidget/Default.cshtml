@@ -1,0 +1,48 @@
+﻿@using MicroStore.Client.PublicWeb.Components.PaginatorWidget;
+@model MicroStore.Client.PublicWeb.Components.ProductReviewListWidget.ProductReviewListWidgetViewComponentModel
+
+<section class="section-b-space blog-detail-page review-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 mb-3">
+                <ul class="comment-section">
+                    @if (Model.ProductReviews != null && Model.ProductReviews.Count > 0)
+                    {
+                        @foreach (var review in Model.ProductReviews)
+                        {
+                            int ratingPercent = (int)(review.Rating * 100 / 5);
+
+                            <li style="display:block !important">
+                                <div class="media">
+                                    <img src="/assets/images/avtar.jpg" alt="Generic placeholder image">
+                                    <div class="media-body">
+                                        <h6>User </h6>
+                                        <div class="custom-rating">
+                                            <div style="width:@(ratingPercent)%"></div>
+                                        </div>
+                                        <p>
+                                            @review.ReviewText
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+
+                    }
+                    else
+                    {
+                        <li>There is no reviews yet</li>
+                    }
+
+                </ul>
+            </div>
+            <div class="col-sm-12 mt-3">
+                <div class="product-pagination mt-3">
+                    <div class="theme-paggination-block">
+                        @await Component.InvokeAsync(typeof(PaginatorWidgetViewComponent), new {model = Model.Pager} )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

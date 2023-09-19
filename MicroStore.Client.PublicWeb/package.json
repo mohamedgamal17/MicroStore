@@ -24,6 +24,7 @@
     "ion-rangeslider": "^2.3.1",
     "lazysizes": "^5.3.2",
     "slick-carousel": "^1.8.1",
+    "star-rating.js": "^4.3.0",
     "summernote": "^0.8.20"
   }
 }

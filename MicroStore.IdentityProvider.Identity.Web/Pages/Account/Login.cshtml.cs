@@ -58,7 +58,6 @@ namespace MicroStore.IdentityProvider.Identity.Web.Pages.Account
             /// </summary>
             [Required]
             [MaxLength(256)]
-            [RegularExpression(@"^([a-zA-Z]+)[0-9]*\\.*[a-zA-Z0-9]+$|^[a-zA-Z]+[0-9]*$", ErrorMessage = "Invalid user name")]
             public string UserName { get; set; }
 
             /// <summary>

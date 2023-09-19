@@ -1,0 +1,28 @@
+﻿@{
+
+    bool isMaingPage = (bool)(ViewData["BreadCrumb.IsMainPage"] ?? false);
+    var title = ViewData["BreadCrumb.Title"];
+    var pageName = ViewData["BreadCrumb.Page"];
+}
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="page-title">
+                    <h2>@title</h2>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item @(isMaingPage ? "active"  : string.Empty)"><a href="/">Home</a></li>
+                        @if (!isMaingPage)
+                        {
+                            <li class="breadcrumb-item active" aria-current="page">@pageName</li>
+                        }
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

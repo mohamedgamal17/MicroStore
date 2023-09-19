@@ -19,6 +19,8 @@
                             $('.abp-widget-wrapper[data-widget-name="CartWidget"]')
                                 .data("abp-widget-manager")
                                 .refresh();
+
+                            abp.notify.info("Added product to your basket.", "Successfully added")
                         }
 
                     })

@@ -46,9 +46,24 @@ namespace MicroStore.Catalog.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductReviewDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> CreateProductReview(string productId ,[FromBody] CreateProductReviewModel model)
+        public async Task<IActionResult> CreateProductReview(string productId ,[FromBody] ProductReviewModel model)
         {
-            var result = await _productReviewService.CreateAsync(productId, model);
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
+            var createModel = new CreateProductReviewModel
+            {
+                Title = model.Title,
+                Rating = model.Rating,
+                ReviewText = model.ReviewText,
+                UserId = CurrentUser.Id.ToString()!
+            };
+
+            var result = await _productReviewService.CreateAsync(productId, createModel);
 
             return result.ToCreatedAtAction(nameof(GetProductReview), 
                 new { productId = result.Value?.Id , productReviewId = result.Value?.ProductId });

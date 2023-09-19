@@ -4,6 +4,9 @@
 @model ProductsModel
 @{
     ViewData["Title"] = "Products page";
+    ViewData["BreadCrumb.IsMainPage"] = false;
+    ViewData["BreadCrumb.Title"] = "Products Page";
+    ViewData["BreadCrumb.Page"] = "Products";
 }
 <section class="section-b-space addtocart_count ratio_asos">
     <div class="collection-wrapper">

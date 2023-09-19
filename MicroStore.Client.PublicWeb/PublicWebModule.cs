@@ -138,8 +138,6 @@ namespace MicroStore.Client.PublicWeb
             context.Services.AddFluentValidationClientsideAdapters();
             context.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
-
-
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

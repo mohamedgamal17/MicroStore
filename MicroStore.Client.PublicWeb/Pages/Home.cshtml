@@ -5,6 +5,8 @@
 @model HomeModel
 @{
     ViewData["Title"] = "Home page";
+    ViewData["BreadCrumb.IsMainPage"] = true;
+    ViewData["BreadCrumb.Title"] = "Home Page";
 }
 
 @await Component.InvokeAsync(typeof(FeaturedProductListWidgetViewComponent))

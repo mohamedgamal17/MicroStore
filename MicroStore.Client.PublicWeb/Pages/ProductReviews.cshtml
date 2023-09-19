@@ -1,0 +1,11 @@
+﻿@page
+@using MicroStore.Client.PublicWeb.Components.ProductReviewListWidget;
+@model MicroStore.Client.PublicWeb.Pages.ProductReviewsModel
+
+@{
+    ViewData["BreadCrumb.IsMainPage"] = false;
+    ViewData["BreadCrumb.Title"] = string.Format("{0} (Reviews)", Model.Product.Name);
+    ViewData["BreadCrumb.Page"] = "REVIEW";
+}
+
+@await Component.InvokeAsync(typeof(ProductReviewListWidgetViewComponent), new { productId = Model.Product.Id, currentPage = Model.CurrentPage})

@@ -131,11 +131,13 @@ namespace MicroStore.Catalog.Application.ProductReviews
                 .Query(qr => qr
                     .Term(x => x.ProductId, productId)
                 )
+                .From(queryParams.Skip)
+                .Size(queryParams.Length)
             );
 
             if (!response.IsValidResponse)
             {
-                return new PagedResult<ElasticProductReview>(null,0,0,0);
+                return new PagedResult<ElasticProductReview>(new List<ElasticProductReview>(),0,0,0);
             }
 
             return  response.ToPagedResult(queryParams.Skip,queryParams.Length);
