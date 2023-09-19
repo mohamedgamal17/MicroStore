@@ -17,7 +17,7 @@ namespace MicroStore.Catalog.Application.ProductReviews
 
         Task<Result<Unit>> DeleteAsync(string productId, string productReviewId, CancellationToken cancellationToken = default);
 
-        Task<Result<PagedResult<ElasticProductReview>>> ListAsync(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ElasticProductReview>>> ListAsync(string productId, ProductReviewListQueryModel queryParams, CancellationToken cancellationToken = default);
 
         Task<Result<ElasticProductReview>> GetAsync(string productId, string productReviewId, CancellationToken cancellationToken = default);
     }

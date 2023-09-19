@@ -120,7 +120,7 @@ namespace MicroStore.Catalog.Application.ProductReviews
             return await _productRepository.AnyAsync(x => x.Id == productId, cancellationToken);
         }
 
-        public async Task<Result<PagedResult<ElasticProductReview>>> ListAsync(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ElasticProductReview>>> ListAsync(string productId, ProductReviewListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
             if (!await CheckProductExist(productId, cancellationToken))
             {
@@ -129,7 +129,14 @@ namespace MicroStore.Catalog.Application.ProductReviews
 
             var response = await _elasticSearchClient.SearchAsync<ElasticProductReview>(desc => desc
                 .Query(qr => qr
-                    .Term(x => x.ProductId, productId)
+                    .Bool(bl=> bl
+                        .Must(mt=>mt
+                            .Term(x=> x.ProductId , productId)
+                            .When(!string.IsNullOrEmpty(queryParams.UserId),cf=>cf
+                                .Term(x=> x.UserId , queryParams.UserId)
+                            )
+                        )
+                    )
                 )
                 .From(queryParams.Skip)
                 .Size(queryParams.Length)

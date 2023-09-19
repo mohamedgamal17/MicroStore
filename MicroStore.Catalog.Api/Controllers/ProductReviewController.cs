@@ -25,7 +25,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductReviewDto>))]
-        public async Task<IActionResult> ListProductReview(string productId ,[FromQuery] PagingQueryParams queryParams)
+        public async Task<IActionResult> ListProductReview(string productId ,[FromQuery] ProductReviewListQueryModel queryParams)
         {
             var result = await _productReviewService.ListAsync(productId, queryParams);
 
