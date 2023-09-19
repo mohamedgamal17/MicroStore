@@ -38,7 +38,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         }
 
 
-        public async Task<PagedList<ProductReview>> ListAsync(string productId, PagingReqeustOptions request, CancellationToken cancellationToken = default)
+        public async Task<PagedList<ProductReview>> ListAsync(string productId, ProductReviewListRequestOption request, CancellationToken cancellationToken = default)
         {
             string path = string.Format(BASE_URL, productId);
 

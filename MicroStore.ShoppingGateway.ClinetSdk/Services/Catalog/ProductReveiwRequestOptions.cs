@@ -14,4 +14,9 @@
     {
         public string ReplayText { get; set; }
     }
+
+    public class ProductReviewListRequestOption : PagingReqeustOptions
+    {
+        public string? UserId { get; set; }
+    }
 }

@@ -12,7 +12,7 @@ namespace MicroStore.Client.PublicWeb.Pages
     {
         public Product Product { get; set; }
         public List<ProductReview> ProductReviews { get; set; }
-        public string? ProductId { get; set; }
+        public List<ProductReview> UserReviews { get; set; }
 
         [BindProperty]
         public CreateProductReviewModel ReviewInput  { get; set; }
@@ -25,12 +25,15 @@ namespace MicroStore.Client.PublicWeb.Pages
 
         private readonly UINotificationManager _uiNotificationManager;
 
-        public ProductDetailsModel(ProductReviewService productReviewService, ILogger<ProductDetailsModel> logger, ProductService productService, UINotificationManager uiNotificationManager)
+        private readonly IWorkContext _workContext;
+
+        public ProductDetailsModel(ProductReviewService productReviewService, ILogger<ProductDetailsModel> logger, ProductService productService, UINotificationManager uiNotificationManager, IWorkContext workContext)
         {
             _productReviewService = productReviewService;
             _logger = logger;
             _productService = productService;
             _uiNotificationManager = uiNotificationManager;
+            _workContext = workContext;
         }
 
         public async Task<IActionResult> OnGetAsync(string id)
@@ -38,9 +41,14 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             Product = await _productService.GetAsync(id);
 
-            var productReviewsResponse = await _productReviewService.ListAsync(id, new PagingReqeustOptions { Length = 10 });
+            var productReviewsResponse = await _productReviewService.ListAsync(id, new ProductReviewListRequestOption { Length = 10 });
+
+            var userReveiwsResponse = await _productReviewService
+                .ListAsync(id, new ProductReviewListRequestOption { UserId = _workContext.TryToGetCurrentUserId(), Length = 10 });
 
             ProductReviews = productReviewsResponse.Items;
+
+            UserReviews = userReveiwsResponse.Items;
 
             return Page();
         }

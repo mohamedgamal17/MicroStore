@@ -20,7 +20,7 @@ namespace MicroStore.Client.PublicWeb.Components.ProductReviewListWidget
 
         public async Task<IViewComponentResult> InvokeAsync(string productId , int currentPage = 1 , int pageSize = 10)
         {
-            var pagingOptions = new PagingReqeustOptions
+            var pagingOptions = new ProductReviewListRequestOption
             {
                 Length = 10,
                 Skip = (currentPage - 1) * pageSize

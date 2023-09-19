@@ -1,10 +1,10 @@
-﻿@page 
+﻿@page
 @using MicroStore.Client.PublicWeb.Components.ProductDetailsWidget
 @using MicroStore.Client.PublicWeb.Components.RelatedProductListWidget;
 @model ProductDetailsModel
 
 @{
-   ViewData["Title"] = "Product Details";
+    ViewData["Title"] = "Product Details";
     ViewData["BreadCrumb.IsMainPage"] = false;
     ViewData["BreadCrumb.Title"] = string.Format("{0} (Details)", Model.Product.Name);
     ViewData["BreadCrumb.Page"] = "PRODUCT";
@@ -36,6 +36,10 @@
             Value=  "5"
         },
     };
+
+    bool isUserAuthenticated = HttpContext.User?.Identity?.IsAuthenticated ?? false;
+
+    bool isUserReviewdProduct = Model.UserReviews.Count > 0;
 }
 
 <section>
@@ -174,13 +178,9 @@
                         <div class="material-border"></div>
                     </li>
 
-                    @if (HttpContext.User.Identity?.IsAuthenticated ?? false)
-                    {
-                    }
-
                     <li class="nav-item">
                         <a class="nav-link" id="top-write-review-tab" data-bs-toggle="tab" href="#top-write-review" role="tab" aria-selected="true">
-                            <i class="icofont icofont-ui-home"></i>Write Review
+                            <i class="icofont icofont-ui-home"></i> @(isUserReviewdProduct ? "Your  Reveiw" : "Write Review")
                         </a>
                     </li>
 
@@ -206,7 +206,7 @@
                             <div class="section-b-space blog-detail-page review-page">
                                 <div class="container">
                                     <div class="row">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12 mb-3">
                                             <ul class="comment-section">
                                                 @if (Model.ProductReviews != null && Model.ProductReviews.Count > 0)
                                                 {
@@ -237,6 +237,11 @@
                                                 }
                                             </ul>
                                         </div>
+                                        <div class="col-sm-12 mt-3 text-center">
+                                            <a class="btn btn-solid hover-solid btn-animation" asp-page="ProductReviews" asp-route-id="@Model.Product.Id">
+                                                Show More
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -244,41 +249,78 @@
                     </div>
 
                     <div class="tab-pane fade" id="top-write-review" role="tabpanel" aria-labelledby="top-write-review-tab">
-                        <form class="theme-form" method="post" asp-page-handler="SubmitProductReview" asp-route-id="@Model.Product.Id">
-                            <input type="hidden" name="ReviewInput.ProductId" value="@Model.Product.Id" />
-                            <div class="form-row row">
-                                <div class="col-md-12 form-group">
-                                    <label for="Rating">Rating</label>
-                                    <select class="form-control star-rating" name="ReviewInput.Rating" asp-items="@ratingList">
-                                        <option value="" selected>Select a rating</option>
-                                    </select>
-                                    <span asp-validation-for="ReviewInput.Rating"></span>
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <label for="ReviewTitle">Review Title</label>
-                                    <input type="text" class="form-control" name="ReviewInput.ReviewTitle" placeholder="Enter your Review Subjects" required="">
-                                    <label id="ReviewTitle-error" class="text-danger"></label>
-                                    <span asp-validation-for="ReviewInput.ReviewTitle"></span>
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <label for="ReviewText">Review Text</label>
-                                    <textarea class="form-control" placeholder="Wrire Your Testimonial Here" name="ReviewInput.ReviewText" rows="3"></textarea>
-                                    <span asp-validation-for="ReviewInput.ReviewText"></span>
 
-                                </div>
-                                <div class="col-md-12">
-                                    <button class="btn btn-solid" type="submit">
-                                        Submit YOur
-                                        Review
-                                    </button>
+                        @if (isUserReviewdProduct)
+                        {
+                            var userReview = Model.UserReviews.First();
+                            int ratingPercent = (int)(userReview.Rating * 100 / 5);
+                            <div class="section-b-space blog-detail-page review-page">
+                                <div class="container">
+                                    <ul class="comment-section">
+                                        <li style="display:block !important">
+                                            <div class="media">
+                                                <img src="../assets/images/avtar.jpg" alt="Generic placeholder image">
+                                                <div class="media-body">
+                                                    <h6> User</h6>
+                                                    <div class="custom-rating">
+                                                        <div style="width:@(ratingPercent)%"></div>
+                                                    </div>
+                                                    <p>
+                                                        @userReview.ReviewText
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    @if (HttpContext.User.Identity?.IsAuthenticated ?? false)
-                    {
+                          
 
-                    }
+
+                        }
+                        else
+                        {
+                            if (!isUserAuthenticated)
+                            {
+                                <div class="alert alert-warning fade show mt-1" role="alert">
+                                    You should login in to be able to submit review
+                                </div>
+                            }
+
+                            <form class="theme-form" method="post" asp-page-handler="SubmitProductReview" asp-route-id="@Model.Product.Id">
+                                <input type="hidden" name="ReviewInput.ProductId" value="@Model.Product.Id" />
+                                <div class="form-row row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="Rating">Rating</label>
+                                        <select class="form-control star-rating" name="ReviewInput.Rating" asp-items="@ratingList">
+                                            <option value="" selected>Select a rating</option>
+                                        </select>
+                                        <span asp-validation-for="ReviewInput.Rating"></span>
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label for="ReviewTitle">Review Title</label>
+                                        <input type="text" class="form-control" name="ReviewInput.ReviewTitle" placeholder="Enter your Review Subjects" required="">
+                                        <label id="ReviewTitle-error" class="text-danger"></label>
+                                        <span asp-validation-for="ReviewInput.ReviewTitle"></span>
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label for="ReviewText">Review Text</label>
+                                        <textarea class="form-control" placeholder="Wrire Your Testimonial Here" name="ReviewInput.ReviewText" rows="3"></textarea>
+                                        <span asp-validation-for="ReviewInput.ReviewText"></span>
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button class="btn btn-solid" type="submit">
+                                            Submit YOur
+                                            Review
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -292,7 +334,7 @@
 @section  Scripts{
     <script>
 
-        (function(){
+        (function () {
 
             $(".product-image-thumb")
                 .click(function () {
@@ -364,7 +406,7 @@
                 });
         })();
 
-        
+
 
 
     </script>
