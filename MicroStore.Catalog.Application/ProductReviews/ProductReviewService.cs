@@ -132,11 +132,13 @@ namespace MicroStore.Catalog.Application.ProductReviews
                     .Bool(bl=> bl
                         .Must(mt=>mt
                             .Term(x=> x.ProductId , productId)
-                            .When(!string.IsNullOrEmpty(queryParams.UserId),cf=>cf
-                                .Term(x=> x.UserId , queryParams.UserId)
+                        )
+                        .Filter(flt=> flt
+                            .When(!string.IsNullOrEmpty(queryParams.UserId), cf=> cf
+                                .Term(x => x.UserId, queryParams.UserId!)
                             )
                         )
-                    )
+                    )                                     
                 )
                 .From(queryParams.Skip)
                 .Size(queryParams.Length)
