@@ -35,7 +35,7 @@ namespace MicroStore.Profiling.Application.Domain
             return phoneNumberParsed;
         }
 
-        public Phone Create(string number, string countryCode) => new Phone(number, countryCode);
+        public static Phone Create(string number, string countryCode) => new Phone(number, countryCode);
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
