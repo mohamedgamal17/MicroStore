@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using MicroStore.Profiling.Application.Domain;
 using System.Reflection;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -9,7 +9,7 @@ namespace MicroStore.Profiling.Application.EntityFramewrok
 {
     [ConnectionStringName("DefaultConnection")]
     [ExposeServices(typeof(DbContext), IncludeDefaults = true, IncludeSelf = true)]
-    public class ApplicationDbContext : AbpDbContext<ApplicationDbContext>
+    public class ApplicationDbContext : AbpDbContext<ApplicationDbContext> , ITransientDependency
     {
         public DbSet<Profile> Profiles { get; set; }
 

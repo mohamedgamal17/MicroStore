@@ -11,6 +11,8 @@ namespace MicroStore.Profiling.Application.EntityFramewrok.EntityTypeConfigurati
 
             builder.Property(x => x.Name).HasMaxLength(400);
 
+            builder.Property(x => x.Phone).HasMaxLength(50);
+
             builder.Property(x=> x.CountryCode).HasMaxLength(10);
 
             builder.Property(x=> x.City).HasMaxLength(50);
