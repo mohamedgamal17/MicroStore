@@ -181,6 +181,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profiling", "Profiling", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Profiling.Application", "MicroStore.Profiling.Application\MicroStore.Profiling.Application.csproj", "{5359CEDC-DE44-4340-9B5D-4FAD466AA266}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profiling", "Profiling", "{8958E33E-C01C-47FC-8F98-B080EB58D96D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Profiling.Application.Tests", "MicroStore.Profiling.Application.Tests\MicroStore.Profiling.Application.Tests.csproj", "{8FD028FC-ECFF-411B-80B8-CE097BC6A655}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -423,6 +427,10 @@ Global
 		{5359CEDC-DE44-4340-9B5D-4FAD466AA266}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5359CEDC-DE44-4340-9B5D-4FAD466AA266}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5359CEDC-DE44-4340-9B5D-4FAD466AA266}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FD028FC-ECFF-411B-80B8-CE097BC6A655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FD028FC-ECFF-411B-80B8-CE097BC6A655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FD028FC-ECFF-411B-80B8-CE097BC6A655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FD028FC-ECFF-411B-80B8-CE097BC6A655}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -515,6 +523,8 @@ Global
 		{E8F6A07A-9D59-4DAE-81D4-10AA7B26F7C3} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{6656C087-47D6-4B1D-A6F9-38244CC40930} = {E9376157-31F1-4C37-8D19-6841506FBBC5}
 		{5359CEDC-DE44-4340-9B5D-4FAD466AA266} = {6656C087-47D6-4B1D-A6F9-38244CC40930}
+		{8958E33E-C01C-47FC-8F98-B080EB58D96D} = {7107956E-BC05-4060-8D9C-563805110605}
+		{8FD028FC-ECFF-411B-80B8-CE097BC6A655} = {8958E33E-C01C-47FC-8F98-B080EB58D96D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
