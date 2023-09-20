@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace MicroStore.Profiling.Application.EntityFramewrok
 {
+    [ConnectionStringName("DefaultConnection")]
+    [ExposeServices(typeof(DbContext), IncludeDefaults = true, IncludeSelf = true)]
     public class ApplicationDbContext : AbpDbContext<ApplicationDbContext>
     {
         public DbSet<Profile> Profiles { get; set; }
