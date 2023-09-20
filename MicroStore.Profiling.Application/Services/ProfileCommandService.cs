@@ -16,9 +16,9 @@ namespace MicroStore.Profiling.Application.Services
         {
             _profileRepository = profileRepository;
         }
-        public async Task<Result<ProfileDto>> CreateAsync(ProfileModel model, CancellationToken cancellationToken)
+        public async Task<Result<ProfileDto>> CreateAsync(CreateProfileModel model, CancellationToken cancellationToken)
         {
-            var profile = ObjectMapper.Map<ProfileModel, Profile>(model);
+            var profile = ObjectMapper.Map<CreateProfileModel, Profile>(model);
 
             await _profileRepository.InsertAsync(profile);
 

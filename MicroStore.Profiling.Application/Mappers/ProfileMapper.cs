@@ -27,6 +27,8 @@ namespace MicroStore.Profiling.Application.Mappers
                 .ForMember(x=> x.Gender, opt=> opt.MapFrom(src=> Enum.Parse<Gender>(src.Gender.ToLower(),true)))
                 .ForMember(x => x.Addresses, opt => opt.MapFrom(src => src.Addresses));
 
+
+            CreateMap<CreateProfileModel, Profile>();
         }
     }
 
