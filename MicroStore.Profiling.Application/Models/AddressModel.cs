@@ -63,25 +63,25 @@ namespace MicroStore.Profiling.Application.Models
             RuleFor(x => x.PostalCode)
              .NotEmpty()
              .WithMessage("Postal Code is required")
-             .Length(3, 10)
-             .WithMessage("Postal code must be between 3 and 10 digits long, and valid for the country of residence.");
+             .MaximumLength( 10)
+             .WithMessage("Postal code maximum length is 10");
 
             RuleFor(x => x.Zip)
              .NotEmpty()
              .WithMessage("Please enter a valid zip code.")
-             .Length(5, 10)
-             .WithMessage("Zip Code should be between 5 and 10 characters long.");
+             .MaximumLength(10)
+             .WithMessage("Zip Code maximum length is 10");
 
             RuleFor(x => x.AddressLine1)
               .NotEmpty()
-              .WithMessage("Address Line 1 is required")
-              .Length(6, 128)
-              .WithMessage("Addresses should be between 6 and 128 characters long.");
+              .WithMessage("Address Line1 is required")
+              .MaximumLength( 500)
+              .WithMessage("Address Line1  maximum length is 500");
 
 
-            RuleFor(x => x.AddressLine1)
-              .Length(6, 128)
-              .WithMessage("Addresses should be between 6 and 128 characters long.");
+            RuleFor(x => x.AddressLine2)
+              .MaximumLength(500)
+              .WithMessage("Address Line2 maximum length is 500");
 
         }
 
