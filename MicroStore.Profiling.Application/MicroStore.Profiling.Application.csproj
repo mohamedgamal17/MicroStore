@@ -21,4 +21,13 @@
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="6.0.2" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="MicroStore.BuildingBlocks.Paging">
+	    <HintPath>..\MicroStore.BuildingBlocks.Paging\obj\Debug\net6.0\ref\MicroStore.BuildingBlocks.Paging.dll</HintPath>
+	  </Reference>
+	  <Reference Include="MicroStore.BuildingBlocks.Results">
+	    <HintPath>..\MicroStore.BuildingBlocks.Results\obj\Debug\net6.0\ref\MicroStore.BuildingBlocks.Results.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
 </Project>

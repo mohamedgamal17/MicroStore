@@ -31,6 +31,10 @@ namespace MicroStore.Profiling.Application.EntityFramewrok.EntityTypeConfigurati
 
 
             builder.HasMany(x => x.Addresses).WithOne();
+
+            builder.HasIndex(x => x.UserId).IsUnique();
+
+            builder.Navigation(x => x.Addresses).AutoInclude(true);
         }
     }
 }
