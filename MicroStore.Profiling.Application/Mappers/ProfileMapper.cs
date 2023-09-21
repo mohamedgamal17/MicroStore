@@ -34,6 +34,8 @@ namespace MicroStore.Profiling.Application.Mappers
                     opt.MapFrom(src => src.Phone);
                     opt.ConvertUsing(PhoneConverter.Converter);
                 });
+
+            CreateMap<ProfileModel, CreateProfileModel>();
         }
     }
 
