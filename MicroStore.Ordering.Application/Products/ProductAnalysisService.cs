@@ -37,7 +37,7 @@ namespace MicroStore.Ordering.Application.Products
             return forcast;          
         }
 
-        public async Task<Result<AggregatedMonthlySalesReportDto>> GetProductMonthlyReport(string productId, CancellationToken cancellationToken = default)
+        public async Task<Result<AggregatedMonthlyReportDto>> GetProductMonthlyReport(string productId, CancellationToken cancellationToken = default)
         {
             var salesReport = await PrepareProductMonthlySalesReport(productId, cancellationToken : cancellationToken);
 
@@ -45,7 +45,7 @@ namespace MicroStore.Ordering.Application.Products
         }
 
 
-        public async Task<Result<AggregateDailySalesReportDto>> GetProductDailySalesReport(string productId, DailySalesReportModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<AggregateDailyReportDto>> GetProductDailySalesReport(string productId, DailyReportModel model, CancellationToken cancellationToken = default)
         {
             var salesReport = await PreapreProductDailySalesReport(productId, model.Year, model.Month, cancellationToken: cancellationToken);
 
@@ -53,14 +53,14 @@ namespace MicroStore.Ordering.Application.Products
         }
 
 
-        private ForecastDto PreapreForcastedModel(ForecastModel model, List<MonthlySalesReportDto> reports)
+        private ForecastDto PreapreForcastedModel(ForecastModel model, List<MonthlyReportDto> reports)
         {
             var mlContext = new MLContext();
 
             var dataView = mlContext.Data.LoadFromEnumerable(reports);
 
             IEstimator<ITransformer> transformer = mlContext.Forecasting.ForecastBySsa(
-                    inputColumnName: nameof(MonthlySalesReportDto.Sum),
+                    inputColumnName: nameof(MonthlyReportDto.Sum),
                     outputColumnName: nameof(ForecastDto.ForecastedValues),
                     windowSize: 12,
                     seriesLength: reports.Count,
@@ -73,12 +73,12 @@ namespace MicroStore.Ordering.Application.Products
 
             ITransformer forcastTransformer = transformer.Fit(dataView);
 
-            var forcastEngine = forcastTransformer.CreateTimeSeriesEngine<MonthlySalesReportDto, ForecastDto>(mlContext);
+            var forcastEngine = forcastTransformer.CreateTimeSeriesEngine<MonthlyReportDto, ForecastDto>(mlContext);
 
             return forcastEngine.Predict();
         }
 
-        private async Task<AggregatedMonthlySalesReportDto> PrepareProductMonthlySalesReport(string productId, bool includeCurrentMonth = true ,CancellationToken cancellationToken = default)
+        private async Task<AggregatedMonthlyReportDto> PrepareProductMonthlySalesReport(string productId, bool includeCurrentMonth = true ,CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext.Query<OrderStateEntity>()
                    .Where(x => x.CurrentState == OrderStatusConst.Completed)
@@ -100,7 +100,7 @@ namespace MicroStore.Ordering.Application.Products
                                  item.SubmissionDate.Month,
                                  item.OrderItems.First().ExternalProductId
                              } into grouped
-                             select new MonthlySalesReportDto
+                             select new MonthlyReportDto
                              {
                                  Year = grouped.Key.Year,
                                  Month = grouped.Key.Month,
@@ -121,8 +121,8 @@ namespace MicroStore.Ordering.Application.Products
             var salesReport = from date in allDates
                               join pr in await projection.ToListAsync()
                               on new { date.Year, date.Month } equals new { pr.Year, pr.Month } into grouped
-                              from gr in grouped.DefaultIfEmpty(new MonthlySalesReportDto())
-                              select new MonthlySalesReportDto
+                              from gr in grouped.DefaultIfEmpty(new MonthlyReportDto())
+                              select new MonthlyReportDto
                               {
                                   Year = date.Year,
                                   Month = date.Month,
@@ -134,7 +134,7 @@ namespace MicroStore.Ordering.Application.Products
                               };
                               
 
-            return new AggregatedMonthlySalesReportDto
+            return new AggregatedMonthlyReportDto
             {
 
                 Min = salesReport.Min(x => x.Sum),
@@ -146,7 +146,7 @@ namespace MicroStore.Ordering.Application.Products
         }
 
 
-        private async Task<AggregateDailySalesReportDto> PreapreProductDailySalesReport(string productId, int year , int month,bool includeCurrentDay = true , CancellationToken cancellationToken = default)
+        private async Task<AggregateDailyReportDto> PreapreProductDailySalesReport(string productId, int year , int month,bool includeCurrentDay = true , CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext.Query<OrderStateEntity>()
                .Where(x => x.CurrentState == OrderStatusConst.Completed)
@@ -173,7 +173,7 @@ namespace MicroStore.Ordering.Application.Products
                                  item.SubmissionDate.Day,
                                  item.OrderItems.First().ExternalProductId
                              } into grouped
-                             select new DailySalesReportDto
+                             select new DailyReportDto
                              {
                                  Year = grouped.Key.Year,
                                  Month = grouped.Key.Month,
@@ -188,8 +188,8 @@ namespace MicroStore.Ordering.Application.Products
             var salesReport = from date in allDates
                               join pr in await projection.ToListAsync()
                               on new { date.Year, date.Month, date.Day } equals new { pr.Year, pr.Month, pr.Day } into grouped
-                              from grp in grouped.DefaultIfEmpty(new DailySalesReportDto())
-                              select new DailySalesReportDto
+                              from grp in grouped.DefaultIfEmpty(new DailyReportDto())
+                              select new DailyReportDto
                               {
                                   Year = date.Year,
                                   Month = date.Month,
@@ -202,7 +202,7 @@ namespace MicroStore.Ordering.Application.Products
                               };
 
 
-            return new AggregateDailySalesReportDto
+            return new AggregateDailyReportDto
             {
 
                 Min = salesReport.Min(x => x.Sum),

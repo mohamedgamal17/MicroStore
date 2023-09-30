@@ -1,17 +1,15 @@
 ﻿namespace MicroStore.Ordering.Application.Dtos
 {
-    public class AggregatedMonthlySalesReportDto
+    public class AggregateDailyReportDto
     {
         public double Min { get; set; }
         public double Max { get; set; }
         public double Sum { get; set; }
         public double Average { get; set; }
-        public List<MonthlySalesReportDto> Reports { get; set; }
-
+        public List<DailyReportDto> Reports { get; set; }
     }
 
-
-    public class MonthlySalesReportDto
+    public class DailyReportDto
     {
         public double Min { get; set; }
         public double Max { get; set; }
@@ -20,8 +18,6 @@
         public double Average { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
+        public int Day { get; set; }
     }
-
-
- 
 }

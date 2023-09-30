@@ -47,7 +47,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpPost]
         [Route("{productId}/daily-report")]
-        public async Task<IActionResult> GetDailyReport(string productId , DailySalesReportModel model)
+        public async Task<IActionResult> GetDailyReport(string productId , DailyReportModel model)
         {
             var validationResult = await ValidateModel(model);
 

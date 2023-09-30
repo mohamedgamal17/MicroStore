@@ -2,14 +2,14 @@
 
 namespace MicroStore.Ordering.Application.Models
 {
-    public class DailySalesReportModel
+    public class DailyReportModel
     {
         public int Year { get; set; }
 
         public int Month { get; set; }
     }
 
-    public class DailySalesReportModelValidation :AbstractValidator<DailySalesReportModel>  
+    public class DailySalesReportModelValidation :AbstractValidator<DailyReportModel>  
     {
         public DailySalesReportModelValidation()
         {
