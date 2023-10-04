@@ -82,10 +82,10 @@ namespace MicroStore.Ordering.Application.Countries
                              {
                                  Year = grouped.Key.Year,
                                  Month = grouped.Key.Month,
-                                 Min = grouped.Min(x => x.TotalPrice),
-                                 Max = grouped.Max(x => x.TotalPrice),
-                                 Average = grouped.Average(x => x.TotalPrice),
-                                 Sum = grouped.Sum(x => x.TotalPrice),
+                                 Min = (float)grouped.Min(x => x.TotalPrice),
+                                 Max = (float)grouped.Max(x => x.TotalPrice),
+                                 Average = (float)grouped.Average(x => x.TotalPrice),
+                                 Sum = (float)grouped.Sum(x => x.TotalPrice),
                                  Count = grouped.Count()
                              };
 
@@ -207,19 +207,22 @@ namespace MicroStore.Ordering.Application.Countries
 
             var dataView = mlContext.Data.LoadFromEnumerable(reports);
 
-            IEstimator<ITransformer> transformer = mlContext.Forecasting.ForecastBySsa(
-                    inputColumnName: nameof(MonthlyReportDto.Sum),
-                    outputColumnName: nameof(ForecastDto.ForecastedValues),
-                    windowSize: 12,
-                    seriesLength: reports.Count,
-                    trainSize: reports.Count,
-                    horizon: model.Horizon,
-                    confidenceLevel: model.ConfidenceLevel,
-                    confidenceLowerBoundColumn: nameof(ForecastDto.ConfidenceLowerBound),
-                    confidenceUpperBoundColumn: nameof(ForecastDto.ConfidenceUpperBound)
+            var pipline = mlContext.Transforms.Conversion.ConvertType(inputColumnName: nameof(MonthlyReportDto.Sum), outputColumnName: nameof(MonthlyReportDto.Sum), outputKind: Microsoft.ML.Data.DataKind.Single)
+                   .Append(
+                   mlContext.Forecasting.ForecastBySsa(
+                       inputColumnName: nameof(MonthlyReportDto.Sum),
+                       outputColumnName: nameof(ForecastDto.ForecastedValues),
+                       windowSize: 12,
+                       seriesLength: reports.Count,
+                       trainSize: reports.Count,
+                       horizon: model.Horizon,
+                       confidenceLevel: model.ConfidenceLevel,
+                       confidenceLowerBoundColumn: nameof(ForecastDto.ConfidenceLowerBound),
+                       confidenceUpperBoundColumn: nameof(ForecastDto.ConfidenceUpperBound)
+                      )
                    );
 
-            ITransformer forcastTransformer = transformer.Fit(dataView);
+            ITransformer forcastTransformer = pipline.Fit(dataView);
 
             var forcastEngine = forcastTransformer.CreateTimeSeriesEngine<MonthlyReportDto, ForecastDto>(mlContext);
 

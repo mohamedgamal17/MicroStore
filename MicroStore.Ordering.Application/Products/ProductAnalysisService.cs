@@ -59,19 +59,22 @@ namespace MicroStore.Ordering.Application.Products
 
             var dataView = mlContext.Data.LoadFromEnumerable(reports);
 
-            IEstimator<ITransformer> transformer = mlContext.Forecasting.ForecastBySsa(
-                    inputColumnName: nameof(MonthlyReportDto.Sum),
-                    outputColumnName: nameof(ForecastDto.ForecastedValues),
-                    windowSize: 12,
-                    seriesLength: reports.Count,
-                    trainSize: reports.Count,
-                    horizon: model.Horizon,
-                    confidenceLevel: model.ConfidenceLevel,
-                    confidenceLowerBoundColumn: nameof(ForecastDto.ConfidenceLowerBound),
-                    confidenceUpperBoundColumn: nameof(ForecastDto.ConfidenceUpperBound)
-                   );
+            var pipline = mlContext.Transforms.Conversion.ConvertType(inputColumnName: nameof(MonthlyReportDto.Sum), outputColumnName: nameof(MonthlyReportDto.Sum), outputKind: Microsoft.ML.Data.DataKind.Single)
+               .Append(
+               mlContext.Forecasting.ForecastBySsa(
+                   inputColumnName: nameof(MonthlyReportDto.Sum),
+                   outputColumnName: nameof(ForecastDto.ForecastedValues),
+                   windowSize: 12,
+                   seriesLength: reports.Count,
+                   trainSize: reports.Count,
+                   horizon: model.Horizon,
+                   confidenceLevel: model.ConfidenceLevel,
+                   confidenceLowerBoundColumn: nameof(ForecastDto.ConfidenceLowerBound),
+                   confidenceUpperBoundColumn: nameof(ForecastDto.ConfidenceUpperBound)
+                  )
+               );
 
-            ITransformer forcastTransformer = transformer.Fit(dataView);
+            ITransformer forcastTransformer = pipline.Fit(dataView);
 
             var forcastEngine = forcastTransformer.CreateTimeSeriesEngine<MonthlyReportDto, ForecastDto>(mlContext);
 
@@ -107,7 +110,7 @@ namespace MicroStore.Ordering.Application.Products
                                  Min = grouped.Min(x => x.OrderItems.First().Quantity),
                                  Max = grouped.Max(x => x.OrderItems.First().Quantity),
                                  Sum = grouped.Sum(x => x.OrderItems.First().Quantity),
-                                 Average = grouped.Average(x => x.OrderItems.First().Quantity),
+                                 Average = (float)grouped.Average(x => x.OrderItems.First().Quantity),
                                  Count = grouped.SelectMany(x => x.OrderItems).Count(),
 
                              };

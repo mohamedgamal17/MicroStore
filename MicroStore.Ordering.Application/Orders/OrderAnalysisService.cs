@@ -59,7 +59,9 @@ namespace MicroStore.Ordering.Application.Orders
 
             if (!includeCurrentMonth)
             {
-                query = query.Where(x => x.SubmissionDate < new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
+                var currentMonthDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+                query = query.Where(x => x.SubmissionDate < currentMonthDate);
             }
 
             var minDate = await query.MinAsync(x => x.SubmissionDate, cancellationToken);
@@ -80,10 +82,10 @@ namespace MicroStore.Ordering.Application.Orders
                              {
                                  Year = grouped.Key.Year,
                                  Month = grouped.Key.Month,
-                                 Min = grouped.Min(x=> x.TotalPrice),
-                                 Max = grouped.Max(x=> x.TotalPrice),
-                                 Average = grouped.Average(x=> x.TotalPrice),
-                                 Sum = grouped.Sum(x=> x.TotalPrice),
+                                 Min = (float)grouped.Min(x=> x.TotalPrice),
+                                 Max = (float)grouped.Max(x=> x.TotalPrice),
+                                 Average = (float)grouped.Average(x=> x.TotalPrice),
+                                 Sum = (float)grouped.Sum(x=> x.TotalPrice),
                                  Count =grouped.Count()
                              };
 
@@ -135,7 +137,7 @@ namespace MicroStore.Ordering.Application.Orders
             List<DateTime> allDates = Enumerable.Range(0, (maxDate - minDate).Days + 1)
                 .Select(offset => minDate.AddDays(offset))
                 .ToList();
-
+           
             var projection = from order in query
                              group order by new
                              {
@@ -185,9 +187,12 @@ namespace MicroStore.Ordering.Application.Orders
 
         private async Task<bool> CheckIfSalesCanMonthlyForecasted(CancellationToken cancellationToken = default)
         {
+
+            var currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
             var query = _orderDbContext.Query<OrderStateEntity>()
                .Where(x => x.CurrentState == OrderStatusConst.Completed)
-               .Where(x => x.SubmissionDate < new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
+               .Where(x => x.SubmissionDate < currentMonth);
 
             var minDate = await query.MinAsync(x => x.SubmissionDate, cancellationToken);
 
@@ -203,7 +208,10 @@ namespace MicroStore.Ordering.Application.Orders
 
             var dataView = mlContext.Data.LoadFromEnumerable(reports);
 
-            IEstimator<ITransformer> transformer = mlContext.Forecasting.ForecastBySsa(
+
+            var pipline = mlContext.Transforms.Conversion.ConvertType(inputColumnName: nameof(MonthlyReportDto.Sum), outputColumnName: nameof(MonthlyReportDto.Sum), outputKind: Microsoft.ML.Data.DataKind.Single)
+                .Append(
+                mlContext.Forecasting.ForecastBySsa(                    
                     inputColumnName: nameof(MonthlyReportDto.Sum),
                     outputColumnName: nameof(ForecastDto.ForecastedValues),
                     windowSize: 12,
@@ -212,10 +220,12 @@ namespace MicroStore.Ordering.Application.Orders
                     horizon: model.Horizon,
                     confidenceLevel: model.ConfidenceLevel,
                     confidenceLowerBoundColumn: nameof(ForecastDto.ConfidenceLowerBound),
-                    confidenceUpperBoundColumn: nameof(ForecastDto.ConfidenceUpperBound)
-                   );
+                    confidenceUpperBoundColumn: nameof(ForecastDto.ConfidenceUpperBound)                   
+                   )
+                );
 
-            ITransformer forcastTransformer = transformer.Fit(dataView);
+
+            ITransformer forcastTransformer = pipline.Fit(dataView);
 
             var forcastEngine = forcastTransformer.CreateTimeSeriesEngine<MonthlyReportDto, ForecastDto>(mlContext);
 

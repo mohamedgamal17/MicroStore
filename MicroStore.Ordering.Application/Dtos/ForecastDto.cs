@@ -1,4 +1,6 @@
-﻿namespace MicroStore.Ordering.Application.Dtos
+﻿using Microsoft.ML.Data;
+
+namespace MicroStore.Ordering.Application.Dtos
 {
     public class ForecastDto
     {

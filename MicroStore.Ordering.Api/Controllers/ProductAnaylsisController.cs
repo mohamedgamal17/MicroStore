@@ -9,7 +9,7 @@ namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/anaylsis/products")]
     [ApiController]
-    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+   // [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class ProductAnaylsisController : MicroStoreApiController
     {
         private readonly IProductAnalysisService _productAnalysisService;
