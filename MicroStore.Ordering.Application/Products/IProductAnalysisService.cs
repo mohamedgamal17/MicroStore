@@ -9,9 +9,7 @@ namespace MicroStore.Ordering.Application.Products
     {
         Task<Result<ForecastDto>> ForecastPrdocut(string productId,ForecastModel model,CancellationToken cancellationToken = default);
 
-        Task<Result<AggregatedMonthlyReportDto>> GetProductMonthlyReport(string productId, CancellationToken cancellationToken = default);
-
-        Task<Result<AggregateDailyReportDto>> GetProductDailySalesReport(string productId, DailyReportModel model ,CancellationToken cancellationToken = default);
+        Task<Result<List<ProductSummaryReport>>> GetProductSummaryReport(string productId, ProductSummaryReportModel model, CancellationToken cancellationToken = default);
 
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.ML.Transforms.TimeSeries;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Application.Dtos;
+using MicroStore.Ordering.Application.Extensions;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.StateMachines;
 using Volo.Abp;
@@ -60,16 +61,16 @@ namespace MicroStore.Ordering.Application.Orders
 
             var projection = model.Period switch
             {
-                ReportPeriod.Daily => query.GroupBy(x => x.SubmissionDate).ProjectToSummaryReport("dd MMMM yyyy"),
+                ReportPeriod.Daily => query.GroupBy(x => x.SubmissionDate).ProjectToOrderSummaryReport("dd MMMM yyyy"),
 
                 ReportPeriod.Monthly => query.GroupBy(x => new
                 {
                     x.SubmissionDate.Month,
                     x.SubmissionDate.Year
                 })
-                .ProjectToSummaryReport("MMMM yyyy"),
+                .ProjectToOrderSummaryReport("MMMM yyyy"),
 
-                _ => query.GroupBy(x => new { x.SubmissionDate.Year }).OrderBy(x => x.Key.Year).ProjectToSummaryReport("yyyy")
+                _ => query.GroupBy(x => new { x.SubmissionDate.Year }).OrderBy(x => x.Key.Year).ProjectToOrderSummaryReport("yyyy")
             };
 
             return await projection.ToListAsync(cancellationToken);
@@ -195,24 +196,5 @@ namespace MicroStore.Ordering.Application.Orders
               
     }
 
-    public static class OrderReportExtension
-    {
-        public static IQueryable<OrderSummaryReport> ProjectToSummaryReport<TKey>(this IQueryable<IGrouping<TKey, OrderStateEntity>> query, string dateFormate)
-        {
-            var projection = from or in query
-                             orderby or.First().SubmissionDate ascending
-                             select new OrderSummaryReport
-                             {
-                                 TotalOrders = or.Count(),
-                                 SumShippingTotalCost = or.Sum(x => x.ShippingCost),
-                                 SumTaxTotalCost = or.Sum(x => x.TaxCost),
-                                 SumSubTotalCost = or.Sum(x => x.SubTotal),
-                                 SumTotalCost = or.Sum(x => x.TotalPrice),
-                                 Date = or.First().SubmissionDate.ToString(dateFormate)
-
-                             };
-
-            return projection;
-        }
-    }
+ 
 }

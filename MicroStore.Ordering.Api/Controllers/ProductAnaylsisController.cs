@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Products;
-using MicroStore.Ordering.Application.Security;
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/anaylsis/products")]
@@ -36,18 +34,11 @@ namespace MicroStore.Ordering.Api.Controllers
             return result.ToOk();
         }
 
-        [HttpPost]
-        [Route("{productId}/monthly-report")]
-        public async Task<IActionResult> GetMonthlyReport(string productId) 
-        {
-            var result = await _productAnalysisService.GetProductMonthlyReport(productId);
 
-            return result.ToOk();
-        }
 
-        [HttpPost]
-        [Route("{productId}/daily-report")]
-        public async Task<IActionResult> GetDailyReport(string productId , DailyReportModel model)
+        [HttpGet]
+        [Route("{productId}/units-summary")]
+        public async Task<IActionResult> GetProductSummaryReport(string productId , ProductSummaryReportModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -57,7 +48,7 @@ namespace MicroStore.Ordering.Api.Controllers
                 return InvalideModelState();
             }
 
-            var result = await _productAnalysisService.GetProductDailySalesReport(productId, model);
+            var result = await _productAnalysisService.GetProductSummaryReport(productId, model);
 
             return result.ToOk();
         }
