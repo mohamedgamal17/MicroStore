@@ -35,18 +35,45 @@ namespace MicroStore.Ordering.Application.Orders
             return forcast;
         }
 
-        public async Task<Result<AggregateDailyReportDto>> GetSalesDailyReport(DailyReportModel model, CancellationToken cancellationToken = default)
+
+        public async Task<Result<List<OrderSummaryReport>>> GetOrdersSummaryReport(OrderSummaryReportModel model, CancellationToken cancellationToken = default)
         {
-            var report = await PrepreSalesDailyReport(model.Year, model.Month , cancellationToken: cancellationToken);
+            var query = _orderDbContext.Query<OrderStateEntity>()
+                .OrderBy(x => x.SubmissionDate)
+                .AsNoTracking();
 
-            return report;
-        }
 
-        public async Task<Result<AggregatedMonthlyReportDto>> GetSalesMonthlyReport(CancellationToken cancellationToken = default)
-        {
-            var report = await PrepareSalesMonthlyReport(cancellationToken: cancellationToken);
+            if (!string.IsNullOrEmpty(model.Status))
+            {
+                query = query.Where(x => x.CurrentState.ToLower() == model.Status.ToLower());
+            }
+            else
+            {
+               query =  query.Where(x => x.CurrentState == OrderStatusConst.Completed);
+            }
+            DateTime endDate = model.EndDate ?? DateTime.Now;
 
-            return report;
+            DateTime startDate = model.StartDate ?? endDate.AddDays(-17);
+
+
+            query = query.Where(x => x.SubmissionDate >= startDate && x.SubmissionDate <= endDate);
+
+            var projection = model.Period switch
+            {
+                ReportPeriod.Daily => query.GroupBy(x => x.SubmissionDate).ProjectToSummaryReport("dd MMMM yyyy"),
+
+                ReportPeriod.Monthly => query.GroupBy(x => new
+                {
+                    x.SubmissionDate.Month,
+                    x.SubmissionDate.Year
+                })
+                .ProjectToSummaryReport("MMMM yyyy"),
+
+                _ => query.GroupBy(x => new { x.SubmissionDate.Year }).OrderBy(x => x.Key.Year).ProjectToSummaryReport("yyyy")
+            };
+
+            return await projection.ToListAsync(cancellationToken);
+
         }
 
         private async Task<AggregatedMonthlyReportDto> PrepareSalesMonthlyReport(bool includeCurrentMonth = true ,CancellationToken cancellationToken = default)
@@ -117,73 +144,6 @@ namespace MicroStore.Ordering.Application.Orders
             };
         }
 
-        private async Task<AggregateDailyReportDto>  PrepreSalesDailyReport(int year,int month , bool includeCurrentDay = false , CancellationToken cancellationToken = default)
-        {
-            var query = _orderDbContext.Query<OrderStateEntity>()
-                .AsNoTracking()
-                .Where(x => x.CurrentState == OrderStatusConst.Completed)
-                .Where(x => x.SubmissionDate.Year == year && x.SubmissionDate.Month == month);
-
-
-            if (!includeCurrentDay)
-            {
-                query = query.Where(x => x.SubmissionDate < DateTime.Now);
-            }
-
-            DateTime minDate = await query.MinAsync(sr => sr.SubmissionDate);
-
-            DateTime maxDate = await query.MaxAsync(sr => sr.SubmissionDate);
-
-            List<DateTime> allDates = Enumerable.Range(0, (maxDate - minDate).Days + 1)
-                .Select(offset => minDate.AddDays(offset))
-                .ToList();
-           
-            var projection = from order in query
-                             group order by new
-                             {
-                                 order.SubmissionDate.Year,
-                                 order.SubmissionDate.Month,
-                                 order.SubmissionDate.Day
-                             } into grouped
-                             select new DailyReportDto
-                             {
-                                 Year = grouped.Key.Year,
-                                 Month = grouped.Key.Month,
-                                 Day=  grouped.Key.Day,
-                                 Min = grouped.Min(x => x.TotalPrice),
-                                 Max = grouped.Max(x => x.TotalPrice),
-                                 Average = grouped.Average(x => x.TotalPrice),
-                                 Sum = grouped.Sum(x => x.TotalPrice),
-                                 Count = grouped.Count()
-                             };
-
-            var salesReport = from date in allDates
-                              join pr in await projection.ToListAsync()
-                              on new { date.Year, date.Month, date.Day } equals new { pr.Year, pr.Month, pr.Day } into grouped
-                              from grp in grouped.DefaultIfEmpty(new DailyReportDto())
-                              select new DailyReportDto
-                              {
-                                  Year = date.Year,
-                                  Month = date.Month,
-                                  Day = date.Day,
-                                  Min = grp.Min,
-                                  Max = grp.Max,
-                                  Sum = grp.Sum,
-                                  Average = grp.Average,
-                                  Count = grp.Count
-                              };
-
-            return new AggregateDailyReportDto
-            {
-
-                Min = salesReport.Min(x => x.Sum),
-                Max = salesReport.Max(x => x.Sum),
-                Average = salesReport.Max(x => x.Average),
-                Sum = salesReport.Sum(x => x.Sum),
-                Reports = salesReport.ToList()
-            };
-        }
-
 
         private async Task<bool> CheckIfSalesCanMonthlyForecasted(CancellationToken cancellationToken = default)
         {
@@ -230,6 +190,29 @@ namespace MicroStore.Ordering.Application.Orders
             var forcastEngine = forcastTransformer.CreateTimeSeriesEngine<MonthlyReportDto, ForecastDto>(mlContext);
 
             return forcastEngine.Predict();
+        }
+
+              
+    }
+
+    public static class OrderReportExtension
+    {
+        public static IQueryable<OrderSummaryReport> ProjectToSummaryReport<TKey>(this IQueryable<IGrouping<TKey, OrderStateEntity>> query, string dateFormate)
+        {
+            var projection = from or in query
+                             orderby or.First().SubmissionDate ascending
+                             select new OrderSummaryReport
+                             {
+                                 TotalOrders = or.Count(),
+                                 SumShippingTotalCost = or.Sum(x => x.ShippingCost),
+                                 SumTaxTotalCost = or.Sum(x => x.TaxCost),
+                                 SumSubTotalCost = or.Sum(x => x.SubTotal),
+                                 SumTotalCost = or.Sum(x => x.TotalPrice),
+                                 Date = or.First().SubmissionDate.ToString(dateFormate)
+
+                             };
+
+            return projection;
         }
     }
 }
