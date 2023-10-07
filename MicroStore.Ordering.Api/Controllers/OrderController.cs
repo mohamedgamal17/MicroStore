@@ -12,7 +12,7 @@ namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/orders")]
     [ApiController]
-  //  [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class OrderController : MicroStoreApiController
     {
         private readonly IOrderCommandService _orderCommandService;

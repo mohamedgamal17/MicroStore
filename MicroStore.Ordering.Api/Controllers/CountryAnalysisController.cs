@@ -10,7 +10,7 @@ namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/anaylsis/countries")]
     [ApiController]
-   // [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class CountryAnalysisController : MicroStoreApiController
     {
         private readonly ICountryAnalysisService _countryAnalysisService;
