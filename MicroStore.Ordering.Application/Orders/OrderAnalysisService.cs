@@ -61,16 +61,16 @@ namespace MicroStore.Ordering.Application.Orders
 
             var projection = model.Period switch
             {
-                ReportPeriod.Daily => query.GroupBy(x => x.SubmissionDate).ProjectToOrderSummaryReport("dd MMMM yyyy"),
+                ReportPeriod.Daily => query.GroupBy(x => x.SubmissionDate).ProjectToOrderSummaryReport(),
 
                 ReportPeriod.Monthly => query.GroupBy(x => new
                 {
                     x.SubmissionDate.Month,
                     x.SubmissionDate.Year
                 })
-                .ProjectToOrderSummaryReport("MMMM yyyy"),
+                .ProjectToOrderSummaryReport(),
 
-                _ => query.GroupBy(x => new { x.SubmissionDate.Year }).OrderBy(x => x.Key.Year).ProjectToOrderSummaryReport("yyyy")
+                _ => query.GroupBy(x => new { x.SubmissionDate.Year }).OrderBy(x => x.Key.Year).ProjectToOrderSummaryReport()
             };
 
             return await projection.ToListAsync(cancellationToken);

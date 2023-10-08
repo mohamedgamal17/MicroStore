@@ -4,11 +4,13 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
+using MicroStore.Ordering.Application.Security;
+
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/anaylsis/orders")]
     [ApiController]
-    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+ //   [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class OrderAnalysisController : MicroStoreApiController 
     {
         private readonly IOrderAnalysisService _orderAnalysisService;

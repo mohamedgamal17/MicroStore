@@ -4,7 +4,7 @@ namespace MicroStore.Ordering.Application.Extensions
 {
     public static class OrderReportExtension
     {
-        public static IQueryable<OrderSummaryReport> ProjectToOrderSummaryReport<TKey>(this IQueryable<IGrouping<TKey, OrderStateEntity>> query, string dateFormate)
+        public static IQueryable<OrderSummaryReport> ProjectToOrderSummaryReport<TKey>(this IQueryable<IGrouping<TKey, OrderStateEntity>> query)
         {
             var projection = from or in query
                              orderby or.First().SubmissionDate ascending
@@ -15,7 +15,7 @@ namespace MicroStore.Ordering.Application.Extensions
                                  SumTaxTotalCost = or.Sum(x => x.TaxCost),
                                  SumSubTotalCost = or.Sum(x => x.SubTotal),
                                  SumTotalCost = or.Sum(x => x.TotalPrice),
-                                 Date = or.First().SubmissionDate.ToString(dateFormate)
+                                 Date = or.First().SubmissionDate.ToString("MM-dd-yyyy")
 
                              };
 

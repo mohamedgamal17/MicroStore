@@ -169,20 +169,20 @@ namespace MicroStore.Ordering.Application.Products
                     x.SubmissionDate.Year,
                     x.SubmissionDate.Month,
                     x.SubmissionDate.Day
-                }).ProjectToProductSummaryReport("dd MMMM yyyy"),
+                }).ProjectToProductSummaryReport(),
 
                 ReportPeriod.Monthly => query.GroupBy(x => new
                 {
                     x.OrderItems.First().ExternalProductId,
                     x.SubmissionDate.Year,
                     x.SubmissionDate.Month,
-                }).ProjectToProductSummaryReport("MMMM yyyy"),
+                }).ProjectToProductSummaryReport(),
 
                 _ => query.GroupBy(x => new
                 {
                     x.OrderItems.First().ExternalProductId,
                     x.SubmissionDate.Year,
-                }).ProjectToProductSummaryReport("yyyy")
+                }).ProjectToProductSummaryReport()
             };
 
 
