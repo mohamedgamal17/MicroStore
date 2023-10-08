@@ -4,11 +4,11 @@ namespace MicroStore.Ordering.Application.Extensions
 {
     public static class OrderReportExtension
     {
-        public static IQueryable<OrderSummaryReport> ProjectToOrderSummaryReport<TKey>(this IQueryable<IGrouping<TKey, OrderStateEntity>> query)
+        public static IQueryable<OrderSalesReport> ProjectToOrderSummaryReport<TKey>(this IQueryable<IGrouping<TKey, OrderStateEntity>> query)
         {
             var projection = from or in query
                              orderby or.First().SubmissionDate ascending
-                             select new OrderSummaryReport
+                             select new OrderSalesReport
                              {
                                  TotalOrders = or.Count(),
                                  SumShippingTotalCost = or.Sum(x => x.ShippingCost),

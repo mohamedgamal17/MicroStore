@@ -37,7 +37,7 @@ namespace MicroStore.Ordering.Application.Orders
         }
 
 
-        public async Task<Result<List<OrderSummaryReport>>> GetOrdersSummaryReport(OrderSummaryReportModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<List<OrderSalesReport>>> GetOrdersSalesReport(OrderSalesReportModel model, CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext.Query<OrderStateEntity>()
                 .OrderBy(x => x.SubmissionDate)
@@ -193,7 +193,25 @@ namespace MicroStore.Ordering.Application.Orders
             return forcastEngine.Predict();
         }
 
-              
+        public  async Task<Result<OrderSummaryReport>> GetOrderSummary(CancellationToken cancellationToken = default)
+        {
+            var query = _orderDbContext.Query<OrderStateEntity>()
+                .AsNoTracking();
+
+
+            var orderSummaryReport = new OrderSummaryReport
+            {
+                TotalUnPayed = await query.CountAsync(x => x.CurrentState == OrderStatusConst.Submited),
+                TotalUnApproved = await query.CountAsync(x => x.CurrentState == OrderStatusConst.Accepted),
+                TotalUnfullfilled = await query.CountAsync(x => x.CurrentState == OrderStatusConst.Approved),
+                TotalUnShipped = await query.CountAsync(x => x.CurrentState == OrderStatusConst.Approved),
+                TotalCompleted = await query.CountAsync(x => x.CurrentState == OrderStatusConst.Completed),
+                TotalCancelled = await query.CountAsync(x => x.CurrentState == OrderStatusConst.Cancelled)
+            };
+
+            return orderSummaryReport;
+
+        }
     }
 
  

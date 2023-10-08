@@ -8,6 +8,10 @@ namespace MicroStore.Ordering.Application.Orders
     {
         Task<Result<ForecastDto>> ForecastSales(ForecastModel model, CancellationToken cancellationToken = default);
 
-        Task<Result<List<OrderSummaryReport>>> GetOrdersSummaryReport(OrderSummaryReportModel model, CancellationToken cancellationToken = default);
+        Task<Result<List<OrderSalesReport>>> GetOrdersSalesReport(OrderSalesReportModel model, CancellationToken cancellationToken = default);
+
+        Task<Result<OrderSummaryReport>> GetOrderSummary(CancellationToken cancellationToken = default);
+
+
     }
 }

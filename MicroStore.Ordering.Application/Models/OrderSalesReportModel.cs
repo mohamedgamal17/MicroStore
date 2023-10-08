@@ -1,6 +1,6 @@
 ﻿namespace MicroStore.Ordering.Application.Models
 {
-    public class OrderSummaryReportModel
+    public class OrderSalesReportModel
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
