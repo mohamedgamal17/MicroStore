@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
+using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Products;
 using MicroStore.Ordering.Application.Security;
@@ -18,6 +19,17 @@ namespace MicroStore.Ordering.Api.Controllers
         {
             _productAnalysisService = productAnalysisService;
         }
+
+
+        [HttpGet]
+        [Route("bestsellers")]
+        public async Task<IActionResult> BestSellers([FromQuery]PagingAndSortingQueryParams queryParams)
+        {
+            var result = await _productAnalysisService.GetBestSellersReport(queryParams);
+
+            return result.ToOk();
+        }
+
 
         [HttpPost]
         [Route("{productId}/forecast")]

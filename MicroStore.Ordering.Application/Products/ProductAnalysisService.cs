@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
+using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Paging.Extensions;
+using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Application.Dtos;
@@ -187,6 +190,43 @@ namespace MicroStore.Ordering.Application.Products
 
 
            return await projection.ToListAsync();
+        }
+
+        public async Task<Result<PagedResult<BestSellerReportDto>>> GetBestSellersReport(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        {
+
+            var query = _orderDbContext.Query<OrderStateEntity>()
+               .AsNoTracking()
+               .Where(x => x.CurrentState == OrderStatusConst.Completed)
+               .SelectMany(x => x.OrderItems);
+
+
+            var projection = query.GroupBy(x => x.ExternalProductId)
+                .Select(x => new BestSellerReportDto
+                {
+                    Id = x.Key,
+                    Name = x.First().Name,
+                    Thumbnail = x.First().Thumbnail,
+                    Quantity = x.Sum(x => x.Quantity),
+                    Amount = x.Sum(x => x.Quantity * x.UnitPrice)
+                });
+
+
+            if(queryParams.SortBy != null)
+            {
+                projection = queryParams.SortBy.ToLower() switch
+                {
+                    "amount" => queryParams.Desc ? projection.OrderByDescending(x => x.Amount) : projection.OrderBy(x=> x.Amount),
+                    "quantity" => queryParams.Desc ? projection.OrderByDescending(x => x.Quantity) : projection.OrderBy(x=> x.Quantity),
+                    _ => throw new InvalidOperationException()
+                };  ;
+            }
+            else
+            {
+                projection = projection.OrderByDescending(x => x.Quantity);
+            }
+
+            return await projection.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
         }
     }
 }
