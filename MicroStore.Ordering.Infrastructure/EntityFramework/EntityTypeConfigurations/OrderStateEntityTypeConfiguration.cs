@@ -127,6 +127,7 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigura
             entity.HasMany(x => x.OrderItems).WithOne();
             entity.HasIndex(x => x.UserId);
             entity.HasIndex(x => x.OrderNumber).IsUnique();
+            entity.HasIndex(x => x.SubmissionDate);
             entity.HasIndex(x => x.ShipmentId);
             entity.Navigation(x => x.OrderItems).AutoInclude();
         }
