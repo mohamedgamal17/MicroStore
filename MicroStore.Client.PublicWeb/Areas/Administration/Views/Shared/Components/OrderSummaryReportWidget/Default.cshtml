@@ -1,0 +1,60 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSummaryReportWidget;
+@model OrderSummaryReportWidgetViewComponentModel
+
+@{
+    int[] data = new int[]
+            {
+                Model.SummaryReport.TotalUnShipped,
+                Model.SummaryReport.TotalUnApproved,
+                Model.SummaryReport.TotalUnfullfilled,
+                Model.SummaryReport.TotalUnShipped,
+                Model.SummaryReport.TotalCompleted,
+                Model.SummaryReport.TotalCancelled
+            };
+}
+
+<abp-card class="card-primary card-outline">
+    <abp-card-header>
+        <abp-card-title class="text-md"> <i class="far fa-chart-bar mr-2"></i>Order Summary</abp-card-title>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <canvas id="order-summary" style="min-height: 340px; height: 340px; max-height: 340px; max-width: 100%; display: block; width: 761px;"></canvas>
+    </abp-card-body>
+</abp-card>
+
+<script target-zone="Footer">
+    var donutData = {
+        labels: [
+            'UnPayed',
+            'UnApproved',
+            'UnFullfilled',
+            'UnShipped',
+            'Completed',
+            'Cancelled',
+        ],
+        datasets: [
+            {
+                data: @Html.Raw(Json.Serialize(data)),
+                backgroundColor: ['#d2d6de', '#3c8dbc', '#00c0ef', '#f39c12', '#00a65a', '#f56954',],
+            }
+        ]
+    }
+    var donutOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+    }
+
+
+    var ctx = document.getElementById("order-summary").getContext("2d")
+
+    var chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: donutData,
+        options: donutOptions
+    })
+</script>

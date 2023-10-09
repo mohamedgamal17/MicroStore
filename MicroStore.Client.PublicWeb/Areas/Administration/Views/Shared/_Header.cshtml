@@ -11,7 +11,9 @@
         <li class="nav-item ">
             <a class="nav-link  text-lg disabled" data-widget="control-sidebar" data-slide="true"
                href="#">
-                @User.Claims.First(cl=> cl.Type == ClaimTypes.Name).Value
+               @if(Context.User.Identity?.IsAuthenticated ?? false){
+                    @User.Claims.First(cl=> cl.Type == ClaimTypes.Name).Value
+               }
             </a>
         </li>
 

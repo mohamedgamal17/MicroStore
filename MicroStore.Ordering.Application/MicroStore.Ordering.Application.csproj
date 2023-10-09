@@ -7,7 +7,6 @@
   </PropertyGroup>
   
  <ItemGroup>
-  <PackageReference Include="EntityFramework" Version="6.4.4" />
   <PackageReference Include="libphonenumber-csharp" Version="8.13.11" />
   <PackageReference Include="MassTransit" Version="8.0.9" />
   <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.10" />

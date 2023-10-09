@@ -1,0 +1,80 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Components.BestSellerWidget;
+@using System.Globalization;
+@model BestSellerWidgetModel
+
+@{
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <abp-card class="card-primary card-outline">
+            <abp-card-header>
+                <abp-card-title class="text-md"><i class="fas fa-star mr-2"></i>Bestsellers by quantity</abp-card-title>
+                <div class="card-tools">
+
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </abp-card-header>
+            <abp-card-body>
+                <abp-table class="text-sm" responsive-sm="true" border-style="Bordered">
+                    <thead>
+                        <tr>
+                            <th>@Html.NameFor(x=>x.ByQuantity.First().Name)</th>
+                            <th>@Html.NameFor(x=> x.ByQuantity.First().Quantity)</th>
+                            <th>@Html.NameFor(x=> x.ByQuantity.First().Amount)</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in Model.ByQuantity)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Amount.ToString("C", new CultureInfo("en-US"))</td>
+                                <td><a class="btn btn-default" asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-eye mr-2"></i>View</a></td>
+                            </tr>
+                        }                   
+                    </tbody>
+                </abp-table>
+            </abp-card-body>
+        </abp-card>
+    </div>
+    <div class="col-md-6">
+       <abp-card class="card-primary card-outline">
+            <abp-card-header>
+                <abp-card-title class="text-md"><i class="far fa-star mr-2"></i>Bestsellers by Amount</abp-card-title>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </abp-card-header>
+            <abp-card-body>
+                <abp-table class="text-sm" responsive-sm="true" border-style="Bordered">
+                    <thead>
+                        <tr>
+                            <th>@Html.NameFor(x=>x.ByAmount.First().Name)</th>
+                            <th>@Html.NameFor(x=> x.ByAmount.First().Quantity)</th>
+                            <th>@Html.NameFor(x=> x.ByAmount.First().Amount)</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ByAmount)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Amount.ToString("C", new CultureInfo("en-US"))</td>
+                                <td><a class="btn btn-default" asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-eye mr-2"></i>View</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </abp-table>
+            </abp-card-body>
+        </abp-card>
+    </div>
+</div>

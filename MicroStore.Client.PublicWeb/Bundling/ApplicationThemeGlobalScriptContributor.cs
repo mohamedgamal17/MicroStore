@@ -10,6 +10,8 @@ namespace MicroStore.Client.PublicWeb.Bundling
             {
                 "/libs/summernote/summernote.min.js",
                 "/libs/admin-lte/js/adminlte.min.js",
+                "/libs/chart.js/dist/chart.umd.js",
+                "/libs/chartjs-adapter-luxon/dist/chartjs-adapter-luxon.umd.min.js",
                 "/js/abp.config.js"
             });
         }

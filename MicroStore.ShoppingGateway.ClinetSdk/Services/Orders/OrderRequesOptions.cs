@@ -46,4 +46,35 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
         public DateTime? StartSubmissionDate { get; set; }
         public DateTime? EndSubmissionDate { get; set; }
     }
+
+    public class OrderSalesReportRequestOptions
+    {
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public ReportPeriod Period { get; set; }
+        public string Status { get; set; }
+    }
+
+
+    public class ProductSalesUnitReportRequestOptions
+    {
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+
+        public ReportPeriod Period { get; set; }
+    }
+    public class ForecastRequestOptions
+    {
+        public float ConfidenceLevel { get; set; }
+        public int Horizon { get; set; }
+    }
+
+    public enum ReportPeriod
+    {
+        Daily = 0,
+        Monthly = 10,
+        Yearly = 15
+    }
+
+    
 }

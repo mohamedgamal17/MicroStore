@@ -1,0 +1,41 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Components.LatestOrderWidget;
+@using System.Globalization;
+@model LatestOrderWidgetViewComponentModel
+
+<abp-card class="card-primary card-outline">
+    <abp-card-header>
+        <abp-card-title class="text-md"><i class="fas fa-cart-plus mr-2"></i>Latest Orders</abp-card-title>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table class="text-sm" responsive-sm="true" border-style="Bordered">
+            <thead>
+                <tr>
+                    <th>@Html.NameFor(x=> x.Orders.First().OrderNumber)</th>
+                    <th>@Html.NameFor(x=> x.Orders.First().CurrentState)</th>
+                    <th>@Html.NameFor(x=> x.Orders.First().SubmissionDate)</th>
+                    <th>@Html.NameFor(x=> x.Orders.First().TotalPrice)</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var order in Model.Orders)
+                {
+                    <tr>
+                        <td>@order.OrderNumber</td>
+                        <td>@order.CurrentState</td>
+                        <td>
+                            @order.SubmissionDate.ToString("dddd, dd MMMM yyyy")
+                        </td>
+                        <td>@order.TotalPrice.ToString("C", new CultureInfo("en-US"))</td>
+                        <td><a class="btn btn-default" asp-controller="Order" asp-action="Details" asp-route-id="@order.Id"><i class="far fa-eye mr-2"></i>View</a></td>
+                    </tr>
+                }
+            </tbody>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

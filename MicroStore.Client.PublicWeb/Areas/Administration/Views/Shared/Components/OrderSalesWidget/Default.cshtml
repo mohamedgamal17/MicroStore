@@ -1,0 +1,143 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSalesWidget.OrderSalesWidgetViewComponentModel
+
+@{
+    var jsonData = Json.Serialize(Model.Daily);
+
+    var dailyRawData = Json.Serialize(Model.Daily);
+
+    var monthlyRawData = Json.Serialize(Model.Monthly);
+
+    var yearlyRawData = Json.Serialize(Model.Yearly);
+}
+<abp-card class="card-primary card-outline">
+    <abp-card-header>
+        <abp-card-title class="text-md"> <i class="fas fa-shopping-cart mr-2 text-dark"></i>Order Sales</abp-card-title>
+        <div class="card-tools">
+         
+            <button class="btn btn-xs btn-info margin-r-5" onclick="orderSalesTimeFrame(this)" value="day">this month</button>
+            <button class="btn btn-xs btn-info margin-r-5" onclick="orderSalesTimeFrame(this)" value="month">this Year</button>
+            <button class="btn btn-xs btn-info  margin-r-5" onclick="orderSalesTimeFrame(this)" value="year">last 10 years</button>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <canvas id="order-sales"></canvas>
+    </abp-card-body>
+</abp-card>
+
+<script target-zone="Footer">
+    const dailyData = @Html.Raw(dailyRawData)
+            const monthlyData = @Html.Raw(monthlyRawData)
+            const yearData = @Html.Raw(yearlyRawData)
+            const baseSegment = {
+        borderColor: function (ctx) {
+            console.log(ctx.p0.raw)
+            if(ctx.p0.raw.isForecasted){
+                return 'rgb(20, 8, 2)'
+            }
+       
+            return 'rgb(75, 192, 192)'
+        }
+    }
+
+    const dailyDataSet = [
+        {
+
+            label: "Order Daily Sales",
+            data: dailyData,
+            segment: baseSegment
+        }
+    ]
+
+    const monthlyDataSet = [
+        {
+            label: "Order Monthly Sales",
+            data: monthlyData,
+            borderWidth: 1,
+             segment: baseSegment
+        }
+    ]
+
+    const yearlyDataSet = [
+        {
+            label: "Order Yearly Sales",
+            data: yearData,
+            backgroundColor: 'rgb(75, 192, 192)',
+            borderWidth: 1,
+            segment: baseSegment
+        }
+    ]
+
+    const dailyOptions =
+    {
+        x: {
+            type: 'time',
+            time: {
+                parser: 'MM-dd-yyyy',
+                unit: 'day'
+            }
+        }
+    }
+
+    const monthlyOptions = {
+        x: {
+            type: 'time',
+            time: {
+                unit: "month",
+                parser: 'MM-dd-yyyy',
+            }
+        }
+    }
+
+    const yearlyOptions = {
+        x: {
+            type: 'time',
+            time: {
+                parser: 'MM-dd-yyyy',
+                unit: 'year'
+            }
+        }
+    }
+
+    var context = document.getElementById("order-sales")
+
+
+    var myChart = new Chart(context, {
+        type: 'line',
+        data: {
+            datasets: dailyDataSet
+        },
+
+        options: {
+            parsing:{
+                xAxisKey:"date",
+                yAxisKey: "sumTotalCost"
+            },
+            scales: dailyOptions
+        }
+
+    });
+
+    function orderSalesTimeFrame(period) {
+        if (period.value == 'day') {
+            myChart.options.scales = dailyOptions
+            myChart.data.datasets = dailyDataSet
+        }
+
+        if (period.value == 'month') {
+            myChart.options.scales = monthlyOptions
+            myChart.data.datasets = monthlyDataSet
+        }
+
+        if (period.value == 'year') {
+            myChart.options.scales = yearlyOptions
+            myChart.data.datasets = yearlyDataSet
+        }
+
+        myChart.update()
+    }
+
+</script>
+
