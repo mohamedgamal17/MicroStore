@@ -3,9 +3,9 @@ using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
-using MicroStore.Ordering.Application.StateMachines;
 using Volo.Abp;
 namespace MicroStore.Ordering.Application.Countries
 {

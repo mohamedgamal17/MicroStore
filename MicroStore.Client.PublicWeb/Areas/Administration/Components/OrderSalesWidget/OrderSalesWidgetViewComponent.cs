@@ -48,11 +48,10 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
             var projection = report.Select(x => new OrderSalesChartDataModel
             {
                 TotalOrders = x.TotalOrders,
-                SumShippingTotalCost = x.SumShippingTotalCost,
-                SumSubTotalCost = x.SumTotalCost,
-                SumTaxTotalCost = x.SumTotalCost,
-                SumTotalCost = x.SumTotalCost,
-                Date = x.Date
+                SumShippingTotalCost = x.TotalShippingPrice,
+                SumTaxTotalCost = x.TotalTaxPrice,
+                SumTotalCost = x.TotalPrice,
+                Date = x.Date.ToString("MM-dd-yyyy")
             }).ToList();
 
             return projection;
@@ -73,11 +72,10 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
             var projection = report.Select(x => new OrderSalesChartDataModel
             {
                 TotalOrders = x.TotalOrders,
-                SumShippingTotalCost = x.SumShippingTotalCost,
-                SumSubTotalCost = x.SumTotalCost,
-                SumTaxTotalCost = x.SumTotalCost,
-                SumTotalCost = x.SumTotalCost,
-                Date = x.Date
+                SumShippingTotalCost = x.TotalShippingPrice,
+                SumTaxTotalCost = x.TotalTaxPrice,
+                SumTotalCost = x.TotalPrice,
+                Date = x.Date.ToString("MM-dd-yyyy")
             }).ToList();
 
             try
@@ -130,11 +128,10 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
             var projection = report.Select(x => new OrderSalesChartDataModel
             {
                 TotalOrders = x.TotalOrders,
-                SumShippingTotalCost = x.SumShippingTotalCost,
-                SumSubTotalCost = x.SumTotalCost,
-                SumTaxTotalCost = x.SumTotalCost,
-                SumTotalCost = x.SumTotalCost,
-                Date = x.Date
+                SumShippingTotalCost = x.TotalShippingPrice,
+                SumTaxTotalCost = x.TotalTaxPrice,
+                SumTotalCost = x.TotalPrice,
+                Date = x.Date.ToString("MM-dd-yyyy")
             }).ToList();
 
 

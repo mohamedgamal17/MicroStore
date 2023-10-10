@@ -6,10 +6,10 @@ using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Extensions;
 using MicroStore.Ordering.Application.Models;
-using MicroStore.Ordering.Application.StateMachines;
 using Volo.Abp;
 namespace MicroStore.Ordering.Application.Products
 {
@@ -29,28 +29,28 @@ namespace MicroStore.Ordering.Application.Products
 
             if (!canProductForecasted)
             {
-                return new Result<ForecastDto>(new UserFriendlyException("Current item cannot be forecasted yet.It will be forecasted after 12 months"));
+                return new Result<ForecastDto>(new UserFriendlyException("Current item cannot be forecasted yet.It must has at least 12 months history in series"));
             }
 
 
             var salesReport = await PrepareProductMonthlySalesReport(productId, includeCurrentMonth: false, cancellationToken);
 
 
-            var forcast = PreapreForcastedModel(model,salesReport.Reports);
+            var forcast = PreapreForcastedModel(model,salesReport);
 
             return forcast;          
         }
 
-        private ForecastDto PreapreForcastedModel(ForecastModel model, List<MonthlyReportDto> reports)
+        private ForecastDto PreapreForcastedModel(ForecastModel model, List<ProductSalesReportDto> reports)
         {
             var mlContext = new MLContext();
 
             var dataView = mlContext.Data.LoadFromEnumerable(reports);
 
-            var pipline = mlContext.Transforms.Conversion.ConvertType(inputColumnName: nameof(MonthlyReportDto.Sum), outputColumnName: nameof(MonthlyReportDto.Sum), outputKind: Microsoft.ML.Data.DataKind.Single)
+            var pipline = mlContext.Transforms.Conversion.ConvertType(inputColumnName: nameof(ProductSalesReportDto.Quantity), outputColumnName: nameof(ProductSalesReportDto.Quantity), outputKind: Microsoft.ML.Data.DataKind.Single)
                .Append(
                mlContext.Forecasting.ForecastBySsa(
-                   inputColumnName: nameof(MonthlyReportDto.Sum),
+                   inputColumnName: nameof(ProductSalesReportDto.Quantity),
                    outputColumnName: nameof(ForecastDto.ForecastedValues),
                    windowSize: 12,
                    seriesLength: reports.Count,
@@ -69,164 +69,115 @@ namespace MicroStore.Ordering.Application.Products
             return forcastEngine.Predict();
         }
 
-        private async Task<AggregatedMonthlyReportDto> PrepareProductMonthlySalesReport(string productId, bool includeCurrentMonth = true ,CancellationToken cancellationToken = default)
+        private async Task<List<ProductSalesReportDto>> PrepareProductMonthlySalesReport(string productId, bool includeCurrentMonth = true ,CancellationToken cancellationToken = default)
         {
-            var query = _orderDbContext.Query<OrderStateEntity>()
-                   .Where(x => x.CurrentState == OrderStatusConst.Completed)
-                   .Where(x => x.OrderItems.Any(x => x.ExternalProductId == productId));
+            var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
-            if (!includeCurrentMonth)
-            {
-                query = query.Where(x => x.SubmissionDate < new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
-            }
+            var startDate = endDate.AddYears(-1);
 
-            DateTime minDate = await query.MinAsync(x => x.SubmissionDate);
+            var query = _orderDbContext.Query<ProductSalesReport>()
+                   .AsNoTracking()
+                   .Where(x => x.ProductId == productId)
+                   .Where(x=> x.Date >= startDate && x.Date <= endDate);
 
-            DateTime maxDate = await query.MaxAsync(x => x.SubmissionDate);
 
             var projection = from item in query
                              group item by new
                              {
-                                 item.SubmissionDate.Year,
-                                 item.SubmissionDate.Month,
-                                 item.OrderItems.First().ExternalProductId
+                                 item.Date.Year,
+                                 item.Date.Month,
+                                 item.ProductId
                              } into grouped
-                             select new MonthlyReportDto
+                             select new ProductSalesReportDto
                              {
-                                 Year = grouped.Key.Year,
-                                 Month = grouped.Key.Month,
-                                 Min = grouped.Min(x => x.OrderItems.First().Quantity),
-                                 Max = grouped.Max(x => x.OrderItems.First().Quantity),
-                                 Sum = grouped.Sum(x => x.OrderItems.First().Quantity),
-                                 Average = (float)grouped.Average(x => x.OrderItems.First().Quantity),
-                                 Count = grouped.SelectMany(x => x.OrderItems).Count(),
-
+                                 Quantity = grouped.Sum(x => x.Quantity),
+                                 TotalPrice = grouped.Sum(x => x.TotalPrice),
+                                 Date = grouped.Max(x => x.Date),
                              };
 
 
-            var allDates = Enumerable.Range(0, (maxDate.Year - minDate.Year) * 12 + maxDate.Month - minDate.Month + 1)
-                .Select(offset => minDate.AddMonths(offset))
-                .ToList();
-
-
-            var salesReport = from date in allDates
-                              join pr in await projection.ToListAsync()
-                              on new { date.Year, date.Month } equals new { pr.Year, pr.Month } into grouped
-                              from gr in grouped.DefaultIfEmpty(new MonthlyReportDto())
-                              select new MonthlyReportDto
-                              {
-                                  Year = date.Year,
-                                  Month = date.Month,
-                                  Min = gr.Min,
-                                  Max = gr.Max,
-                                  Sum = gr.Sum,
-                                  Average = gr.Average,
-                                  Count = gr.Count
-                              };
-                              
-
-            return new AggregatedMonthlyReportDto
-            {
-
-                Min = salesReport.Min(x => x.Sum),
-                Max = salesReport.Max(x => x.Sum),
-                Average = salesReport.Max(x => x.Average),
-                Sum = salesReport.Sum(x => x.Sum),
-                Reports = salesReport.ToList()
-            };                            
+            return await projection.OrderBy(x=> x.Date).ToListAsync(cancellationToken);                            
         }
 
 
        
         private async Task<bool> CheckIfProductCanMonthlyForecasted(string productId, CancellationToken cancellationToken )
         {
-            var query = _orderDbContext.Query<OrderStateEntity>()
-               .Where(x => x.CurrentState == OrderStatusConst.Completed)
-               .Where(x => x.OrderItems.Any(x => x.ExternalProductId == productId))
-               .Where(x => x.SubmissionDate < new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
+            var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
-            var minDate = await query.MinAsync(x => x.SubmissionDate, cancellationToken);
-            var maxDate = await query.MaxAsync(x => x.SubmissionDate, cancellationToken);
+            var startDate = endDate.AddYears(-1);
 
-            return maxDate > minDate.AddYears(1);
+            var count = await _orderDbContext.Query<ProductSalesReport>()
+                   .AsNoTracking()
+                   .Where(x => x.ProductId == productId)
+                   .Where(x => x.Date >= startDate && x.Date <= endDate)
+                   .GroupBy(x => new { x.Date.Year, x.Date.Month })
+                   .CountAsync();
+                   
+
+            return count >= 12;
                
         }
 
-        public async Task<Result<List<ProductSummaryReport>>> GetProductSummaryReport(string productId, ProductSummaryReportModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<List<ProductSalesReportDto>>> GetProductSalesReport(string productId, ProductSummaryReportModel model, CancellationToken cancellationToken = default)
         {
             var endDate = model.EndDate ?? DateTime.Now;
             var startDate = model.StartDate ?? endDate.Date.AddDays(-14);
 
-            var query = _orderDbContext.Query<OrderStateEntity>()
+            var query = _orderDbContext.Query<ProductSalesReport>()
                .AsNoTracking()
-               .Where(x => x.CurrentState == OrderStatusConst.Completed)
-               .Where(x => x.OrderItems.Any(x => x.ExternalProductId == productId))
-               .Where(x => x.SubmissionDate <= endDate && x.SubmissionDate >= startDate);
+               .Where(x => x.ProductId == productId)
+               .Where(x => x.Date <= endDate && x.Date >= startDate);
 
 
             var projection = model.Period switch
             {
-                ReportPeriod.Daily => query.GroupBy(x => new
+                ReportPeriod.Daily => query.Select(x=> new ProductSalesReportDto
                 {
-                    x.OrderItems.First().ExternalProductId,
-                    x.SubmissionDate.Year,
-                    x.SubmissionDate.Month,
-                    x.SubmissionDate.Day
-                }).ProjectToProductSummaryReport(),
+                    Quantity = x.Quantity,
+                    TotalPrice =x.TotalPrice,
+                    Date = x.Date
+                }),
 
                 ReportPeriod.Monthly => query.GroupBy(x => new
                 {
-                    x.OrderItems.First().ExternalProductId,
-                    x.SubmissionDate.Year,
-                    x.SubmissionDate.Month,
-                }).ProjectToProductSummaryReport(),
-
-                _ => query.GroupBy(x => new
+                    x.Date.Year,
+                    x.Date.Month,
+                }).Select(x=> new ProductSalesReportDto
                 {
-                    x.OrderItems.First().ExternalProductId,
-                    x.SubmissionDate.Year,
-                }).ProjectToProductSummaryReport()
+                    Quantity = x.Sum(x=> x.Quantity),
+                    TotalPrice = x.Sum(x => x.TotalPrice),
+                    Date = x.Max(x=> x.Date)
+                }),
+                _ => query.GroupBy(x => new 
+                {
+                    x.Date.Year,
+                }).Select(x => new ProductSalesReportDto
+                {
+                    Quantity = x.Sum(x => x.Quantity),
+                    TotalPrice = x.Sum(x => x.TotalPrice),
+                    Date = x.Max(x => x.Date)
+                })
             };
 
 
-           return await projection.ToListAsync();
+           return await projection.OrderBy(x=> x.Date).ToListAsync(cancellationToken);
         }
 
-        public async Task<Result<PagedResult<BestSellerReportDto>>> GetBestSellersReport(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<BestSellerReport>>> GetBestSellersReport(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
 
-            var query = _orderDbContext.Query<OrderStateEntity>()
-               .AsNoTracking()
-               .Where(x => x.CurrentState == OrderStatusConst.Completed)
-               .SelectMany(x => x.OrderItems);
+            var query = _orderDbContext.Query<BestSellerReport>()
+               .AsNoTracking();
 
-
-            var projection = query.GroupBy(x => x.ExternalProductId)
-                .Select(x => new BestSellerReportDto
-                {
-                    Id = x.Key,
-                    Name = x.First().Name,
-                    Thumbnail = x.First().Thumbnail,
-                    Quantity = x.Sum(x => x.Quantity),
-                    Amount = x.Sum(x => x.Quantity * x.UnitPrice)
-                });
-
-
-            if(queryParams.SortBy != null)
+            query = queryParams.SortBy?.ToLower() switch
             {
-                projection = queryParams.SortBy.ToLower() switch
-                {
-                    "amount" => queryParams.Desc ? projection.OrderByDescending(x => x.Amount) : projection.OrderBy(x=> x.Amount),
-                    "quantity" => queryParams.Desc ? projection.OrderByDescending(x => x.Quantity) : projection.OrderBy(x=> x.Quantity),
-                    _ => throw new InvalidOperationException()
-                };  ;
-            }
-            else
-            {
-                projection = projection.OrderByDescending(x => x.Quantity);
-            }
+                "amount" => queryParams.Desc ? query.OrderByDescending(x => x.Amount) : query.OrderBy(x => x.Amount),
+                "quantity" => queryParams.Desc ? query.OrderByDescending(x => x.Quantity) : query.OrderBy(x => x.Quantity),
+                _ => query.OrderByDescending(x => x.Quantity)
+            };
 
-            return await projection.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
+            return await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
         }
     }
 }

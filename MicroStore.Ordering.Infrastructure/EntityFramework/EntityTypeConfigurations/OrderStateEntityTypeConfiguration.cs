@@ -1,14 +1,13 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.Ordering.Application.StateMachines;
+using MicroStore.Ordering.Application.Domain;
 
 namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigurations
 {
     public class OrderStateEntityTypeConfiguration
          : SagaClassMap<OrderStateEntity>
     {
-
         protected override void Configure(EntityTypeBuilder<OrderStateEntity> entity, ModelBuilder model)
         {
             entity.Property(x => x.UserId).HasMaxLength(256);

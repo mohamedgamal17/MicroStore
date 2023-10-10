@@ -1,7 +1,6 @@
-﻿
-namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes
+﻿namespace MicroStore.Ordering.Application.Dtos
 {
-    public class OrderSalesReport
+    public class OrderSalesReportDto
     {
         public long TotalOrders { get; set; }
         public double TotalShippingPrice { get; set; }

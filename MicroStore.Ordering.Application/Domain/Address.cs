@@ -1,4 +1,4 @@
-﻿namespace MicroStore.Ordering.Application.StateMachines
+﻿namespace MicroStore.Ordering.Application.Domain
 {
     public class Address : ValueObject<Address>
     {

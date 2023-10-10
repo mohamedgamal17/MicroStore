@@ -1,4 +1,4 @@
-﻿namespace MicroStore.Ordering.Application.Dtos
+﻿namespace MicroStore.Ordering.Application.Domain
 {
     public class OrderSummaryReport
     {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MicroStore.Inventory.IntegrationEvents;
 using MicroStore.Inventory.IntegrationEvents.Models;
+using MicroStore.Ordering.Application.Domain;
 using Volo.Abp.DependencyInjection;
 namespace MicroStore.Ordering.Application.StateMachines.Activities
 {

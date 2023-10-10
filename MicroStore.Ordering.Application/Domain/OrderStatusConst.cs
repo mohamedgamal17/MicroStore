@@ -1,4 +1,4 @@
-﻿namespace MicroStore.Ordering.Application.Common
+﻿namespace MicroStore.Ordering.Application.Domain
 {
     public static class OrderStatusConst
     {

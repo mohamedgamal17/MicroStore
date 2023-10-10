@@ -3,10 +3,9 @@ using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
-using MicroStore.Ordering.Application.Extensions;
 using MicroStore.Ordering.Application.Models;
-using MicroStore.Ordering.Application.StateMachines;
 using Volo.Abp;
 namespace MicroStore.Ordering.Application.Orders
 {
@@ -25,22 +24,21 @@ namespace MicroStore.Ordering.Application.Orders
 
             if (!canForecastSales)
             {
-                return new Result<ForecastDto>(new UserFriendlyException("Sales cannot be forecasted yet.It will be forecasted after 12 months"));
+                return new Result<ForecastDto>(new UserFriendlyException("Sales cannot be forecasted yet.It must have  at least 12 months in series"));
             }
 
             var salesReport = await PrepareSalesMonthlyReport(includeCurrentMonth: false, cancellationToken);
 
 
-            var forcast = PrepareForcastedModel(model, salesReport.Reports);
+            var forcast = PrepareForcastedModel(model, salesReport);
 
             return forcast;
         }
 
 
-        public async Task<Result<List<OrderSalesReport>>> GetOrdersSalesReport(OrderSalesReportModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<List<OrderSalesReportDto>>> GetOrdersSalesReport(OrderSalesReportModel model, CancellationToken cancellationToken = default)
         {
-            var query = _orderDbContext.Query<OrderStateEntity>()
-                .OrderBy(x => x.SubmissionDate)
+            var query = _orderDbContext.Query<OrderSalesReport>()
                 .AsNoTracking();
 
 
@@ -57,123 +55,105 @@ namespace MicroStore.Ordering.Application.Orders
             DateTime startDate = model.StartDate ?? endDate.AddDays(-17);
 
 
-            query = query.Where(x => x.SubmissionDate >= startDate && x.SubmissionDate <= endDate);
+            query = query.Where(x => x.Date >= startDate && x.Date <= endDate);
 
             var projection = model.Period switch
             {
-                ReportPeriod.Daily => query.GroupBy(x => x.SubmissionDate).ProjectToOrderSummaryReport(),
+                ReportPeriod.Daily => query.Select(x => new OrderSalesReportDto
+                {
+                    TotalOrders = x.TotalOrders,
+                    TotalShippingPrice = x.TotalShippingPrice,
+                    TotalTaxPrice = x.TotalTaxPrice,
+                    TotalPrice = x.TotalPrice,
+                    Date = x.Date
+                }),
 
                 ReportPeriod.Monthly => query.GroupBy(x => new
                 {
-                    x.SubmissionDate.Month,
-                    x.SubmissionDate.Year
+                    x.Date.Year,
+                    x.Date.Month
+                }).Select(x => new OrderSalesReportDto
+                {
+                    Date = x.Max(x=> x.Date),
+                    TotalOrders = x.Sum(x => x.TotalOrders),
+                    TotalShippingPrice = x.Sum(x => x.TotalShippingPrice),
+                    TotalTaxPrice = x.Sum(x => x.TotalTaxPrice),
+                    TotalPrice = x.Sum(x => x.TotalPrice),
+                }),
+                _ => query.GroupBy(x=> new { x.Date.Year })
+                .Select(x=> new OrderSalesReportDto
+                {
+                    Date = x.Max(x => x.Date),
+                    TotalOrders = x.Sum(x => x.TotalOrders),
+                    TotalShippingPrice = x.Sum(x => x.TotalShippingPrice),
+                    TotalTaxPrice = x.Sum(x => x.TotalTaxPrice),
+                    TotalPrice = x.Sum(x => x.TotalPrice),
                 })
-                .ProjectToOrderSummaryReport(),
-
-                _ => query.GroupBy(x => new { x.SubmissionDate.Year }).OrderBy(x => x.Key.Year).ProjectToOrderSummaryReport()
             };
 
-            return await projection.ToListAsync(cancellationToken);
+            return await projection.OrderBy(x=> x.Date).ToListAsync(cancellationToken);
 
         }
 
-        private async Task<AggregatedMonthlyReportDto> PrepareSalesMonthlyReport(bool includeCurrentMonth = true ,CancellationToken cancellationToken = default)
+        private async Task<List<OrderSalesReportDto>> PrepareSalesMonthlyReport(bool includeCurrentMonth = true ,CancellationToken cancellationToken = default)
         {
+            var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
-            var query = _orderDbContext.Query<OrderStateEntity>()
+            var startDate = endDate.AddYears(-3);
+
+
+            var query = _orderDbContext.Query<OrderSalesReport>()
                 .AsNoTracking()
-                .Where(x => x.CurrentState == OrderStatusConst.Completed);
-
-
-            if (!includeCurrentMonth)
-            {
-                var currentMonthDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
-                query = query.Where(x => x.SubmissionDate < currentMonthDate);
-            }
-
-            var minDate = await query.MinAsync(x => x.SubmissionDate, cancellationToken);
-            var maxDate = await  query.MaxAsync(x => x.SubmissionDate, cancellationToken);
-
-            var allDates = Enumerable.Range(0, (maxDate.Year - minDate.Year) * 12 + maxDate.Month - minDate.Month + 1)
-                .Select(offset => minDate.AddMonths(offset))
-                .ToList();
-
+                .Where(x => x.CurrentState == OrderStatusConst.Completed)
+                .Where(x => x.Date >= startDate && x.Date <= endDate);
 
             var projection = from order in query
                              group order by new
                              {
-                                 order.SubmissionDate.Year,
-                                 order.SubmissionDate.Month,
+                                 order.Date.Year,
+                                 order.Date.Month,
                              } into grouped
-                             select new MonthlyReportDto
+                             select new OrderSalesReportDto
                              {
-                                 Year = grouped.Key.Year,
-                                 Month = grouped.Key.Month,
-                                 Min = (float)grouped.Min(x=> x.TotalPrice),
-                                 Max = (float)grouped.Max(x=> x.TotalPrice),
-                                 Average = (float)grouped.Average(x=> x.TotalPrice),
-                                 Sum = (float)grouped.Sum(x=> x.TotalPrice),
-                                 Count =grouped.Count()
+                             
+                                 TotalOrders = grouped.Sum(x => x.TotalOrders),
+                                 TotalShippingPrice = grouped.Sum(x => x.TotalShippingPrice),
+                                 TotalTaxPrice = grouped.Sum(x => x.TotalTaxPrice),
+                                 TotalPrice = grouped.Sum(x => x.TotalPrice),
+                                 Date = grouped.Max(x => x.Date),
                              };
 
-
-
-            var salesReport = from date in allDates
-                              join pr in await projection.ToListAsync()
-                              on new { date.Year, date.Month } equals new { pr.Year, pr.Month }
-                              select new MonthlyReportDto
-                              {
-                                  Year = date.Year,
-                                  Month = date.Month,
-                                  Min = pr.Min,
-                                  Max = pr.Max,
-                                  Average = pr.Average,
-                                  Sum = pr.Sum,
-                                  Count = pr.Count
-                              };
-
-
-            return new AggregatedMonthlyReportDto
-            {
-
-                Min = salesReport.Min(x => x.Sum),
-                Max = salesReport.Max(x => x.Sum),
-                Average = salesReport.Max(x => x.Average),
-                Sum = salesReport.Sum(x => x.Sum),
-                Reports = salesReport.ToList()
-            };
+            return await projection.ToListAsync(cancellationToken);
         }
 
 
         private async Task<bool> CheckIfSalesCanMonthlyForecasted(CancellationToken cancellationToken = default)
         {
 
-            var currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
-            var query = _orderDbContext.Query<OrderStateEntity>()
+            var startDate = endDate.AddYears(-3);
+
+            var count = await _orderDbContext.Query<OrderSalesReport>()
                .Where(x => x.CurrentState == OrderStatusConst.Completed)
-               .Where(x => x.SubmissionDate < currentMonth);
+               .Where(x => x.Date < endDate && x.Date >= startDate)
+               .GroupBy(x => new { x.Date.Year, x.Date.Month })
+               .CountAsync();
 
-            var minDate = await query.MinAsync(x => x.SubmissionDate, cancellationToken);
-
-            var maxDate = await query.MaxAsync(x => x.SubmissionDate, cancellationToken);
-
-            return maxDate > minDate.AddYears(1);
-
+            return count >= 36;
         }
 
-        private ForecastDto PrepareForcastedModel(ForecastModel model, List<MonthlyReportDto> reports)
+        private ForecastDto PrepareForcastedModel(ForecastModel model, List<OrderSalesReportDto> reports)
         {
             var mlContext = new MLContext();
 
             var dataView = mlContext.Data.LoadFromEnumerable(reports);
 
 
-            var pipline = mlContext.Transforms.Conversion.ConvertType(inputColumnName: nameof(MonthlyReportDto.Sum), outputColumnName: nameof(MonthlyReportDto.Sum), outputKind: Microsoft.ML.Data.DataKind.Single)
+            var pipline = mlContext.Transforms.Conversion.ConvertType(inputColumnName: nameof(OrderSalesReportDto.TotalPrice), outputColumnName: nameof(OrderSalesReportDto.TotalPrice), outputKind: Microsoft.ML.Data.DataKind.Single)
                 .Append(
                 mlContext.Forecasting.ForecastBySsa(                    
-                    inputColumnName: nameof(MonthlyReportDto.Sum),
+                    inputColumnName: nameof(OrderSalesReportDto.TotalPrice),
                     outputColumnName: nameof(ForecastDto.ForecastedValues),
                     windowSize: 12,
                     seriesLength: reports.Count,
@@ -188,7 +168,7 @@ namespace MicroStore.Ordering.Application.Orders
 
             ITransformer forcastTransformer = pipline.Fit(dataView);
 
-            var forcastEngine = forcastTransformer.CreateTimeSeriesEngine<MonthlyReportDto, ForecastDto>(mlContext);
+            var forcastEngine = forcastTransformer.CreateTimeSeriesEngine<OrderSalesReportDto, ForecastDto>(mlContext);
 
             return forcastEngine.Predict();
         }

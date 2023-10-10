@@ -4,6 +4,7 @@ using MicroStore.Ordering.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MicroStore.Ordering.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    partial class OrderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231010190704_BestSellerProductsViewMigration")]
+    partial class BestSellerProductsViewMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +79,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                     b.HasIndex("Sku");
 
-                    b.ToTable("OrderItemEntity", (string)null);
+                    b.ToTable("OrderItemEntity");
                 });
 
             modelBuilder.Entity("MicroStore.Ordering.Application.Domain.OrderSalesReport", b =>
@@ -167,7 +169,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrderStateEntity", (string)null);
+                    b.ToTable("OrderStateEntity");
                 });
 
             modelBuilder.Entity("MicroStore.Ordering.Application.Domain.ProductSalesReport", b =>
@@ -198,7 +200,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
             modelBuilder.Entity("MicroStore.Ordering.Application.Domain.OrderStateEntity", b =>
                 {
-                    b.OwnsOne("MicroStore.Ordering.Application.Domain.OrderStateEntity.BillingAddress#MicroStore.Ordering.Application.Domain.Address", "BillingAddress", b1 =>
+                    b.OwnsOne("MicroStore.Ordering.Application.Domain.Address", "BillingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderStateEntityCorrelationId")
                                 .HasColumnType("uniqueidentifier");
@@ -268,13 +270,13 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                             b1.HasKey("OrderStateEntityCorrelationId");
 
-                            b1.ToTable("OrderStateEntity", (string)null);
+                            b1.ToTable("OrderStateEntity");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderStateEntityCorrelationId");
                         });
 
-                    b.OwnsOne("MicroStore.Ordering.Application.Domain.OrderStateEntity.ShippingAddress#MicroStore.Ordering.Application.Domain.Address", "ShippingAddress", b1 =>
+                    b.OwnsOne("MicroStore.Ordering.Application.Domain.Address", "ShippingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderStateEntityCorrelationId")
                                 .HasColumnType("uniqueidentifier");
@@ -344,7 +346,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                             b1.HasKey("OrderStateEntityCorrelationId");
 
-                            b1.ToTable("OrderStateEntity", (string)null);
+                            b1.ToTable("OrderStateEntity");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderStateEntityCorrelationId");

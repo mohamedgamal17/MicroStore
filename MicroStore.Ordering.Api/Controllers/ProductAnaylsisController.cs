@@ -10,7 +10,7 @@ namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/anaylsis/products")]
     [ApiController]
-    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+   // [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class ProductAnaylsisController : MicroStoreApiController
     {
         private readonly IProductAnalysisService _productAnalysisService;
@@ -52,7 +52,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("{productId}/units-summary")]
-        public async Task<IActionResult> GetProductSummaryReport(string productId , ProductSummaryReportModel model)
+        public async Task<IActionResult> GetProductSummaryReport(string productId ,[FromQuery] ProductSummaryReportModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -62,7 +62,7 @@ namespace MicroStore.Ordering.Api.Controllers
                 return InvalideModelState();
             }
 
-            var result = await _productAnalysisService.GetProductSummaryReport(productId, model);
+            var result = await _productAnalysisService.GetProductSalesReport(productId, model);
 
             return result.ToOk();
         }

@@ -1,5 +1,4 @@
-﻿using MicroStore.Ordering.Application.Dtos;
-using MicroStore.Ordering.Application.StateMachines;
+﻿using MicroStore.Ordering.Application.Domain;
 namespace MicroStore.Ordering.Application.Extensions
 {
     public static class OrderReportExtension
@@ -11,12 +10,10 @@ namespace MicroStore.Ordering.Application.Extensions
                              select new OrderSalesReport
                              {
                                  TotalOrders = or.Count(),
-                                 SumShippingTotalCost = or.Sum(x => x.ShippingCost),
-                                 SumTaxTotalCost = or.Sum(x => x.TaxCost),
-                                 SumSubTotalCost = or.Sum(x => x.SubTotal),
-                                 SumTotalCost = or.Sum(x => x.TotalPrice),
-                                 Date = or.First().SubmissionDate.ToString("MM-dd-yyyy")
-
+                                 TotalShippingPrice = or.Sum(x => x.ShippingCost),
+                                 TotalTaxPrice = or.Sum(x => x.TaxCost),
+                                 TotalPrice = or.Sum(x => x.TotalPrice),
+                                 Date = or.First().SubmissionDate
                              };
 
             return projection;

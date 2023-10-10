@@ -1,4 +1,4 @@
-﻿namespace MicroStore.Ordering.Application.StateMachines
+﻿namespace MicroStore.Ordering.Application.Domain
 {
     public abstract class ValueObject<T>
           where T : ValueObject<T>

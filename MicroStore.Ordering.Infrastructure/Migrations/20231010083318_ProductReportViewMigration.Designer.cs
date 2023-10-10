@@ -4,6 +4,7 @@ using MicroStore.Ordering.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MicroStore.Ordering.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    partial class OrderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231010083318_ProductReportViewMigration")]
+    partial class ProductReportViewMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,22 +23,6 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("MicroStore.Ordering.Application.Domain.BestSellerReport", b =>
-                {
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId");
-
-                    b.ToTable("vw_BestSellerProducts", (string)null);
-                });
 
             modelBuilder.Entity("MicroStore.Ordering.Application.Domain.OrderItemEntity", b =>
                 {
@@ -77,32 +63,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                     b.HasIndex("Sku");
 
-                    b.ToTable("OrderItemEntity", (string)null);
-                });
-
-            modelBuilder.Entity("MicroStore.Ordering.Application.Domain.OrderSalesReport", b =>
-                {
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CurrentState")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<long>("TotalOrders")
-                        .HasColumnType("bigint");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalShippingPrice")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalTaxPrice")
-                        .HasColumnType("float");
-
-                    b.HasKey("Date", "CurrentState");
-
-                    b.ToTable("vw_OrderSalesReports", (string)null);
+                    b.ToTable("OrderItemEntity");
                 });
 
             modelBuilder.Entity("MicroStore.Ordering.Application.Domain.OrderStateEntity", b =>
@@ -167,26 +128,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrderStateEntity", (string)null);
-                });
-
-            modelBuilder.Entity("MicroStore.Ordering.Application.Domain.ProductSalesReport", b =>
-                {
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
-
-                    b.HasKey("ProductId", "Date");
-
-                    b.ToTable("vw_ProductSalesReports", (string)null);
+                    b.ToTable("OrderStateEntity");
                 });
 
             modelBuilder.Entity("MicroStore.Ordering.Application.Domain.OrderItemEntity", b =>
@@ -198,7 +140,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
             modelBuilder.Entity("MicroStore.Ordering.Application.Domain.OrderStateEntity", b =>
                 {
-                    b.OwnsOne("MicroStore.Ordering.Application.Domain.OrderStateEntity.BillingAddress#MicroStore.Ordering.Application.Domain.Address", "BillingAddress", b1 =>
+                    b.OwnsOne("MicroStore.Ordering.Application.Domain.Address", "BillingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderStateEntityCorrelationId")
                                 .HasColumnType("uniqueidentifier");
@@ -268,13 +210,13 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                             b1.HasKey("OrderStateEntityCorrelationId");
 
-                            b1.ToTable("OrderStateEntity", (string)null);
+                            b1.ToTable("OrderStateEntity");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderStateEntityCorrelationId");
                         });
 
-                    b.OwnsOne("MicroStore.Ordering.Application.Domain.OrderStateEntity.ShippingAddress#MicroStore.Ordering.Application.Domain.Address", "ShippingAddress", b1 =>
+                    b.OwnsOne("MicroStore.Ordering.Application.Domain.Address", "ShippingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderStateEntityCorrelationId")
                                 .HasColumnType("uniqueidentifier");
@@ -344,7 +286,7 @@ namespace MicroStore.Ordering.Infrastructure.Migrations
 
                             b1.HasKey("OrderStateEntityCorrelationId");
 
-                            b1.ToTable("OrderStateEntity", (string)null);
+                            b1.ToTable("OrderStateEntity");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderStateEntityCorrelationId");

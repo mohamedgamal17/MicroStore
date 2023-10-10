@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigurations;
+using System.Reflection;
 using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.Ordering.Infrastructure.EntityFramework
@@ -16,7 +17,7 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
 
             base.OnModelCreating(modelBuilder);

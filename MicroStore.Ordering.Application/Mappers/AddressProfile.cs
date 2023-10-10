@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
-using MicroStore.Ordering.Application.StateMachines;
 namespace MicroStore.Ordering.Application.Mappers
 {
     public class AddressProfile : Profile

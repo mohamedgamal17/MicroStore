@@ -4,9 +4,9 @@ using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
-using MicroStore.Ordering.Application.StateMachines;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 namespace MicroStore.Ordering.Application.Orders
@@ -64,6 +64,7 @@ namespace MicroStore.Ordering.Application.Orders
             var query = _orderDbContext
                   .Query<OrderStateEntity>()
                   .AsNoTracking()
+                  .IgnoreAutoIncludes()
                   .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
 

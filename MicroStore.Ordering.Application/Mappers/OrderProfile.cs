@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.IntegrationEvents;

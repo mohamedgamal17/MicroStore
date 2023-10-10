@@ -1,7 +1,7 @@
 ﻿#nullable disable
 using MassTransit;
 
-namespace MicroStore.Ordering.Application.StateMachines
+namespace MicroStore.Ordering.Application.Domain
 {
     public class OrderStateEntity : SagaStateMachineInstance
     {

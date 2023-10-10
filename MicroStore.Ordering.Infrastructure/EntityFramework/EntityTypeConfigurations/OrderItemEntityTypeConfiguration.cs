@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.Ordering.Application.StateMachines;
+using MicroStore.Ordering.Application.Domain;
 
 namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigurations
 {

@@ -26,11 +26,11 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             return await _microStoreClinet.MakeRequest<PagedList<BestSellerReport>>(path, HttpMethod.Get,options,cancellationToken);
         }
 
-        public async Task<List<ProductUnitSalesReport>> GetProductUnitSalesReport( string productId, ProductSalesUnitReportRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<List<ProductSalesReport>> GetProductUnitSalesReport( string productId, ProductSalesUnitReportRequestOptions options, CancellationToken cancellationToken = default)
         {
             string path = string.Format("{0}/{1}/{2}", BaseUrl, productId, "units-summary");
 
-            return await _microStoreClinet.MakeRequest<List<ProductUnitSalesReport>>(path, HttpMethod.Get, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<List<ProductSalesReport>>(path, HttpMethod.Get, options, cancellationToken);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.Ordering.Application.Common;
-using MicroStore.Ordering.Application.StateMachines;
+using MicroStore.Ordering.Application.Domain;
 using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.Ordering.Infrastructure.EntityFramework
