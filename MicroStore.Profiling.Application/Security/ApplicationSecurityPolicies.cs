@@ -4,5 +4,9 @@
     {
         public const string RequireAuthenticatedUser = nameof(RequireAuthenticatedUser);
 
+        public const string RequireProfilingReadScope = nameof(RequireProfilingReadScope);
+
+        public const string RequireProfilingWriteScope = nameof(RequireProfilingWriteScope);
+
     }
 }

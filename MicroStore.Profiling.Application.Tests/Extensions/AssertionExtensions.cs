@@ -11,7 +11,9 @@ namespace MicroStore.Profiling.Application.Tests.Extensions
             profile.FirstName.Should().Be(model.FirstName);
             profile.LastName.Should().Be(model.LastName);
             profile.Phone.AssertPhone(model.Phone);
-            profile.BirthDate.Should().Be(model.BirthDate);
+            profile.BirthDate.Should().BeSameDateAs(model.BirthDate);
+                
+                
             profile.Gender.Should().Be(Enum.Parse<Gender>(model.Gender.ToLower(), true));
 
             if(profile.Addresses != null && model.Addresses != null)
@@ -24,9 +26,9 @@ namespace MicroStore.Profiling.Application.Tests.Extensions
 
         }
 
-        public static void AssertPhone(this Phone phone, PhoneModel model)
+        public static void AssertPhone(this Phone phone, string number)
         {
-            var expected = Phone.Create(model.Number, model.CountryCode);
+            var expected = Phone.Create(number);
            
             phone.Should().Be(expected);
         }

@@ -20,15 +20,14 @@ namespace MicroStore.Profiling.Application.EntityFramewrok.EntityTypeConfigurati
 
             builder.OwnsOne(x => x.Phone, phoneNavigationBuilder =>
             {
-                phoneNavigationBuilder.Property(x => x.CountryCode)
-                    .UsePropertyAccessMode(PropertyAccessMode.Field)
-                    .HasMaxLength(10);
 
                 phoneNavigationBuilder.Property(x => x.Number)
                     .UsePropertyAccessMode(PropertyAccessMode.Field)
                     .HasMaxLength(50);
             });
 
+
+            builder.Property(x=> x.BirthDate).HasColumnType("date");
 
             builder.HasMany(x => x.Addresses).WithOne();
 

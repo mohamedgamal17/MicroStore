@@ -17,10 +17,9 @@ namespace MicroStore.Profiling.Application.Migrations
                     UserId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "date", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Phone_Number = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Phone_CountryCode = table.Column<int>(type: "int", maxLength: 10, nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(800)", maxLength: 800, nullable: true)
                 },
                 constraints: table =>

@@ -212,11 +212,7 @@ namespace MicroStore.Profiling.Application.Tests
                 Avatar = Guid.NewGuid().ToString(),
                 BirthDate = DateTime.Now.AddYears(-25),
                 Gender = "female",
-                Phone = new PhoneModel
-                {
-                    Number = "1111111111",
-                    CountryCode = "US"
-                },
+                Phone = "+18143511258",
                 Addresses = new List<AddressModel>
                 {
                     new AddressModel
@@ -225,7 +221,7 @@ namespace MicroStore.Profiling.Application.Tests
                         CountryCode = "US",
                         State = "TX",
                         City = "Texas",
-                        Phone = "3333333333",
+                        Phone = "+18143511258",
                         AddressLine1 = Guid.NewGuid().ToString(),
                         AddressLine2 = Guid.NewGuid().ToString(),
                         PostalCode = "5432",
@@ -245,11 +241,7 @@ namespace MicroStore.Profiling.Application.Tests
                 Avatar = Guid.NewGuid().ToString(),
                 BirthDate = DateTime.Now.AddYears(-25),
                 Gender = "female",
-                Phone = new PhoneModel
-                {
-                    Number = "6666666666",
-                    CountryCode = "US"
-                },
+                Phone = "+15852826903",
                 Addresses = new List<AddressModel>
                 {
                     new AddressModel
@@ -258,7 +250,7 @@ namespace MicroStore.Profiling.Application.Tests
                         CountryCode = "US",
                         State = "TX",
                         City = "Texas",
-                        Phone = "8888888888",
+                        Phone = "+18143008176",
                         AddressLine1 = Guid.NewGuid().ToString(),
                         AddressLine2 = Guid.NewGuid().ToString(),
                         PostalCode = "5432",
@@ -278,7 +270,7 @@ namespace MicroStore.Profiling.Application.Tests
                 CountryCode = "US",
                 State = "TX",
                 City = "Texas",
-                Phone = "7777777777",
+                Phone = "+18143511258",
                 AddressLine1 = Guid.NewGuid().ToString(),
                 AddressLine2 = Guid.NewGuid().ToString(),
                 PostalCode = "3215",

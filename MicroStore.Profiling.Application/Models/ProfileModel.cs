@@ -11,7 +11,7 @@ namespace MicroStore.Profiling.Application.Models
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public string Gender { get; set; }
-        public PhoneModel Phone { get; set; }
+        public string Phone { get; set; }
         public string? Avatar { get; set; }
         public List<AddressModel>? Addresses { get; set; }
     }
@@ -45,27 +45,11 @@ namespace MicroStore.Profiling.Application.Models
 
 
             RuleFor(x => x.Phone)
-                .ChildRules(child =>
-                {
-
-                    child.RuleFor(x => x.Number)
-                         .NotNull()
-                         .WithMessage("Phone Number is required.")
-                         .MinimumLength(10)
-                         .WithMessage("Phone Number must not be less than 10 characters.")
-                         .MaximumLength(50)
-                         .WithMessage("Phone Number must not exceed 50 characters.")
-                         .Must((model, _) => ValidatePhone(model.Number, model.CountryCode))
-                         .WithMessage("Invalid phone number");
-
-                    child.RuleFor(x => x.CountryCode)
-                     .NotNull()
-                     .WithMessage("Country Code is required")
-                     .MinimumLength(2)
-                     .WithMessage("Country Code minimum lenght is 2")
-                     .MaximumLength(3)
-                     .WithMessage("Country Code maximum length is 3");
-                });
+                .NotNull()
+                .WithMessage("Phone is required")
+                .MaximumLength(25)
+                .WithMessage("Phone maximum length is 25")
+                .Must((model, phone) => ValidatePhone(phone));
 
 
             RuleForEach(x => x.Addresses)
@@ -74,15 +58,15 @@ namespace MicroStore.Profiling.Application.Models
 
         }
 
-        private bool ValidatePhone(string number, string countryCode)
+        private bool ValidatePhone(string number)
         {
             var phoneNumberUtil = PhoneNumberUtil.GetInstance();
 
             try
             {
-                var phoneNumberParsed = phoneNumberUtil.Parse(number, countryCode);
+                var phoneNumberParsed = phoneNumberUtil.Parse(number, number);
 
-                return phoneNumberUtil.IsPossibleNumberForType(phoneNumberParsed, PhoneNumberType.MOBILE);
+                return phoneNumberUtil.IsValidNumber(phoneNumberParsed);
 
             }
             catch

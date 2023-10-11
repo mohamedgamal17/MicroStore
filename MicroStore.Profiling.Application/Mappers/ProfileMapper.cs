@@ -9,14 +9,8 @@ namespace MicroStore.Profiling.Application.Mappers
         public ProfileMapper()
         {
             CreateMap<Profile, ProfileDto>()
-                .ForMember(x => x.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(x => x.Phone, opt => opt.MapFrom(src => src.Phone.Number))
                 .ForMember(x => x.Addresses, opt => opt.MapFrom(src => src.Addresses));
-
-
-            CreateMap<Phone, PhoneDto>()
-                .ForMember(x => x.Number, opt => opt.MapFrom(src => src.Number))
-                .ForMember(x => x.CountryCode, opt => opt.MapFrom(src => src.CountryCode));
-
 
             CreateMap<ProfileModel, Profile>()
                 .ForMember(x => x.Phone, opt =>
@@ -39,12 +33,12 @@ namespace MicroStore.Profiling.Application.Mappers
         }
     }
 
-    public class PhoneConverter : AutoMapper.IValueConverter<PhoneModel, Phone>
+    public class PhoneConverter : AutoMapper.IValueConverter<string, Phone>
     {
         public static PhoneConverter Converter = new PhoneConverter();
-        public Phone Convert(PhoneModel sourceMember, AutoMapper.ResolutionContext context)
+        public Phone Convert(string sourceMember, AutoMapper.ResolutionContext context)
         {
-            return Phone.Create(sourceMember.Number, sourceMember.CountryCode);
+            return Phone.Create(sourceMember);
 
         }
     }

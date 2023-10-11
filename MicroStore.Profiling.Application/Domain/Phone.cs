@@ -7,27 +7,24 @@ namespace MicroStore.Profiling.Application.Domain
     {
 
         private string _number;
-
-        private int _countryCode;
         public string Number=> _number;
-        public int CountryCode => _countryCode;
         private Phone() { }
+        private Phone(string number)
+        {            
+            var phoneNumberParsed = ParsePhoneNumber(number);
 
-        private Phone(string number, string countryCode)
-        {
-            
-            var phoneNumberParsed = ParsePhoneNumber(number, countryCode);
-            _number = number;
-            _countryCode = phoneNumberParsed.CountryCode;
+            var phoneNumberUtil = PhoneNumberUtil.GetInstance();
+
+            _number = phoneNumberUtil.Format(phoneNumberParsed,PhoneNumberFormat.E164);
         }
 
-        private PhoneNumber ParsePhoneNumber(string phone, string countryCode)
+        private PhoneNumber ParsePhoneNumber(string phone)
         {
             var phoneNumberUtil = PhoneNumberUtil.GetInstance();
 
-            var phoneNumberParsed = phoneNumberUtil.Parse(phone, countryCode);
+            var phoneNumberParsed = phoneNumberUtil.Parse(phone,null);
 
-            if(!phoneNumberUtil.IsPossibleNumberForType(phoneNumberParsed, PhoneNumberType.MOBILE))
+            if(!phoneNumberUtil.IsValidNumber(phoneNumberParsed))
             {
                 throw new InvalidOperationException("Invalid phone number");
             }
@@ -35,12 +32,11 @@ namespace MicroStore.Profiling.Application.Domain
             return phoneNumberParsed;
         }
 
-        public static Phone Create(string number, string countryCode) => new Phone(number, countryCode);
+        public static Phone Create(string number) => new Phone(number);
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return _number;
-            yield return _countryCode;
                 
         }
     }

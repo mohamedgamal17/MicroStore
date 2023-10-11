@@ -1,25 +1,44 @@
-var builder = WebApplication.CreateBuilder(args);
+using MicroStore.Profiling.Host;
+using Serilog;
+using Serilog.Events;
 
-// Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+Log.Logger = new LoggerConfiguration()
+#if DEBUG
+    .MinimumLevel.Debug()
+#else
+    .MinimumLevel.Information()
+#endif
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Async(c => c.File("Logs/logs.txt"))
+    .WriteTo.Async(c => c.Console())
+    .CreateLogger();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Information("Starting web host.");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.AddAppSettingsSecretsJson()
+        .UseAutofac()
+        .UseSerilog();
+    await builder.AddApplicationAsync<ProfilingHostModule>();
+
+    var app = builder.Build();
+
+    await app.InitializeApplicationAsync();
+
+    await app.RunAsync();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly!");
+}
+finally
+{
+    Log.CloseAndFlush(); ;
+}

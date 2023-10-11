@@ -17,7 +17,7 @@ namespace MicroStore.Profiling.Application.Tests
                 Gender = Gender.Male,
                 BirthDate = DateTime.Now.AddYears(-18),
                 UserId = Guid.NewGuid().ToString(),
-                Phone = Phone.Create("5555555555","US"),
+                Phone = Phone.Create("+18143511258"),
                 Addresses = new List<Address>
                 {
                     new Address
@@ -26,7 +26,7 @@ namespace MicroStore.Profiling.Application.Tests
                         CountryCode = "US",
                         State = "TX",
                         City = "Austin",
-                        Phone = "5555555555",
+                        Phone = "+18143511258",
                         PostalCode = "5461",
                         AddressLine1= Guid.NewGuid().ToString(),
                         AddressLine2= Guid.NewGuid().ToString(),

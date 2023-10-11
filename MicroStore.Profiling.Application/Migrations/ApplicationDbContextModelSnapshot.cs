@@ -94,7 +94,7 @@ namespace MicroStore.Profiling.Application.Migrations
                         .HasColumnType("nvarchar(800)");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -135,10 +135,6 @@ namespace MicroStore.Profiling.Application.Migrations
                         {
                             b1.Property<string>("ProfileId")
                                 .HasColumnType("nvarchar(256)");
-
-                            b1.Property<int>("CountryCode")
-                                .HasMaxLength(10)
-                                .HasColumnType("int");
 
                             b1.Property<string>("Number")
                                 .IsRequired()
