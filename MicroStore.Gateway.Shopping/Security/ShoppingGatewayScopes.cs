@@ -19,7 +19,10 @@
                 Shipping.Access,
                 Shipping.Read,
                 Inventory.Access,
-                Geographic.Access
+                Geographic.Access,
+                Profiling.Access,
+                Profiling.Read,
+               Profiling.Write
             };
         }
 
@@ -68,5 +71,13 @@
         {
             public const string Access = "geographic.access";
         }
+
+        public static class Profiling 
+        {
+            public const string Access = "profiling.access";
+            public const string Read = "profiling.read";
+            public const string Write = "profiling.write";
+        }
+
     }
 }
