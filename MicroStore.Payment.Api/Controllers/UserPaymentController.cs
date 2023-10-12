@@ -43,7 +43,7 @@ namespace MicroStore.Payment.Api.Controllers
             {
                 OrderId = model.OrderId,
                 OrderNumber = model.OrderNumber,
-                UserId = CurrentUser.Id.ToString()!,
+                UserId = CurrentUser.UserId!,
                 TaxCost = model.TaxCost,
                 ShippingCost = model.ShippingCost,
                 SubTotal = model.SubTotal,
@@ -85,7 +85,7 @@ namespace MicroStore.Payment.Api.Controllers
         [Authorize(Policy = ApplicationPolicies.RequirePaymentReadScope)]
         public async Task<IActionResult> RetriveUserPaymentRequestList([FromQuery] PaymentRequestListQueryModel queryparams)
         {
-            var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, CurrentUser.Id.ToString()!);
+            var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, CurrentUser.UserId!);
 
             return result.ToOk();
         }

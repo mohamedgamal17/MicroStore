@@ -33,7 +33,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         public async Task<IActionResult> RetriveUserShipmentList( [FromQuery] ShipmentListQueryModel queryParams)
         {
-            var result = await _shipmentQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);
+            var result = await _shipmentQueryService.ListAsync(queryParams, CurrentUser.UserId!);
 
             return result.ToOk();
         }

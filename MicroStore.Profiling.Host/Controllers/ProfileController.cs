@@ -18,16 +18,18 @@ namespace MicroStore.Profiling.Host.Controllers
 
         private readonly IProfileQueryService _profileQueryService;
 
-        public ProfileController(IProfileCommandService profileCommandService, IProfileQueryService profileQueryService)
+        private readonly ILogger<ProfileController> _logger;
+        public ProfileController(IProfileCommandService profileCommandService, IProfileQueryService profileQueryService, ILogger<ProfileController> logger)
         {
             _profileCommandService = profileCommandService;
             _profileQueryService = profileQueryService;
+            _logger = logger;
         }
 
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProfileDto>))]
-        public async Task<IActionResult> ListAsync(PagingQueryParams queryParams)
+        public async Task<IActionResult> ListAsync([FromQuery]PagingQueryParams queryParams)
         {
             var result = await _profileQueryService.ListAsync(queryParams);
 
@@ -48,7 +50,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProfileDto))]
         [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
-        public async Task<IActionResult> CreateAsync(CreateProfileModel model)
+        public async Task<IActionResult> CreateAsync([FromBody]CreateProfileModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -67,7 +69,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProfileDto))]
         [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
-        public async Task<IActionResult> UpdateAsync(string userId,ProfileModel model)
+        public async Task<IActionResult> UpdateAsync(string userId,[FromBody]ProfileModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -107,7 +109,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddressDto))]
         [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
-        public async Task<IActionResult> CreateAddresssAsync(string userId , AddressModel model)
+        public async Task<IActionResult> CreateAddresssAsync(string userId , [FromBody] AddressModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -126,7 +128,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
         [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
-        public async Task<IActionResult> UpdateAddressAsync(string userId,string addressId ,AddressModel model)
+        public async Task<IActionResult> UpdateAddressAsync(string userId,string addressId ,[FromBody] AddressModel model)
         {
             var validationResult = await ValidateModel(model);
 

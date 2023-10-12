@@ -13,6 +13,7 @@ using MicroStore.Catalog.Domain.Configuration;
 using MicroStore.Catalog.Infrastructure;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
 using Volo.Abp;
 using Volo.Abp.Application;
@@ -78,6 +79,7 @@ namespace MicroStore.Catalog.Api
 
             var authority = configuration.GetValue<string>("Security:Jwt:Authority");
             var audience = configuration.GetValue<string>("Security:Jwt:Audience");
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
             {

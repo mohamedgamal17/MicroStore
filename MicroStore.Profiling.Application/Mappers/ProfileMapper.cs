@@ -23,6 +23,7 @@ namespace MicroStore.Profiling.Application.Mappers
 
 
             CreateMap<CreateProfileModel, Profile>()
+                .ForMember(x=> x.UserId, opt=> opt.MapFrom(c=> c.UserId))
                 .ForMember(x => x.Phone, opt =>
                 {
                     opt.MapFrom(src => src.Phone);

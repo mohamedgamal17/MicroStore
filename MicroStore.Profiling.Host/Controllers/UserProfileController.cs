@@ -16,10 +16,13 @@ namespace MicroStore.Profiling.Host.Controllers
         private readonly IProfileQueryService _profileQueryService;
 
         private readonly IProfileCommandService _profileCommandService;
-        public UserProfileController(IProfileQueryService profileQueryService, IProfileCommandService profileCommandService)
+
+        private readonly ILogger<UserProfileController> _logger;
+        public UserProfileController(IProfileQueryService profileQueryService, IProfileCommandService profileCommandService, ILogger<UserProfileController> logger)
         {
             _profileQueryService = profileQueryService;
             _profileCommandService = profileCommandService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -27,7 +30,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProfileDto))]
         public async Task<IActionResult> GetAsync()
         {
-            var userId = CurrentUser.Id!.ToString()!;
+            var userId = CurrentUser.UserId!;
 
             var result = await _profileQueryService.GetAsync(userId);
 
@@ -37,7 +40,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProfileDto))]
-        public async Task<IActionResult> CreateAsync(ProfileModel model)
+        public async Task<IActionResult> CreateAsync([FromBody] ProfileModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -46,8 +49,9 @@ namespace MicroStore.Profiling.Host.Controllers
                 return InvalideModelState();
             }
 
-            var userId = CurrentUser.Id!.ToString()!;
+            var userId = CurrentUser.UserId!;
 
+            _logger.LogInformation("Currrent User Id : {userId}", userId);
             var createModel = ObjectMapper.Map<ProfileModel, CreateProfileModel>(model);
 
             createModel.UserId = userId;
@@ -60,7 +64,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [HttpPut]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProfileDto))]
-        public async Task<IActionResult> UpdateAsync(ProfileModel model)
+        public async Task<IActionResult> UpdateAsync([FromBody] ProfileModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -69,7 +73,7 @@ namespace MicroStore.Profiling.Host.Controllers
                 return InvalideModelState();
             }
 
-            var userId = CurrentUser.Id!.ToString()!;
+            var userId = CurrentUser.UserId!;
 
             var result = await _profileCommandService.UpdateAsync(userId,model);
 
@@ -81,7 +85,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AddressDto>))]
         public async Task<IActionResult> ListAddressesAsync()
         {
-            var userId = CurrentUser.Id!.ToString()!;
+            var userId = CurrentUser.UserId!;
 
             var result = await _profileQueryService.ListAddressesAsync(userId);
 
@@ -94,7 +98,7 @@ namespace MicroStore.Profiling.Host.Controllers
 
         public async Task<IActionResult> GetAddressAsync(string addressId)
         {
-            var userId = CurrentUser.Id!.ToString()!;
+            var userId = CurrentUser.UserId!;
 
             var result = await _profileQueryService.GetAddressAsync(userId,addressId);
 
@@ -104,7 +108,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [HttpPost]
         [Route("/addresses")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddressDto))]
-        public async Task<IActionResult> CreateAddressAsync(AddressModel model)
+        public async Task<IActionResult> CreateAddressAsync( [FromBody] AddressModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -113,7 +117,7 @@ namespace MicroStore.Profiling.Host.Controllers
                 return InvalideModelState();
             }
 
-            var userId = CurrentUser.Id!.ToString()!;
+            var userId = CurrentUser.UserId!;
 
             var result = await _profileCommandService.CreateAddressAsync(userId, model);
 
@@ -123,7 +127,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [HttpPut]
         [Route("/addresses/{addressId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
-        public async Task<IActionResult> UpdateAddressAsync(string addressId, AddressModel model)
+        public async Task<IActionResult> UpdateAddressAsync(string addressId,[FromBody] AddressModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -132,7 +136,7 @@ namespace MicroStore.Profiling.Host.Controllers
                 return InvalideModelState();
             }
 
-            var userId = CurrentUser.Id!.ToString()!;
+            var userId = CurrentUser.UserId!;
 
             var result = await _profileCommandService.UpdateAddressAsync(userId, addressId, model);
 
@@ -145,7 +149,7 @@ namespace MicroStore.Profiling.Host.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
         public async Task<IActionResult> RemoveAddressAsync(string addressId)
         {
-            var userId = CurrentUser.Id!.ToString()!;
+            var userId = CurrentUser.UserId!;
 
             var result = await _profileCommandService.RemoveAddressAsync(userId, addressId);
 

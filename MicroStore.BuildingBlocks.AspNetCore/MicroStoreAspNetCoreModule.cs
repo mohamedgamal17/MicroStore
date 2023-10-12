@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.BuildingBlocks.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 
@@ -12,7 +13,8 @@ namespace MicroStore.BuildingBlocks.AspNetCore
     [DependsOn(typeof(AbpAspNetCoreMvcModule),
         typeof(AbpSwashbuckleModule))]
     public class MicroStoreAspNetCoreModule : AbpModule
-    {
+    {    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             Configure<MvcOptions>(config =>

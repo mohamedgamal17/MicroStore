@@ -2,12 +2,15 @@
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
+using MicroStore.BuildingBlocks.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Uow;
+
 namespace MicroStore.BuildingBlocks.AspNetCore
 {
     public class MicroStoreApiController : AbpController
     {
-
+        public new ApplicationCurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ApplicationCurrentUser>();
 
         protected async Task<ValidationResult> ValidateModel<TModel>(TModel model)
         {

@@ -75,6 +75,8 @@ namespace MicroStore.Inventory.Host
         {
             var appsettings = services.GetSingletonInstance<ApplicationSettings>();
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

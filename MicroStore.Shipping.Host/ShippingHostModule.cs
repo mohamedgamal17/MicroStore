@@ -21,6 +21,7 @@ using MicroStore.Shipping.Domain.Security;
 using IdentityModel;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MicroStore.Shipping.Host
 {
@@ -74,6 +75,8 @@ namespace MicroStore.Shipping.Host
         {
             var appsettings = services.GetSingletonInstance<ApplicationSettings>();
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -90,6 +93,7 @@ namespace MicroStore.Shipping.Host
                     ValidIssuer = appsettings.Security.Jwt.Authority,
                     ValidateLifetime = true,
                 };
+                options.MapInboundClaims = false;
             });
             services.AddAuthorization(opt =>
             {

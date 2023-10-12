@@ -68,7 +68,7 @@ namespace MicroStore.Ordering.Application.Orders
                   .ProjectTo<OrderDto>(MapperAccessor.Mapper.ConfigurationProvider);
 
 
-            query = ApplyQueryFilter(query, queryParams);
+            query = ApplyQueryFilter(query, queryParams, userId);
 
             var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
@@ -92,13 +92,13 @@ namespace MicroStore.Ordering.Application.Orders
 
             return await ordersQuery.PageResult(model.Skip, model.Length, cancellationToken);
         }
-        private IQueryable<OrderDto> TryToSort(IQueryable<OrderDto> query, string sortby, bool desc)
+        private IQueryable<OrderDto> TryToSort(IQueryable<OrderDto> query, string? sortby, bool desc)
         {
-            return sortby.ToLower() switch
+            return sortby?.ToLower() switch
             {
                 "submission_date" => desc ? query.OrderByDescending(x => x.SubmissionDate)
                     : query.OrderBy(x => x.SubmissionDate),
-                _ => query
+                _ => query.OrderByDescending(x=> x.Id)
             };
         }
 
@@ -136,12 +136,8 @@ namespace MicroStore.Ordering.Application.Orders
                               select order;
             }
 
-            if (!string.IsNullOrEmpty(model.SortBy))
-            {
-                query = TryToSort(query, model.SortBy, model.Desc);
-            }
 
-            return query;
+            return TryToSort(query, model.SortBy, model.Desc); ;
         }
     }
 }

@@ -50,7 +50,7 @@ namespace MicroStore.Ordering.Api.Controllers
                 ShippingAddress = model.ShippingAddress,
                 BillingAddress = model.BillingAddress,
                 Items = model.Items,
-                UserId = CurrentUser.Id.ToString()!,
+                UserId = CurrentUser.UserId!,
             };
 
             var result = await _orderCommandService.CreateOrderAsync(orderModel);
@@ -66,8 +66,15 @@ namespace MicroStore.Ordering.Api.Controllers
         [Authorize(Policy = ApplicationSecurityPolicies.RequireOrderReadScope)]
         public async Task<IActionResult> RetirveUserOrderList([FromQuery] OrderListQueryModel queryParams)
         {
+            var userClaims = HttpContext.User.Claims;
 
-            var result = await _orderQueryService.ListAsync(queryParams, CurrentUser.Id.ToString()!);
+            var userId = CurrentUser.UserId!;
+
+            _logger.LogInformation("User claism : {userClaims}", userClaims);
+
+            _logger.LogInformation("User Id {userId}", userId);
+
+            var result = await _orderQueryService.ListAsync(queryParams, CurrentUser.UserId!);
 
             return result.ToOk();
         }

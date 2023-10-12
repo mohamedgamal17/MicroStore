@@ -126,6 +126,9 @@ namespace MicroStore.Profiling.Host
                     ValidIssuer = appsettings.Security.Jwt.Authority,
                     ValidateLifetime = true,
                 };
+
+                options.MapInboundClaims = false;
+
             });
 
             services.AddAuthorization(options =>

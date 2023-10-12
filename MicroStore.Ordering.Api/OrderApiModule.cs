@@ -22,6 +22,7 @@ using MicroStore.Ordering.Api.OpenApi;
 using MicroStore.Ordering.Application.Security;
 using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MicroStore.Ordering.Api
 {
@@ -71,6 +72,8 @@ namespace MicroStore.Ordering.Api
         {
             var appsettings = services.GetSingletonInstance<ApplicationSettings>();
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,8 +91,6 @@ namespace MicroStore.Ordering.Api
                     ValidIssuer = appsettings.Security.Jwt.Authority,
                     ValidateLifetime = true,
                 };
-
-                options.MapInboundClaims = false;
 
             });
 
