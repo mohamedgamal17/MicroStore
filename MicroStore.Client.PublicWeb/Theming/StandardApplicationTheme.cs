@@ -9,6 +9,8 @@ namespace MicroStore.Client.PublicWeb.Theming
         public const string BackEnd = "MicroStoreBackendLayout";
 
         public const string FrontEnd = "MicroStoreFrontEndLayout";
+
+        public const string ProfileCreationLayout = "MicroStoreFrontEndProfileCreationLayout";
     }
 
     [ThemeName(Name)]
@@ -21,6 +23,7 @@ namespace MicroStore.Client.PublicWeb.Theming
             {
                 StandardApplicationLayout.BackEnd => "~/Areas/Administration/Views/Shared/_Layout.cshtml",
                 StandardApplicationLayout.FrontEnd => "~/Pages/Shared/_MultiKartLayout.cshtml",
+                StandardApplicationLayout.ProfileCreationLayout => "~/Pages/Shared/_ProfileCreationLayout.cshtml",
                 _ => fallbackToDefault ? "~/Areas/Administration/Views/Shared/_MultiKartLayout.cshtml" : string.Empty
             };
         }

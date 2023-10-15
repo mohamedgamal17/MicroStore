@@ -1,28 +1,29 @@
-﻿<div class="container mt-3">
+﻿@if (NotificationManager.HasNotifications())
+{
 
-    @if (NotificationManager.HasNotifications())
-    {
+    <div class="container mt-3">
 
 
 
-        foreach (var notification in NotificationManager.GetNotifications())
+
+        @foreach (var notification in NotificationManager.GetNotifications())
         {
-            var alertType = notification.Type switch
-            {
-                NotificationType.Warning => "alert-warning",
-                NotificationType.Error => "alert-danger",
-                NotificationType.Success => "alert-success",
-                _ => "alert-info"
-            };
+        var alertType = notification.Type switch
+        {
+        NotificationType.Warning => "alert-warning",
+        NotificationType.Error => "alert-danger",
+        NotificationType.Success => "alert-success",
+        _ => "alert-info"
+        };
 
-            <div class="alert @(alertType) alert-dismissible fade show mt-1" role="alert">
-                @notification.Message
+        <div class="alert @(alertType) alert-dismissible fade show mt-1" role="alert">
+            @notification.Message
 
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
-            </div>
+        </div>
         }
 
-    }
-</div>
 
+    </div>
+}

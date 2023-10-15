@@ -1,0 +1,104 @@
+﻿@page  
+@using MicroStore.Client.PublicWeb.Pages.Profile;
+@using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
+@model EditModel
+@{
+    ViewData["Title"] = "Edit Profile";
+    ViewData["ContainerTitle"] = "Edit Profile";
+    ViewData["BreadCrumb.IsMainPage"] = false;
+    ViewData["BreadCrumb.Title"] = "Edit Profile";
+    ViewData["BreadCrumb.Page"] = "Edit Profile";
+}
+<div class="container mt-3">
+    <form class="theme-form" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-sm-12 mb-3 mt-3">
+                <h5 class="mb-3">PERSONAL DETAIL</h5>
+                <div class="mt-3 mb-3">
+                    @Html.ValidationSummary()
+                </div>
+                <div class="form-row row">
+                    <div class="col-md-6">
+                        <abp-input asp-for="Profile.FirstName"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Profile.LastName"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="Profile_LastName">LastName</label>
+                            <input type="text" class="form-control" id="@Html.IdFor(x=> x.Profile.Phone)" value="@Model.Profile.Phone">
+                            <span class="text-danger" asp-validation-for="Profile.Phone"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Profile.BirthDate"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-select asp-for="Profile.Gender" asp-items="@Html.GetEnumSelectList<Gender>()"></abp-select>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <abp-input asp-for="Profile.Avatar"></abp-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 mt-12 mb-12">
+                <button class="btn btn-sm btn-solid" type="submit">Save Profile</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+
+            $("#Address_Country").change(function () {
+
+                var countryCode = $(this).val();
+
+                if (countryCode != null) {
+                    getStates(countryCode);
+                }
+
+            })
+
+            const phoneinput = document.querySelector("#Profile_Phone");
+
+            var iti = window.intlTelInput(phoneinput, {
+                hiddenInput: "Profile.Phone",
+                utilsScript: "/libs/intl-tel-input/build/js/utils.js"
+            })
+
+            $(phoneinput).on('change',function(){
+
+                if(iti.getNumber()){
+                    iti.setNumber(intlTelInputUtils.formatNumber(iti.getNumber(), null, intlTelInputUtils.numberFormat.INTERNATIONAL));
+                }
+            })
+        
+            var getStates = function (countryCode) {
+                abp.ajax({
+                    url: `/api/country/code/${countryCode}`,
+                    method: "GET",
+                    success: function (result) {
+                        var stateProvinceElment = $("#Address_StateProvince");
+                        stateProvinceElment.empty();
+                        stateProvinceElment.append("<option selected>Please Select State Province</option>");
+                        $.each(result.stateProvinces, function (index, val) {
+                            stateProvinceElment.append(new Option(val.name, val.abbreviation));
+                        })
+                    },
+
+                    error: function () {
+                        abp.notifiy.error("UnExpected Error has been happend please refersh the page")
+
+                    }
+                })
+            }
+        });
+    </script>
+}
+

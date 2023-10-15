@@ -28,10 +28,11 @@ using Volo.Abp.UI.Navigation;
 using FluentValidation.AspNetCore;
 using Volo.Abp.FluentValidation;
 using MicroStore.Client.PublicWeb.Extensions;
-using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Infrastructure;
-using Microsoft.AspNetCore.Builder;
-
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
+using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
+using System.Net;
+using IdentityModel;
 namespace MicroStore.Client.PublicWeb
 {
     [DependsOn(typeof(MicroStoreAspNetCoreUIModule),
@@ -146,9 +147,11 @@ namespace MicroStore.Client.PublicWeb
             var env = context.GetEnvironment();
             var config = context.GetConfiguration();
 
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
+        
 
             app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseAbpRequestLocalization();
 
@@ -166,10 +169,12 @@ namespace MicroStore.Client.PublicWeb
 
             app.UseAuthorization();
 
+            //app.UseMiddleware<UserProfileMiddleWare>();
+
             app.UseAbpSerilogEnrichers();
 
             app.UseConfiguredEndpoints();
-
+       
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
@@ -190,11 +195,11 @@ namespace MicroStore.Client.PublicWeb
         {
             var appsettings = services.GetSingletonInstance<ApplicationSettings>();
 
+           
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme =OpenIdConnectDefaults.AuthenticationScheme;
-         
 
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
@@ -212,8 +217,7 @@ namespace MicroStore.Client.PublicWeb
                options.ResponseType = "code";
                options.ClaimActions.MapInBoundCustomClaims();
                appsettings.Security.Client.Scopes.ForEach((scp) => options.Scope.Add(scp));
-               options.SaveTokens = true;
-
+               options.SaveTokens = true;             
            });
 
             services.AddAccessTokenManagement();

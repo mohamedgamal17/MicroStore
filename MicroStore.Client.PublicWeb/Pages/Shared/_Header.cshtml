@@ -18,6 +18,7 @@
                             <ul class="onhover-show-div">
                                 @if(User.Identity?.IsAuthenticated ?? false)
                                 {
+                                    <li><a asp-page="/Profile/Index" >Profile</a></li>
                                     <li><a href="javascript:void(0)" id="btn-logout">Logout</a></li>
                                     <form method="post" asp-controller="Authentication" asp-action="Logout" id="logout-form">
                                         @Html.AntiForgeryToken()

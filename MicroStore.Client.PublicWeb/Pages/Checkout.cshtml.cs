@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Extensions;
@@ -6,9 +7,12 @@ using MicroStore.Client.PublicWeb.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Common;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
+using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Billing;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
 namespace MicroStore.Client.PublicWeb.Pages
 {
@@ -26,6 +30,9 @@ namespace MicroStore.Client.PublicWeb.Pages
         [BindProperty]
         public string PaymentMethod { get; set; }
 
+      
+        public User Profile { get; set; }
+
         private readonly IWorkContext _workContext;
 
         private readonly UserOrderService _userOrderService;
@@ -36,13 +43,18 @@ namespace MicroStore.Client.PublicWeb.Pages
 
         private BasketAggregateService _basketAggregateService;
 
-        public CheckoutModel(IWorkContext workContext, UserOrderService userOrderService, UserPaymentRequestService userPaymentRequestService, ShipmentRateService shipmentRateService, BasketAggregateService basketAggregateService)
+        private readonly UINotificationManager _notificationManager;
+
+        private readonly UserProfileService _profileService;
+        public CheckoutModel(IWorkContext workContext, UserOrderService userOrderService, UserPaymentRequestService userPaymentRequestService, ShipmentRateService shipmentRateService, BasketAggregateService basketAggregateService, UINotificationManager notificationManager, UserProfileService profileService)
         {
             _workContext = workContext;
             _userOrderService = userOrderService;
             _userPaymentRequestService = userPaymentRequestService;
             _shipmentRateService = shipmentRateService;
             _basketAggregateService = basketAggregateService;
+            _notificationManager = notificationManager;
+            _profileService = profileService;
         }
 
         public List<PaymentSystem> PaymentSystems { get; set; }
@@ -51,39 +63,48 @@ namespace MicroStore.Client.PublicWeb.Pages
         public double Total { get; set; }
 
 
-
-        public async Task<IActionResult> OnGetAsync()
+        public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
-            var basketResponse = await _basketAggregateService
+            Basket = await _basketAggregateService
                  .RetriveBasket(_workContext.TryToGetCurrentUserId());
 
-            if (basketResponse.Items.Count < 1)
+            if (Basket.Items.Count < 1)
             {
-                return Redirect("~/frontend/cart");
+                _notificationManager.Error("Your cart is empty.");
+
+                context.Result = RedirectToPage("MyCart");
             }
 
-            return Page();
+            try
+            {
+                Profile = await _profileService.GetProfileAsync();
 
+                await next();
+
+            }catch(MicroStoreClientException ex) when(ex.StatusCode== System.Net.HttpStatusCode.NotFound)
+            {
+
+                _notificationManager.Error("Please complete your profile first");
+
+                context.Result = RedirectToPage("CreateProfile", new {returnUrl = context.HttpContext.Request.Path});
+            }
+
+
+        }
+      
+        public async Task<IActionResult> OnGetAsync()
+        {
+            return Page();
         }
 
 
-
+  
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-
-            var basketResponse = await _basketAggregateService
-              .RetriveBasket(_workContext.TryToGetCurrentUserId());
-
-            if (basketResponse.Items.Count < 1)
-            {
-                return Redirect("~/frontend/cart");
-            }
-
-            Basket = basketResponse;
 
             var rateRequestOptions = new ShipmentRateEstimateRequestOptions
             {
@@ -98,7 +119,7 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             double shippingCost = estimateRateResponse.Where(x => x.EstaimatedDays < 7).Select(x => x.Money.Value).Min();
 
-            double subTotal = basketResponse.Items.Sum(x => x.Price * x.Quantity);
+            double subTotal = Basket.Items.Sum(x => x.Price * x.Quantity);
 
             double total = subTotal + shippingCost;
 
@@ -154,7 +175,7 @@ namespace MicroStore.Client.PublicWeb.Pages
         {
             return new Address
             {
-                Name = string.Format("{0} {1}", model.FirstName, model.LastName),
+                Name = model.Name,
                 CountryCode = model.Country,
                 State = model.StateProvince,
                 City = model.City,

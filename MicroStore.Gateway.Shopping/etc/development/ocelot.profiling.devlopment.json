@@ -43,7 +43,6 @@
         "DefaultTokenExchangeDelegatingHandler"
       ]
     },
-
     {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
@@ -55,7 +54,23 @@
       ],
       "Priority": 0,
       "UpstreamPathTemplate": "/mvcgateway/profiling/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET" ],
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7061
+        }
+      ],
+      "Priority": 0,
+      "UpstreamPathTemplate": "/mvcgateway/profiling/{everything}",
+      "UpstreamHttpMethod": [  "POST", "PUT", "DELETE", "PATCH" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       },

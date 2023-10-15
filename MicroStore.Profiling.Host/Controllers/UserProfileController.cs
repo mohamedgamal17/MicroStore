@@ -81,7 +81,7 @@ namespace MicroStore.Profiling.Host.Controllers
         }
 
         [HttpGet]
-        [Route("/addresses")]
+        [Route("addresses")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AddressDto>))]
         public async Task<IActionResult> ListAddressesAsync()
         {
@@ -93,7 +93,7 @@ namespace MicroStore.Profiling.Host.Controllers
         }
 
         [HttpGet]
-        [Route("/addresses/{addressId}")]
+        [Route("addresses/{addressId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
 
         public async Task<IActionResult> GetAddressAsync(string addressId)
@@ -106,7 +106,7 @@ namespace MicroStore.Profiling.Host.Controllers
         }
 
         [HttpPost]
-        [Route("/addresses")]
+        [Route("addresses")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddressDto))]
         public async Task<IActionResult> CreateAddressAsync( [FromBody] AddressModel model)
         {
@@ -125,7 +125,7 @@ namespace MicroStore.Profiling.Host.Controllers
         }
 
         [HttpPut]
-        [Route("/addresses/{addressId}")]
+        [Route("addresses/{addressId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
         public async Task<IActionResult> UpdateAddressAsync(string addressId,[FromBody] AddressModel model)
         {
@@ -145,7 +145,7 @@ namespace MicroStore.Profiling.Host.Controllers
         }
 
         [HttpDelete]
-        [Route("/addresses/{addressId}")]
+        [Route("addresses/{addressId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
         public async Task<IActionResult> RemoveAddressAsync(string addressId)
         {

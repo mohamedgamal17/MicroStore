@@ -10,14 +10,10 @@
     <abp-column size=_12 data-address="@Html.NameFor(x=> x.ShippingAddress)">
         <abp-row class="check=out">
             <abp-column class="form-group" size-md="_6" size-sm="_12">
-                <abp-input asp-for="@Model.ShippingAddress.FirstName"></abp-input>
+                <abp-input asp-for="@Model.ShippingAddress.Name"></abp-input>
             </abp-column>
             <abp-column class="form-group" size-md="_6" size-sm="_12">
-                <abp-input asp-for="@Model.ShippingAddress.FirstName"></abp-input>
-            </abp-column>
-
-            <abp-column class="form-group" size-md="_6" size-sm="_12">
-                <abp-input asp-for="@Model.ShippingAddress.LastName"></abp-input>
+                <abp-input asp-for="@Model.ShippingAddress.Name"></abp-input>
             </abp-column>
             <abp-column class="form-group" size-md="_12" >
                 <abp-input asp-for="@Model.ShippingAddress.PhoneNumber"></abp-input>
@@ -55,14 +51,10 @@
         </div>
         <abp-row class="check=out">
             <abp-column class="form-group" size-md="_6" size-sm="_12">
-                <abp-input asp-for="@Model.BillingAddress.FirstName"></abp-input>
+                <abp-input asp-for="@Model.BillingAddress.Name"></abp-input>
             </abp-column>
             <abp-column class="form-group" size-md="_6" size-sm="_12">
-                <abp-input asp-for="@Model.BillingAddress.FirstName"></abp-input>
-            </abp-column>
-
-            <abp-column class="form-group" size-md="_6" size-sm="_12">
-                <abp-input asp-for="@Model.BillingAddress.LastName"></abp-input>
+                <abp-input asp-for="@Model.BillingAddress.Name"></abp-input>
             </abp-column>
             <abp-column class="form-group" size-md="_12">
                 <abp-input asp-for="@Model.BillingAddress.PhoneNumber"></abp-input>

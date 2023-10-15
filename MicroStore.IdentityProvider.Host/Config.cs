@@ -37,7 +37,7 @@ namespace MicroStore.IdentityProvider.Host
                 new ApiScope("billing.access","access billing api"),
                 new ApiScope("inventory.access","access inventory api"),
                 new ApiScope("geographic.access", "access geogrpahic api"),
-
+                new ApiScope("profiling.access","access profiling api"),
 
                 new ApiScope("ordering.read","allowing read user orders operations"),
                 new ApiScope("ordering.write","allowing write on user orders operations"),
@@ -45,7 +45,10 @@ namespace MicroStore.IdentityProvider.Host
                 new ApiScope("billing.write","allowing write on user payments operations"),
                 new ApiScope("shipping.read","allowing read on user shipments operations"),
 
-
+                
+                new ApiScope("profiling.read","allowing read on user profile"),
+                new ApiScope("profiling.write","allowing write on user profile"),
+   
 
 
 
@@ -56,6 +59,9 @@ namespace MicroStore.IdentityProvider.Host
                 new ApiScope("mvcgateway.shipping.read","allowing shipping read operation on micro store shopping api gateway"),
                 new ApiScope("mvcgateway.inventory.read","allowing inventory read operation on micro store shopping api gateway"),
                 new ApiScope("mvcgateway.inventory.write","allowing inventory write operation on micro store shopping api gateway"),
+
+               new ApiScope("mvcgateway.profiling.read","allowing profiling read operation on micro store profiling api gateway"),
+                new ApiScope("mvcgateway.profiling.write","allowing profiling write operation on micro store shopping api gateway"),
             };
 
 
@@ -106,10 +112,17 @@ namespace MicroStore.IdentityProvider.Host
                     Scopes = {"geographic.access"}
                 },
 
+                new ApiResource("api-profiling","Profiling Api")
+                {
+                    Scopes = { "profiling.access", "profiling.read", "profiling.write"}
+                },
+
                 new ApiResource("api-gateway","Shopping gateway")
                 {
                     Scopes ={ "shoppinggateway.access" , "mvcgateway.ordering.read" , "mvcgateway.ordering.write" , "mvcgateway.billing.read" ,
                           "mvcgateway.billing.write" , "mvcgateway.shipping.read", "mvcgateway.inventory.read","mvcgateway.inventory.write" ,
+                            "mvcgateway.profiling.access","mvcgateway.profiling.read",
+                            "mvcgateway.profiling.write",
                           IdentityServerConstants.StandardScopes.OfflineAccess
                     },
 
@@ -139,7 +152,10 @@ namespace MicroStore.IdentityProvider.Host
                     AllowedGrantTypes = new List<string> { "urn:ietf:params:oauth:grant-type:token-exchange"},
                     ClientSecrets = { new Secret("07366033-d7d3-46e9-9a4f-1f85ee7c9d17".Sha512()) },
 
-                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read", "api-sample" , "geographic.access"},
+                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read", "api-sample" , "geographic.access",
+                        "profiling.access",  "profiling.read", "profiling.write"
+
+                    },
 
 
                     AllowOfflineAccess = false,
@@ -177,7 +193,7 @@ namespace MicroStore.IdentityProvider.Host
                     PostLogoutRedirectUris = { "https://localhost:7020/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "access_control", "shoppinggateway.access" ,"mvcgateway.ordering.read" , "mvcgateway.ordering.write", "mvcgateway.billing.read","mvcgateway.billing.write","mvcgateway.shipping.read","mvcgateway.inventory.read","mvcgateway.inventory.write" },
+                    AllowedScopes = { "openid", "profile", "access_control", "shoppinggateway.access" ,"mvcgateway.ordering.read" , "mvcgateway.ordering.write", "mvcgateway.billing.read","mvcgateway.billing.write","mvcgateway.shipping.read","mvcgateway.inventory.read","mvcgateway.inventory.write" , "mvcgateway.profiling.read", "mvcgateway.profiling.write"},
 
                     RequirePkce = true,
 

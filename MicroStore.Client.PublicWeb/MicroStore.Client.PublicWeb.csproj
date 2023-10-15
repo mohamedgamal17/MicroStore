@@ -12,21 +12,25 @@
     <Compile Remove="Components\Purshase\**" />
     <Compile Remove="Ex\**" />
     <Compile Remove="Logs\**" />
+    <Compile Remove="wwwroot\css\frontend\**" />
     <Content Remove="Areas\Administration\Components\Catalog\**" />
     <Content Remove="Areas\Administration\Views\Shared\Components\Catalog\**" />
     <Content Remove="Components\Purshase\**" />
     <Content Remove="Ex\**" />
     <Content Remove="Logs\**" />
+    <Content Remove="wwwroot\css\frontend\**" />
     <EmbeddedResource Remove="Areas\Administration\Components\Catalog\**" />
     <EmbeddedResource Remove="Areas\Administration\Views\Shared\Components\Catalog\**" />
     <EmbeddedResource Remove="Components\Purshase\**" />
     <EmbeddedResource Remove="Ex\**" />
     <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="wwwroot\css\frontend\**" />
     <None Remove="Areas\Administration\Components\Catalog\**" />
     <None Remove="Areas\Administration\Views\Shared\Components\Catalog\**" />
     <None Remove="Components\Purshase\**" />
     <None Remove="Ex\**" />
     <None Remove="Logs\**" />
+    <None Remove="wwwroot\css\frontend\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +38,9 @@
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <Content Remove="Pages\NotFound.cshtml" />
     <Content Remove="Pages\OrderSuccess.cshtml" />
+    <Content Remove="Pages\Profile.cshtml" />
+    <Content Remove="Pages\Profile\Edit.cshtml" />
+    <Content Remove="Pages\Shared\_ProfileCreationLayout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,7 +70,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\css\frontend\" />
     <Folder Include="wwwroot\js\BackEnd\Components\" />
     <Folder Include="wwwroot\libs\" />
     <Folder Include="wwwroot\backend\" />
@@ -80,6 +86,8 @@
     <None Include="Pages\OrderSuccess.cshtml" />
     <None Include="Pages\ProductDetails.cshtml" />
     <None Include="Pages\Products.cshtml" />
+    <None Include="Pages\Profile\Edit.cshtml" />
+    <None Include="Pages\Profile\Index.cshtml" />
     <None Include="Pages\Shared\Components\BasketWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\CartWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\CheckoutInformationWidget\Default.cshtml" />
@@ -87,6 +95,7 @@
     <None Include="Pages\Shared\Components\OrderWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\ProductListWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\Purchase\Defaultcshtml.cshtml" />
+    <None Include="Pages\Shared\_ProfileCreationLayout.cshtml" />
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />
     <None Include="Pages\_ViewStart.cshtml" />
@@ -137,10 +146,25 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\NotFound.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\OrderSuccess.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Profile.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Profile\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Shared\_ProfileCreationLayout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\OrderSuccess.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Shared\_ProfileCreationLayout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Profile.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Profile\Edit.cshtml" />
   </ItemGroup>
 
 </Project>

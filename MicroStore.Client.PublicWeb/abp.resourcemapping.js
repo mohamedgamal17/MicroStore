@@ -13,6 +13,7 @@
         "@node_modules/slick-carousel/slick/**/*": "@libs/slick/",
         "@node_modules/star-rating.js/**/*": "@libs/star-rating.js/",
         "@node_modules/chart.js/**/*": "@libs/chart.js/",
-        "@node_modules/chartjs-adapter-luxon/**/*":"@libs/chartjs-adapter-luxon/"
+        "@node_modules/chartjs-adapter-luxon/**/*": "@libs/chartjs-adapter-luxon/",
+        "@node_modules/intl-tel-input/**/*":"@libs/intl-tel-input/"
     }
 }

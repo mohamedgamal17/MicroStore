@@ -60,7 +60,7 @@ namespace MicroStore.Catalog.Api.Controllers
                 Title = model.Title,
                 Rating = model.Rating,
                 ReviewText = model.ReviewText,
-                UserId = CurrentUser.Id.ToString()!
+                UserId = CurrentUser.UserId!
             };
 
             var result = await _productReviewService.CreateAsync(productId, createModel);

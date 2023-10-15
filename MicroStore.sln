@@ -185,7 +185,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profiling", "Profiling", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Profiling.Application.Tests", "MicroStore.Profiling.Application.Tests\MicroStore.Profiling.Application.Tests.csproj", "{8FD028FC-ECFF-411B-80B8-CE097BC6A655}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Profiling.Host", "MicroStore.Profiling.Host\MicroStore.Profiling.Host.csproj", "{17FC479A-6B07-42D8-ABB4-F93A821B36C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Profiling.Host", "MicroStore.Profiling.Host\MicroStore.Profiling.Host.csproj", "{17FC479A-6B07-42D8-ABB4-F93A821B36C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

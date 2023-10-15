@@ -1,0 +1,147 @@
+﻿@page
+@using MicroStore.Client.PublicWeb.Theming;
+@using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@model CreateModel
+@{
+    ViewData["Title"] = "Create Profile";
+    ViewData["BreadCrumb.IsMainPage"] = false;
+    ViewData["BreadCrumb.Title"] = "Create Profile Page";
+    ViewData["BreadCrumb.Page"] = "Create Profile";
+    var countriesSelectList = Model.Countries?.Select(x => new SelectListItem
+           {
+                Text = x.Name,
+                Value = x.TwoLetterIsoCode,
+            }).ToList() ??  new List<SelectListItem>();
+}
+<div class="container mt-3">
+    <form class="theme-form" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-sm-12 mb-3 mt-3">
+                <h5 class="mb-3">PERSONAL DETAIL</h5>
+
+                <div class="mt-3 mb-3">
+                    @Html.ValidationSummary()
+                </div>
+                <div class="form-row row">
+                    <div class="col-md-6">
+                        <abp-input asp-for="Profile.FirstName"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Profile.LastName"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="Profile_LastName">LastName</label>
+                            <input type="text" class="form-control" id="@Html.IdFor(x=> x.Profile.Phone)" value="@Model.Profile.Phone">
+                            <span class="text-danger" asp-validation-for="Profile.Phone"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Profile.BirthDate"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-select asp-for="Profile.Gender" asp-items="@Html.GetEnumSelectList<Gender>()"></abp-select>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <abp-input asp-for="Profile.Avatar"></abp-input>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-12 mb-3 mt-3">
+                <h5 class="mb-3">ADDRESS</h5>
+                <div class="form-row mt-3 row">
+                    <div class="from-groub col-md-6">
+                        <abp-input asp-for="Address.Name"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Address.PhoneNumber"></abp-input>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" asp-for="@Model.Address.Country"> </label>
+                        <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.Country)" asp-for="@Model.Address.Country">
+                            <option selected>Please select country</option>
+                            @foreach (var country in countriesSelectList)
+                            {
+                                <option value="@country.Value">@country.Text</option>
+                            }
+                        </select>
+                        <span class="text-danger" asp-validation-for="Address.Country"></span>
+                    </div>
+               
+                    <div class="col-md-6">
+                        <label class="form-label" asp-for="@Model.Address.StateProvince"> </label>
+                        <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.StateProvince)" asp-for="@Model.Address.StateProvince" data-address-select="StateProvince"></select>
+                        <span class="text-danger" asp-validation-for="Address.StateProvince"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Address.City"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Address.AddressLine1"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Address.AddressLine2"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Address.PostalCode"></abp-input>
+                    </div>
+                    <div class="col-md-6">
+                        <abp-input asp-for="Address.ZipCode"></abp-input>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-12 mt-12 mb-12">
+                <button class="btn btn-sm btn-solid" type="submit">Save Profile</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+
+            $("#Address_Country").change(function () {
+            
+                var countryCode = $(this).val();
+
+                if(countryCode != null){
+                    getStates(countryCode);
+                }              
+            })
+
+            const phoneinput = document.querySelector("#Profile_Phone");
+
+            var iti = window.intlTelInput(phoneinput, {
+                hiddenInput: "Profile.Phone",
+                utilsScript: "/libs/intl-tel-input/build/js/utils.js"
+            })
+
+            var getStates = function(countryCode){
+                abp.ajax({
+                    url: `/api/country/code/${countryCode}`,
+                    method:"GET",
+                    success : function(result){
+                        var stateProvinceElment = $("#Address_StateProvince");
+                        stateProvinceElment.empty();
+                        stateProvinceElment.append("<option selected>Please Select State Province</option>");
+                        $.each(result.stateProvinces, function (index, val) {
+                            stateProvinceElment.append(new Option(val.name, val.abbreviation));
+                       })
+                    },
+
+                    error :function(){
+                        abp.notifiy.error("UnExpected Error has been happend please refersh the page")
+
+                    }
+                })
+            }
+        });
+    </script>
+}
+

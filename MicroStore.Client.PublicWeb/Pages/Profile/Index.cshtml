@@ -1,0 +1,188 @@
+﻿@page
+@using System.Security.Claims;
+@model IndexModel
+@{
+
+    ViewData["Title"] = "Profile";
+    ViewData["ContainerTitle"] = "Profile";
+    ViewData["BreadCrumb.IsMainPage"] = false;
+    ViewData["BreadCrumb.Title"] = "Profile";
+    ViewData["BreadCrumb.Page"] = "Profile";
+}
+
+<section class="dashboard-section section-b-space user-dashboard-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="dashboard-sidebar">
+                    <div class="profile-top">
+                        <div class="profile-image">
+                            <img src="../assets/images/avtar.jpg" alt="" class="img-fluid">
+                        </div>
+                        <div class="profile-detail">
+                            <h5>@Model.Profile</h5>
+                            <h6>
+                                @User.Claims.SingleOrDefault(x=> x.Type == ClaimTypes.Email)?.Value
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="faq-tab">
+                        <ul class="nav nav-tabs" id="top-tab" role="tablist">
+                            <li class="nav-item ">
+                                <a data-bs-toggle="tab" data-bs-target="#profile"
+                                   class="nav-link active">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="tab" data-bs-target="#address"
+                                   class="nav-link">Addresses</a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9" style="min-height: 500px;">
+                <div class="faq-content tab-content" id="top-tabContent">
+                    <div class="tab-pane active" id="profile">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card mt-0">
+                                    <div class="card-body">
+                                        <div class="dashboard-box">
+                                            <div class="dashboard-title">
+                                                <h4>profile</h4>
+                                                <a class="edit-link" asp-page="/Profile/Edit">edit</a>
+                                            </div>
+                                            <div class="dashboard-detail">
+                                                <ul>
+                                                    <li>
+                                                        <div class="details">
+                                                            <div class="left">
+                                                                <h6>Name</h6>
+                                                            </div>
+                                                            <div class="right">
+                                                                <h6>@string.Format("{0} {1}",Model.UserProfile.FirstName, Model.UserProfile.LastName) </h6>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="details">
+                                                            <div class="left">
+                                                                <h6>Birth date</h6>
+                                                            </div>
+                                                            <div class="right">
+                                                                <h6>@Model.UserProfile.BirthDate.ToString("dddd, dd MMMM yyyy")
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="details">
+                                                            <div class="left">
+                                                                <h6>Gender</h6>
+                                                            </div>
+                                                            <div class="right">
+                                                                <h6>@Model.UserProfile.Gender.ToString()</h6>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="details">
+                                                            <div class="left">
+                                                                <h6>Phone</h6>
+                                                            </div>
+                                                            <div class="right">
+                                                                <h6>@Model.UserProfile.Phone</h6>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="dashboard-title mt-lg-5 mt-3">
+                                                <h4>login details</h4>
+                                            </div>
+                                            <div class="dashboard-detail">
+                                                <ul>
+                                                    <li>
+                                                        <div class="details">
+                                                            <div class="left">
+                                                                <h6>Email Address</h6>
+                                                            </div>
+                                                            <div class="right">
+                                                                <h6>
+                                                                    @User.Claims.SingleOrDefault(x=> x.Type == ClaimTypes.Name)?.Value
+                                                                                            
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="details">
+                                                            <div class="left">
+                                                                <h6>User Name</h6>
+                                                            </div>
+                                                            <div class="right">
+                                                                <h6>
+                                                                    @User.Claims.SingleOrDefault(x=> x.Type == ClaimTypes.Name)?.Value
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="address">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card mt-0">
+                                    <div class="card-body">
+                                        <div class="top-sec">
+                                            <h3>Address Book</h3>
+                                            <a asp-page="Address/Create" class="btn btn-sm btn-solid">+ add new</a>
+                                        </div>
+                                        <div class="address-book-section">
+                                            <div class="row g-4">
+                                                @foreach(var address in Model.UserProfile.Addresses)
+                                                {
+                                                    <div class="select-box active col-xl-4 col-md-6">
+                                                        <div class="address-box">
+                                                            <div class="top">
+                                                                <h6>@address.Name <span>home</span></h6>
+                                                            </div>
+                                                            <div class="middle">
+                                                                <div class="address">
+                                                                    <p class="mb-1">@address.AddressLine1</p>
+                                                                    <p class="mb-1">@address.AddressLine2</p>
+                                                                </div>
+                                                                <div class="number">
+                                                                    <p>Country : <span>@address.CountryCode</span></p>
+                                                                    <p>State : <span>@address.State</span></p>
+                                                                    <p>City : <span>@address.City</span></p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="bottom">
+                                                                <a asp-page="Address/Edit" asp-route-id="@address.Id" class="bottom_btn">  edit</a>
+                                                                                                                                                                                                             <a href="#" class="bottom_btn">remove</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

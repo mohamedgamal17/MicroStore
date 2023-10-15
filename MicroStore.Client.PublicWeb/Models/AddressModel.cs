@@ -6,11 +6,8 @@ namespace MicroStore.Client.PublicWeb.Models
 {
     public class AddressModel
     {
-        [DisplayName("First Name")]
-        public string FirstName { get; set; }
-
-        [DisplayName("Last Name")]
-        public string LastName { get; set; }
+        public string? Id { get; set; }
+        public string Name { get; set; }
 
         [DisplayName("Country Code")]
         public string Country { get; set; }
@@ -41,12 +38,10 @@ namespace MicroStore.Client.PublicWeb.Models
     {
         public AddressModelValidator()
         {
-            RuleFor(x => x.FirstName)
+            RuleFor(x => x.Name)
                .NotNull()
-               .MaximumLength(150);
-            RuleFor(x => x.LastName)
-               .NotNull()
-               .MaximumLength(150);
+               .MaximumLength(300);
+
 
             RuleFor(x => x.PhoneNumber)
                  .NotNull()
@@ -59,12 +54,11 @@ namespace MicroStore.Client.PublicWeb.Models
                  .WithMessage("Invalid phone number");
 
             RuleFor(x => x.Country)
-                .NotNull()
-                .Length(3);
+                .NotNull();
 
             RuleFor(x => x.StateProvince)
-                .NotNull()
-                .Length(2);
+                .NotNull();
+ 
 
 
             RuleFor(x => x.City)

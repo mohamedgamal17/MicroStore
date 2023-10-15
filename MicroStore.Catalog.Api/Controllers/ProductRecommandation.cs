@@ -26,7 +26,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> GetProductRecommendation([FromQuery] PagingQueryParams queryParams)
         {
-            var result = await _productQueryService.GetUserRecommendation(CurrentUser.Id.ToString()!, queryParams);
+            var result = await _productQueryService.GetUserRecommendation(CurrentUser.UserId!, queryParams);
 
             return result.ToOk();
         }

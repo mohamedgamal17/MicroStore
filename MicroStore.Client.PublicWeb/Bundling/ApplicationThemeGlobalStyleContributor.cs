@@ -8,7 +8,8 @@ namespace MicroStore.Client.PublicWeb.Bundling
             context.Files.AddRange(new[] 
             {
                 "/libs/admin-lte/css/adminlte.min.css",
-                "/libs/summernote/summernote.min.css"
+                "/libs/summernote/summernote.min.css",
+                "/libs/intl-tel-input/build/css/intlTelInput.min.css"
             });
 
         }

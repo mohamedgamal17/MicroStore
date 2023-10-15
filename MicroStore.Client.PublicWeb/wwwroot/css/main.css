@@ -1,1 +1,3 @@
-﻿
+﻿.input-group .form-control, .intl-tel-input {
+    width: 100%;
+}
