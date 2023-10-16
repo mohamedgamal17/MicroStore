@@ -19,7 +19,11 @@ namespace MicroStore.Profiling.Application.Mappers
                     opt.ConvertUsing(PhoneConverter.Converter);
                 })
                 .ForMember(x=> x.Gender, opt=> opt.MapFrom(src=> Enum.Parse<Gender>(src.Gender.ToLower(),true)))
-                .ForMember(x => x.Addresses, opt => opt.MapFrom(src => src.Addresses));
+                .ForMember(x => x.Addresses, opt =>
+                {
+                    opt.Condition(src => src.Addresses != null);
+                    opt.MapFrom(src => src.Addresses);
+                });
 
 
             CreateMap<CreateProfileModel, Profile>()
