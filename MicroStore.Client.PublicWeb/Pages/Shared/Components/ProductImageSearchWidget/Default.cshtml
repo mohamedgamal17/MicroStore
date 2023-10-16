@@ -1,0 +1,57 @@
+﻿@using System.Globalization;
+@model MicroStore.Client.PublicWeb.Components.ProductImageSearchWidget.ProductImageSearchWidgetViewComponentModel
+<div class="collection-product-wrapper">
+    <div class="product-wrapper-grid product-m no-arrow">
+        <div class="row margin-res">
+            @foreach (var product in Model.Products)
+            {
+                var productName = product.Name;
+                var productImage = product.ProductImages?.OrderBy(x => x.DisplayOrder)
+                .FirstOrDefault()?.Image ?? @"/user-content/no-image.png";
+                var productsku = product.Sku;
+                var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
+                bool isItemInBasket = Model.UserBasket.Items?.Any(x => x.ProductId == product.Id) ?? false;
+                var quantityBoxClass = isItemInBasket ? "open" : "";
+
+                <div class="col-xl-3 col-6 col-grid-box">
+                    <div class="product-box product-wrap" style="width: 100%; display: inline-block;" data-product-id="@product.Id">
+                        <div class="img-wrapper">
+                            <div class="front">
+                                <a href="ProductDetails/?id=@product.Id">
+                                    <img src="@productImage" class="img-fluid blur-up lazyload bg-img" alt="">
+                                </a>
+                            </div>
+                            <div class="addtocart_btn">
+                                <button class="add-button add_cart" title="Add to cart" tabindex="0">
+                                    Add to Cart
+                                </button>
+                                <div class="qty-box cart_qty @quantityBoxClass">
+                                    <div class="input-group">
+                                        <button type="button" class="btn quantity-left-minus" data-type="minus"
+                                                data-field="" tabindex="0">
+                                            <i class="fa fa-minus" aria-hidden="true"></i>
+                                        </button>
+                                        <input type="text" class="form-control input-number qty-input" value="1"
+                                               tabindex="0" disabled>
+                                        <button type="button" class="btn quantity-right-plus" data-type="plus"
+                                                data-field="" tabindex="0">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-detail text-center">
+                            <a href="product-page(no-sidebar).html" tabindex="0">
+                                <h6>@productName</h6>
+                            </a>
+                            <h4>@productPrice</h4>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </div>
+</div>

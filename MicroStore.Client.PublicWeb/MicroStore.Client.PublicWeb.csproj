@@ -40,7 +40,6 @@
     <Content Remove="Pages\OrderSuccess.cshtml" />
     <Content Remove="Pages\Profile.cshtml" />
     <Content Remove="Pages\Profile\Edit.cshtml" />
-    <Content Remove="Pages\Shared\_ProfileCreationLayout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -95,7 +94,6 @@
     <None Include="Pages\Shared\Components\OrderWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\ProductListWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\Purchase\Defaultcshtml.cshtml" />
-    <None Include="Pages\Shared\_ProfileCreationLayout.cshtml" />
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />
     <None Include="Pages\_ViewStart.cshtml" />
@@ -148,15 +146,10 @@
     <_ContentIncludedByDefault Remove="Pages\OrderSuccess.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Profile.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Profile\Edit.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Shared\_ProfileCreationLayout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\OrderSuccess.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Shared\_ProfileCreationLayout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

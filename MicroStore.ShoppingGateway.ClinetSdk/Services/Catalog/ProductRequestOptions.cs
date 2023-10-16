@@ -29,4 +29,10 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         public bool IsFeatured { get; set; }
     }
 
+
+    public class ProductSearchByImageRequestOptions
+    {
+        public byte[] Image { get; set; }
+    }
+
 }

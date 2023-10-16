@@ -1,0 +1,44 @@
+﻿@page "{image:string}"
+@using MicroStore.Client.PublicWeb.Components.ProductImageSearchWidget;
+@model MicroStore.Client.PublicWeb.Pages.ImageSearchModel
+@{
+    ViewData["Title"] = "Image Search";
+    ViewData["BreadCrumb.IsMainPage"] = false;
+    ViewData["BreadCrumb.Title"] = "Image Search Page";
+    ViewData["BreadCrumb.Page"] = "Image Search";
+}
+
+<section class="section-b-space addtocart_count ratio_asos">
+    <div class="collection-wrapper">
+        <div class="container">
+
+            @if (Model.HasErorr)
+            {
+                @Html.ValidationSummary("Invalid input", new {@class="text-danger"})
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="rounded mx-auto" src="@Url.Action("GetFileStream","CDN", new {fileName = Model.TargetImage})" />
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="collection-content col">
+                            <div class="page-main-content">
+                                <div class="row">
+                                    <div class="col-sm-12">
+
+                                        @Component.InvokeAsync(typeof(ProductImageSearchWidgetViewComponent),new {})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+        </div>
+    </div>
+</section>
+

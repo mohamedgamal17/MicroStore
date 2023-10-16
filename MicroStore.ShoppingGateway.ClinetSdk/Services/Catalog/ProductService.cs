@@ -59,5 +59,13 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         {
             return await _clinet.MakeRequest<Product>(string.Format(PRODUCT_IMAGE_URL_WITH_ID, productId, productImageId), HttpMethod.Delete, cancellationToken);
         }
-    }
+
+
+        public async Task<List<Product>> SearchByImage(ProductSearchByImageRequestOptions options, CancellationToken cancellationToken = default)
+        {
+            string path = string.Format("{0}/{1}", BASE_URL_WITHOUT_ID, "search-by-image");
+
+            return await _clinet.MakeRequest<List<Product>>(path, HttpMethod.Post, options, cancellationToken);
+        }
+     }
 }

@@ -84,9 +84,26 @@
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
+
+        function openSearch() {
+            document.getElementById("search-overlay").style.display = "block";
+        }
+
+        function closeSearch() {
+            document.getElementById("search-overlay").style.display = "none";
+        }
+
         $(document).ready(function () {
             $("#btn-logout").click(function () {
                 $("#logout-form").submit();
+            })
+
+            $("#image-search-btn").click(function(){
+                $("#image-search-input").trigger('click');
+            })
+
+            $("#image-search-input").change(function(){
+                $("#image-search").submit();
             })
         })
     </script>

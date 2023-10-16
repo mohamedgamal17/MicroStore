@@ -16,9 +16,9 @@
                             <i class="fa fa-user" aria-hidden="true"></i>
                             My Account
                             <ul class="onhover-show-div">
-                                @if(User.Identity?.IsAuthenticated ?? false)
+                                @if (User.Identity?.IsAuthenticated ?? false)
                                 {
-                                    <li><a asp-page="/Profile/Index" >Profile</a></li>
+                                    <li><a asp-page="/Profile/Index">Profile</a></li>
                                     <li><a href="javascript:void(0)" id="btn-logout">Logout</a></li>
                                     <form method="post" asp-controller="Authentication" asp-action="Logout" id="logout-form">
                                         @Html.AntiForgeryToken()
@@ -28,7 +28,7 @@
                                 {
                                     <li><a asp-controller="Authentication" asp-action="Login">Login</a></li>
                                 }
-                                
+
                             </ul>
                         </li>
                     </ul>
@@ -77,10 +77,27 @@
                                                                            id="exampleInputPassword1"
                                                                            placeholder="Search a Product">
                                                                 </div>
-                                                                <button type="submit" class="btn btn-primary">
+                                                                <button type="submit" class="btn btn-primary d-none" style="right: 45px!important">
                                                                     <i class="fa fa-search"></i>
                                                                 </button>
                                                             </form>
+                                                            <form  action="/ImageSearch" enctype="multipart/form-data"  
+                                                            id="image-search" method="post">
+                                                            @Html.AntiForgeryToken()
+                                                                <button id="image-search-btn" class="btn btn-primary mr-3"
+                                                                        style="display: block!important;
+                                                                                position: absolute;
+                                                                                top: 5px;
+                                                                                background-color: transparent;
+                                                                                border: 0;
+                                                                                font-size: 24px;
+                                                                            color: #777;
+                                                                            "  type="button">
+                                                                    <i class="fa fa-camera " style="display: block!important;"></i>
+                                                                </button>
+                                                                <input type="file" name="Image" id="image-search-input" class="d-none">
+                                                            </form>
+
                                                         </div>
                                                     </div>
                                                 </div>
