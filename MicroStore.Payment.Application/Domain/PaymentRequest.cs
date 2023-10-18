@@ -3,7 +3,7 @@ using MicroStore.Payment.Domain.Shared.Events;
 using Volo.Abp.Domain.Entities.Auditing;
 namespace MicroStore.Payment.Application.Domain
 {
-    public class PaymentRequest : AuditedAggregateRoot<string>
+    public class PaymentRequest : FullAuditedAggregateRoot<string>
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
