@@ -1,15 +1,12 @@
 ﻿#pragma warning disable CS8618
-using Volo.Abp.Domain.Entities;
-
+using Volo.Abp.Domain.Entities.Auditing;
 namespace MicroStore.Geographic.Application.Domain
 {
-    public class Country : Entity<string>
+    public class Country : FullAuditedAggregateRoot<string>
     {
         public Country()
         {
             Id = Guid.NewGuid().ToString();
-
-        //    StateProvinces = new List<StateProvince>();
         }
         public string Name { get; set; }
         public string TwoLetterIsoCode { get; set; }

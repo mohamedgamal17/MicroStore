@@ -4,6 +4,7 @@ using MicroStore.Geographic.Application.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Geographic.Application.Migrations
 {
     [DbContext(typeof(GeographicDbContext))]
-    partial class GeographicDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231018162027_FullyAuditedMigration")]
+    partial class FullyAuditedMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
