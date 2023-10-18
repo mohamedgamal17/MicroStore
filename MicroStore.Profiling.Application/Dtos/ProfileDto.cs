@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Application.Dtos;
 namespace MicroStore.Profiling.Application.Dtos
 {
-    public class ProfileDto : EntityDto<string>
+    public class ProfileDto : FullAuditedEntityDto<string>
     {
         public string UserId { get; set; }
         public string FirstName { get; set; }

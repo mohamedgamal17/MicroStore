@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace MicroStore.Profiling.Application.Domain
 {
-    public class Profile : Entity<string>
+    public class Profile : FullAuditedEntity<string>
     {
         public string UserId { get; set; }
         public string FirstName { get; set; }
