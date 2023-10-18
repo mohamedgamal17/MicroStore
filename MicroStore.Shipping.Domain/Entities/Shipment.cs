@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Domain.Entities.Events;
 namespace MicroStore.Shipping.Domain.Entities
 {
-    public class Shipment : AuditedAggregateRoot<string>
+    public class Shipment : FullAuditedAggregateRoot<string>
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
