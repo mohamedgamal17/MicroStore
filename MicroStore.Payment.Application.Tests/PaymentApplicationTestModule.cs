@@ -12,7 +12,8 @@ using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using MicroStore.Payment.Application.Tests.Consts;
-using MicroStore.Payment.Application.Domain;
+using MicroStore.Payment.Domain.Shared.Configuration;
+using MicroStore.Payment.Application.Tests.Fakes;
 
 namespace MicroStore.Payment.Application.Tests
 {
@@ -29,6 +30,26 @@ namespace MicroStore.Payment.Application.Tests
 
             ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
         };
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            var appsettings = context.Services.GetSingletonInstance<ApplicationSettings>();
+
+            Configure<PaymentSystemOptions>(opt =>
+            {
+                var providerConfig = appsettings.PaymentProviders.FindByKey(PaymentMethodConst.ProviderKey);
+
+                var system = PaymentSystem.Create(PaymentMethodConst.ProviderKey, PaymentMethodConst.DisplayName, Guid.NewGuid().ToString(), typeof(FakePaymentMethod), providerConfig);
+
+                var nonActiveSystem = PaymentSystem.Create(PaymentMethodConst.NonActiveGateway, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(),
+                    typeof(FakeNonActivePaymentMethodProvider), null);
+
+                opt.Systems.Add(system);
+
+                opt.Systems.Add(nonActiveSystem);
+
+            });
+        }
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
 
@@ -52,7 +73,6 @@ namespace MicroStore.Payment.Application.Tests
 
                 dbContext.Database.Migrate();
 
-                SeedFakePaymentMethod(dbContext);
 
             }
         }
@@ -76,32 +96,7 @@ namespace MicroStore.Payment.Application.Tests
         }
 
 
-        private  void SeedFakePaymentMethod(PaymentDbContext dbContext)
-        {
-            var paymentMethods = new List<PaymentSystem>
-            {
-                new PaymentSystem
-                {
-                    Name = PaymentMethodConst.PaymentGatewayName,
-                    IsEnabled = true,
-                    DisplayName = PaymentMethodConst.PaymentGatewayName,
-                    Image = PaymentMethodConst.PaymentGatewayName,
 
-                },
-
-                new PaymentSystem
-                {
-                   Name = PaymentMethodConst.NonActiveGateway,
-                    IsEnabled = false,
-                    DisplayName = PaymentMethodConst.NonActiveGateway,
-                    Image = PaymentMethodConst.NonActiveGateway,
-                }
-            };
-
-            dbContext.AddRange(paymentMethods);
-
-            dbContext.SaveChanges();
-        }
 
     }
 }

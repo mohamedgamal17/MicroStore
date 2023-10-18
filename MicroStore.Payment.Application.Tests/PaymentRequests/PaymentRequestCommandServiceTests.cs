@@ -58,7 +58,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             var result = await _paymentRequestCommandService.ProcessPaymentAsync(paymentRequest.Id, new ProcessPaymentRequestModel
             {
-                GatewayName = PaymentMethodConst.PaymentGatewayName,
+                GatewayName = PaymentMethodConst.ProviderKey,
                 CancelUrl = "http://cancel.com/",
                 ReturnUrl = "http://success.com/",
             });
@@ -74,7 +74,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             var result = await _paymentRequestCommandService.ProcessPaymentAsync(Guid.NewGuid().ToString(), new ProcessPaymentRequestModel
             {
-                GatewayName = PaymentMethodConst.PaymentGatewayName,
+                GatewayName = PaymentMethodConst.ProviderKey,
                 CancelUrl = "http://cancel.com/",
                 ReturnUrl = "http://success.com/",
             });
@@ -104,7 +104,6 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
             result.Exception.Should().BeOfType<EntityNotFoundException>();
         }
 
-
         [Test]
         public async Task Shoud_return_error_result_while_processing_payment_request_when_payment_gateway_is_not_active()
         {
@@ -125,6 +124,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
         }
 
 
+
         [Test]
         public async Task Should_return_error_result_while_processing_payment_request_when_payment_state_is_not_waiting()
         {
@@ -132,7 +132,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
 
             var result = await _paymentRequestCommandService.ProcessPaymentAsync(paymentRequest.Id, new ProcessPaymentRequestModel
             {
-                GatewayName = PaymentMethodConst.PaymentGatewayName,
+                GatewayName = PaymentMethodConst.ProviderKey,
                 CancelUrl = "http://cancel.com/",
                 ReturnUrl = "http://success.com/",
             });

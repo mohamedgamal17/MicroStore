@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MicroStore.Payment.Application.Domain;
+using MicroStore.Payment.Domain.Shared.Configuration;
 using MicroStore.Payment.Domain.Shared.Dtos;
 
 namespace MicroStore.Payment.Application.Mappers
@@ -8,8 +8,7 @@ namespace MicroStore.Payment.Application.Mappers
     {
         public PaymentSystemMapper()
         {
-            CreateMap<PaymentSystem, PaymentSystemDto>()
-                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id));
+            CreateMap<PaymentSystem, PaymentSystemDto>();
 
         }
     }

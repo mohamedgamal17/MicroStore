@@ -16,7 +16,7 @@ namespace MicroStore.Payment.Application.Migrations
                     Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     OrderId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     OrderNumber = table.Column<string>(type: "nvarchar(265)", maxLength: 265, nullable: false),
-                    CustomerId = table.Column<string>(type: "nvarchar(265)", maxLength: 265, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(265)", maxLength: 265, nullable: false),
                     SubTotal = table.Column<double>(type: "float", nullable: false),
                     TaxCost = table.Column<double>(type: "float", nullable: false),
                     ShippingCost = table.Column<double>(type: "float", nullable: false),
@@ -31,39 +31,16 @@ namespace MicroStore.Payment.Application.Migrations
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PaymentRequests", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PaymentSystems",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    IsEnabled = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PaymentSystems", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SettingsEntity",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SettingsEntity", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -110,11 +87,6 @@ namespace MicroStore.Payment.Application.Migrations
                 column: "Sku");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaymentRequests_CustomerId",
-                table: "PaymentRequests",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PaymentRequests_OrderId",
                 table: "PaymentRequests",
                 column: "OrderId",
@@ -132,28 +104,15 @@ namespace MicroStore.Payment.Application.Migrations
                 column: "TransctionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaymentSystems_Name",
-                table: "PaymentSystems",
-                column: "Name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SettingsEntity_ProviderKey",
-                table: "SettingsEntity",
-                column: "ProviderKey",
-                unique: true);
+                name: "IX_PaymentRequests_UserId",
+                table: "PaymentRequests",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "PaymentRequestProduct");
-
-            migrationBuilder.DropTable(
-                name: "PaymentSystems");
-
-            migrationBuilder.DropTable(
-                name: "SettingsEntity");
 
             migrationBuilder.DropTable(
                 name: "PaymentRequests");

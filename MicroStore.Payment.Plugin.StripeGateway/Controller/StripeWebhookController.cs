@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MicroStore.Payment.Domain.Shared;
-using MicroStore.Payment.Plugin.StripeGateway.Config;
+using MicroStore.Payment.Domain.Shared.Configuration;
 using MicroStore.Payment.Plugin.StripeGateway.Consts;
 using Stripe;
 
@@ -15,12 +16,14 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
 
         private readonly IPaymentRequestManager _paymentRequestManager;
 
-        private readonly ISettingsRepository _settingsRepository;
-        public StripeWebhookController(ILogger<StripeWebhookController> logger, IPaymentRequestManager paymentRequestManager, ISettingsRepository settingsRepository)
+
+        private readonly PaymentSystem _paymentSystem;
+
+        public StripeWebhookController(ILogger<StripeWebhookController> logger, IPaymentRequestManager paymentRequestManager, IOptions<PaymentSystemOptions> options )
         {
             _logger = logger;
             _paymentRequestManager = paymentRequestManager;
-            _settingsRepository = settingsRepository;
+            _paymentSystem = options.Value.Systems.Single(x=> x.Name == StripePaymentConst.Provider);
         }
 
         [Route("")]
@@ -28,10 +31,14 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
         public async Task<IActionResult> Index()
         {
 
+            if (!_paymentSystem.IsEnabled)
+            {
+                return BadRequest("Stripe payment provider has not been configured");
+            }
 
             try
             {
-                var settings = await _settingsRepository.TryToGetSettings<StripePaymentSettings>(StripePaymentConst.Provider);
+                var configuration = _paymentSystem.Configuration;
 
                 using var stream = new StreamReader(HttpContext.Request.Body);
 
@@ -39,7 +46,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway.Controller
 
                 var stripeSignature = HttpContext.Request.Headers["Stripe-Signature"];
 
-                var stripeEvent = EventUtility.ConstructEvent(json, stripeSignature, settings?.EndPointSecret ?? string.Empty);
+                var stripeEvent = EventUtility.ConstructEvent(json, stripeSignature, configuration?.WebHookSecret ?? string.Empty);
 
                 if (stripeEvent.Type == Events.CheckoutSessionCompleted)
                 {

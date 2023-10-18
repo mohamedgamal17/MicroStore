@@ -22,7 +22,7 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
         {
             var fakePaymentRequest = await CreateFakePaymentRequest();
 
-            fakePaymentRequest.Complete(PaymentMethodConst.PaymentGatewayName, Guid.NewGuid().ToString(), DateTime.UtcNow);
+            fakePaymentRequest.Complete(PaymentMethodConst.ProviderKey, Guid.NewGuid().ToString(), DateTime.UtcNow);
 
             return await Update(fakePaymentRequest);
         }

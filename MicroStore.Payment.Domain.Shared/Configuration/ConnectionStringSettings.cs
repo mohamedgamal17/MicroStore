@@ -1,4 +1,4 @@
-﻿namespace MicroStore.Payment.Application.Configuration
+﻿namespace MicroStore.Payment.Domain.Shared.Configuration
 {
     public class ConnectionStringSettings : Dictionary<string, string>
     {

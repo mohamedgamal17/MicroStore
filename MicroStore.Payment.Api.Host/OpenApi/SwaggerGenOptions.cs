@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
-using MicroStore.Payment.Application.Configuration;
+using MicroStore.Payment.Domain.Shared.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 namespace MicroStore.Payment.Api.Host.OpenApi
 {

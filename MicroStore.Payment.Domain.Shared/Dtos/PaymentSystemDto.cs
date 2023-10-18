@@ -2,7 +2,7 @@
 
 namespace MicroStore.Payment.Domain.Shared.Dtos
 {
-    public class PaymentSystemDto : AuditedEntityDto<string>
+    public class PaymentSystemDto 
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }

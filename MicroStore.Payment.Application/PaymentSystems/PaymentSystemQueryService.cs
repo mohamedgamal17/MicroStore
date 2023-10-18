@@ -1,65 +1,33 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.Payment.Application.Common;
-using MicroStore.Payment.Application.Domain;
+using MicroStore.Payment.Domain.Shared.Configuration;
 using MicroStore.Payment.Domain.Shared.Dtos;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Payment.Application.PaymentSystems
 {
     public class PaymentSystemQueryService : PaymentApplicationService, IPaymentSystemQueryService
     {
-        private readonly IPaymentDbContext _paymentDbContext;
+        private readonly List<PaymentSystem> _paymentSystems;
 
-        public PaymentSystemQueryService(IPaymentDbContext paymentDbContext)
+        public PaymentSystemQueryService(IOptions<PaymentSystemOptions> options)
         {
-            _paymentDbContext = paymentDbContext;
+            _paymentSystems = options.Value.Systems;
         }
 
-        public async Task<Result<PaymentSystemDto>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public Task<Result<List<PaymentSystemDto>>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var query = _paymentDbContext.PaymentSystems
-                .AsNoTracking()
-                .ProjectTo<PaymentSystemDto>(MapperAccessor.Mapper.ConfigurationProvider);
-
-            var result = await query.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-            if (result == null)
+            var systems = _paymentSystems.Select(x => new PaymentSystemDto
             {
-                return new Result<PaymentSystemDto>(new EntityNotFoundException(typeof(PaymentSystem), id));
-            }
+                Name = x.Name,
+                DisplayName = x.DisplayName,
+                Image = x.Image,
+                IsEnabled = x.IsEnabled
+            }).ToList();
 
-            return result;
-        }
-
-        public async Task<Result<PaymentSystemDto>> GetBySystemNameAsync(string name, CancellationToken cancellationToken = default)
-        {
-            var query = _paymentDbContext.PaymentSystems
-               .AsNoTracking()
-               .ProjectTo<PaymentSystemDto>(MapperAccessor.Mapper.ConfigurationProvider);
-
-            var result = await query.SingleOrDefaultAsync(x => x.Name == name, cancellationToken);
-
-            if (result == null)
-            {
-                return new Result<PaymentSystemDto>(new EntityNotFoundException($"payment sytem with name : {name} is not exist"));
-            }
-
-            return result;
-        }
-
-        public async Task<Result<List<PaymentSystemDto>>> ListPaymentSystemAsync(CancellationToken cancellationToken = default)
-        {
-            var query = _paymentDbContext.PaymentSystems
-              .AsNoTracking()
-              .ProjectTo<PaymentSystemDto>(MapperAccessor.Mapper.ConfigurationProvider);
-
-
-            var result = await query.ToListAsync(cancellationToken);
-
-            return result;
+            return Task.FromResult(new Result<List<PaymentSystemDto>>(systems));
         }
     }
 }

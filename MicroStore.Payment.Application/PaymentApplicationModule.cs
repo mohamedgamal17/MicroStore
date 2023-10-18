@@ -1,9 +1,9 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Payment.Application.Configuration;
 using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.Payment.Domain.Shared;
+using MicroStore.Payment.Domain.Shared.Configuration;
 using System.Reflection;
 using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;

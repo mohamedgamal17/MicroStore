@@ -13,7 +13,6 @@ namespace MicroStore.Payment.Application.EntityFramework
     public class PaymentDbContext : AbpDbContext<PaymentDbContext> , IPaymentDbContext , ITransientDependency
     {
         public DbSet<PaymentRequest> PaymentRequests { get; set; }
-        public DbSet<PaymentSystem> PaymentSystems { get ; set ; }
 
         public PaymentDbContext(DbContextOptions<PaymentDbContext> options)
             : base(options)

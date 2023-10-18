@@ -1,62 +1,64 @@
-﻿using MicroStore.Payment.Domain.Shared;
-using MicroStore.Payment.Domain.Shared.Dtos;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Repositories;
-using Volo.Abp.ObjectMapping;
-using Volo.Abp.Uow;
+﻿//using MicroStore.Payment.Application.Configuration;
+//using MicroStore.Payment.Domain.Shared;
+//using MicroStore.Payment.Domain.Shared.Configuration;
+//using MicroStore.Payment.Domain.Shared.Dtos;
+//using Volo.Abp.DependencyInjection;
+//using Volo.Abp.Domain.Repositories;
+//using Volo.Abp.ObjectMapping;
+//using Volo.Abp.Uow;
 
-namespace MicroStore.Payment.Application.Domain
-{
-    public class PaymentSystemManager : IPaymentSystemManager , IUnitOfWorkEnabled, ITransientDependency
-    {
-        private readonly IRepository<PaymentSystem> _paymentSystemRepository;
+//namespace MicroStore.Payment.Application.Domain
+//{
+//    public class PaymentSystemManager : IPaymentSystemManager , IUnitOfWorkEnabled, ITransientDependency
+//    {
+//        private readonly IRepository<PaymentSystem> _paymentSystemRepository;
 
-        private readonly IObjectMapper _objectMapper;
-        public PaymentSystemManager(IRepository<PaymentSystem> paymentSystemRepository, IObjectMapper objectMapper)
-        {
-            _paymentSystemRepository = paymentSystemRepository;
-            _objectMapper = objectMapper;
-        }
+//        private readonly IObjectMapper _objectMapper;
+//        public PaymentSystemManager(IRepository<PaymentSystem> paymentSystemRepository, IObjectMapper objectMapper)
+//        {
+//            _paymentSystemRepository = paymentSystemRepository;
+//            _objectMapper = objectMapper;
+//        }
 
-        public async Task<PaymentSystemDto> GetPaymentSystem(string name)
-        {
-            var paymentSystem = await _paymentSystemRepository.SingleAsync(x => x.Name == name);
+//        public async Task<PaymentSystemDto> GetPaymentSystem(string name)
+//        {
+//            var paymentSystem = await _paymentSystemRepository.SingleAsync(x => x.Name == name);
 
-            return _objectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem);
-        }
+//            return _objectMapper.Map<PaymentSystem, PaymentSystemDto>(paymentSystem);
+//        }
 
-        public async Task TryToCreate(string name, string displayName, string image)
-        {
+//        public async Task TryToCreate(string name, string displayName, string image)
+//        {
 
-            var paymentSystem = await _paymentSystemRepository.SingleOrDefaultAsync(x => x.Name == name);
+//            var paymentSystem = await _paymentSystemRepository.SingleOrDefaultAsync(x => x.Name == name);
 
-            if(paymentSystem != null)
-            {
-                return;
-            }
+//            if(paymentSystem != null)
+//            {
+//                return;
+//            }
 
 
-            paymentSystem = new PaymentSystem
-            {
-                Name = name,
-                DisplayName = displayName,
-                Image = image,
-                IsEnabled = true
-            };
+//            paymentSystem = new PaymentSystem
+//            {
+//                Name = name,
+//                DisplayName = displayName,
+//                Image = image,
+//                IsEnabled = true
+//            };
 
-            await _paymentSystemRepository.InsertAsync(paymentSystem);
-        }
+//            await _paymentSystemRepository.InsertAsync(paymentSystem);
+//        }
 
-        public async Task TryToDeleate(string name, string displayName, string image)
-        {
-            var paymentSystem = await _paymentSystemRepository.SingleOrDefaultAsync(x => x.Name == name);
+//        public async Task TryToDeleate(string name, string displayName, string image)
+//        {
+//            var paymentSystem = await _paymentSystemRepository.SingleOrDefaultAsync(x => x.Name == name);
 
-            if (paymentSystem == null)
-            {
-                return;
-            }
+//            if (paymentSystem == null)
+//            {
+//                return;
+//            }
 
-            await _paymentSystemRepository.DeleteAsync(paymentSystem);
-        }
-    }
-}
+//            await _paymentSystemRepository.DeleteAsync(paymentSystem);
+//        }
+//    }
+//}

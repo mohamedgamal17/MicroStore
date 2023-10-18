@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MicroStore.Payment.Application.Migrations
 {
     [DbContext(typeof(PaymentDbContext))]
-    [Migration("20231018160315_FullyAuditedMigration")]
-    partial class FullyAuditedMigration
+    [Migration("20231018201039_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -181,77 +181,6 @@ namespace MicroStore.Payment.Application.Migrations
                     b.HasIndex("Sku");
 
                     b.ToTable("PaymentRequestProduct");
-                });
-
-            modelBuilder.Entity("MicroStore.Payment.Application.Domain.PaymentSystem", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("PaymentSystems");
-                });
-
-            modelBuilder.Entity("MicroStore.Payment.Application.Domain.SettingsEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Data")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProviderKey")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProviderKey")
-                        .IsUnique();
-
-                    b.ToTable("SettingsEntity");
                 });
 
             modelBuilder.Entity("MicroStore.Payment.Application.Domain.PaymentRequestProduct", b =>

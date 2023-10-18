@@ -40,7 +40,7 @@ namespace MicroStore.Payment.Application.Tests.Consumers
                 TotalCost = 50,
             };
 
-            paymentRequest.Complete(PaymentMethodConst.PaymentGatewayName, Guid.NewGuid().ToString(), DateTime.UtcNow);
+            paymentRequest.Complete(PaymentMethodConst.ProviderKey, Guid.NewGuid().ToString(), DateTime.UtcNow);
 
 
             await Insert(paymentRequest);

@@ -12,9 +12,9 @@ namespace MicroStore.Payment.Application.PaymentRequests
     public class PaymentRequestCommandService : PaymentApplicationService, IPaymentRequestCommandService
     {
         private readonly IRepository<PaymentRequest> _paymentRequestRepository;
-        private readonly IPaymentMethodResolver _paymentMethodResolver;
+        private readonly IPaymentMethodProviderResolver _paymentMethodResolver;
 
-        public PaymentRequestCommandService(IRepository<PaymentRequest> paymentRequestRepository, IPaymentMethodResolver paymentMethodResolver)
+        public PaymentRequestCommandService(IRepository<PaymentRequest> paymentRequestRepository, IPaymentMethodProviderResolver paymentMethodResolver)
         {
             _paymentRequestRepository = paymentRequestRepository;
             _paymentMethodResolver = paymentMethodResolver;

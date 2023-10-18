@@ -1,7 +1,9 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using Microsoft.Extensions.Options;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Application.Tests.Consts;
 using MicroStore.Payment.Domain.Shared;
+using MicroStore.Payment.Domain.Shared.Configuration;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
 using Volo.Abp.DependencyInjection;
@@ -9,17 +11,19 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 namespace MicroStore.Payment.Application.Tests.Fakes
 {
-    [ExposeServices(typeof(IPaymentMethod))]
-    public class FakePaymentMethod : IPaymentMethod, ITransientDependency
+    [ExposeServices(typeof(IPaymentMethodProvider), IncludeSelf = true)]
+    public class FakePaymentMethod : IPaymentMethodProvider, ITransientDependency
     {
-        public string PaymentGatewayName => PaymentMethodConst.PaymentGatewayName;
+        private readonly PaymentSystem  _paymentSystem; 
 
         private readonly IRepository<PaymentRequest> _paymentRequestRepository;
 
         private readonly IObjectMapper _objectMapper;
 
-        public FakePaymentMethod(IRepository<PaymentRequest> paymentRequestRepository, IObjectMapper objectMapper)
+        public FakePaymentMethod(IOptions<PaymentSystemOptions> options,IRepository<PaymentRequest> paymentRequestRepository, IObjectMapper objectMapper)
         {
+            _paymentSystem = options.Value.Systems.Single(x => x.Name == PaymentMethodConst.ProviderKey);
+
             _paymentRequestRepository = paymentRequestRepository;
             _objectMapper = objectMapper;
         }
@@ -28,7 +32,7 @@ namespace MicroStore.Payment.Application.Tests.Fakes
         {
             var result = new PaymentProcessResultDto
             {
-                CheckoutLink = PaymentMethodConst.CheckoutUrl
+                CheckoutLink = PaymentMethodConst.CheckoutUrl,
             };
 
             return Task.FromResult(new Result<PaymentProcessResultDto>( result));
@@ -51,11 +55,10 @@ namespace MicroStore.Payment.Application.Tests.Fakes
         }
 
     }
+    [ExposeServices(typeof(IPaymentMethodProvider), IncludeSelf = true)]
 
-    [ExposeServices(typeof(IPaymentMethod))]
-    public class FakeNotActivePaymentMethod : IPaymentMethod , ITransientDependency
+    public class FakeNonActivePaymentMethodProvider : IPaymentMethodProvider, ITransientDependency
     {
-        public string PaymentGatewayName => PaymentMethodConst.NonActiveGateway;
 
         public Task<Result<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
@@ -67,5 +70,4 @@ namespace MicroStore.Payment.Application.Tests.Fakes
             throw new NotImplementedException();
         }
     }
-
 }
