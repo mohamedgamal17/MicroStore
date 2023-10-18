@@ -1,6 +1,8 @@
-﻿namespace MicroStore.Catalog.Application.Operations.Etos
+﻿using Volo.Abp.Application.Dtos;
+
+namespace MicroStore.Catalog.Application.Operations.Etos
 {
-    public class ProductReviewEto : EntityEto
+    public class ProductReviewEto : FullAuditedEntityDto<string>
     {
         public string UserId { get; set; }
 

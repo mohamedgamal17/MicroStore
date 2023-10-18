@@ -1,6 +1,6 @@
 ﻿namespace MicroStore.Catalog.Entities.ElasticSearch
 {
-    public class ElasticProductReview : ElasticEntity
+    public class ElasticProductReview : ElasticAuditedEntity
     {
         public string UserId { get; set; }
 

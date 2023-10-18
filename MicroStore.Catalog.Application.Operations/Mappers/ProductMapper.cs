@@ -37,7 +37,10 @@ namespace MicroStore.Catalog.Application.Operations.Mappers
              .ForMember(x => x.ProductCategories, opt => opt.MapFrom(sr => sr.ProductCategories))
              .ForMember(x => x.ProductManufacturers, opt => opt.MapFrom(sr => sr.ProductManufacturers))
              .ForMember(x => x.ProductImages, opt => opt.MapFrom(c => c.ProductImages))
-             .ForMember(x => x.SpecificationAttributes, opt => opt.MapFrom(sr => sr.SpecificationAttributes));
+             .ForMember(x => x.SpecificationAttributes, opt => opt.MapFrom(sr => sr.SpecificationAttributes))
+             .ForMember(x => x.CreatorId, opt => opt.MapFrom(src => src.CreatorId.ToString()))
+             .ForMember(x => x.LastModifierId, opt => opt.MapFrom(src => src.LastModifierId.ToString()))
+             .ForMember(x => x.DeletionTime, opt => opt.MapFrom(Src => Src.DeletionTime.ToString()));
 
             CreateMap<ProductImageEto, ElasticProductImage>();
 

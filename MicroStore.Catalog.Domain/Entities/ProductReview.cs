@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace MicroStore.Catalog.Domain.Entities
 {
-    public class ProductReview : Entity<string>
+    public class ProductReview : FullAuditedEntity<string>
     {
         public string UserId { get; set; }
 

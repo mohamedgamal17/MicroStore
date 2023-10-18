@@ -32,8 +32,4 @@
     <ProjectReference Include="..\MicroStore.Catalog.Entities.ElasticSearch\MicroStore.Catalog.Entities.ElasticSearch.csproj" />
   </ItemGroup>
   
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-  
 </Project>

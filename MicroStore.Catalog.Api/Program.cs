@@ -2,8 +2,6 @@ using MicroStore.Catalog.Api;
 using Serilog;
 using Serilog.Events;
 
-
-
 Log.Logger = new LoggerConfiguration()
 #if DEBUG
     .MinimumLevel.Debug()
@@ -12,6 +10,7 @@ Log.Logger = new LoggerConfiguration()
 #endif
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
     .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+    .MinimumLevel.Override("HangFire",LogEventLevel.Warning)
     .Enrich.FromLogContext()
     .WriteTo.Async(c => c.File("Logs/logs.txt"))
     .WriteTo.Async(c => c.Console())

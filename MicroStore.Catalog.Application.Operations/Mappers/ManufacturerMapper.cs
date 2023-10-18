@@ -16,7 +16,10 @@ namespace MicroStore.Catalog.Application.Operations.Mappers
                 .ForMember(x => x.Name, opt => opt.MapFrom(sr => sr.Manufacturer.Name))
                 .ForMember(x => x.Description, opt => opt.MapFrom(sr => sr.Manufacturer.Description));
 
-            CreateMap<ManufacturerEto, ElasticManufacturer>();
+            CreateMap<ManufacturerEto, ElasticManufacturer>()
+                .ForMember(x => x.CreatorId, opt => opt.MapFrom(src => src.CreatorId.ToString()))
+                .ForMember(x => x.LastModifierId, opt => opt.MapFrom(src => src.LastModifierId.ToString()))
+                .ForMember(x => x.DeletionTime, opt => opt.MapFrom(Src => Src.DeletionTime.ToString()));
         }
     }
 }

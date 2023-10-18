@@ -1,7 +1,7 @@
-﻿using MicroStore.Catalog.Entities.ElasticSearch;
+﻿using Volo.Abp.Application.Dtos;
 namespace MicroStore.Catalog.Application.Operations.Etos
 {
-    public class ProductEto : EntityEto
+    public class ProductEto : FullAuditedEntityDto<string>
     {
         public string Name { get; set; }
         public string Sku { get; set; }

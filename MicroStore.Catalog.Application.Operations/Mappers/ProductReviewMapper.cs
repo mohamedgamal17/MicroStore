@@ -11,8 +11,11 @@ namespace MicroStore.Catalog.Application.Operations.Mappers
         {
             CreateMap<ProductReview, ProductReviewEto>();
 
-            CreateMap<ProductReviewEto , ElasticProductReview >();
-               
+            CreateMap<ProductReviewEto , ElasticProductReview>()
+                .ForMember(x => x.CreatorId, opt => opt.MapFrom(src => src.CreatorId.ToString()))
+                .ForMember(x => x.LastModifierId, opt => opt.MapFrom(src => src.LastModifierId.ToString()))
+                .ForMember(x => x.DeletionTime, opt => opt.MapFrom(Src => Src.DeletionTime.ToString())); 
+
         }
     }
 }

@@ -16,7 +16,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.HasIndex(x => x.Name);
 
-            builder.HasMany(x => x.Options).WithOne().HasForeignKey(x=> x.SpecificationAttributeId);
+            builder.HasMany(x => x.Options).WithOne().HasForeignKey(x=> x.SpecificationAttributeId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 
@@ -27,6 +27,8 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
             builder.Property(x => x.Id).HasMaxLength(256);
 
             builder.Property(x=> x.Name).HasMaxLength(256);
+
+            
         }
     }
 

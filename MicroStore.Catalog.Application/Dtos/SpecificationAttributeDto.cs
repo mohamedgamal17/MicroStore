@@ -2,7 +2,7 @@
 
 namespace MicroStore.Catalog.Application.Dtos
 {
-    public class SpecificationAttributeListDto : EntityDto<string>
+    public class SpecificationAttributeListDto : FullAuditedEntityDto<string>
     {
         public string Name{ get; set; }
     }
@@ -12,7 +12,7 @@ namespace MicroStore.Catalog.Application.Dtos
 
     }
 
-    public class SpecificationAttributeOptionDto : EntityDto<string>
+    public class SpecificationAttributeOptionDto : FullAuditedEntityDto<string>
     {
         public string Name { get; set; }
         public string AttributeId { get; set; }

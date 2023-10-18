@@ -13,9 +13,11 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x=>x.OptionId).HasMaxLength(256);
 
-            builder.HasOne(x => x.Attribute).WithMany().HasForeignKey(x => x.AttributeId);
+            builder.Property(x=>  x.ProductId).HasMaxLength(256);
 
-            builder.HasOne(x => x.Option).WithMany().HasForeignKey(x => x.OptionId);
+            builder.HasOne(x => x.Attribute).WithMany().HasForeignKey(x => x.AttributeId).OnDelete(DeleteBehavior.Restrict);
+                
+            builder.HasOne(x => x.Option).WithMany().HasForeignKey(x => x.OptionId).OnDelete(DeleteBehavior.Cascade);
 
             builder.Navigation(x => x.Attribute).AutoInclude();
 

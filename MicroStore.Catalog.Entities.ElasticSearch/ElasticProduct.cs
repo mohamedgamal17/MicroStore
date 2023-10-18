@@ -2,9 +2,8 @@
 
 namespace MicroStore.Catalog.Entities.ElasticSearch
 {
-    public class ElasticProduct
+    public class ElasticProduct : ElasticAuditedEntity
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
         public string ShortDescription { get; set; }

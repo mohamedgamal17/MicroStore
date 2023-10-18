@@ -1,9 +1,8 @@
-﻿
-#pragma warning disable CS8618
-using Volo.Abp.Domain.Entities;
+﻿#pragma warning disable CS8618
+using Volo.Abp.Domain.Entities.Auditing;
 namespace MicroStore.Catalog.Domain.Entities
 {
-    public class Category : BasicAggregateRoot<string>
+    public class Category : AuditedAggregateRoot<string>
     {
 
         public string Name { get;  set; }

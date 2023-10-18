@@ -23,6 +23,13 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
                     .Properties(pr=> pr
                         .Keyword(x=> x.Name)
                         .Text(x=> x.Description)
+                         .Boolean(x => x.IsDeleted)
+                        .Date(x => x.CreatationTime)
+                        .Date(x => x.LastModificationTime)
+                        .Date(x => x.DeletionTime)
+                        .Text(x => x.CreatorId)
+                        .Keyword(x => x.LastModifierId)
+                        .Keyword(x => x.DeleterId)
                     )
                 );
 
@@ -35,6 +42,13 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
                     .Properties(pr => pr
                         .Keyword(x => x.Name)
                         .Text(x => x.Description)
+                         .Boolean(x => x.IsDeleted)
+                        .Date(x => x.CreatationTime)
+                        .Date(x => x.LastModificationTime)
+                        .Date(x => x.DeletionTime)
+                        .Text(x => x.CreatorId)
+                        .Keyword(x => x.LastModifierId)
+                        .Keyword(x => x.DeleterId)
                     )
                 );
         }
@@ -133,6 +147,13 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
                                 .Keyword(x => x.SpecificationAttributes.First().Value)
                             )
                         )
+                        .Boolean(x => x.IsDeleted)
+                        .Date(x => x.CreatationTime)
+                        .Date(x => x.LastModificationTime)
+                        .Date(x => x.DeletionTime)
+                        .Text(x => x.CreatorId)
+                        .Keyword(x => x.LastModifierId)
+                        .Keyword(x => x.DeleterId)
 
 
                     )
@@ -151,6 +172,13 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
                         .Text(x => x.ReviewText)
                         .IntegerNumber(x => x.Rating)
                         .Text(x => x.ReplayText)
+                        .Boolean(x=> x.IsDeleted)
+                        .Date(x => x.CreatationTime)
+                        .Date(x => x.LastModificationTime)
+                        .Date(x => x.DeletionTime)
+                        .Text(x => x.CreatorId)
+                        .Keyword(x => x.LastModifierId)
+                        .Keyword(x => x.DeleterId)
                     )
                 );
         }

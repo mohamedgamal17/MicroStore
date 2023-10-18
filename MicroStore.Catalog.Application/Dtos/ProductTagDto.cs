@@ -2,7 +2,7 @@
 
 namespace MicroStore.Catalog.Application.Dtos
 {
-    public class ProductTagDto : EntityDto<string>
+    public class ProductTagDto : FullAuditedEntityDto<string>
     {
         public string Name { get; set; }
         public string? Description { get; set; }
