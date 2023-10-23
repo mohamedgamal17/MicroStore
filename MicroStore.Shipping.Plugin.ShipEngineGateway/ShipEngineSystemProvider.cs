@@ -1,11 +1,12 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using Microsoft.Extensions.Options;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Shipping.Application.Abstraction.Common;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Common;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Consts;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Domain;
-using MicroStore.Shipping.Plugin.ShipEngineGateway.Settings;
 using ShipEngineSDK;
 using ShipEngineSDK.Common;
 using ShipEngineSDK.Common.Enums;
@@ -18,19 +19,18 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 {
     public class ShipEngineSystemProvider : IShipmentSystemProvider 
     {
-        public string SystemName => ShipEngineConst.SystemName;
 
         private readonly IShipmentRepository _shipmentRepository;
 
         private readonly IObjectMapper _objectMapper;
 
-        private readonly ISettingsRepository _settingsRepository;
 
-        public ShipEngineSystemProvider( IShipmentRepository shipmentRepository, IObjectMapper objectMapper,  ISettingsRepository settingsRepository)
+        private readonly ShippingSystem _system;
+        public ShipEngineSystemProvider( IShipmentRepository shipmentRepository, IObjectMapper objectMapper,  IOptions<ShippingSystemOptions> options)
         {
             _shipmentRepository = shipmentRepository;
             _objectMapper = objectMapper;
-             _settingsRepository = settingsRepository;
+            _system = options.Value.Systems.Single(x => x.Name == ShipEngineConst.Provider);
         }
 
         public async Task<Result<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
@@ -108,7 +108,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
                 var result = await clinet.CreateShipment(shipEngineShipment);
 
-                shipment.Fullfill(SystemName, result.ShipmentId);
+                shipment.Fullfill(_system.Name, result.ShipmentId);
 
                 await _shipmentRepository.UpdateAsync(shipment);
 
@@ -125,8 +125,6 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
                 var shipment = await _shipmentRepository.RetriveShipment(shipmentId, cancellationToken)!;
 
                 var clinet = await GetShipEngineClinet();
-
-                var settings = await _settingsRepository.TryToGetSettings<ShipEngineSettings>(ShipEngineConst.SystemName) ?? new ShipEngineSettings();
 
 
                 var carriers = await clinet.ListCarriers();
@@ -325,9 +323,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
         private async Task<ShipEngineClinet> GetShipEngineClinet(CancellationToken cancellationToken = default)
         {
-            var settings = await _settingsRepository.TryToGetSettings<ShipEngineSettings>(ShipEngineConst.SystemName, cancellationToken) ?? new ShipEngineSettings();
-
-            return new ShipEngineClinet(settings);
+            return  ShipEngineClinet.Create(_system.Configuration);
         }
 
       

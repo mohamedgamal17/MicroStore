@@ -13,7 +13,6 @@ using MicroStore.Shipping.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.IdentityModel.Tokens;
-using MicroStore.Shipping.Domain.Configuration;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using MicroStore.Shipping.Host.OpenApi;
@@ -22,6 +21,7 @@ using IdentityModel;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
 
 namespace MicroStore.Shipping.Host
 {

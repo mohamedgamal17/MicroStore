@@ -1,7 +1,7 @@
 ﻿using AutoMapper.Internal.Mappers;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Common;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Domain;
-using MicroStore.Shipping.Plugin.ShipEngineGateway.Settings;
 using Newtonsoft.Json;
 using ShipEngineSDK;
 using ShipEngineSDK.Common;
@@ -9,9 +9,9 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 {
     public class ShipEngineClinet : ShipEngine , IShipEngineClinet 
     {
-        private readonly ShipEngineSettings _settings;
+        private readonly ShipmentProviderSetting _settings;
 
-        public ShipEngineClinet(ShipEngineSettings settings) 
+        public ShipEngineClinet(ShipmentProviderSetting settings) 
             : base(new Config(settings.ApiKey, TimeSpan.FromSeconds(60),3 ))
         {
             _settings = settings;
@@ -53,7 +53,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
         }
 
 
-        public static ShipEngineClient Create(ShipEngineSettings settings)
+        public static ShipEngineClinet Create(ShipmentProviderSetting settings)
         {
             return new ShipEngineClinet(settings);
         }

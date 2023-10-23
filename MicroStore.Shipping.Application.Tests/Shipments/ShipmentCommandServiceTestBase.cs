@@ -44,7 +44,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
                     Length = 5,
                     Unit = StandardDimensionUnit.Inch
                 },
-
+                
                 Weight = new WeightModel
                 {
                     Value = 5,
@@ -67,7 +67,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
                     AddressLine1 = "525 S Winchester Blvd",
                     AddressLine2 = "525 S Winchester Blvd",
                     Name = "Jane Doe",
-                    Phone = "555-555-5555",
+                    Phone = "8143511258",
                     PostalCode = "95128",
                     Zip = "90241"
                 },
@@ -91,7 +91,7 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
                         Weight = new WeightModel
                         {
                             Value = 5,
-                            Unit = "g",
+                            Unit = "gram",
                         },
                         UnitPrice = 50
                     }

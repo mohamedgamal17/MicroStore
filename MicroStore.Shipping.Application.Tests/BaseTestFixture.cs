@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Tests.Fakes;
@@ -8,9 +7,6 @@ using MicroStore.Shipping.Domain.Entities;
 using MicroStore.TestBase;
 using Respawn;
 using Respawn.Graph;
-using System.Linq.Expressions;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Shipping.Application.Tests
 {
     public class BaseTestFixture : MassTransitTestBase<ShippingApplicationTestModule>
@@ -29,22 +25,6 @@ namespace MicroStore.Shipping.Application.Tests
                 {
                    "__EFMigrationsHistory"
                 }
-            });
-
-            await Insert(new ShippingSystem
-            {
-                Name = FakeConst.ActiveSystem,
-                DisplayName = FakeConst.ActiveSystem,
-                Image = Guid.NewGuid().ToString(),
-                IsEnabled = true
-            });
-
-            await Insert(new ShippingSystem
-            {
-                Name = FakeConst.NotActiveSystem,
-                DisplayName = FakeConst.NotActiveSystem,
-                Image = Guid.NewGuid().ToString(),
-                IsEnabled = false
             });
 
             var settings = new ShippingSettings

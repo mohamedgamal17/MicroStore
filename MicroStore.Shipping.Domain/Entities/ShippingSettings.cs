@@ -8,8 +8,7 @@ namespace MicroStore.Shipping.Domain.Entities
         public string ProviderKey { get; private set; } = SettingsConst.ProviderKey;
         public string? DefaultShippingSystem { get; set; }
         public AddressSettings? Location { get; set; } 
-        public bool ProductionMode { get; set; }
-        
+      
     }
 
     public class AddressSettings

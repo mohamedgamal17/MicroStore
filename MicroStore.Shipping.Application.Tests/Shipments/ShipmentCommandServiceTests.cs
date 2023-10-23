@@ -5,6 +5,7 @@ using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Shipments;
 using MicroStore.Shipping.Domain.Entities;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Validation;
 
 namespace MicroStore.Shipping.Application.Tests.Shipments
 {
@@ -30,7 +31,6 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
 
             result.IsSuccess.Should().BeTrue();
 
-
             var shipment = await RetriveShipment(result.Value.Id);
 
             var item = model.Items.First();
@@ -49,6 +49,8 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
             shipmentItem?.Thumbnail.Should().Be(item.Thumbnail);
             shipmentItem?.Dimension.Should().Be(item.Dimension.AsDimension());
             shipmentItem?.Weight.Should().Be(item.Weight.AsWeight());
+
+
         }
 
 
@@ -56,19 +58,22 @@ namespace MicroStore.Shipping.Application.Tests.Shipments
         [Test]
         public async Task Should_fullfill_shipment()
         {
-            var fakeShipment = await CreateFakeShipment();
+               var fakeShipment = await CreateFakeShipment();
 
-            var model = GeneratePackageModel();
+                var model = GeneratePackageModel();
 
-            var result = await _shipmentCommandService.FullfillAsync(fakeShipment.Id, model);
+                var result = await _shipmentCommandService.FullfillAsync(fakeShipment.Id, model);
 
-            var shipment = await SingleAsync<Shipment>(x=> x.Id== fakeShipment.Id);
+                var shipment = await SingleAsync<Shipment>(x => x.Id == fakeShipment.Id);
 
-            shipment.Should().NotBeNull();
+                shipment.Should().NotBeNull();
 
-            shipment?.ShipmentExternalId.Should().Be(result.Value.ShipmentExternalId);
+                shipment?.ShipmentExternalId.Should().Be(result.Value.ShipmentExternalId);
 
-            shipment?.Status.Should().Be(ShipmentStatus.Fullfilled);
+                shipment?.Status.Should().Be(ShipmentStatus.Fullfilled);
+
+        
+
 
         }
 

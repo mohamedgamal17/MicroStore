@@ -1,4 +1,4 @@
-﻿namespace MicroStore.Shipping.Domain.Configuration
+﻿namespace MicroStore.Shipping.Application.Abstraction.Configuration
 {
     public class SecuritySettings
     {

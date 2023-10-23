@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MicroStore.Shipping.Domain.Entities;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Consts;
 using MicroStore.Shipping.Plugin.ShipEngineGateway.Profiles;
-using Volo.Abp;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Data;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 {
@@ -17,6 +14,18 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
                 mvcBuilder.AddApplicationPartIfNotExists(typeof(ShipEngineSystemModule).Assembly);
+            });
+
+
+            var appsettings = context.Services.GetSingletonInstance<ApplicationSettings>();
+
+            Configure<ShippingSystemOptions>(opt =>
+            {
+                var systemConfig = appsettings.ShipmentProviders.FindByKey(ShipEngineConst.Provider);
+
+                var system = ShippingSystem.Create(ShipEngineConst.Provider, ShipEngineConst.DisplayName, ShipEngineConst.Image, typeof(ShipEngineSystemProvider), systemConfig);
+
+                opt.Systems.Add(system);
             });
 
             Configure<AbpAutoMapperOptions>(opt =>

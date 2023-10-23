@@ -39,4 +39,8 @@
     <ProjectReference Include="..\MicroStore.TestBase\MicroStore.TestBase.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Shipments\" />
+  </ItemGroup>
+
 </Project>

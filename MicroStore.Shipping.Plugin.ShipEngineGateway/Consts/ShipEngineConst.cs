@@ -3,10 +3,11 @@
     public class ShipEngineConst
     {
 
-        public static string SystemName => "shipengine_sys";
+        public static string Provider => "ShipEngine";
 
-        public static string DisplayName => "MicroStore ShipEngine";
+        public static string DisplayName => "ShipEngine";
 
-        public static bool Active => true;
+        public static string Image => "image";
+
     }
 }

@@ -3,15 +3,12 @@ using MicroStore.Shipping.Application.Abstraction.Common;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Domain.Entities;
-using System.Net;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 namespace MicroStore.Shipping.Application.Tests.Fakes
 {
     public class FakeShipmentSystemProvider : IShipmentSystemProvider
     {
-        public string SystemName => FakeConst.ActiveSystem;
 
         private readonly IShipmentRepository _shipmentRepsoitory;
 
@@ -120,8 +117,6 @@ namespace MicroStore.Shipping.Application.Tests.Fakes
 
     public class FakeNotActiveShipmentSystem : IShipmentSystemProvider 
     {
-        public string SystemName => FakeConst.NotActiveSystem;
-
         public Task<Result<ShipmentDto>> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();

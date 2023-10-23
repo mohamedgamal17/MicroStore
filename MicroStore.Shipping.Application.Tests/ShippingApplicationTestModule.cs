@@ -13,6 +13,8 @@ using Newtonsoft.Json.Serialization;
 using Respawn;
 using Respawn.Graph;
 using Microsoft.Extensions.Configuration;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
+using MicroStore.Shipping.Application.Tests.Fakes;
 
 namespace MicroStore.Shipping.Application.Tests
 {
@@ -28,6 +30,9 @@ namespace MicroStore.Shipping.Application.Tests
                 NamingStrategy = new SnakeCaseNamingStrategy()
             },
         };
+
+
+       
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddMassTransitTestHarness(busRegisterConfig =>
@@ -39,6 +44,21 @@ namespace MicroStore.Shipping.Application.Tests
                     inMemoryBusConfig.ConfigureEndpoints(context);
                 });
 
+            });
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            var appSettings = context.Services.GetSingletonInstance<ApplicationSettings>();
+            var activeSystemConfig = appSettings.ShipmentProviders.FindByKey(FakeConst.ActiveSystem);
+            var activeSystem = ShippingSystem.Create(FakeConst.ActiveSystem, Guid.NewGuid().ToString(), Guid.NewGuid().ToString() , typeof(FakeShipmentSystemProvider), activeSystemConfig);
+
+            var nonActiveSystem = ShippingSystem.Create(FakeConst.NotActiveSystem, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), typeof(FakeNotActiveShipmentSystem), null);
+
+            Configure<ShippingSystemOptions>(opt =>
+            {
+                opt.Systems.Add(activeSystem);
+                opt.Systems.Add(nonActiveSystem);
             });
         }
 

@@ -2,7 +2,7 @@
 
 namespace MicroStore.Shipping.Application.Abstraction.Dtos
 {
-    public class ShippingSystemDto  : FullAuditedEntityDto<string>
+    public class ShippingSystemDto 
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }

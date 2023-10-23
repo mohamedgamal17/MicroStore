@@ -14,8 +14,11 @@ namespace MicroStore.Shipping.Infrastructure
 
         protected override List<Type> GetExposedServiceTypes(Type type)
         {
-            return type.GetInterfaces()
-                .Where(x => x == typeof(IShipmentSystemProvider)).ToList();
+            var defaultExposedServices = ExposedServiceExplorer.GetExposedServices(type);
+
+            defaultExposedServices.Add(typeof(IShipmentSystemProvider));
+
+            return defaultExposedServices;
         }
 
         private bool CanRegister(Type type)

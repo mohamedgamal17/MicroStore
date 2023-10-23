@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS8618
 using Microsoft.EntityFrameworkCore;
 using MicroStore.Shipping.Application.Abstraction.Common;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
 using MicroStore.Shipping.Domain.Entities;
 using System.Reflection;
 using Volo.Abp.Data;
@@ -13,7 +14,6 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework
     public class ShippingDbContext : AbpDbContext<ShippingDbContext>, IShippingDbContext
     {
         public DbSet<Shipment> Shipments { get; set; }
-        public DbSet<ShippingSystem> ShippingSystems { get; set; }
         public ShippingDbContext(DbContextOptions<ShippingDbContext> options) : base(options)
         {
         }

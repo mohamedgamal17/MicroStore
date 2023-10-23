@@ -1,62 +1,28 @@
-﻿using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Extensions.Options;
 using MicroStore.BuildingBlocks.Results;
-using MicroStore.Shipping.Application.Abstraction.Common;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
-using MicroStore.Shipping.Domain.Entities;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Shipping.Application.ShippingSystems
 {
     public class ShippingSystemQueryService : ShippingApplicationService, IShippingSystemQueryService
     {
-        private readonly IShippingDbContext _shippingDbContext;
+        private readonly List<ShippingSystem> _systems;
 
-        public ShippingSystemQueryService(IShippingDbContext shippingDbContext)
+        public ShippingSystemQueryService(IOptions<ShippingSystemOptions> options)
         {
-            _shippingDbContext = shippingDbContext;
-        }
-
-        public async Task<Result<ShippingSystemDto>> GetAsync(string systemId, CancellationToken cancellationToken = default)
-        {
-            var query = _shippingDbContext.ShippingSystems
-               .AsNoTracking()
-               .ProjectTo<ShippingSystemDto>(MapperAccessor.Mapper.ConfigurationProvider);
-
-            var result = await query.SingleOrDefaultAsync(x => x.Id == systemId, cancellationToken);
-
-            if (result == null)
-            {
-                return new Result<ShippingSystemDto>(new EntityNotFoundException(typeof(ShippingSystem), systemId));
-            }
-
-            return result;
-        }   
-
-        public async Task<Result<ShippingSystemDto>> GetByNameAsync(string systemName, CancellationToken cancellationToken = default)
-        {
-            var query = _shippingDbContext.ShippingSystems
-              .AsNoTracking()
-              .ProjectTo<ShippingSystemDto>(MapperAccessor.Mapper.ConfigurationProvider);
-
-            var result = await query.SingleOrDefaultAsync(x => x.Name == systemName, cancellationToken);
-
-            if (result == null)
-            {
-                return new Result<ShippingSystemDto>(new EntityNotFoundException($"system with name {systemName} is not exist"));
-            }
-
-            return result;
+            _systems = options.Value.Systems;
         }
 
         public async Task<Result<List<ShippingSystemDto>>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var query = _shippingDbContext.ShippingSystems
-                 .AsNoTracking()
-                 .ProjectTo<ShippingSystemDto>(MapperAccessor.Mapper.ConfigurationProvider);
+            var result = _systems.Select(x => new ShippingSystemDto
+            {
+                Name = x.Name,
+                DisplayName = x.DisplayName,
+                Image = x.Image,
+                IsEnabled = x.IsEnabled
+            }).ToList();
 
-            var result = await query.ToListAsync();
 
             return result;
         }

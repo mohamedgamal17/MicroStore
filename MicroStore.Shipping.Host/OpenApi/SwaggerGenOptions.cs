@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
-using MicroStore.Shipping.Domain.Configuration;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
 namespace MicroStore.Shipping.Host.OpenApi
 {

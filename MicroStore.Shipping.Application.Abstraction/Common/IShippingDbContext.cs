@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MicroStore.Shipping.Application.Abstraction.Configuration;
 using MicroStore.Shipping.Domain.Entities;
 
 namespace MicroStore.Shipping.Application.Abstraction.Common
@@ -7,6 +8,5 @@ namespace MicroStore.Shipping.Application.Abstraction.Common
     {
          DbSet<Shipment> Shipments { get; set; }
 
-         DbSet<ShippingSystem> ShippingSystems { get; set; }
     }
 }
