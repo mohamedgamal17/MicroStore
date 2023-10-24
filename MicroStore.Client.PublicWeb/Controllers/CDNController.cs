@@ -11,7 +11,6 @@ namespace MicroStore.Client.PublicWeb.Controllers
 
         private IBlobContainer<MultiMediaBlobContainer> _blobContainer;
 
-        //private const string STREAM_CONTENT_TYPE = @"application/octet-stream";
         public CDNController(IBlobContainer<MultiMediaBlobContainer> blobContainer)
         {
             _blobContainer = blobContainer;

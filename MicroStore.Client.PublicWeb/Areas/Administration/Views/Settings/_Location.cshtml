@@ -1,0 +1,186 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Settings.ShipmentSettingsModel
+@{
+    var countries = (List<SelectListItem>)ViewBag.Countries;
+    var states = ((List<SelectListItem>)ViewBag.States) ?? new List<SelectListItem>();
+}
+<abp-card>
+    <abp-card-header>
+        <abp-card-title><i class="fas fa-info mr-1 text-lightblue"></i> Location </abp-card-title>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.Name"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input asp-for="@Model.Location.Name" class="form-control" placeholder="Value" />
+                <span class="text-danger" asp-validation-for="@Model.Location.Name">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.CountryCode"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <select class="form-select form-control" id="@Html.IdFor(x=> x.Location.CountryCode)" asp-for="@Model.Location.CountryCode">
+                    <option value="">Please select country</option>
+                    @foreach (var country in countries)
+                    {
+                        <option value="@country.Value">@country.Text</option>
+                    }
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.Location.CountryCode">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.StateProvince"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <select class="form-select form-control" id="@Html.IdFor(x=> x.Location.StateProvince)" asp-for="@Model.Location.StateProvince" data-address-select="StateProvince">
+                    @if (states.Count() > 0)
+                    {
+                        <option value="">Please select country</option>
+
+                        @foreach (var state in states)
+                        {
+                            <option value="@state.Value">@state.Text</option>
+                        }
+
+                    }
+
+
+                </select>
+                <span class="text-danger" asp-validation-for="Location.StateProvince"></span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.City"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input asp-for="@Model.Location.City" class="form-control" placeholder="Value" />
+                <span class="text-danger" asp-validation-for="@Model.Location.City">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.Phone"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input asp-for="@Model.Location.Phone" class="form-control" placeholder="Value" />
+                <span class="text-danger" asp-validation-for="@Model.Location.Phone">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.AddressLine1"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input asp-for="@Model.Location.AddressLine1" class="form-control" placeholder="Value" />
+                <span class="text-danger" asp-validation-for="@Model.Location.AddressLine1">
+                </span>
+            </div>
+        </div>
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.AddressLine2"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input asp-for="@Model.Location.AddressLine2" class="form-control" placeholder="Value" />
+                <span class="text-danger" asp-validation-for="@Model.Location.AddressLine2">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.PostalCode"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input asp-for="@Model.Location.PostalCode" class="form-control" placeholder="Value" />
+                <span class="text-danger" asp-validation-for="@Model.Location.PostalCode">
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Location.Zip"></micro-label>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input asp-for="@Model.Location.Zip" class="form-control" placeholder="Value" />
+                <span class="text-danger" asp-validation-for="@Model.Location.Zip">
+                </span>
+            </div>
+        </div>
+    </abp-card-body>
+</abp-card>
+
+
+<script target-zone="Footer">
+    $(function () {
+
+        $("#Location_CountryCode").change(function () {
+
+            var countryCode=  $(this).val();
+
+            $("#Location_StateProvince").empty();
+
+            console.log(countryCode);
+            if (countryCode) {
+                getStates(countryCode);
+            }
+
+        })
+
+        var getStates = function (countryCode) {
+            abp.ajax({
+                url: `/api/country/code/${countryCode}`,
+                method: "GET",
+                success: function (result) {
+                    var stateProvinceElment = $("#Location_StateProvince");
+                    stateProvinceElment.append("<option>Please Select State Province</option>");
+                    $.each(result.stateProvinces, function (index, val) {
+                        stateProvinceElment.append(new Option(val.name, val.abbreviation));
+                    })
+                },
+
+                error: function () {
+                    abp.notifiy.error("UnExpected Error has been happend please refersh the page")
+
+                }
+            })
+        }
+    });
+</script>

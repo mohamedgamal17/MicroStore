@@ -8,7 +8,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Common
         public string Phone { get; set; }
         public string CountryCode { get; set; }
         public string City { get; set; }
-        public string State { get; set; }
+        public string StateProvince { get; set; }
         public string PostalCode { get; set; }
         public string Zip { get; set; }
         public string AddressLine1 { get; set; }

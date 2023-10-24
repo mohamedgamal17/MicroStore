@@ -19,8 +19,13 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers
                 .ForMember(x => x.Country, opt => opt.MapFrom(c => c.Country))
                 .ForMember(x => x.State, opt => opt.MapFrom(c => c.State));
 
-            CreateMap<Address, AddressModel>();
-            CreateMap<Address, AddressModel>();
+            CreateMap<Address, AddressModel>()
+                .ForMember(x => x.StateProvince, opt => opt.MapFrom(c => c.State))
+                .ForMember(x => x.CountryCode, opt => opt.MapFrom(c => c.CountryCode));
+
+            CreateMap<AddressModel, Address>()
+                .ForMember(x => x.State, opt => opt.MapFrom(c => c.StateProvince))
+                .ForMember(x => x.CountryCode, opt => opt.MapFrom(c => c.CountryCode));
         }
     }
 }

@@ -35,6 +35,8 @@
         @await Component.InvokeAsync("Sidebar");
 
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
+
+
         @RenderBody()
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
     </div>
@@ -46,9 +48,6 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 
-    @{
-        await Html.RenderPartialAsync("_NotificationView");
-    }
 
     <script>
         $(document).ready(function () {

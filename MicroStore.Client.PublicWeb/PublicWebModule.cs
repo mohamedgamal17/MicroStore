@@ -29,10 +29,6 @@ using FluentValidation.AspNetCore;
 using Volo.Abp.FluentValidation;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
-using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
-using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
-using System.Net;
-using IdentityModel;
 namespace MicroStore.Client.PublicWeb
 {
     [DependsOn(typeof(MicroStoreAspNetCoreUIModule),
@@ -147,8 +143,6 @@ namespace MicroStore.Client.PublicWeb
             var env = context.GetEnvironment();
             var config = context.GetConfiguration();
 
-        
-
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
@@ -169,12 +163,10 @@ namespace MicroStore.Client.PublicWeb
 
             app.UseAuthorization();
 
-            //app.UseMiddleware<UserProfileMiddleWare>();
-
             app.UseAbpSerilogEnrichers();
 
             app.UseConfiguredEndpoints();
-       
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
@@ -183,7 +175,7 @@ namespace MicroStore.Client.PublicWeb
 
                 endpoints.MapAreaControllerRoute(name: AreaNames.Administration,
                     areaName: AreaNames.Administration,
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
             });
 
         }
