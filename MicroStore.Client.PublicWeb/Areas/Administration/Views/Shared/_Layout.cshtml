@@ -37,7 +37,14 @@
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
 
 
-        @RenderBody()
+
+        <div class="content-wrapper">
+            @await Html.PartialAsync("_NotificationView")
+            @RenderBody()
+        </div>
+     
+
+
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
     </div>
 

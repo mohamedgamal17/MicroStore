@@ -7,8 +7,7 @@
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Inventory.InventoryItemMenus.Edit);
 }
 
-<div class="content-wrapper mr-2">
-    <!-- Content Header (Page header) -->
+<div>
     <form method="post" asp-action="Edit" >
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x=> x.Id)

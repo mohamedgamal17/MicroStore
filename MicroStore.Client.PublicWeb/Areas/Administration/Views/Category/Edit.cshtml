@@ -3,7 +3,7 @@
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.CategoryMenus.Edit);
 }
-<div class="content-wrapper mr-2">
+<div>
     <form method="post" asp-action="Edit" >
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x=> x.Id)

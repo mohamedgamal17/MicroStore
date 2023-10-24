@@ -1,7 +1,6 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.CountryModel
 
 <div class="content-wrapper mr-2">
-    <!-- Content Header (Page header) -->
     <form method="post" asp-action="Create" >
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x=> x.Id)

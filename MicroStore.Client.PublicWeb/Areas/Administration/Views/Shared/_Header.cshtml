@@ -9,7 +9,7 @@
     </ul>
     <ul class="navbar-nav ml-auto pl-5">
         <li class="nav-item ">
-            <a class="nav-link  text-lg disabled" data-widget="control-sidebar" data-slide="true"
+            <a class="nav-link disabled" data-widget="control-sidebar" data-slide="true"
                href="#">
                @if(Context.User.Identity?.IsAuthenticated ?? false){
                     @User.Claims.First(cl=> cl.Type == ClaimTypes.Name).Value
