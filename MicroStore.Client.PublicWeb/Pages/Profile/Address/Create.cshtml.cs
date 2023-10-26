@@ -16,6 +16,8 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
         public AddressModel Address { get; set; }
         public List<Country> Countries { get; set; }
 
+        public List<StateProvince> StateProvinces { get; set; }
+
         private readonly UserProfileService _userProfileService;
 
         private readonly CountryService _countryService;
@@ -43,6 +45,8 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
             {
                 await PrepareCountries();
 
+                await PreapreStates(Address.Country);
+
                 return Page();
             }
 
@@ -65,11 +69,13 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 
                 _uINotificationManager.Success("New address has been created");
 
-                return RedirectToPage("/Profile/Address/Index");
+                return RedirectToPage("/Profile/Index");
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
                 await PrepareCountries();
+
+                await PreapreStates(Address.Country);
 
                 _uINotificationManager.Error(ex.Erorr.Title);
 
@@ -85,6 +91,17 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
             var response = await _countryService.ListAsync();
 
             Countries = response;
+        }
+
+        public async Task PreapreStates(string countryCode)
+        {
+            if(countryCode != null)
+            {
+                var country = await _countryService.GetByCodeAsync(countryCode);
+
+                StateProvinces = country.StateProvinces;
+            }
+
         }
     }
 }

@@ -58,3 +58,14 @@
  .iti {
     width: 100%;
 }
+
+.clientside-validation-summary {
+    display: flex;
+    flex-flow: column nowrap;
+    .field-validation-error > span:before
+
+{
+    content: "*";
+    padding-right: .3rem;
+}
+}

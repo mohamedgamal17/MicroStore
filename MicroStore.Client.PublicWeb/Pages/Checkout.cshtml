@@ -12,9 +12,118 @@
             <div class="checkout-form">
                 <form method="post">
                     <abp-row>
+                        <abp-column size="_12">
+                            <div class="container mb-3">
+                                <div class="text-center text-danger">
+                                    <div class="form-group clientside-validation-summary">
+                                        <span asp-validation-for="ShippingAddressId" class="text-danger d-block"></span>
+                                        <span asp-validation-for="BillingAddressId" class="text-danger d-block"></span>
+                                        <span asp-validation-for="PaymentMethod" class="text-danger d-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </abp-column>
                         <abp-column size-md="_6" size-sm="_12">
-                            @await Component.InvokeAsync(typeof(CheckoutInformationWidgetViewComponent), Model)
-                        </abp-column>      
+
+
+                            <abp-row>
+                                <abp-column class="mb-3" size=_12>
+                                    <abp-card>
+                                        <abp-card-header>
+                                            <abp-card-title>Billing Address</abp-card-title>
+                                        </abp-card-header>                                     
+                                        <abp-card-body>
+                                            <abp-row>
+                                                @foreach (var address in Model.Profile.Addresses)
+                                                {
+                                                    <abp-column size-lg=_4 size-md=_6 size-sm=_12>
+                                                        <abp-card>
+                                                            <abp-card-header>
+                                                                <input class="form-check-input" asp-for="BillingAddressId" type="radio"
+                                                                       value="@address.Id" style="margin:0!important; position:unset!important">
+                                                            </abp-card-header>
+                                                            <abp-card-body>
+                                                                <div>
+                                                                    <h5>Name : @address.Name</h5>
+                                                                </div>
+                                                                <div>
+                                                                    <h5>Phone :@address.Phone</h5>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <p>Country :@address.CountryCode</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p>State Province :@address.State</p>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <p>City :@address.State</p>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <p>Address line 1 : @address.AddressLine1</p>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <p>Address line 2 : @address.AddressLine2</p>
+                                                                </div>
+                                                            </abp-card-body>
+                                                        </abp-card>
+                                                    </abp-column>
+
+                                                }
+                                            </abp-row>
+                                        </abp-card-body>
+                                    </abp-card>
+                                </abp-column>
+
+                                <abp-column class="mb-3" size=_12>
+                                    <abp-card>
+                                        <abp-card-header>
+                                            <abp-card-title>Shipping Address</abp-card-title>
+                                        </abp-card-header>
+                                        
+                                       <abp-card-body>
+                                            <abp-row>
+                                                @foreach (var address in Model.Profile.Addresses)
+                                                {
+                                                    <abp-column size-lg=_4 size-md=_6 size-sm=_12>
+                                                        <abp-card>
+                                                            <abp-card-header>
+
+                                                                <input class="form-check-input" asp-for="ShippingAddressId" type="radio" value="@address.Id" style="margin:0!important; position:unset!important">
+                                                          
+                                                            </abp-card-header>
+                                                            <abp-card-body>
+                                                                <div>
+                                                                    <h5>Name : @address.Name</h5>
+                                                                </div>
+                                                                <div>
+                                                                    <h5>Phone :@address.Phone</h5>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <p>Country :@address.CountryCode</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p>State Province :@address.State</p>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <p>City :@address.State</p>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <p>Address line 1 : @address.AddressLine1</p>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <p>Address line 2 : @address.AddressLine2</p>
+                                                                </div>
+                                                            </abp-card-body>
+                                                        </abp-card>
+                                                    </abp-column>
+
+                                                }
+                                            </abp-row>
+                                        </abp-card-body>
+                                    </abp-card>
+                                </abp-column>
+                            </abp-row>
+                        </abp-column>
                         <abp-column size-md="_6" size-sm="_12">
                             @await Component.InvokeAsync(typeof(CheckoutSummaryWidgetViewComponent),Model)
                         </abp-column>

@@ -18,19 +18,17 @@ namespace MicroStore.Client.PublicWeb.Pages
 {
     public class CheckoutModel : PageModel
     {
-        [BindProperty]
-        public AddressModel ShippingAddress { get; set; }
-
-        [BindProperty]
-        public bool UseAnotherBillingAddress { get; set; }
-
-        [BindProperty]
-        public AddressModel BillingAddress { get; set; }
-
+   
         [BindProperty]
         public string PaymentMethod { get; set; }
 
-      
+        [BindProperty]
+        public string BillingAddressId { get; set; }
+
+        [BindProperty]
+
+        public string ShippingAddressId { get; set; }
+
         public User Profile { get; set; }
 
         private readonly IWorkContext _workContext;
@@ -46,6 +44,7 @@ namespace MicroStore.Client.PublicWeb.Pages
         private readonly UINotificationManager _notificationManager;
 
         private readonly UserProfileService _profileService;
+
         public CheckoutModel(IWorkContext workContext, UserOrderService userOrderService, UserPaymentRequestService userPaymentRequestService, ShipmentRateService shipmentRateService, BasketAggregateService basketAggregateService, UINotificationManager notificationManager, UserProfileService profileService)
         {
             _workContext = workContext;
@@ -75,18 +74,26 @@ namespace MicroStore.Client.PublicWeb.Pages
                 context.Result = RedirectToPage("MyCart");
             }
 
+
             try
             {
                 Profile = await _profileService.GetProfileAsync();
 
                 await next();
 
+                bool hasAddresses = Profile.Addresses?.Count > 0;
+
+                if (!hasAddresses)
+                {
+                    context.Result = RedirectToPage("/Profile/Address/Create");
+                }
+
             }catch(MicroStoreClientException ex) when(ex.StatusCode== System.Net.HttpStatusCode.NotFound)
             {
 
                 _notificationManager.Error("Please complete your profile first");
 
-                context.Result = RedirectToPage("CreateProfile", new {returnUrl = context.HttpContext.Request.Path});
+                context.Result = RedirectToPage("/Profile/Create", new {returnUrl = context.HttpContext.Request.Path});
             }
 
 
@@ -106,16 +113,33 @@ namespace MicroStore.Client.PublicWeb.Pages
                 return Page();
             }
 
+            var billingAddress = Profile.Addresses.SingleOrDefault(x => x.Id == BillingAddressId);
+
+            var shippingAddress = Profile.Addresses.SingleOrDefault(x=> x.Id ==  ShippingAddressId);
+
+            if(billingAddress == null)
+            {
+                _notificationManager.Error("Invalid billing address id");
+
+                return Page();
+            }
+
+            if(shippingAddress == null)
+            {
+                _notificationManager.Error("Invalid billing address id");
+
+                return Page();
+            }
+
             var rateRequestOptions = new ShipmentRateEstimateRequestOptions
             {
                 Items = PrepareShipmentItemEstimateRequest(Basket),
 
-                Address = MapAddress(ShippingAddress),
+                Address = billingAddress,
 
             };
 
             var estimateRateResponse = await _shipmentRateService.EstimateAsync(rateRequestOptions);
-
 
             double shippingCost = estimateRateResponse.Where(x => x.EstaimatedDays < 7).Select(x => x.Money.Value).Min();
 
@@ -125,9 +149,9 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             OrderSubmitRequestOptions submitRequestOptions = new OrderSubmitRequestOptions
             {
-                BillingAddress = MapAddress(BillingAddress),
+                BillingAddress = billingAddress,
 
-                ShippingAddress = MapAddress(ShippingAddress),
+                ShippingAddress = shippingAddress,
 
                 TaxCost = 0,
 
@@ -159,7 +183,7 @@ namespace MicroStore.Client.PublicWeb.Pages
             var processPaymentRequestOptions = new PaymentProcessRequestOptions
             {
                 GatewayName = PaymentMethod,
-                ReturnUrl = Url.Page("OrderSuccess") ,
+                ReturnUrl = $"{HttpContext.GetHostUrl()}{Url.Page("OrderSuccess")}",
                 CancelUrl = HttpContext.GetHostUrl()
             };
 

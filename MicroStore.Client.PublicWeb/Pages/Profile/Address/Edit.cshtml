@@ -35,7 +35,8 @@
             <div class="col-md-6 mb-3">
                 <label class="form-label" asp-for="@Model.Address.Country"> </label>
                 <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.Country)" asp-for="@Model.Address.Country">
-                    <option selected>Please select country</option>
+                    <option value="" disabled selected>Please select</option>
+
                     @foreach (var country in countriesSelectList)
                     {
                         <option value="@country.Value">@country.Text</option>
@@ -47,6 +48,7 @@
             <div class="col-md-6">
                 <label class="form-label" asp-for="@Model.Address.StateProvince"> </label>
                 <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.StateProvince)" asp-for="@Model.Address.StateProvince" data-address-select="StateProvince">
+                    <option value="" disabled selected>Please select</option>
                     @foreach(var state in stateProvvincesList)
                     {
                         <option value="@state.Value">@state.Text</option>
@@ -81,10 +83,10 @@
     <script>
         $(function () {
 
-            $("#Address_Country").change(function () {
 
+            $("#Address_Country").change(function () {
                 var countryCode = $(this).val();
-                if (countryCode != null) {
+                if (countryCode) {
                     getStates(countryCode);
                 }
 
@@ -97,7 +99,6 @@
                     success: function (result) {
                         var stateProvinceElment = $("#Address_StateProvince");
                         stateProvinceElment.empty();
-                        stateProvinceElment.append("<option selected>Please Select State Province</option>");
                         $.each(result.stateProvinces, function (index, val) {
                             stateProvinceElment.append(new Option(val.name, val.abbreviation));
                         })
