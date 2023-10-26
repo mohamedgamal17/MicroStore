@@ -55,7 +55,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
 
             return _exceptionHandler(result.Exception);
         }
-        public static IActionResult ToOk<T>(this Result<T> result )
+        public static IActionResult ToOk<T>(this Result<T> result)
         {
             return result.Match((r) =>
             {

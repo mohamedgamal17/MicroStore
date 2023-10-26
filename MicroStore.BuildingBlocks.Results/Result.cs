@@ -4,11 +4,32 @@
     {
         private readonly T _value;
 
-        private readonly Exception _exception;
+        private readonly Exception? _exception;
 
         private readonly ResultState _state;
-        public T Value => _value;
-        public Exception Exception => _exception;
+        public T Value
+        {
+            get{
+                if (IsFailure)
+                {
+                    throw new InvalidOperationException("Cannot retrive result value beacause result is already in failure state.");
+                }
+
+                return _value;
+            }
+        }
+        public Exception Exception
+        {
+            get
+            {
+                if (IsSuccess)
+                {
+                    throw new InvalidOperationException("Cannot retrive result exception beacause result is already in success state.");
+                }
+
+                return _exception!;
+            }
+        }
         public ResultState State => _state;
         public bool IsSuccess => _state == ResultState.Success;
         public bool IsFailure => !IsSuccess;
