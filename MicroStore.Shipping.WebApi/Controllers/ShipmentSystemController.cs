@@ -6,12 +6,11 @@ using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.ShippingSystems;
 using MicroStore.Shipping.Domain.Security;
-using System.Net;
-
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
     [Route("api/systems")]
+    [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
     public class ShipmentSystemController : MicroStoreApiController
     {
 

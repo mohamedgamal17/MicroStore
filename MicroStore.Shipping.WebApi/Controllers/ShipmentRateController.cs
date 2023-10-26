@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Rates;
+using MicroStore.Shipping.Domain.Security;
+
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
-   // [Authorize]
+    [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
     [Route("api/rates")]
     public class ShipmentRateController : MicroStoreApiController
     {

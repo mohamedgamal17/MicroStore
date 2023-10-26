@@ -11,6 +11,7 @@ namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
     [Route("api/settings")]
+    [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
     public class ShipmentSettingsController : MicroStoreApiController
     {
         private readonly IApplicationSettingsService _applicationSettingsService;
@@ -23,7 +24,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(ShippingSettings))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
 
         public async Task<IActionResult> GetShipmentSettings()
         {
@@ -36,8 +36,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShippingSettings))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
-
         public async Task<IActionResult> UpdateShipppingSettings([FromBody]UpdateShippingSettingsModel model)
         {
             var validationResult = await ValidateModel(model);

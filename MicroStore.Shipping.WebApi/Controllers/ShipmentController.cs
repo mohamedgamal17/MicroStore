@@ -12,6 +12,7 @@ using MicroStore.Shipping.Domain.Security;
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
+    [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
     [Route("api/shipments")]
     public class ShipmentController : MicroStoreApiController
     {
@@ -28,7 +29,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type= typeof(PagedResult<ShipmentDto>))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
 
         public async Task<IActionResult> RetriveShipmentList([FromQuery] ShipmentListQueryModel queryParams,  string? userId=  null)
         {
@@ -44,7 +44,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [Route("{shipmentId}")]
         [ActionName(nameof(RetriveShipmentById))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> RetriveShipmentById(string shipmentId)
         {
 
@@ -57,7 +56,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpGet]
         [Route("order_id/{orderId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> RetriveShipmentByOrderId(string orderId)
         {
 
@@ -69,7 +67,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpGet]
         [Route("order_number/{orderNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> RetriveShipmentByOrderNumber(string orderNumber)
         {
 
@@ -81,7 +78,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ShipmentDto))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> CreateShipment([FromBody] ShipmentModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -100,7 +96,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpPost]
         [Route("fullfill/{shipmentId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ShipmentDto))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> FullfillShipment(string shipmentId, [FromBody] PackageModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -117,7 +112,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("{shipmentId}/labels")]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> BuyShipmentLabel(string shipmentId, BuyShipmentLabelModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -135,7 +129,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
 
         [HttpPost]
         [Route("{shipmentId}/rates")]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> RetriveShipmentRate(string shipmentId)
         {
             var result  =await  _shipmentCommandService.RetriveShipmentRatesAsync(shipmentId);
@@ -147,7 +140,6 @@ namespace MicroStore.Shipping.WebApi.Controllers
         [HttpPost]
         [Route("search")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ShipmentDto>))]
-        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
         public async Task<IActionResult> Search([FromBody]ShipmentSearchByOrderNumberModel model)
         {
             var validationResult = await ValidateModel(model);

@@ -5,12 +5,12 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Addresses;
-using System.Net;
+using MicroStore.Shipping.Domain.Security;
 
 namespace MicroStore.Shipping.WebApi.Controllers
 {
     [ApiController]
-   // [Authorize]
+    [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
     [Route("api/addresses")]
     public class AddressController : MicroStoreApiController
     {

@@ -36,7 +36,7 @@ namespace MicroStore.Shipping.Application.Rates
 
             if (systemResult.IsFailure)
             {
-                return new Result<List<EstimatedRateDto>>(result.Exception);
+                return new Result<List<EstimatedRateDto>>(systemResult.Exception);
             }
 
 
