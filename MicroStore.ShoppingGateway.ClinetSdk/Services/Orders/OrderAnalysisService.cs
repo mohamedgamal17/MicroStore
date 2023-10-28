@@ -1,4 +1,5 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 {
@@ -21,10 +22,10 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             return await _microStoreClinet.MakeRequest<ForecastModel>(path,HttpMethod.Post, option, cancellationToken);
         }
 
-        public async Task<List<OrderSalesReport>> GetOrderSalesReport(OrderSalesReportRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<PagedList<OrderSalesReport>> GetOrderSalesReport(OrderSalesReportRequestOptions options, CancellationToken cancellationToken = default)
         {
             var path = string.Format("{0}/{1}", BaseUrl, "sales-report");
-            return await _microStoreClinet.MakeRequest<List<OrderSalesReport>>(path, HttpMethod.Get, options, cancellationToken);
+            return await _microStoreClinet.MakeRequest<PagedList<OrderSalesReport>>(path, HttpMethod.Get, options, cancellationToken);
         }
 
 

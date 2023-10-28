@@ -1,6 +1,8 @@
-﻿namespace MicroStore.Ordering.Application.Models
+﻿using MicroStore.BuildingBlocks.Paging.Params;
+
+namespace MicroStore.Ordering.Application.Models
 {
-    public class OrderSalesReportModel
+    public class OrderSalesReportModel : PagingQueryParams
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

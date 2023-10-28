@@ -41,11 +41,12 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
                 Status = OrderState.Completed.ToString(),
                 StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
                 EndDate = DateTime.Now,
-                Period = ReportPeriod.Daily
+                Period = ReportPeriod.Daily,
+                Length = 31
             };
-            var report = await _orderAnaylsisService.GetOrderSalesReport(requestOptions);
+            var response = await _orderAnaylsisService.GetOrderSalesReport(requestOptions);
 
-            var projection = report.Select(x => new OrderSalesChartDataModel
+            var projection = response.Items.Select(x => new OrderSalesChartDataModel
             {
                 TotalOrders = x.TotalOrders,
                 SumShippingTotalCost = x.TotalShippingPrice,
@@ -65,11 +66,12 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
                 Status = OrderState.Completed.ToString(),
                 StartDate = new DateTime(DateTime.Now.Year, 1, 1),
                 EndDate = DateTime.Now,
-                Period = ReportPeriod.Monthly
+                Period = ReportPeriod.Monthly,
+                Length = 12
             };
             var report = await _orderAnaylsisService.GetOrderSalesReport(requestOptions);
 
-            var projection = report.Select(x => new OrderSalesChartDataModel
+            var projection = report.Items.Select(x => new OrderSalesChartDataModel
             {
                 TotalOrders = x.TotalOrders,
                 SumShippingTotalCost = x.TotalShippingPrice,
@@ -119,13 +121,14 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
                 Status = OrderState.Completed.ToString(),
                 StartDate = new DateTime(DateTime.Now.AddYears(-10).Year,10 , 1),
                 EndDate = DateTime.Now,
-                Period = ReportPeriod.Yearly
+                Period = ReportPeriod.Yearly,
+                Length=  10
             };
 
             var report = await _orderAnaylsisService.GetOrderSalesReport(requestOptions);
 
 
-            var projection = report.Select(x => new OrderSalesChartDataModel
+            var projection = report.Items.Select(x => new OrderSalesChartDataModel
             {
                 TotalOrders = x.TotalOrders,
                 SumShippingTotalCost = x.TotalShippingPrice,

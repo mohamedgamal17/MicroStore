@@ -1,4 +1,5 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
@@ -9,7 +10,7 @@ namespace MicroStore.Ordering.Application.Orders
     {
         Task<Result<ForecastDto>> ForecastSales(ForecastModel model, CancellationToken cancellationToken = default);
 
-        Task<Result<List<OrderSalesReportDto>>> GetOrdersSalesReport(OrderSalesReportModel model, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<OrderSalesReportDto>>> GetOrdersSalesReport(OrderSalesReportModel model, CancellationToken cancellationToken = default);
 
         Task<Result<OrderSummaryReport>> GetOrderSummary(CancellationToken cancellationToken = default);
 

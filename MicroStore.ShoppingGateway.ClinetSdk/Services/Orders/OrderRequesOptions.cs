@@ -47,7 +47,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
         public DateTime? EndSubmissionDate { get; set; }
     }
 
-    public class OrderSalesReportRequestOptions
+    public class OrderSalesReportRequestOptions : PagingReqeustOptions
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
+using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Application.Domain;
@@ -36,7 +38,7 @@ namespace MicroStore.Ordering.Application.Orders
         }
 
 
-        public async Task<Result<List<OrderSalesReportDto>>> GetOrdersSalesReport(OrderSalesReportModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<OrderSalesReportDto>>> GetOrdersSalesReport(OrderSalesReportModel model, CancellationToken cancellationToken = default)
         {
             var query = _orderDbContext.Query<OrderSalesReport>()
                 .AsNoTracking();
@@ -50,12 +52,16 @@ namespace MicroStore.Ordering.Application.Orders
             {
                query =  query.Where(x => x.CurrentState == OrderStatusConst.Completed);
             }
-            DateTime endDate = model.EndDate ?? DateTime.Now;
 
-            DateTime startDate = model.StartDate ?? endDate.AddDays(-17);
+            if(model.StartDate != null)
+            {
+                query = query.Where(x => x.Date >= model.StartDate);
+            }
 
-
-            query = query.Where(x => x.Date >= startDate && x.Date <= endDate);
+            if(model.EndDate != null)
+            {
+                query = query.Where(x => x.Date <= model.EndDate);
+            }
 
             var projection = model.Period switch
             {
@@ -91,7 +97,7 @@ namespace MicroStore.Ordering.Application.Orders
                 })
             };
 
-            return await projection.OrderBy(x=> x.Date).ToListAsync(cancellationToken);
+            return await projection.OrderByDescending(x => x.Date).PageResult(model.Skip,  model.Length, cancellationToken);
 
         }
 

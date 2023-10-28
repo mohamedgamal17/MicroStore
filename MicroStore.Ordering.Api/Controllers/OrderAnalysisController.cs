@@ -1,15 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
+using MicroStore.Ordering.Application.Security;
+
 namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/anaylsis/orders")]
     [ApiController]
- //   [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class OrderAnalysisController : MicroStoreApiController 
     {
         private readonly IOrderAnalysisService _orderAnalysisService;
@@ -40,7 +44,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<OrderSalesReport>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<OrderSalesReport>))]
         [Route("sales-report")]
         public async Task<IActionResult> GetOrderSalesReport([FromQuery]OrderSalesReportModel model)
         {
