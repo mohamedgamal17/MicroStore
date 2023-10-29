@@ -12,7 +12,7 @@ namespace MicroStore.Ordering.Application.Products
     {
         Task<Result<ForecastDto>> ForecastPrdocut(string productId,ForecastModel model,CancellationToken cancellationToken = default);
 
-        Task<Result<List<ProductSalesReportDto>>> GetProductSalesReport(string productId, ProductSummaryReportModel model, CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<ProductSalesReportDto>>> GetProductSalesReport(string productId, ProductSummaryReportModel model, CancellationToken cancellationToken = default);
 
 
         Task<Result<PagedResult<BestSellerReport>>> GetBestSellersReport(PagingAndSortingQueryParams queryParams,CancellationToken cancellationToken = default);

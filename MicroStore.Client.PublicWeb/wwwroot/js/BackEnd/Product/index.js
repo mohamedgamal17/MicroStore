@@ -12,7 +12,7 @@
                     data.maxPrice = $("#MaxPrice").val();
                 }
             },
-
+            processing:true,
             paging: true,
             serverSide: true,
             searching: false,
@@ -31,12 +31,24 @@
                     data: 'price'
                 },
                 {
-                    orderable: false,
-                    title: "Actions",
-                    render: function (data, type, row) {
-                        return `<a  href="Product/Edit/${row.id}" class="btn btn-info" >Edit</a>`
+                    title: 'Actions',
+                    rowAction: {
+                        items:
+                             [ {
+                                    text: 'Edit',
+                                    action: function (data) {
+                                        window.location.href = `Product/Edit/${data.record.id}`
+                                    }
+                                },
+                                {
+                                    text: 'Report',
+                                    action: function (data) {
+                                        window.location.href = `Product/SalesReport/${data.record.id}`
+                                    }
+                                }
+                            ]
                     }
-                }
+                },
             ]
         })
 

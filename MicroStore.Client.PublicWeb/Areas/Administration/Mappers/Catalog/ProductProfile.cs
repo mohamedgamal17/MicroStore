@@ -2,6 +2,7 @@
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Catalog
@@ -36,6 +37,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Catalog
             CreateMap<ProductImage, ProductImageVM>();
 
             CreateMap<ProductCategory, ProductCategoryVM>();
+
+            CreateMap<ProductSalesReport, ProductSalesReportVM>();
 
         }
     }

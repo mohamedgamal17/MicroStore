@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
+using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Products;
 using MicroStore.Ordering.Application.Security;
@@ -10,7 +12,7 @@ namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/anaylsis/products")]
     [ApiController]
-   // [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class ProductAnaylsisController : MicroStoreApiController
     {
         private readonly IProductAnalysisService _productAnalysisService;
@@ -52,6 +54,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("{productId}/units-summary")]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<ProductSalesReportDto>))]
         public async Task<IActionResult> GetProductSummaryReport(string productId ,[FromQuery] ProductSummaryReportModel model)
         {
             var validationResult = await ValidateModel(model);

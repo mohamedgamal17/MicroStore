@@ -1,0 +1,103 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products;
+@model ProductSalesReportModel
+
+@{
+    var product = (ProductVM)ViewBag.Product;
+}
+
+<div>
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Sales Report for - @product.Name</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a asp-action="SalesForecasting" class="btn btn-info">
+                                <i class="fas fa-chart-line mr-2"></i>Forecast
+                            </a>
+
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <partial name="_Sales.AdvancedFilter" model="Model" />
+            <abp-card>
+                <abp-card-body>
+                    <abp-table striped-rows="true" id="ReportTable"></abp-table>
+                </abp-card-body>
+            </abp-card>
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script>
+
+        $(function () {
+
+            var reportTable = $("#ReportTable").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    ajax: {
+                        type: "POST",
+                        data: function (data) {
+                            data.startDate = $("#StartDate").val();
+                            data.endDate = $("#EndDate").val();
+                            data.groupBy = $("#GroupBy").val();
+                        }
+                    },
+                    paging: true,
+                    serverSide: true,
+                    searching: false,
+                    processing: true,
+                    columnDefs: [
+                        {
+                            title: '@Html.NameFor(x=> x.Data.First().Quantity)',
+                            data: 'quantity',
+                            orderable: false
+                        },
+                        {
+                            title: '@Html.NameFor(x=> x.Data.First().TotalPrice)',
+                            data: 'totalPrice',
+                            render: function (data, type, row) {
+                                var priceFormat = new Intl.NumberFormat('en-US', {
+                                    style: 'currency',
+                                    currency: 'USD',
+                                })
+
+                                return priceFormat.format(row.totalPrice)
+                            },
+                            orderable: false
+
+                        },
+                        {
+                            title: "@Html.NameFor(x=> x.Data.First().Date)",
+                            data: "date",
+                            render: function (data, type, row) {
+                                const date = new Date(row.date)
+                                return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                            },
+                            orderable: false
+                        }
+                    ]
+
+                })
+            )
+
+            $("#ReportFilterForm").on('submit', function (evt) {
+                evt.preventDefault();
+                reportTable.ajax.reload()
+            })
+
+
+        })();
+    </script>
+
+}

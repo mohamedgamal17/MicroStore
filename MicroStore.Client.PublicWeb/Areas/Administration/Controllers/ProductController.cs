@@ -12,6 +12,9 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using System.Data;
 using System.Net;
 using Volo.Abp.BlobStoring;
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
@@ -29,13 +32,16 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
 
         private readonly ManufacturerService _manufacturerService;
-        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IBlobContainer<MultiMediaBlobContainer> blobContainer, ManufacturerService manufacturerService)
+
+        private readonly ProductAnalysisService _productAnalysisService;
+        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IBlobContainer<MultiMediaBlobContainer> blobContainer, ManufacturerService manufacturerService, ProductAnalysisService productAnalysisService)
         {
             _productService = productService;
             _categoryService = categoryService;
             _logger = logger;
             _blobContainer = blobContainer;
             _manufacturerService = manufacturerService;
+            _productAnalysisService = productAnalysisService;
         }
 
         public async Task<IActionResult> Index()
@@ -64,19 +70,20 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 Length = model.Length
             };
 
-            var data = await _productService.ListAsync(requestOptions);
+            var response = await _productService.ListAsync(requestOptions);
 
             var responseModel = new ProductListModel
             {
                 Start = model.Start,
                 Length = model.Length,
                 Draw = model.Draw,
-                RecordsTotal = model.RecordsTotal,
-                Data = ObjectMapper.Map<List<Product>, List<ProductVM>>(data.Items)
+                RecordsTotal = response.TotalCount,
+                Data = ObjectMapper.Map<List<Product>, List<ProductVM>>(response.Items)
             };
 
             return Json(responseModel);
         }
+
 
         [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Create()
@@ -293,6 +300,113 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(ObjectMapper.Map<Product, ProductVM>(result));
 
         }
+
+        public async Task<IActionResult> SalesReport(string id)
+        {
+            var response = await _productService.GetAsync(id);
+
+            ViewBag.Product = ObjectMapper.Map<Product, ProductVM>(response);
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SalesReport(string id, ProductSalesReportModel model)
+        {
+            var requestOptions = new ProductSalesReportRequestOptions
+            {
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                Period = model.GroupBy,
+                Length = model.Length,
+                Skip = model.Skip
+            };
+
+            var response = await _productAnalysisService.GetProductSalesReport(id,requestOptions);
+
+            var responseModel = new ProductSalesReportModel
+            {
+                Data = ObjectMapper.Map<List<ProductSalesReport>, List<ProductSalesReportVM>>(response.Items),
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                GroupBy = model.GroupBy,
+                Length = response.Lenght,
+                Start = response.Skip,
+                Draw = model.Draw,
+                RecordsTotal = response.TotalCount
+            };
+
+            return Ok(responseModel);
+        }
+
+        public async Task<IActionResult> SalesUnitForecasting(string id)
+        {
+            try
+            {
+                var productResponse = await _productService.GetAsync(id);
+
+                ViewBag.Product = ObjectMapper.Map<Product, ProductVM>(productResponse);
+
+                var lastYearDate = DateTime.Now.AddMonths(-12);
+
+                var startDate = new DateTime(lastYearDate.Year, lastYearDate.Month, 1);
+
+                var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddDays(-1);
+
+                var forecastRequestOptions = new ForecastRequestOptions
+                {
+                    ConfidenceLevel = 0.95f,
+                    Horizon = 6
+                };
+
+                var forecasting = await _productAnalysisService.Forecast(id, forecastRequestOptions);
+
+                var reportRequestOptions = new ProductSalesReportRequestOptions
+                {
+                    StartDate = startDate,
+                    EndDate =endDate,
+                    Period = ReportPeriod.Monthly,
+                    Length = 12,
+                    Skip = 0
+                };
+
+                var monthlySalesReport = await _productAnalysisService.GetProductSalesReport(id, reportRequestOptions);
+
+                var projection = monthlySalesReport.Items.Select(x => new ProductSalesChartDataModel
+                {
+                    Quantity = x.Quantity,
+                    TotalPrice = x.TotalPrice,
+                    Date = x.Date.ToString("MM-dd-yyyy"),
+
+                }).ToList();
+
+                int monthOffset = 1;
+
+                for (int i = 0; i < forecasting.ForecastedValues.Length; i++)
+                {
+
+                    projection.Add(new ProductSalesChartDataModel
+                    {
+                        Quantity = forecasting.ForecastedValues[i],
+                        Date = DateTime.Now.AddMonths(monthOffset).ToString("MM-dd-yyyy"),
+                        IsForecasted = true
+                    });
+
+                    monthOffset++;
+                }
+
+                return View();
+            }
+            catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                NotificationManager.Error(ex.Erorr.Detail);
+
+                return RedirectToAction(nameof(SalesReport), new { id = id });
+            }
+
+        }
+
+   
 
         private async Task<List<SelectListItem>> BuildCategoriesSelecetListItems(string[]? categoriesValues = null , bool idDefaultValue  = true)
         {

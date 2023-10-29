@@ -119,16 +119,24 @@ namespace MicroStore.Ordering.Application.Products
                
         }
 
-        public async Task<Result<List<ProductSalesReportDto>>> GetProductSalesReport(string productId, ProductSummaryReportModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ProductSalesReportDto>>> GetProductSalesReport(string productId, ProductSummaryReportModel model, CancellationToken cancellationToken = default)
         {
-            var endDate = model.EndDate ?? DateTime.Now;
-            var startDate = model.StartDate ?? endDate.Date.AddDays(-14);
 
             var query = _orderDbContext.Query<ProductSalesReport>()
-               .AsNoTracking()
-               .Where(x => x.ProductId == productId)
-               .Where(x => x.Date <= endDate && x.Date >= startDate);
+               .AsNoTracking();
 
+
+            if(model.StartDate != null)
+            {
+                query = query.Where(x=> x.Date >= model.StartDate);
+            }
+
+            if(model.EndDate != null)
+            {
+                query= query.Where(x=> x.Date <= model.EndDate);
+            }
+
+            query = query.Where(x => x.ProductId == productId);
 
             var projection = model.Period switch
             {
@@ -161,7 +169,7 @@ namespace MicroStore.Ordering.Application.Products
             };
 
 
-           return await projection.OrderBy(x=> x.Date).ToListAsync(cancellationToken);
+           return await projection.OrderByDescending(x=> x.Date).PageResult(model.Skip,model.Length , cancellationToken);
         }
 
         public async Task<Result<PagedResult<BestSellerReport>>> GetBestSellersReport(PagingAndSortingQueryParams queryParams, CancellationToken cancellationToken = default)
