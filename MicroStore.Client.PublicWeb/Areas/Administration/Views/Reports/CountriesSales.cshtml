@@ -1,0 +1,111 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Reports;
+@model CountrySalesSummaryModel
+<div>
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Country Summary Report</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <abp-card>
+                <abp-card-body>
+                    <abp-table striped-rows="true" id="ReportTable"></abp-table>
+                </abp-card-body>
+            </abp-card>
+        </div>
+    </section>
+</div>
+
+@section Scripts{
+    <script>
+         $(function(){
+
+            var reportTable = $("#ReportTable").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    ajax:{
+                        type:"POST",
+                    },
+                    paging: true,
+                    serverSide: true,
+                    searching: false,
+                    processing: true,
+                    columnDefs: [
+                        {
+                            title:"@Html.NameFor(x=> x.Data.First().CountryCode)",
+                            data:"countryCode",
+                            orderable: false
+                        },
+                        {
+                            title: '@Html.NameFor(x=> x.Data.First().TotalOrders)',
+                            data: 'totalOrders',
+                            orderable: false
+                        },
+                        {
+                            title: '@Html.NameFor(x=> x.Data.First().TotalShippingPrice)',
+                            data: 'totalShippingPrice',
+                            render : function(data, type , row){
+                                var priceFormat = new Intl.NumberFormat('en-US',{
+                                        style: 'currency',
+                                        currency: 'USD',
+                                })
+
+                                return priceFormat.format(row.totalShippingPrice)
+                            },
+                            orderable: false
+
+                        },
+                        {
+                            title: '@Html.NameFor(x=> x.Data.First().TotalTaxPrice)',
+                            data: 'totalTaxPrice',
+                            render : function(data, type , row){
+                                var priceFormat = new Intl.NumberFormat('en-US',{
+                                        style: 'currency',
+                                        currency: 'USD',
+                                })
+
+                                return priceFormat.format(row.totalTaxPrice)
+                            },
+                            orderable: false
+                        },
+                        {
+                            title: '@Html.NameFor(x=> x.Data.First().TotalPrice)',
+                            data: 'totalPrice',
+                            render : function(data, type , row){
+                                var priceFormat = new Intl.NumberFormat('en-US',{
+                                        style: 'currency',
+                                        currency: 'USD',
+                                })
+
+                                return priceFormat.format(row.totalPrice)
+                            },
+                            orderable: false
+                        },
+
+                        {
+                            title: 'Actions',
+                            rowAction: {
+                                items:
+                                [
+                                    {
+                                        text: 'Forecast',
+                                        action: function (data) {
+                                            window.location.href = `Country/SalesReport?code=${data.record.countryCode}`
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                    ]
+
+                })
+            )
+
+        })();
+    </script>
+}

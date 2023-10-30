@@ -4,6 +4,7 @@
             ajax: {
                 type: "POST"
             },
+            processing: true,
             columnDefs: [
                 {
                     title: "Name",
@@ -21,12 +22,27 @@
                     title: "Numeric Iso Code",
                     data: "numericIsoCode"
                 },
+
                 {
-                    title: "Actions",
-                    render: function (data, type, row) {
-                        return `<a href="Country/Edit/${row.id}" class="btn btn-info">Edit</a>`
+                    title: 'Actions',
+                    rowAction: {
+                        items:
+                            [
+                            {
+                                    text: "Edit",
+                                    action: function (data) {
+                                        window.location.href = `Country/Edit/${data.record.id}`
+                                    }
+                            },
+                            {
+                                text: 'Report',
+                                action: function (data) {
+                                    window.location.href = `Country/SalesReport?code=${data.record.twoLetterIsoCode}`
+                                }
+                            }
+                            ]
                     }
-                }
+                },
             ]
         })
     );

@@ -1,0 +1,107 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic;
+@model List<CountrySalesChartDataModel>
+@{
+    var country = (CountryVM)ViewBag.Country;
+    var jsonData = Json.Serialize(Model);
+}
+
+<div>
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">@country.Name - Sales Forecasting Report</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a asp-action="SalesReport" asp-route-code="@country.TwoLetterIsoCode" class="btn btn-info">
+                                <i class="fas fa-arrow-circle-left mr-2"></i>Go Back
+                            </a>
+
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <abp-row>
+                <abp-column size="_12">
+                    <abp-card class="card-primary card-outline">
+                        <abp-card-header>
+                            <abp-card-title class="text-md"> <i class="fas fa-shopping-cart mr-2 text-dark"></i>Forecasting Sales</abp-card-title>
+                        </abp-card-header>
+                        <abp-card-body>
+                            <canvas id="SalesForecasting"></canvas>
+                        </abp-card-body>
+                    </abp-card>
+                </abp-column>
+            </abp-row>
+        </div>
+    </section>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            var context = document.getElementById("SalesForecasting");
+            var forecastedData = @Html.Raw(jsonData)
+
+                    var myChart = new Chart(context, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: "@(country.Name) Monthly Sales",
+                        data: forecastedData,
+                        segment: {
+                            borderColor: function (ctx) {
+                                console.log(ctx.p0.raw)
+                                if (ctx.p0.raw.isForecasted) {
+                                    return 'rgb(20, 8, 2)'
+                                }
+
+                                return 'rgb(75, 192, 192)'
+                            }
+                        }
+                    }]
+                },
+
+                options: {
+                    parsing: {
+                        xAxisKey: "date",
+                        yAxisKey: "sumTotalCost"
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                parser: 'MM-dd-yyyy',
+                                unit: 'month'
+                            }
+                        },
+
+                        y: {
+                            ticks: {
+                                callback: function (label, index, labels) {
+                                    var priceFormat = new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                    })
+
+                                    return priceFormat.format(label)
+                                }
+
+
+                            }
+                        }
+                    }
+                }
+
+            });
+
+        })
+    </script>
+}

@@ -2,9 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic;
+using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
 using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
+using System.Net;
+
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
     [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
@@ -13,10 +19,13 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         private readonly CountryService _countryService;
 
         private readonly StateProvinceService _stateProvinceService;
-        public CountryController(CountryService countryService, StateProvinceService stateProvinceService)
+
+        private readonly CountryAnalysisService _countryAnalysisService;
+        public CountryController(CountryService countryService, StateProvinceService stateProvinceService, CountryAnalysisService countryAnalysisService)
         {
             _countryService = countryService;
             _stateProvinceService = stateProvinceService;
+            _countryAnalysisService = countryAnalysisService;
         }
         public IActionResult Index()
         {
@@ -175,6 +184,108 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             await  _stateProvinceService.DeleteAsync(model.CountryId, model.StateId);
 
             return NoContent();
+        }
+
+        public async Task<IActionResult> SalesReport(string code)
+        {
+            var response = await _countryService.GetByCodeAsync(code);
+
+            ViewBag.Countries = ObjectMapper.Map<Country, CountryVM>(response);
+
+            return View(new CountrySalesReportModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SalesReport(string code,CountrySalesReportModel model)
+        {
+            var requestOptions = new CountrySalesReportRequestOptions
+            {
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                Period = model.GroupBy,
+                Skip = model.Skip,
+                Length = model.Length
+            };
+
+            var response = await _countryAnalysisService.GetCountrySalesReport(code, requestOptions);
+
+            var responseModel = new CountrySalesReportModel
+            {
+                Data = ObjectMapper.Map<List<CountrySalesReport>, List<CountrySalesReportVM>>(response.Items),
+                Draw =  model.Draw,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                GroupBy = model.GroupBy,
+                Start = model.Start,
+                Length = response.Lenght,
+                RecordsTotal = response.TotalCount
+            };
+
+            return Json(responseModel);
+        }
+
+        public async Task<IActionResult> SalesForecasting(string code)
+        {
+            try
+            {
+                var response = await _countryService.GetByCodeAsync(code);
+
+                ViewBag.Country = ObjectMapper.Map<Country, CountryVM>(response);
+
+                var forcastedValues = await _countryAnalysisService.Forecast(code,new ForecastRequestOptions
+                {
+                    Horizon = 6,
+                    ConfidenceLevel = 0.95f
+                });
+
+                var lastYearDate = DateTime.Now.AddMonths(-12);
+
+                var startDate = new DateTime(lastYearDate.Year, lastYearDate.Month, 1);
+
+                var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddDays(-1);
+
+                var monthlySalesReport = await _countryAnalysisService.GetCountrySalesReport(code,new CountrySalesReportRequestOptions
+                {
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Period = ReportPeriod.Monthly,
+                    Length = 12
+                });
+
+                var projection = monthlySalesReport.Items.OrderBy(x=> x.Date).Select(x => new CountrySalesChartDataModel
+                {
+                    TotalOrders = x.TotalOrders,
+                    SumShippingTotalCost = x.TotalShippingPrice,
+                    SumTaxTotalCost = x.TotalTaxPrice,
+                    SumTotalCost = x.TotalPrice,
+                    Date = x.Date.ToString("MM-dd-yyyy"),
+
+                }).ToList();
+
+                int monthOffset = 1;
+
+                for (int i = 0; i < forcastedValues.ForecastedValues.Length; i++)
+                {
+
+                    projection.Add(new CountrySalesChartDataModel
+                    {
+                        SumTotalCost = forcastedValues.ForecastedValues[i],
+                        Date = DateTime.Now.AddMonths(monthOffset).ToString("MM-dd-yyyy"),
+                        IsForecasted = true
+                    });
+
+                    monthOffset++;
+                }
+
+                return View(projection);
+
+            }
+            catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                NotificationManager.Error(ex.Erorr.Detail);
+
+                return RedirectToAction(nameof(CountrySalesReport), new { code = code });
+            }
         }
     }
 }

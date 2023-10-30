@@ -1,0 +1,64 @@
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic;
+@using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
+@model CountrySalesReportModel
+<form id="ReportFilterForm">
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title><i class="fas fa-search mr-2 text-lightblue"></i><span class="text-lg"> Search</span> </abp-card-title>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus text-lg"></i>
+                </button>
+            </div>
+        </abp-card-header>
+        <abp-card-body>
+            <abp-row>
+                <abp-column size-md="_6">
+                    <abp-row class="form-group mb-3">
+                        <abp-column size-sm="_4">
+                            <div class="float-sm-left float-md-right">
+                                <micro-label class="col-form-label" asp-for="@Model.StartDate"></micro-label>
+                            </div>
+
+                        </abp-column>
+                        <abp-column size-sm="_8">
+                            <input asp-for="@Model.StartDate" id="@Html.IdFor(x=> x.StartDate)" class="form-control" />
+                            <span class="text-danger" asp-validation-for="@Model.StartDate" />
+                        </abp-column>
+                    </abp-row>
+                    <abp-row class="form-group mb-3">
+                        <abp-column size-sm="_4">
+                            <div class="float-sm-left float-md-right">
+                                <micro-label class="col-form-label" asp-for="@Model.EndDate"></micro-label>
+                            </div>
+
+                        </abp-column>
+                        <abp-column size-sm="_8">
+                            <input asp-for="@Model.EndDate" id="@Html.IdFor(x=> x.EndDate)" class="form-control" />
+                            <span class="text-danger" asp-validation-for="@Model.EndDate" />
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+                <abp-column size-md="_6">
+                    <abp-row class="form-group mb-3">
+                        <abp-column size-sm="_4">
+                            <div class="float-sm-left float-md-right">
+                                <micro-label class="col-form-label" asp-for="@Model.GroupBy"></micro-label>
+                            </div>
+                        </abp-column>
+                        <abp-column size-sm="_8">
+                            <select class="form-control" asp-for="@Model.GroupBy" asp-items="@Html.GetEnumSelectList<ReportPeriod>()"></select>
+                            <span class="text-danger" asp-validation-for="@Model.StartDate" />
+                        </abp-column>
+                    </abp-row>
+                </abp-column>
+
+                <abp-column size-md="_12" class="mt-3">
+                    <div class="text-center">
+                        <abp-button type="submit" button-type="Info"><i class="fas fa-chart-line mr-1 text-white"></i><span class=""> Run Report</span> </abp-button>
+                    </div>
+                </abp-column>
+            </abp-row>
+        </abp-card-body>
+    </abp-card>
+</form>

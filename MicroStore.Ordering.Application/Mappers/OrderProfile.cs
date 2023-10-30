@@ -36,6 +36,12 @@ namespace MicroStore.Ordering.Application.Mappers
                 .ForMember(x => x.BillingAddress, opt => opt.MapFrom(c => c.BillingAddress))
                 .ForMember(x => x.ShippingAddress, opt => opt.MapFrom(c => c.ShippingAddress))
                 .ForMember(x => x.OrderItems, opt => opt.MapFrom(c => c.OrderItems));
+
+
+            CreateMap<CountrySalesSummaryReport, CountrySalesSummaryReportDto>();
+
+            CreateMap<CountrySalesReport, CountrySalesReportDto>();
+
         }
     }
 }

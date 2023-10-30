@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Geographic
 {
@@ -20,6 +21,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Geographic
             CreateMap<StateProvince, StateProvinceModel>();
 
             CreateMap<StateProvinceModel, StateProvinceRequestOptions>();
+
+            CreateMap<CountrySalesReport, CountrySalesReportVM>();
         }
     }
 }

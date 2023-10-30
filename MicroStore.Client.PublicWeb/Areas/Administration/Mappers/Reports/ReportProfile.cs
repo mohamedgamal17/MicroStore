@@ -9,6 +9,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Reports
         public ReportProfile()
         {
             CreateMap<OrderSalesReport, OrderSalesReportVM>();
+
+            CreateMap<CountrySalesSummary, CountrySalesSummaryVM>();
         }
     }
 }

@@ -5,6 +5,7 @@ using MicroStore.Client.PublicWeb.Areas.Administration.Models.Reports;
 using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
+using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using System.Net;
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
@@ -12,12 +13,13 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
     [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
     public class ReportsController : AdministrationController
     {
-
         private readonly OrderAnalysisService _orderAnalysisService;
 
-        public ReportsController(OrderAnalysisService orderAnalysisService)
+        private readonly CountryAnalysisService _countryAnalysisService;
+        public ReportsController(OrderAnalysisService orderAnalysisService, CountryAnalysisService countryAnalysisService)
         {
             _orderAnalysisService = orderAnalysisService;
+            _countryAnalysisService = countryAnalysisService;
         }
 
 
@@ -79,7 +81,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 });
 
 
-                var projection = monthlySalesReport.Items.Select(x => new OrderSalesChartDataModel
+                var projection = monthlySalesReport.Items.OrderBy(x => x.Date).Select(x => new OrderSalesChartDataModel
                 {
                     TotalOrders = x.TotalOrders,
                     SumShippingTotalCost = x.TotalShippingPrice,
@@ -113,6 +115,39 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return RedirectToAction(nameof(Sales));
             }
         }
+
+
+
+        public IActionResult CountriesSales()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CountriesSales(CountrySalesSummaryModel model)
+        {
+
+            var requestOptions = new PagingReqeustOptions()
+            {
+                Skip = model.Skip,
+                Length= model.Length
+            };
+
+            var response = await _countryAnalysisService.GetCountriesSalesSummary(requestOptions);
+
+
+            var responseModel = new CountrySalesSummaryModel
+            {
+                Data = ObjectMapper.Map<List<CountrySalesSummary>, List<CountrySalesSummaryVM>>(response.Items),
+                Start = response.Skip,
+                Length = response.Lenght,
+                RecordsTotal = response.TotalCount,
+                Draw = model.Draw
+            };
+
+            return Ok(responseModel);
+        }
+
 
 
 

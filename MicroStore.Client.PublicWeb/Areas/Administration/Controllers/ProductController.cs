@@ -372,7 +372,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 var monthlySalesReport = await _productAnalysisService.GetProductSalesReport(id, reportRequestOptions);
 
-                var projection = monthlySalesReport.Items.Select(x => new ProductSalesChartDataModel
+                var projection = monthlySalesReport.Items.OrderBy(x => x.Date).Select(x => new ProductSalesChartDataModel
                 {
                     Quantity = x.Quantity,
                     TotalPrice = x.TotalPrice,
