@@ -11,8 +11,8 @@ namespace MicroStore.Catalog.Application.Models.Products
     {
         public string Name { get; set; }
         public string Sku { get; set; }
-        public string ShortDescription { get; set; }
-        public string LongDescription { get; set; }
+        public string? ShortDescription { get; set; }
+        public string? LongDescription { get; set; }
         public bool IsFeatured { get; set; }
         public double Price { get; set; }
         public double OldPrice { get; set; }
