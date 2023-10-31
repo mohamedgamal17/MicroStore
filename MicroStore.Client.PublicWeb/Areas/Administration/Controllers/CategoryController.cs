@@ -64,9 +64,11 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             try
             {
-                await _categoryService.CreateAsync(categoryRequestOptions);
+                var categoryId = await _categoryService.CreateAsync(categoryRequestOptions);
 
-                return RedirectToAction("Index");
+                NotificationManager.Success("Category has been created successfully !");
+
+                return RedirectToAction("Edit" , new { id= categoryId });
             }
             catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {
@@ -104,7 +106,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 await _categoryService.UpdateAsync(model.Id, categoryRequestOptions);
 
-                return RedirectToAction("Index");
+                NotificationManager.Success("Category has been updated successfully !");
+
+                return RedirectToAction("Edit", new {id = model.Id});
 
             }catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {

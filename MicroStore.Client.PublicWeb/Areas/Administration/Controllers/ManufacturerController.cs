@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Manufacturers;
+using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
-using MicroStore.ShoppingGateway.ClinetSdk.Services;
+using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
+using System.Net;
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
     [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
@@ -59,11 +61,25 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return View(model);
             }
 
-            var requestOptions = ObjectMapper.Map<ManufacturerModel, ManufacturerRequestOptions>(model);
+            try
+            {
 
-            var result =  await _manufacturerService.CreateAsync(requestOptions);
+                var requestOptions = ObjectMapper.Map<ManufacturerModel, ManufacturerRequestOptions>(model);
 
-            return RedirectToAction("Index");
+                var result = await _manufacturerService.CreateAsync(requestOptions);
+
+                NotificationManager.Success("Manufacturer has been created successfully !");
+
+                return RedirectToAction("Edit" , new {id = result.Id });
+
+            }
+            catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                ex.Erorr.MapToModelState(ModelState);
+
+                return View(model);
+            }
+
         }
 
 
@@ -81,18 +97,31 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         [HttpPost]
         [RuleSetForClientSideMessages("*")]
-        public async Task<IActionResult> Edit(string id , ManufacturerModel model)
+        public async Task<IActionResult> Edit( ManufacturerModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var requestOptions = ObjectMapper.Map<ManufacturerModel, ManufacturerRequestOptions>(model);
+            try
+            {
+                var requestOptions = ObjectMapper.Map<ManufacturerModel, ManufacturerRequestOptions>(model);
 
-            var result = await _manufacturerService.UpdateAsync(id,requestOptions);
+                var result = await _manufacturerService.UpdateAsync(model.Id, requestOptions);
 
-            return RedirectToAction("Edit", new { id = id });
+                NotificationManager.Success("Manufacturer has been updated successfully !");
+
+                return RedirectToAction("Edit", new { id = model.Id });
+            }
+            catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                ex.Erorr.MapToModelState(ModelState);
+
+                return View(model);
+            }
+
+
         }
     }
 }

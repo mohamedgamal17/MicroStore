@@ -118,9 +118,11 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 var requestOptions = ObjectMapper.Map<ProductModel, ProductRequestOptions>(model);
 
-                await _productService.CreateAsync(requestOptions);
+                var response =  await _productService.CreateAsync(requestOptions);
 
-                return RedirectToAction("Index");
+                NotificationManager.Success("Product has been created successfully !");
+
+                return RedirectToAction("Edit" , new { id= response.Id });
 
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
@@ -174,7 +176,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 await _productService.UpdateAsync(model.Id, requestOptions);
 
-                return RedirectToAction("Index");
+                NotificationManager.Success("Product has been updated successfully !");
+
+                return RedirectToAction("Edit", new {id = model.Id });
 
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
