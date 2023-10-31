@@ -13,8 +13,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Manufa
     {
         public ManufacturerModelValidator()
         {
-            RuleFor(x => x.Id)
-                .NotEmpty();
 
             RuleFor(x => x.Name)
                 .NotEmpty()

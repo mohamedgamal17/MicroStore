@@ -1,7 +1,5 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
 @model PublicWeb.Areas.Administration.Models.Catalog.Manufacturers.ManufacturerSearchModel
-
-
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.ManufacturerMenus.Index);
 }
@@ -40,7 +38,46 @@
 </div>
 
 @section Scripts{
+    <script>
+        $(document).ready(function () {
+            var manufacturerTable = $("#ManufacturersGrid").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    paging: true,
+                    processing: true,
+                    searching: false,
+                    scrollX: true,
+                    ajax: {
+                        type: "POST",
+                        data: function (data) {
+                            data.name = $("#Name").val();
+                        },
+                    },
 
-    <script src="~/js/BackEnd/Manufacturer/index.js"></script>
+                    columnDefs: [
+                        {
+                            title: "Name",
+                            data: "name",
+                        },
+                        {
+                            title: "Description",
+                            data: "description",
+                            orderable: false,
+                        },
+                        {
+                            orderable: false,
+                            render: function (data, type, row) {
+                                return `<a href="Manufacturer/Edit/${row.id}" class="btn btn-info">Edit</a>`
+                            }
+                        },
+                    ]
+                })
+            )
+
+            $("#AdvancedSearchForm").on('submit', function (evt) {
+                evt.preventDefault();
+                manufacturerTable.ajax.reload();
+            });
+        })
+    </script>
 
 }

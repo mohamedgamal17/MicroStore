@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Common;
-using MicroStore.ShoppingGateway.ClinetSdk.Common;
 using System.ComponentModel;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products

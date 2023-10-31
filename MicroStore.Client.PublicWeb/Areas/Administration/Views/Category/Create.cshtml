@@ -25,6 +25,10 @@
                 </div>
             </div>
         </div>
+
+        <div class="text-danger">
+            @Html.ValidationSummary()
+        </div>
         <div class="content container-fluid">
                 @{
                 await Html.RenderPartialAsync("_CreateOrUpdate.Info", Model);

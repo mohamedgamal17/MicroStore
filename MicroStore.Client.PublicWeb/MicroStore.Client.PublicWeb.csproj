@@ -69,7 +69,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\js\BackEnd\Components\" />
     <Folder Include="wwwroot\libs\" />
     <Folder Include="wwwroot\backend\" />
   </ItemGroup>
