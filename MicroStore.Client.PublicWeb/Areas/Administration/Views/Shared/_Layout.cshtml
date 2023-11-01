@@ -32,10 +32,9 @@
 
 
 
-        @await Component.InvokeAsync("Sidebar");
+        @await Component.InvokeAsync("Sidebar")
 
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
-
 
 
         <div class="content-wrapper">

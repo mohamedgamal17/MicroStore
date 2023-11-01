@@ -5,17 +5,16 @@
     var country = (CountryVM)ViewBag.Country;
 }
 <div>
-
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Edit country details - @Model.Name</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <button class="btn btn-info" type="submit">
+                            <button class="btn btn-info" type="submit" id="SumbitButton">
                                 <i class="fas
                                 fa-plus-square mr-1"></i> Save
                             </button>
@@ -25,15 +24,19 @@
             </div>
         </div>
     </div>
+
+    <div class="text-danger">
+        <div asp-validation-summary="All"></div> 
+    </div>
     <div class="content">
         <div class="container-fluid">
-            <form method="post" asp-action="Edit">
+            <form method="post" asp-action="Edit" id="CountryForm">
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(x=> x.Id, new {id ="CountryId"})
                 <partial name="_CreateOrUpdate.Info" model="Model" />
             </form>
 
-          <partial name="Grids/_Grid.StateProvinces" model="new StateProvinceListModel()" />
+            <partial name="Grids/_Grid.StateProvinces" model="new StateProvinceListModel()" />
         </div>
     </div>
 </div>
@@ -41,6 +44,92 @@
 
 @section Scripts{
 
-<script src="~/js/BackEnd/Country/edit.js"></script>
+    <script>
+
+        $(document).ready(function(){
+            var countryId = $("#CountryId").val();
+
+            var createStateModal = new abp.ModalManager({
+                viewUrl: '/Administration/Country/CreateOrEditStateModal'
+            });
+
+            var stateProvinceTable = $("#StateProvincesTable").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    ajax: {
+                        url: "/Administration/Country/ListStateProvinces/" + countryId,
+                        type: "POST",
+                    },
+                    processing: true,
+                    columnDefs: [
+                        {
+                            title: "Name",
+                            data: "name"
+                        },
+                        {
+                            title: "Abbreviation",
+                            data: "abbreviation"
+                        },
+                        {
+                            title: "Actions",
+
+                            rowAction: {
+                                items: [
+                                    {
+                                        text: 'Edit',
+                                        action: function (data) {
+                                            createStateModal.open({
+                                                countryId: data.record.countryId,
+                                                stateId: data.record.id
+                                            });
+                                        }
+                                    },
+
+                                    {
+                                        text: 'Delete',
+
+                                        confirmMessage: function (data) {
+                                            return `Are you sure you want to delete state ${data.name}`
+                                        },
+
+                                        action: function (data) {
+                                            abp.ajax({
+                                                url: "/Administration/Country/RemoveStateProvince",
+                                                type: "POST",
+                                                data: JSON.stringify({
+                                                    countryId: data.record.countryId,
+                                                    stateId: data.record.id
+                                                }),
+                                                success: function (response, status) {
+                                                    abp.notify.info("Successfully deleted!");
+                                                    stateProvinceTable.ajax.reload()
+                                                }
+                                            })
+
+                                        }
+                                    }
+
+                                ]
+                            }
+                        }
+                    ]
+                })
+            );
+
+            $("#CreateStateButton").on('click', function (event) {
+                event.preventDefault();
+                createStateModal.open({
+                    countryId: countryId
+                })
+            })
+
+            $("#SumbitButton").on('click',function(event){
+                $("#CountryForm").submit()
+            })
+
+            createStateModal.onResult(function (data) {
+                stateProvinceTable.ajax.reload();
+            })
+        })
+    </script>
 
 }

@@ -1,5 +1,5 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.CountryListModel
-
+﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic;
+@model CountryListModel
 <div>
     <div class="content-header">
         <div class="container-fluid">
@@ -30,6 +30,58 @@
         </div>
     </section>
 </div>
+
 @section Scripts{
- <script src="~/js/BackEnd/Country/index.js"></script>
+    <script>
+        $(function () {
+            $("#CountryTable").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    ajax: {
+                        type: "POST"
+                    },
+                    processing: true,
+                    columnDefs: [
+                        {
+                            title: "@(Html.NameFor(x=> x.Data.First().Name))",
+                            data: "name"
+                        },
+                        {
+                            title: "@(Html.NameFor(x => x.Data.First().TwoLetterIsoCode))",
+                            data: "twoLetterIsoCode"
+                        }
+                        , {
+                            title: "@(Html.NameFor(x => x.Data.First().ThreeLetterIsoCode))",
+                            data: "threeLetterIsoCode"
+                        },
+                        {
+                            title: "@(Html.NameFor(x => x.Data.First().NumericIsoCode))",
+                            data: "numericIsoCode"
+                        },
+
+                        {
+                            title: 'Actions',
+                            rowAction: {
+                                items:
+                                    [
+                                        {
+                                            text: "Edit",
+                                            action: function (data) {
+                                                window.location.href = `Country/Edit/${data.record.id}`
+                                            }
+                                        },
+                                        {
+                                            text: 'Report',
+                                            action: function (data) {
+                                                window.location.href = `Country/SalesReport?code=${data.record.twoLetterIsoCode}`
+                                            }
+                                        }
+                                    ]
+                            }
+                        },
+                    ]
+                })
+            );
+        })
+    </script>
 }
+
