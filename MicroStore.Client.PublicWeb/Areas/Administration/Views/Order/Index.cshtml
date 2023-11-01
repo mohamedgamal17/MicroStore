@@ -25,5 +25,62 @@
     </section>
 </div>
 @section Scripts{
-    <script src="~/js/BackEnd/Order/index.js"></script>
+    <script>
+        $(document).ready(function(){
+            var orderTable = $("#OrderTable").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    ajax: {
+                        type: "POST",
+                        data: function (data) {
+                            data.startSubmissionDate = $("#@Html.IdFor(x=> x.StartSubmissionDate)").val();
+                            data.endSubmissionDate = $("#@Html.IdFor(x=> x.EndSubmissionDate)").val();
+                            data.orderNumber = $("#@Html.IdFor(x=> x.OrderNumber)").val();
+                            data.states = $("#@Html.IdFor(x=> x.States)").val();
+                        }
+                    },
+                    paging: true,
+                    serverSide: true,
+                    processing : true,
+                    searching: false,
+                    columnDefs: [
+                        {
+                            title: "@Html.NameFor(x=> x.OrderNumber)",
+                            data: "orderNumber",
+                            orderable: false
+                        },
+
+                        {
+                            title: "@Html.NameFor(x=> x.OrderNumber)",
+                            data: "currentState",
+                            orderable: false
+                        },
+                        {
+                            title: "Total Price",
+                            data: "totalPrice",
+                            orderable: false
+                        },
+                        {
+                            title: "Actions",
+                            render: function (data, type, row) {
+                                return `<a href="Order/Details/${row.id}" class="btn btn-info"> View</a>`
+                            },
+                            orderable: false
+                        }
+                    ],
+                })
+            )
+
+            $("#States").select2({
+                placeholder: 'select order states'
+            })
+
+
+            $("#AdvancedSearchForm").on('submit', function (evt) {
+                evt.preventDefault();
+                console.log($("#States").val())
+                orderTable.ajax.reload();
+            });
+
+        })
+    </script>
 }

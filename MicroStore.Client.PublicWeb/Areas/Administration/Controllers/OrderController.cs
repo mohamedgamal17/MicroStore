@@ -50,18 +50,18 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 StartSubmissionDate = model.StartSubmissionDate,
                 EndSubmissionDate = model.EndSubmissionDate,
                 OrderNumber  = model.OrderNumber,
-                States = model.States != null && model.States.Length > 1 ? model.States.Select(x=>x.ToString()).JoinAsString(",") : null,
+                States = model.States != null  ? model.States.Select(x=>x.ToString()).JoinAsString(",") : null,
             };
 
-            var data = await _orderService.ListAsync(requestOptions);
+            var response = await _orderService.ListAsync(requestOptions);
 
             var responseModel = new OrderListModel
             {
                 Draw = model.Draw,
-                Length = model.Length,
-                Start = model.Start,
-                RecordsTotal = model.RecordsTotal,
-                Data = ObjectMapper.Map<List<Order>, List<OrderVM>>(data.Items)
+                Length = response.Lenght,
+                Start = response.Skip,
+                RecordsTotal = response.TotalCount,
+                Data = ObjectMapper.Map<List<Order>, List<OrderVM>>(response.Items)
             };
 
             return Json(responseModel);
