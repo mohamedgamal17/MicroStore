@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
+using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Security;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
@@ -10,7 +11,6 @@ using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using System.Net;
-
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
     [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser, Roles = ApplicationSecurityRoles.Admin)]
@@ -57,11 +57,24 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return View(model);
             }
 
-            var requestOptions = ObjectMapper.Map<CountryModel, CountryRequestOptions>(model);
+            try
+            {
+                var requestOptions = ObjectMapper.Map<CountryModel, CountryRequestOptions>(model);
 
-            var result = await _countryService.CreateAsync(requestOptions);
+                var result = await _countryService.CreateAsync(requestOptions);
 
-            return RedirectToAction("Index");
+                NotificationManager.Success("Country has been created successfully !");
+
+                return RedirectToAction("Edit", new {id = result.Id});
+            }
+            catch(MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                ex.Erorr.MapToModelState(ModelState);
+
+                return View(model);
+            }
+
+        
         }
 
         [RuleSetForClientSideMessages("*")]
@@ -90,11 +103,23 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return View(model);
             }
 
-            var requestOptions = ObjectMapper.Map<CountryModel, CountryRequestOptions>(model);
+            try
+            {
+                var requestOptions = ObjectMapper.Map<CountryModel, CountryRequestOptions>(model);
 
-            await _countryService.UpdateAsync(model.Id, requestOptions);
+                await _countryService.UpdateAsync(model.Id, requestOptions);
 
-            return RedirectToAction("Edit", new { id = model.Id });
+                NotificationManager.Success("Country has been updated successfully !");
+
+                return RedirectToAction("Edit", new { id = model.Id });
+            }
+            catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                ex.Erorr.MapToModelState(ModelState);
+
+                return View(model);
+            }
+   
         }
 
         [HttpPost]
@@ -145,15 +170,21 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(ModelState);
+                return BadRequest(ModelState);
             }
 
+            try
+            {
+                var requestOptions = ObjectMapper.Map<StateProvinceModel, StateProvinceRequestOptions>(model);
+                var result = await _stateProvinceService.CreateAsync(model.CountryId, requestOptions);
 
-            var requestOptions = ObjectMapper.Map<StateProvinceModel, StateProvinceRequestOptions>(model);
+                return Json(ObjectMapper.Map<StateProvince, StateProvinceVM>(result));
 
-            var result = await _stateProvinceService.CreateAsync(model.CountryId, requestOptions);
-
-            return Json(ObjectMapper.Map<StateProvince, StateProvinceVM>(result));
+            }
+            catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return BadRequest(ex.Erorr);
+            }
         }
 
 
@@ -165,12 +196,19 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return BadRequest(ModelState);
             }
 
-            var requestOptions = ObjectMapper.Map<StateProvinceModel, StateProvinceRequestOptions>(model);
+            try
+            {
+                var requestOptions = ObjectMapper.Map<StateProvinceModel, StateProvinceRequestOptions>(model);
 
-            var result = await _stateProvinceService.UpdateAsync(model.CountryId,model.Id, requestOptions);
+                var result = await _stateProvinceService.UpdateAsync(model.CountryId, model.Id, requestOptions);
 
-           
-            return Json(ObjectMapper.Map<StateProvince, StateProvinceVM>(result));
+                return Json(ObjectMapper.Map<StateProvince, StateProvinceVM>(result));
+            }
+            catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return BadRequest(ex.Erorr);
+            }
+    
         }
 
         [HttpPost]

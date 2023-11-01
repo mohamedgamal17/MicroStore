@@ -21,9 +21,8 @@ namespace MicroStore.Geographic.Application.Models
 
                 RuleFor(x => x.Abbreviation)
                     .NotEmpty()
-                    .WithMessage("Abbreviation cannot be null or empty")
-                    .Length(2)
-                    .WithMessage("Abbreviation exact lenght should be 2");
+                    .WithMessage("Abbreviation cannot be null or empty");
+
             }
         }
     }
