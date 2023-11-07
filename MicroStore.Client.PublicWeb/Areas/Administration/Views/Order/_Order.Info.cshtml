@@ -18,6 +18,18 @@
     }
 
 
+    List<string> subStrings = new List<string>();
+
+    for (int i = 0; i < Model.OrderNumber.Length; i = i + 3)
+    {
+        if (i % 3 == 0)
+        {
+            subStrings.Add(Model.OrderNumber.Substring(i, 3));
+        }
+
+    }
+
+    var formatedOrderNumber = subStrings.JoinAsString(" ");
 
 }
 <abp-card>
@@ -52,7 +64,7 @@
             </abp-column>
             <abp-column size-sm=_9>
                 <div>
-                    @Model.OrderNumber
+                    @formatedOrderNumber
                 </div>
             </abp-column>
         </abp-row>

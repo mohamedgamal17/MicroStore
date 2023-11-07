@@ -29,6 +29,85 @@
 
 
 @section Scripts{
-    <script src="~/js/BackEnd/PaymentRequest/index.js"></script>
+    <script>
+        $(document).ready(function (){
+            var paymentTable = $("#PaymentRequestsTable").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    ajax: {
+                        type: "POST",
+                        data: function (data) {
+                            data.startDate = $("#StartDate").val();
+                            data.endDate = $("#EndDate").val();
+                            data.status = $("#Status").val();
+                            data.minPrice = $("#MinPrice").val();
+                            data.maxPrice = $("#MaxPrice").val();
+                            data.orderNumber = $("#OrderNumber").val();
+                        }
+                    },
+                    serverSide: true,
+                    processing: true,
+                    paging: true,
+                    searching: false,
+
+
+                    columnDefs: [
+                        {
+                            title: 'Order Number',
+                            orderable: false,
+                            render : function(data,type,row){
+                                const orderNumber=  row.orderNumber;
+
+                                const arr= []
+
+                                for(var i = 0; i <orderNumber.length; i++){
+                                    if(i % 3 == 0){
+                                        arr.push(orderNumber.substring(i, i + 3))
+                                    }
+                                }
+
+                                return arr.join("-")
+                            }
+                        },
+                        {
+                            title: 'Total Cost',
+                            data: "totalCost"
+                        },
+                        {
+                            title: 'Status',
+                            data: "status",
+                            orderable: false
+                        },
+                        {
+                            title: 'Created At',
+                            render :function(data,type,row){
+                                var date = new Date(row.createdAt);
+                                return date.toLocaleDateString("en-US",{
+                                    minute : "numeric",
+                                    hour:"numeric",
+                                    day: "numeric",
+                                    month:"numeric",
+                                    year:"numeric"
+                                })
+                            }
+                        },
+                        {
+                            orderable: false,
+                            title: "Actions",
+                            render: function (data, type, row) {
+                                return `<a href="PaymentRequest/Details/${row.id}" class="btn btn-info">View</a>`
+                            }
+                        }
+                    ]
+
+                })
+            );
+
+            $("#Status").select2();
+            $("#AdvancedSearchForm").on('submit', function (evt) {
+                evt.preventDefault();
+                paymentTable.ajax.reload();
+            });
+        })
+    </script>
 
 }

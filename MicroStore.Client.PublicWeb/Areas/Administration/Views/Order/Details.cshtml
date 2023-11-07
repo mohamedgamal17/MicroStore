@@ -6,14 +6,28 @@
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.OrderMenus.View);
+
+    List<string> subStrings = new List<string>();
+
+    for (int i = 0; i < Model.OrderNumber.Length; i = i + 3)
+    {
+        if (i % 3 == 0)
+        {
+            subStrings.Add(Model.OrderNumber.Substring(i, 3));
+        }
+
+    }
+
+    var formatedOrderNumber = subStrings.JoinAsString(" ");
 }
+
 <div>
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">
-                        View order details -  @Model.OrderNumber
+                        View order details -  @formatedOrderNumber
                     </h1>
                     <input type="hidden" value="@Model.Id" id="Id" />
 
