@@ -8,6 +8,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments
     {
         public string Id { get; set; }
         public string OrderId { get; set; }
+        public string OrderNumber { get; set; }
         public string UserId { get; set; }
         public AddressVM Address { get; set; }
         public string ShipmentExternalId { get; set; }

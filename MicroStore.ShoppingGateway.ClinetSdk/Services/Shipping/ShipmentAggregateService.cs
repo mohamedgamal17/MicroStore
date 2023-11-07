@@ -40,6 +40,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
             {
                 Id = shipment.Id,
                 OrderId = shipment.OrderId,
+                OrderNumber = shipment.OrderNumber,
                 UserId = shipment.UserId,
                 ShipmentExternalId = shipment.ShipmentExternalId,
                 ShipmentLabelExternalId = shipment.ShipmentLabelExternalId,

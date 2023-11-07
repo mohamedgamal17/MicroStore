@@ -20,6 +20,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments
         [JsonConverter(typeof(StringEnumConverter))]
         public ShipmentStatus Status { get; set; }
         public List<ShipmentItem> Items { get; set; } = new List<ShipmentItem>();
+        public DateTime? CreatedAt { get; set; }
+
     }
 
 

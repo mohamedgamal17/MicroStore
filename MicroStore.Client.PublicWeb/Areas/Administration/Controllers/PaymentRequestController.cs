@@ -39,7 +39,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             var responseModel = new PaymentRequestListModel
             {
                 Start = model.Start,
-                RecordsTotal = model.RecordsTotal,
+                RecordsTotal = data.TotalCount,
                 Length = model.Length,
                 Draw = model.Draw,
                 Data = ObjectMapper.Map<List<PaymentRequest>, List<PaymentRequestVM>>(data.Items),

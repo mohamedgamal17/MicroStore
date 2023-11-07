@@ -60,7 +60,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             var responseModel = new ShipmentListModel
             {
                 Start = model.Start,
-                RecordsTotal = model.RecordsTotal,
+                RecordsTotal = data.TotalCount,
                 Length = model.Length,
                 Draw = model.Draw,
                 Data = ObjectMapper.Map<List<Shipment>, List<ShipmentVM>>(data.Items)

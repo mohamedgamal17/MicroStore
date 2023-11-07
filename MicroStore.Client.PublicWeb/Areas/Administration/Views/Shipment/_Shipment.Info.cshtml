@@ -1,4 +1,19 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentAggregateVM
+@{
+    List<string> subStrings = new List<string>();
+
+    for (int i = 0; i < Model.OrderNumber.Length; i = i + 3)
+    {
+        if (i % 3 == 0)
+        {
+            subStrings.Add(Model.OrderNumber.Substring(i, 3));
+        }
+
+    }
+
+    var formatedOrderNumber = subStrings.JoinAsString(" ");
+}
+
 <abp-card>
     <abp-card-header>
         <abp-card-title class="text-lg">
@@ -12,11 +27,11 @@
         <abp-row class="form-group">
             <abp-column size-sm=_3>
                 <div class="float-right">
-                    <micro-label asp-for="@Model.Id" text-size=Lg />
+                    <micro-label asp-for="@Model.Id"  />
                 </div>
             </abp-column>
             <abp-column>
-                <div class="text-lg">
+                <div >
                     @Model.Id
                 </div>
             </abp-column>
@@ -25,12 +40,12 @@
         <abp-row class="form-group">
             <abp-column size-sm=_3>
                 <div class="float-right">
-                    <micro-label asp-for="@Model.OrderId" text-size=Lg />
+                    <micro-label asp-for="@Model.OrderNumber"  />
                 </div>
             </abp-column>
             <abp-column>
                 <div class="text-lg">
-                   <a asp-action="Details" asp-controller="Order" asp-route-id=@Model.OrderId> @Model.OrderId</a>
+                    <a asp-action="Details" asp-controller="Order" asp-route-id=@Model.OrderId> @formatedOrderNumber</a>
                 </div>
             </abp-column>
         </abp-row>
@@ -38,11 +53,11 @@
         <abp-row class="form-group">
             <abp-column size-sm=_3>
                 <div class="float-right">
-                    <micro-label asp-for="@Model.UserId" text-size=Lg />
+                    <micro-label asp-for="@Model.UserId"  />
                 </div>
             </abp-column>
             <abp-column>
-                <div class="text-lg">
+                <div >
                     @Model.UserId
                 </div>
             </abp-column>
@@ -50,11 +65,11 @@
         <abp-row class="form-group">
             <abp-column size-sm=_3>
                 <div class="float-right">
-                    <micro-label asp-for="@Model.SystemName" text-size=Lg />
+                    <micro-label asp-for="@Model.SystemName" />
                 </div>
             </abp-column>
             <abp-column>
-                <div class="text-lg">
+                <div >
                     @Model.SystemName
                 </div>
             </abp-column>
@@ -62,11 +77,11 @@
         <abp-row class="form-group">
             <abp-column size-sm=_3>
                 <div class="float-right">
-                    <micro-label asp-for="@Model.Status" text-size=Lg />
+                    <micro-label asp-for="@Model.Status"  />
                 </div>
             </abp-column>
             <abp-column>
-                <div class="text-lg">
+                <div >
                     @Model.Status
                 </div>
             </abp-column>
@@ -74,11 +89,11 @@
         <abp-row class="form-group">
             <abp-column size-sm=_3>
                 <div class="float-right">
-                    <micro-label asp-for="@Model.ShipmentExternalId" text-size=Lg />
+                    <micro-label asp-for="@Model.ShipmentExternalId"  />
                 </div>
             </abp-column>
             <abp-column>
-                <div class="text-lg">
+                <div>
                     @Model.ShipmentExternalId
                 </div>
             </abp-column>
@@ -86,11 +101,11 @@
         <abp-row class="form-group">
             <abp-column size-sm=_3>
                 <div class="float-right">
-                    <micro-label asp-for="@Model.ShipmentLabelExternalId" text-size=Lg />
+                    <micro-label asp-for="@Model.ShipmentLabelExternalId"  />
                 </div>
             </abp-column>
             <abp-column>
-                <div class="text-lg">
+                <div >
                     @Model.ShipmentLabelExternalId
                 </div>
             </abp-column>
@@ -98,11 +113,11 @@
         <abp-row class="form-group">
             <abp-column size-sm=_3>
                 <div class="float-right">
-                    <micro-label asp-for="@Model.TrackingNumber" text-size=Lg />
+                    <micro-label asp-for="@Model.TrackingNumber" />
                 </div>
             </abp-column>
             <abp-column>
-                <div class="text-lg">
+                <div >
                     @Model.TrackingNumber
                 </div>
             </abp-column>

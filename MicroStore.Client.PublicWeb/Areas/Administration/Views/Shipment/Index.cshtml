@@ -22,5 +22,89 @@
 </div>
 
 @section Scripts{
-    <abp-script src="/js/BackEnd/Shipment/index.js"></abp-script>
+    <script>
+        $(document).ready(function(){
+            var shipmentTable = $("#ShipmentTable").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    ajax: {
+                        method: "POST",
+                        data: function (data) {
+                            data.startDate = $("#StartDate").val();
+                            data.endDate = $("#EndDate").val();
+                            data.status = $("#Status").val();
+                            data.country = $("#Country").val();
+                            data.trackingNumber = $("#TrackingNumber").val();
+                            data.orderNumber = $("#OrderNumber").val();
+                        }
+                    },
+                    processing: true,
+                    paging: true,
+                    serverSide: true,
+                    searching: false,
+                    columnDefs: [
+                        {
+                            title: "Order Number",
+                            data: "orderNumber",
+                            render: function (data, type, row) {
+                                const orderNumber = row.orderNumber;
+
+                                const arr = []
+
+                                for (var i = 0; i < orderNumber.length; i++) {
+                                    if (i % 3 == 0) {
+                                        arr.push(orderNumber.substring(i, i + 3))
+                                    }
+                                }
+
+                                return arr.join(" ")
+                            }
+                        },
+                        {
+                            title: "User Id",
+                            data: "userId",
+                            orderable: false,
+                        },
+                        {
+                            title: "Status",
+                            data: "status",
+                            orderable: false,
+                        },
+                        {
+                            title: "Created At",
+                            render: function(data,type, row){
+                                const date = new Date(row.createdAt);
+                                return date.toLocaleDateString("en-US", {
+                                    minute: "numeric",
+                                    hour: "numeric",
+                                    day: "numeric",
+                                    month: "numeric",
+                                    year: "numeric"
+                                });
+                            }
+                        },
+
+                        {
+                            orderable: false,
+                            title: "Action",
+                            render: function (data, type, row) {
+                                return `<a href="Shipment/Details/${row.id}" class="btn btn-info">View</a>`
+                            }
+
+                        }
+                    ]
+
+                })
+            );
+
+            $("#Status").select2();
+
+            $("#Country").select2();
+
+
+            $("#AdvancedSearchForm").on('submit', function (evt) {
+                evt.preventDefault();
+                shipmentTable.ajax.reload();
+            });
+        })
+    </script>
 }
