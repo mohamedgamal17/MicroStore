@@ -3,21 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Application.Products;
-using MicroStore.Catalog.Entities.ElasticSearch;
-
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/products")]
     [ApiController]
     public class ProductController : MicroStoreApiController
     {
-
         private readonly IProductCommandService _productCommandService;
 
         private readonly IProductQueryService _productQueryService;
@@ -113,7 +109,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{productId}/productimages")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductImageDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> AddProductImage(string productId, [FromBody] CreateProductImageModel model)
         {
@@ -133,7 +129,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{productId}/productimages/{productImageId}")]
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductImageDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> UpdateProductImage(string productId, string productImageId, [FromBody] UpdateProductImageModel model)
         {
@@ -150,13 +146,13 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{productId}/productimages/{productImageId}")]
         [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> DeleteProductImage(string productId, string productImageId)
         {
             var result = await _productCommandService.DeleteProductImageAsync(productId, productImageId);
 
-            return result.ToOk();
+            return result.ToNoContent();
         }
 
         [Route("{productId}/productspecificationattributes")]

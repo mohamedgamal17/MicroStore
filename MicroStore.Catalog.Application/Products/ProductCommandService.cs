@@ -146,7 +146,7 @@ namespace MicroStore.Catalog.Application.Products
 
         }
 
-       public async Task<Result<ProductDto>> AddProductImageAsync(string productId, CreateProductImageModel model, CancellationToken cancellationToken = default)
+       public async Task<Result<ProductImageDto>> AddProductImageAsync(string productId, CreateProductImageModel model, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository
                 .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
@@ -154,7 +154,7 @@ namespace MicroStore.Catalog.Application.Products
 
             if (product == null)
             {
-                return new Result<ProductDto>(new EntityNotFoundException(typeof(Product), productId));
+                return new Result<ProductImageDto>(new EntityNotFoundException(typeof(Product), productId));
 
             }
 
@@ -170,47 +170,47 @@ namespace MicroStore.Catalog.Application.Products
             await _productRepository.UpdateAsync(product, cancellationToken : cancellationToken);
 
 
-            return ObjectMapper.Map<Product, ProductDto>(product);
+            return ObjectMapper.Map<ProductImage, ProductImageDto>(productImage);
         }
 
-        public async Task<Result<ProductDto>> UpdateProductImageAsync(string productId, string productImageId, UpdateProductImageModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductImageDto>> UpdateProductImageAsync(string productId, string productImageId, UpdateProductImageModel model, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository
                 .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
 
             if (product == null)
             {
-                return new Result<ProductDto>(new EntityNotFoundException(typeof(Product), productId));
+                return new Result<ProductImageDto>(new EntityNotFoundException(typeof(Product), productId));
 
             }
             var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
 
             if(productImage == null)
             {
-                return new Result<ProductDto>(new EntityNotFoundException(typeof(ProductImage), productImageId));
+                return new Result<ProductImageDto>(new EntityNotFoundException(typeof(ProductImage), productImageId));
             }
 
             productImage.DisplayOrder = model.DisplayOrder;
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 
-            return ObjectMapper.Map<Product, ProductDto>(product);
+            return ObjectMapper.Map<ProductImage, ProductImageDto>(productImage);
         }
-        public async Task<Result<ProductDto>> DeleteProductImageAsync(string productId, string productImageId, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> DeleteProductImageAsync(string productId, string productImageId, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository
                 .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
 
             if (product == null)
             {
-                return new Result<ProductDto>(new EntityNotFoundException(typeof(Product), productId));
+                return new Result<Unit>(new EntityNotFoundException(typeof(Product), productId));
 
             }
             var productImage = product.ProductImages.SingleOrDefault(x => x.Id == productImageId);
 
             if (productImage == null)
             {
-                return new Result<ProductDto>(new EntityNotFoundException(typeof(ProductImage), productImageId));
+                return new Result<Unit>(new EntityNotFoundException(typeof(ProductImage), productImageId));
             }
 
 
@@ -218,7 +218,7 @@ namespace MicroStore.Catalog.Application.Products
 
             await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
 
-            return ObjectMapper.Map<Product, ProductDto>(product);
+            return Unit.Value;
         }
 
         private async Task<Result<Unit>> ValidateProduct(ProductModel model , string? productId = null)
