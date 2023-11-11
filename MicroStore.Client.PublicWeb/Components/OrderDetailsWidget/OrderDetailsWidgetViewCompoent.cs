@@ -19,7 +19,7 @@ namespace MicroStore.Client.PublicWeb.Components.OrderDetailsWidget
 
         public async Task<IViewComponentResult> InvokeAsync(Guid orderId)
         {
-            var order = await _userOrderService.Retrieve(orderId);
+            var order = await _userOrderService.GetAsync(orderId);
 
             var viewModel = new OrderDetailsWidgetViewModel
             {

@@ -34,7 +34,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         private readonly ManufacturerService _manufacturerService;
 
         private readonly ProductAnalysisService _productAnalysisService;
-        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IBlobContainer<MultiMediaBlobContainer> blobContainer, ManufacturerService manufacturerService, ProductAnalysisService productAnalysisService)
+
+        private readonly ProductImageService _productImageService;
+        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IBlobContainer<MultiMediaBlobContainer> blobContainer, ManufacturerService manufacturerService, ProductAnalysisService productAnalysisService, ProductImageService productImageService)
         {
             _productService = productService;
             _categoryService = categoryService;
@@ -42,6 +44,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             _blobContainer = blobContainer;
             _manufacturerService = manufacturerService;
             _productAnalysisService = productAnalysisService;
+            _productImageService = productImageService;
         }
 
         public async Task<IActionResult> Index()
@@ -194,7 +197,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> ListProductImages(string id, ListProductImagesModel model)
         {
-            var productImages = await _productService.ListProductImageAsync(id);
+            var productImages = await _productImageService.ListAsync(id);
 
             var result = ObjectMapper.Map<List<ProductImage>, List<ProductImageVM>>(productImages);
 
@@ -238,9 +241,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 DisplayOrder = model.DisplayOrder
             };
 
-            var result = await _productService.CreateProductImageAsync(model.ProductId, requestOptions);
+            var result = await _productImageService.CreateAsync(model.ProductId, requestOptions);
 
-            return Json(ObjectMapper.Map<Product, ProductVM>(result));
+            return Json(ObjectMapper.Map<ProductImage, ProductImageVM>(result));
         }
 
         [RuleSetForClientSideMessages("*")]
@@ -250,14 +253,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _productService.ListProductImageAsync(productId);
-
-            var productImage = result.SingleOrDefault(x => x.Id == productImageId);
-
-            if (productImage == null)
-            {
-                return BadRequest("product image is not exist");
-            }
+            var productImage = await _productImageService.GetAsync(productId,productImageId);
 
             var model = new UpdateProductImageModel
             {
@@ -283,9 +279,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 DisplayOrder = model.DisplayOrder
             };
 
-            var result = await _productService.UpdateProductImageAsync(model.ProductId, model.ProductImageId, requestOptions);
+            var result = await _productImageService.UpdateAsync(model.ProductId, model.ProductImageId, requestOptions);
 
-            return Json(ObjectMapper.Map<Product, ProductVM>(result));
+            return Json(ObjectMapper.Map<ProductImage, ProductImageVM>(result));
 
         }
 
@@ -299,9 +295,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _productService.DeleteProductImageAsync(model.ProductId, model.ProductImageId);
+            await _productImageService.DeleteAsync(model.ProductId, model.ProductImageId);
 
-            return Json(ObjectMapper.Map<Product, ProductVM>(result));
+            return NoContent();
 
         }
 

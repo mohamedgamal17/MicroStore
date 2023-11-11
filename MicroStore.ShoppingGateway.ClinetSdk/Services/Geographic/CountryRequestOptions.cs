@@ -7,4 +7,9 @@
         public string ThreeLetterIsoCode { get; set; }
         public int NumericIsoCode { get; set; }
     }
+
+    public class CountryListRequestOptions
+    {
+        public string  Name{ get; set; }
+    }
 }

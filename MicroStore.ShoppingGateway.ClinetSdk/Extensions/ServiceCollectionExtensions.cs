@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MicroStore.ShoppingGateway.ClinetSdk;
 using System.Reflection;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
 {
@@ -30,7 +29,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
         {
             var types = Assembly.GetExecutingAssembly().GetTypes()
                                 .Where(x => x.Name.EndsWith("Service"))
-                                .Where(x => x.IsClass)
+                                .Where(x => x.IsClass  && !x.IsAbstract)
                                 .ToList();
 
 

@@ -45,7 +45,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
         {
             try
             {
-                UserProfile = await _userProfileService.GetProfileAsync();
+                UserProfile = await _userProfileService.GetAsync();
 
                 await next();
 
@@ -89,7 +89,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
             try
             {
-                await _userProfileService.UpdateProfileAsync(requestOptions);
+                await _userProfileService.UpdateAsync(requestOptions);
 
                 return RedirectToPage("/Profile/Index");
             }

@@ -1,24 +1,17 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 {
-    public class ShipmentRateService
+    public class ShipmentRateService : Service
     {
         const string BaseUrl = "/shipping/rates";
 
-        private readonly MicroStoreClinet _microStoreClinet;
-
-        public ShipmentRateService(MicroStoreClinet microStoreClinet)
+        public ShipmentRateService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
         {
-            _microStoreClinet = microStoreClinet;
         }
-
-
-     
-
-        public async Task<List<EstimatedRate>> EstimateAsync(ShipmentRateEstimateRequestOptions options , CancellationToken cancellationToken = default )
+        public async Task<List<EstimatedRate>> EstimateAsync(ShipmentRateEstimateRequestOptions options , RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default )
         {
-            return await _microStoreClinet.MakeRequest<List<EstimatedRate>>(BaseUrl + "/" + "estimate", HttpMethod.Post, options,cancellationToken);
+            return await MakeRequestAsync<List<EstimatedRate>>(BaseUrl + "/" + "estimate", HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
         }
     }
 }

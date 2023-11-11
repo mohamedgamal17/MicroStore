@@ -29,6 +29,8 @@ using FluentValidation.AspNetCore;
 using Volo.Abp.FluentValidation;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
+
 namespace MicroStore.Client.PublicWeb
 {
     [DependsOn(typeof(MicroStoreAspNetCoreUIModule),
@@ -83,6 +85,7 @@ namespace MicroStore.Client.PublicWeb
 
             context.Services.AddMicroStoreClinet()
                 .AddUserAccessTokenHandler();
+
 
             Configure<AbpNavigationOptions>(opt =>
             {
@@ -209,7 +212,8 @@ namespace MicroStore.Client.PublicWeb
                options.ResponseType = "code";
                options.ClaimActions.MapInBoundCustomClaims();
                appsettings.Security.Client.Scopes.ForEach((scp) => options.Scope.Add(scp));
-               options.SaveTokens = true;             
+               options.SaveTokens = true;
+
            });
 
             services.AddAccessTokenManagement();

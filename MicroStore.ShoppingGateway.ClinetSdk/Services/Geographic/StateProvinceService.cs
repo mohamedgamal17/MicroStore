@@ -1,47 +1,47 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
+using MicroStore.ShoppingGateway.ClinetSdk.Interfaces;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic
 {
-    public class StateProvinceService
+    public class StateProvinceService  : Service,
+        INestedListable<StateProvince>,
+        INestedRetrievable<StateProvince>,
+        INestedCreatable<StateProvince, StateProvinceRequestOptions>,
+        INestedUpdateable<StateProvince,StateProvinceRequestOptions>,
+        INestedDeletable
     {
         const string BASE_URL = "/geographic/countries/{0}/states";
 
-
-        private readonly MicroStoreClinet _microStoreClient;
-
-        public StateProvinceService(MicroStoreClinet microStoreClient)
+        public StateProvinceService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
         {
-            _microStoreClient = microStoreClient;
         }
 
-
-        public async Task<StateProvince> CreateAsync(string countryId ,StateProvinceRequestOptions request, CancellationToken cancellationToken = default)
+        public async Task<List<StateProvince>> ListAsync(string parentId, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClient.MakeRequest<StateProvince>(string.Format(BASE_URL, countryId), HttpMethod.Post, request, cancellationToken);
+            return await MakeRequestAsync<List<StateProvince>>(string.Format(BASE_URL, parentId), HttpMethod.Get,requestHeaderOptions: requestHeaderOptions, cancellationToken: cancellationToken);
+        }
+        public async Task<StateProvince> CreateAsync(string parentId ,StateProvinceRequestOptions request, RequestHeaderOptions requestHeaderOption = null, CancellationToken cancellationToken = default)
+        {
+            return await MakeRequestAsync<StateProvince>(string.Format(BASE_URL, parentId), HttpMethod.Post, request,requestHeaderOption ,cancellationToken);
         }
 
-        public async Task<StateProvince> UpdateAsync(string countryId , string stateId , StateProvinceRequestOptions request, CancellationToken cancellationToken = default)
+        public async Task<StateProvince> UpdateAsync(string parentId, string id , StateProvinceRequestOptions request, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClient.MakeRequest<StateProvince>(string.Format(BASE_URL,countryId) + "/" + stateId, HttpMethod.Put, request, cancellationToken);
+            return await MakeRequestAsync<StateProvince>(string.Format(BASE_URL, parentId) + "/" + id, HttpMethod.Put, request, requestHeaderOptions, cancellationToken);
         }
-        public async Task DeleteAsync(string countryId, string stateId , CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(string parentId, string id ,RequestHeaderOptions requestHeaderOptions = null , CancellationToken cancellationToken = default)
         {
-             await _microStoreClient.MakeRequest(string.Format(BASE_URL, countryId) + "/" + stateId, HttpMethod.Delete,  cancellationToken);
+             await MakeRequestAsync(string.Format(BASE_URL, parentId) + "/" + id, HttpMethod.Delete, requestHeaderOptions: requestHeaderOptions ,cancellationToken: cancellationToken);
         }
-
-        public async Task<List<StateProvince>> ListAsync(string countryId, CancellationToken cancellationToken = default)
+        public async Task<StateProvince> GetAsync(string parentId, string id, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClient.MakeRequest<List<StateProvince>>(string.Format(BASE_URL, countryId), HttpMethod.Get,  cancellationToken);
-        }
-
-        public async Task<StateProvince> GetAsync(string countryId, string stateId, CancellationToken cancellationToken = default)
-        {
-            return await _microStoreClient.MakeRequest<StateProvince>(string.Format(BASE_URL, countryId) + "/" + stateId, HttpMethod.Get, cancellationToken);
+            return await MakeRequestAsync<StateProvince>(string.Format(BASE_URL, parentId) + "/" + id, HttpMethod.Get, requestHeaderOptions: requestHeaderOptions ,cancellationToken: cancellationToken);
         }
 
-        public async Task<StateProvince> GetByCodeAsync(string countryCode, string stateCode, CancellationToken cancellationToken = default)
+        public async Task<StateProvince> GetByCodeAsync(string countryCode, string stateCode, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClient.MakeRequest<StateProvince>(string.Format(BASE_URL, $"code/{ countryCode}") + "/code/" + stateCode, HttpMethod.Get, cancellationToken);
+            return await MakeRequestAsync<StateProvince>(string.Format(BASE_URL, $"code/{countryCode}") + "/code/" + stateCode, HttpMethod.Get,requestHeaderOptions: requestHeaderOptions,cancellationToken: cancellationToken);
         }
     }
 }

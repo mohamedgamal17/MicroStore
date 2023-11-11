@@ -1,23 +1,22 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 {
-    public class ShipmentSettingsService
+    public class ShipmentSettingsService : Service
     {
         const string BASE_URL = "/shipping/settings";
 
-        private readonly MicroStoreClinet _microStoreClient;
+        public ShipmentSettingsService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
+        {
+        }
 
-        public ShipmentSettingsService(MicroStoreClinet microStoreClient)
+        public async Task<ShipmentSettings> GetAsync(RequestHeaderOptions requestHeaderOptions = null,CancellationToken cancellationToken = default)
         {
-            _microStoreClient = microStoreClient;
+           return await MakeRequestAsync<ShipmentSettings>(BASE_URL, HttpMethod.Get, cancellationToken: cancellationToken);
         }
-        public async Task<ShipmentSettings> RetriveShipmentSettingsAsync(CancellationToken cancellationToken = default)
+        public async Task<ShipmentSettings> UpdateAsync(ShipmentSettingsRequestOptions options = null, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
-           return await _microStoreClient.MakeRequest<ShipmentSettings>(BASE_URL, HttpMethod.Get, cancellationToken: cancellationToken);
-        }
-        public async Task<ShipmentSettings> UpdateShipmentSettingsAsync(ShipmentSettingsRequestOptions options, CancellationToken cancellationToken = default)
-        {
-            return await _microStoreClient.MakeRequest<ShipmentSettings>(BASE_URL, HttpMethod.Post, options, cancellationToken);
+            return await MakeRequestAsync<ShipmentSettings>(BASE_URL, HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
         }
     }
 }

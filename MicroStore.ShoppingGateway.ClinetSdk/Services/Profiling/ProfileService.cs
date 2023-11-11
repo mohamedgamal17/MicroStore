@@ -1,31 +1,30 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
+using MicroStore.ShoppingGateway.ClinetSdk.Interfaces;
+
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling
 {
-    public class ProfileService
+    public class ProfileService : Service,
+        IListableWithPaging<User, PagingReqeustOptions>,
+        IRetrievable<User>
     {
         const string BaseUrl = "/profiling/profile";
 
-        private readonly MicroStoreClinet _microStoreClient;
-
-        public ProfileService(MicroStoreClinet microStoreClient)
+        public ProfileService(MicroStoreClinet microStoreClinet) 
+            : base(microStoreClinet)
         {
-            _microStoreClient = microStoreClient;
         }
 
-        public async Task<PagedList<User>> ListAsync(PagingReqeustOptions options,CancellationToken cancellationToken = default)
-        {
-       
-            return await _microStoreClient.MakeRequest<PagedList<User>>(BaseUrl, HttpMethod.Get,options,cancellationToken);
+        public async Task<PagedList<User>> ListAsync(PagingReqeustOptions options,RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
+        {     
+            return await MakeRequestAsync<PagedList<User>>(BaseUrl, HttpMethod.Get,options, requestHeaderOptions, cancellationToken);
         }
-        public async Task<User> GetUserAsync(string userId, CancellationToken cancellationToken = default)
+        public async Task<User> GetAsync(string id, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
-            string path = string.Format("{0}/{1}", BaseUrl, userId);
+            string path = string.Format("{0}/{1}", BaseUrl, id);
 
-            return await _microStoreClient.MakeRequest<User>(path, HttpMethod.Get, cancellationToken: cancellationToken);
+            return await MakeRequestAsync<User>(path, HttpMethod.Get,requestHeaderOptions: requestHeaderOptions ,cancellationToken: cancellationToken);
         }
-
-
-
     }
 }

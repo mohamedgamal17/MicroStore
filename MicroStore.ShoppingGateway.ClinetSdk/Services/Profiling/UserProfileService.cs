@@ -2,68 +2,28 @@
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling
 {
-    public class UserProfileService
+    public class UserProfileService : Service
     {
         const string BaseUrl = "/profiling/user/profile";
 
-        private readonly MicroStoreClinet _microStoreClient;
 
-        public UserProfileService(MicroStoreClinet microStoreClient)
+        public UserProfileService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
         {
-            _microStoreClient = microStoreClient;
         }
 
-        public async Task<User> CreateProfileAsync(ProfileRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<User> CreateAsync(ProfileRequestOptions options, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-             return await _microStoreClient.MakeRequest<User>(BaseUrl,HttpMethod.Post, options, cancellationToken);
+             return await MakeRequestAsync<User>(BaseUrl,HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
         }
 
-
-        public async Task<User> UpdateProfileAsync(ProfileRequestOptions options, CancellationToken cancellationToken =  default)
+        public async Task<User> UpdateAsync(ProfileRequestOptions options,RequestHeaderOptions requestHeaderOptions =  null ,CancellationToken cancellationToken =  default)
         {
-            return await _microStoreClient.MakeRequest<User>(BaseUrl,HttpMethod.Put,options, cancellationToken); 
+            return await MakeRequestAsync<User>(BaseUrl,HttpMethod.Put,options,requestHeaderOptions ,cancellationToken); 
         }
 
-
-        public async Task<User> GetProfileAsync(CancellationToken cancellationToken = default)
+        public async Task<User> GetAsync(RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClient.MakeRequest<User>(BaseUrl,HttpMethod.Get,cancellationToken);
+            return await MakeRequestAsync<User>(BaseUrl,HttpMethod.Get,requestHeaderOptions: requestHeaderOptions,cancellationToken: cancellationToken);
         }
-
-        public async Task<List<Address>> ListAddressesAsync(CancellationToken cancellationToken = default)
-        {
-            string path = string.Format("{0}/{1}", BaseUrl, "addresses");
-
-            return await _microStoreClient.MakeRequest<List<Address>>(path,HttpMethod.Get,cancellationToken);
-        } 
-
-        public async Task<Address> GetAddressAsync(string id , CancellationToken cancellationToken = default)
-        {
-            string path = string.Format("{0}/{1}/{2}", BaseUrl, "addresses", id);
-
-            return await _microStoreClient.MakeRequest<Address>(path,HttpMethod.Get,cancellationToken);
-        }
-
-        public async Task<Address> CreateAddressAsync(AddressRequestOptions options,CancellationToken cancellationToken = default)
-        {
-            string path = string.Format("{0}/{1}", BaseUrl, "addresses");
-
-            return await _microStoreClient.MakeRequest<Address>(path,HttpMethod.Post,options, cancellationToken);
-        }
-
-        public async Task<Address> UpdateAddressAsync(string id , AddressRequestOptions options,CancellationToken cancellationToken = default)
-        {
-            string path = string.Format("{0}/{1}/{2}", BaseUrl, "addresses", id);
-
-            return await _microStoreClient.MakeRequest<Address>(path,HttpMethod.Put,options,cancellationToken);
-        }
-
-        public async Task<Address> RemoveAddressAsync(string id , CancellationToken cancellationToken = default)
-        {
-            string path = string.Format("{0}/{1}/{2}", BaseUrl, "addresses", id);
-
-            return await _microStoreClient.MakeRequest<Address>(path, HttpMethod.Delete, cancellationToken: cancellationToken);
-        }
-
     }
 }

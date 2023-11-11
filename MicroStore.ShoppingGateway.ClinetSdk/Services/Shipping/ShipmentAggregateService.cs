@@ -21,7 +21,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 
         public async Task<ShipmentAggregate> GetAsync(string shipmentId , CancellationToken cancellationToken = default)
         {
-            var shipment = await _shipmentService.GetAsync(shipmentId, cancellationToken);
+            var shipment = await _shipmentService.GetAsync(shipmentId, cancellationToken: cancellationToken);
 
             var addressAggregate = await PrepareAddressAggregate(shipment.Address);
 
@@ -55,7 +55,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
         {
             var country = await _countryService.GetByCodeAsync(address.CountryCode, cancellationToken);
 
-            var stateProvince = await _stateProvinceService.GetByCodeAsync(address.CountryCode, address.State, cancellationToken);
+            var stateProvince = await _stateProvinceService.GetByCodeAsync(address.CountryCode, address.State, cancellationToken: cancellationToken);
 
             return new AddressAggregate
             {

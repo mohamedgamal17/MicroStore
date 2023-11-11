@@ -20,23 +20,26 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 
         private readonly UINotificationManager _notificatioManager;
 
+        private readonly UserAddressService _userAddressService;
+
         [BindProperty]
         public AddressModel Address { get; set; }
 
         public List<Country> Countries { get; set; }
 
         public List<StateProvince> StateProvinces { get; set; }
-        public EditModel(UserProfileService userProfileService, CountryService countryService, UINotificationManager notificatioManager, StateProvinceService stateProvinceService)
+        public EditModel(UserProfileService userProfileService, CountryService countryService, UINotificationManager notificatioManager, StateProvinceService stateProvinceService, UserAddressService userAddressService)
         {
             _userProfileService = userProfileService;
             _countryService = countryService;
             _notificatioManager = notificatioManager;
             _stateProvinceService = stateProvinceService;
+            _userAddressService = userAddressService;
         }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            var address = await _userProfileService.GetAddressAsync(id);
+            var address = await _userAddressService.GetAsync(id);
 
             Address = PreapreAddressModel(address);
 
@@ -69,7 +72,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 
             try
             {
-                await _userProfileService.UpdateAddressAsync(Address.Id, requestOptions);
+                await _userAddressService.UpdateAsync(Address.Id, requestOptions);
 
 
                 _notificatioManager.Success("address has been updated!");

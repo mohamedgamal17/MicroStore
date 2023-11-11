@@ -101,7 +101,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
             try
             {
-                await _userProfileService.CreateProfileAsync(requestOptions);
+                await _userProfileService.CreateAsync(requestOptions);
 
                 uINotificationManager.Success("Your profile has been successfully updated!");
 
@@ -121,7 +121,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
         {
             try
             {
-                var profile = await _userProfileService.GetProfileAsync();
+                var profile = await _userProfileService.GetAsync();
 
                 return true;
             }

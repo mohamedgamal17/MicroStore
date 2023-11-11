@@ -179,7 +179,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         private async Task PrepareShipmentRates(string shipmentId)
         {
-            ViewBag.ShipmentRates = await _shipmentService.RetrieveRatesAsync(shipmentId);
+            ViewBag.ShipmentRates = await _shipmentService.ListRatesAsync(shipmentId);
         }
 
 

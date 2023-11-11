@@ -1,46 +1,46 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
+using MicroStore.ShoppingGateway.ClinetSdk.Interfaces;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Billing
 {
-    public class UserPaymentRequestService
+    public class UserPaymentRequestService : Service,
+        IListableWithPaging<PaymentRequest, PagingReqeustOptions>,
+        ICreatable<PaymentRequest, PaymentRequestOptions>,
+        IRetrievable<PaymentRequest>
     {
         const string BaseUrl = "/billing/user/payments";
 
-        private readonly MicroStoreClinet _microStoreClinet;
-
-        public UserPaymentRequestService(MicroStoreClinet microStoreClinet)
+        public UserPaymentRequestService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
         {
-            _microStoreClinet = microStoreClinet;
         }
 
-        public Task<PaymentRequest> CreateAsync(PaymentRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<PaymentRequest> CreateAsync(PaymentRequestOptions options = null, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
-            return _microStoreClinet.MakeRequest<PaymentRequest>(BaseUrl, HttpMethod.Post, options, cancellationToken);
-        }
-        public async Task<PaymentProcess> ProcessAsync(string paymentId, PaymentProcessRequestOptions options, CancellationToken cancellationToken = default)
-        {
-            return await _microStoreClinet.MakeRequest<PaymentProcess>(string.Format("{0}/process/{1}", BaseUrl, paymentId), HttpMethod.Post, options, cancellationToken);
+            return await MakeRequestAsync<PaymentRequest>(BaseUrl, HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
         }
 
-        public async Task<PaymentRequest> CompleteAsync(string paymentId, PaymentCompleteRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<PaymentProcess> ProcessAsync(string paymentId, PaymentProcessRequestOptions options, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
-
-            return await _microStoreClinet.MakeRequest<PaymentRequest>(string.Format("{0}/complete/{1}", BaseUrl, paymentId), HttpMethod.Post, options, cancellationToken);
-        }
-        public async Task< PagedList<PaymentRequestList>> ListAsync(PagingReqeustOptions options, CancellationToken cancellationToken = default)
-        {
-            return await _microStoreClinet.MakeRequest<PagedList<PaymentRequestList>>(BaseUrl, HttpMethod.Get, options, cancellationToken);
+            return await MakeRequestAsync<PaymentProcess>(string.Format("{0}/process/{1}", BaseUrl, paymentId), HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
         }
 
-        public async Task<PaymentRequest> Retrieve(string paymentId, CancellationToken cancellationToken = default)
+        public async Task<PagedList<PaymentRequest>> ListAsync(PagingReqeustOptions options, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<PaymentRequest>(string.Format("{0}/{1}", BaseUrl, paymentId), HttpMethod.Get, cancellationToken);
+            return await MakeRequestAsync<PagedList<PaymentRequest>>(BaseUrl, HttpMethod.Get, options, requestHeaderOptions, cancellationToken);
         }
 
-        public async Task<PaymentRequest> RetrieveByOrderAsync(string orderId, CancellationToken cancellationToken = default)
+
+        public async Task<PaymentRequest> GetAsync(string id, RequestHeaderOptions requestHeaderOptions = null
+        , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<PaymentRequest>(string.Format("{0}/order_id/{1}", BaseUrl, orderId), HttpMethod.Get, cancellationToken: cancellationToken);
+            return await MakeRequestAsync<PaymentRequest>(string.Format("{0}/{1}", BaseUrl, id), HttpMethod.Get, requestHeaderOptions: requestHeaderOptions, cancellationToken: cancellationToken);
+        }
+
+        public async Task<PaymentRequest> GetByOrderAsync(string orderId, CancellationToken cancellationToken = default)
+        {
+            return await MakeRequestAsync<PaymentRequest>(string.Format("{0}/order_id/{1}", BaseUrl, orderId), HttpMethod.Get, cancellationToken: cancellationToken);
         }
 
     }

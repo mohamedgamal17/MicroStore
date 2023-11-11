@@ -3,20 +3,17 @@ using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 {
-    public class AddressService
+    public class AddressService : Service
     {
         const string BaseUrl = "/shipping/addresses";
 
-        private readonly MicroStoreClinet _microStoreClient;
-
-        public AddressService(MicroStoreClinet microStoreClient)
+        public AddressService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
         {
-            _microStoreClient = microStoreClient;
         }
 
-        public Task<AddressValidation> ValidateAsync(Address address , CancellationToken cancellationToken = default)
+        public async Task<AddressValidation> ValidateAsync(Address address ,RequestHeaderOptions requestHeaderOptions = null  ,CancellationToken cancellationToken = default)
         {
-            return _microStoreClient.MakeRequest<AddressValidation>(BaseUrl + "/"+ "validate",HttpMethod.Post, address, cancellationToken);
+            return await MakeRequestAsync<AddressValidation>(BaseUrl + "/"+ "validate",HttpMethod.Post, address, requestHeaderOptions,cancellationToken);
         }
     }
 }

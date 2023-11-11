@@ -33,7 +33,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
         {
             try
             {
-                UserProfile = await _userPorfileService.GetProfileAsync();
+                UserProfile = await _userPorfileService.GetAsync();
 
                 await next();
 
@@ -68,7 +68,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
             };
 
 
-            await _userPorfileService.UpdateProfileAsync(requestOptions);
+            await _userPorfileService.UpdateAsync(requestOptions);
 
             _notificationManager.Success("Your profile has been successfully updated!");
 

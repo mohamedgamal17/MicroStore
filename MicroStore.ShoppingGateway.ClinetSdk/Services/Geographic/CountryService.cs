@@ -1,48 +1,49 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
-
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
+using MicroStore.ShoppingGateway.ClinetSdk.Interfaces;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic
 {
-    public class CountryService
+    public class CountryService : Service, 
+        IListable<Country,CountryListRequestOptions>,
+        IRetrievable<Country>,
+        ICreatable<Country,CountryRequestOptions>,
+        IUpdateable<Country,CountryRequestOptions>,
+        IDeletable
     {
         const string BASE_URL = "/geographic/countries";
 
-        private readonly MicroStoreClinet _microStoreClinet;
-
-        public CountryService(MicroStoreClinet microStoreClinet)
+        public CountryService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
         {
-            _microStoreClinet = microStoreClinet;
         }
 
-        public async Task<Country> CreateAsync(CountryRequestOptions request, CancellationToken cancellationToken = default)
+        public async Task<Country> CreateAsync(CountryRequestOptions request, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Country>(BASE_URL, HttpMethod.Post, request, cancellationToken);
+            return await MakeRequestAsync<Country>(BASE_URL, HttpMethod.Post, request, requestHeaderOptions, cancellationToken);
         }
 
-        public async Task<Country> UpdateAsync(string id, CountryRequestOptions request ,  CancellationToken cancellationToken = default)
+        public async Task<Country> UpdateAsync(string id, CountryRequestOptions request , RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Country>(string.Format("{0}/{1}",BASE_URL,id), HttpMethod.Put, request, cancellationToken);
+            return await MakeRequestAsync<Country>(string.Format("{0}/{1}",BASE_URL,id), HttpMethod.Put, request, requestHeaderOptions, cancellationToken);
         }
 
-
-        public async Task DeleteAsync(string id , CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(string id ,RequestHeaderOptions requestHeaderOptions ,CancellationToken cancellationToken = default)
         {
-            await _microStoreClinet.MakeRequest(string.Format("{0}/{1}", BASE_URL, id), HttpMethod.Delete, cancellationToken);
+            await MakeRequestAsync(string.Format("{0}/{1}", BASE_URL, id), HttpMethod.Delete, requestHeaderOptions: requestHeaderOptions,cancellationToken: cancellationToken);
         }
 
-
-        public async Task<List<Country>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<List<Country>> ListAsync(CountryListRequestOptions options = null, RequestHeaderOptions requestHeaderOptions = null , CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<List<Country>>(BASE_URL,HttpMethod.Get, cancellationToken);
+            return await MakeRequestAsync<List<Country>>(BASE_URL,HttpMethod.Get,options,requestHeaderOptions ,cancellationToken);
         }
 
-        public async Task<Country> GetAsync(string id , CancellationToken cancellationToken = default)
+        public async Task<Country> GetAsync(string id ,RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Country>(string.Format("{0}/{1}", BASE_URL, id),  HttpMethod.Get, cancellationToken);
+            return await MakeRequestAsync<Country>(string.Format("{0}/{1}", BASE_URL, id),  HttpMethod.Get, requestHeaderOptions: requestHeaderOptions, cancellationToken: cancellationToken);
         }
 
-        public async Task<Country> GetByCodeAsync(string code ,  CancellationToken cancellationToken = default)
+        public async Task<Country> GetByCodeAsync(string code ,  RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Country>(string.Format("{0}/code/{1}", BASE_URL, code), HttpMethod.Get, cancellationToken);
+            return await MakeRequestAsync<Country>(string.Format("{0}/code/{1}", BASE_URL, code), HttpMethod.Get, requestHeaderOptions: requestHeaderOptions, cancellationToken: cancellationToken);
         }
     }
 }

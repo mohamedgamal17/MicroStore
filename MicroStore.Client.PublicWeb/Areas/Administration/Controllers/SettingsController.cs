@@ -31,7 +31,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         public async Task<IActionResult> Shipping()
         {
-            var settings = await _shipmentSettingsService.RetriveShipmentSettingsAsync();
+            var settings = await _shipmentSettingsService.GetAsync();
 
             var model = ObjectMapper.Map<ShipmentSettings, ShipmentSettingsModel>(settings);
 
@@ -57,7 +57,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 var request = ObjectMapper.Map<ShipmentSettingsModel, ShipmentSettingsRequestOptions>(model);
 
-                var reponse = await _shipmentSettingsService.UpdateShipmentSettingsAsync(request);
+                var reponse = await _shipmentSettingsService.UpdateAsync(request);
 
                 NotificationManager.Success("Shipping settings has been updated successfully!");
 

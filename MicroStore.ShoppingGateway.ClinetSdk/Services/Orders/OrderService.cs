@@ -1,53 +1,56 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+using MicroStore.ShoppingGateway.ClinetSdk.Interfaces;
+
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 {
-    public class OrderService
+    public class OrderService : Service,
+        ICreatable<Order, OrderCreateRequestOptions>,
+        IListableWithPaging<Order, OrderListRequestOptions>
     {
         const string BaseUrl = "/ordering/orders";
 
-        private readonly MicroStoreClinet _microStoreClinet;
-
-        public OrderService(MicroStoreClinet microStoreClinet)
+        public OrderService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
         {
-            _microStoreClinet = microStoreClinet;
         }
 
-        public async Task<Order> CreateAsync(OrderCreateRequestOptions options, CancellationToken cancellationToken = default)
+        public async Task<Order> CreateAsync(OrderCreateRequestOptions options, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Order>(BaseUrl, HttpMethod.Post, options, cancellationToken);
+            return await MakeRequestAsync<Order>(BaseUrl, HttpMethod.Post, options,requestHeaderOptions ,cancellationToken);
         }
 
-        public async Task<PagedList<Order>> ListAsync(OrderListRequestOptions options , CancellationToken cancellationToken = default)
+        public async Task FullfillAsync(Guid orderId, OrderFullfillRequestOptions options, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<PagedList<Order>>(BaseUrl,HttpMethod.Get, options, cancellationToken);  
+            await MakeRequestAsync(string.Format("{0}/fullfill/{1}", BaseUrl, orderId), HttpMethod.Post, options, requestHeaderOptions,cancellationToken);
         }
 
-        public async Task<PagedList<Order>> ListByUserAsync(string userId,PagingReqeustOptions options , CancellationToken cancellationToken = default)
+        public async Task CompleteAsync(Guid orderId, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest< PagedList<Order>>(string.Format("{0}/user/{1}", BaseUrl, userId), HttpMethod.Get, options, cancellationToken);
+            await MakeRequestAsync(string.Format("{0}/complete/{1}", BaseUrl, orderId), HttpMethod.Post,requestHeaderOptions: requestHeaderOptions , cancellationToken: cancellationToken );
         }
 
-        public async Task<Order> GetAsync(Guid orderId , CancellationToken cancellationToken = default)
+        public async Task CancelAsync(Guid orderId, OrderCancelRequestOptions options = null,RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Order>(string.Format("{0}/{1}",BaseUrl,orderId),HttpMethod.Get,cancellationToken);
+            await MakeRequestAsync(string.Format("{0}/cancel/{1}", BaseUrl, orderId), HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
+        }
+
+        public async Task<PagedList<Order>> ListAsync(OrderListRequestOptions options ,RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
+        {
+            return await MakeRequestAsync<PagedList<Order>>(BaseUrl,HttpMethod.Get, options,requestHeaderOptions: requestHeaderOptions , cancellationToken : cancellationToken);  
+        }
+
+        public async Task<PagedList<Order>> ListByUserAsync(string userId,PagingReqeustOptions options = null , RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
+        {
+            return await MakeRequestAsync< PagedList<Order>>(string.Format("{0}/user/{1}", BaseUrl, userId), HttpMethod.Get, options,requestHeaderOptions ,cancellationToken);
+        }
+
+        public async Task<Order> GetAsync(Guid orderId , RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
+        {
+            return await MakeRequestAsync<Order>(string.Format("{0}/{1}",BaseUrl,orderId),HttpMethod.Get, requestHeaderOptions: requestHeaderOptions,cancellationToken: cancellationToken);
         } 
 
-        public async Task FullfillAsync(Guid orderId ,OrderFullfillRequestOptions options, CancellationToken cancellationToken = default)
-        {
-             await _microStoreClinet.MakeRequest(string.Format("{0}/fullfill/{1}", BaseUrl, orderId), HttpMethod.Post, options, cancellationToken);
 
-        }
-
-        public  async Task CompleteAsync(Guid orderId, CancellationToken cancellationToken = default)
-        {
-             await _microStoreClinet.MakeRequest(string.Format("{0}/complete/{1}", BaseUrl, orderId), HttpMethod.Post, cancellationToken);
-        }
-
-        public async Task CancelAsync(Guid orderId , OrderCancelRequestOptions options , CancellationToken cancellationToken = default)
-        {
-             await _microStoreClinet.MakeRequest(string.Format("{0}/cancel/{1}", BaseUrl, orderId), HttpMethod.Post,options, cancellationToken);
-        }
 
     }
 }

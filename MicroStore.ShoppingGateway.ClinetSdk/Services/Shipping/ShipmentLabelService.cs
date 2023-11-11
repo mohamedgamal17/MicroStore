@@ -1,22 +1,20 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping
 {
-    public class ShipmentLabelService
+    public class ShipmentLabelService : Service
     {
 
         const string BaseUrl = "/shipping/labels";
 
-        private readonly MicroStoreClinet _microStoreClinet;
-
-        public ShipmentLabelService(MicroStoreClinet microStoreClinet)
+        public ShipmentLabelService(MicroStoreClinet microStoreClinet) : base(microStoreClinet)
         {
-            _microStoreClinet = microStoreClinet;
         }
 
-        public async Task<Shipment> BuyLabelAsync(PurchaseLabelRequestOptions options , CancellationToken cancellationToken = default)
+        public async Task<Shipment> BuyLabelAsync(PurchaseLabelRequestOptions options , RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
-            return await _microStoreClinet.MakeRequest<Shipment>( BaseUrl + "/" + "buylabel", HttpMethod.Post, options, cancellationToken);
+            return await MakeRequestAsync<Shipment>( BaseUrl + "/" + "buylabel", HttpMethod.Post, options,requestHeaderOptions ,cancellationToken);
         }
     }
 }

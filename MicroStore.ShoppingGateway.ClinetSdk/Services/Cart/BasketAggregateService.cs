@@ -25,13 +25,13 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Cart
                 Items = new List<BasketItemAggregate>()
             };
 
-            var basketResponse = await _basketService.RetrieveAsync(userId, cancellationToken);
+            var basketResponse = await _basketService.RetrieveAsync(userId, cancellationToken: cancellationToken);
 
             if(basketResponse != null)
             {
                 foreach (var item in basketResponse.Items)
                 {
-                    var productResponse = await _productService.GetAsync(item.ProductId, cancellationToken);
+                    var productResponse = await _productService.GetAsync(item.ProductId, cancellationToken: cancellationToken);
 
 
                     var basketItem = PrepareBasketItemAggregate(productResponse);

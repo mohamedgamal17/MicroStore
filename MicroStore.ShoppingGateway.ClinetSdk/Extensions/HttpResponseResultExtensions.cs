@@ -1,14 +1,16 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
-using System.Net;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using System.Runtime.CompilerServices;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
 {
     public static class HttpResponseResultExtensions
     {
-        public static void ThrowIfFailure(this HttpResponseMessage httpResponseMessage)
+        public static async Task<MicroStoreResponse> ToMicroStoreResponse(this HttpResponseMessage httpResponseMessage)
         {
-
-            
+            var httpStatusCode=  httpResponseMessage.StatusCode;
+            var headers = httpResponseMessage.Headers;
+            var content = await httpResponseMessage.Content.ReadAsStringAsync();
+            return new MicroStoreResponse(httpStatusCode, headers, content);    
         }
     }
 }

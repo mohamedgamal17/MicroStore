@@ -33,7 +33,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label" for="Profile_LastName">LastName</label>
-                            <input type="text" class="form-control" id="@Html.IdFor(x=> x.Profile.Phone)" value="@Model.Profile.Phone">
+                            <input type="text" class="form-control" id="@Html.IdFor(x=> x.Profile.Phone)" asp-for="Profile.Phone">
                             <span class="text-danger" asp-validation-for="Profile.Phone"></span>
                         </div>
                     </div>

@@ -19,8 +19,8 @@
 
     public class PaymentProcessRequestOptions
     {
-        public string GatewayName { get;
-            set; }
+        public string GatewayName { get; set; }
+
         public string ReturnUrl { get; set; }
         public string CancelUrl { get; set; }
     }

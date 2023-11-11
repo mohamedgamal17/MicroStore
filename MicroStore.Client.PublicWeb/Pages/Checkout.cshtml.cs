@@ -77,7 +77,7 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             try
             {
-                Profile = await _profileService.GetProfileAsync();
+                Profile = await _profileService.GetAsync();
 
                 await next();
 

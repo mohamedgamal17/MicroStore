@@ -23,11 +23,14 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
         private readonly CountryService _countryService;
 
         private readonly UINotificationManager _uINotificationManager;
-        public CreateModel(UserProfileService userProfileService, CountryService countryService, UINotificationManager uINotificationManager)
+
+        private readonly UserAddressService _userAddressService;
+        public CreateModel(UserProfileService userProfileService, CountryService countryService, UINotificationManager uINotificationManager, UserAddressService userAddressService)
         {
             _userProfileService = userProfileService;
             _countryService = countryService;
             _uINotificationManager = uINotificationManager;
+            _userAddressService = userAddressService;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -65,7 +68,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 
             try
             {
-                var address =  await _userProfileService.CreateAddressAsync(requestOptions);
+                var address =  await _userAddressService.CreateAsync(requestOptions);
 
                 _uINotificationManager.Success("New address has been created");
 

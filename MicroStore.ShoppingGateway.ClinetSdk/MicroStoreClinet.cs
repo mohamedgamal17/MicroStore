@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-using System.Net;
 using Microsoft.AspNetCore.WebUtilities;
 using MicroStore.ShoppingGateway.ClinetSdk.Extensions;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-
+using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using System.Net.Http.Headers;
 namespace MicroStore.ShoppingGateway.ClinetSdk
 {
     public class MicroStoreClinet
@@ -37,7 +37,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
             _logger = logger;
         }
 
-        public async Task<TResponse> MakeRequest<TResponse>(string path, HttpMethod httpMethod, object request = null, CancellationToken cancellationToken = default)
+        public async Task<MicroStoreResponse> ProcessRequestAsync(string path, HttpMethod httpMethod,object request = null, RequestHeaderOptions requestHeaderOptions = null,CancellationToken cancellationToken = default)
         {
             HttpRequestMessage httpRequest = new HttpRequestMessage
             {
@@ -47,59 +47,38 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
 
             if (httpMethod == HttpMethod.Get)
             {
-                httpRequest.RequestUri = new Uri(QueryHelpers.AddQueryString(httpRequest.RequestUri.AbsoluteUri, request.ConvertToDictionary()));
-
-                _logger.LogInformation("Sending request with http method : {@httpMethod}  & request query : {request}", httpMethod, SerializeObject(request));
+                if (request != null)
+                {
+                    httpRequest.RequestUri = new Uri(QueryHelpers.AddQueryString(httpRequest.RequestUri.AbsoluteUri, request.ConvertToDictionary()));
+                }
             }
             else
             {
                 if (request != null)
                 {
                     httpRequest.Content = new StringContent(SerializeObject(request), Encoding.UTF8, DefaultMediaType);
+                }             
+            }
+
+            if(requestHeaderOptions != null)
+            {
+
+                if(requestHeaderOptions.Authorization != null)
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", requestHeaderOptions.Authorization);
                 }
 
-                _logger.LogInformation("Sending request with http method : {@httpMethod}  & request query : {@request}", httpMethod, SerializeObject(request));
             }
 
 
-
-            var httpResponseMessage = await _httpClient.SendAsync(httpRequest, cancellationToken);
-
-            await  ThrowIfFailureResponse(httpResponseMessage);
-
-
-            return await ConvertResponseResult<TResponse>(httpResponseMessage, cancellationToken);
-
-
-        }
-
-        public async Task MakeRequest(string path, HttpMethod httpMethod, object request = null, CancellationToken cancellationToken = default)
-        {
-
-
-            HttpRequestMessage httpRequest = new HttpRequestMessage
-            {
-                RequestUri = new Uri(string.Format("{0}{1}", _httpClient.BaseAddress?.AbsoluteUri, path)),
-                Method = httpMethod
-            };
-
-            if (request != null)
-            {
-                httpRequest.Content = new StringContent(SerializeObject(request), Encoding.UTF8, DefaultMediaType);
-            }
-
-            _logger.LogInformation("Sending request with http method : {@HttpMethod} & request body : {@Request}", httpMethod, request);
-
+            _logger.LogInformation("Sending request with http method : {@httpMethod}  & request options : {@request}", httpMethod, SerializeObject(request));
 
             var httpResponseMessage = await _httpClient.SendAsync(httpRequest, cancellationToken);
 
             await ThrowIfFailureResponse(httpResponseMessage);
 
-
-
+            return await httpResponseMessage.ToMicroStoreResponse();
         }
-
-
 
 
         public string SerializeObject(object obj)
@@ -135,9 +114,6 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
                 throw new MicroStoreClientException(httpResponseMessage.StatusCode, error?.Title ?? httpResponseMessage.StatusCode.ToString(), error);
             }
         }
-
-
-
     }
 
 

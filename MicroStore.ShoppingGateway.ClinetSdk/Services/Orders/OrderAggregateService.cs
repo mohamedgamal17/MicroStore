@@ -33,7 +33,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 
         public async Task<OrderAggregate> GetAsync(Guid orderId, CancellationToken cancellationToken = default)
         {
-            Order order = await _orderService.GetAsync(orderId, cancellationToken);
+            Order order = await _orderService.GetAsync(orderId, cancellationToken: cancellationToken);
 
             PaymentRequest paymentRequest = null;
 
@@ -41,7 +41,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 
             if(order.PaymentId != null)
             {
-                paymentRequest = await _paymentRequestService.GetAsync(order.PaymentId, cancellationToken);
+                paymentRequest = await _paymentRequestService.GetAsync(order.PaymentId, cancellationToken:  cancellationToken);
             }
 
             if(order.ShipmentId != null)
@@ -89,7 +89,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
         private async Task<AddressAggregate> PrepareAddressAggregate(Address address , CancellationToken cancellationToken = default) 
         {
             var country = await _countryService.GetByCodeAsync(address.CountryCode ,cancellationToken);
-            var stateProvince = await _stateProvinceService.GetByCodeAsync(address.CountryCode, address.State, cancellationToken);
+            var stateProvince = await _stateProvinceService.GetByCodeAsync(address.CountryCode, address.State, cancellationToken: cancellationToken);
 
             return new AddressAggregate
             {
