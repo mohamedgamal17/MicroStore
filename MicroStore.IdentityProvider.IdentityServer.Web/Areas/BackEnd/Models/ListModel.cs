@@ -17,7 +17,7 @@
         public int PageSize => Length;
         public int Length { get; set; }
         public int Start { get; set; }
-        public int RecordsTotal { get; set; }
-        public int RecordsFiltered => RecordsTotal;
+        public long RecordsTotal { get; set; }
+        public long RecordsFiltered => RecordsTotal;
     }
 }

@@ -41,7 +41,6 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
             }).AddUserManager<ApplicationUserManager>()
-               .AddRoleManager<ApplicationRoleManager>()
                .AddDefaultTokenProviders();
 
         }
@@ -84,7 +83,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests
             respawner.ResetAsync(config.GetConnectionString("DefaultConnection")).Wait();
         }
 
-        private void CreateRoles(ApplicationRoleManager rolemanager, List<RoleReadModel> userRoles)
+        private void CreateRoles(RoleManager<ApplicationIdentityRole> rolemanager, List<RoleReadModel> userRoles)
         {
             foreach (var role in userRoles)
             {

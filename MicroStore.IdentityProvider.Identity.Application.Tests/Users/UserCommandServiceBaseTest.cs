@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Models;
 
@@ -25,7 +26,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
         }
         protected async Task<List<ApplicationIdentityRole>> CreateFakeRoles()
         {
-            var rolmanager = ServiceProvider.GetRequiredService<ApplicationRoleManager>();
+            var rolmanager = ServiceProvider.GetRequiredService<RoleManager<ApplicationIdentityRole>>();
             var rules = new List<ApplicationIdentityRole>
             {
                 new ApplicationIdentityRole

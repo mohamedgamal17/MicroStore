@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using MassTransit.Testing;
 using MicroStore.Inventory.IntegrationEvents;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.StateMachines;
 namespace MicroStore.Ordering.Application.Tests.StateMachines

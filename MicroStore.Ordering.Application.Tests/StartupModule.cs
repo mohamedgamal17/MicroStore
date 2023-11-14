@@ -2,6 +2,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.StateMachines;
 using MicroStore.Ordering.Infrastructure;
 using MicroStore.Ordering.Infrastructure.EntityFramework;
