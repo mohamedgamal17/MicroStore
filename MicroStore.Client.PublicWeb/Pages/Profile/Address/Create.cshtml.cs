@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.AspNetCore.UI;
+using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
@@ -10,13 +13,14 @@ using System.Net;
 
 namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 {
+    [Authorize]
+    [CheckProfilePageCompletedFilter]
     public class CreateModel : PageModel
     {
         [BindProperty]
         public AddressModel Address { get; set; }
-        public List<Country> Countries { get; set; }
-
-        public List<StateProvince> StateProvinces { get; set; }
+        public List<SelectListItem> Countries { get; set; }
+        public List<SelectListItem>? StateProvinces { get; set; }
 
         private readonly UserProfileService _userProfileService;
 
@@ -35,7 +39,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await PrepareCountries();
+            await PreapreGeographicSelectedLists();
 
             return Page();
         }
@@ -46,9 +50,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
         {
             if (!ModelState.IsValid)
             {
-                await PrepareCountries();
-
-                await PreapreStates(Address.Country);
+                await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
                 return Page();
             }
@@ -76,9 +78,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                await PrepareCountries();
-
-                await PreapreStates(Address.Country);
+                await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
                 _uINotificationManager.Error(ex.Erorr.Title);
 
@@ -89,22 +89,33 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 
         }
 
-        public async Task PrepareCountries()
+        public async Task PreapreGeographicSelectedLists(string? countryCode = null , string? stateProvince =  null)
         {
-            var response = await _countryService.ListAsync();
+            var countriesResponse = await _countryService.ListAsync();
 
-            Countries = response;
-        }
+            Countries = countriesResponse
+                .Select(x=> new SelectListItem
+                {
+                    Text = x.Name, 
+                    Value = x.TwoLetterIsoCode , 
+                    Selected = countryCode == x.TwoLetterIsoCode
+                }).ToList();
 
-        public async Task PreapreStates(string countryCode)
-        {
             if(countryCode != null)
             {
-                var country = await _countryService.GetByCodeAsync(countryCode);
+                var countryResposnse = await _countryService.GetByCodeAsync(countryCode);
 
-                StateProvinces = country.StateProvinces;
+                StateProvinces = countryResposnse.StateProvinces?
+                     .Select(x => new SelectListItem
+                     {
+                         Text = x.Name,
+                         Value = x.Abbreviation,
+                         Selected = stateProvince == x.Abbreviation
+                     }).ToList();
+
             }
 
         }
+
     }
 }

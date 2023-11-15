@@ -6,6 +6,7 @@ using Volo.Abp.BlobStoring;
 
 namespace MicroStore.Client.PublicWeb.Pages
 {
+    [CheckProfilePageCompletedFilter]
     public class ImageSearchModel : PageModel
     {
         private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;

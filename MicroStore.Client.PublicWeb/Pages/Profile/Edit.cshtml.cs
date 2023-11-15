@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.AspNetCore.UI;
+using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
@@ -17,6 +18,7 @@ using Volo.Abp.BlobStoring;
 namespace MicroStore.Client.PublicWeb.Pages.Profile
 {
     [Authorize]
+    [CheckProfilePageCompletedFilter]
     public class EditModel : PageModel
     {
         [BindProperty]
@@ -41,23 +43,11 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
             _logger = logger;
         }
 
-        public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
-        {
-            try
-            {
-                UserProfile = await _userProfileService.GetAsync();
 
-                await next();
-
-            }
-            catch (MicroStoreClientException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                context.Result = RedirectToPage("/Profile/Create");
-            }
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
+            UserProfile = (User)HttpContext.Items[HttpContextSharedItemsConsts.UserProfile]!;
 
             Profile = PrepareUserProfileModel(UserProfile);
 
@@ -72,6 +62,8 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
             if (!ModelState.IsValid)
             {
+                UserProfile = (User)HttpContext.Items[HttpContextSharedItemsConsts.UserProfile]!;
+
                 await PrepareCountries();
 
                 return Page();
@@ -95,6 +87,8 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
+                UserProfile = (User)HttpContext.Items[HttpContextSharedItemsConsts.UserProfile]!;
+
                 await PrepareCountries();
 
                 _notificationManager.Error(ex.Erorr.Title);
@@ -115,11 +109,11 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
         {
             if (formFile == null) return null;
 
-            string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(Profile.Avatar.FileName));
+            string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(formFile.FileName));
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                await Profile.Avatar.CopyToAsync(memoryStream);
+                await formFile.CopyToAsync(memoryStream);
 
                 await _blobContainer.SaveAsync(imageName, memoryStream.ToArray());
             }

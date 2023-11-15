@@ -5,6 +5,4 @@
         Task HandleAsync(HttpContext context , TException exception);
     }
 
-
-
 }

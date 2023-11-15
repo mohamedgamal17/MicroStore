@@ -64,7 +64,7 @@ namespace MicroStore.Profiling.Application.Models
 
             try
             {
-                var phoneNumberParsed = phoneNumberUtil.Parse(number, number);
+                var phoneNumberParsed = phoneNumberUtil.Parse(number,null);
 
                 return phoneNumberUtil.IsValidNumber(phoneNumberParsed);
 

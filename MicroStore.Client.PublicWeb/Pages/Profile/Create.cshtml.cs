@@ -2,11 +2,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.AspNetCore.UI;
+using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
@@ -23,7 +26,11 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
         [BindProperty]
         public AddressModel Address { get; set; }
-        public List<Country> Countries { get; set; } = new List<Country>();
+
+        [BindProperty]
+        public string? ReturnUrl { get; set; }
+        public List<SelectListItem> Countries { get; set; }
+        public List<SelectListItem>? StateProvinces { get; set; }
 
         private readonly UserProfileService _userProfileService;
 
@@ -42,9 +49,9 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
         public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
-            bool userHasProfile = await CheckIfUserHasProfile();
+            var  userProfile = context.HttpContext.Items[HttpContextSharedItemsConsts.UserProfile] as User;
 
-            if (userHasProfile)
+            if (userProfile != null)
             {
                 uINotificationManager.Error("Your profile is already created!");
 
@@ -55,9 +62,11 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(string? returnUrl = null)
         {
-            await PrepareCountries();
+            ReturnUrl = returnUrl;
+
+            await PreapreGeographicSelectedLists();
 
             return Page();
         }
@@ -67,7 +76,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
         {
             if (!ModelState.IsValid)
             {
-                await PrepareCountries();
+                await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
                 return Page();
             }
@@ -105,37 +114,48 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
                 uINotificationManager.Success("Your profile has been successfully updated!");
 
+                if(ReturnUrl != null)
+                {
+                    return Redirect(ReturnUrl);
+                }
+
                 return RedirectToPage("Profile/Index");
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                await PrepareCountries();
+                await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
                 uINotificationManager.Error(ex.Erorr.Title);
 
                 return Page();
             }
         }
-
-        private async Task<bool> CheckIfUserHasProfile()
+        public async Task PreapreGeographicSelectedLists(string? countryCode = null, string? stateProvince = null)
         {
-            try
+            var countriesResponse = await _countryService.ListAsync();
+
+            Countries = countriesResponse
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.TwoLetterIsoCode,
+                    Selected = countryCode == x.TwoLetterIsoCode
+                }).ToList();
+
+            if (countryCode != null)
             {
-                var profile = await _userProfileService.GetAsync();
+                var countryResposnse = await _countryService.GetByCodeAsync(countryCode);
 
-                return true;
+                StateProvinces = countryResposnse.StateProvinces?
+                     .Select(x => new SelectListItem
+                     {
+                         Text = x.Name,
+                         Value = x.Abbreviation,
+                         Selected = stateProvince == x.Abbreviation
+                     }).ToList();
+
             }
-            catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
-            {
-                return false;
-            }
-        }
 
-        public async Task PrepareCountries()
-        {
-            var response = await _countryService.ListAsync();
-
-            Countries = response;
         }
 
         public async Task<string?> GetUserImageLink(IFormFile? formFile)

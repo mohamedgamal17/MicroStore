@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.AspNetCore.UI;
+using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
@@ -8,6 +9,7 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using System.ComponentModel.DataAnnotations;
 namespace MicroStore.Client.PublicWeb.Pages
 {
+    [CheckProfilePageCompletedFilter]
     public class ProductDetailsModel : PageModel
     {
         public Product Product { get; set; }

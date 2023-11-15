@@ -8,11 +8,6 @@
     ViewData["BreadCrumb.IsMainPage"] = false;
     ViewData["BreadCrumb.Title"] = "Create Profile Page";
     ViewData["BreadCrumb.Page"] = "Create Profile";
-    var countriesSelectList = Model.Countries?.Select(x => new SelectListItem
-           {
-                Text = x.Name,
-                Value = x.TwoLetterIsoCode,
-            }).ToList() ??  new List<SelectListItem>();
 }
 <div class="container mt-3">
     <form class="theme-form" method="post" enctype="multipart/form-data">
@@ -22,6 +17,7 @@
 
                 <div class="mt-3 mb-3">
                     @Html.ValidationSummary()
+                    @Html.HiddenFor(x=> x.ReturnUrl)
                 </div>
                 <div class="form-row row">
                     <div class="col-md-6">
@@ -33,7 +29,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label" for="Profile_LastName">LastName</label>
-                            <input type="text" class="form-control" id="@Html.IdFor(x=> x.Profile.Phone)" asp-for="Profile.Phone">
+                            <input type="text" class="form-control" id="@Html.IdFor(x=> x.Profile.Phone)" value="@Model.Profile?.Phone">
                             <span class="text-danger" asp-validation-for="Profile.Phone"></span>
                         </div>
                     </div>
@@ -62,9 +58,9 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label" asp-for="@Model.Address.Country"> </label>
-                        <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.Country)" asp-for="@Model.Address.Country">
-                            <option selected>Please select country</option>
-                            @foreach (var country in countriesSelectList)
+                        <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.Country)" asp-for="@Model.Address.Country" placeholder="Please Select State">
+                            <option disabled>Please select country</option>
+                            @foreach (var country in Model.Countries)
                             {
                                 <option value="@country.Value">@country.Text</option>
                             }
@@ -74,7 +70,15 @@
                
                     <div class="col-md-6">
                         <label class="form-label" asp-for="@Model.Address.StateProvince"> </label>
-                        <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.StateProvince)" asp-for="@Model.Address.StateProvince" data-address-select="StateProvince"></select>
+                        <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.StateProvince)" asp-for="@Model.Address.StateProvince" data-address-select="StateProvince" placeholder="Please Select State">
+                            @if (Model.StateProvinces != null)
+                            {
+                                @foreach (var state in Model.StateProvinces)
+                                {
+                                    <option value="@state.Value">@state.Text</option>
+                                }
+                            }
+                        </select>
                         <span class="text-danger" asp-validation-for="Address.StateProvince"></span>
                     </div>
                     <div class="col-md-6">
@@ -106,12 +110,30 @@
     <script>
         $(function () {
 
-            $("#Address_Country").change(function () {
-            
-                var countryCode = $(this).val();
+            var getStates = function (countryCode, stateCode) {
+                abp.ajax({
+                    url: `/api/country/code/${countryCode}`,
+                    method: "GET",
+                    success: function (result) {
+                        var stateProvinceElment = $("#Address_StateProvince");
+                        stateProvinceElment.empty();
+                        $.each(result.stateProvinces, function (index, val) {
+                            var selected = val.name == stateCode;
+                            stateProvinceElment.append(new Option(val.name, val.abbreviation, selected));
+                        })
+                    },
 
+                    error: function () {
+                        abp.notifiy.error("UnExpected Error has been happend please refersh the page")
+
+                    }
+                })
+            }
+
+            $("#Address_Country").change(function () {       
+                var countryCode = $(this).val();
                 if(countryCode != null){
-                    getStates(countryCode);
+                    getStates(countryCode, null);
                 }              
             })
 
@@ -122,25 +144,15 @@
                 utilsScript: "/libs/intl-tel-input/build/js/utils.js"
             })
 
-            var getStates = function(countryCode){
-                abp.ajax({
-                    url: `/api/country/code/${countryCode}`,
-                    method:"GET",
-                    success : function(result){
-                        var stateProvinceElment = $("#Address_StateProvince");
-                        stateProvinceElment.empty();
-                        stateProvinceElment.append("<option selected>Please Select State Province</option>");
-                        $.each(result.stateProvinces, function (index, val) {
-                            stateProvinceElment.append(new Option(val.name, val.abbreviation));
-                       })
-                    },
 
-                    error :function(){
-                        abp.notifiy.error("UnExpected Error has been happend please refersh the page")
+            $(phoneinput).on('change', function () {
+                if (iti.getNumber()) {
+                    var formatedNumber = intlTelInputUtils.formatNumber(iti.getNumber(), null, intlTelInputUtils.numberFormat.E164);
+                    iti.setNumber(formatedNumber);
+                    console.log(formatedNumber)
+                }
+            }) 
 
-                    }
-                })
-            }
         });
     </script>
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
@@ -9,6 +10,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
 namespace MicroStore.Client.PublicWeb.Pages
 {
     [Authorize]
+    [CheckProfilePageCompletedFilter]
     public class MyOrdersModel : PageModel
     {
         private readonly UserOrderService _userOrderService;

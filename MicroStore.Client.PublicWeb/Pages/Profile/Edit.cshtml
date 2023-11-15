@@ -9,6 +9,8 @@
     ViewData["BreadCrumb.Title"] = "Edit Profile";
     ViewData["BreadCrumb.Page"] = "Edit Profile";
 }
+
+
 <div class="container mt-3">
     <form class="theme-form" method="post" enctype="multipart/form-data">
         <div class="row">
@@ -54,17 +56,6 @@
 @section Scripts{
     <script>
         $(function () {
-
-            $("#Address_Country").change(function () {
-
-                var countryCode = $(this).val();
-
-                if (countryCode != null) {
-                    getStates(countryCode);
-                }
-
-            })
-
             const phoneinput = document.querySelector("#Profile_Phone");
 
             var iti = window.intlTelInput(phoneinput, {
@@ -78,26 +69,6 @@
                     iti.setNumber(intlTelInputUtils.formatNumber(iti.getNumber(), null, intlTelInputUtils.numberFormat.INTERNATIONAL));
                 }
             })
-        
-            var getStates = function (countryCode) {
-                abp.ajax({
-                    url: `/api/country/code/${countryCode}`,
-                    method: "GET",
-                    success: function (result) {
-                        var stateProvinceElment = $("#Address_StateProvince");
-                        stateProvinceElment.empty();
-                        stateProvinceElment.append("<option selected>Please Select State Province</option>");
-                        $.each(result.stateProvinces, function (index, val) {
-                            stateProvinceElment.append(new Option(val.name, val.abbreviation));
-                        })
-                    },
-
-                    error: function () {
-                        abp.notifiy.error("UnExpected Error has been happend please refersh the page")
-
-                    }
-                })
-            }
         });
     </script>
 }

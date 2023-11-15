@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Extensions;
+using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Common;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
@@ -16,6 +18,8 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
 namespace MicroStore.Client.PublicWeb.Pages
 {
+    [Authorize]
+    [CheckProfilePageCompletedFilter]
     public class CheckoutModel : PageModel
     {
    

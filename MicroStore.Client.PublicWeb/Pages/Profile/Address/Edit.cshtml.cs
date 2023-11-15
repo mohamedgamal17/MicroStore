@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.AspNetCore.UI;
+using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
-using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
@@ -10,6 +12,8 @@ using System.Net;
 
 namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 {
+    [Authorize]
+    [CheckProfilePageCompletedFilter]
     public class EditModel : PageModel
     {
         private readonly UserProfileService _userProfileService;
@@ -25,9 +29,8 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
         [BindProperty]
         public AddressModel Address { get; set; }
 
-        public List<Country> Countries { get; set; }
-
-        public List<StateProvince> StateProvinces { get; set; }
+        public List<SelectListItem> Countries { get; set; }
+        public List<SelectListItem>? StateProvinces { get; set; }
         public EditModel(UserProfileService userProfileService, CountryService countryService, UINotificationManager notificatioManager, StateProvinceService stateProvinceService, UserAddressService userAddressService)
         {
             _userProfileService = userProfileService;
@@ -43,7 +46,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
 
             Address = PreapreAddressModel(address);
 
-            await PrepareCountries(address.CountryCode);
+            await PreapreGeographicSelectedLists(address.CountryCode, Address.StateProvince);
 
             return Page();
         }
@@ -52,7 +55,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
         {
             if (!ModelState.IsValid)
             {
-                await PrepareCountries(Address.Country);
+                await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
                 return Page();
             }
@@ -81,7 +84,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                await PrepareCountries(Address.Country);
+                await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
                 _notificatioManager.Error(ex.Erorr.Title);
 
@@ -89,21 +92,33 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
             }
 
         }
-
-        public async Task PrepareCountries(string? countryCode)
+        public async Task PreapreGeographicSelectedLists(string? countryCode = null, string? stateProvince = null)
         {
+            var countriesResponse = await _countryService.ListAsync();
 
-            Countries = await _countryService.ListAsync();
+            Countries = countriesResponse
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.TwoLetterIsoCode,
+                    Selected = countryCode == x.TwoLetterIsoCode
+                }).ToList();
 
-            if(countryCode != null)
+            if (countryCode != null)
             {
-                var country = await _countryService.GetByCodeAsync(countryCode);
+                var countryResposnse = await _countryService.GetByCodeAsync(countryCode);
 
-                StateProvinces = country.StateProvinces;
+                StateProvinces = countryResposnse.StateProvinces?
+                     .Select(x => new SelectListItem
+                     {
+                         Text = x.Name,
+                         Value = x.Abbreviation,
+                         Selected = stateProvince == x.Abbreviation
+                     }).ToList();
+
             }
 
         }
-
         private AddressModel PreapreAddressModel(MicroStore.ShoppingGateway.ClinetSdk.Common.Address address)
         {
             return new AddressModel

@@ -6,17 +6,6 @@
     ViewData["BreadCrumb.IsMainPage"] = false;
     ViewData["BreadCrumb.Title"] = "Create Address";
     ViewData["BreadCrumb.Page"] = "Create Address";
-    var countriesSelectList = Model.Countries?.Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.TwoLetterIsoCode,
-            }).ToList() ?? new List<SelectListItem>();
-
-    var statesSelectList = Model.StateProvinces?.Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Abbreviation
-            }) ?? new List<SelectListItem>();
 }
 <div class="container mt-3">
     <form  method="post" >
@@ -32,7 +21,7 @@
                 <label class="form-label" asp-for="@Model.Address.Country"> </label>
                 <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.Country)" asp-for="@Model.Address.Country" place>
                     <option value="" disabled selected>Please select</option>
-                    @foreach (var country in countriesSelectList)
+                    @foreach (var country in Model.Countries)
                     {
                         <option value="@country.Value">@country.Text</option>
                     }
@@ -43,11 +32,9 @@
             <div class="col-md-6 form-group">
                 <label class="form-label" asp-for="@Model.Address.StateProvince"> </label>
                 <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.StateProvince)" asp-for="@Model.Address.StateProvince" data-address-select="StateProvince">
-                    @if(statesSelectList != null)
+                    @if(Model.StateProvinces != null)
                     {
-                        <option value="" disabled selected>Please select</option>
-
-                        @foreach (var state in statesSelectList)
+                        @foreach (var state in Model.StateProvinces)
                         {
                             <option value="@state.Value">@state.Text</option>
                         }
@@ -94,7 +81,6 @@
                     success: function (result) {
                         var stateProvinceElment = $("#Address_StateProvince");
                         stateProvinceElment.empty();
-                        stateProvinceElment.append("<option value='' disabled selected>Please select</option>")
                         $.each(result.stateProvinces, function (index, val) {
                             stateProvinceElment.append(new Option(val.name, val.abbreviation));
                         })

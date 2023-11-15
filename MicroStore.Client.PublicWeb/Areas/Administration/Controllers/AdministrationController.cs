@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Extensions;
+using MicroStore.Client.PublicWeb.Infrastructure;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
     [Area(AreaNames.Administration)]
+    [CheckProfileActionCompletedFilterAttribute]
     public  abstract class AdministrationController : AbpController
     {
         public UINotificationManager NotificationManager => LazyServiceProvider.LazyGetRequiredService<UINotificationManager>();

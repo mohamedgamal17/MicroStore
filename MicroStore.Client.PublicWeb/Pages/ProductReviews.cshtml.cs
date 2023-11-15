@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 
 namespace MicroStore.Client.PublicWeb.Pages
 {
+    [CheckProfilePageCompletedFilter]
     public class ProductReviewsModel : PageModel
     {
 

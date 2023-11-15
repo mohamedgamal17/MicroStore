@@ -13,6 +13,7 @@ using Volo.Abp.BlobStoring;
 namespace MicroStore.Client.PublicWeb.Pages.Profile
 {
     [Authorize]
+    [CheckProfilePageCompletedFilter]
     public class IndexModel : PageModel
     {
 

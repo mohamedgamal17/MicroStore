@@ -7,19 +7,6 @@
     ViewData["BreadCrumb.Title"] = "Edit Address";
     ViewData["BreadCrumb.Page"] = "Edit Address";
 
-    var countriesSelectList = Model.Countries?.Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.TwoLetterIsoCode,
-            }).ToList() ?? new List<SelectListItem>();
-
-    var stateProvvincesList = Model.StateProvinces?.Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Abbreviation,
-                Selected = Model.Address.StateProvince == x.Abbreviation
-
-            }) ?? new List<SelectListItem>();
 }
 <div class="container mt-3">
     <form class="theme-form" method="post" >
@@ -36,8 +23,7 @@
                 <label class="form-label" asp-for="@Model.Address.Country"> </label>
                 <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.Country)" asp-for="@Model.Address.Country">
                     <option value="" disabled selected>Please select</option>
-
-                    @foreach (var country in countriesSelectList)
+                    @foreach (var country in Model.Countries)
                     {
                         <option value="@country.Value">@country.Text</option>
                     }
@@ -48,11 +34,13 @@
             <div class="col-md-6">
                 <label class="form-label" asp-for="@Model.Address.StateProvince"> </label>
                 <select class="form-select form-control" id="@Html.IdFor(x=> x.Address.StateProvince)" asp-for="@Model.Address.StateProvince" data-address-select="StateProvince">
-                    <option value="" disabled selected>Please select</option>
-                    @foreach(var state in stateProvvincesList)
+                    @if(Model.StateProvinces != null)
                     {
-                        <option value="@state.Value">@state.Text</option>
-                    }
+                        @foreach (var state in Model.StateProvinces)
+                        {
+                            <option value="@state.Value">@state.Text</option>
+                        }
+                    }        
                 </select>
                 <span class="text-danger" asp-validation-for="Address.StateProvince"></span>
             </div>
