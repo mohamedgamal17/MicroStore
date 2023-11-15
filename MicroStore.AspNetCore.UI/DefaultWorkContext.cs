@@ -41,5 +41,29 @@ namespace MicroStore.AspNetCore.UI
 
             return userId;
         }
+
+
+        public string GetAnonymousUserId()
+        {
+            var context = _httpContextAccessor.HttpContext;
+
+            string? userId;
+
+            if (context?.Request.Cookies.TryGetValue(AnonymousUser, out userId) == true && userId != null)
+            {
+                return userId;
+            }
+
+            userId = Guid.NewGuid().ToString();
+
+            return userId;
+        }
+
+        public void ClearAnonymousUserCookie()
+        {
+            var context=  _httpContextAccessor.HttpContext;
+          
+            context?.Response.Cookies.Delete(AnonymousUser);
+        }
     }
 }

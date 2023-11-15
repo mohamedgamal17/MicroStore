@@ -30,6 +30,9 @@ using Volo.Abp.FluentValidation;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
+using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using IdentityModel;
 
 namespace MicroStore.Client.PublicWeb
 {
@@ -214,6 +217,10 @@ namespace MicroStore.Client.PublicWeb
                appsettings.Security.Client.Scopes.ForEach((scp) => options.Scope.Add(scp));
                options.SaveTokens = true;
 
+               options.Events.OnUserInformationReceived = async (ctx) =>
+               {
+                   await ctx.MigrateUserBasketAsync();
+               };
            });
 
             services.AddAccessTokenManagement();
@@ -261,5 +268,6 @@ namespace MicroStore.Client.PublicWeb
                 });
             });
         }
+
     }
 }

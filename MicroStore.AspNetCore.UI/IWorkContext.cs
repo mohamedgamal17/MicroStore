@@ -3,5 +3,7 @@
     public interface IWorkContext
     {
         string TryToGetCurrentUserId();
+
+        void ClearAnonymousUserCookie();
     }
 }

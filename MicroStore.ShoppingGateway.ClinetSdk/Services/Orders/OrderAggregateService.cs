@@ -88,7 +88,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 
         private async Task<AddressAggregate> PrepareAddressAggregate(Address address , CancellationToken cancellationToken = default) 
         {
-            var country = await _countryService.GetByCodeAsync(address.CountryCode ,cancellationToken);
+            var country = await _countryService.GetByCodeAsync(address.CountryCode , cancellationToken:cancellationToken);
             var stateProvince = await _stateProvinceService.GetByCodeAsync(address.CountryCode, address.State, cancellationToken: cancellationToken);
 
             return new AddressAggregate
