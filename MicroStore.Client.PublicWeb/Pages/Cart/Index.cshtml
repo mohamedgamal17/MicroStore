@@ -1,6 +1,6 @@
 ﻿@page
 @using MicroStore.Client.PublicWeb.Components.Basket
-@model CartModel
+@model MicroStore.Client.PublicWeb.Pages.Cart.IndexModel
 @{
     ViewData["Title"] = "Cart";
     ViewData["ContainerTitle"] = "Basket";
@@ -10,4 +10,3 @@
 }
 
 @await Component.InvokeAsync(typeof(BasketWidgetViewComponent))
-
