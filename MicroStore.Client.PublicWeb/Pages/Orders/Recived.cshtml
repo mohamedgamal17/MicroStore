@@ -1,11 +1,11 @@
 ﻿@page
-@model MicroStore.Client.PublicWeb.Pages.OrderRecivedModel
+@using MicroStore.Client.PublicWeb.Utils
+@model MicroStore.Client.PublicWeb.Pages.Orders.RecivedModel
 @{
     ViewData["Title"] = "Order Recived";
     ViewData["BreadCrumb.Page"] = "Order Recived";
     ViewData["BreadCrumb.Title"] = "Order Recived";
 }
-
 <section class="section-b-space ">
     <div class="container">
         <div class="row">
@@ -55,7 +55,7 @@
                     </div>
                     <h2>thank you</h2>
                     <p>Payment is successfully processsed and your order is on the way</p>
-                    <p>Order number : <a asp-page="OrderDetails" asp-route-id="@Model.Order.Id"> @Model.Order.OrderNumber</a></p>
+                    <p>Order number : <a asp-page="/Orders/Details" asp-route-id="@Model.Order.Id">@FormatHelper.FormatOrderNumber(Model.Order.OrderNumber)</a></p>
                 </div>
             </div>
         </div>

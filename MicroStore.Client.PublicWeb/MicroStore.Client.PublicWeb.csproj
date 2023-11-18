@@ -37,7 +37,6 @@
     <Content Remove="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <Content Remove="Pages\NotFound.cshtml" />
-    <Content Remove="Pages\OrderRecived.cshtml" />
     <Content Remove="Pages\Profile.cshtml" />
     <Content Remove="Pages\Profile\Edit.cshtml" />
   </ItemGroup>
@@ -79,9 +78,7 @@
     <None Include="Pages\Cart.cshtml" />
     <None Include="Pages\Checkout.cshtml" />
     <None Include="Pages\Home.cshtml" />
-    <None Include="Pages\MyOrders.cshtml" />
     <None Include="Pages\NotFound.cshtml" />
-    <None Include="Pages\OrderRecived.cshtml" />
     <None Include="Pages\ProductDetails.cshtml" />
     <None Include="Pages\Products.cshtml" />
     <None Include="Pages\Profile\Edit.cshtml" />
@@ -90,7 +87,6 @@
     <None Include="Pages\Shared\Components\CartWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\CheckoutInformationWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\CheckoutSummaryWidget\Default.cshtml" />
-    <None Include="Pages\Shared\Components\OrderWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\ProductListWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\Purchase\Defaultcshtml.cshtml" />
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />

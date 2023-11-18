@@ -6,7 +6,7 @@ using MicroStore.ShoppingGateway.ClinetSdk.Interfaces;
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 {
     public class UserOrderService : Service ,
-        IListableWithPaging<Order, PagingReqeustOptions>
+        IListableWithPaging<Order, PagingAndSortingRequestOptions>
     {
         const string BaseUrl = "/ordering/user/orders";
 
@@ -21,7 +21,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
             return await MakeRequestAsync<Order>(BaseUrl, HttpMethod.Post, options,requestHeaderOptions, cancellationToken);
         }
 
-        public async Task<PagedList<Order>> ListAsync(PagingReqeustOptions options= null,RequestHeaderOptions  requestHeaderOptions = null , CancellationToken cancellationToken = default)
+        public async Task<PagedList<Order>> ListAsync(PagingAndSortingRequestOptions options = null,RequestHeaderOptions  requestHeaderOptions = null , CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<PagedList<Order>>(BaseUrl, HttpMethod.Get, options, requestHeaderOptions, cancellationToken);
         }

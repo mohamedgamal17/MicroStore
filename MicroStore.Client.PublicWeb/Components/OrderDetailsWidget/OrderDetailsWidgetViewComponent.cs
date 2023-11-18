@@ -8,11 +8,11 @@ namespace MicroStore.Client.PublicWeb.Components.OrderDetailsWidget
 {
     [Widget(AutoInitialize = true ,
         ScriptFiles = new string[] { "/Pages/Shared/Components/OrderDetailsWidget/order-details-widget.js" })]
-    public class OrderDetailsWidgetViewCompoent : AbpViewComponent
+    public class OrderDetailsWidgetViewComponent : AbpViewComponent
     {
         private readonly UserOrderService _userOrderService;
 
-        public OrderDetailsWidgetViewCompoent(UserOrderService userOrderService)
+        public OrderDetailsWidgetViewComponent(UserOrderService userOrderService)
         {
             _userOrderService = userOrderService;
         }
@@ -26,7 +26,7 @@ namespace MicroStore.Client.PublicWeb.Components.OrderDetailsWidget
                 Order = order
             };
 
-            return View(order);
+            return View(viewModel);
         }
 
     }

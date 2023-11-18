@@ -1,0 +1,12 @@
+﻿@page "{id}"
+@using MicroStore.Client.PublicWeb.Components.OrderDetailsWidget
+@model MicroStore.Client.PublicWeb.Pages.Orders.DetailsModel
+@{
+    ViewData["Title"] = "Order Details";
+    ViewData["ContainerTitle"] = "Order Details";
+    ViewData["BreadCrumb.IsMainPage"] = false;
+    ViewData["BreadCrumb.Title"] = "Order Details";
+    ViewData["BreadCrumb.Page"] = "Order";
+}
+
+@await Component.InvokeAsync(typeof(OrderDetailsWidgetViewComponent), new { orderId = Model.OrderId })

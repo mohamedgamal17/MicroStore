@@ -5,17 +5,16 @@ using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 
-namespace MicroStore.Client.PublicWeb.Pages
+namespace MicroStore.Client.PublicWeb.Pages.Orders
 {
     [Authorize]
     [CheckProfilePageCompletedFilter]
-    public class OrderRecivedModel : PageModel
+    public class RecivedModel : PageModel
     {
         private readonly UserOrderService _userOrderService;
-
         public Order Order { get; set; }
 
-        public OrderRecivedModel(UserOrderService userOrderService)
+        public RecivedModel(UserOrderService userOrderService)
         {
             _userOrderService = userOrderService;
         }

@@ -1,4 +1,5 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Navigation
+@using MicroStore.Client.PublicWeb.Utils
 @using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 @using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 @using System.Globalization
@@ -7,18 +8,7 @@
 @{
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.OrderMenus.View);
 
-    List<string> subStrings = new List<string>();
-
-    for (int i = 0; i < Model.OrderNumber.Length; i = i + 3)
-    {
-        if (i % 3 == 0)
-        {
-            subStrings.Add(Model.OrderNumber.Substring(i, 3));
-        }
-
-    }
-
-    var formatedOrderNumber = subStrings.JoinAsString(" ");
+    var formatedOrderNumber = FormatHelper.FormatOrderNumber(Model.OrderNumber);
 }
 
 <div>

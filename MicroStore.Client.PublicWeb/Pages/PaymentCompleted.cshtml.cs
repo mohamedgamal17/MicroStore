@@ -38,7 +38,7 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             if (paymentSessionModel.Status == PaymentSessionStatus.Completed)
             {
-                return RedirectToPage("OrderRecived", new { orderNumber = paymentSessionModel.OrderNumber });
+                return RedirectToPage("Orders/Recived", new { orderNumber = paymentSessionModel.OrderNumber });
             }
             else
             {
@@ -67,7 +67,7 @@ namespace MicroStore.Client.PublicWeb.Pages
 
                     _cookieManager.Set(PaymentConsts.Cookie, paymentSessionModel, cookieOptions);
 
-                    return RedirectToPage("OrderRecived", new { orderNumber = paymentRequest.OrderNumber });
+                    return RedirectToPage("Orders/Recived", new { orderNumber = paymentRequest.OrderNumber });
                 }
                 catch (MicroStoreClientException ex) when (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {

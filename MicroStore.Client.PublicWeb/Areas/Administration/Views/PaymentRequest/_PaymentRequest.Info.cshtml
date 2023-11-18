@@ -1,4 +1,5 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing.PaymentRequestVM
+﻿@using MicroStore.Client.PublicWeb.Utils
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing.PaymentRequestVM
 
 <abp-card>
     <abp-card-header>
@@ -44,21 +45,7 @@
             <abp-column size=_9>
                 <div >
                     <a asp-action="Details" asp-controller="Order" asp-route-id=@Model.OrderId>
-                        @{
-                            List<string> subStrings = new List<string>();
-
-                            for (int i = 0; i < Model.OrderNumber.Length; i = i + 3)
-                            {
-                                if(i % 3 == 0)
-                                {
-                                    subStrings.Add(Model.OrderNumber.Substring(i, 3));
-                                }
-
-                            }
-
-                            var formatedOrderNumber = subStrings.JoinAsString(" ");                       
-                        }
-                        @formatedOrderNumber
+                        @FormatHelper.FormatOrderNumber(Model.OrderNumber)
                     </a>
                   
                 </div>

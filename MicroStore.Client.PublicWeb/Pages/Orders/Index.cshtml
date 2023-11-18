@@ -1,17 +1,18 @@
 ﻿@page
-@using MicroStore.Client.PublicWeb.Components.OrderWidget
-@using MicroStore.Client.PublicWeb.Components.PaginatorWidget;
-@using System.Globalization;
-@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
-@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
-@model MyOrdersModel
+@using MicroStore.Client.PublicWeb.Utils
+@using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes
+@using System.Globalization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
+@model MicroStore.Client.PublicWeb.Pages.Orders.IndexModel
 @{
     var selectList = new List<SelectListItem>();
     ViewData["Title"] = "Orders";
-    ViewData["ContainerTitle"] = "Orders";
+    ViewData["ContainerTitle"] = "My Orders";
+    ViewData["BreadCrumb.IsMainPage"] = false;
+    ViewData["BreadCrumb.Title"] = "Orders";
+    ViewData["BreadCrumb.Page"] = "Orders";
+
     var pager = new PagerModel(100, 10, 1, 10, Url.Page("MyOrders"), "desc");
-
-
     string GetOrderStatusCssClass(OrderState currentState)
     {
         string orderStatusCssClass = string.Empty;
@@ -36,17 +37,17 @@
         return orderStatusCssClass;
     }
 }
-<abp-container>
+<abp-container class="mt-3">
     <abp-card>
         <abp-card-body>
             <abp-table border-style="Bordered">
                 <thead>
                     <tr>
-                        <th>Order Number</th>
-                        <th>Order Date</th>
+                        <th>Order Number</th>        
                         <th>Order Status</th>
                         <th>Payment Status</th>
                         <th>Amount</th>
+                        <th>Order Date</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -55,9 +56,8 @@
                     {
                         @foreach (var order in Model.Orders)
                         {
-                            var orderNumber = Enumerable.Range(0, order.OrderNumber.Length)
-                            .Select(x => order.OrderNumber.Substring(x * 3, 3))
-                            .JoinAsString(" ");
+
+                            var orderNumber = order.OrderNumber.ToString();
 
                             var paymentStatus = order.PaymentId != null ? "Paid" : "UnPaid";
 
@@ -67,17 +67,17 @@
 
                             string orderStatusCssClass = GetOrderStatusCssClass(order.CurrentState);
 
-                            var submissionDate = order.SubmissionDate.ToString("dd MMMM yyyy");
+                            var submissionDate = order.SubmissionDate.ToString("dd-MM-yyyy");
 
                             var totaAmount = order.TotalPrice.ToString("C", new CultureInfo("en-US"));
 
                             <tr>
-                                <td><a asp-page="OrderDetails" asp-route-id="@order.Id">@orderNumber</a></td>
-                                <td>@submissionDate</td>
+                                <td><a asp-page="/Orders/Details" asp-route-id="@order.Id">@FormatHelper.FormatOrderNumber(orderNumber)</a></td>
                                 <td class="@orderStatusCssClass">@orderStatus</td>
                                 <td class="@paymentStatusCssClass">@paymentStatus</td>
-                                <td>totaAmount</td>
-                                <td><a asp-page="OrderDetails" asp-route-id="@order.Id"><i class="fa fa-eye text-theme"></i></a></td>
+                                <td>@totaAmount</td>
+                                <td>@submissionDate</td>
+                                <td><a asp-page="/Orders/Details" asp-route-id="@order.Id"><i class="fa fa-eye text-theme"></i></a></td>
 
                             </tr>
                         }
@@ -95,11 +95,3 @@
         </abp-card-body>
     </abp-card>
 </abp-container>
-<div class="container">
-    <div class="card">
-        <div class="card-body">
-        </div>
-    </div>
-</div>
-
-

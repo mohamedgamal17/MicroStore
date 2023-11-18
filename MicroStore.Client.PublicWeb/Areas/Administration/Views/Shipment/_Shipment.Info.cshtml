@@ -1,17 +1,7 @@
-﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentAggregateVM
+﻿@using MicroStore.Client.PublicWeb.Utils
+@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments.ShipmentAggregateVM
 @{
-    List<string> subStrings = new List<string>();
-
-    for (int i = 0; i < Model.OrderNumber.Length; i = i + 3)
-    {
-        if (i % 3 == 0)
-        {
-            subStrings.Add(Model.OrderNumber.Substring(i, 3));
-        }
-
-    }
-
-    var formatedOrderNumber = subStrings.JoinAsString(" ");
+    var formatedOrderNumber = FormatHelper.FormatOrderNumber(Model.OrderNumber);
 }
 
 <abp-card>

@@ -1,17 +1,20 @@
 ﻿@using MicroStore.Client.PublicWeb.Components.OrderDetailsWidget;
 @using System.Globalization;
+@using MicroStore.Client.PublicWeb.Utils
 @model OrderDetailsWidgetViewModel
 @{
 
-    var orderNumber = Enumerable.Range(0, Model.Order.OrderNumber.Length)
-                .Select(x => Model.Order.OrderNumber.Substring(x * 3, 3))
-                .JoinAsString(" ");
+    var orderNumber = FormatHelper.FormatOrderNumber(Model.Order.OrderNumber);
 
     var paymentStatus = Model.Order.PaymentId != null ? "Paid" : "UnPaid";
 
     var orderStatus = Model.Order.CurrentState;
 
-    var submissionDate = Model.Order.SubmissionDate.ToString("dd MMMM yyyy");
+    var totalPrice = Model.Order.TotalPrice;
+
+    var submissionDate = Model.Order.SubmissionDate.ToString("dd-MM-yyyy");
+
+
 
 }
 <abp-container>
@@ -42,7 +45,7 @@
                 <abp-card class="order-item m-3" data-product-id="@item.ExternalProductId">
                     <abp-card-body>
                         <abp-row>
-                            <abp-column size="_2">
+                            <abp-column size-md="_2">
                                 <a href="/products/@item.ExternalProductId">
                                     @{
                                         string imageUrl = item.Thumbnail ?? "/user-content/no-image.png";
@@ -50,11 +53,14 @@
                                     }
                                 </a>
                             </abp-column>
-                            <abp-column size-lg="_4" size-md="_4" size-sm="_4">
+                            <abp-column size-md="_4" size-md="_4" class="mb-3">
                                 <a href="/products/@Guid.NewGuid().ToString()">
                                     <h3><strong class="text-dark">@item.Name</strong></h3>
                                     <h5><em class="text-secondary">@item.Sku</em></h5>
+                            
                                 </a>
+                                <h5>quantity : @item.Quantity</h5>
+                                <h5>Unit Price : @item.UnitPrice.ToString("C", new CultureInfo("en-US"))</h5>
                                 <div class="mt-3">
                                     <a href="javascript:void(0)" id="cartEffect" class="btn btn-solid hover-solid btn-animation buy-again">
                                         <i class="fa fa-shopping-cart me-1" aria-hidden="true"></i> Buy Again
@@ -62,14 +68,9 @@
 
                                 </div>
                             </abp-column>
-                            <abp-column offset="_3" size="_2">
-                                <abp-row class="pb-3">
-                                    <abp-button class="btn btn-light shadow" disabled="true" abp-tooltip-right="Not available yet">
-                                        Return Product
-                                    </abp-button>
-                                </abp-row>
+                            <abp-column offset-md="_3" size-md="_2">
                                 <abp-row>
-                                    <abp-button class="btn btn-light shadow" disabled="true" abp-tooltip-right="Not available yet">
+                                    <abp-button class="btn btn-light shadow"  abp-tooltip-right="Not available yet">
                                         Reivew Product
                                     </abp-button>
                                 </abp-row>
