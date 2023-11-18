@@ -76,7 +76,6 @@
     <None Include="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <None Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <None Include="Pages\Cart.cshtml" />
-    <None Include="Pages\Checkout.cshtml" />
     <None Include="Pages\Home.cshtml" />
     <None Include="Pages\NotFound.cshtml" />
     <None Include="Pages\ProductDetails.cshtml" />

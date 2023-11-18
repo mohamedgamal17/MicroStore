@@ -35,7 +35,7 @@
                                     <abp-card>
                                         <abp-card-header>
                                             <abp-card-title>Billing Address</abp-card-title>
-                                        </abp-card-header>                                     
+                                        </abp-card-header>
                                         <abp-card-body>
                                             <abp-row>
                                                 @foreach (var address in Model.Profile.Addresses)
@@ -83,8 +83,8 @@
                                         <abp-card-header>
                                             <abp-card-title>Shipping Address</abp-card-title>
                                         </abp-card-header>
-                                        
-                                       <abp-card-body>
+
+                                        <abp-card-body>
                                             <abp-row>
                                                 @foreach (var address in Model.Profile.Addresses)
                                                 {
@@ -93,7 +93,7 @@
                                                             <abp-card-header>
 
                                                                 <input class="form-check-input" asp-for="ShippingAddressId" type="radio" value="@address.Id" style="margin:0!important; position:unset!important">
-                                                          
+
                                                             </abp-card-header>
                                                             <abp-card-body>
                                                                 <div>
@@ -129,7 +129,7 @@
                             </abp-row>
                         </abp-column>
                         <abp-column size-md="_6" size-sm="_12">
-                            @await Component.InvokeAsync(typeof(CheckoutSummaryWidgetViewComponent),Model)
+                            @await Component.InvokeAsync(typeof(CheckoutSummaryWidgetViewComponent), Model)
                         </abp-column>
                     </abp-row>
                 </form>

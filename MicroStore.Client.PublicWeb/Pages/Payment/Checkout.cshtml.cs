@@ -18,13 +18,13 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
-namespace MicroStore.Client.PublicWeb.Pages
+
+namespace MicroStore.Client.PublicWeb.Pages.Payment
 {
     [Authorize]
     [CheckProfilePageCompletedFilter]
     public class CheckoutModel : PageModel
     {
-   
         [BindProperty]
         public string PaymentMethod { get; set; }
 
@@ -36,6 +36,8 @@ namespace MicroStore.Client.PublicWeb.Pages
         public string ShippingAddressId { get; set; }
 
         public User Profile { get; set; }
+
+
 
         private readonly IWorkContext _workContext;
 
@@ -64,7 +66,6 @@ namespace MicroStore.Client.PublicWeb.Pages
             _profileService = profileService;
             _cookieManager = cookieManager;
         }
-
         public List<PaymentSystem> PaymentSystems { get; set; }
         public BasketAggregate Basket { get; set; }
         public double SubTotal { get; set; }
@@ -97,24 +98,24 @@ namespace MicroStore.Client.PublicWeb.Pages
                     context.Result = RedirectToPage("/Profile/Address/Create");
                 }
 
-            }catch(MicroStoreClientException ex) when(ex.StatusCode== System.Net.HttpStatusCode.NotFound)
+            }
+            catch (MicroStoreClientException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
 
                 _notificationManager.Error("Please complete your profile first");
 
-                context.Result = RedirectToPage("/Profile/Create", new {returnUrl = context.HttpContext.Request.Path});
+                context.Result = RedirectToPage("/Profile/Create", new { returnUrl = context.HttpContext.Request.Path });
             }
 
 
         }
-      
+
         public async Task<IActionResult> OnGetAsync()
         {
             return Page();
         }
 
 
-  
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -124,16 +125,16 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             var billingAddress = Profile.Addresses.SingleOrDefault(x => x.Id == BillingAddressId);
 
-            var shippingAddress = Profile.Addresses.SingleOrDefault(x=> x.Id ==  ShippingAddressId);
+            var shippingAddress = Profile.Addresses.SingleOrDefault(x => x.Id == ShippingAddressId);
 
-            if(billingAddress == null)
+            if (billingAddress == null)
             {
                 _notificationManager.Error("Invalid billing address id");
 
                 return Page();
             }
 
-            if(shippingAddress == null)
+            if (shippingAddress == null)
             {
                 _notificationManager.Error("Invalid billing address id");
 
@@ -192,7 +193,7 @@ namespace MicroStore.Client.PublicWeb.Pages
             var processPaymentRequestOptions = new PaymentProcessRequestOptions
             {
                 GatewayName = PaymentMethod,
-                ReturnUrl = $"{HttpContext.GetHostUrl()}{Url.Page("PaymentCompleted")}",
+                ReturnUrl = $"{HttpContext.GetHostUrl()}{Url.Page("/Payment/Complete")}",
                 CancelUrl = HttpContext.GetHostUrl()
             };
 
@@ -284,6 +285,5 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             }).ToList();
         }
-
     }
 }
