@@ -33,6 +33,7 @@ using Microsoft.AspNetCore.Authentication;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Common;
 using IdentityModel;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace MicroStore.Client.PublicWeb
 {
@@ -135,6 +136,12 @@ namespace MicroStore.Client.PublicWeb
                        bundle.AddContributors(typeof(FronEndThemeScriptContributor));
                    });
 
+            });
+
+            context.Services.AddCookieManager(options =>
+            {
+                options.AllowEncryption = true;
+                options.DefaultExpireTimeInDays = 10;
             });
 
             context.Services.AddFluentValidationAutoValidation();

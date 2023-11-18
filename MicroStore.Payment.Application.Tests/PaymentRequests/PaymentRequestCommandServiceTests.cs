@@ -142,6 +142,62 @@ namespace MicroStore.Payment.Application.Tests.PaymentRequests
             result.Exception.Should().BeOfType<BusinessException>();
         }
 
+
+
+        [Test]
+        public async Task Should_complete_payment_requests()
+        {
+            PaymentRequest fakePayment = await CreateFakePaymentRequest();
+
+            var result = await _paymentRequestCommandService.CompleteAsync(new CompletePaymentModel
+            {
+                GatewayName = PaymentMethodConst.ProviderKey,
+                SessionId = fakePayment.Id
+            });
+
+            result.IsSuccess.Should().BeTrue();
+
+            var paymentRequest = await SingleAsync<PaymentRequest>(x => x.Id == fakePayment.Id);
+
+            paymentRequest.State.Should().Be(PaymentStatus.Payed);
+        }
+
+
+        [Test]
+        public async Task Should_return_error_result_while_completing_payment_request_when_payment_gateway_is_not_exist()
+        {
+            PaymentRequest paymentRequest = await CreateFakePaymentRequest();
+
+            var result = await _paymentRequestCommandService.CompleteAsync(new CompletePaymentModel
+            {
+                GatewayName = "NA",                
+                SessionId = Guid.NewGuid().ToString()
+            });
+
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Exception.Should().BeOfType<EntityNotFoundException>();
+        }
+
+        [Test]
+        public async Task Shoud_return_error_result_while_completing_payment_request_when_payment_gateway_is_not_active()
+        {
+            PaymentRequest paymentRequest = await CreateFakePaymentRequest();
+
+            var result = await _paymentRequestCommandService.CompleteAsync(new CompletePaymentModel
+            {
+                GatewayName = PaymentMethodConst.NonActiveGateway,
+                SessionId = Guid.NewGuid().ToString()
+            });
+
+            result.IsFailure.Should().BeTrue();
+
+            result.Exception.Should().BeOfType<BusinessException>();
+
+            result.IsFailure.Should().BeTrue();
+        }
+
         [Test]
         public async Task Should_refund_payment_request()
         {

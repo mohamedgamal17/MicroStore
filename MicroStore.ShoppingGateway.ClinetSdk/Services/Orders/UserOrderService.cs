@@ -30,5 +30,10 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
         {
             return await MakeRequestAsync<Order>(string.Format("{0}/{1}", BaseUrl, orderId), HttpMethod.Get, requestHeaderOptions: requestHeaderOptions ,cancellationToken:cancellationToken);
         }
+
+        public async Task<Order> GetByOrderNumberAsync(string orderNumber , RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
+        {
+            return await MakeRequestAsync<Order>(string.Format("{0}/order_number/{1}",BaseUrl ,orderNumber), HttpMethod.Get, requestHeaderOptions: requestHeaderOptions, cancellationToken: cancellationToken);
+        }
     }
 }

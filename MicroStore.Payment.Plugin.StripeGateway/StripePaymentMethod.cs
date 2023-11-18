@@ -37,11 +37,9 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             _paymentRequestManager = paymentRequestManager;
         }
 
-        public string PaymentGatewayName => throw new NotImplementedException();
-
         public async Task<Result<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default)
         {
-            return await WrappResponseResult(async () =>
+            return await WrappResponseWithResult(async () =>
             {
                 var paymentRequest = await _paymentRequestManager.GetPaymentRequest(paymentId);
 
@@ -51,10 +49,6 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     CancelUrl = processPaymentModel.CancelUrl,
                     ClientReferenceId = paymentId.ToString(),
                     LineItems = PrepareStripeLineItems(paymentRequest!.Items),
-
-
-
-
                     ShippingOptions = new List<SessionShippingOptionOptions>
                     {
                         new SessionShippingOptionOptions
@@ -101,14 +95,33 @@ namespace MicroStore.Payment.Plugin.StripeGateway
                     AmountTotal = (session.AmountTotal / 100 ?? 0),
                     SuccessUrl = session.SuccessUrl,
                     CancelUrl = session.CancelUrl,
-                    CheckoutLink = session.Url
+                    CheckoutLink = session.Url,
+                    Provider = StripePaymentConst.Provider
                 };
+            });
+        }
+        public async Task<Result<PaymentRequestDto>> Complete(string sessionId, CancellationToken cancellationToken = default)
+        {
+            return await WrappReponseWithException(async () =>
+            {
+                var requestOptions = PrepareStripeRequest();
+
+                var stripeSession = await _sessionService.GetAsync(sessionId, requestOptions: requestOptions);
+
+                if (stripeSession.Status != "complete")
+                {
+                    return new Result<PaymentRequestDto>(new UserFriendlyException("Payment session is not completed"));
+                }
+
+                var paymentRequestId = stripeSession.Metadata["paymentrequest_id"];
+
+                return await _paymentRequestManager.Complete(paymentRequestId, StripePaymentConst.Provider, stripeSession.PaymentIntentId, DateTime.UtcNow);
             });
         }
 
         public async Task<Result<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default)
         {
-            return await WrappResponseResult(async () =>
+            return await WrappResponseWithResult(async () =>
             {
                 var paymentRequest = await _paymentRequestManager.GetPaymentRequest(paymentId);
 
@@ -160,7 +173,18 @@ namespace MicroStore.Payment.Plugin.StripeGateway
         }
 
 
-        private async Task<Result<T>> WrappResponseResult<T>(Func<Task<T>> func)
+        private async Task<T> WrappReponseWithException<T>(Func<Task<T>> func)
+        {
+            try
+            {
+                return await func();
+
+            }catch(StripeException ex)
+            {
+                throw new UserFriendlyException(message: ex.StripeError?.Error, details: ex.StripeError?.ErrorDescription);
+            }
+        }
+        private async Task<Result<T>> WrappResponseWithResult<T>(Func<Task<T>> func)
         {
 
             try
@@ -170,8 +194,7 @@ namespace MicroStore.Payment.Plugin.StripeGateway
             }
             catch (StripeException ex)
             {
-                return new Result<T>(new BusinessException(message: ex.StripeError?.Message, details: ex.StripeError?.ErrorDescription));
-
+                return new Result<T>(new UserFriendlyException(message: ex.StripeError?.Message, details: ex.StripeError?.ErrorDescription));
             }
         }
     }

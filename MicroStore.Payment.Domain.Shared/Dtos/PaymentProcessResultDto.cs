@@ -13,5 +13,7 @@ namespace MicroStore.Payment.Domain.Shared.Dtos
         public string CancelUrl { get; set; }
         public string SuccessUrl { get; set; }
 
+        public string Provider { get; set; }
+
     }
 }

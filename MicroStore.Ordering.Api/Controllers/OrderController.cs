@@ -12,7 +12,7 @@ namespace MicroStore.Ordering.Api.Controllers
 {
     [Route("api/orders")]
     [ApiController]
-   // [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
+    [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
     public class OrderController : MicroStoreApiController
     {
         private readonly IOrderCommandService _orderCommandService;
@@ -52,7 +52,7 @@ namespace MicroStore.Ordering.Api.Controllers
         }
 
         [HttpGet]
-        [Route("order_number/{orderId}")]
+        [Route("order_number/{orderNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
         public async Task<IActionResult> RetirveOrderByNumber(string orderNumber)
         {

@@ -23,7 +23,6 @@ namespace MicroStore.Payment.Application.Domain
         {
             var payment = await RetrivePaymentRequest(paymentId, cancellationToken);
 
-
             payment.Complete(paymentGateway, transactionId, capturedAt);
 
             await _paymentRequestRepository.UpdateAsync(payment);

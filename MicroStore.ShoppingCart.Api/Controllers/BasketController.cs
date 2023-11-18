@@ -139,6 +139,16 @@ namespace MicroStore.ShoppingCart.Api.Controllers
         }
 
 
+        [Route("clear/{id}")]
+        [HttpPost]
+        public async Task<IActionResult> Clear(string id)
+        {
+            await _basketRepository.RemoveAsync(id);
+
+            return NoContent();
+        }
+
+
         [NonAction]
         protected IActionResult Success<TResult>(int statusCode, TResult result)
         {

@@ -1,8 +1,10 @@
+using CookieManager;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.AspNetCore.UI;
+using MicroStore.Client.PublicWeb.Consts;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
@@ -49,7 +51,9 @@ namespace MicroStore.Client.PublicWeb.Pages
 
         private readonly UserProfileService _profileService;
 
-        public CheckoutModel(IWorkContext workContext, UserOrderService userOrderService, UserPaymentRequestService userPaymentRequestService, ShipmentRateService shipmentRateService, BasketAggregateService basketAggregateService, UINotificationManager notificationManager, UserProfileService profileService)
+        private readonly ICookieManager _cookieManager;
+
+        public CheckoutModel(IWorkContext workContext, UserOrderService userOrderService, UserPaymentRequestService userPaymentRequestService, ShipmentRateService shipmentRateService, BasketAggregateService basketAggregateService, UINotificationManager notificationManager, UserProfileService profileService, ICookieManager cookieManager)
         {
             _workContext = workContext;
             _userOrderService = userOrderService;
@@ -58,6 +62,7 @@ namespace MicroStore.Client.PublicWeb.Pages
             _basketAggregateService = basketAggregateService;
             _notificationManager = notificationManager;
             _profileService = profileService;
+            _cookieManager = cookieManager;
         }
 
         public List<PaymentSystem> PaymentSystems { get; set; }
@@ -187,17 +192,33 @@ namespace MicroStore.Client.PublicWeb.Pages
             var processPaymentRequestOptions = new PaymentProcessRequestOptions
             {
                 GatewayName = PaymentMethod,
-                ReturnUrl = $"{HttpContext.GetHostUrl()}{Url.Page("OrderSuccess")}",
+                ReturnUrl = $"{HttpContext.GetHostUrl()}{Url.Page("PaymentCompleted")}",
                 CancelUrl = HttpContext.GetHostUrl()
             };
 
             var paymentProcessResponse = await _userPaymentRequestService.ProcessAsync(paymentResponse.Id, processPaymentRequestOptions);
 
+            var PaymentSessionModel = new PaymentSessionModel
+            {
+                OrderId = orderResponse.Id,
+                OrderNumber = orderResponse.OrderNumber,
+                PaymentRequestId = paymentResponse.Id,
+                Provider = paymentProcessResponse.Provider,
+                SessionId = paymentProcessResponse.SessionId,
+                CheckoutUrl = paymentProcessResponse.CheckoutLink
+            };
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                Expires = DateTime.UtcNow.AddHours(1)
+            };
+
+            _cookieManager.Set(PaymentConsts.Cookie, PaymentSessionModel, cookieOptions);
+
             return Redirect(paymentProcessResponse.CheckoutLink);
         }
-
-
-
 
         private Address MapAddress(AddressModel model)
         {

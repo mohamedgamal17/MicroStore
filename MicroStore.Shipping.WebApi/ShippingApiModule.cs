@@ -1,4 +1,5 @@
-﻿using MicroStore.BuildingBlocks.AspNetCore;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.Shipping.Application;
 using MicroStore.Shipping.Infrastructure;
 using Volo.Abp.Modularity;
@@ -14,7 +15,10 @@ namespace MicroStore.Shipping.WebApi
 
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-          
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(ShippingApiModule).Assembly);
+            });
         }
     }
 

@@ -20,6 +20,8 @@ namespace MicroStore.Payment.Application.PaymentRequests
             _paymentMethodResolver = paymentMethodResolver;
         }
 
+
+
         public async Task<Result<PaymentRequestDto>> CreateAsync(CreatePaymentRequestModel model, CancellationToken cancellationToken = default)
         {
             bool isOrderPaymentCreated = await _paymentRequestRepository.AnyAsync(x => x.OrderId == model.OrderId
@@ -78,6 +80,21 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
 
             return await paymentMethod.Process(paymentId, model);
+        }
+
+
+        public async Task<Result<PaymentRequestDto>> CompleteAsync(CompletePaymentModel model, CancellationToken cancellationToken = default)
+        {
+            var resolverResult = await _paymentMethodResolver.Resolve(model.GatewayName, cancellationToken);
+
+            if (resolverResult.IsFailure)
+            {
+                return new Result<PaymentRequestDto>(resolverResult.Exception);
+            }
+
+            var paymentMethod = resolverResult.Value;
+
+            return  await paymentMethod.Complete(model.SessionId, cancellationToken);
         }
 
         public async Task<Result<PaymentRequestDto>> RefundPaymentAsync(string paymentId, CancellationToken cancellationToken = default)

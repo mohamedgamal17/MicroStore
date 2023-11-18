@@ -20,7 +20,6 @@
     public class PaymentProcessRequestOptions
     {
         public string GatewayName { get; set; }
-
         public string ReturnUrl { get; set; }
         public string CancelUrl { get; set; }
     }
@@ -28,8 +27,8 @@
 
     public class PaymentCompleteRequestOptions
     {
-        public string PaymentGatewayName { get; set; }
-        public string Token { get; set; }
+        public string GatewayName { get; set; }
+        public string SessionId { get; set; }
     }
 
     public class PaymentProductCreateRequestOptions

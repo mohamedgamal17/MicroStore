@@ -26,6 +26,11 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Billing
             return await MakeRequestAsync<PaymentProcess>(string.Format("{0}/process/{1}", BaseUrl, paymentId), HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
         }
 
+        public async Task<PaymentRequest> CompleteAsync(PaymentCompleteRequestOptions options, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
+        {
+            return await MakeRequestAsync<PaymentRequest>(string.Format("{0}/complete",BaseUrl), HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
+        }
+
         public async Task<PagedList<PaymentRequest>> ListAsync(PagingReqeustOptions options, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<PagedList<PaymentRequest>>(BaseUrl, HttpMethod.Get, options, requestHeaderOptions, cancellationToken);

@@ -77,6 +77,23 @@ namespace MicroStore.Payment.Api.Controllers
             return result.ToOk();
         }
 
+        [HttpPost]
+        [Route("complete")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
+        [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+        public async Task<IActionResult> CompletePaymentRequest(CompletePaymentModel model)
+        {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
+            var result = await _paymentRequestCommandService.CompleteAsync(model);
+
+            return result.ToOk();
+        }
 
 
         [HttpGet]

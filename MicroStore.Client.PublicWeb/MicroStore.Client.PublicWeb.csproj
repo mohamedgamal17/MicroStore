@@ -37,12 +37,13 @@
     <Content Remove="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <Content Remove="Pages\NotFound.cshtml" />
-    <Content Remove="Pages\OrderSuccess.cshtml" />
+    <Content Remove="Pages\OrderRecived.cshtml" />
     <Content Remove="Pages\Profile.cshtml" />
     <Content Remove="Pages\Profile\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CookieManager" Version="2.0.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="jQuery" Version="3.6.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
@@ -80,7 +81,7 @@
     <None Include="Pages\Home.cshtml" />
     <None Include="Pages\MyOrders.cshtml" />
     <None Include="Pages\NotFound.cshtml" />
-    <None Include="Pages\OrderSuccess.cshtml" />
+    <None Include="Pages\OrderRecived.cshtml" />
     <None Include="Pages\ProductDetails.cshtml" />
     <None Include="Pages\Products.cshtml" />
     <None Include="Pages\Profile\Edit.cshtml" />
@@ -141,13 +142,8 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\NotFound.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\OrderSuccess.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Profile.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Profile\Edit.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\OrderSuccess.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

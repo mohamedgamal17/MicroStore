@@ -8,6 +8,8 @@ namespace MicroStore.Payment.Domain.Shared
     {
         Task<Result<PaymentProcessResultDto>> Process(string paymentId, ProcessPaymentRequestModel processPaymentModel, CancellationToken cancellationToken = default);
 
+        Task<Result<PaymentRequestDto>> Complete(string sessionId, CancellationToken cancellationToken = default); 
+
         Task<Result<PaymentRequestDto>> Refund(string paymentId, CancellationToken cancellationToken = default);
 
     }

@@ -12,7 +12,6 @@ using System.Net;
 namespace MicroStore.Ordering.Api.Controllers
 {
     [ApiController]
-
     [Route("api/user/orders")]
     public class UserOrderController : MicroStoreApiController
     {
@@ -95,7 +94,7 @@ namespace MicroStore.Ordering.Api.Controllers
         }
 
         [HttpGet]
-        [Route("order_number/{orderId}")]
+        [Route("order_number/{orderNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
         [Authorize(Policy = ApplicationSecurityPolicies.RequireOrderReadScope)]
         public async Task<IActionResult> RetirveOrderByNumber(string orderNumber)

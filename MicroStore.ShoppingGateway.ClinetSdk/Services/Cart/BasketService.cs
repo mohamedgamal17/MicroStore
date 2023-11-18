@@ -38,5 +38,10 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Cart
         {
             return await MakeRequestAsync<Basket>(BaseUrl + "/" + "migrate", HttpMethod.Put, options, requestHeaderOptions, cancellationToken);
         }
+
+        public async Task ClearAsync(string userId , RequestHeaderOptions requestHeaderOptions = null , CancellationToken cancellationToken = default)
+        {
+            await MakeRequestAsync(string.Format("{0}/clear/{1}", BaseUrl, userId), HttpMethod.Post, requestHeaderOptions: requestHeaderOptions, cancellationToken: cancellationToken);
+        }
     }
 }

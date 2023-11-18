@@ -8,6 +8,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
     {
         Task<Result<PaymentRequestDto>> CreateAsync(CreatePaymentRequestModel model, CancellationToken cancellationToken = default);
         Task<Result<PaymentProcessResultDto>> ProcessPaymentAsync(string paymentId, ProcessPaymentRequestModel model, CancellationToken cancellationToken = default);
+        Task<Result<PaymentRequestDto>> CompleteAsync(CompletePaymentModel model, CancellationToken cancellationToken = default);
         Task<Result<PaymentRequestDto>> RefundPaymentAsync(string paymentId, CancellationToken cancellationToken = default);
     }
 }
