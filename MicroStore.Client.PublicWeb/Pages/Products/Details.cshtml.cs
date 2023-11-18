@@ -2,34 +2,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Infrastructure;
+using MicroStore.Client.PublicWeb.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
-using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
-using System.ComponentModel.DataAnnotations;
-namespace MicroStore.Client.PublicWeb.Pages
+
+namespace MicroStore.Client.PublicWeb.Pages.Products
 {
     [CheckProfilePageCompletedFilter]
-    public class ProductDetailsModel : PageModel
+    public class DetailsModel : PageModel
     {
         public Product Product { get; set; }
         public List<ProductReview> ProductReviews { get; set; }
         public List<ProductReview> UserReviews { get; set; }
 
         [BindProperty]
-        public CreateProductReviewModel ReviewInput  { get; set; }
+        public CreateProductReviewModel ReviewInput { get; set; }
 
         private readonly ProductService _productService;
 
         private readonly ProductReviewService _productReviewService;
 
-        private readonly ILogger<ProductDetailsModel> _logger;
+        private readonly ILogger<DetailsModel> _logger;
 
         private readonly UINotificationManager _uiNotificationManager;
 
         private readonly IWorkContext _workContext;
 
-        public ProductDetailsModel(ProductReviewService productReviewService, ILogger<ProductDetailsModel> logger, ProductService productService, UINotificationManager uiNotificationManager, IWorkContext workContext)
+        public DetailsModel(ProductReviewService productReviewService, ILogger<DetailsModel> logger, ProductService productService, UINotificationManager uiNotificationManager, IWorkContext workContext)
         {
             _productReviewService = productReviewService;
             _logger = logger;
@@ -37,6 +37,7 @@ namespace MicroStore.Client.PublicWeb.Pages
             _uiNotificationManager = uiNotificationManager;
             _workContext = workContext;
         }
+
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -60,9 +61,9 @@ namespace MicroStore.Client.PublicWeb.Pages
         {
             if (!ModelState.IsValid)
             {
-                _uiNotificationManager.Error( "There is one or more validation error");
+                _uiNotificationManager.Error("There is one or more validation error");
 
-                return RedirectToPage("ProductDetails", new { id = id });
+                return RedirectToPage("Details", new { id = id });
 
             }
 
@@ -72,7 +73,7 @@ namespace MicroStore.Client.PublicWeb.Pages
             {
                 _uiNotificationManager.Error("You should be logged in to be able to submit your review");
 
-                return RedirectToPage("ProductDetails", new { id = id });
+                return RedirectToPage("Details", new { id = id });
             }
 
             var requestOptions = new ProductReviewRequestOption
@@ -84,43 +85,27 @@ namespace MicroStore.Client.PublicWeb.Pages
 
             try
             {
-               var response = await _productReviewService.CreateAsync(id, requestOptions);
+                var response = await _productReviewService.CreateAsync(id, requestOptions);
 
-                _uiNotificationManager.Success( "Your review has been submited successfully");
+                _uiNotificationManager.Success("Your review has been submited successfully");
 
-               return RedirectToPage("ProductDetails", new { id = id });
+                return RedirectToPage("Details", new { id = id });
 
             }
-            catch(MicroStoreClientException ex) 
+            catch (MicroStoreClientException ex)
             {
                 _uiNotificationManager.Error(ex.Erorr.Detail);
 
-                return RedirectToPage("ProductDetails", new { id = id });
+                return RedirectToPage("Details", new { id = id });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogException(ex);
 
                 _uiNotificationManager.Error("Sorry service is not available now . Try again later");
 
-                return RedirectToPage("ProductDetails", new { id = id });
+                return RedirectToPage("Details", new { id = id });
             }
         }
-    }
-
-    public class CreateProductReviewModel
-    {
-        [Range(1,5)]
-        public int Rating { get; set; }
-
-        [Required]
-        [MaxLength(265)]
-        [MinLength(3)]
-        public string ReviewTitle { get; set; }
-
-        [Required]
-        [MaxLength(265)]
-        [MinLength(3)]
-        public string ReviewText { get; set; }
     }
 }

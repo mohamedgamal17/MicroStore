@@ -24,13 +24,13 @@
                         <div class="product-box" data-product-id="@product.Id">
                             <div class="img-wrapper">
                                 <div class="front">
-                                    <a asp-page="ProductDetails" asp-route-id="@product.Id">
+                                    <a asp-page="/Products/Details" asp-route-id="@product.Id">
                                         <img src="@frontImage"
                                              class="img-fluid blur-up lazyload bg-img" alt="">
                                     </a>
                                 </div>
                                 <div class="back">
-                                    <a asp-page="ProductDetails" asp-route-id="@product.Id">
+                                    <a asp-page="/Products/Details" asp-route-id="@product.Id">
                                         <img src="@backImage"
                                              class="img-fluid blur-up lazyload bg-img" alt="">
                                     </a>
@@ -42,7 +42,7 @@
                                 </div>
                             </div>
                             <div class="product-detail">
-                                <a href="product-page(no-sidebar).html">
+                                <a asp-page="/Products/Details" asp-route-id="@product.Id">
                                     <h6>@productName</h6>
                                 </a>
                                 <h4>@productPrice</h4>

@@ -1,6 +1,6 @@
 ﻿@using MicroStore.Client.PublicWeb.Components.CategoryWidget
 @model CategoryWidgetModel
-<div id="mySidenav" class="sidenav">
+<div id="mySidenav" class="sidenav" style="overflow:hidden">
     <a href="javascript:void(0)" class="sidebar-overlay" onclick="closeNav()"></a>
     <nav>
         <div onclick="closeNav()">
@@ -9,16 +9,19 @@
                    aria-hidden="true"></i> Back
             </div>
         </div>
-        <ul id="sub-menu" class="sm pixelstrap sm-vertical">
-            @if (Model.Categories.Count > 0)
-            {
+        @if (Model.Categories.Count > 0)
+        {
+            <ul id="sub-menu" class="sm pixelstrap sm-vertical">
                 @foreach (var category in Model.Categories)
                 {
                     <li>
-                        <a href=@($"/Products?categoryName={category.Name}")>@category.Name</a>
+                        <a asp-page="/Products/Index" asp-route-category="@category.Name">@category.Name</a>
                     </li>
                 }
-            }
-        </ul>
+            </ul>
+        }
+        <div class="sidebar-back border-top " style="margin:0 !important; position:absolute; bottom:0; width:100%!important">
+            <a class="text-dark" asp-page="/Products/Index">All Products</a>
+        </div>
     </nav>
 </div>

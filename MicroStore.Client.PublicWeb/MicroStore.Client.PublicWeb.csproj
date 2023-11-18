@@ -78,8 +78,6 @@
     <None Include="Pages\Cart.cshtml" />
     <None Include="Pages\Home.cshtml" />
     <None Include="Pages\NotFound.cshtml" />
-    <None Include="Pages\ProductDetails.cshtml" />
-    <None Include="Pages\Products.cshtml" />
     <None Include="Pages\Profile\Edit.cshtml" />
     <None Include="Pages\Profile\Index.cshtml" />
     <None Include="Pages\Shared\Components\BasketWidget\Default.cshtml" />

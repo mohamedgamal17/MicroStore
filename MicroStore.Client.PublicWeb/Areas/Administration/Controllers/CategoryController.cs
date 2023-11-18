@@ -64,11 +64,11 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             try
             {
-                var categoryId = await _categoryService.CreateAsync(categoryRequestOptions);
+                var category = await _categoryService.CreateAsync(categoryRequestOptions);
 
                 NotificationManager.Success("Category has been created successfully !");
 
-                return RedirectToAction("Edit" , new { id= categoryId });
+                return RedirectToAction("Edit" , new { id= category.Id });
             }
             catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {

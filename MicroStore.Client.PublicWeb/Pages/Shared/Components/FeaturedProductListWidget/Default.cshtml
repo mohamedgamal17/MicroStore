@@ -26,7 +26,7 @@
                                         <div class="product-box product-wrap" style="width: 100%; display: inline-block;" data-product-id="@product.Id">
                                             <div class="img-wrapper">
                                                 <div class="front">
-                                                    <a href="ProductDetails/?id=@product.Id">
+                                                    <a asp-page="/Products/Details" asp-route-id="@product.Id">
                                                         <img src="@frontImage" class="img-fluid blur-up lazyload bg-img" alt="">
                                                     </a>
                                                 </div>
@@ -51,7 +51,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-detail text-center">
-                                                <a href="product-page(no-sidebar).html" tabindex="0">
+                                                <a asp-page="/Products/Details" asp-route-id="@product.Id" tabindex="0">
                                                     <h6>@productName</h6>
                                                 </a>
                                                 <h4>@productPrice</h4>

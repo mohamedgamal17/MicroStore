@@ -4,14 +4,14 @@ using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using Volo.Abp.BlobStoring;
 
-namespace MicroStore.Client.PublicWeb.Pages
+namespace MicroStore.Client.PublicWeb.Pages.Products
 {
     [CheckProfilePageCompletedFilter]
     public class ImageSearchModel : PageModel
     {
         private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
         public List<Product> Products { get; set; }
-        public string  TargetImage { get; set; }
+        public string TargetImage { get; set; }
         public bool HasErorr { get; set; }
 
         [BindProperty]
@@ -38,8 +38,8 @@ namespace MicroStore.Client.PublicWeb.Pages
 
                 return Page();
             }
-           
-            using(var ms = new MemoryStream())
+
+            using (var ms = new MemoryStream())
             {
 
                 string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(Image.FileName));

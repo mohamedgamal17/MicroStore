@@ -1,24 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
-
-namespace MicroStore.Client.PublicWeb.Pages
+namespace MicroStore.Client.PublicWeb.Pages.Products
 {
-    [CheckProfilePageCompletedFilter]
-    public class ProductReviewsModel : PageModel
+    public class ReviewsModel : PageModel
     {
-
         private readonly ProductService _productService;
         public Product Product { get; set; }
         public int CurrentPage { get; set; }
-        public ProductReviewsModel(ProductService productService)
+        public ReviewsModel(ProductService productService)
         {
             _productService = productService;
         }
 
-        public async Task<IActionResult> OnGetAsync(string id , int currentPage = 1)
+
+        public async Task<IActionResult> OnGetAsync(string id, int currentPage = 1)
         {
 
             Product = await _productService.GetAsync(id);
@@ -26,6 +23,6 @@ namespace MicroStore.Client.PublicWeb.Pages
             CurrentPage = currentPage;
 
             return Page();
-        } 
+        }
     }
 }
