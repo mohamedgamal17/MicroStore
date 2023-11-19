@@ -176,7 +176,7 @@ namespace MicroStore.Client.PublicWeb
 
             app.UseAuthorization();
 
-            app.UseMiddleware<UserProfileMiddleware>();
+           // app.UseMiddleware<UserProfileMiddleware>();
 
             app.UseAbpSerilogEnrichers();
 

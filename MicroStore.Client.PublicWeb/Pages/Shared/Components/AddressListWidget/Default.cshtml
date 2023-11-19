@@ -1,0 +1,45 @@
+﻿@model MicroStore.Client.PublicWeb.Components.AddressListWidget.AddressListWidgetModel
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mt-0">
+            <div class="card-body">
+                <div class="top-sec">
+                    <h3>Address Book</h3>
+                    <a href="/Profile/Address/Create" class="btn btn-sm btn-solid">+ add new</a>
+                </div>
+                <div class="address-book-section">
+                    <div class="row g-4">
+                        @foreach (var address in Model.Addresses)
+                        {
+                            <div class="select-box active col-xl-4 col-md-6 address-box-wrapper" data-address-id="@address.Id">
+                                <div class="address-box">
+                                    <div class="top">
+                                        <h6>@address.Name <span>home</span></h6>
+                                    </div>
+                                    <div class="middle">
+                                        <div class="address">
+                                            <p class="mb-1">@address.AddressLine1</p>
+                                            <p class="mb-1">@address.AddressLine2</p>
+                                        </div>
+                                        <div class="number">
+                                            <p>Country : <span>@address.CountryCode</span></p>
+                                            <p>State : <span>@address.State</span></p>
+                                            <p>City : <span>@address.City</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="bottom">
+                                        <a href="Profile/Address/Edit/@address.Id" class="bottom_btn">  edit</a>
+                                        <a href="#" class="bottom_btn remove-address">remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿@page
 @using System.Security.Claims;
+@using MicroStore.Client.PublicWeb.Components.AddressListWidget
 @model IndexModel
 @{
 
@@ -139,48 +140,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="address">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card mt-0">
-                                    <div class="card-body">
-                                        <div class="top-sec">
-                                            <h3>Address Book</h3>
-                                            <a asp-page="Address/Create" class="btn btn-sm btn-solid">+ add new</a>
-                                        </div>
-                                        <div class="address-book-section">
-                                            <div class="row g-4">
-                                                @foreach(var address in Model.UserProfile.Addresses)
-                                                {
-                                                    <div class="select-box active col-xl-4 col-md-6">
-                                                        <div class="address-box">
-                                                            <div class="top">
-                                                                <h6>@address.Name <span>home</span></h6>
-                                                            </div>
-                                                            <div class="middle">
-                                                                <div class="address">
-                                                                    <p class="mb-1">@address.AddressLine1</p>
-                                                                    <p class="mb-1">@address.AddressLine2</p>
-                                                                </div>
-                                                                <div class="number">
-                                                                    <p>Country : <span>@address.CountryCode</span></p>
-                                                                    <p>State : <span>@address.State</span></p>
-                                                                    <p>City : <span>@address.City</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="bottom">
-                                                                <a asp-page="Address/Edit" asp-route-id="@address.Id" class="bottom_btn">  edit</a>
-                                                                                                                                                                                                             <a href="#" class="bottom_btn">remove</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
-                                        
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @await Component.InvokeAsync(typeof(AddressListWidgetViewComponent))
                     </div>
                 </div>
             </div>

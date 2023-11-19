@@ -14,6 +14,11 @@ namespace MicroStore.Client.PublicWeb.Controllers
             return ViewComponent("BasketWidget");
         }
 
+        public IActionResult AddressListWidget()
+        {
+            return ViewComponent("AddressListWidget");
+        }
+
         public IActionResult ProductListWidget(string? category , string? manufacturer , double? minPrice , double? maxPrice , int length = 24)
         {
             return ViewComponent("ProductListWidget", new

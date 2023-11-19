@@ -34,6 +34,11 @@ namespace MicroStore.Client.PublicWeb.Models
         public string PhoneNumber { get; set; }
     }
 
+    public class RemoveAddressModel
+    {
+        public string AddressId { get; set; }
+    }
+
     public class AddressModelValidator : AbstractValidator<AddressModel>
     {
         public AddressModelValidator()
