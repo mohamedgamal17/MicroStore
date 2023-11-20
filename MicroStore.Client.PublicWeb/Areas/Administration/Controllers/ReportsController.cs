@@ -110,7 +110,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
             catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                NotificationManager.Error(ex.Erorr.Title);
+                NotificationManager.Error(ex.Error.Title);
 
                 return RedirectToAction(nameof(Sales));
             }

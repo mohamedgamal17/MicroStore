@@ -67,9 +67,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             }catch(MicroStoreClientException ex) when(ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                NotificationManager.Error(ex.Erorr.Title);
+                NotificationManager.Error(ex.Error.Title);
 
-                ex.Erorr.MapToModelState(ModelState);
+                ex.Error.MapToModelState(ModelState);
 
                 await PrepareShippingSetingsSelectionLists(model.DefaultShippingSystem, model.Location?.CountryCode, model.Location?.StateProvince);
 

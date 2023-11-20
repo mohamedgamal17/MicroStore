@@ -71,7 +71,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Payment
                 catch (MicroStoreClientException ex) when (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
                     HasError = true;
-                    Error = ex.Erorr.Detail;
+                    Error = ex.Error.Detail;
                     return Page();
                 }
             }

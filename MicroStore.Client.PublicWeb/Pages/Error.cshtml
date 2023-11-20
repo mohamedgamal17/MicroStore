@@ -1,18 +1,26 @@
 ﻿@page
-@model MicroStore.Client.PublicWeb.Pages.NotFoundModel
+@using MicroStore.Client.PublicWeb.Theming
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@model MicroStore.Client.PublicWeb.Pages.ErrorModel
+@inject IThemeManager ThemeManager
+@{
+    Layout = ThemeManager.CurrentTheme.GetLayout(StandardApplicationLayout.Error);
+
+    ViewData["Title"] = $"{(int)Model.HttpStatusCode} page";
+}
 <div class="breadcrumb-section">
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
                 <div class="page-title">
-                    <h2>404 page</h2>
+                    <h2>401 page</h2>
                 </div>
             </div>
             <div class="col-sm-6">
                 <nav aria-label="breadcrumb" class="theme-breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a asp-page="Home">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">404 page</li>
+                        <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@((int)Model.HttpStatusCode) page</li>
                     </ol>
                 </nav>
             </div>
@@ -26,8 +34,8 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="error-section">
-                    <h1>404</h1>
-                    <h2>page not found</h2>
+                    <h1>@((int)Model.HttpStatusCode)</h1>
+                    <h2>@Model.HttpStatusCode.ToString()</h2>
                     <a asp-page="/Index" class="btn btn-solid">back to home</a>
                 </div>
             </div>

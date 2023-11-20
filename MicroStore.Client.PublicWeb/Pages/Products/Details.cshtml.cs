@@ -94,7 +94,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Products
             }
             catch (MicroStoreClientException ex)
             {
-                _uiNotificationManager.Error(ex.Erorr.Detail);
+                _uiNotificationManager.Error(ex.Error.Detail);
 
                 return RedirectToPage("Details", new { id = id });
             }

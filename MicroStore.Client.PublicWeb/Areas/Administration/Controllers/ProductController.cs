@@ -130,7 +130,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                ex.Erorr.MapToModelState(ModelState);
+                ex.Error.MapToModelState(ModelState);
 
                 ViewBag.Categories = await BuildCategoriesSelecetListItems();
 
@@ -186,7 +186,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                ex.Erorr.MapToModelState(ModelState);
+                ex.Error.MapToModelState(ModelState);
 
                 ViewBag.Categories = await BuildCategoriesSelecetListItems();
 
@@ -399,7 +399,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
             catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                NotificationManager.Error(ex.Erorr.Detail);
+                NotificationManager.Error(ex.Error.Detail);
 
                 return RedirectToAction(nameof(SalesReport), new { id = id });
             }

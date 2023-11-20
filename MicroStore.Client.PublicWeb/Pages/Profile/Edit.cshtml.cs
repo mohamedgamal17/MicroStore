@@ -91,7 +91,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
                 await PrepareCountries();
 
-                _notificationManager.Error(ex.Erorr.Title);
+                _notificationManager.Error(ex.Error.Title);
 
                 return Page();
             }

@@ -80,7 +80,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile.Address
             {
                 await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
-                _uINotificationManager.Error(ex.Erorr.Title);
+                _uINotificationManager.Error(ex.Error.Title);
 
                 return Page();
             }

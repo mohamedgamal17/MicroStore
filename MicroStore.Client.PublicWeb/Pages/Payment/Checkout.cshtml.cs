@@ -189,12 +189,11 @@ namespace MicroStore.Client.PublicWeb.Pages.Payment
             };
 
             var paymentResponse = await _userPaymentRequestService.CreateAsync(paymentRequestOptions);
-
             var processPaymentRequestOptions = new PaymentProcessRequestOptions
             {
                 GatewayName = PaymentMethod,
-                ReturnUrl = $"{HttpContext.GetHostUrl()}{Url.Page("/Payment/Complete")}",
-                CancelUrl = HttpContext.GetHostUrl()
+                ReturnUrl = Url.Page("/Payment/Complete"),
+                CancelUrl = Url.Page("/Index")
             };
 
             var paymentProcessResponse = await _userPaymentRequestService.ProcessAsync(paymentResponse.Id, processPaymentRequestOptions);

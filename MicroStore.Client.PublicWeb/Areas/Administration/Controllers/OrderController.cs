@@ -89,7 +89,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
             catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                ex.Erorr.MapToModelState(ModelState);
+                ex.Error.MapToModelState(ModelState);
 
                 return RedirectToAction("Details", new {orderId = model.OrderId});
             }
@@ -156,7 +156,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 if(ex.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    return BadRequest(ex.Erorr);
+                    return BadRequest(ex.Error);
                 }
 
                 if(ex.StatusCode == HttpStatusCode.NotFound)
@@ -247,7 +247,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 if (ex.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    return BadRequest(ex.Erorr);
+                    return BadRequest(ex.Error);
                 }
 
                 if (ex.StatusCode == HttpStatusCode.NotFound)

@@ -125,7 +125,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
             {
                 await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
-                uINotificationManager.Error(ex.Erorr.Title);
+                uINotificationManager.Error(ex.Error.Title);
 
                 return Page();
             }

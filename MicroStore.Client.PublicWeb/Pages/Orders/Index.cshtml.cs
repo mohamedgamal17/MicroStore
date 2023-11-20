@@ -10,7 +10,7 @@ using MicroStore.Client.PublicWeb.Infrastructure;
 namespace MicroStore.Client.PublicWeb.Pages.Orders
 {
     [Authorize]
-    [CheckProfilePageCompletedFilter]
+   // [CheckProfilePageCompletedFilter]
     public class IndexModel : PageModel
     {
         private readonly UserOrderService _userOrderService;

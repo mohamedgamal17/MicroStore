@@ -29,12 +29,6 @@ using FluentValidation.AspNetCore;
 using Volo.Abp.FluentValidation;
 using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
-using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
-using MicroStore.ShoppingGateway.ClinetSdk.Common;
-using IdentityModel;
-using Microsoft.AspNetCore.CookiePolicy;
-
 namespace MicroStore.Client.PublicWeb
 {
     [DependsOn(typeof(MicroStoreAspNetCoreUIModule),
@@ -79,11 +73,15 @@ namespace MicroStore.Client.PublicWeb
 
             ConfigureMinioStorage(context.Services);
 
-            context.Services.AddControllers().AddNewtonsoftJson(opt =>
-            {
-                var e = new StringEnumConverter();
-                opt.SerializerSettings.Converters.Add(e);
-            });
+            context.Services.AddControllers()
+                .AddMvcOptions(opt =>
+                {
+                    opt.Filters.Add(typeof(ExceptionFilter));
+                }).AddNewtonsoftJson(opt =>
+                {
+                    var e = new StringEnumConverter();
+                    opt.SerializerSettings.Converters.Add(e);
+                });
 
             context.Services.AddHttpContextAccessor();
 
@@ -114,13 +112,13 @@ namespace MicroStore.Client.PublicWeb
                         bundle.AddContributors(typeof(ApplicationThemeGlobalStyleContributor));
                     });
 
-               options
-                .ScriptBundles
-                .Configure(StandardBundles.Scripts.Global, bundle =>
-                {
-                    bundle.AddContributors(typeof(ApplicationThemeGlobalScriptContributor));
+                options
+                 .ScriptBundles
+                 .Configure(StandardBundles.Scripts.Global, bundle =>
+                 {
+                     bundle.AddContributors(typeof(ApplicationThemeGlobalScriptContributor));
 
-                });
+                 });
 
                 options
                     .StyleBundles
@@ -146,8 +144,14 @@ namespace MicroStore.Client.PublicWeb
 
             context.Services.AddFluentValidationAutoValidation();
             context.Services.AddFluentValidationClientsideAdapters();
-            context.Services.AddRazorPages().AddRazorRuntimeCompilation();
+            context.Services.AddRazorPages()
+                .AddMvcOptions(opt =>
+                {
+                    opt.Filters.Add(typeof(PageExceptionFilter));
+                })
+                .AddRazorRuntimeCompilation();
 
+  
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -156,11 +160,17 @@ namespace MicroStore.Client.PublicWeb
             var env = context.GetEnvironment();
             var config = context.GetConfiguration();
 
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
-
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
-
             app.UseAbpRequestLocalization();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+
+            }
+            else
+            {
+                app.UseErrorPage();
+            }
 
             app.UseCorrelationId();
 
@@ -175,8 +185,6 @@ namespace MicroStore.Client.PublicWeb
             app.UseAuthentication();
 
             app.UseAuthorization();
-
-           // app.UseMiddleware<UserProfileMiddleware>();
 
             app.UseAbpSerilogEnrichers();
 
@@ -202,11 +210,11 @@ namespace MicroStore.Client.PublicWeb
         {
             var appsettings = services.GetSingletonInstance<ApplicationSettings>();
 
-           
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme =OpenIdConnectDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {

@@ -4,7 +4,7 @@ using MicroStore.Client.PublicWeb.Infrastructure;
 namespace MicroStore.Client.PublicWeb.Pages
 {
     [CheckProfilePageCompletedFilter]
-    public class HomeModel : PageModel
+    public class IndexModel : PageModel
     {
         public int CurrentPage { get; set; }
         public int PageSize { get; set; } = 24;

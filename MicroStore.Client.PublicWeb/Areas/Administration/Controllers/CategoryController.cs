@@ -72,7 +72,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             }
             catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                ex.Erorr.MapToModelState(ModelState);
+                ex.Error.MapToModelState(ModelState);
 
                 return View(model);
             }
@@ -112,7 +112,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             }catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                ex.Erorr.MapToModelState(ModelState);
+                ex.Error.MapToModelState(ModelState);
 
                 return View(model);
             }
