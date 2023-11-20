@@ -15,7 +15,7 @@ namespace MicroStore.Inventory.Infrastructure.EntityFramework.EntityTypeConfigur
 
             builder.Property(x => x.Sku).HasMaxLength(256);
 
-            builder.Property(x => x.Thumbnail).HasMaxLength(500);
+            builder.Property(x => x.Thumbnail).IsRequired(false).HasMaxLength(500);
 
             builder.HasIndex(x => x.ProductId);
 
