@@ -83,9 +83,7 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
 
             RuleFor(x => x.State)
                 .NotNull()
-                .WithMessage("State is required")
-                .Length(2)
-                .WithMessage("State code exact lenght is 2");
+                .WithMessage("State is required");
 
 
             RuleFor(x => x.City)
