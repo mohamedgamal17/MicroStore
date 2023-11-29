@@ -81,11 +81,13 @@ namespace MicroStore.Catalog.Application.Products
                 .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider)
                 .AsQueryable();
 
-            var products = from product in query
-                           where relatedImages.Select(x => x.ProductId).Contains(product.Id)
-                           select product;
+            query = from pr in query
+                           where relatedImages.Select(x => x.ProductId).Contains(pr.Id)
+                           select pr;
 
-            return products.ToList();
+            var products = await query.ToListAsync();
+
+            return products.OrderBy(x=>  relatedImages.FindIndex(c=> c.Id == x.Id)).ToList();
         }
 
 
@@ -144,10 +146,14 @@ namespace MicroStore.Catalog.Application.Products
                         )
                         .Filter(flt => flt
                             .When(queryParams.Category != null, act => act
-                                .Term(x => x.ProductCategories.First().Name, queryParams.Category!)
+                                .Nested(cf=> cf.Path(p=> p.ProductCategories).Query(nqr=> nqr
+                                    .Term(x=> x.ProductCategories.First().Name,queryParams.Category!)
+                                ))
                             )
                             .When(queryParams.Manufacturer != null, act => act
-                                .Term(x => x.ProductManufacturers.First().Name, queryParams.Manufacturer!)
+                                .Nested(cf => cf.Path(p => p.ProductManufacturers).Query(nqr => nqr
+                                    .Term(x => x.ProductManufacturers.First().Name, queryParams.Manufacturer!)
+                                ))
                             )
                             .When(queryParams.MinPrice != null || queryParams.MaxPrice != null, act => act
                                 .Range(rng => rng
@@ -172,14 +178,26 @@ namespace MicroStore.Catalog.Application.Products
                 .Size(queryParams.Length)
                 .From(queryParams.Skip)
                 .When(queryParams.SortBy != null, act => act
-                    .Sort(srt => srt
-                        .When(queryParams.SortBy!.ToLower() == "name", act => act
-                            .Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc))
-                        )
-                        .When(queryParams.SortBy!.ToLower() == "price", act => act
-                            .Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc))
-                        )
-                    )
+                    .Sort(srt =>
+                    {
+                        switch (queryParams.SortBy!.ToLower())
+                        {
+                            case "name":
+                                srt.Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
+                                break;
+                            case "price":
+                                srt.Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
+                                break;
+                            case "creation":  srt.Field(x => x.CreatationTime, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
+                                break;
+                            default:
+                                srt.Field(x => x.CreatationTime, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
+                                break;
+
+
+                        }
+
+                    })
 
                 );
 
@@ -234,6 +252,26 @@ namespace MicroStore.Catalog.Application.Products
 
         }
 
+        public async Task<Result<ElasticProductImage>> GetProductImageAsync(string productId, string imageId, CancellationToken cancellationToken = default)
+        {
+            var response = await _elasticSearchClient.GetAsync<ElasticProduct>(productId);
+
+            if (!response.IsValidResponse)
+            {
+                return new Result<ElasticProductImage>(new EntityNotFoundException(typeof(ElasticProduct), productId));
+            }
+
+            var product = response.Source!;
+
+            var productImage = product.ProductImages.SingleOrDefault(x => x.Id == imageId);
+
+            if(productImage == null)
+            {
+                return new Result<ElasticProductImage>(new EntityNotFoundException(typeof(ElasticProductImage)));
+            }
+
+            return productImage;
+        }
     }
 
 

@@ -19,9 +19,9 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.IsFeatured).HasDefaultValue(default(bool));
 
-            builder.Property(x => x.ShortDescription).HasMaxLength(600);
+            builder.Property(x => x.ShortDescription).HasMaxLength(600).IsRequired(false);
 
-            builder.Property(x => x.LongDescription).HasMaxLength(2500);
+            builder.Property(x => x.LongDescription).HasMaxLength(2500).IsRequired(false);
 
             builder.Property(x => x.Price);
 

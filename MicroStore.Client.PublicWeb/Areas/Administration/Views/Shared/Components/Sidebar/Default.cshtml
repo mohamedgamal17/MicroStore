@@ -1,11 +1,14 @@
 ﻿@using MicroStore.AspNetCore.UI.Extensions
+@using MicroStore.Client.PublicWeb.Areas.Administration.Components.ProfileWidget
 @model MicroStore.AspNetCore.UI.HtmlHelpers.TreeViewRoot
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a asp-action="Index" asp-controller="Dashboard" class="brand-link">
+        <img src="https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Micro store</span>
+    </a>
     <div class="sidebar">
-        <a asp-action="Index" asp-controller="Dashboard" class="brand-link">
-            <img src="https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">Micro store</span>
-        </a>
+      
+        @await Component.InvokeAsync(typeof(ProfileWidgetViewComponent))
         <nav class="mt-2">
 
             @(Html.CreateMenutItems(Model)

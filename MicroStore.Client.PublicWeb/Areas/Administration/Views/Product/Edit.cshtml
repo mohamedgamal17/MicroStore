@@ -97,7 +97,7 @@
 
 
             var productImageTable = $("#ProductImagesTable").DataTable(
-                abp.libs.datatables.normalizeConfiguration({
+                  abp.libs.datatables.normalizeConfiguration({
                     ajax: {
                         url: '/Administration/Product/ListProductImages/' + prouctId,
                         type: 'POST'
@@ -125,8 +125,9 @@
                                     {
                                         text: 'Edit',
                                         action: function (data) {
+                                            var productId = $("input[name='Id']").val();
                                             productImageEditMoadl.open({
-                                                productId: data.record.productId,
+                                                productId: productId,
                                                 productImageId: data.record.id,
                                             })
                                         }
@@ -139,16 +140,24 @@
                                         },
 
                                         action: function (dataTable) {
+                                            var productId = $("input[name='Id']").val();
                                             abp.ajax({
                                                 url: "/Administration/Product/RemoveProductImage",
                                                 type: "POST",
                                                 data: JSON.stringify({
-                                                    ProductId: dataTable.record.productId,
+                                                    ProductId: productId,
                                                     ProductImageId: dataTable.record.id
                                                 }),
+                                                success: function(){
+                                                    abp.notify.info("Successfully deleted!");
+                                                    productImageTable.ajax.reload()
+                                                    
+                                                },
+
+
                                             })
 
-                                            dataTable.table.ajax.reload();
+                                          
 
                                         }
                                     }

@@ -55,7 +55,7 @@ namespace MicroStore.Catalog.Application.Operations.Manufacturers
                     Source = @"
                             for(int i =0; i< ctx._source.productManufacturers.size(); i++)
                             {
-                                if(ctx._source.productManufacturers[i].id == params.id)
+                                if(ctx._source.productManufacturers[i].manufacturerId == params.id)
                                 {
                                     ctx._source.productManufacturers[i].name = params.name;
                                     ctx._source.productManufacturers[i].description = params.description;
@@ -73,12 +73,9 @@ namespace MicroStore.Catalog.Application.Operations.Manufacturers
                 }))
                 .Query(desc => desc
                     .Nested(nes => nes
-                    .Path(pt => pt.ProductCategories)
+                    .Path(pt => pt.ProductManufacturers)
                     .Query(qr => qr
-                        .Match(mt => mt
-                            .Field(x => x.ProductCategories.First().Id)
-                            .Query(elasticEntity.Id)
-                         )
+                        .Term(mt => mt.ProductManufacturers.First().ManufacturerId, elasticEntity.Id)
                     )
                 )
             );

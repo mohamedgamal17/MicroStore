@@ -28,7 +28,15 @@ namespace MicroStore.Catalog.Application.Operations.Products
         {
             var elasticEntity = _objectMapper.Map<ProductEto, ElasticProduct>(context.Message.Entity);
 
+            var elasticProductVector = new ElasticImageVector
+            {
+                Id = context.Message.Entity.Id,
+                ProductId = context.Message.Entity.Id
+            };
+
             var response = await _elasticsearchClient.IndexAsync(elasticEntity);
+
+            await _elasticsearchClient.IndexAsync(elasticProductVector);
         }
 
         public async Task Consume(ConsumeContext<EntityUpdatedEvent<ProductEto>> context)

@@ -1,0 +1,12 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Components.ProfileWidget.ProfileWidgetViewComponentModel
+<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="image">
+        @{
+            var userImage =  Model.User.Avatar ??  "/images/user.png";
+        }
+        <img src="@userImage" class="img-circle elevation-2" alt="User Image">
+    </div>
+    <div class="info">
+        <a href="#" class="d-block">@string.Format("{0} {1}", Model.User.FirstName, Model.User.LastName)</a>
+    </div>
+</div>

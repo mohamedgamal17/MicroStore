@@ -5,17 +5,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Consts;
-using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
-using MicroStore.ShoppingGateway.ClinetSdk.Entities.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
+using MimeMapping;
 using System.Net;
-using Volo.Abp.BlobStoring;
-
 namespace MicroStore.Client.PublicWeb.Pages.Profile
 {
     [Authorize]
@@ -38,13 +35,14 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
         private readonly CountryService _countryService;
 
-        private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
-        public CreateModel(UserProfileService userProfileService, UINotificationManager uINotificationManager, CountryService countryService, IBlobContainer<MultiMediaBlobContainer> blobContainer)
+
+        private readonly IObjectStorageProvider _objectStorageProvider;
+        public CreateModel(UserProfileService userProfileService, UINotificationManager uINotificationManager, CountryService countryService,  IObjectStorageProvider objectStorageProvider)
         {
             _userProfileService = userProfileService;
             this.uINotificationManager = uINotificationManager;
             _countryService = countryService;
-            _blobContainer = blobContainer;
+            _objectStorageProvider = objectStorageProvider;
         }
 
         public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
@@ -162,16 +160,25 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
         {
             if (formFile == null) return null;
 
-            string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(Profile.Avatar.FileName));
+            string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(formFile.FileName));
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                await Profile.Avatar.CopyToAsync(memoryStream);
+                await formFile.CopyToAsync(memoryStream);
 
-                await _blobContainer.SaveAsync(imageName, memoryStream.ToArray());
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                var args = new S3ObjectSaveArgs
+                {
+                    Name = imageName,
+                    Data = memoryStream,
+                    ContentType = MimeUtility.GetMimeMapping(formFile.FileName)
+                };
+
+                await _objectStorageProvider.SaveAsync(args);
             }
 
-            return HttpContext.GenerateFileLink(imageName);
+            return await _objectStorageProvider.CalculatePublicReferenceUrl(imageName);
         }
     }
 }

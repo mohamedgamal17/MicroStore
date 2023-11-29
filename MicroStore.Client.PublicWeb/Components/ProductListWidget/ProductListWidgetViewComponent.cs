@@ -39,6 +39,8 @@ namespace MicroStore.Client.PublicWeb.Components.ProductListWidget
                 IsFeatured = isFeatured,
                 MinPrice = minPrice,
                 MaxPrice = maxPrice,
+                SortBy = "creation",
+                Desc = true
             };
 
 

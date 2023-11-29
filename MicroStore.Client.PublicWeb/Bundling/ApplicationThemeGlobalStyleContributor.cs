@@ -9,7 +9,8 @@ namespace MicroStore.Client.PublicWeb.Bundling
             {
                 "/libs/admin-lte/css/adminlte.min.css",
                 "/libs/summernote/summernote.min.css",
-                "/libs/intl-tel-input/build/css/intlTelInput.min.css"
+                "/libs/intl-tel-input/build/css/intlTelInput.min.css",
+                "/css/custom-data-table.css"
             });
 
         }

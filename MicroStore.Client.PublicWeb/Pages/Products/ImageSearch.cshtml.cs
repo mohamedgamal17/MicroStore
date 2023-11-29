@@ -2,33 +2,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
-using Volo.Abp.BlobStoring;
-
+using MimeMapping;
 namespace MicroStore.Client.PublicWeb.Pages.Products
 {
     [CheckProfilePageCompletedFilter]
     public class ImageSearchModel : PageModel
     {
-        private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
+        private readonly IObjectStorageProvider _objectStorageProvider;
+
+
+
         public List<Product> Products { get; set; }
         public string TargetImage { get; set; }
+        public string ImageLink { get;  set; }
         public bool HasErorr { get; set; }
 
         [BindProperty]
         public IFormFile Image { get; set; }
-        public ImageSearchModel(IBlobContainer<MultiMediaBlobContainer> blobContainer)
-        {
-            _blobContainer = blobContainer;
-        }
 
-        public IActionResult OnGet(string image)
+        public ImageSearchModel(IObjectStorageProvider objectStorageProvider)
+        {
+            _objectStorageProvider = objectStorageProvider;
+        }
+        public async Task<IActionResult> OnGet(string image)
         {
             TargetImage = image;
+            ImageLink = await _objectStorageProvider.CalculatePublicReferenceUrl(image);
 
             return Page();
         }
-
-
         public async Task<IActionResult> OnPostAsync()
         {
 
@@ -46,11 +48,21 @@ namespace MicroStore.Client.PublicWeb.Pages.Products
 
                 await Image.CopyToAsync(ms);
 
-                await _blobContainer.SaveAsync(imageName, ms);
+                ms.Seek(0, SeekOrigin.Begin);
 
-                return RedirectToPage("ImageSearch", new { image = imageName });
+                var args = new S3ObjectSaveArgs
+                {
+                    Name = imageName,
+                    Data = ms,
+                    ContentType = MimeUtility.GetMimeMapping(Image.FileName)
+                };
+
+                await _objectStorageProvider.SaveAsync(args);
+
+                return RedirectToPage("/Products/ImageSearch", new { image = imageName });
             }
 
         }
+
     }
 }

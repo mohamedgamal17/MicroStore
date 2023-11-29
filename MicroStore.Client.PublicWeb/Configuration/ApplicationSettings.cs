@@ -3,6 +3,6 @@
     public class ApplicationSettings
     {
         public SecuritySettings Security { get; set; } = new SecuritySettings();
-        public MinioSettings Minio { get; set; } = new MinioSettings();
+        public S3StorageProviderSettings S3ObjectProvider { get; set; } = new S3StorageProviderSettings();
     }
 }

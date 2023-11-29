@@ -1,7 +1,8 @@
 ﻿(function () {
-    abp.widgets.ProductImageSearch = function ($wrapper) {
+    abp.widgets.ProductImageSearchWidget = function ($wrapper) {
         var widgetManager = $wrapper.data("abp-widget-manager");
         var init = function ($filter) {
+            console.log("SEE")
             $wrapper
                 .find(".quantity-right-plus")
                 .click(function () {
@@ -74,6 +75,7 @@
 
             $wrapper
                 .find(".add_cart").click(function () {
+                    console.log("c")
                     var $this = $(this);
                     var parent = $this.parents(".product-box")
                     var productId = parent.attr("data-product-id");

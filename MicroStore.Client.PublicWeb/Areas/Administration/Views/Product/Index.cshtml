@@ -59,10 +59,27 @@
                     paging: true,
                     serverSide: true,
                     searching: false,
+                    sorting:false,
                     columnDefs: [
                         {
+                            title: "Image",
+                            data: "productImages",
+                            render: function (data) {
+                                if (data ){
+
+                                    if (data.length > 0) {
+                                        var image = data[0].image
+                                        return `<img src="${image}" class="img" style="maxwidth:75px;max-height:75px">`
+                                    }
+                                }
+                                return `<img src="/user-content/no-image.png" style="maxwidth:75px;max-height:75px">`
+                                
+                            },
+                            orderable:false
+                        },
+                        {
                             title: 'Name',
-                            data: 'name'
+                            data: 'name',
                         },
                         {
                             title: 'Sku',
@@ -71,7 +88,7 @@
                         },
                         {
                             title: 'Price',
-                            data: 'price'
+                            data: 'price',
                         },
                         {
                             title: 'Actions',
@@ -90,7 +107,7 @@
                                         }
                                     }
                                     ]
-                            }
+                            },
                         },
                     ]
                 })

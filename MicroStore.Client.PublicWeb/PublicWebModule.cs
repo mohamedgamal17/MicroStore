@@ -21,8 +21,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.BlobStoring;
-using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using FluentValidation.AspNetCore;
@@ -35,8 +33,6 @@ namespace MicroStore.Client.PublicWeb
         typeof(AbpAutoMapperModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpBlobStoringModule),
-        typeof(AbpBlobStoringMinioModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpFluentValidationModule))]
     public class PublicWebModule : AbpModule
@@ -69,9 +65,6 @@ namespace MicroStore.Client.PublicWeb
             });
 
             ConfigureAutoMapper();
-
-
-            ConfigureMinioStorage(context.Services);
 
             context.Services.AddControllers()
                 .AddMvcOptions(opt =>
@@ -154,6 +147,16 @@ namespace MicroStore.Client.PublicWeb
   
         }
 
+        public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+        {
+            using var scope = context.ServiceProvider.CreateScope();
+
+            var storageProvider = scope.ServiceProvider.GetRequiredService<IObjectStorageProvider>();
+
+            await storageProvider.MigrateAsync();
+
+            await base.OnApplicationInitializationAsync(context);
+        }
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -265,26 +268,7 @@ namespace MicroStore.Client.PublicWeb
         private void ConfigureAutoMapper() => Configure<AbpAutoMapperOptions>(opt => opt.AddMaps<PublicWebModule>());
 
 
-        private void ConfigureMinioStorage(IServiceCollection services)
-        {
-            var appsettings = services.GetSingletonInstance<ApplicationSettings>();
-
-            Configure<AbpBlobStoringOptions>(opt =>
-            {
-                opt.Containers.ConfigureDefault(container =>
-                {
-                    container.UseMinio(minio =>
-                    {
-                        minio.EndPoint = appsettings.Minio.EndPoint;
-                        minio.AccessKey = appsettings.Minio.AccessKey;
-                        minio.SecretKey = appsettings.Minio.SecretKey;
-                        minio.BucketName = appsettings.Minio.BucketName;
-                        minio.WithSSL = appsettings.Minio.WithSSL;
-                        minio.CreateBucketIfNotExists = true;
-                    });
-                });
-            });
-        }
+      
 
     }
 }

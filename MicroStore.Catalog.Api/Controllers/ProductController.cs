@@ -8,6 +8,7 @@ using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Application.Products;
+using MicroStore.Catalog.Entities.ElasticSearch;
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/products")]
@@ -98,12 +99,24 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [Route("{productId}/productimages")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<ProductImageDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<ElasticProductImage>>))]
         public async Task<IActionResult> GetProductImagesAsync(string productId)
         {
             var result = await _productQueryService.ListProductImagesAsync(productId);
 
             return result.ToOk();
+        }
+
+
+        [Route("{productId}/productimages/{imageId}")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<ElasticProductImage>))]
+        public async Task<IActionResult> GetProductImageAsync(string productId, string imageId)
+        {
+            var result = await _productQueryService.GetProductImageAsync(productId, imageId);
+
+            return result.ToOk();
+
         }
 
 
@@ -184,7 +197,12 @@ namespace MicroStore.Catalog.Api.Controllers
             return result.ToOk();
         }
 
-  
+    
+
+        public class TestImageSearchModel
+        {
+            public IFormFile Image { get; set; }
+        }
 
     }
 }

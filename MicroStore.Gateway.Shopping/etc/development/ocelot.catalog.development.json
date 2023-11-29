@@ -11,7 +11,23 @@
       ],
 
       "UpstreamPathTemplate": "/mvcgateway/catalog/{everything}",
-      "UpstreamHttpMethod": [ "GET"],
+      "UpstreamHttpMethod": [ "GET" ],
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/products/search-by-image",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+      ],
+
+      "UpstreamPathTemplate": "/mvcgateway/catalog/products/search-by-image",
+      "UpstreamHttpMethod": [ "post" ],
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
@@ -29,10 +45,10 @@
       "UpstreamPathTemplate": "/mvcgateway/catalog/{everything}",
       "UpstreamHttpMethod": [ "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey":  "Bearer",
+        "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "role" : "Admin" 
+        "role": "Admin"
       },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"

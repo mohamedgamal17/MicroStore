@@ -9,9 +9,9 @@ using MicroStore.Client.PublicWeb.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
+using MimeMapping;
 using System.Net;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Abp.BlobStoring;
 namespace MicroStore.Client.PublicWeb.Pages.Profile
 {
     [Authorize]
@@ -23,19 +23,21 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
         private readonly UINotificationManager _notificationManager;
 
-        private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
+        private readonly IObjectStorageProvider _objectStorageProvider;
 
         private readonly UserAddressService _userAddressService;
+
+  
         public User UserProfile { get; set; }
         public UserProfileModel Profile { get; set; }
-        public IndexModel(UserProfileService userPorfileService, UINotificationManager notificationManager, IBlobContainer<MultiMediaBlobContainer> blobContainer, UserAddressService userAddressService)
+
+        public IndexModel(UserProfileService userPorfileService, UINotificationManager notificationManager, IObjectStorageProvider objectStorageProvider, UserAddressService userAddressService)
         {
             _userPorfileService = userPorfileService;
             _notificationManager = notificationManager;
-            _blobContainer = blobContainer;
+            _objectStorageProvider = objectStorageProvider;
             _userAddressService = userAddressService;
         }
-
         public IActionResult OnGet()
         {
             UserProfile = (User)HttpContext.Items[HttpContextSharedItemsConsts.UserProfile]!;
@@ -90,16 +92,25 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
         {
             if (formFile == null) return null;
 
-            string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(Profile.Avatar.FileName));
+            string imageName = string.Format("{0}{1}", Guid.NewGuid().ToString(), Path.GetExtension(formFile.FileName));
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                await Profile.Avatar.CopyToAsync(memoryStream);
+                await formFile.CopyToAsync(memoryStream);
 
-                await _blobContainer.SaveAsync(imageName, memoryStream.ToArray());
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                var args = new S3ObjectSaveArgs
+                {
+                    Name = imageName,
+                    Data = memoryStream,
+                    ContentType = MimeUtility.GetMimeMapping(formFile.FileName)
+                };
+
+                await _objectStorageProvider.SaveAsync(args);
             }
 
-            return HttpContext.GenerateFileLink(imageName);
+            return await _objectStorageProvider.CalculatePublicReferenceUrl(imageName);
         }
 
     }

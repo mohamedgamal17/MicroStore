@@ -99,7 +99,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             var model = new CreateProductImageModel
             {
-                Image = Guid.NewGuid().ToString(),
+                Image = "https://developers.google.com/nest/device-access/images/device-camera.png",
                 DisplayOrder = 1
             };
 

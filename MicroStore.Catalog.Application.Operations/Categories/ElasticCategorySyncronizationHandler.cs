@@ -61,7 +61,7 @@ namespace MicroStore.Catalog.Application.Operations.Categories
                 {
                     Source = @" 
                         for(int i = 0; i < ctx._source.productCategories.size(); i++){
-                          if(ctx._source.productCategories[i].id == params.id){
+                          if(ctx._source.productCategories[i].categoryId == params.id){
                                 ctx._source.productCategories[i].name =params.name;
                                 ctx._source.productCategories[i].description= params.description;
                            }
@@ -80,10 +80,7 @@ namespace MicroStore.Catalog.Application.Operations.Categories
                     .Nested(nes => nes
                     .Path(pt => pt.ProductCategories)
                     .Query(qr => qr
-                        .Match(mt => mt
-                            .Field(x => x.ProductCategories.First().Id)
-                            .Query(elasticEntity.Id)
-                         )
+                        .Term(mt=> mt.ProductCategories.First().CategoryId , elasticEntity.Id)
                     )
                 )
             );

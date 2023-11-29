@@ -36,7 +36,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
 
         public async Task<ProductImage> UpdateAsync(string parentId, string id, ProductImageRequestUpdateOptions options = null, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
-            return await MakeRequestAsync<ProductImage>(string.Format(BASE_URL_WITHOUT_ID, parentId, id), HttpMethod.Put, options,requestHeaderOptions ,cancellationToken);
+            return await MakeRequestAsync<ProductImage>(string.Format(BASE_URL_WITH_ID, parentId, id), HttpMethod.Put, options,requestHeaderOptions ,cancellationToken);
         }
 
 

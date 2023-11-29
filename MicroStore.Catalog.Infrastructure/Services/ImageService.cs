@@ -66,16 +66,17 @@ namespace MicroStore.Catalog.Infrastructure.Services
 
             var response = await _elasticSearchClient.SearchAsync<ElasticImageVector>(sr => sr
                      .Knn(k => k
+                         .Field(x=> x.Features)
                          .QueryVector(features)
                          .k(100)
-                         .NumCandidates(100)
-                     )
+                         .NumCandidates(200)
+                    )
                  );
 
 
             if (response.IsValidResponse)
             {
-                return response.Documents.ToList();
+                return response.Documents.DistinctBy(x=> x.ProductId).ToList();
             }
 
             return new List<ElasticImageVector>();

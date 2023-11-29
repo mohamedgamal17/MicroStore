@@ -162,6 +162,7 @@ namespace MicroStore.Catalog.Application.Products
             {
                 ImagePath = model.Image,
                 DisplayOrder = model.DisplayOrder,
+                ProductId = product.Id
             };
 
             product.ProductImages.Add(productImage);

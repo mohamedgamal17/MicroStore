@@ -7,4 +7,5 @@
         public string ImageId { get; set; }
         public List<float> Features { get; set; }
     }
+
 }

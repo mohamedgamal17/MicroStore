@@ -12,9 +12,8 @@ using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
+using MimeMapping;
 using System.Net;
-using Volo.Abp.BlobStoring;
-
 namespace MicroStore.Client.PublicWeb.Pages.Profile
 {
     [Authorize]
@@ -30,20 +29,18 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
 
         private readonly UserProfileService _userProfileService;
         private readonly CountryService _countryService;
-        private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
+        private readonly IObjectStorageProvider _objectStorageProvider;
         private readonly UINotificationManager _notificationManager;
         private readonly ILogger<EditModel> _logger;
 
-        public EditModel(UserProfileService userProfileService, CountryService countryService, IBlobContainer<MultiMediaBlobContainer> blobContainer, UINotificationManager notificationManager, ILogger<EditModel> logger)
+        public EditModel(UserProfileService userProfileService, CountryService countryService, IObjectStorageProvider objectStorageProvider, UINotificationManager notificationManager, ILogger<EditModel> logger)
         {
             _userProfileService = userProfileService;
             _countryService = countryService;
-            _blobContainer = blobContainer;
+            _objectStorageProvider = objectStorageProvider;
             _notificationManager = notificationManager;
             _logger = logger;
         }
-
-
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -115,10 +112,19 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
             {
                 await formFile.CopyToAsync(memoryStream);
 
-                await _blobContainer.SaveAsync(imageName, memoryStream.ToArray());
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                var args = new S3ObjectSaveArgs
+                {
+                    Name = imageName,
+                    Data = memoryStream,
+                    ContentType = MimeUtility.GetMimeMapping(formFile.FileName)
+                };
+
+                await _objectStorageProvider.SaveAsync(args);
             }
 
-            return HttpContext.GenerateFileLink(imageName);
+            return await _objectStorageProvider.CalculatePublicReferenceUrl(imageName);
         }
 
 

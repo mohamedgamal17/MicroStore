@@ -80,19 +80,19 @@ namespace MicroStore.Catalog.Infrastructure
         }
 
 
-        private void ConfigureElasticSearch(IServiceCollection services, ApplicationSettings applicationSettings)
+        private void ConfigureElasticSearch(IServiceCollection services, ApplicationSettings appsettings)
         {
 
-            var connectionSettings = new ElasticsearchClientSettings(new Uri(applicationSettings.ElasticSearch.Uri))
-                .DefaultIndex(applicationSettings.ElasticSearch.ProductIndex)
-                .DefaultMappingFor<ElasticImageVector>(m => m.IndexName(applicationSettings.ElasticSearch.ImageVectorIndex))
-                .DefaultMappingFor<ElasticProduct>(m => m.IndexName(applicationSettings.ElasticSearch.ProductIndex))
-                .DefaultMappingFor<ElasticCategory>(m => m.IndexName(applicationSettings.ElasticSearch.CategoryIndex))
-                .DefaultMappingFor<ElasticManufacturer>(m => m.IndexName(applicationSettings.ElasticSearch.ManufacturerIndex))
-                .DefaultMappingFor<ElasticProductTag>(m => m.IndexName(applicationSettings.ElasticSearch.ProductTagIndex))
-                .DefaultMappingFor<ElasticSpecificationAttribute>(m => m.IndexName(applicationSettings.ElasticSearch.SpecificationAttributeIndex))
-                .DefaultMappingFor<ElasticProductReview>(m => m.IndexName(applicationSettings.ElasticSearch.ProductReviewIndex))
-                .DefaultMappingFor<ElasticProductExpectedRating>(m => m.IndexName(applicationSettings.ElasticSearch.ProductExpectedRatingIndex));
+            var connectionSettings = new ElasticsearchClientSettings(new Uri(appsettings.ElasticSearch.Uri))
+                .DefaultIndex(appsettings.ElasticSearch.ProductIndex)
+                .DefaultMappingFor<ElasticImageVector>(m => m.IndexName(appsettings.ElasticSearch.ImageVectorIndex))
+                .DefaultMappingFor<ElasticProduct>(m => m.IndexName(appsettings.ElasticSearch.ProductIndex))
+                .DefaultMappingFor<ElasticCategory>(m => m.IndexName(appsettings.ElasticSearch.CategoryIndex))
+                .DefaultMappingFor<ElasticManufacturer>(m => m.IndexName(appsettings.ElasticSearch.ManufacturerIndex))
+                .DefaultMappingFor<ElasticProductTag>(m => m.IndexName(appsettings.ElasticSearch.ProductTagIndex))
+                .DefaultMappingFor<ElasticSpecificationAttribute>(m => m.IndexName(appsettings.ElasticSearch.SpecificationAttributeIndex))
+                .DefaultMappingFor<ElasticProductReview>(m => m.IndexName(appsettings.ElasticSearch.ProductReviewIndex))
+                .DefaultMappingFor<ElasticProductExpectedRating>(m => m.IndexName(appsettings.ElasticSearch.ProductExpectedRatingIndex));
 
 
 
@@ -109,23 +109,33 @@ namespace MicroStore.Catalog.Infrastructure
         {
             using (var scope= serviceProvider.CreateScope())
             {
+                var appsettings = scope.ServiceProvider.GetRequiredService<ApplicationSettings>(); 
+
                 var elasticClient = scope.ServiceProvider.GetRequiredService<ElasticsearchClient>();
 
-                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ImageVectorMappings());
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ImageVectorMappings(appsettings.ElasticSearch.ImageVectorIndex));
 
-                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticProductMappings());
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticProductMappings(appsettings.ElasticSearch.ProductIndex));
 
-                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticCategoryMappings());
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticCategoryMappings(appsettings.ElasticSearch.CategoryIndex));
 
-                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticManufacturerMappings());
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticManufacturerMappings(appsettings.ElasticSearch.ManufacturerIndex));
 
-                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticProductReviewMappings());
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticProductReviewMappings(appsettings.ElasticSearch.ProductReviewIndex));
 
-                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticSpecificationAttributeMappings());
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticSpecificationAttributeMappings(appsettings.ElasticSearch.SpecificationAttributeIndex));
 
-                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticProductTagMappings());
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticProductTagMappings(appsettings.ElasticSearch.ProductTagIndex));
 
-                await elasticClient.Indices.CreateAsync(ElasticIndeciesMapping.ElasticProductExpectedRatingMappings());
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticProductExpectedRatingMappings(appsettings.ElasticSearch.ProductExpectedRatingIndex));
 
             }
         }

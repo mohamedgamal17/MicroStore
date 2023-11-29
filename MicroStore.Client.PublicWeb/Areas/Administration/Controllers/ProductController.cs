@@ -11,10 +11,10 @@ using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using System.Data;
 using System.Net;
-using Volo.Abp.BlobStoring;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
+using MimeMapping;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
@@ -29,19 +29,19 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         private readonly ILogger<ProductController> _logger;
 
-        private readonly IBlobContainer<MultiMediaBlobContainer> _blobContainer;
+        private readonly IObjectStorageProvider _objectStorageProvider;
 
         private readonly ManufacturerService _manufacturerService;
 
         private readonly ProductAnalysisService _productAnalysisService;
 
         private readonly ProductImageService _productImageService;
-        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IBlobContainer<MultiMediaBlobContainer> blobContainer, ManufacturerService manufacturerService, ProductAnalysisService productAnalysisService, ProductImageService productImageService)
+        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IObjectStorageProvider objectStorageProvider, ManufacturerService manufacturerService, ProductAnalysisService productAnalysisService, ProductImageService productImageService)
         {
             _productService = productService;
             _categoryService = categoryService;
             _logger = logger;
-            _blobContainer = blobContainer;
+            _objectStorageProvider = objectStorageProvider;
             _manufacturerService = manufacturerService;
             _productAnalysisService = productAnalysisService;
             _productImageService = productImageService;
@@ -70,7 +70,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 MinPrice = model.MinPrice,
                 MaxPrice = model.MaxPrice,
                 Skip = model.Skip,
-                Length = model.Length
+                Length = model.Length,
+                SortBy = "creation",
+                Desc = true
             };
 
             var response = await _productService.ListAsync(requestOptions);
@@ -232,12 +234,21 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 await model.Image.CopyToAsync(memoryStream);
 
-                await _blobContainer.SaveAsync(imageName, memoryStream.ToArray());
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                var args = new S3ObjectSaveArgs
+                {
+                    Name = imageName,
+                    Data = memoryStream,
+                    ContentType = MimeUtility.GetMimeMapping(model.Image.FileName)
+                };
+
+                await _objectStorageProvider.SaveAsync(args);
             }
 
             var requestOptions = new ProductImageRequestCreateOptions
             {
-                Image = HttpContext.GenerateFileLink(imageName),
+                Image =  await _objectStorageProvider.CalculatePublicReferenceUrl(imageName),
                 DisplayOrder = model.DisplayOrder
             };
 
@@ -246,7 +257,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             return Json(ObjectMapper.Map<ProductImage, ProductImageVM>(result));
         }
 
-        [RuleSetForClientSideMessages("*")]
+        [HttpGet]
+
         public async Task<IActionResult> EditProductImageModal(string productId, string productImageId)
         {
             if (!ModelState.IsValid)

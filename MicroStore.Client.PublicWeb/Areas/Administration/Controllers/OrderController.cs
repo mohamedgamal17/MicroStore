@@ -243,19 +243,16 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 return RedirectToAction("Details", new { id = model.Id });
 
             }
-            catch (MicroStoreClientException ex)
+            catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest || ex.StatusCode == HttpStatusCode.NotFound)
             {
                 if (ex.StatusCode == HttpStatusCode.BadRequest)
                 {
                     return BadRequest(ex.Error);
                 }
-
-                if (ex.StatusCode == HttpStatusCode.NotFound)
+                else
                 {
                     return NotFound();
                 }
-
-                throw ex;
             }
         }
     }

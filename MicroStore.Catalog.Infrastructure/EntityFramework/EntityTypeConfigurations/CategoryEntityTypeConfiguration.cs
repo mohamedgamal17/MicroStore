@@ -15,7 +15,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.Name).IsRequired().HasMaxLength(250);
 
-            builder.Property(x => x.Description).HasMaxLength(600);
+            builder.Property(x => x.Description).HasMaxLength(600).IsRequired(false);
 
             builder.HasIndex(x => x.Name).IsUnique();
 

@@ -1,4 +1,4 @@
-﻿@page "{image}"
+﻿@page 
 @using MicroStore.Client.PublicWeb.Components.ProductImageSearchWidget;
 @model MicroStore.Client.PublicWeb.Pages.Products.ImageSearchModel
 @{
@@ -19,7 +19,7 @@
             {
                 <div class="row">
                     <div class="col-md-3">
-                        <img class="rounded mx-auto" src="@Url.Action("GetFileStream","CDN", new {fileName = Model.TargetImage})" />
+                        <img class="" src="@Model.ImageLink" style="max-width:300px;max-height:300px" />
                     </div>
 
                     <div class="col-md-9">
@@ -28,7 +28,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
 
-                                        @Component.InvokeAsync(typeof(ProductImageSearchWidgetViewComponent), new { })
+                                        @await Component.InvokeAsync(typeof(ProductImageSearchWidgetViewComponent), new { image = Model.TargetImage })
                                     </div>
                                 </div>
                             </div>

@@ -37,7 +37,7 @@ namespace MicroStore.Catalog.Application.Operations.Products
             var eto = _objectMapper.Map<Product, ProductEto>(product);
 
           
-            var synchronizationEvent =   new EntityCreatedEvent<ProductEto>(eto);
+            var synchronizationEvent =  new EntityCreatedEvent<ProductEto>(eto);
 
             var integrationEvent = PrepareProductCreatedIntegrationEvent(eventData.Entity);
 

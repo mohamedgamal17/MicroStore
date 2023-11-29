@@ -29,6 +29,8 @@ namespace MicroStore.Client.PublicWeb.Components.FeatureProductListWidget
             {
                 IsFeatured = true,
                 Length = lenght,
+                SortBy = "creation",
+                Desc = true
             };
 
             var productResult = await _productService.ListAsync(requestOptions);

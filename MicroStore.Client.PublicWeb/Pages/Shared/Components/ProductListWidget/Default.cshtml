@@ -40,12 +40,12 @@
                 bool isItemInBasket = Model.UserBasket.Items?.Any(x => x.ProductId == product.Id) ?? false;
                 var quantityBoxClass = isItemInBasket ? "open" : "";
 
-                <div class="col-xl-3 col-6 col-grid-box">
+                <div class="col-xl-4 col-6 col-grid-box">
                     <div class="product-box product-wrap" style="width: 100%; display: inline-block;" data-product-id="@product.Id">
                         <div class="img-wrapper">
                             <div class="front">
                                 <a href="/Products/Details/@product.Id">
-                                    <img src="@productImage" class="img-fluid blur-up lazyload bg-img" alt="">
+                                    <img src="@productImage" class="blur-up lazyload bg-img" alt="" style="object-fit: cover">
                                 </a>
                             </div>
                             <div class="addtocart_btn">
