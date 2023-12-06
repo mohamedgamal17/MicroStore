@@ -2,9 +2,11 @@
 
 @{
     var shippingSystems = (List<SelectListItem>)ViewBag.ShippingSystems;
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Settings.Shipping);
+
 }
 
-<div>s
+<div>
     <form method="post" asp-action="Shipping">
         @Html.AntiForgeryToken()
         <div class="content-header">

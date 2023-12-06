@@ -2,6 +2,7 @@
 @model CountrySalesReportModel
 @{
     var country = (CountryVM)ViewBag.Countries;
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Country.Report);
 }
 <div>
     <div class="content-header">

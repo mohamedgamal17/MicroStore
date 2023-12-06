@@ -1,5 +1,8 @@
 ﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Geographic.CountryModel
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Country.Create);
 
+}
 <div>
     <form method="post" asp-action="Create" >
         @Html.AntiForgeryToken()

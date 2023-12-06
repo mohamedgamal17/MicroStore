@@ -3,6 +3,7 @@
 @{
     var product = (ProductVM) ViewBag.Product;
     var jsonData = Json.Serialize(Model);
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Product.Forecast);
 }
 
 <div>

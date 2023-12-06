@@ -2,16 +2,24 @@
 {
     public static class BackEndMenusStandard
     {
-        public static class ProductMenus
+        public static class Dasboard
+        {
+           public const string Index = "MicroStore.Dashboard";
+        }
+        public static class Product
         {
             public const string Index = "MicroStore.Catalog.Product";
 
             public const string Create = "MicroStore.Catalog.Product.Create";
 
             public const string Edit = "MicroStore.Catalog.Product.Edit";
+
+            public const string Report = "MicroStore.Catalog.Product.Report";
+
+            public const string Forecast = "MicroStore.Catalog.Product.Forecast";
         }
 
-        public static class CategoryMenus
+        public static class Category
         {
             public const string Index = "MicroStore.Catalog.Category";
 
@@ -20,7 +28,7 @@
             public const string Edit = "MicroStore.Catalog.Category.Edit";
         }
 
-        public static class ManufacturerMenus
+        public static class Manufacturer
         {
             public const string Index = "MicroStore.Catalog.Manufacturer";
 
@@ -29,7 +37,7 @@
             public const string Edit = "MicroStore.Catalog.Manufacturer.Edit";
         }
 
-        public static class OrderMenus
+        public static class Order
         {
             public const string Index = "MicroStore.Sales.Order";
 
@@ -37,14 +45,15 @@
         }
 
 
-        public static class PaymentRequestMenus
+        public static class PaymentRequest
         {
             public const string Index = "MicroStore.Sales.PaymentRequest";
 
             public const string View = "MicroStore.Sales.PaymentRequest.View";
         }
 
-        public static class ShipmentMenus
+        public static class Shipment
+
         {
             public const string Index = "MicroStore.Sales.Shipment";
 
@@ -57,7 +66,7 @@
 
         public static class Inventory
         {
-            public class InventoryItemMenus
+            public class InventoryItem
             {
                 public const string Index = "MicroStore.Inventory.InventoryItem";
 
@@ -66,12 +75,34 @@
                 public const string Edit = "MicroStore.Inventory.InventoryItem.Edit";
             }
 
-            public class OrderMenus
-            {
-                public const string Index = "MicroStore.Inventory.Order";
 
-                public const string View = "MicroStore.Inventory.View";
-            }
+        }
+
+        public class Report
+        {
+            public const string OrderSales = "MicroStore.Report.OrderSales";
+
+            public const string CountriesSales = "MicroStore.Report.CountriesSales";
+
+            public const string SalesForecasting = "MicroStore.Report.OrderSales.Forecasting";
+        }
+
+        public class Country
+        {
+            public const string Index = "MicroStore.Configuation.Country";
+
+            public const string Create = "MicroStore.Configuation.Country.Create";
+
+            public const string Edit = "MicroStore.Configuation.Country.Edit";
+
+            public const string Forecasting = "MicroStore.Configuation.Country.Forecasting";
+
+            public const string Report = "MicroStore.Configuation.Country.Report";
+        }
+
+        public class Settings
+        {
+            public const string Shipping = "MicroStore.Configuation.Shipping";
         }
     }
 }

@@ -6,7 +6,7 @@
 @using Microsoft.Extensions.Localization
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering.OrderAggregateVM
 @{
-    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.OrderMenus.View);
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Order.View);
 
     var formatedOrderNumber = FormatHelper.FormatOrderNumber(Model.OrderNumber);
 }

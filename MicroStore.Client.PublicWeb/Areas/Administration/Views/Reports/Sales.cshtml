@@ -1,6 +1,8 @@
 ﻿@using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Reports.OrderSalesReportModel
-
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Report.OrderSales);
+}
 <div>
     <div class="content-header">
         <div class="container-fluid">

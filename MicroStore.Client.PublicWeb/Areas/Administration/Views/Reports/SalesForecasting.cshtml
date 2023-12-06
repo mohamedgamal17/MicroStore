@@ -1,6 +1,8 @@
 ﻿@using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
 @model List<OrderSalesChartDataModel>
-
+@{
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Report.SalesForecasting);
+}
 @{
     var jsonData = Json.Serialize(Model);
 }

@@ -3,6 +3,8 @@
 @{
     var country = (CountryVM)ViewBag.Country;
     var jsonData = Json.Serialize(Model);
+
+    UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Country.Forecasting);
 }
 
 <div>
