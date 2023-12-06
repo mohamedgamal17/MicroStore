@@ -13,7 +13,7 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
    
         public string Sku { get; set; }
         public string Name { get; set; }
-        public string Thumbnail { get; set; }
+        public string? Thumbnail { get; set; }
         public int Stock { get; private set; }
         public int AllocatedStock { get; private set; }
         public Product(string id)
@@ -26,14 +26,6 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             Id = Guid.NewGuid().ToString();
         }
 
-        public Product(string sku, string name, string thumbnail, int stock)
-        {
-            Id = Guid.NewGuid().ToString();
-            Sku = sku;
-            Name = name;
-            Thumbnail = thumbnail;
-            Stock = stock;
-        }
 
         public void UpdateInventory(int stock)
         {
