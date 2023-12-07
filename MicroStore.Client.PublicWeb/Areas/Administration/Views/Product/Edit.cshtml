@@ -16,18 +16,29 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <h1 class="m-0">
                         Edit product details - @Model.Name
                     </h1>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-7">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <button class="btn btn-info" id="SubmitProductForm">
-                                <i class="fas fa-plus-square mr-1"></i>
-                                Save
-                            </button>
+                            <div class="row">
+                                <div class="d-inline">
+                                    <a class="btn btn-success mr-1" asp-controller="InventoryItem" asp-action="Edit" asp-route-id="@Model.Id">
+                                        <i class="fas fa-edit mr-1"></i>
+                                        Edit Stock
+                                    </a>
+                                    <button class="btn btn-info ml-1" id="SubmitProductForm">
+                                        <i class='fas fa-save mr-1' ></i>
+                                        Save
+                                    </button>
+                                   
+                                </div>
+                             
+                            </div>
+                           
                         </li>
                     </ol>
                 </div>

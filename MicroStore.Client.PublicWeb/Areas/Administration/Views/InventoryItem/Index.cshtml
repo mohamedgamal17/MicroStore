@@ -30,23 +30,63 @@
 
 <script>
     $(document).ready(function(){
-        $("#invetoryitems-grid").DataTable({
-            ajax: {
-                url: "",
-                type: "POST"
-            },
-             columns: [
-                 {data : "thumbnail", name : "@(Html.DisplayNameFor(x=> x.Data.First().Thumbnail))" },
-                 {data : "name", name : "@(Html.DisplayNameFor(x=> x.Data.First().Name))" },
-                 {data : "sku", name : "@(Html.DisplayNameFor(x=> x.Data.First().Sku))" },
-                 {data : "stock", name : "@(Html.DisplayNameFor(x=> x.Data.First().Stock))" },
-                 {
-                     mRender : function(data, type, row){
-                         return `<a href="InventoryItem/Edit/${row.id}" class="btn btn-info">Edit</a>`
-                     }
-                 }
-            ]
-        })
+
+            var table = $("#invetoryitems-grid").DataTable(
+                abp.libs.datatables.normalizeConfiguration({
+                    ajax: {
+                        type: "POST",
+                    },
+                    processing: true,
+                    paging: true,
+                    serverSide: true,
+                    searching: false,
+                    ordering: false,
+                    columnDefs: [
+                        {
+                            title: "Image",
+                            data: "productImages",
+                            render: function (data) {
+                                if (data) {
+
+                                    if (data.length > 0) {
+                                        var image = data[0].image
+                                        return `<img src="${image}" class="img" style="maxwidth:75px;max-height:75px">`
+                                    }
+                                }
+                                return `<img src="/user-content/no-image.png" style="maxwidth:75px;max-height:75px">`
+
+                            },
+                            orderable: false
+                        },
+                        {
+                            title: 'Name',
+                            data: 'name',
+                        },
+                        {
+                            title: 'Sku',
+                            data: 'sku',
+
+                        },
+                        {
+                            title: 'Stock',
+                            data: 'stock',
+                        },
+                        {
+                            title: 'Actions',
+                            rowAction: {
+                                items:
+                                    [{
+                                        text: 'Edit',
+                                        action: function (data) {
+                                            window.location.href = `InventoryItem/Edit/${data.record.id}`
+                                        }
+                                    }]
+                                    
+                            },
+                        },
+                    ]
+                })
+            )
 
     })
 </script>

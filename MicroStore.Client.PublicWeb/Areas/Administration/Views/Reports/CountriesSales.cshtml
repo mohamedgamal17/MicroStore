@@ -38,6 +38,7 @@
                     serverSide: true,
                     searching: false,
                     processing: true,
+                    ordering: false,
                     columnDefs: [
                         {
                             title:"@Html.NameFor(x=> x.Data.First().CountryCode)",
@@ -47,7 +48,7 @@
                         {
                             title: '@Html.NameFor(x=> x.Data.First().TotalOrders)',
                             data: 'totalOrders',
-                            orderable: false
+      
                         },
                         {
                             title: '@Html.NameFor(x=> x.Data.First().TotalShippingPrice)',
@@ -60,7 +61,7 @@
 
                                 return priceFormat.format(row.totalShippingPrice)
                             },
-                            orderable: false
+     
 
                         },
                         {
@@ -74,7 +75,7 @@
 
                                 return priceFormat.format(row.totalTaxPrice)
                             },
-                            orderable: false
+             
                         },
                         {
                             title: '@Html.NameFor(x=> x.Data.First().TotalPrice)',
@@ -87,7 +88,7 @@
 
                                 return priceFormat.format(row.totalPrice)
                             },
-                            orderable: false
+                          
                         },
 
                         {
@@ -96,9 +97,16 @@
                                 items:
                                 [
                                     {
+                                        text:"Sales Report",
+                                            action: function (data) {
+                                                window.location.href = `/Administration/Country/SalesReport?code=${data.record.countryCode}`
+                                            }
+
+                                    },
+                                    {
                                         text: 'Forecast',
                                         action: function (data) {
-                                            window.location.href = `Country/SalesReport?code=${data.record.countryCode}`
+                                            window.location.href = `/Administration/Country/SalesForecasting?code=${data.record.countryCode}`
                                         }
                                     }
                                 ]

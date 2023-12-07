@@ -71,6 +71,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
             await _inventoryItemService.UpdateAsync(model.Id, requestOptions);
 
+            NotificationManager.Success("Product stock has been updated!");
 
             return RedirectToAction("Edit", new { model.Id});
         }
