@@ -34,7 +34,7 @@
                                 <td>@item.Name</td>
                                 <td>@item.Quantity</td>
                                 <td>@item.Amount.ToString("C", new CultureInfo("en-US"))</td>
-                                <td><a class="btn btn-default" asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-eye mr-2"></i>View</a></td>
+                                <td><a class="btn btn-default" asp-controller="Product" asp-action="Edit" asp-route-id="@item.ProductId"><i class="far fa-eye mr-2"></i>View</a></td>
                             </tr>
                         }                   
                     </tbody>
@@ -69,7 +69,7 @@
                                 <td>@item.Name</td>
                                 <td>@item.Quantity</td>
                                 <td>@item.Amount.ToString("C", new CultureInfo("en-US"))</td>
-                                <td><a class="btn btn-default" asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-eye mr-2"></i>View</a></td>
+                                <td><a class="btn btn-default" asp-controller="Product" asp-action="Edit" asp-route-id="@item.ProductId"><i class="far fa-eye mr-2"></i>View </a></td>
                             </tr>
                         }
                     </tbody>

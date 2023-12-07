@@ -39,7 +39,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
             var requestOptions = new OrderSalesReportRequestOptions
             {
                 Status = OrderState.Completed.ToString(),
-                StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+                StartDate = DateTime.Now.AddDays(-30) ,
                 EndDate = DateTime.Now,
                 Period = ReportPeriod.Daily,
                 Length = 31
@@ -61,24 +61,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
 
         private async Task<List<OrderSalesChartDataModel>> PrepareMonthlySalesReport()
         {
-            var requestOptions = new OrderSalesReportRequestOptions
-            {
-                Status = OrderState.Completed.ToString(),
-                StartDate = new DateTime(DateTime.Now.Year, 1, 1),
-                EndDate = DateTime.Now,
-                Period = ReportPeriod.Monthly,
-                Length = 12
-            };
-            var report = await _orderAnaylsisService.GetOrderSalesReport(requestOptions);
-
-            var projection = report.Items.Select(x => new OrderSalesChartDataModel
-            {
-                TotalOrders = x.TotalOrders,
-                SumShippingTotalCost = x.TotalShippingPrice,
-                SumTaxTotalCost = x.TotalTaxPrice,
-                SumTotalCost = x.TotalPrice,
-                Date = x.Date.ToString("MM-dd-yyyy")
-            }).ToList();
+            List<OrderSalesChartDataModel> projection = new List<OrderSalesChartDataModel>();
 
             try
             {
@@ -95,7 +78,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
                 for (int i = 0; i < forecastedReponse.ForecastedValues.Length; i++)
                 {
 
-                    projection.Add(new OrderSalesChartDataModel
+                    projection.AddFirst(new OrderSalesChartDataModel
                     {
                         SumTotalCost = forecastedReponse.ForecastedValues[i],
                         Date = DateTime.Now.AddMonths(monthOffset).ToString("MM-dd-yyyy"),
@@ -110,6 +93,25 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.OrderSales
             {
                 _logger.LogDebug("Unable to get order forecasted value yet");
             }
+
+            var requestOptions = new OrderSalesReportRequestOptions
+            {
+                Status = OrderState.Completed.ToString(),
+                StartDate = DateTime.Now.AddMonths(-12),
+                EndDate = DateTime.Now,
+                Period = ReportPeriod.Monthly,
+                Length = 12
+            };
+            var report = await _orderAnaylsisService.GetOrderSalesReport(requestOptions);
+
+            projection.AddRange(report.Items.Select(x => new OrderSalesChartDataModel
+            {
+                TotalOrders = x.TotalOrders,
+                SumShippingTotalCost = x.TotalShippingPrice,
+                SumTaxTotalCost = x.TotalTaxPrice,
+                SumTotalCost = x.TotalPrice,
+                Date = x.Date.ToString("MM-dd-yyyy")
+            }).ToList());
 
             return projection;
         }
