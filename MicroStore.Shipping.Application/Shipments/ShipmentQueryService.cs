@@ -145,6 +145,7 @@ namespace MicroStore.Shipping.Application.Shipments
                 query = query.Where(x => x.CreationTime <= endDate);
             }
 
+            query = query.OrderByDescending(x => x.CreationTime);
 
             return query;
 
