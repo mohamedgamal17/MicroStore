@@ -6,7 +6,8 @@
     UIMenuNavigationManager.SetCurrentMenu(BackEndMenusStandard.Shipment.Fullfill);
 
 }
-<div class="content-wrapper mr-2">
+
+<div>
     <form method="post" asp-action="Fullfill">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="@Model.Id" />
@@ -22,7 +23,7 @@
                             <li class="breadcrumb-item">
                                 <button class="btn btn-info" type="submit">
                                     <i class='fas fa-save mr-1'></i>
-                                     Save And Continue
+                                    Save And Continue
                                 </button>
                             </li>
                         </ol>
@@ -52,8 +53,8 @@
                             <abp-column size-md=_9>
                                 <div class="input-group">
                                     <input asp-for="@Model.Weight.Value" type="number" class="form-control" placeholder="Value" />
-                                    <select asp-for="@Model.Weight.Unit" asp-items="@Html.GetEnumSelectList<WeightUnit>()" 
-                                        class="form-control"></select>
+                                    <select asp-for="@Model.Weight.Unit" asp-items="@Html.GetEnumSelectList<WeightUnit>()"
+                                            class="form-control"></select>
 
                                     <span asp-validation-for="@Model.Weight.Value" class="invalid-feedback"></span>
                                     <span asp-validation-for="@Model.Weight.Unit" class="invalid-feedback"></span>
@@ -66,12 +67,12 @@
                                 <micro-label asp-for="@Model.Dimension"></micro-label>
                             </abp-column>
                             <abp-column size-md=_9>
-                          <div class="input-group">
+                                <div class="input-group">
                                     <input asp-for="@Model.Dimension.Length" type="number" class="form-control" placeholder="Lenght" />
                                     <input asp-for="@Model.Dimension.Width" type="number" class="form-control" placeholder="Width" />
                                     <input asp-for="@Model.Dimension.Height" type="number" class="form-control" placeholder="Height" />
-                                    <select asp-for="@Model.Dimension.Unit" asp-items="@Html.GetEnumSelectList<DimensionUnit>()" 
-                                        class="form-control">
+                                    <select asp-for="@Model.Dimension.Unit" asp-items="@Html.GetEnumSelectList<DimensionUnit>()"
+                                            class="form-control">
                                     </select>
 
                                     <span asp-validation-for="@Model.Dimension.Length" class="invalid-feedback"></span>
@@ -85,5 +86,4 @@
             </div>
         </div>
     </form>
-
 </div>

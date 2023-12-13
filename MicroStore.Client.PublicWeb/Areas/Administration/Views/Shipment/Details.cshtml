@@ -13,13 +13,13 @@
         <div class="float-right ml-3">
             @if (Model.Status == ShipmentStatus.Created)
             {
-                <a asp-action="Fullfill" asp-route-id="@Model.Id" class="btn btn-info text-lg ml-3">
+                <a asp-action="Fullfill" asp-route-id="@Model.Id" class="btn btn-info ml-3">
                     <i class="fas fa-plus-square mr-2"></i> Full Fill
                 </a>
             }
             else if (Model.Status == ShipmentStatus.Fullfilled)
             {
-                <a asp-action="PurshaseLabel" asp-route-id="@Model.Id" class="btn btn-info text-lg ml-3">
+                <a asp-action="PurshaseLabel" asp-route-id="@Model.Id" class="btn btn-info ml-3">
                     <i class="fas fa-plus-square mr-2"></i> Purshase Label
                 </a>
             }

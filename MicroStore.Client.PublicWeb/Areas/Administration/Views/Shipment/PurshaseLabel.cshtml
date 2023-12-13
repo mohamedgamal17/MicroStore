@@ -14,8 +14,7 @@
 
 }
 
-<div class="content-wrapper mr-2">
-    <!-- Content Header (Page header) -->
+<div>
     <form method="post" asp-action="PurshaseLabel">
         @Html.AntiForgeryToken()
         <div class="content-header">
@@ -39,7 +38,7 @@
         </div>
         <div class="content">
             <div class="container-fluid">
-                <abp-row >
+                <abp-row>
                     <abp-column size-md=_6>
                         <abp-card>
                             <abp-card-header>
@@ -61,7 +60,7 @@
                                         @if (shipmentRates != null)
                                         {
                                             <div class="list-group clearfix overflow-auto "
-                                             style="max-height : 400px">
+                                                 style="max-height : 400px">
 
 
                                                 @foreach (var rate in shipmentRates)
@@ -89,7 +88,7 @@
                     </abp-column>
 
                     <abp-column size-md=_6>
-                        @await Component.InvokeAsync(typeof(OrderSummaryViewComponent) , new {orderId = Guid.Parse(shipment.OrderId)})
+                        @await Component.InvokeAsync(typeof(OrderSummaryViewComponent), new { orderId = Guid.Parse(shipment.OrderId) })
                     </abp-column>
                 </abp-row>
             </div>
