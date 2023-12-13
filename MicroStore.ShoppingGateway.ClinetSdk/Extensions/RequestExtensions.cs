@@ -1,5 +1,6 @@
 ﻿using MicroStore.ShoppingGateway.ClinetSdk.Services;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
@@ -21,13 +22,41 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
             requestType.GetProperties().ToList()
                  .ForEach((p) =>
                  {
-                     dictionary.Add(string.Format("{0}", ConvertToSnakeCase( p.Name)), p.GetValue(request)?.ToString());
+                     string value = string.Empty;
+
+                     if(TryToGetPropertyValueValue(p, request, out var val))
+                     {
+
+                         if(val.GetType() == typeof(DateTime))
+                         {
+                             DateTime dateTime = (DateTime)val;
+
+                             dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)),  dateTime.ToString("yyyy-MM-ddTHH:mm:ss"));
+
+                         }
+                         else
+                         {
+                             dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)),val.ToString());
+                         }
+
+             
+                     }
+
                  });
 
 
             return dictionary;
         }
         
+        private static bool TryToGetPropertyValueValue(PropertyInfo propertyInfo , Object obj , out object val)
+        {
+            val = propertyInfo.GetValue(obj);
+
+            if (val != null)
+                return true;
+
+            return false;
+        }
         private static string ConvertToSnakeCase(string str)
         {
             if (string.IsNullOrWhiteSpace(str))

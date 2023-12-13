@@ -109,7 +109,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
             {
                 "creation" => desc ? query.OrderByDescending(x => x.CreationTime) : query.OrderBy(x => x.CreationTime),
                 "price" => desc ? query.OrderByDescending(x=>x.TotalCost): query.OrderBy(x=> x.TotalCost),
-                _ => query
+                _ => query.OrderByDescending(x=> x.CreationTime)
             };
         }
 
@@ -130,7 +130,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             if (model.Status != null)
             {
-                var status = (PaymentStatus)model.Status;
+                var status = Enum.Parse<PaymentStatus>(model.Status);
 
                 query = query.Where(x => x.State == status);
             }
@@ -148,6 +148,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
             if (model.StartDate != null)
             {
                 var startDate = model.StartDate.Value;
+
                 query = query.Where(x => x.CreationTime >= startDate);
             }
 
@@ -157,10 +158,16 @@ namespace MicroStore.Payment.Application.PaymentRequests
                 query = query.Where(x => x.CreationTime <= endDate);
             }
 
-            if (model.SortBy != null)
+            if(model.SortBy != null)
             {
                 query = TryToSort(query, model.SortBy, model.Desc);
+
             }
+            else
+            {
+                query = query.OrderByDescending(x => x.CreationTime);
+            }
+
 
             return query;
         }

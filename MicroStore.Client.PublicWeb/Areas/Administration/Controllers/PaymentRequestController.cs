@@ -29,8 +29,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 EndDate = model.EndDate,
                 MinPrice = model.MinPrice,
                 MaxPrice = model.MaxPrice,
-                Status = model.Status,
-                Skip = model.PageNumber,
+                Status = model.Status.ToString(),
+                Skip = model.Skip,
                 Length = model.PageSize,
             };
 

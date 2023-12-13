@@ -13,6 +13,7 @@ namespace MicroStore.Client.PublicWeb.Bundling
                 "/libs/chart.js/dist/chart.umd.js",
                 "/libs/chartjs-adapter-luxon/dist/chartjs-adapter-luxon.umd.min.js",
                 "/libs/intl-tel-input/build/js/intlTelInput.min.js",
+                "/libs/inputmask/dist/jquery.inputmask.min.js",
                 "/js/abp.config.js"
             });
         }
