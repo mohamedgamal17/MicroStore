@@ -3,10 +3,9 @@
 namespace MicroStore.Catalog.Application.Models.Categories
 {
     public class CategoryModel
-
     {
-        public string Name { get; set; } = null!;
-        public string Description { get; set; } = string.Empty;
+        public string Name { get; set; }
+        public string? Description { get; set; } 
     }
 
     public class CategoryModelValidation : AbstractValidator<CategoryModel>
