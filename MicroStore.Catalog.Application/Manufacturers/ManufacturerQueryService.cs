@@ -44,7 +44,7 @@ namespace MicroStore.Catalog.Application.Manufacturers
                     .Bool(bl => bl
                         .Must(mst => mst
                             .When(!string.IsNullOrEmpty(queryParams.Name), act => act
-                                .MatchPhrase(mt => mt
+                                .MatchPhrasePrefix(mt => mt
                                     .Field(x => x.Name)
                                     .Query(queryParams.Name!)
                                 )

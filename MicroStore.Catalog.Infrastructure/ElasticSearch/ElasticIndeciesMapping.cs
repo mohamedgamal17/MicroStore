@@ -21,7 +21,7 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
             return new CreateIndexRequestDescriptor<ElasticCategory>(IndexName.From<ElasticCategory>())
                 .Mappings(mp => mp
                     .Properties(pr=> pr
-                        .Keyword(x=> x.Name)
+                        .Text(x=> x.Name)
                         .Text(x=> x.Description)
                          .Boolean(x => x.IsDeleted)
                         .Date(x => x.CreatationTime)
@@ -40,9 +40,9 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
             return new CreateIndexRequestDescriptor<ElasticManufacturer>(IndexName.From<ElasticManufacturer>())
                 .Mappings(mp => mp
                     .Properties(pr => pr
-                        .Keyword(x => x.Name)
+                        .Text(x => x.Name)
                         .Text(x => x.Description)
-                         .Boolean(x => x.IsDeleted)
+                        .Boolean(x => x.IsDeleted)
                         .Date(x => x.CreatationTime)
                         .Date(x => x.LastModificationTime)
                         .Date(x => x.DeletionTime)
@@ -59,7 +59,7 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
             return new CreateIndexRequestDescriptor<ElasticProductTag>(IndexName.From<ElasticProductTag>())
                 .Mappings(mp => mp
                     .Properties(pr => pr
-                        .Keyword(x => x.Name)
+                        .Text(x => x.Name)
                         .Text(x => x.Description)
                     )
                 );
@@ -72,7 +72,7 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
                 IndexName.From<ElasticSpecificationAttribute>())
                 .Mappings(mp => mp
                     .Properties(pr=> pr
-                        .Keyword(x=> x.Name)
+                        .Text(x=> x.Name)
                         .Text(x=> x.Description)
                         .Nested(x=>  x.Options,cfg=> cfg
                             .Properties(prx=> prx

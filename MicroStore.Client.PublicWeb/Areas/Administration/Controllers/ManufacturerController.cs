@@ -53,6 +53,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Create(ManufacturerModel model)
         {
@@ -96,6 +97,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RuleSetForClientSideMessages("*")]
         public async Task<IActionResult> Edit( ManufacturerModel model)
         {
