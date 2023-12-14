@@ -46,11 +46,13 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             var requestOptions = new OrderListRequestOptions
             {
                 Length = model.PageSize,
-                Skip = model.PageNumber,
+                Skip = model.Skip,
                 StartSubmissionDate = model.StartSubmissionDate,
                 EndSubmissionDate = model.EndSubmissionDate,
                 OrderNumber  = model.OrderNumber,
                 States = model.States != null  ? model.States.Select(x=>x.ToString()).JoinAsString(",") : null,
+                SortBy = "submission_date",
+                Desc = true
             };
 
             var response = await _orderService.ListAsync(requestOptions);

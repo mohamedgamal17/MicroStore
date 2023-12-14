@@ -25,7 +25,12 @@
 
                         </abp-column>
                         <abp-column size-sm="_8">
-                            <input asp-for="@Model.StartSubmissionDate" id="@Html.IdFor(x=> x.StartSubmissionDate)" class="form-control" />
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" asp-for="@Model.StartSubmissionDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric">
+                            </div>
                             <span class="text-danger" asp-validation-for="@Model.StartSubmissionDate" />
                         </abp-column>
                     </abp-row>
@@ -37,7 +42,12 @@
 
                         </abp-column>
                         <abp-column size-sm="_8">
-                            <input asp-for="@Model.EndSubmissionDate" id="@Html.IdFor(x=> x.EndSubmissionDate)" class="form-control" />
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" asp-for="@Model.EndSubmissionDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric">
+                            </div>
                             <span class="text-danger" asp-validation-for="@Model.EndSubmissionDate" />
                         </abp-column>
                     </abp-row>

@@ -27,6 +27,8 @@
 @section Scripts{
     <script>
         $(document).ready(function(){
+            $("#StartSubmissionDate").inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $("#EndSubmissionDate").inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
             var orderTable = $("#OrderTable").DataTable(
                 abp.libs.datatables.normalizeConfiguration({
                     ajax: {
@@ -42,29 +44,40 @@
                     serverSide: true,
                     processing : true,
                     searching: false,
+                    ordering: false,
                     columnDefs: [
                         {
                             title: "@Html.NameFor(x=> x.OrderNumber)",
                             data: "orderNumber",
-                            orderable: false
+                            render: function (data, type, row) {
+                                const orderNumber = row.orderNumber;
+
+                                const arr = []
+
+                                for (var i = 0; i < orderNumber.length; i++) {
+                                    if (i % 3 == 0) {
+                                        arr.push(orderNumber.substring(i, i + 3))
+                                    }
+                                }
+
+                                return arr.join(" ")
+                            }
                         },
 
                         {
                             title: "@Html.NameFor(x=> x.OrderNumber)",
                             data: "currentState",
-                            orderable: false
                         },
                         {
                             title: "Total Price",
                             data: "totalPrice",
-                            orderable: false
                         },
                         {
                             title: "Actions",
                             render: function (data, type, row) {
                                 return `<a href="Order/Details/${row.id}" class="btn btn-info"> View</a>`
                             },
-                            orderable: false
+
                         }
                     ],
                 })
