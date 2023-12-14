@@ -9,6 +9,7 @@ namespace MicroStore.Client.PublicWeb.Models
         public string LastName { get; set; }
 
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
         public string Phone { get; set; }
