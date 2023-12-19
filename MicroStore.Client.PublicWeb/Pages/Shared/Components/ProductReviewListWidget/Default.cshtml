@@ -14,7 +14,7 @@
 
                             <li style="display:block !important">
                                 <div class="media">
-                                    <img src="/assets/images/avtar.jpg" alt="Generic placeholder image">
+                                    <img src="/images/user.png" alt=" placeholder image">
                                     <div class="media-body">
                                         <h6>User </h6>
                                         <div class="custom-rating">
@@ -31,18 +31,22 @@
                     }
                     else
                     {
-                        <li>There is no reviews yet</li>
+                        <li class="text-center text-dark" style="display:block !important"><h3 class="text-dark">There is no reviews yet</h3></li>
                     }
 
                 </ul>
             </div>
-            <div class="col-sm-12 mt-3">
-                <div class="product-pagination mt-3">
-                    <div class="theme-paggination-block">
-                        @await Component.InvokeAsync(typeof(PaginatorWidgetViewComponent), new {model = Model.Pager} )
+            @if (Model.ProductReviews != null && Model.ProductReviews.Count > 0)
+            {
+                <div class="col-sm-12 mt-3">
+                    <div class="product-pagination mt-3">
+                        <div class="theme-paggination-block">
+                            @await Component.InvokeAsync(typeof(PaginatorWidgetViewComponent), new { model = Model.Pager })
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+
         </div>
     </div>
 </section>

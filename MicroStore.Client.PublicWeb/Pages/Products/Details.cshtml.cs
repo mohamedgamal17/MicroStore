@@ -92,7 +92,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Products
                 return RedirectToPage("Details", new { id = id });
 
             }
-            catch (MicroStoreClientException ex)
+            catch (MicroStoreClientException ex) when(ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 _uiNotificationManager.Error(ex.Error.Detail);
 
