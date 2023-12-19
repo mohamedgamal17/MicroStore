@@ -9,13 +9,59 @@
           "Port": 7188
         }
       ],
-
+      "Priority": 0,
       "UpstreamPathTemplate": "/mvcgateway/catalog/{everything}",
       "UpstreamHttpMethod": [ "GET" ],
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
     },
+    {
+      "DownstreamPathTemplate": "/api/products/{productId}/productreviews",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+      ],
+      "Priority": 1,
+      "UpstreamPathTemplate": "/mvcgateway/catalog/products/{productId}/productreviews",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/products/{productId}/productreviews/replay",
+      "DownstreeamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7188
+        }
+      ],
+      "Priority": 1,
+      "UpstreamPathTemplate": "/mvcgateway/catalog/products/{productId}/productreviews/replay",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "Admin"
+      },
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ],
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+    },
+
     {
       "DownstreamPathTemplate": "/api/products/search-by-image",
       "DownstreeamScheme": "https",
