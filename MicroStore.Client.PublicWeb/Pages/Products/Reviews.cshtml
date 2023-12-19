@@ -2,6 +2,7 @@
 @using MicroStore.Client.PublicWeb.Components.ProductReviewListWidget
 @model MicroStore.Client.PublicWeb.Pages.Products.ReviewsModel
 @{
+    ViewData["Title"] = " Reviews Page";
     ViewData["BreadCrumb.IsMainPage"] = false;
     ViewData["BreadCrumb.Title"] = string.Format("{0} (Reviews)", Model.Product.Name);
     ViewData["BreadCrumb.Page"] = "REVIEW";
