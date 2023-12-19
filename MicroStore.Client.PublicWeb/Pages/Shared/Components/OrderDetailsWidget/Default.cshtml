@@ -46,7 +46,7 @@
                     <abp-card-body>
                         <abp-row>
                             <abp-column size-md="_2">
-                                <a href="/products/@item.ExternalProductId">
+                                <a href="/products/Details/@item.ExternalProductId">
                                     @{
                                         string imageUrl = item.Thumbnail ?? "/user-content/no-image.png";
                                         <img class="img-size w-75" src="@imageUrl" />
@@ -54,7 +54,7 @@
                                 </a>
                             </abp-column>
                             <abp-column size-md="_4" size-md="_4" class="mb-3">
-                                <a href="/products/@Guid.NewGuid().ToString()">
+                                <a href="/products/Details/@item.ExternalProductId">
                                     <h3><strong class="text-dark">@item.Name</strong></h3>
                                     <h5><em class="text-secondary">@item.Sku</em></h5>
                             
@@ -67,13 +67,6 @@
                                     </a>
 
                                 </div>
-                            </abp-column>
-                            <abp-column offset-md="_3" size-md="_2">
-                                <abp-row>
-                                    <abp-button class="btn btn-light shadow"  abp-tooltip-right="Not available yet">
-                                        Reivew Product
-                                    </abp-button>
-                                </abp-row>
                             </abp-column>
                         </abp-row>
                     </abp-card-body>
