@@ -50,6 +50,29 @@
     },
 
     {
+      "DownstreamPathTemplate": "/api/systems",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7092
+        }
+      ],
+
+      "Priority": 0,
+      "UpstreamPathTemplate": "/mvcgateway/billing/systems",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+
+    },
+
+
+    {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [

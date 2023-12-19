@@ -43,6 +43,25 @@
     },
 
     {
+      "DownstreamPathTemplate": "/api/rates/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7162
+        }
+      ],
+      "UpstreamPathTemplate": "/mvcgateway/shipping/rates/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "DelegatingHandlers": [
+        "DefaultTokenExchangeDelegatingHandler"
+      ]
+    },
+
+    {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
