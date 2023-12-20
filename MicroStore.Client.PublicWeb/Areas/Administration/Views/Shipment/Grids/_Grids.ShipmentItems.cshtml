@@ -29,7 +29,10 @@
                 @foreach (var item in Model.Items)
                 {
                     <tr>
-                        <td><img src="@item.Thumbnail" style="width:150px ; height:150px;"></img></td>
+                        @{
+                            string thumbnail = item.Thumbnail ?? @"/user-content/no-image.png";
+                        }
+                        <td><img src="@thumbnail" style="width:150px ; height:150px;"></img></td>
                         <td>@item.Name</td>
                         <td>@item.Sku</td>
                         <td>@item.Quantity</td>

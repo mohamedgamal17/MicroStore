@@ -242,7 +242,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 await _orderService.CancelAsync(model.Id, requestOptions);
 
-                return RedirectToAction("Details", new { id = model.Id });
+                return RedirectToAction("Details", new { orderId = model.Id });
 
             }
             catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest || ex.StatusCode == HttpStatusCode.NotFound)
