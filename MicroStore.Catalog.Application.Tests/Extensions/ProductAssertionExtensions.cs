@@ -72,13 +72,13 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
             elasticProduct.ProductCategories.OrderBy(x => x.Id)
                 .Zip(product.ProductCategories.Select(x => x.Category).OrderBy(x => x.Id))
                 .ToList()
-                .ForEach(categoryTuple => categoryTuple.First.AssertElasticCategory(categoryTuple.Second));
+                .ForEach(categoryTuple => categoryTuple.First.AssertElasticProductCategory(categoryTuple.Second));
 
 
             elasticProduct.ProductManufacturers.OrderBy(x => x.Id)
                 .Zip(product.ProductManufacturers.Select(x => x.Manufacturer).OrderBy(x => x.Id))
                 .ToList()
-                .ForEach(manufacturerTuple => manufacturerTuple.First.AssertElasticManufacturer(manufacturerTuple.Second));
+                .ForEach(manufacturerTuple =>  manufacturerTuple.First.AssertElasticProductManufacturer(manufacturerTuple.Second));
 
 
             elasticProduct.ProductTags.OrderBy(x => x.Id)

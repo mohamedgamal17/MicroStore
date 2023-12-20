@@ -20,5 +20,11 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
             elasticCategory.Name.Should().Be(category.Name);
             elasticCategory.Description.Should().Be(category.Description);
         }
+
+        public static void AssertElasticProductCategory(this ElasticProductCategory elasticProductCategory , Category category)
+        {
+            elasticProductCategory.Id.Should().Be(category.Id);
+            elasticProductCategory.Name.Should().Be(category.Name);
+        }
     }
 }
