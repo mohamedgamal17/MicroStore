@@ -54,10 +54,9 @@ namespace MicroStore.Shipping.Application.Abstraction.Models
                 .WithMessage("Item sku maximum characters is 265");
 
             RuleFor(x => x.Thumbnail)
-                .NotNull()
-                .WithMessage("Item Image is required")
                 .MaximumLength(500)
-                .WithMessage("Item Image maximum characters is 265");
+                .WithMessage("Item Image maximum characters is 500")
+                .When(x=> x.Thumbnail != null);
 
             RuleFor(x => x.Quantity)
                 .GreaterThan(0)

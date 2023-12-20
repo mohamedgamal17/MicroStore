@@ -24,7 +24,7 @@ namespace MicroStore.Shipping.Infrastructure.EntityFramework.EntityTypeConfigura
                 .HasMaxLength(265);
 
             builder.Property(x => x.Thumbnail)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(600);
 
             builder.OwnsOne(x => x.Weight, weightNavigationBuilder =>
