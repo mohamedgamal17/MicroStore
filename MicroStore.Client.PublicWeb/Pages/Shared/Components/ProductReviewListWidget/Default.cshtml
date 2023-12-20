@@ -11,12 +11,14 @@
                         @foreach (var review in Model.ProductReviews)
                         {
                             int ratingPercent = (int)(review.Rating * 100 / 5);
+                            string userImage = review.User.Avatar ?? "/images/user.png";
+                            string name = string.Format("{0} {1}", review.User.FirstName, review.User.LastName);
 
                             <li style="display:block !important">
                                 <div class="media">
-                                    <img src="/images/user.png" alt=" placeholder image">
+                                    <img src="@userImage" alt=" placeholder image">
                                     <div class="media-body">
-                                        <h6>User </h6>
+                                        <h6>@name</h6>
                                         <div class="custom-rating">
                                             <div style="width:@(ratingPercent)%"></div>
                                         </div>

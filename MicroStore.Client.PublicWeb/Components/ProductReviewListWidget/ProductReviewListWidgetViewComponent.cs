@@ -13,9 +13,11 @@ namespace MicroStore.Client.PublicWeb.Components.ProductReviewListWidget
     {
         private readonly ProductReviewService _productReveiwService;
 
-        public ProductReviewListWidgetViewComponent(ProductReviewService productReveiwService)
+        private readonly ProductReviewAggregateService _productReviewAggregateService;
+
+        public ProductReviewListWidgetViewComponent(ProductReviewAggregateService productReviewAggregateService)
         {
-            _productReveiwService = productReveiwService;
+            _productReviewAggregateService = productReviewAggregateService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(string productId , int currentPage = 1 , int pageSize = 10)
@@ -26,7 +28,7 @@ namespace MicroStore.Client.PublicWeb.Components.ProductReviewListWidget
                 Skip = (currentPage - 1) * pageSize
             };
 
-            var response = await _productReveiwService.ListAsync(productId, pagingOptions);
+            var response = await _productReviewAggregateService.ListAsync(productId, pagingOptions);
 
             var url = QueryHelpers.AddQueryString("/ProductReviews", "id", productId);
 
@@ -42,7 +44,7 @@ namespace MicroStore.Client.PublicWeb.Components.ProductReviewListWidget
 
     public class ProductReviewListWidgetViewComponentModel
     {
-        public List<ProductReview> ProductReviews { get; set; }
+        public List<ProductReviewAggregate> ProductReviews { get; set; }
         public PagerModel Pager { get; set; }
     }
 

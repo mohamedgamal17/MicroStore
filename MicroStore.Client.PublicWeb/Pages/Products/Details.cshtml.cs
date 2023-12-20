@@ -13,8 +13,8 @@ namespace MicroStore.Client.PublicWeb.Pages.Products
     public class DetailsModel : PageModel
     {
         public Product Product { get; set; }
-        public List<ProductReview> ProductReviews { get; set; }
-        public List<ProductReview> UserReviews { get; set; }
+        public List<ProductReviewAggregate> ProductReviews { get; set; }
+        public List<ProductReviewAggregate> UserReviews { get; set; }
 
         [BindProperty]
         public CreateProductReviewModel ReviewInput { get; set; }
@@ -23,30 +23,32 @@ namespace MicroStore.Client.PublicWeb.Pages.Products
 
         private readonly ProductReviewService _productReviewService;
 
+        private readonly ProductReviewAggregateService _productReviewAggregateService;
+
         private readonly ILogger<DetailsModel> _logger;
 
         private readonly UINotificationManager _uiNotificationManager;
 
         private readonly IWorkContext _workContext;
 
-        public DetailsModel(ProductReviewService productReviewService, ILogger<DetailsModel> logger, ProductService productService, UINotificationManager uiNotificationManager, IWorkContext workContext)
+        public DetailsModel(ProductService productService, ProductReviewService productReviewService, ProductReviewAggregateService productReviewAggregateService, ILogger<DetailsModel> logger, UINotificationManager uiNotificationManager, IWorkContext workContext)
         {
-            _productReviewService = productReviewService;
-            _logger = logger;
             _productService = productService;
+            _productReviewService = productReviewService;
+            _productReviewAggregateService = productReviewAggregateService;
+            _logger = logger;
             _uiNotificationManager = uiNotificationManager;
             _workContext = workContext;
         }
-
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
 
             Product = await _productService.GetAsync(id);
 
-            var productReviewsResponse = await _productReviewService.ListAsync(id, new ProductReviewListRequestOption { Length = 10 });
+            var productReviewsResponse = await _productReviewAggregateService.ListAsync(id, new ProductReviewListRequestOption { Length = 10 });
 
-            var userReveiwsResponse = await _productReviewService
+            var userReveiwsResponse = await _productReviewAggregateService
                 .ListAsync(id, new ProductReviewListRequestOption { UserId = _workContext.TryToGetCurrentUserId(), Length = 10 });
 
             ProductReviews = productReviewsResponse.Items;

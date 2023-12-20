@@ -9,7 +9,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling
         IListableWithPaging<User, PagingReqeustOptions>,
         IRetrievable<User>
     {
-        const string BaseUrl = "/profiling/profile";
+        const string BaseUrl = "/profiling/profiles";
 
         public ProfileService(MicroStoreClinet microStoreClinet) 
             : base(microStoreClinet)
