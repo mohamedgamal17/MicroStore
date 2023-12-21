@@ -20,7 +20,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.BestSeller
         public async Task<IViewComponentResult> InvokeAsync()
         {
 
-            var bestSellersByAmount = await _productAnalysisService.GetBestSellersReport(new PagingAndSortingRequestOptions
+            var bestSellersByAmount = await _productAnalysisService.GetBestSellersReportAggregate(new PagingAndSortingRequestOptions
             {
                 Length = 10,
                 Skip = 0,
@@ -28,7 +28,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.BestSeller
                 Desc = true
             });
 
-            var bestSellersByQuantity = await _productAnalysisService.GetBestSellersReport(new PagingAndSortingRequestOptions
+            var bestSellersByQuantity = await _productAnalysisService.GetBestSellersReportAggregate(new PagingAndSortingRequestOptions
             {
                 Length = 10,
                 Skip = 0,
@@ -49,8 +49,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Components.BestSeller
 
     public class BestSellerWidgetModel
     {
-        public List<BestSellerReport> ByAmount { get; set; }
+        public List<BestSellerReportAggregate> ByAmount { get; set; }
 
-        public List<BestSellerReport> ByQuantity { get; set; }
+        public List<BestSellerReportAggregate> ByQuantity { get; set; }
     }
 }

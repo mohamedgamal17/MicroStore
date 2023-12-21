@@ -4,6 +4,7 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging;
 using MicroStore.BuildingBlocks.Paging.Params;
+using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Products;
@@ -25,6 +26,7 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpGet]
         [Route("bestsellers")]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(BestSellerReport))]
         public async Task<IActionResult> BestSellers([FromQuery]PagingAndSortingQueryParams queryParams)
         {
             var result = await _productAnalysisService.GetBestSellersReport(queryParams);
@@ -35,6 +37,8 @@ namespace MicroStore.Ordering.Api.Controllers
 
         [HttpPost]
         [Route("{productId}/forecast")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ForecastDto))]
+
         public async Task<IActionResult> Forecast(string productId ,ForecastModel model)
         {
             var validationResult = await ValidateModel(model);
