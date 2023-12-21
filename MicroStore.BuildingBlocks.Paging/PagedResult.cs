@@ -2,15 +2,19 @@
 {
     public class PagedResult
     {
-        public int Lenght { get; protected set; }
+        public int Lenght { get;  set; }
         public int Skip { get; set; }
-        public long TotalCount { get; protected set; }
+        public long TotalCount { get;  set; }
     }
 
     public class PagedResult<T> : PagedResult 
     { 
         public IEnumerable<T> Items { get; set; }
 
+        public PagedResult()
+        {
+            
+        }
         public PagedResult(IEnumerable<T> items, long count, int skip, int lenght)
         {
             Items = items;
