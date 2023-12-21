@@ -1,5 +1,6 @@
 ﻿using MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Common;
+using MicroStore.Client.PublicWeb.Areas.Administration.Models.Profiling;
 using MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments;
 using MicroStore.ShoppingGateway.ClinetSdk.Common;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
@@ -24,6 +25,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering
         public List<OrderItemVM> Items { get; set; }
         public string CancellationReason { get; set; }
         public DateTime? CancellationDate { get; set; }
+        public UserProfileVM User { get; set; }
         public PaymentRequestVM Payment { get; set; }
         public ShipmentAggregateVM Shipment { get; set; }
     }

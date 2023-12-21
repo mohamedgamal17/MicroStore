@@ -1,88 +1,147 @@
 ﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
+using MicroStore.ShoppingGateway.ClinetSdk.Interfaces;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Billing;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
 {
-    public class OrderAggregateService
+    public class OrderAggregateService : IListableWithPaging<OrderAggregate, OrderListRequestOptions>
     {
 
         private readonly OrderService _orderService;
 
         private readonly PaymentRequestService _paymentRequestService;
 
-        private readonly ShipmentAggregateService _shipmentAggregateService;
+        private readonly ShipmentService _shipmentService;
 
         private readonly CountryService _countryService;
 
         private readonly StateProvinceService _stateProvinceService;
 
-        public OrderAggregateService(OrderService orderService, ShipmentAggregateService shipmentAggregateService, CountryService countryService, StateProvinceService stateProvinceService, PaymentRequestService paymentRequestService)
+        private readonly ProfileService _profileService;
+
+        public OrderAggregateService(OrderService orderService, PaymentRequestService paymentRequestService, ShipmentService shipmentService, CountryService countryService, StateProvinceService stateProvinceService, ProfileService profileService)
         {
             _orderService = orderService;
-            _shipmentAggregateService = shipmentAggregateService;
+            _paymentRequestService = paymentRequestService;
+            _shipmentService = shipmentService;
             _countryService = countryService;
             _stateProvinceService = stateProvinceService;
-            _paymentRequestService = paymentRequestService;
+            _profileService = profileService;
         }
 
+        public async Task<PagedList<OrderAggregate>> ListAsync(OrderListRequestOptions options = null, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
+        {
+            var response = await _orderService.ListAsync(options, requestHeaderOptions, cancellationToken);
+
+            var tasks = response.Items.Select(x => PreapreOrderAggregate(x, cancellationToken));
+
+            var aggregates =  await Task.WhenAll(tasks);
+
+            var pagedModel = new PagedList<OrderAggregate>
+            {
+                Items = aggregates.ToList(),
+                Skip = response.Skip,
+                Lenght = response.Lenght,
+                TotalCount = response.TotalCount
+            };
+
+            return pagedModel;
+        }
 
         public async Task<OrderAggregate> GetAsync(Guid orderId, CancellationToken cancellationToken = default)
         {
             Order order = await _orderService.GetAsync(orderId, cancellationToken: cancellationToken);
 
-            PaymentRequest paymentRequest = null;
+            return await PreapreOrderAggregate(order, cancellationToken);
 
-            ShipmentAggregate shipment = null;
-
-            if(order.PaymentId != null)
-            {
-                paymentRequest = await _paymentRequestService.GetAsync(order.PaymentId, cancellationToken:  cancellationToken);
-            }
-
-            if(order.ShipmentId != null)
-            {
-                shipment = await _shipmentAggregateService.GetAsync(order.ShipmentId, cancellationToken);
-            }
-            
-
-            var orderAggregate=  BuildOrderAggregate(order);
-
-            orderAggregate.Payment = paymentRequest;
-
-            orderAggregate.Shipment = shipment;
-
-            orderAggregate.BillingAddress = await PrepareAddressAggregate(order.BillingAddress, cancellationToken);
-
-            orderAggregate.ShippingAddress = await PrepareAddressAggregate(order.ShippingAddress, cancellationToken);
-
-            return orderAggregate;
         }
 
-        private OrderAggregate BuildOrderAggregate(Order order)
+        private async Task<OrderAggregate> PreapreOrderAggregate(Order order, CancellationToken cancellationToken = default)
         {
-            return new OrderAggregate
+            var userProfile = _profileService.GetAsync(order.UserId, cancellationToken: cancellationToken);
+            var billingAddress = PrepareAddressAggregate(order.BillingAddress, cancellationToken);
+            var shippingAddress = PrepareAddressAggregate(order.ShippingAddress, cancellationToken);
+
+            Task<PaymentRequest> paymentRequest = order.PaymentId != null ? _paymentRequestService.GetAsync(order.PaymentId, cancellationToken: cancellationToken) : Task.FromResult(new PaymentRequest());
+
+            Task<Shipment> shipment = order.ShipmentId != null ? _shipmentService.GetAsync(order.ShipmentId, cancellationToken: cancellationToken) : Task.FromResult(new Shipment());
+
+
+            await Task.WhenAll(userProfile, billingAddress, shippingAddress, paymentRequest, shipment);
+
+            var aggregate = new OrderAggregate
             {
                 Id = order.Id,
                 OrderNumber = order.OrderNumber,
-                PaymentId = order.PaymentId,
-                ShipmentId = order.ShipmentId,
                 UserId = order.UserId,
+                User = userProfile.Result,
                 TaxCost = order.TaxCost,
                 ShippingCost = order.ShippingCost,
                 SubTotal = order.SubTotal,
                 TotalPrice = order.TotalPrice,
+                BillingAddress = billingAddress.Result,
+                ShippingAddress = shippingAddress.Result,
+                PaymentId = order.PaymentId,
+                Payment = order.PaymentId != null ? PreaprePaymentPaymentRequestAggregate(paymentRequest.Result, userProfile.Result) : null,
+                ShipmentId = order.ShipmentId,
+                Shipment = order.ShipmentId != null ? PreapreShipmentAggregate(shipment.Result, shippingAddress.Result, userProfile.Result) : null,
                 Items = order.Items,
+                CurrentState = order.CurrentState,
                 SubmissionDate = order.SubmissionDate,
                 ShippedDate = order.ShippedDate,
-                CurrentState = order.CurrentState,
                 CancellationDate = order.CancellationDate,
-                CancellationReason = order.CancellationReason,
-               
+                CancellationReason = order.CancellationReason
+
+            };
+
+            return aggregate;
+        }
+
+        private PaymentRequestAggregate PreaprePaymentPaymentRequestAggregate(PaymentRequest paymentRequest, User user)
+        {
+            return new PaymentRequestAggregate
+            {
+                Id = paymentRequest.Id,
+                OrderId = paymentRequest.OrderId,
+                OrderNumber = paymentRequest.OrderNumber,
+                UserId = paymentRequest.UserId,
+                User = user,
+                TransctionId = paymentRequest.TransctionId,
+                TaxCost = paymentRequest.TaxCost,
+                ShippingCost = paymentRequest.ShippingCost,
+                SubTotal = paymentRequest.SubTotal,
+                TotalCost = paymentRequest.TotalCost,
+                Status = paymentRequest.Status,
+                PaymentGateway = paymentRequest.PaymentGateway,
+                Description = paymentRequest.Description,
+                CapturedAt = paymentRequest.CapturedAt,
+                OpenedAt = paymentRequest.OpenedAt,
+                Items = paymentRequest.Items
+            };
+        }
+        private ShipmentAggregate PreapreShipmentAggregate(Shipment shipment, AddressAggregate addressAggregate, User user)
+        {
+            return new ShipmentAggregate
+            {
+                Id = shipment.Id,
+                ShipmentExternalId = shipment.ShipmentExternalId,
+                ShipmentLabelExternalId = shipment.ShipmentLabelExternalId,
+                TrackingNumber = shipment.TrackingNumber,
+                OrderId = shipment.OrderId,
+                OrderNumber = shipment.OrderNumber,
+                UserId = shipment.UserId,
+                SystemName = shipment.SystemName,
+                Address = addressAggregate,
+                Items = shipment.Items,
+                Status = shipment.Status
             };
         }
 
@@ -115,7 +174,6 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
                 AddressLine2 = address.AddressLine2
             };
         }
-
 
     }
 }

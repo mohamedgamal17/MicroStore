@@ -47,7 +47,7 @@
                     ordering: false,
                     columnDefs: [
                         {
-                            title: "@Html.NameFor(x=> x.OrderNumber)",
+                            title: "Order Number",
                             data: "orderNumber",
                             render: function (data, type, row) {
                                 const orderNumber = row.orderNumber;
@@ -63,9 +63,16 @@
                                 return arr.join(" ")
                             }
                         },
+                        {
+                            title: "Customer",
+                            data: "user",
+                            render: function (data, type, row) {
+                                return row.user.firstName + " " + row.user.lastName;
+                            }
+                        },
 
                         {
-                            title: "@Html.NameFor(x=> x.OrderNumber)",
+                            title: "State",
                             data: "currentState",
                         },
                         {

@@ -1,10 +1,10 @@
-﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
-using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
+﻿using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 
-namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling
+namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Profiling
 {
-    public class User : BaseEntity<string>
+    public class UserProfileVM
     {
+        public string Id { get; set; }
         public string UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -12,6 +12,6 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling
         public Gender Gender { get; set; }
         public string Phone { get; set; }
         public string Avatar { get; set; }
-        public List<Address> Addresses { get; set; }
+        public List<AddressEntityVM> Addresses { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Ordering
         {
             CreateMap<OrderAggregate, OrderAggregateVM>()
                 .ForMember(x => x.Items, opt => opt.MapFrom(c => c.Items))
+                .ForMember(x=> x.User, opt=> opt.MapFrom(c=> c.User))
                 .ForMember(x => x.Payment, opt => opt.MapFrom(c => c.Payment))
                 .ForMember(x => x.Shipment, opt => opt.MapFrom(c => c.Shipment))
                 .ForMember(x => x.ShippingAddress, opt => opt.MapFrom(c => c.ShippingAddress))

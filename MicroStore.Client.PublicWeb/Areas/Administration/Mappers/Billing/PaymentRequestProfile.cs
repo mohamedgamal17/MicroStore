@@ -11,7 +11,8 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Billing
         {
             CreateMap<PaymentRequest, PaymentRequestVM>()
                 .ForMember(x => x.Items, opt => opt.MapFrom(c => c.Items));
-
+            CreateMap<PaymentRequestAggregate, PaymentRequestVM>()
+                .ForMember(x => x.Items, opt => opt.MapFrom(c => c.Items));
             CreateMap<PaymentRequestProduct, PaymentRequestProductVM>();
 
             CreateMap<PagedList<PaymentRequest>, PagedList<PaymentRequestVM>>();

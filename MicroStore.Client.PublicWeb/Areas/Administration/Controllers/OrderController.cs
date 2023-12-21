@@ -55,7 +55,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 Desc = true
             };
 
-            var response = await _orderService.ListAsync(requestOptions);
+            var response = await _orderAggregateService.ListAsync(requestOptions);
 
             var responseModel = new OrderListModel
             {
@@ -63,7 +63,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 Length = response.Lenght,
                 Start = response.Skip,
                 RecordsTotal = response.TotalCount,
-                Data = ObjectMapper.Map<List<Order>, List<OrderVM>>(response.Items)
+                Data = ObjectMapper.Map<List<OrderAggregate>, List<OrderAggregateVM>>(response.Items)
             };
 
             return Json(responseModel);

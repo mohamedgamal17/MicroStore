@@ -4,6 +4,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering
 {
     public class OrderListModel : BasePagedListModel
     {
-        public List<OrderVM> Data { get; set; }
+        public List<OrderAggregateVM> Data { get; set; }
     }
 }

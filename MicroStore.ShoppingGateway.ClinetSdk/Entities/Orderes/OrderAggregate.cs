@@ -1,5 +1,6 @@
 ﻿using MicroStore.ShoppingGateway.ClinetSdk.Common;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Shipping;
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes
@@ -13,6 +14,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes
         public double SubTotal { get; set; }
         public double TotalPrice { get; set; }
         public string UserId { get; set; }
+        public User User { get; set; }
         public string PaymentId { get; set; }
         public string ShipmentId { get; set; }
         public DateTime SubmissionDate { get; set; }
@@ -22,7 +24,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes
         public DateTime? CancellationDate { get; set; }
         public AddressAggregate ShippingAddress { get; set; }
         public AddressAggregate BillingAddress { get; set; }
-        public PaymentRequest Payment { get; set; }
+        public PaymentRequestAggregate Payment { get; set; }
         public ShipmentAggregate Shipment { get; set; }
     }
 }
