@@ -73,7 +73,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk
 
             _logger.LogInformation("Sending request with http method : {@httpMethod}  & request options : {@request}", httpMethod, SerializeObject(request));
 
-            var httpResponseMessage = await _httpClient.SendAsync(httpRequest, cancellationToken);
+            var httpResponseMessage = await _httpClient.SendAsync(httpRequest,HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             await ThrowIfFailureResponse(httpResponseMessage);
 

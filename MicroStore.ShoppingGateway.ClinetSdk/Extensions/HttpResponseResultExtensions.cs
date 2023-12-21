@@ -7,10 +7,17 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
     {
         public static async Task<MicroStoreResponse> ToMicroStoreResponse(this HttpResponseMessage httpResponseMessage)
         {
-            var httpStatusCode=  httpResponseMessage.StatusCode;
-            var headers = httpResponseMessage.Headers;
-            var content = await httpResponseMessage.Content.ReadAsStringAsync();
-            return new MicroStoreResponse(httpStatusCode, headers, content);    
+            try
+            {
+                var httpStatusCode = httpResponseMessage.StatusCode;
+                var headers = httpResponseMessage.Headers;
+                var content = await httpResponseMessage.Content.ReadAsStringAsync();
+                return new MicroStoreResponse(httpStatusCode, headers, content);
+            }
+            finally
+            {
+                httpResponseMessage.Dispose();
+            }       
         }
     }
 }
