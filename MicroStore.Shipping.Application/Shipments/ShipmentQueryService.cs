@@ -25,8 +25,7 @@ namespace MicroStore.Shipping.Application.Shipments
         public async Task<Result<ShipmentDto>> GetAsync(string shipmentId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
-               .AsNoTracking()
-               .ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider);
+               .AsNoTracking();
 
             var result = await query.SingleOrDefaultAsync(x => x.Id == shipmentId, cancellationToken);
 
@@ -35,14 +34,13 @@ namespace MicroStore.Shipping.Application.Shipments
                 return new Result<ShipmentDto>(new EntityNotFoundException(typeof(Shipment), shipmentId));
             }
 
-            return result;
+            return ObjectMapper.Map<Shipment,ShipmentDto>(result);
         }
 
         public async Task<Result<ShipmentDto>> GetByOrderIdAsync(string orderId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
-               .AsNoTracking()
-               .ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider);
+               .AsNoTracking();
 
             var result = await query.SingleOrDefaultAsync(x => x.OrderId == orderId, cancellationToken);
 
@@ -51,15 +49,14 @@ namespace MicroStore.Shipping.Application.Shipments
                 return new Result<ShipmentDto>(new EntityNotFoundException($"shipment with order id {orderId} is not exist"));
             }
 
-            return result;
+            return ObjectMapper.Map<Shipment, ShipmentDto>(result);
         }
 
         public async Task<Result<ShipmentDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
         {
 
             var query = _shippingDbContext.Shipments
-               .AsNoTracking()
-               .ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider);
+               .AsNoTracking();
 
             var result = await query.SingleOrDefaultAsync(x => x.OrderNumber == orderNumber, cancellationToken);
 
@@ -68,7 +65,7 @@ namespace MicroStore.Shipping.Application.Shipments
                 return new Result<ShipmentDto>(new EntityNotFoundException($"shipment with order number {orderNumber} is not exist"));
             }
 
-            return result;
+            return ObjectMapper.Map<Shipment, ShipmentDto>(result);
         }
 
         public async Task<Result<PagedResult<ShipmentDto>>> ListAsync(ShipmentListQueryModel queryParams, string? userId = null ,CancellationToken cancellationToken = default)
@@ -79,17 +76,15 @@ namespace MicroStore.Shipping.Application.Shipments
 
             query =  ApplyQueryFilter(query, queryParams, userId);
 
-            var result = await query.ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider)
-                .PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
+            var result = await query.PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
-            return result;
+            return ObjectMapper.Map<PagedResult<Shipment>, PagedResult<ShipmentDto>>(result);
         }
 
         public async Task<Result<PagedResult<ShipmentDto>>> SearchByOrderNumber(ShipmentSearchByOrderNumberModel model, CancellationToken cancellationToken = default)
         {
             var shipmentsQuery = _shippingDbContext.Shipments
                 .AsNoTracking()
-                .ProjectTo<ShipmentDto>(MapperAccessor.Mapper.ConfigurationProvider)
                 .AsQueryable();
 
             shipmentsQuery = from shipment in shipmentsQuery
@@ -98,7 +93,9 @@ namespace MicroStore.Shipping.Application.Shipments
                                 || shipment.OrderNumber.Contains(model.OrderNumber)
                             select shipment;
 
-            return await shipmentsQuery.PageResult(model.Skip, model.Length, cancellationToken);     
+            var result= await shipmentsQuery.PageResult(model.Skip, model.Length, cancellationToken);
+
+            return ObjectMapper.Map<PagedResult<Shipment>, PagedResult<ShipmentDto>>(result);
         }
 
         private IQueryable<Shipment> ApplyQueryFilter(IQueryable<Shipment> query , ShipmentListQueryModel model ,string?userId = null )

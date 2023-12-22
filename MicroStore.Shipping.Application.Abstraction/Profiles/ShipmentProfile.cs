@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MicroStore.BuildingBlocks.Paging;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Domain.Entities;
 namespace MicroStore.Shipping.Application.Abstraction.Profiles
@@ -17,6 +18,10 @@ namespace MicroStore.Shipping.Application.Abstraction.Profiles
                 .ForMember(x => x.Address, opt => opt.MapFrom(c => c.Address))
                 .ForMember(x => x.Items, opt => opt.MapFrom(c => c.Items))
                 .ForMember(x => x.Status, opt => opt.MapFrom(c => c.Status));
+
+
+            CreateMap<PagedResult<Shipment>, PagedResult<ShipmentDto>>()
+                .ForMember(x => x.Items, opt => opt.MapFrom(c => c.Items));
         }
     }
 }
