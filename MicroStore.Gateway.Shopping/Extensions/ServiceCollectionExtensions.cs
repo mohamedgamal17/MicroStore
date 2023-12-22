@@ -75,6 +75,8 @@ namespace MicroStore.Gateway.Shopping.Extensions
                   opt.ClientSecret = configuration.GetValue<string>("IdentityProvider:ApiSecret");
                   opt.SaveToken = true;
                   opt.ClaimsIssuer = configuration.GetValue<string>("IdentityProvider:Authority");
+                  opt.EnableCaching = true;
+                  
               });
 
             services.AddSingleton<IClaimsTransformation, ScopeClaimsTransformer>();
