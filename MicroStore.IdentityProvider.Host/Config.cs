@@ -156,8 +156,7 @@ namespace MicroStore.IdentityProvider.Host
                         "profiling.access",  "profiling.read", "profiling.write"
 
                     },
-
-
+                    AccessTokenLifetime = (int) TimeSpan.FromDays(7).TotalSeconds,
                     AllowOfflineAccess = false,
                     PairWiseSubjectSalt =  ""
 
@@ -174,11 +173,11 @@ namespace MicroStore.IdentityProvider.Host
 
                     AccessTokenType  = AccessTokenType.Reference,
 
-                    AccessTokenLifetime = 120,
+                    AccessTokenLifetime = (int) TimeSpan.FromMinutes(15).TotalSeconds,
 
                     RefreshTokenExpiration = TokenExpiration.Sliding,
 
-                    RefreshTokenUsage=  TokenUsage.OneTimeOnly,
+                    RefreshTokenUsage=  TokenUsage.ReUse,
 
                     AbsoluteRefreshTokenLifetime =(int) TimeSpan.FromDays(30).TotalSeconds,
 
