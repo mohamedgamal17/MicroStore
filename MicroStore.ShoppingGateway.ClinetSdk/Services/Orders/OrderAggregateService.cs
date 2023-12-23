@@ -148,7 +148,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
         private async Task<AddressAggregate> PrepareAddressAggregate(Address address , CancellationToken cancellationToken = default) 
         {
             var country = await _countryService.GetByCodeAsync(address.CountryCode , cancellationToken:cancellationToken);
-            var stateProvince = await _stateProvinceService.GetByCodeAsync(address.CountryCode, address.State, cancellationToken: cancellationToken);
+            var stateProvince = country.StateProvinces?.SingleOrDefault(x => x.Abbreviation == address.State);
 
             return new AddressAggregate
             {
@@ -158,17 +158,17 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
                 {
                     Id = country.Id,
                     Name = country.Name,
-                    NumericIsoCode = country.NumericIsoCode,                
+                    NumericIsoCode = country.NumericIsoCode,
                     TwoLetterIsoCode = country.TwoLetterIsoCode,
                     ThreeLetterIsoCode = country.ThreeLetterIsoCode
                 },
-                State = new AddressStateProvince
+                State = stateProvince != null ? new AddressStateProvince
                 {
                     Id = stateProvince.Id,
                     Name = stateProvince.Name,
                     Abbreviation = stateProvince.Abbreviation,
                     CountryId = stateProvince.CountryId
-                },
+                } : null,
                 City = address.City,
                 AddressLine1 = address.AddressLine1,
                 AddressLine2 = address.AddressLine2
