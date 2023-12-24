@@ -40,7 +40,8 @@
                     processing: true,
                     paging: true,
                     serverSide: true,
-                    searching: false,
+                    searching: false, 
+                    ordering: false,
                     columnDefs: [
                         {
                             title: "Order Number",
@@ -60,9 +61,11 @@
                             }
                         },
                         {
-                            title: "User Id",
-                            data: "userId",
-                            orderable: false,
+                            title: "Customer",
+                            data: "user",
+                            render: function (data, type, row) {
+                                return row.user.firstName + " " + row.user.lastName;
+                            }
                         },
                         {
                             title: "Status",

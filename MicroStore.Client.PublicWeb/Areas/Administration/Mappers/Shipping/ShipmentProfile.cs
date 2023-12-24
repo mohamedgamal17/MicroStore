@@ -20,6 +20,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Shipping
                 .ForMember(x => x.Address, opt => opt.MapFrom(c => c.Address));
 
             CreateMap<ShipmentAggregate, ShipmentAggregateVM>()
+            .ForMember(x=> x.User, opt=> opt.MapFrom(c=> c.User))
             .ForMember(x => x.Items, opt => opt.MapFrom(c => c.Items))
             .ForMember(x => x.Address, opt => opt.MapFrom(c => c.Address));
 

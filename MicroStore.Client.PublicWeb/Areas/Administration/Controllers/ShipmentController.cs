@@ -55,7 +55,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 Length = model.PageSize
             };
 
-            var data = await _shipmentService.ListAsync(pagingOptions);
+            var data = await _shipmentAggregateService.ListAsync(pagingOptions);
 
             var responseModel = new ShipmentListModel
             {
@@ -63,7 +63,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 RecordsTotal = data.TotalCount,
                 Length = model.Length,
                 Draw = model.Draw,
-                Data = ObjectMapper.Map<List<Shipment>, List<ShipmentVM>>(data.Items)
+                Data = ObjectMapper.Map<List<ShipmentAggregate>, List<ShipmentAggregateVM>>(data.Items)
             };
             return Json(responseModel);
         }

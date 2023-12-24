@@ -4,6 +4,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Shipments
 {
     public class ShipmentListModel : BasePagedListModel
     {
-        public List<ShipmentVM> Data { get; set; }
+        public List<ShipmentAggregateVM> Data { get; set; }
     }
 }

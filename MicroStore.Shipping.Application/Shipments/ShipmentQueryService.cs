@@ -25,7 +25,8 @@ namespace MicroStore.Shipping.Application.Shipments
         public async Task<Result<ShipmentDto>> GetAsync(string shipmentId, CancellationToken cancellationToken = default)
         {
             var query = _shippingDbContext.Shipments
-               .AsNoTracking();
+               .AsNoTracking()
+               .Include(x => x.Items);
 
             var result = await query.SingleOrDefaultAsync(x => x.Id == shipmentId, cancellationToken);
 
