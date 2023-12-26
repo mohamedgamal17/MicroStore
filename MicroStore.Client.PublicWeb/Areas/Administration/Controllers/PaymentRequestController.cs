@@ -10,9 +10,12 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
     public class PaymentRequestController : AdministrationController
     {
         private readonly PaymentRequestService _paymentRequestService;
-        public PaymentRequestController(PaymentRequestService paymentRequestService)
+
+        private readonly PaymentRequestAggregateService _paymentRequestAggregateService;
+        public PaymentRequestController(PaymentRequestService paymentRequestService, PaymentRequestAggregateService paymentRequestAggregateService)
         {
             _paymentRequestService = paymentRequestService;
+            _paymentRequestAggregateService = paymentRequestAggregateService;
         }
         public async Task<IActionResult> Index()
         {       
@@ -34,7 +37,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 Length = model.PageSize,
             };
 
-            var data = await _paymentRequestService.ListAsync(pagingOptions);
+            var data = await _paymentRequestAggregateService.ListAsync(pagingOptions);
 
             var responseModel = new PaymentRequestListModel
             {
@@ -42,7 +45,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 RecordsTotal = data.TotalCount,
                 Length = model.Length,
                 Draw = model.Draw,
-                Data = ObjectMapper.Map<List<PaymentRequest>, List<PaymentRequestVM>>(data.Items),
+                Data = ObjectMapper.Map<List<PaymentRequestAggregate>, List<PaymentRequestVM>>(data.Items),
             };
 
             return Json(responseModel);
@@ -51,9 +54,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var payments = await _paymentRequestService.GetAsync(id);
+            var payments = await _paymentRequestAggregateService.GetAsync(id);
 
-            return View(ObjectMapper.Map<PaymentRequest, PaymentRequestVM>(payments));
+            return View(ObjectMapper.Map<PaymentRequestAggregate, PaymentRequestVM>(payments));
         }
     }
 }

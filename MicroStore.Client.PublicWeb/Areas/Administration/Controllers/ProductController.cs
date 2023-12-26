@@ -258,7 +258,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
         [HttpGet]
-
         public async Task<IActionResult> EditProductImageModal(string productId, string productImageId)
         {
             if (!ModelState.IsValid)

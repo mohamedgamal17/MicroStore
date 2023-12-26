@@ -1,4 +1,5 @@
 ﻿@using MicroStore.Client.PublicWeb.Utils
+@using System.Globalization
 @model MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing.PaymentRequestVM
 
 <abp-card>
@@ -72,6 +73,54 @@
             <abp-column size=_9>
                 <div>
                     @Model.TransctionId
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row class="form-group mb-2">
+            <abp-column size=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.TaxCost" />
+                </div>
+            </abp-column>
+            <abp-column size=_9>
+                <div>
+                    @Model.TaxCost.ToString("C", new CultureInfo("en-US"))
+                </div>
+            </abp-column>
+        </abp-row>    
+        <abp-row class="form-group mb-2">
+            <abp-column size=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.ShippingCost" />
+                </div>
+            </abp-column>
+            <abp-column size=_9>
+                <div>
+                    @Model.ShippingCost.ToString("C", new CultureInfo("en-US"))
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row class="form-group mb-2">
+            <abp-column size=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.SubTotal" />
+                </div>
+            </abp-column>
+            <abp-column size=_9>
+                <div>
+                    @Model.SubTotal.ToString("C", new CultureInfo("en-US"))
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row class="form-group mb-2">
+            <abp-column size=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.TotalCost" />
+                </div>
+            </abp-column>
+            <abp-column size=_9>
+                <div>
+                    @Model.TotalCost.ToString("C", new CultureInfo("en-US"))
                 </div>
             </abp-column>
         </abp-row>

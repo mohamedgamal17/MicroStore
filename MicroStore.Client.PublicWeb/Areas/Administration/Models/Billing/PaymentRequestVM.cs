@@ -1,4 +1,5 @@
 ﻿using MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing
 {
@@ -8,6 +9,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }
         public string UserId { get; set; }
+        public User User { get; set; }
         public double TaxCost { get; set; }
         public double SubTotal { get; set; }
         public double ShippingCost { get; set; }

@@ -52,7 +52,7 @@
                     processing: true,
                     paging: true,
                     searching: false,
-
+                    ordering: false,
 
                     columnDefs: [
                         {
@@ -73,8 +73,23 @@
                             }
                         },
                         {
+                            title: "Customer",
+                            data: "user",
+                            render: function (data, type, row) {
+                                return row.user.firstName + " " + row.user.lastName;
+                            }
+                        },
+                        {
                             title: 'Total Cost',
-                            data: "totalCost"
+                            data: "totalCost",
+                            render: function (data, type, row) {
+                                var priceFormat = new Intl.NumberFormat('en-US', {
+                                    style: 'currency',
+                                    currency: 'USD',
+                                })
+
+                                return priceFormat.format(row.totalCost)
+                            },
                         },
                         {
                             title: 'Status',

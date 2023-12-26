@@ -2,7 +2,7 @@
 
 namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Billing
 {
-    public class PaymentRequestAggregate : BaseEntity<string>
+    public class PaymentRequestAggregate : AuditedEntity<string>
     {
         public string OrderId { get; set; }
         public string OrderNumber { get; set; }

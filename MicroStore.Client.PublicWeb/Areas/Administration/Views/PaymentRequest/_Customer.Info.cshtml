@@ -1,0 +1,74 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Billing.PaymentRequestVM
+<abp-card>
+    <abp-card-header>
+        <abp-card-title><i class="fas fa-info mr-1 text-lightblue"></i> Customer Info</abp-card-title>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus text-lg"></i>
+
+            </button>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-row class="form-group mb-2">
+            <abp-column size-sm=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.User.FirstName" />
+                </div>
+            </abp-column>
+            <abp-column size-sm=_9>
+                <div>
+                    @Model.User.FirstName
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row class="form-group mb-2">
+            <abp-column size-sm=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.User.LastName" />
+                </div>
+            </abp-column>
+            <abp-column size-sm=_9>
+                <div>
+                    @Model.User.LastName
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row class="form-group mb-2">
+            <abp-column size-sm=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.User.Phone" />
+                </div>
+            </abp-column>
+            <abp-column size-sm=_9>
+                <div>
+                    @Model.User.Phone
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row class="form-group mb-2">
+            <abp-column size-sm=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.User.BirthDate" />
+                </div>
+            </abp-column>
+            <abp-column size-sm=_9>
+                <div>
+                    @Model.User.BirthDate.ToString("dd-MM-yyyy")
+                </div>
+            </abp-column>
+        </abp-row>
+        <abp-row class="form-group mb-2">
+            <abp-column size-sm=_3>
+                <div class="float-right">
+                    <micro-label asp-for="@Model.User.Gender" />
+                </div>
+            </abp-column>
+            <abp-column size-sm=_9>
+                <div>
+                    @Model.User.Gender.ToString()
+                </div>
+            </abp-column>
+        </abp-row>
+    </abp-card-body>
+</abp-card>
