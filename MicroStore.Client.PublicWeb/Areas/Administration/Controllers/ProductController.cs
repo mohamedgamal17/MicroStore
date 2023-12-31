@@ -13,7 +13,6 @@ using System.Data;
 using System.Net;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
-using MicroStore.Client.PublicWeb.Areas.Administration.Models.Ordering;
 using MimeMapping;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
@@ -246,7 +245,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 await _objectStorageProvider.SaveAsync(args);
             }
 
-            var requestOptions = new ProductImageRequestCreateOptions
+            var requestOptions = new ProductImageRequestptions
             {
                 Image =  await _objectStorageProvider.CalculatePublicReferenceUrl(imageName),
                 DisplayOrder = model.DisplayOrder
@@ -281,19 +280,27 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-
                 return BadRequest(ModelState);
             }
 
-            var requestOptions = new ProductImageRequestUpdateOptions
+            try
             {
-                DisplayOrder = model.DisplayOrder
-            };
+                var productImage = await _productImageService.GetAsync(model.ProductId, model.ProductImageId);
 
-            var result = await _productImageService.UpdateAsync(model.ProductId, model.ProductImageId, requestOptions);
+                var requestOptions = new ProductImageRequestptions
+                {
+                    Image = productImage.Image,
+                    DisplayOrder = model.DisplayOrder
+                };
 
-            return Json(ObjectMapper.Map<ProductImage, ProductImageVM>(result));
+                var result = await _productImageService.UpdateAsync(model.ProductId, model.ProductImageId, requestOptions);
 
+                return Json(ObjectMapper.Map<ProductImage, ProductImageVM>(result));
+
+            }catch(MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "Product image is not exist");
+            }       
         }
 
 

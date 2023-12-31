@@ -15,6 +15,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         public Dimension Dimensions { get; set; }
         public string[] CategoriesIds { get; set; }
         public string[] ManufacturersIds { get; set; }
+        public List<ProductImageModel> ProductImages{ get; set; }
     } 
 
 
@@ -30,9 +31,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
     }
 
 
-    public class ProductSearchByImageRequestOptions
+    public class ProductSearchByImageRequestOptions : PagingReqeustOptions
     {
-        public byte[] Image { get; set; }
+        public string Image { get; set; } 
     }
 
 }

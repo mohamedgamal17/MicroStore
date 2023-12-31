@@ -136,6 +136,7 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
                                 .Keyword(x => x.ProductImages.First().Id)
                                 .Text(x => x.ProductImages.First().Image)
                                 .IntegerNumber(x => x.ProductImages.First().DisplayOrder)
+                                .DenseVector(x => x.ProductImages.First().Features, cf => cf.Dims(1440).Similarity("l2_norm").Index(true))
                             )
                         )
                          .Nested(x => x.SpecificationAttributes, cfg => cfg

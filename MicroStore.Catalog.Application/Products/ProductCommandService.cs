@@ -102,6 +102,15 @@ namespace MicroStore.Catalog.Application.Products
                 product.ProductTags = await PrepareProductTags(model.ProductTags, cancellationToken);
             }
 
+            if(model.ProductImages != null)
+            {
+                product.ProductImages = model.ProductImages.Select(x => new ProductImage
+                {
+                    Image = x.Image,
+                    DisplayOrder = x.DisplayOrder,
+                }).ToList();
+            }
+
             if(model.SpecificationAttributes != null)
             {
                 product.SpecificationAttributes = await PrepareProductSpecificationAttributes(model.SpecificationAttributes,cancellationToken);
@@ -146,7 +155,7 @@ namespace MicroStore.Catalog.Application.Products
 
         }
 
-       public async Task<Result<ProductImageDto>> AddProductImageAsync(string productId, CreateProductImageModel model, CancellationToken cancellationToken = default)
+       public async Task<Result<ProductImageDto>> AddProductImageAsync(string productId, ProductImageModel model, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository
                 .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
@@ -160,7 +169,7 @@ namespace MicroStore.Catalog.Application.Products
 
             ProductImage productImage = new ProductImage
             {
-                ImagePath = model.Image,
+                Image = model.Image,
                 DisplayOrder = model.DisplayOrder,
                 ProductId = product.Id
             };
@@ -174,7 +183,7 @@ namespace MicroStore.Catalog.Application.Products
             return ObjectMapper.Map<ProductImage, ProductImageDto>(productImage);
         }
 
-        public async Task<Result<ProductImageDto>> UpdateProductImageAsync(string productId, string productImageId, UpdateProductImageModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductImageDto>> UpdateProductImageAsync(string productId, string productImageId, ProductImageModel model, CancellationToken cancellationToken = default)
         {
             Product? product = await _productRepository
                 .SingleOrDefaultAsync(x => x.Id == productId, cancellationToken);
@@ -190,6 +199,8 @@ namespace MicroStore.Catalog.Application.Products
             {
                 return new Result<ProductImageDto>(new EntityNotFoundException(typeof(ProductImage), productImageId));
             }
+
+            productImage.Image = model.Image;
 
             productImage.DisplayOrder = model.DisplayOrder;
 

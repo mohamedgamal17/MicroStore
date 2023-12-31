@@ -13,7 +13,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.ProductId).HasMaxLength(256);
 
-            builder.Property(x => x.ImagePath).IsRequired().HasMaxLength(600);
+            builder.Property(x => x.Image).IsRequired().HasMaxLength(600);
 
             builder.Property(x => x.DisplayOrder).IsRequired();
 

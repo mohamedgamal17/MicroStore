@@ -7,5 +7,6 @@ namespace MicroStore.Client.PublicWeb.Infrastructure
         Task<Stream?> GetAsync(string objectName, CancellationToken cancellationToken = default);
         Task MigrateAsync(CancellationToken cancellationToken = default);
         Task SaveAsync(S3ObjectSaveArgs args, CancellationToken cancellationToken = default);
+        Task<bool> BlobExistsAsync(string objectName);
     }
 }

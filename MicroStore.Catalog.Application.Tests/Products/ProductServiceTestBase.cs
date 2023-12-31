@@ -56,7 +56,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 {
                     new ProductImage
                     {
-                        ImagePath = Guid.NewGuid().ToString()
+                        Image = Guid.NewGuid().ToString()
                     }
                 },
 

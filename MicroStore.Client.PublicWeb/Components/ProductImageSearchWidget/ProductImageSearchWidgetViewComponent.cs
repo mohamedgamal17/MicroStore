@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 namespace MicroStore.Client.PublicWeb.Components.ProductImageSearchWidget
 {
@@ -29,41 +31,32 @@ namespace MicroStore.Client.PublicWeb.Components.ProductImageSearchWidget
             _basketService = basketService;
             _workContext = workContext;
         }
-        public async Task<IViewComponentResult> InvokeAsync(string image)
+        public async Task<IViewComponentResult> InvokeAsync(string image, int currentPage = 1  , int pageSize = 24)
         {
-            var imageStream = await _objectStorageProvider.GetAsync(image);
-
-            if(imageStream != null)
+            var requestOptions = new ProductSearchByImageRequestOptions
             {
-                var requestOptions = new ProductSearchByImageRequestOptions
-                {
-                    Image = await imageStream.GetAllBytesAsync()
-                };
+                Image = await _objectStorageProvider.CalculatePublicReferenceUrl(image),
+                Skip = (currentPage - 1) * pageSize,
+                Length = pageSize,
+            };
 
-                var products = await _productService.SearchByImage(requestOptions);
+            var productResult = await _productService.SearchByImage(requestOptions);
 
-                var userBasket = await _basketService.RetrieveAsync(_workContext.TryToGetCurrentUserId());
+            var userBasket = await _basketService.RetrieveAsync(_workContext.TryToGetCurrentUserId());
 
-                var model = new ProductImageSearchWidgetViewComponentModel
-                {
-                    Products = products,
-                    UserBasket = userBasket
-                };
+            Dictionary<string,string> queryDictionary = new Dictionary<string, string>();
+            queryDictionary.Add(nameof(image), image);
 
-                return View(model);
-            }
-            else
+            string url = QueryHelpers.AddQueryString("/Products", queryDictionary!);
+
+            var model = new ProductImageSearchWidgetViewComponentModel
             {
-                var model = new ProductImageSearchWidgetViewComponentModel
-                {
-                    Error = true,
+                Products = productResult.Items,
+                Pager = new PagerModel(productResult.TotalCount, pageSize, productResult.PageNumber, pageSize, url),
+                UserBasket = userBasket
+            };
 
-                    ErrorMessage = "Image is not exist"
-                };
-
-                return View(model);
-             
-            }
+            return View(model);
 
         }
     }
@@ -72,6 +65,7 @@ namespace MicroStore.Client.PublicWeb.Components.ProductImageSearchWidget
     {
         public List<Product> Products { get; set; }
         public string ImagePath { get; set; }
+        public PagerModel Pager { get; set; }
         public MicroStore.ShoppingGateway.ClinetSdk.Entities.Cart.Basket UserBasket { get; set; }
         public bool Error { get; set; }
         public string ErrorMessage { get; set; }

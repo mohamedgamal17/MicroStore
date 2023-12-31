@@ -36,7 +36,7 @@ namespace MicroStore.Catalog.Application.Mappers
             CreateMap<ProductImage, ProductImageDto>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.DisplayOrder, opt => opt.MapFrom(c => c.DisplayOrder))
-                .ForMember(x => x.Image, opt => opt.MapFrom(c => c.ImagePath));
+                .ForMember(x => x.Image, opt => opt.MapFrom(c => c.Image));
 
 
             CreateMap<ProductManufacturer, ProductManufacturerDto>()

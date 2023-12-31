@@ -6,8 +6,8 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
     public class ProductImageService : Service ,
         INestedListable<ProductImage>,
         INestedRetrievable<ProductImage>,
-        INestedCreatable<ProductImage,ProductImageRequestCreateOptions>,
-        INestedUpdateable<ProductImage, ProductImageRequestUpdateOptions>,
+        INestedCreatable<ProductImage,ProductImageRequestptions>,
+        INestedUpdateable<ProductImage, ProductImageRequestptions>,
         INestedDeletable
     {
         const string BASE_URL_WITHOUT_ID = "/catalog/products/{0}/productimages";
@@ -29,12 +29,12 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
             return await MakeRequestAsync<ProductImage>(string.Format(BASE_URL_WITH_ID, parentId,id), httpMethod: HttpMethod.Get, requestHeaderOptions: requestHeaderOptions, cancellationToken: cancellationToken);
         }
 
-        public async Task<ProductImage> CreateAsync(string parentId, ProductImageRequestCreateOptions options = null, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
+        public async Task<ProductImage> CreateAsync(string parentId, ProductImageRequestptions options = null, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<ProductImage>(string.Format(BASE_URL_WITHOUT_ID, parentId), HttpMethod.Post, options,requestHeaderOptions, cancellationToken);
         }
 
-        public async Task<ProductImage> UpdateAsync(string parentId, string id, ProductImageRequestUpdateOptions options = null, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
+        public async Task<ProductImage> UpdateAsync(string parentId, string id, ProductImageRequestptions options = null, RequestHeaderOptions requestHeaderOptions = null, CancellationToken cancellationToken = default)
         {
             return await MakeRequestAsync<ProductImage>(string.Format(BASE_URL_WITH_ID, parentId, id), HttpMethod.Put, options,requestHeaderOptions ,cancellationToken);
         }

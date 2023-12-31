@@ -27,8 +27,11 @@
                             <div class="page-main-content">
                                 <div class="row">
                                     <div class="col-sm-12">
-
-                                        @await Component.InvokeAsync(typeof(ProductImageSearchWidgetViewComponent), new { image = Model.TargetImage })
+                                        @await Component.InvokeAsync(typeof(ProductImageSearchWidgetViewComponent), new { 
+                                            image = Model.TargetImage , 
+                                            currentPage = Model.CurrentPage ,
+                                            pageSize = Model.PageSize
+                                        })
                                     </div>
                                 </div>
                             </div>

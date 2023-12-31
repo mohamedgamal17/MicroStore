@@ -9,12 +9,11 @@ namespace MicroStore.Client.PublicWeb.Pages.Products
     public class ImageSearchModel : PageModel
     {
         private readonly IObjectStorageProvider _objectStorageProvider;
-
-
-
         public List<Product> Products { get; set; }
         public string TargetImage { get; set; }
         public string ImageLink { get;  set; }
+        public int CurrentPage { get; set; }
+        public int PageSize { get; set; }
         public bool HasErorr { get; set; }
 
         [BindProperty]
@@ -24,9 +23,22 @@ namespace MicroStore.Client.PublicWeb.Pages.Products
         {
             _objectStorageProvider = objectStorageProvider;
         }
-        public async Task<IActionResult> OnGet(string image)
+        public async Task<IActionResult> OnGet(string image, int currentPage = 1)
         {
+
+            bool isExist = await _objectStorageProvider.BlobExistsAsync(image);
+
+            if (!isExist)
+            {
+                return NotFound();
+            }
+
             TargetImage = image;
+
+            CurrentPage = currentPage;
+
+            PageSize = 12;
+
             ImageLink = await _objectStorageProvider.CalculatePublicReferenceUrl(image);
 
             return Page();

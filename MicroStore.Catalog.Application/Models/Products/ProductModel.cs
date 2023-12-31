@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Domain.ValueObjects;
+using MicroStore.Catalog.IntegrationEvents.Models;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Models.Products
@@ -21,6 +22,7 @@ namespace MicroStore.Catalog.Application.Models.Products
         public HashSet<string>? CategoriesIds { get; set; }
         public HashSet<string>? ManufacturersIds { get; set; }
         public HashSet<string>? ProductTags { get; set; }
+        public List<ProductImageModel>? ProductImages { get; set; }
         public HashSet<ProductSpecificationAttributeModel>? SpecificationAttributes { get; set; }
     }
 
@@ -122,9 +124,13 @@ namespace MicroStore.Catalog.Application.Models.Products
                 .MustAsync(CheckManufacturerExist)
                 .When(x => x.CategoriesIds != null);
 
-            RuleForEach(x=> x.SpecificationAttributes)
+            RuleForEach(x => x.ProductImages)
+                .SetValidator(new CreateProductImageModelValidator())
+                .When(x => x.ProductImages != null);
+
+            RuleForEach(x => x.SpecificationAttributes)
                 .SetValidator(serviceProvider.GetRequiredService<IValidator<ProductSpecificationAttributeModel>>())
-                .When(x=> x.SpecificationAttributes != null);
+                .When(x => x.SpecificationAttributes != null);
 
         }
         private Task<bool> CheckCategoryExist(string categoryId, CancellationToken cancellationToken)

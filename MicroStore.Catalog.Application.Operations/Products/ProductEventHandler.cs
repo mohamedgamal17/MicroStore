@@ -77,7 +77,7 @@ namespace MicroStore.Catalog.Application.Operations.Products
             {
                 integrationEvent.ProductImages = product.ProductImages.Select(x => new ProductImageModel
                 {
-                    ImageLink = x.ImagePath,
+                    ImageLink = x.Image,
                     DisplayOrder = x.DisplayOrder
                 }).ToList();
             }
@@ -102,7 +102,7 @@ namespace MicroStore.Catalog.Application.Operations.Products
             {
                 integrationEvent.ProductImages = product.ProductImages.Select(x => new ProductImageModel
                 {
-                    ImageLink = x.ImagePath,
+                    ImageLink = x.Image,
                     DisplayOrder = x.DisplayOrder
                 }).ToList();
             }

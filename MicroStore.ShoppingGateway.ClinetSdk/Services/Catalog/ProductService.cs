@@ -38,11 +38,11 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         {
             return await MakeRequestAsync<Product>(string.Format(BASE_URL_WITH_ID , productId), HttpMethod.Put, options, requestHeaderOptions, cancellationToken);
         }
-        public async Task<List<Product>> SearchByImage(ProductSearchByImageRequestOptions options, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
+        public async Task<PagedList<Product>> SearchByImage(ProductSearchByImageRequestOptions options, RequestHeaderOptions requestHeaderOptions = null ,CancellationToken cancellationToken = default)
         {
             string path = string.Format("{0}/{1}", BASE_URL_WITHOUT_ID, "search-by-image");
 
-            return await MakeRequestAsync<List<Product>>(path, HttpMethod.Post, options, requestHeaderOptions, cancellationToken);
+            return await MakeRequestAsync<PagedList<Product>>(path, HttpMethod.Get, options, requestHeaderOptions, cancellationToken);
         }
      }
 }

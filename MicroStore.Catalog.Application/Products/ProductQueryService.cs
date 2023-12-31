@@ -1,20 +1,14 @@
-﻿using AutoMapper.QueryableExtensions;
-using Elastic.Clients.Elasticsearch;
+﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Core.Search;
 using Elastic.Clients.Elasticsearch.QueryDsl;
-using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Extensions;
 using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
-using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Extensions;
 using MicroStore.Catalog.Application.Models.Products;
-using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Validation;
 namespace MicroStore.Catalog.Application.Products
 {
@@ -73,21 +67,37 @@ namespace MicroStore.Catalog.Application.Products
             return product.ProductImages;
         }
 
-        public async Task<Result<List<ProductDto>>> SearchByImage(ProductSearchByImageModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ElasticProduct>>> SearchByImage(ProductSearchByImageQueryModel queryParams, CancellationToken cancellationToken = default)
         {
-            var relatedImages = await _imageService.SearchByImage(model.Image);
+            var featureResult = await _imageService.Descripe(queryParams.Image);
 
-            var query = _catalogDbContext.Products
-                .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider)
-                .AsQueryable();
+            if (featureResult.IsFailure)
+            {
+                return new Result<PagedResult<ElasticProduct>>(featureResult.Exception);
+            }
 
-            query = from pr in query
-                           where relatedImages.Select(x => x.ProductId).Contains(pr.Id)
-                           select pr;
+            var response = await _elasticSearchClient.SearchAsync<ElasticProduct>(sr => sr
+                    .Knn(k => k
+                        .Field(x => x.ProductImages.First().Features)
+                        .QueryVector(featureResult.Value)
+                        .k(100)
+                        .NumCandidates(200)
+                   )
+                    .SourceExcludes(Infer.Fields<ElasticProduct>(
+                            src=> src.ProductImages.First().Features
+                        )
+                   )
+                 .Size(queryParams.Length)
+                 .From(queryParams.Skip)
+                );
 
-            var products = await query.ToListAsync();
 
-            return products.OrderBy(x=>  relatedImages.FindIndex(c=> c.Id == x.Id)).ToList();
+            if (!response.IsValidResponse)
+            {
+                return new PagedResult<ElasticProduct>(new List<ElasticProduct>(), 0, 0, 0);
+            }
+
+            return response.ToPagedResult(queryParams.Skip,queryParams.Length);
         }
 
 
@@ -106,6 +116,10 @@ namespace MicroStore.Catalog.Application.Products
                     .Field(x => x.Id)
                     .Terms(new Elastic.Clients.Elasticsearch.QueryDsl.TermsQueryField(productIds))
                     )
+                )
+                .SourceExcludes(Infer.Fields<ElasticProduct>(
+                    src => src.ProductImages.First().Features
+                  )
                 )
                 .Size(pagingParams.Length)
             );
@@ -174,6 +188,10 @@ namespace MicroStore.Catalog.Application.Products
                     )
 
                 )
+                .SourceExcludes(Infer.Fields<ElasticProduct>(
+                    src => src.ProductImages.First().Features
+                  )
+                )
                 .TrackTotalHits(new TrackHits(true))
                 .Size(queryParams.Length)
                 .From(queryParams.Skip)
@@ -216,6 +234,10 @@ namespace MicroStore.Catalog.Application.Products
                    .Field(x => x.Score, cfg => cfg.Order(SortOrder.Desc))
 
                )
+               .SourceExcludes(Infer.Fields<ElasticProduct>(
+                    src => src.ProductImages.First().Features
+                  )
+               )
                .TrackTotalHits(new TrackHits(true))
                .From(skip)
                .Size(length)
@@ -245,6 +267,10 @@ namespace MicroStore.Catalog.Application.Products
                         .MinTermFreq(1)
                         .MaxQueryTerms(20)
                  )
+              )
+              .SourceExcludes(Infer.Fields<ElasticProduct>(
+                    src=> src.ProductImages.First().Features
+                  )
               )
               .TrackTotalHits(new TrackHits(true))
               .Size(length)

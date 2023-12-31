@@ -97,7 +97,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
         {
             var fakeProduct = await CreateFakeProduct();
 
-            var model = new CreateProductImageModel
+            var model = new ProductImageModel
             {
                 Image = "https://developers.google.com/nest/device-access/images/device-camera.png",
                 DisplayOrder = 1
@@ -112,9 +112,9 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
                 var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
-                var productImage = product.ProductImages.Single(x => x.ImagePath == model.Image);
+                var productImage = product.ProductImages.Single(x => x.Image == model.Image);
 
-                productImage.ImagePath.Should().Be(model.Image);
+                productImage.Image.Should().Be(model.Image);
 
                 productImage.DisplayOrder.Should().Be(model.DisplayOrder);
 
@@ -130,7 +130,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
         [Test]
         public async Task Should_return_failure_result_while_adding_new_product_image_when_product_is_not_exist()
         {
-            var model = new CreateProductImageModel
+            var model = new ProductImageModel
             {
                 Image = Guid.NewGuid().ToString(),
                 DisplayOrder = 1
@@ -150,8 +150,9 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             var productImageId = fakeProduct.ProductImages.First().Id;
 
-            var model = new UpdateProductImageModel
+            var model = new ProductImageModel
             {
+                Image = "https://developers.google.com/nest/device-access/images/device-camera.png",
                 DisplayOrder = 5
             };
 
@@ -162,6 +163,8 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 var product = await SingleAsync<Product>(x => x.Id == fakeProduct.Id);
 
                 var productImage = product.ProductImages.Single(x => x.Id == productImageId);
+
+                productImage.Image.Should().Be(model.Image);
 
                 productImage.DisplayOrder.Should().Be(model.DisplayOrder);
 
@@ -177,8 +180,9 @@ namespace MicroStore.Catalog.Application.Tests.Products
         [Test]
         public async Task Should_return_failure_result_while_adding_updating_product_image_when_product_is_not_exist()
         {
-            var model = new UpdateProductImageModel
+            var model = new ProductImageModel
             {
+                Image = "https://developers.google.com/nest/device-access/images/device-camera.png",
                 DisplayOrder = 5
             };
 
@@ -195,8 +199,9 @@ namespace MicroStore.Catalog.Application.Tests.Products
         {
             var fakeProduct = await CreateFakeProduct();
 
-            var model = new UpdateProductImageModel
+            var model = new ProductImageModel
             {
+                Image = "https://developers.google.com/nest/device-access/images/device-camera.png",
                 DisplayOrder = 5
             };
 
@@ -216,8 +221,9 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
             var productImageId = fakeProduct.ProductImages.First().Id;
 
-            var model = new UpdateProductImageModel
+            var model = new ProductImageModel
             {
+                Image = "https://developers.google.com/nest/device-access/images/device-camera.png",
                 DisplayOrder = 5
             };
 

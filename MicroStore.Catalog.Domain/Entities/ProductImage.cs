@@ -4,7 +4,7 @@ namespace MicroStore.Catalog.Domain.Entities
 {
     public class ProductImage : Entity<string>
     {
-        public string ImagePath { get; set; }
+        public string Image { get; set; }
         public int DisplayOrder { get; set; }
         public string ProductId { get; set; }
         public ProductImage()

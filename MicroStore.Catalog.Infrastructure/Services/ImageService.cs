@@ -1,7 +1,7 @@
-﻿using Elastic.Clients.Elasticsearch;
-using Emgu.CV;
+﻿using Emgu.CV;
+using MicroStore.BuildingBlocks.Results;
 using MicroStore.Catalog.Application.Common;
-using MicroStore.Catalog.Entities.ElasticSearch;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 namespace MicroStore.Catalog.Infrastructure.Services
 {
@@ -9,77 +9,67 @@ namespace MicroStore.Catalog.Infrastructure.Services
     {
         private readonly IImageDescriptor _imageDescriptor;
 
-        private readonly ElasticsearchClient _elasticSearchClient;
 
-        public ImageService(IImageDescriptor imageDescriptor, ElasticsearchClient elasticSearchClient)
+        private List<string> _imageContentType = new List<string>
+        {
+            "image/jpg",
+            "image/jpeg",
+            "image/pjpeg",
+            "image/gif",
+            "image/x-png",
+            "image/png"
+        };
+
+        public ImageService(IImageDescriptor imageDescriptor)
         {
             _imageDescriptor = imageDescriptor;
-            _elasticSearchClient = elasticSearchClient;
         }
 
-        public async Task<byte[]> GetImageBufferFromUrl(string url)
+        public async Task<Result<List<float>>> Descripe(string imageLink)
+        {
+            var result = await GetImageBufferFromUrl(imageLink);
+
+            if (result.IsFailure)
+            {
+                return new Result<List<float>>(result.Exception);
+            }
+
+            byte[] buffer = result.Value;
+
+            var imageMat = new Mat();
+
+            CvInvoke.Imdecode(buffer, Emgu.CV.CvEnum.ImreadModes.Color, imageMat);
+
+            CvInvoke.CvtColor(imageMat, imageMat, Emgu.CV.CvEnum.ColorConversion.Bgr2Hsv);
+
+            var features = _imageDescriptor.Descripe(imageMat);
+
+            return features;
+        }
+
+        public async Task<Result<byte[]>> GetImageBufferFromUrl(string url)
         {
             using (var httpClient = new HttpClient())
             {
                 var memoryStream = new MemoryStream();
 
-                var httpResponse = await httpClient.GetAsync(url);
+                var httpResponse = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead) ;
+
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    return new Result<byte[]>(new UserFriendlyException("Cannot retrive image from desired url"));
+                }
+
+                if (!_imageContentType.Contains(httpResponse.Content.Headers.ContentType?.MediaType!))
+                {
+                    return new Result<byte[]>(new UserFriendlyException("Invalid image uri link"));
+                }
+
 
                 await httpResponse.Content.CopyToAsync(memoryStream);
 
                 return memoryStream.ToArray();
             }
-        }
-
-        public async Task IndexImageAsync(string productId, string imageId, string imageLink)
-        {
-            var buffer = await GetImageBufferFromUrl(imageLink);
-
-            var imageMat = new Mat();
-
-            CvInvoke.Imdecode(buffer, Emgu.CV.CvEnum.ImreadModes.Color, imageMat);
-
-            CvInvoke.CvtColor(imageMat, imageMat, Emgu.CV.CvEnum.ColorConversion.Bgr2Hsv);
-
-            var features = _imageDescriptor.Descripe(imageMat);
-
-            ElasticImageVector imageVector = new ElasticImageVector
-            {
-                ProductId = productId,
-                ImageId = imageId,
-                Features = features
-            };
-
-
-            await _elasticSearchClient.IndexAsync(imageVector);
-        }
-
-        public async Task<List<ElasticImageVector>> SearchByImage(byte[] buffer)
-        {
-            var imageMat = new Mat();
-
-            CvInvoke.Imdecode(buffer, Emgu.CV.CvEnum.ImreadModes.Color, imageMat);
-
-            CvInvoke.CvtColor(imageMat, imageMat, Emgu.CV.CvEnum.ColorConversion.Bgr2Hsv);
-
-            var features = _imageDescriptor.Descripe(imageMat);
-
-            var response = await _elasticSearchClient.SearchAsync<ElasticImageVector>(sr => sr
-                     .Knn(k => k
-                         .Field(x=> x.Features)
-                         .QueryVector(features)
-                         .k(100)
-                         .NumCandidates(200)
-                    )
-                 );
-
-
-            if (response.IsValidResponse)
-            {
-                return response.Documents.DistinctBy(x=> x.ProductId).ToList();
-            }
-
-            return new List<ElasticImageVector>();
         }
     }
 }

@@ -59,7 +59,7 @@
                     paging: true,
                     serverSide: true,
                     searching: false,
-                    sorting:false,
+                    ordering: false,
                     columnDefs: [
                         {
                             title: "Image",
@@ -74,12 +74,12 @@
                                 }
                                 return `<img src="/user-content/no-image.png" style="maxwidth:75px;max-height:75px">`
                                 
-                            },
-                            orderable:false
+                            }
                         },
                         {
                             title: 'Name',
                             data: 'name',
+
                         },
                         {
                             title: 'Sku',
@@ -89,6 +89,14 @@
                         {
                             title: 'Price',
                             data: 'price',
+                            render: function (data, type, row) {
+                                var priceFormat = new Intl.NumberFormat('en-US', {
+                                    style: 'currency',
+                                    currency: 'USD',
+                                })
+
+                                return priceFormat.format(row.price)
+                            },
                         },
                         {
                             title: 'Actions',

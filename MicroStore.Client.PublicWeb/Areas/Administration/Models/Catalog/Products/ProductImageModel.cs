@@ -16,19 +16,6 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
         public string ProductImageId { get; set; }
         public int DisplayOrder { get; set; }
 
-
-        public UpdateProductImageModel(string productImageId, string displayOrder)
-        {
-            ProductImageId = productImageId;
-
-        }
-
-        public UpdateProductImageModel()
-        {
-
-        }
-
-
     }
 
     public class RemoveProductImageModel

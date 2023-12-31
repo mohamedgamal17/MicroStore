@@ -88,10 +88,17 @@ namespace MicroStore.Catalog.Api.Controllers
 
 
         [Route("search-by-image")]
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProductDto>))]
-        public async Task<IActionResult> SearchByImage(ProductSearchByImageModel model)
+        public async Task<IActionResult> SearchByImage([FromQuery] ProductSearchByImageQueryModel model)
         {
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                return InvalideModelState();
+            }
+
             var result = await _productQueryService.SearchByImage(model);
 
             return result.ToOk();
@@ -124,7 +131,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductImageDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> AddProductImage(string productId, [FromBody] CreateProductImageModel model)
+        public async Task<IActionResult> AddProductImage(string productId, [FromBody] ProductImageModel model)
         {
             var validationResult = await ValidateModel(model);
 
@@ -144,7 +151,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductImageDto))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-        public async Task<IActionResult> UpdateProductImage(string productId, string productImageId, [FromBody] UpdateProductImageModel model)
+        public async Task<IActionResult> UpdateProductImage(string productId, string productImageId, [FromBody] ProductImageModel model)
         {
             var validationResult = await ValidateModel(model);
 

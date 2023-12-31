@@ -8,7 +8,7 @@ using Volo.Abp.DependencyInjection;
 namespace MicroStore.Client.PublicWeb.Infrastructure
 {
     [ExposeServices(typeof(IObjectStorageProvider))]
-    public class MinioObjectStorageProvider : IObjectStorageProvider  ,ITransientDependency
+    public class MinioObjectStorageProvider : IObjectStorageProvider, ITransientDependency
     {
         private readonly ApplicationSettings _applicationSettings;
         public MinioObjectStorageProvider(ApplicationSettings applicationSettings)
@@ -70,7 +70,7 @@ namespace MicroStore.Client.PublicWeb.Infrastructure
 
         public async Task MigrateAsync(CancellationToken cancellationToken = default)
         {
-        
+
             bool isBucketExist = await IsBucketExist(cancellationToken);
 
             if (!isBucketExist)
@@ -96,6 +96,26 @@ namespace MicroStore.Client.PublicWeb.Infrastructure
             await client.PutObjectAsync(requestArgs, cancellationToken);
         }
 
+        public async Task<bool> BlobExistsAsync(string objectName)
+        {
+            var client = GetMinioClient();
+
+            try
+            {
+                await client.StatObjectAsync(new StatObjectArgs().WithBucket(_applicationSettings.S3ObjectProvider.BucketName).WithObject(objectName));
+            }
+            catch (Exception e)
+            {
+                if (e is ObjectNotFoundException)
+                {
+                    return false;
+                }
+
+                throw;
+            }
+
+            return true;
+        }
 
         private async Task<bool> IsBucketExist(CancellationToken cancellationToken)
         {
