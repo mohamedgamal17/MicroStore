@@ -4,7 +4,6 @@ using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.Modularity;
 using Volo.Abp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using MicroStore.Inventory.Api;
 using Volo.Abp.Autofac;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AspNetCore.Mvc;
@@ -20,11 +19,14 @@ using IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using MicroStore.Geographic.Host.OpenApi;
+using MicroStore.Inventory.Host.OpenApi;
+using MicroStore.Inventory.Application;
+using MicroStore.Inventory.Infrastructure;
 
 namespace MicroStore.Inventory.Host
 {
-    [DependsOn(typeof(InventoryApiModule),
+    [DependsOn(typeof(InventoryInfrastructureModule),
+        typeof(InventoryApplicationModule),
         typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAspNetCoreMvcModule))]

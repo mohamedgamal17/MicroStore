@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.Inventory.Domain.Configuration;
 using Swashbuckle.AspNetCore.SwaggerGen;
-namespace MicroStore.Geographic.Host.OpenApi
+namespace MicroStore.Inventory.Host.OpenApi
 {
     public class ConfigureSwaggerGenOptions : IConfigureOptions<SwaggerGenOptions>
     {
