@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using MicroStore.Shipping.Plugin.ShipEngineGateway;
-using MicroStore.Shipping.WebApi;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Data;
 using MicroStore.Shipping.Infrastructure.EntityFramework;
@@ -22,13 +21,18 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using MicroStore.Shipping.Application.Abstraction.Configuration;
+using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.Shipping.Application;
+using MicroStore.Shipping.Infrastructure;
 
 namespace MicroStore.Shipping.Host
 {
-    [DependsOn(typeof(ShippingApiModule),
+    [DependsOn(typeof(ShippingInfrastructureModule),
+        typeof(ShippingApplicationModule),
+        typeof(MicroStoreAspNetCoreModule),
         typeof(ShipEngineSystemModule),
         typeof(AbpAutofacModule),
-    typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAspNetCoreMvcModule))]
     public class ShippingHostModule : AbpModule
     {

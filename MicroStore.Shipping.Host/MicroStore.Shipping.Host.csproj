@@ -23,8 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
+    <ProjectReference Include="..\MicroStore.Shipping.Application\MicroStore.Shipping.Application.csproj" />
+    <ProjectReference Include="..\MicroStore.Shipping.Infrastructure\MicroStore.Shipping.Infrastructure.csproj" />
     <ProjectReference Include="..\MicroStore.Shipping.Plugin.ShipEngineGateway\MicroStore.Shipping.Plugin.ShipEngineGateway.csproj" />
-    <ProjectReference Include="..\MicroStore.Shipping.WebApi\MicroStore.Shipping.WebApi.csproj" />
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
