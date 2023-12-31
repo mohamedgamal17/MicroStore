@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Application.Abstraction.Models;
 using MicroStore.Shipping.Application.Shipments;
@@ -12,7 +11,7 @@ using MicroStore.Shipping.Domain.Security;
 namespace MicroStore.Shipping.Host.Controllers
 {
     [ApiController]
-  //  [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+    [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
     [Route("api/shipments")]
     public class ShipmentController : MicroStoreApiController
     {

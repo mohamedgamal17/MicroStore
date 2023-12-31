@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.Payment.Api.Host.OpenApi;
+using MicroStore.Payment.Application;
 using MicroStore.Payment.Application.EntityFramework;
 using MicroStore.Payment.Application.Security;
 using MicroStore.Payment.Domain.Shared.Configuration;
@@ -20,7 +22,8 @@ using Volo.Abp.Modularity;
 namespace MicroStore.Payment.Api.Host
 {
 
-    [DependsOn(typeof(PaymentApiModule),
+    [DependsOn(typeof(PaymentApplicationModule),
+        typeof(MicroStoreAspNetCoreModule),
         typeof(StripeGatewayPluginModule),
         typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreSerilogModule))]

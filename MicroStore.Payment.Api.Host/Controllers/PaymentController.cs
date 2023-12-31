@@ -8,7 +8,7 @@ using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Application.Security;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
-namespace MicroStore.Payment.Api.Controllers
+namespace MicroStore.Payment.Api.Host.Controllers
 {
     [ApiController]
     [Route("api/payments")]
@@ -28,7 +28,7 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(PagedResult<PaymentRequestDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<PaymentRequestDto>))]
         public async Task<IActionResult> RetrivePaymentRequestList([FromQuery] PaymentRequestListQueryModel queryparams, [FromQuery(Name = "user_id")] string? userId = null)
         {
             var result = await _paymentRequestQueryService.ListPaymentAsync(queryparams, userId);
@@ -87,7 +87,7 @@ namespace MicroStore.Payment.Api.Controllers
 
             var result = await _paymentRequestCommandService.CreateAsync(model);
 
-            return result.ToCreatedAtAction(nameof(RetrivePaymentRequest), new { paymentId = result.Value?.Id});
+            return result.ToCreatedAtAction(nameof(RetrivePaymentRequest), new { paymentId = result.Value?.Id });
         }
 
         [HttpPost]
@@ -103,7 +103,7 @@ namespace MicroStore.Payment.Api.Controllers
                 return InvalideModelState();
             }
 
-            var result = await _paymentRequestCommandService.ProcessPaymentAsync(paymentId,model);
+            var result = await _paymentRequestCommandService.ProcessPaymentAsync(paymentId, model);
 
             return result.ToOk();
         }
@@ -129,12 +129,12 @@ namespace MicroStore.Payment.Api.Controllers
 
         [HttpPost]
         [Route("search")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type= typeof(PaymentRequestDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentRequestDto))]
 
-        public async Task<IActionResult> Search([FromBody]PaymentRequestSearchModel model)
+        public async Task<IActionResult> Search([FromBody] PaymentRequestSearchModel model)
         {
             var validationResult = await ValidateModel(model);
-            
+
             if (!validationResult.IsValid)
             {
                 return InvalideModelState();

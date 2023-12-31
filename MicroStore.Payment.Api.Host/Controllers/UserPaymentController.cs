@@ -9,7 +9,7 @@ using MicroStore.Payment.Application.Security;
 using MicroStore.Payment.Domain.Shared.Dtos;
 using MicroStore.Payment.Domain.Shared.Models;
 using System.Linq.Dynamic.Core;
-namespace MicroStore.Payment.Api.Controllers
+namespace MicroStore.Payment.Api.Host.Controllers
 {
     [ApiController]
     [Route("api/user/payments")]
@@ -51,11 +51,11 @@ namespace MicroStore.Payment.Api.Controllers
                 Items = model.Items,
             };
 
-            
+
 
             var result = await _paymentRequestCommandService.CreateAsync(paymentModel);
 
-            return result.ToCreatedAtAction(nameof(RetrivePaymentRequest), new { paymentId = result.Value?.Id});
+            return result.ToCreatedAtAction(nameof(RetrivePaymentRequest), new { paymentId = result.Value?.Id });
         }
 
         [HttpPost]

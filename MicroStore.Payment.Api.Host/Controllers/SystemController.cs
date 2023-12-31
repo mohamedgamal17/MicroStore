@@ -5,7 +5,7 @@ using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Payment.Application.PaymentSystems;
 using MicroStore.Payment.Domain.Shared.Dtos;
 
-namespace MicroStore.Payment.Api.Controllers
+namespace MicroStore.Payment.Api.Host.Controllers
 {
     [ApiController]
     [Route("api/systems")]

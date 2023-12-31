@@ -32,7 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MicroStore.Payment.Api\MicroStore.Payment.Api.csproj" />
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
+    <ProjectReference Include="..\MicroStore.Payment.Application\MicroStore.Payment.Application.csproj" />
     <ProjectReference Include="..\MicroStore.Payment.Plugin.StripeGateway\MicroStore.Payment.Plugin.StripeGateway.csproj" />
   </ItemGroup>
 
