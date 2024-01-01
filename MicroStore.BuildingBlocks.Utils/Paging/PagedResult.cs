@@ -1,19 +1,19 @@
-﻿namespace MicroStore.BuildingBlocks.Paging
+﻿namespace MicroStore.BuildingBlocks.Utils.Paging
 {
     public class PagedResult
     {
-        public int Lenght { get;  set; }
+        public int Lenght { get; set; }
         public int Skip { get; set; }
-        public long TotalCount { get;  set; }
+        public long TotalCount { get; set; }
     }
 
-    public class PagedResult<T> : PagedResult 
-    { 
+    public class PagedResult<T> : PagedResult
+    {
         public IEnumerable<T> Items { get; set; }
 
         public PagedResult()
         {
-            
+
         }
         public PagedResult(IEnumerable<T> items, long count, int skip, int lenght)
         {
@@ -21,7 +21,7 @@
             TotalCount = count;
             Skip = skip;
             Lenght = lenght;
-     
+
         }
 
     }

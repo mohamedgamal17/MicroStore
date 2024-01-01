@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Payment.Application.Common;
 using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;

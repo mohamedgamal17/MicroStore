@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Shipping.Application.Abstraction.Configuration;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 namespace MicroStore.Shipping.Application.ShippingSystems

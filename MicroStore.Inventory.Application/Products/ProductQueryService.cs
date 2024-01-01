@@ -1,9 +1,9 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging.Extensions;
+using MicroStore.BuildingBlocks.Utils.Paging.Params;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Inventory.Application.Common;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Models;

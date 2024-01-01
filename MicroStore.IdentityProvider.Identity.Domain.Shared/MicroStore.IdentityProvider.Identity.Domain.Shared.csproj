@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MicroStore.BuildingBlocks.Utils\MicroStore.BuildingBlocks.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="MicroStore.BuildingBlocks.Paging">
       <HintPath>..\MicroStore.BuildingBlocks.Paging\obj\Debug\net6.0\ref\MicroStore.BuildingBlocks.Paging.dll</HintPath>
     </Reference>

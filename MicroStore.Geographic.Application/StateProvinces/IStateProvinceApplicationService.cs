@@ -1,4 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Geographic.Application.Dtos;
 using MicroStore.Geographic.Application.Models;
 using Volo.Abp.Application.Services;

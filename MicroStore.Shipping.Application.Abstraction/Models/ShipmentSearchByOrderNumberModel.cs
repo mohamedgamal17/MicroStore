@@ -1,7 +1,5 @@
-﻿
-using FluentValidation;
-using MicroStore.BuildingBlocks.Paging.Params;
-
+﻿using FluentValidation;
+using MicroStore.BuildingBlocks.Utils.Paging.Params;
 namespace MicroStore.Shipping.Application.Abstraction.Models
 {
     public class ShipmentSearchByOrderNumberModel : PagingQueryParams

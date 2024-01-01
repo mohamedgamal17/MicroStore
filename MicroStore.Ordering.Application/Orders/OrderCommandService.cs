@@ -1,5 +1,5 @@
 ﻿using MassTransit;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
 

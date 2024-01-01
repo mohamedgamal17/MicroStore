@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Validation;
-
 namespace MicroStore.Inventory.Application.Products
 {
     public class ProductCommandService : InventoryApplicationService, IProductCommandService

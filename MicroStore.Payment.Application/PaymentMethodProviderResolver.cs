@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Payment.Application.Common;
 using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Domain.Shared.Configuration;

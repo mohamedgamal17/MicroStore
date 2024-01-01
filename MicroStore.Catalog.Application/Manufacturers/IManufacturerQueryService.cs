@@ -1,5 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Catalog.Application.Models.Manufacturers;
 using MicroStore.Catalog.Entities.ElasticSearch;
 namespace MicroStore.Catalog.Application.Manufacturers

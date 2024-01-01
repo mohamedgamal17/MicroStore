@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging.Extensions;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Ordering.Application.Common;
 using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;

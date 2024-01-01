@@ -1,4 +1,4 @@
-﻿namespace MicroStore.BuildingBlocks.Paging.Params
+﻿namespace MicroStore.BuildingBlocks.Utils.Paging.Params
 {
     public class SortingQueryParams
     {

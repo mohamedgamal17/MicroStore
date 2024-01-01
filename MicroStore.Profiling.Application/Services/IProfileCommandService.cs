@@ -1,4 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Profiling.Application.Dtos;
 using MicroStore.Profiling.Application.Models;
 

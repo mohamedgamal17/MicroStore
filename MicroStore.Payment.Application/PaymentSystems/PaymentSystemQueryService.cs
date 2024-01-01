@@ -1,11 +1,7 @@
-﻿using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using MicroStore.BuildingBlocks.Results;
+﻿using Microsoft.Extensions.Options;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Payment.Domain.Shared.Configuration;
 using MicroStore.Payment.Domain.Shared.Dtos;
-using Volo.Abp.Domain.Repositories;
-
 namespace MicroStore.Payment.Application.PaymentSystems
 {
     public class PaymentSystemQueryService : PaymentApplicationService, IPaymentSystemQueryService

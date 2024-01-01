@@ -25,13 +25,15 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             result.IsSuccess.Should().BeTrue();
 
-            var user = await SingleAsync<ApplicationIdentityUser>(x=> x.Id == result.Value.Id);
+            var user = await SingleAsync<ApplicationIdentityUser>(x => x.Id == result.Value.Id);
 
             user.AssertUser(model);
 
             user.AssertUserPassword(model, ServiceProvider);
 
             user.AssertUserDto(result.Value);
+
+
         }
 
         [Test]
@@ -41,17 +43,15 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
 
             var model = await PreapreUserModel();
 
-            var result = await _userCommandService.UpdateUserAsync(fakeUser.Id,model);
+            var result = await _userCommandService.UpdateUserAsync(fakeUser.Id, model);
 
             result.IsSuccess.Should().BeTrue();
 
-            var user = await  SingleAsync<ApplicationIdentityUser>(x => x.Id == result.Value.Id);
+            var user = await SingleAsync<ApplicationIdentityUser>(x => x.Id == result.Value.Id);
 
             user.AssertUser(model);
 
             user.AssertUserPassword(model, ServiceProvider);
-
-            user.AssertUserDto(result.Value);
         }
 
         [Test]

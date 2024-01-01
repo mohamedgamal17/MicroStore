@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
+using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging.Params;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.Domain.Security;
-using System.Net;
-
 namespace MicroStore.Inventory.Host.Controllers
 {
     [ApiController]
@@ -29,7 +26,6 @@ namespace MicroStore.Inventory.Host.Controllers
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<OrderListDto>))]
-
         public async Task<IActionResult> RetirveOrderList([FromQuery] PagingQueryParams queryParams, [FromQuery(Name = "user_id")] string? userId = null)
         {
             var result = await _orderQueryService.ListOrderAsync(queryParams, userId);
@@ -42,7 +38,6 @@ namespace MicroStore.Inventory.Host.Controllers
         [HttpGet]
         [Route("order_number/{orderNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
-
         public async Task<IActionResult> RetirveOrderWithExternalId(string orderNumber)
         {
 
@@ -54,7 +49,6 @@ namespace MicroStore.Inventory.Host.Controllers
         [HttpGet]
         [Route("{orderId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderDto))]
-
         public async Task<IActionResult> RetriveOrder(string orderId)
         {
 

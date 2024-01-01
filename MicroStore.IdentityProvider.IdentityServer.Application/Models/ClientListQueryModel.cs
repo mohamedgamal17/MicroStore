@@ -1,4 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Paging.Params;
+﻿using MicroStore.BuildingBlocks.Utils.Paging.Params;
 using System.ComponentModel.DataAnnotations;
 
 namespace MicroStore.IdentityProvider.IdentityServer.Application.Models

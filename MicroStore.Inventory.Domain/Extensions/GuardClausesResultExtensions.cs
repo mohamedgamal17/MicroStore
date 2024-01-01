@@ -1,5 +1,5 @@
 ﻿using Ardalis.GuardClauses;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 namespace MicroStore.Inventory.Domain.Extensions
 {
     public static class GuardClausesResultExtensions

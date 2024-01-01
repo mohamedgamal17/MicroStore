@@ -1,6 +1,5 @@
-﻿using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;
 using Volo.Abp.Application.Services;

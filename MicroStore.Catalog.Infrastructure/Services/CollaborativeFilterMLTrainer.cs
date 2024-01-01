@@ -6,9 +6,9 @@ using MicroStore.Catalog.Domain.Configuration;
 using MicroStore.Catalog.Domain.ML;
 using Microsoft.ML.Trainers;
 using MicroStore.Catalog.Entities.ElasticSearch;
-using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Paging;
 using Volo.Abp.DependencyInjection;
+using MicroStore.BuildingBlocks.Utils.Paging.Extensions;
+using MicroStore.BuildingBlocks.Utils.Paging;
 namespace MicroStore.Catalog.Infrastructure.Services
 {
     internal class CollaborativeFilterMLTrainer : ICollaborativeFilterMLTrainer , ITransientDependency

@@ -1,10 +1,10 @@
 ﻿#pragma warning disable CS8618
 using Volo.Abp.Domain.Entities;
 using Ardalis.GuardClauses;
-using MicroStore.BuildingBlocks.Results;
 using MicroStore.Inventory.Domain.Events;
 using MicroStore.Inventory.Domain.Extensions;
 using Volo.Abp;
+using MicroStore.BuildingBlocks.Utils.Results;
 
 namespace MicroStore.Inventory.Domain.ProductAggregate
 {
@@ -19,6 +19,14 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
         public Product(string id)
         {
             Id = id;
+        }
+
+        public Product(string id ,string name , string sku , int stock)
+        {
+            Id = id;
+            Name = name;
+            Sku = sku;
+            Stock = stock;
         }
 
         public Product()

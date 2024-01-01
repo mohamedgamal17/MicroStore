@@ -1,4 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Payment.Domain.Shared;
 
 namespace MicroStore.Payment.Application.Common

@@ -1,4 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.SpecificationAttributes;
 using MicroStore.Catalog.Entities.ElasticSearch;

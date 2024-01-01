@@ -1,5 +1,5 @@
 ﻿using Emgu.CV;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Catalog.Application.Common;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;

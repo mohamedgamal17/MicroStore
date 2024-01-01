@@ -1,6 +1,5 @@
 ﻿using Elastic.Clients.Elasticsearch;
-using MicroStore.BuildingBlocks.Paging;
-
+using MicroStore.BuildingBlocks.Utils.Paging;
 namespace MicroStore.Catalog.Application.Extensions
 {
     public static class ElasticSearchPagedResultExtensions

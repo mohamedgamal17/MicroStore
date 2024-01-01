@@ -1,9 +1,8 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Extensions;

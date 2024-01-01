@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using MicroStore.Shipping.Domain.ValueObjects;
-
 namespace MicroStore.Shipping.Application.Abstraction.Models
 {
     public class PackageModel

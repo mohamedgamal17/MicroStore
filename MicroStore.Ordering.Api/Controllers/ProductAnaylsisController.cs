@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
+using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging.Params;
 using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;

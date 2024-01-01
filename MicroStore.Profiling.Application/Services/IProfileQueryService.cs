@@ -1,6 +1,6 @@
-﻿using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging.Params;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Profiling.Application.Dtos;
 
 namespace MicroStore.Profiling.Application.Services

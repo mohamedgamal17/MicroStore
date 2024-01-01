@@ -1,7 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Results;
-using MicroStore.Catalog.Domain.Entities;
-using MicroStore.Catalog.Entities.ElasticSearch;
-
+﻿using MicroStore.BuildingBlocks.Utils.Results;
 namespace MicroStore.Catalog.Application.Common
 {
     public interface IImageService

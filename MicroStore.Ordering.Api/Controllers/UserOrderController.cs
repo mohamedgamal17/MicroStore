@@ -2,13 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.Paging.Params;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.Orders;
 using MicroStore.Ordering.Application.Security;
-using System.Net;
-
 namespace MicroStore.Ordering.Api.Controllers
 {
     [ApiController]
@@ -30,7 +27,6 @@ namespace MicroStore.Ordering.Api.Controllers
         [HttpPost]
         [Route("")]
         [Authorize(Policy =ApplicationSecurityPolicies.RequireOrderWriteScope)]
-
         public async Task<IActionResult> SubmitOrder(OrderModel model)
         {
             var validationResult = await ValidateModel(model);

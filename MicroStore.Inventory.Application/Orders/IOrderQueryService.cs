@@ -1,9 +1,8 @@
-﻿using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging.Params;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Inventory.Application.Dtos;
 using Volo.Abp.Application.Services;
-
 namespace MicroStore.Inventory.Application.Orders
 {
     public interface IOrderQueryService : IApplicationService

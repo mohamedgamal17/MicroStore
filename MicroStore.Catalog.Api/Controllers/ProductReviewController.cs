@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
+using MicroStore.BuildingBlocks.Utils.Paging;
 using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Models.ProductReviews;

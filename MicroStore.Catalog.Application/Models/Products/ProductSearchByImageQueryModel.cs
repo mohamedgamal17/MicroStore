@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
-using MicroStore.BuildingBlocks.Paging.Params;
-
+using MicroStore.BuildingBlocks.Utils.Paging.Params;
 namespace MicroStore.Catalog.Application.Models.Products
 {
     public class ProductSearchByImageQueryModel : PagingQueryParams

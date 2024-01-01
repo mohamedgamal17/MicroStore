@@ -1,12 +1,12 @@
 ﻿using MicroStore.Shipping.Application.Abstraction.Common;
 using Volo.Abp.DependencyInjection;
-using MicroStore.BuildingBlocks.Results;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp;
 using MicroStore.Shipping.Application.Abstraction.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using MicroStore.BuildingBlocks.Utils.Results;
 
 namespace MicroStore.Shipping.Infrastructure
 {

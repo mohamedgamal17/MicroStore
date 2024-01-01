@@ -37,7 +37,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Extensions
             identityUser.GivenName.Should().Be(userDto.GivenName);
             identityUser.FamilyName.Should().Be(userDto.FamilyName);
             identityUser.UserName.Should().Be(userDto.UserName);
-            identityUser.UserRoles.Select(x => x.Role).Should().Equal(userDto.UserRoles, (left, right) => left.Name == right.Name);
+            identityUser.UserRoles.Select(x => x.Role).OrderBy(x=> x.Name).Should().Equal(userDto.UserRoles.OrderBy(x=> x.Name), (left, right) => left.Name == right.Name);
  
         }
 

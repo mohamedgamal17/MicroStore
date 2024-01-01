@@ -1,8 +1,8 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Extensions;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging.Extensions;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Payment.Application.Common;
 using MicroStore.Payment.Application.Domain;
 using MicroStore.Payment.Domain.Shared.Dtos;

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging;
 using MicroStore.Shipping.Application.Abstraction.Dtos;
 using MicroStore.Shipping.Domain.Entities;
 namespace MicroStore.Shipping.Application.Abstraction.Profiles

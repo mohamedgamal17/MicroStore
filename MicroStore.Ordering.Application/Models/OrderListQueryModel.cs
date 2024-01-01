@@ -1,5 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Paging.Params;
-
+﻿using MicroStore.BuildingBlocks.Utils.Paging.Params;
 namespace MicroStore.Ordering.Application.Models
 {
     public class OrderListQueryModel : PagingAndSortingQueryParams

@@ -91,7 +91,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Roles
 
             var result = await _roleCommandService.RemoveAsync(roleId);
 
-            result.IsFailure.Should().BeFalse();
+            result.IsFailure.Should().BeTrue();
 
             result.Exception.Should().BeOfType<EntityNotFoundException>();
         }

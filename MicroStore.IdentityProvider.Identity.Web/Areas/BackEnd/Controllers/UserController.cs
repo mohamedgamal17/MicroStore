@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.IdentityProvider.Identity.Application.Roles;
 using MicroStore.IdentityProvider.Identity.Application.Users;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;

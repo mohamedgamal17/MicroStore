@@ -1,9 +1,9 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Core.Search;
 using Elastic.Clients.Elasticsearch.QueryDsl;
-using MicroStore.BuildingBlocks.Paging;
-using MicroStore.BuildingBlocks.Paging.Params;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging.Params;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Application.Extensions;
 using MicroStore.Catalog.Application.Models.Products;

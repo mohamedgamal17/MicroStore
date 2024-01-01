@@ -1,4 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Results;
+﻿using MicroStore.BuildingBlocks.Utils.Results;
 using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.ShoppingCart.Api.Models

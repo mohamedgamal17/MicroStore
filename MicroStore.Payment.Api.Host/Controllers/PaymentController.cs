@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.BuildingBlocks.Paging;
+using MicroStore.BuildingBlocks.Utils.Paging;
 using MicroStore.Payment.Application.PaymentRequests;
 using MicroStore.Payment.Application.Security;
 using MicroStore.Payment.Domain.Shared.Dtos;

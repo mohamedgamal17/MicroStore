@@ -1,6 +1,6 @@
 ﻿using Duende.IdentityServer.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.IdentityProvider.IdentityServer.Application.Common;
 using MicroStore.IdentityProvider.IdentityServer.Application.Dtos;
 using MicroStore.IdentityProvider.IdentityServer.Application.Models;

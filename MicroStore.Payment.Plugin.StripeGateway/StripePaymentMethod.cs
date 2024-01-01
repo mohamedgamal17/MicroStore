@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Payment.Domain.Shared;
 using MicroStore.Payment.Domain.Shared.Configuration;
 using MicroStore.Payment.Domain.Shared.Dtos;

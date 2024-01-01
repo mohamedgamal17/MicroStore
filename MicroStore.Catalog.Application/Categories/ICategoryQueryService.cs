@@ -1,5 +1,4 @@
-﻿using MicroStore.BuildingBlocks.Results;
-using MicroStore.Catalog.Application.Dtos;
+﻿using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Catalog.Application.Models.Categories;
 using MicroStore.Catalog.Entities.ElasticSearch;
 

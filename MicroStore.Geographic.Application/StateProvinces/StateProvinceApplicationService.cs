@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Geographic.Application.Domain;
 using MicroStore.Geographic.Application.Dtos;
 using MicroStore.Geographic.Application.Models;

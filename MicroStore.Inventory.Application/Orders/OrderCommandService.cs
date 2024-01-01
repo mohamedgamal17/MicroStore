@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Domain.OrderAggregate;

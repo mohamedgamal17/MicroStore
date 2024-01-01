@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using System.Text.Json;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;

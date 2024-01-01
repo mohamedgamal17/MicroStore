@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MicroStore.BuildingBlocks.Results;
+using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.IdentityProvider.Identity.Application.Extensions;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;

@@ -77,6 +77,7 @@ namespace MicroStore.IdentityProvider.Identity.Application.Tests.Users
             {
                 GivenName = Guid.NewGuid().ToString(),
                 FamilyName = Guid.NewGuid().ToString(),
+                UserName = "fakeuser",
                 Email = $"{Guid.NewGuid().ToString()}@example.com",
                 PhoneNumber = "447859305608",
                 Password = Guid.NewGuid().ToString(),
