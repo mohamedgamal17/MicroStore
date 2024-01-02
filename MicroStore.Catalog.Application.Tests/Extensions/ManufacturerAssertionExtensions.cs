@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Models.Manufacturers;
+using MicroStore.Catalog.Application.Abstractions.Manufacturers;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 

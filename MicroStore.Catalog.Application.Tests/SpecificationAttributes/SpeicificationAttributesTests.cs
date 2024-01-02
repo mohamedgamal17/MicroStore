@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Models.SpecificationAttributes;
+using MicroStore.Catalog.Application.Abstractions.SpecificationAttributes;
 using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Application.Operations.Etos;
-using MicroStore.Catalog.Application.SpecificationAttributes;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;

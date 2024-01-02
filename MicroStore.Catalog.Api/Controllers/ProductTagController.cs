@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Catalog.Api.Infrastructure;
-using MicroStore.Catalog.Application.Models.ProductTags;
-using MicroStore.Catalog.Application.ProductTags;
+using MicroStore.Catalog.Application.Abstractions.ProductTags;
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/producttags")]

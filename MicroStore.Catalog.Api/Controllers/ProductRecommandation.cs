@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.Catalog.Api.Infrastructure;
-using MicroStore.Catalog.Application.Products;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Utils.Paging;
 using MicroStore.BuildingBlocks.Utils.Paging.Params;
+using MicroStore.Catalog.Application.Abstractions.Products;
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/product-recommandation")]

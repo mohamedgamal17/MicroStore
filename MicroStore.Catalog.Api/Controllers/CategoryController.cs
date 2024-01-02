@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
-using MicroStore.Catalog.Application.Dtos;
 using MicroStore.Catalog.Application.Categories;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
-using MicroStore.Catalog.Application.Models.Categories;
 using MicroStore.Catalog.Api.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
+using MicroStore.Catalog.Application.Abstractions.Categories;
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/categories")]

@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Catalog.Api.Infrastructure;
-using MicroStore.Catalog.Application.Models.SpecificationAttributes;
-using MicroStore.Catalog.Application.SpecificationAttributes;
+using MicroStore.Catalog.Application.Abstractions.SpecificationAttributes;
 namespace MicroStore.Catalog.Api.Controllers
 {
 

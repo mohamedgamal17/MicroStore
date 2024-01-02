@@ -1,7 +1,7 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using MicroStore.Catalog.Application.Common;
+using MicroStore.Catalog.Application.Abstractions.Common;
 using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Domain.ValueObjects;
 using MicroStore.Catalog.Entities.ElasticSearch;

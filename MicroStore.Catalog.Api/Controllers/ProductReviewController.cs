@@ -4,9 +4,7 @@ using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Utils.Paging;
 using MicroStore.Catalog.Api.Infrastructure;
-using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models.ProductReviews;
-using MicroStore.Catalog.Application.ProductReviews;
+using MicroStore.Catalog.Application.Abstractions.ProductReveiws;
 namespace MicroStore.Catalog.Api.Controllers
 {
     [Route("api/products/{productId}/productreviews")]

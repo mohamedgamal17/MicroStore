@@ -1,13 +1,11 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Models.ProductReviews;
 using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.Operations;
-using MicroStore.Catalog.Application.ProductReviews;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Entities.Events.Distributed;
 using MicroStore.Catalog.Entities.ElasticSearch;
+using MicroStore.Catalog.Application.Abstractions.ProductReveiws;
 
 namespace MicroStore.Catalog.Application.Tests.ProductReviews
 {

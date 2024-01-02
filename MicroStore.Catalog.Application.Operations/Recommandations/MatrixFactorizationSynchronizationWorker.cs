@@ -1,6 +1,6 @@
 ﻿using Hangfire;
 using Microsoft.Extensions.Logging;
-using MicroStore.Catalog.Application.Common;
+using MicroStore.Catalog.Application.Abstractions.Common;
 using Volo.Abp.BackgroundWorkers.Hangfire;
 using Volo.Abp.DependencyInjection;
 namespace MicroStore.Catalog.Application.Operations.Recommandations

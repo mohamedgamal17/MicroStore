@@ -5,9 +5,7 @@ using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Utils.Paging;
 using MicroStore.BuildingBlocks.Utils.Results;
 using MicroStore.Catalog.Api.Infrastructure;
-using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models.Products;
-using MicroStore.Catalog.Application.Products;
+using MicroStore.Catalog.Application.Abstractions.Products;
 using MicroStore.Catalog.Entities.ElasticSearch;
 namespace MicroStore.Catalog.Api.Controllers
 {

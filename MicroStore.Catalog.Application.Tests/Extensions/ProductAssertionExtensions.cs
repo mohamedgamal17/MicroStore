@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Models.Products;
-using MicroStore.Catalog.Application.Models.ProductTags;
-using MicroStore.Catalog.Application.Models.SpecificationAttributes;
+using MicroStore.Catalog.Application.Abstractions.Products;
+using MicroStore.Catalog.Application.Abstractions.ProductTags;
+using MicroStore.Catalog.Application.Abstractions.SpecificationAttributes;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Domain.ValueObjects;
 using MicroStore.Catalog.Entities.ElasticSearch;

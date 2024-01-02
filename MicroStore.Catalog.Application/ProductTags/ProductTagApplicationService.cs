@@ -1,9 +1,8 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Utils.Results;
-using MicroStore.Catalog.Application.Common;
-using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Models.ProductTags;
+using MicroStore.Catalog.Application.Abstractions.Common;
+using MicroStore.Catalog.Application.Abstractions.ProductTags;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;

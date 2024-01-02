@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using MicroStore.Catalog.Application.Common;
+using MicroStore.Catalog.Application.Abstractions.Common;
 using Volo.Abp.DependencyInjection;
 
 namespace MicroStore.Catalog.Infrastructure.Services

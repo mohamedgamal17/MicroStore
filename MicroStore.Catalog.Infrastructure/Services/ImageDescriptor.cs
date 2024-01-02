@@ -4,8 +4,8 @@ using Emgu.CV;
 using MicroStore.Catalog.Domain.Entities;
 using System.Drawing;
 using System.Collections;
-using MicroStore.Catalog.Application.Common;
 using Microsoft.Extensions.Options;
+using MicroStore.Catalog.Application.Abstractions.Common;
 
 namespace MicroStore.Catalog.Infrastructure.Services
 {

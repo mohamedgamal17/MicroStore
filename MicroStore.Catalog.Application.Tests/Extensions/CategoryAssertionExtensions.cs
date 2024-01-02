@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Models.Categories;
+using MicroStore.Catalog.Application.Abstractions.Categories;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 namespace MicroStore.Catalog.Application.Tests.Extensions

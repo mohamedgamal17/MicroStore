@@ -1,6 +1,6 @@
 ﻿using Emgu.CV;
 using MicroStore.BuildingBlocks.Utils.Results;
-using MicroStore.Catalog.Application.Common;
+using MicroStore.Catalog.Application.Abstractions.Common;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 namespace MicroStore.Catalog.Infrastructure.Services

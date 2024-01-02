@@ -1,7 +1,7 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using MicroStore.BuildingBlocks.Utils.Results;
+using MicroStore.Catalog.Application.Abstractions.Manufacturers;
 using MicroStore.Catalog.Application.Extensions;
-using MicroStore.Catalog.Application.Models.Manufacturers;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
 namespace MicroStore.Catalog.Application.Manufacturers

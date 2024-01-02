@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Models.ProductTags;
+using MicroStore.Catalog.Application.Abstractions.ProductTags;
 using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Application.Operations.Etos;
-using MicroStore.Catalog.Application.ProductReviews;
-using MicroStore.Catalog.Application.ProductTags;
+
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;

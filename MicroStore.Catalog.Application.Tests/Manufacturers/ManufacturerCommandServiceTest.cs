@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Manufacturers;
-using MicroStore.Catalog.Application.Models.Manufacturers;
+using MicroStore.Catalog.Application.Abstractions.Manufacturers;
 using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.Tests.Extensions;

@@ -1,7 +1,6 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
-using MicroStore.Catalog.Application.Common;
 using MicroStore.Catalog.Domain.Configuration;
 using MicroStore.Catalog.Domain.ML;
 using Microsoft.ML.Trainers;
@@ -9,6 +8,7 @@ using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.DependencyInjection;
 using MicroStore.BuildingBlocks.Utils.Paging.Extensions;
 using MicroStore.BuildingBlocks.Utils.Paging;
+using MicroStore.Catalog.Application.Abstractions.Common;
 namespace MicroStore.Catalog.Infrastructure.Services
 {
     internal class CollaborativeFilterMLTrainer : ICollaborativeFilterMLTrainer , ITransientDependency

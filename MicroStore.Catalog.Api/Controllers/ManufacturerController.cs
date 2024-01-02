@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Catalog.Api.Infrastructure;
-using MicroStore.Catalog.Application.Dtos;
-using MicroStore.Catalog.Application.Manufacturers;
-using MicroStore.Catalog.Application.Models.Manufacturers;
+using MicroStore.Catalog.Application.Abstractions.Manufacturers;
 namespace MicroStore.Catalog.Api.Controllers
 {
 

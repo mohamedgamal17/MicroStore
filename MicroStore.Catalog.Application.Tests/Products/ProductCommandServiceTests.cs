@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Models.Products;
 using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Application.Products;
@@ -8,6 +7,7 @@ using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using MicroStore.Catalog.IntegrationEvents;
 using Volo.Abp.Domain.Entities;
+using MicroStore.Catalog.Application.Abstractions.Products;
 namespace MicroStore.Catalog.Application.Tests.Products
 {
     public class ProductCommandServiceTests : ProductServiceTestBase
