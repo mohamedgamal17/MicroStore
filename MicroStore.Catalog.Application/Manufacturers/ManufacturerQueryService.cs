@@ -4,6 +4,7 @@ using MicroStore.Catalog.Application.Abstractions.Manufacturers;
 using MicroStore.Catalog.Application.Extensions;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
+using static MassTransit.ValidationResultExtensions;
 namespace MicroStore.Catalog.Application.Manufacturers
 {
     public class ManufacturerQueryService : CatalogApplicationService, IManufacturerQueryService
@@ -14,28 +15,32 @@ namespace MicroStore.Catalog.Application.Manufacturers
             _elasticSearchClient = elasticSearchClient;
         }
 
-        public async Task<Result<ElasticManufacturer>> GetAsync(string manufacturerId, CancellationToken cancellationToken = default)
+        public async Task<Result<ManufacturerDto>> GetAsync(string manufacturerId, CancellationToken cancellationToken = default)
         {
             var response = await _elasticSearchClient.GetAsync<ElasticManufacturer>(manufacturerId,cancellationToken);
 
             if (!response.IsValidResponse)
             {
-                return new Result<ElasticManufacturer>(new EntityNotFoundException(typeof(ElasticManufacturer), manufacturerId));
+                return new Result<ManufacturerDto>(new EntityNotFoundException(typeof(ElasticManufacturer), manufacturerId));
             }
 
-            return response.Source!;
+            var result =  response.Source!;
+
+            return ObjectMapper.Map<ElasticManufacturer, ManufacturerDto>(result);
         }
 
-        public async Task<Result<List<ElasticManufacturer>>> ListAsync(ManufacturerListQueryModel queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<List<ManufacturerDto>>> ListAsync(ManufacturerListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
             var response = await _elasticSearchClient.SearchAsync(PreapreSearchRequestDescriptor(queryParams));
 
             if (!response.IsValidResponse)
             {
-                return new List<ElasticManufacturer>();
+                return new List<ManufacturerDto>();
             }
 
-            return response.Documents.ToList();     
+            var result =  response.Documents.ToList();
+
+            return ObjectMapper.Map<List<ElasticManufacturer>,List<ManufacturerDto>>(result);
         }
         private SearchRequestDescriptor<ElasticManufacturer> PreapreSearchRequestDescriptor(ManufacturerListQueryModel queryParams)
         {

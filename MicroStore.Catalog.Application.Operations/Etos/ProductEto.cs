@@ -27,8 +27,7 @@ namespace MicroStore.Catalog.Application.Operations.Etos
 
     public class ProductManufacturerEto : EntityDto<string>
     {
-        public string ManufacturerId { get; set; }
-
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

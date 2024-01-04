@@ -15,7 +15,7 @@ namespace MicroStore.Catalog.Application.Operations.Mappers
                 .ForMember(x => x.Weight, opt => opt.MapFrom(sr => sr.Weight))
                 .ForMember(x => x.Dimensions, opt => opt.MapFrom(sr => sr.Dimensions))
                 .ForMember(x => x.ProductCategories, opt => opt.MapFrom(sr => sr.Categories))
-                .ForMember(x => x.ProductManufacturers, opt => opt.MapFrom(sr => sr.ProductManufacturers))
+                .ForMember(x => x.ProductManufacturers, opt => opt.MapFrom(sr => sr.Manufacturers))
                 .ForMember(x => x.ProductImages, opt => opt.MapFrom(c => c.ProductImages.OrderBy(x=> x.DisplayOrder).ToList()))
                 .ForMember(x => x.SpecificationAttributes, opt => opt.MapFrom(sr => sr.SpecificationAttributes));
 
@@ -34,17 +34,17 @@ namespace MicroStore.Catalog.Application.Operations.Mappers
                 .ForMember(x => x.Name, opt => opt.MapFrom(sr => sr.Name))
                 .ForMember(x => x.Description, opt => opt.MapFrom(sr => sr.Description));
 
-            CreateMap<ProductManufacturer, ProductManufacturerEto>()
+            CreateMap<Manufacturer, ProductManufacturerEto>()
              .ForMember(x => x.Id, opt => opt.MapFrom(sr => sr.Id))
-             .ForMember(x => x.ManufacturerId, opt => opt.MapFrom(sr => sr.ManufacturerId))
-             .ForMember(x => x.Name, opt => opt.MapFrom(sr => sr.Manufacturer.Name));
+             .ForMember(x => x.Name, opt => opt.MapFrom(sr => sr.Name))
+             .ForMember(x => x.Description, opt => opt.MapFrom(sr => sr.Description));
 
 
             CreateMap<ProductEto, ElasticProduct>()
              .ForMember(x => x.Weight, opt => opt.MapFrom(sr => sr.Weight))
              .ForMember(x => x.Dimensions, opt => opt.MapFrom(sr => sr.Dimensions))
              .ForMember(x => x.Categories, opt => opt.MapFrom(sr => sr.ProductCategories))
-             .ForMember(x => x.ProductManufacturers, opt => opt.MapFrom(sr => sr.ProductManufacturers))
+             .ForMember(x => x.Manufacturers, opt => opt.MapFrom(sr => sr.ProductManufacturers))
              .ForMember(x => x.ProductImages, opt => opt.MapFrom(c => c.ProductImages))
              .ForMember(x => x.SpecificationAttributes, opt => opt.MapFrom(sr => sr.SpecificationAttributes))
              .ForMember(x => x.CreatorId, opt => opt.MapFrom(src => src.CreatorId.ToString()))
@@ -61,8 +61,8 @@ namespace MicroStore.Catalog.Application.Operations.Mappers
 
             CreateMap<ProductManufacturerEto, ElasticProductManufacturer>()
              .ForMember(x => x.Id, opt => opt.MapFrom(sr => sr.Id))
-             .ForMember(x => x.ManufacturerId, opt => opt.MapFrom(sr => sr.ManufacturerId))
-             .ForMember(x => x.Name, opt => opt.MapFrom(sr => sr.Name));
+             .ForMember(x => x.Name, opt => opt.MapFrom(sr => sr.Name))
+             .ForMember(x => x.Description, opt => opt.MapFrom(sr => sr.Description));
 
             CreateMap<ProductImageEto, ElasticProductImage>();
 

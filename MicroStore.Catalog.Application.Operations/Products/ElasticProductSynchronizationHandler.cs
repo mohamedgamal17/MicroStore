@@ -144,11 +144,11 @@ namespace MicroStore.Catalog.Application.Operations.Products
                     Description = x.Description
                 }).ToList(),
 
-                ProductManufacturers = productEto.ProductManufacturers?.Select(x => new ElasticProductManufacturer
+                Manufacturers = productEto.ProductManufacturers?.Select(x => new ElasticProductManufacturer
                 {
                     Id = x.Id,
-                    ManufacturerId = x.ManufacturerId,
-                    Name = x.Name
+                    Name = x.Name,
+                    Description = x.Description
                 }).ToList(),
 
                 ProductTags = productEto.ProductTags?.Select(x => new ElasticProductTag

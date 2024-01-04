@@ -20,12 +20,15 @@ namespace MicroStore.Catalog.Application.Products
         private readonly IRepository<SpecificationAttribute> _specificationAttributeRepository;
 
         private readonly IRepository<Category> _categoryRepository;
-        public ProductCommandService(IRepository<Product> productRepository, IRepository<ProductTag> productTagRepository, IRepository<SpecificationAttribute> specificationAttributeRepository, IRepository<Category> categoryRepository)
+
+        private readonly IRepository<Manufacturer> _manufacturerRepository;
+        public ProductCommandService(IRepository<Product> productRepository, IRepository<ProductTag> productTagRepository, IRepository<SpecificationAttribute> specificationAttributeRepository, IRepository<Category> categoryRepository, IRepository<Manufacturer> manufacturerRepository)
         {
             _productRepository = productRepository;
             _productTagRepository = productTagRepository;
             _specificationAttributeRepository = specificationAttributeRepository;
             _categoryRepository = categoryRepository;
+            _manufacturerRepository = manufacturerRepository;
         }
 
         public async Task<Result<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
@@ -97,11 +100,15 @@ namespace MicroStore.Catalog.Application.Products
                 product.Categories = categories;
             }
 
-            if(model.ManufacturersIds != null)
+            if(model.Manufacturers != null)
             {
-                product.ProductManufacturers = model.ManufacturersIds
-                    .Select(x => new ProductManufacturer { ManufacturerId = x })
-                    .ToList();
+                List<Manufacturer> manufacturers = new List<Manufacturer>();
+
+                if(model.Manufacturers.Count > 0)
+                {
+                    manufacturers = await _manufacturerRepository.GetListAsync(x => model.Manufacturers.Contains(x.Id));
+                }
+                product.Manufacturers = manufacturers;
             }
 
             if(model.ProductTags != null)

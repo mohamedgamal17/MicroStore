@@ -14,8 +14,8 @@ namespace MicroStore.Catalog.Application.Abstractions.Products
         public double OldPrice { get; set; }
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
-        public List<ProductCategoryDto> ProductCategories { get; set; }
-        public List<ProductManufacturerDto> ProductManufacturers { get; set; }
+        public List<ProductCategoryDto> Categories { get; set; }
+        public List<ProductManufacturerDto> Manufacturers { get; set; }
         public List<ProductImageDto> ProductImages { get; set; }
         public List<ProductTagDto> ProductTags { get; set; }
         public List<ProductSpecificationAttributeDto> SpecificationAttributes { get; set; }

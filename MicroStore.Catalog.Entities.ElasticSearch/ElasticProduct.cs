@@ -14,7 +14,7 @@ namespace MicroStore.Catalog.Entities.ElasticSearch
         public ElasticWeight Weight { get; set; }
         public ElasticDimension Dimensions { get; set; }
         public List<ElasticProductCategory> Categories { get; set; }
-        public List<ElasticProductManufacturer> ProductManufacturers { get; set; }
+        public List<ElasticProductManufacturer> Manufacturers { get; set; }
         public List<ElasticProductImage> ProductImages { get; set; }
         public List<ElasticProductTag> ProductTags { get; set; }
         public List<ElasticProductSpecificationAttribute> SpecificationAttributes { get; set; }
@@ -22,7 +22,7 @@ namespace MicroStore.Catalog.Entities.ElasticSearch
         public ElasticProduct()
         {
             Categories = new List<ElasticProductCategory>();
-            ProductManufacturers = new List<ElasticProductManufacturer>();
+            Manufacturers = new List<ElasticProductManufacturer>();
             ProductImages = new List<ElasticProductImage>();
             ProductTags = new List<ElasticProductTag>();
             SpecificationAttributes = new List<ElasticProductSpecificationAttribute>();
@@ -38,7 +38,8 @@ namespace MicroStore.Catalog.Entities.ElasticSearch
 
     public class ElasticProductManufacturer : ElasticEntity
     {
-        public string ManufacturerId { get; set; }
         public string Name { get; set; }
+
+        public string Description { get; set; }
     }
 }

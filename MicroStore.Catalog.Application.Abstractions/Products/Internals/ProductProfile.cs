@@ -17,27 +17,25 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Internals
                 .ForMember(x => x.OldPrice, opt => opt.MapFrom(c => c.OldPrice))
                 .ForMember(x => x.Weight, opt => opt.MapFrom(c => c.Weight))
                 .ForMember(x => x.Dimensions, opt => opt.MapFrom(c => c.Dimensions))
-                .ForMember(x => x.ProductCategories, opt => opt.MapFrom(c => c.Categories))
-                .ForMember(x => x.ProductManufacturers, opt => opt.MapFrom(c => c.ProductManufacturers))
+                .ForMember(x => x.Categories, opt => opt.MapFrom(c => c.Categories))
+                .ForMember(x => x.Manufacturers, opt => opt.MapFrom(c => c.Manufacturers))
                 .ForMember(x => x.ProductTags, opt => opt.MapFrom(c => c.ProductTags))
                 .ForMember(x => x.SpecificationAttributes, opt => opt.MapFrom(c => c.SpecificationAttributes));
-
-
 
             CreateMap<Category, ProductCategoryDto>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(x => x.Id))
                 .ForMember(x => x.Name, opt => opt.MapFrom(x => x.Name))
                 .ForMember(x => x.Description, opt => opt.MapFrom(x => x.Description));
 
-
             CreateMap<ProductImage, ProductImageDto>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
                 .ForMember(x => x.DisplayOrder, opt => opt.MapFrom(c => c.DisplayOrder))
                 .ForMember(x => x.Image, opt => opt.MapFrom(c => c.Image));
 
-
-            CreateMap<ProductManufacturer, ProductManufacturerDto>()
-                .ForMember(x => x.Manufacturer, opt => opt.MapFrom(c => c.Manufacturer));
+            CreateMap<Manufacturer, ProductManufacturerDto>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(c => c.Id))
+                .ForMember(x => x.Name, opt => opt.MapFrom(c => c.Name))
+                .ForMember(x => x.Description, opt => opt.MapFrom(c => c.Description));
 
             CreateMap<ProductSpecificationAttribute, ProductSpecificationAttributeDto>()
                 .ForMember(x => x.Attribute, opt => opt.MapFrom(c => c.Attribute))

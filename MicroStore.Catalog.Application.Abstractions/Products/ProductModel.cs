@@ -18,7 +18,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
         public HashSet<string>? Categories { get; set; }
-        public HashSet<string>? ManufacturersIds { get; set; }
+        public HashSet<string>? Manufacturers { get; set; }
         public HashSet<string>? ProductTags { get; set; }
         public List<ProductImageModel>? ProductImages { get; set; }
         public HashSet<ProductSpecificationAttributeModel>? SpecificationAttributes { get; set; }
@@ -118,7 +118,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products
                 .When(x => x.Categories != null);
 
 
-            RuleForEach(x => x.ManufacturersIds)
+            RuleForEach(x => x.Manufacturers)
                 .MustAsync(CheckManufacturerExist)
                 .When(x => x.Categories != null);
 

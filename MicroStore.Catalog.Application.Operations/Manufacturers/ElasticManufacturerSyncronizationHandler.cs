@@ -53,12 +53,12 @@ namespace MicroStore.Catalog.Application.Operations.Manufacturers
                 .Script(new Script(new InlineScript
                 {
                     Source = @"
-                            for(int i =0; i< ctx._source.productManufacturers.size(); i++)
+                            for(int i =0; i< ctx._source.manufacturers.size(); i++)
                             {
-                                if(ctx._source.productManufacturers[i].manufacturerId == params.id)
+                                if(ctx._source.manufacturers[i].id == params.id)
                                 {
-                                    ctx._source.productManufacturers[i].name = params.name;
-                                    ctx._source.productManufacturers[i].description = params.description;
+                                    ctx._source.manufacturers[i].name = params.name;
+                                    ctx._source.manufacturers[i].description = params.description;
                                 }
                             }
                          ",
@@ -73,9 +73,9 @@ namespace MicroStore.Catalog.Application.Operations.Manufacturers
                 }))
                 .Query(desc => desc
                     .Nested(nes => nes
-                    .Path(pt => pt.ProductManufacturers)
+                    .Path(pt => pt.Manufacturers)
                     .Query(qr => qr
-                        .Term(mt => mt.ProductManufacturers.First().ManufacturerId, elasticEntity.Id)
+                        .Term(mt => mt.Manufacturers.First().Id, elasticEntity.Id)
                     )
                 )
             );

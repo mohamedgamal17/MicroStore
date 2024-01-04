@@ -4,8 +4,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products
 {
     public class ProductManufacturerDto : EntityDto<string>
     {
-        public string ManufacturerId { get; set; }
-        public string ProductId { get; set; }
-        public ManufacturerDto Manufacturer { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

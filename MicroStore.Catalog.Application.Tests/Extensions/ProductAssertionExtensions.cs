@@ -29,9 +29,9 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
                 return left.Id == right;
             });
 
-            product.ProductManufacturers.OrderBy(x => x.ManufacturerId).Should().Equal(model.ManufacturersIds?.OrderBy(x => x), (left, right) =>
+            product.Manufacturers.OrderBy(x => x.Id).Should().Equal(model.Manufacturers?.OrderBy(x => x), (left, right) =>
             {
-                return left.ManufacturerId == right;
+                return left.Id == right;
             });
 
             product.ProductTags.OrderBy(x => x.Name).Should().Equal(model.ProductTags?.OrderBy(x => x), (left, right) =>
@@ -75,8 +75,8 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
                 .ForEach(categoryTuple => categoryTuple.First.AssertElasticProductCategory(categoryTuple.Second));
 
 
-            elasticProduct.ProductManufacturers.OrderBy(x => x.ManufacturerId)
-                .Zip(product.ProductManufacturers.Select(x => x.Manufacturer).OrderBy(x => x.Id))
+            elasticProduct.Manufacturers.OrderBy(x => x.Id)
+                .Zip(product.Manufacturers.OrderBy(x => x.Id))
                 .ToList()
                 .ForEach(manufacturerTuple =>  manufacturerTuple.First.AssertElasticProductManufacturer(manufacturerTuple.Second));
 

@@ -27,19 +27,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 Name = Guid.NewGuid().ToString(),
                 Price = 50,
 
-                ProductManufacturers  = new List<ProductManufacturer>
-                {
-                    new ProductManufacturer
-                    {
-                        Manufacturer = new Manufacturer
-                        {
-                            Name = Guid.NewGuid().ToString(),
-                            Description = Guid.NewGuid().ToString()
-                        },
-                    }
-                },
-
-
                 ProductImages = new List<ProductImage>
                 {
                     new ProductImage
@@ -232,7 +219,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
                 Categories =categories.Select(x=> x.Id).ToHashSet(),
 
-                ManufacturersIds  = manufacturers.Select(x=>x.Id).ToHashSet(),
+                Manufacturers  = manufacturers.Select(x=>x.Id).ToHashSet(),
 
                 ProductTags = manufacturers.Select(x=> x.Name).ToHashSet(),
 

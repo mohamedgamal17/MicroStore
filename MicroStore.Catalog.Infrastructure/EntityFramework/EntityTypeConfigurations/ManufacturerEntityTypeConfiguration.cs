@@ -16,7 +16,6 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.Description).HasMaxLength(500).IsRequired(false).HasDefaultValue(string.Empty);
 
-            builder.HasMany<ProductManufacturer>().WithOne().HasForeignKey(x => x.ManufacturerId);
         }
     }
 }

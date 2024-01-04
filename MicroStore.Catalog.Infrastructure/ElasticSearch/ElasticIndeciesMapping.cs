@@ -117,11 +117,11 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
                                 .Text(x=> x.Categories.First().Description)
                             )
                         )
-                        .Nested(x => x.ProductManufacturers, cfg => cfg
+                        .Nested(x => x.Manufacturers, cfg => cfg
                             .Properties(prx => prx
-                                .Keyword(x => x.ProductManufacturers.First().Id)
-                                .Keyword(x => x.ProductManufacturers.First().ManufacturerId)
-                                .Keyword(x => x.ProductManufacturers.First().Name)
+                                .Keyword(x => x.Manufacturers.First().Id)
+                                .Text(x => x.Manufacturers.First().Name)
+                                .Text(x => x.Manufacturers.First().Description)
                             )
                         )
                         .Nested(x => x.ProductTags, cfg => cfg

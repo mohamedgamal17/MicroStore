@@ -165,8 +165,8 @@ namespace MicroStore.Catalog.Application.Products
                                 ))
                             )
                             .When(queryParams.Manufacturer != null, act => act
-                                .Nested(cf => cf.Path(p => p.ProductManufacturers).Query(nqr => nqr
-                                    .Term(x => x.ProductManufacturers.First().Name, queryParams.Manufacturer!)
+                                .Nested(cf => cf.Path(p => p.Manufacturers).Query(nqr => nqr
+                                    .Term(x => x.Manufacturers.First().Name, queryParams.Manufacturer!)
                                 ))
                             )
                             .When(queryParams.MinPrice != null || queryParams.MaxPrice != null, act => act
@@ -259,7 +259,7 @@ namespace MicroStore.Catalog.Application.Products
                                     x => x.Name,
                                     x => x.ShortDescription,
                                     x => x.Categories.First().Name,
-                                    x => x.ProductManufacturers.First().Name,
+                                    x => x.Manufacturers.First().Name,
                                     x => x.ProductTags.First().Name
                                )
                          )

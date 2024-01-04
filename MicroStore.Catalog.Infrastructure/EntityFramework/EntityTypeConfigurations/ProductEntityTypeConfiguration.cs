@@ -74,11 +74,11 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.HasMany(x => x.Categories)
                 .WithMany(x => x.Products);
-                
+
+            builder.HasMany(x => x.Manufacturers)
+                .WithMany(x => x.Products);
 
             builder.HasMany(x => x.ProductImages).WithOne().HasForeignKey(x=> x.ProductId);
-
-            builder.HasMany(x => x.ProductManufacturers).WithOne().HasForeignKey(x=> x.ProductId);
 
             builder.HasMany(x => x.ProductTags).WithMany(x=> x.Products);
 
@@ -90,7 +90,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Navigation(x => x.Categories).AutoInclude();
 
-            builder.Navigation(x => x.ProductManufacturers).AutoInclude();
+            builder.Navigation(x => x.Manufacturers).AutoInclude();
 
             builder.Navigation(x => x.ProductImages).AutoInclude();
 

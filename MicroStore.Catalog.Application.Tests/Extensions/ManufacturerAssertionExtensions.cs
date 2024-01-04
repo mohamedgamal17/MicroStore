@@ -21,7 +21,7 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
         }
         public static void AssertElasticProductManufacturer(this ElasticProductManufacturer productManufacturer, Manufacturer manufacturer)
         {
-            productManufacturer.ManufacturerId.Should().Be(manufacturer.Id);
+            productManufacturer.Id.Should().Be(manufacturer.Id);
             productManufacturer.Name.Should().Be(manufacturer.Name);
 
         }
