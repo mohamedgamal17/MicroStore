@@ -8,36 +8,38 @@ namespace MicroStore.Catalog.Application.Categories
 {
     public class CategoryQueryService : CatalogApplicationService, ICategoryQueryService
     {
-
         private readonly ElasticsearchClient _elasticsearchClient;
-
         public CategoryQueryService(ElasticsearchClient elasticsearchClient)
         {
             _elasticsearchClient = elasticsearchClient;
         }
 
-        public async Task<Result<ElasticCategory>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Result<CategoryDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var response = await _elasticsearchClient.GetAsync<ElasticCategory>(id);
 
             if (!response.IsValidResponse)
             {
-                return new Result<ElasticCategory>(new EntityNotFoundException(typeof(ElasticCategory), id));
+                return new Result<CategoryDto>(new EntityNotFoundException(typeof(ElasticCategory), id));
             }
 
-            return response.Source!;
+            var result = response.Source!;
+
+            return ObjectMapper.Map<ElasticCategory, CategoryDto>(result);
         }
 
-        public async Task<Result<List<ElasticCategory>>> ListAsync(CategoryListQueryModel queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<List<CategoryDto>>> ListAsync(CategoryListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
             var response = await _elasticsearchClient.SearchAsync(PreapreSearchRequestDescriptor(queryParams));
 
             if(!response.IsValidResponse)
             {
-                return new List<ElasticCategory>();
+                return new List<CategoryDto>();
             }
 
-            return response.Documents.ToList() ;
+            var result =  response.Documents.ToList() ;
+
+            return ObjectMapper.Map<List<ElasticCategory>, List<CategoryDto>>(result);
         }
 
 

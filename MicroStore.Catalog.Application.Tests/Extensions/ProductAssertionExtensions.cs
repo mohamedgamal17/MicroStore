@@ -24,9 +24,9 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
             product.Dimensions.Should().Be(model.Dimensions.AsDimension());
             product.IsFeatured.Should().Be(model.IsFeatured);
 
-            product.ProductCategories.OrderBy(x => x.CategoryId).Should().Equal(model.CategoriesIds?.OrderBy(x => x), (left, right) =>
+            product.Categories.OrderBy(x => x.Id).Should().Equal(model.Categories?.OrderBy(x => x), (left, right) =>
             {
-                return left.CategoryId == right;
+                return left.Id == right;
             });
 
             product.ProductManufacturers.OrderBy(x => x.ManufacturerId).Should().Equal(model.ManufacturersIds?.OrderBy(x => x), (left, right) =>
@@ -69,8 +69,8 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
 
             elasticProduct.IsFeatured.Should().Be(product.IsFeatured);
 
-            elasticProduct.ProductCategories.OrderBy(x => x.CategoryId)
-                .Zip(product.ProductCategories.Select(x => x.Category).OrderBy(x => x.Id))
+            elasticProduct.Categories.OrderBy(x => x.Id)
+                .Zip(product.Categories.OrderBy(x => x.Id))
                 .ToList()
                 .ForEach(categoryTuple => categoryTuple.First.AssertElasticProductCategory(categoryTuple.Second));
 

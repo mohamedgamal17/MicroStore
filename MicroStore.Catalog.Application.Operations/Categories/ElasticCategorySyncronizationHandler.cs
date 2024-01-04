@@ -60,10 +60,10 @@ namespace MicroStore.Catalog.Application.Operations.Categories
                 .Script(new Script(new InlineScript
                 {
                     Source = @" 
-                        for(int i = 0; i < ctx._source.productCategories.size(); i++){
-                          if(ctx._source.productCategories[i].categoryId == params.id){
-                                ctx._source.productCategories[i].name =params.name;
-                                ctx._source.productCategories[i].description= params.description;
+                        for(int i = 0; i < ctx._source.categories.size(); i++){
+                          if(ctx._source.categories[i].id == params.id){
+                                ctx._source.categories[i].name =params.name;
+                                ctx._source.categories[i].description= params.description;
                            }
                          }
                         ",
@@ -78,9 +78,9 @@ namespace MicroStore.Catalog.Application.Operations.Categories
                 }))
                 .Query(desc => desc
                     .Nested(nes => nes
-                    .Path(pt => pt.ProductCategories)
+                    .Path(pt => pt.Categories)
                     .Query(qr => qr
-                        .Term(mt=> mt.ProductCategories.First().CategoryId , elasticEntity.Id)
+                        .Term(mt=> mt.Categories.First().Id , elasticEntity.Id)
                     )
                 )
             );

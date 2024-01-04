@@ -137,11 +137,11 @@ namespace MicroStore.Catalog.Application.Operations.Products
                     Unit = Enum.Parse<DimensionUnit>(productEto.Dimensions.Unit)
                 },
 
-                ProductCategories = productEto.ProductCategories?.Select(x => new ElasticProductCategory
+                Categories = productEto.ProductCategories?.Select(x => new ElasticProductCategory
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    CategoryId = x.CategoryId
+                    Description = x.Description
                 }).ToList(),
 
                 ProductManufacturers = productEto.ProductManufacturers?.Select(x => new ElasticProductManufacturer
@@ -166,7 +166,7 @@ namespace MicroStore.Catalog.Application.Operations.Products
                     OptionId = x.OptionId,
                     Value = x.Value
                 }).ToList(),
-                CreatationTime = productEto.CreationTime,
+                CreationTime = productEto.CreationTime,
                 CreatorId = productEto.CreatorId?.ToString(),
                 LastModificationTime = productEto.LastModificationTime,
                 LastModifierId = productEto.LastModifierId?.ToString(),
@@ -186,7 +186,7 @@ namespace MicroStore.Catalog.Application.Operations.Products
                     elasticProductImage.Id = productImage.Id;
                     elasticProductImage.Image = productImage.Image;
                     elasticProductImage.DisplayOrder = productImage.DisplayOrder;
-                    elasticProductImage.CreatationTime = productImage.CreationTime;
+                    elasticProductImage.CreationTime = productImage.CreationTime;
                     elasticProductImage.CreatorId = productImage.CreatorId?.ToString();
                     elasticProductImage.LastModificationTime = productImage.LastModificationTime;
                     elasticProductImage.LastModifierId = productImage.LastModifierId?.ToString();

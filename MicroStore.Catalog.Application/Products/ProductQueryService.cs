@@ -160,8 +160,8 @@ namespace MicroStore.Catalog.Application.Products
                         )
                         .Filter(flt => flt
                             .When(queryParams.Category != null, act => act
-                                .Nested(cf=> cf.Path(p=> p.ProductCategories).Query(nqr=> nqr
-                                    .Term(x=> x.ProductCategories.First().Name,queryParams.Category!)
+                                .Nested(cf=> cf.Path(p=> p.Categories).Query(nqr=> nqr
+                                    .Term(x=> x.Categories.First().Name,queryParams.Category!)
                                 ))
                             )
                             .When(queryParams.Manufacturer != null, act => act
@@ -206,10 +206,10 @@ namespace MicroStore.Catalog.Application.Products
                             case "price":
                                 srt.Field(x => x.Name, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
                                 break;
-                            case "creation":  srt.Field(x => x.CreatationTime, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
+                            case "creation":  srt.Field(x => x.CreationTime, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
                                 break;
                             default:
-                                srt.Field(x => x.CreatationTime, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
+                                srt.Field(x => x.CreationTime, cfg => cfg.Order(queryParams.Desc ? SortOrder.Desc : SortOrder.Asc));
                                 break;
 
 
@@ -258,7 +258,7 @@ namespace MicroStore.Catalog.Application.Products
                             Infer.Fields<ElasticProduct>(
                                     x => x.Name,
                                     x => x.ShortDescription,
-                                    x => x.ProductCategories.First().Name,
+                                    x => x.Categories.First().Name,
                                     x => x.ProductManufacturers.First().Name,
                                     x => x.ProductTags.First().Name
                                )

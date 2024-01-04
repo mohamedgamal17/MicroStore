@@ -18,11 +18,14 @@ namespace MicroStore.Catalog.Application.Products
         private readonly IRepository<ProductTag> _productTagRepository;
 
         private readonly IRepository<SpecificationAttribute> _specificationAttributeRepository;
-        public ProductCommandService(IRepository<Product> productRepository, IRepository<ProductTag> productTagRepository, IRepository<SpecificationAttribute> specificationAttributeRepository)
+
+        private readonly IRepository<Category> _categoryRepository;
+        public ProductCommandService(IRepository<Product> productRepository, IRepository<ProductTag> productTagRepository, IRepository<SpecificationAttribute> specificationAttributeRepository, IRepository<Category> categoryRepository)
         {
             _productRepository = productRepository;
             _productTagRepository = productTagRepository;
             _specificationAttributeRepository = specificationAttributeRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<Result<ProductDto>> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
@@ -82,11 +85,16 @@ namespace MicroStore.Catalog.Application.Products
             product.Dimensions = model.Dimensions?.AsDimension() ?? Dimension.Empty;
             product.IsFeatured = model.IsFeatured;
 
-            if (model.CategoriesIds != null)
+            if (model.Categories != null)
             {
-                product.ProductCategories = model.CategoriesIds
-                    .Select(x => new ProductCategory { CategoryId = x })
-                    .ToList();
+                List<Category> categories = new List<Category>();
+
+                if(model.Categories.Count > 0)
+                {
+                    categories = await _categoryRepository.GetListAsync(x => model.Categories.Contains(x.Id));
+                }
+
+                product.Categories = categories;
             }
 
             if(model.ManufacturersIds != null)

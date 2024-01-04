@@ -21,23 +21,11 @@ namespace MicroStore.Catalog.Application.Tests.Products
         {
             var attributes = await CreateFakeSpecificationAttributes();
 
-
             var fakeProduct = new Product
             {
                 Sku = Guid.NewGuid().ToString(),
                 Name = Guid.NewGuid().ToString(),
                 Price = 50,
-
-                ProductCategories = new List<ProductCategory>()
-                {
-                   new ProductCategory
-                   {
-                       Category = new Category
-                       {
-                           Name = Guid.NewGuid().ToString(),
-                       }
-                   }
-                },
 
                 ProductManufacturers  = new List<ProductManufacturer>
                 {
@@ -242,7 +230,7 @@ namespace MicroStore.Catalog.Application.Tests.Products
                     Unit = DimensionUnit.Inch.ToString()
                 },
 
-                CategoriesIds =categories.Select(x=> x.Id).ToHashSet(),
+                Categories =categories.Select(x=> x.Id).ToHashSet(),
 
                 ManufacturersIds  = manufacturers.Select(x=>x.Id).ToHashSet(),
 

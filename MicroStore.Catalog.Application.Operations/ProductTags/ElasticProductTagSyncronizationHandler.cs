@@ -76,10 +76,10 @@ namespace MicroStore.Catalog.Application.Operations.ProductTags
                 }))
                 .Query(desc => desc
                     .Nested(nes => nes
-                    .Path(pt => pt.ProductCategories)
+                    .Path(pt => pt.Categories)
                     .Query(qr => qr
                         .Match(mt => mt
-                            .Field(x => x.ProductCategories.First().Id)
+                            .Field(x => x.Categories.First().Id)
                             .Query(elasticEntity.Id)
                          )
                     )

@@ -3,7 +3,7 @@
 
     public class ElasticCreationAuditedEntity : ElasticEntity
     {
-        public DateTime CreatationTime { get; set; }
+        public DateTime CreationTime { get; set; }
         public string CreatorId { get; set; }
     }
 

@@ -14,7 +14,7 @@ namespace MicroStore.Catalog.Domain.Entities
         public double OldPrice { get; set; }
         public Weight Weight { get; set; }
         public Dimension Dimensions { get; set; }
-        public List<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
+        public List<Category> Categories { get; set; } = new List<Category>();
         public List<ProductManufacturer> ProductManufacturers { get; set; } = new List<ProductManufacturer>();
         public List<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
         public List<ProductTag> ProductTags { get; set; } = new List<ProductTag>();
