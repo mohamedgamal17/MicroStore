@@ -7,7 +7,7 @@ namespace MicroStore.Catalog.Application.Abstractions.ProductTags.Internals
     {
         public ProductTagProfile()
         {
-            CreateMap<ProductTag, ProductTagDto>();
+            CreateMap<Tag, ProductTagDto>();
         }
 
     }

@@ -10,9 +10,9 @@ using Volo.Abp.ObjectMapping;
 namespace MicroStore.Catalog.Application.Operations.ProductTags
 {
     public class ProductTagEventHandler :
-        ILocalEventHandler<EntityCreatedEventData<ProductTag>>,
-        ILocalEventHandler<EntityUpdatedEventData<ProductTag>>,
-        ILocalEventHandler<EntityDeletedEventData<ProductTag>>,
+        ILocalEventHandler<EntityCreatedEventData<Tag>>,
+        ILocalEventHandler<EntityUpdatedEventData<Tag>>,
+        ILocalEventHandler<EntityDeletedEventData<Tag>>,
         ITransientDependency
 
     {
@@ -26,27 +26,27 @@ namespace MicroStore.Catalog.Application.Operations.ProductTags
             _publishEndPoint = publishEndPoint;
         }
 
-        public async Task HandleEventAsync(EntityCreatedEventData<ProductTag> eventData)
+        public async Task HandleEventAsync(EntityCreatedEventData<Tag> eventData)
         {
-            var eto = _objectMapper.Map<ProductTag, ProductTagEto>(eventData.Entity);
+            var eto = _objectMapper.Map<Tag, ProductTagEto>(eventData.Entity);
 
             var distributedEvent = new EntityCreatedEvent<ProductTagEto>(eto);
 
             await _publishEndPoint.Publish(distributedEvent);
         }
 
-        public async Task HandleEventAsync(EntityUpdatedEventData<ProductTag> eventData)
+        public async Task HandleEventAsync(EntityUpdatedEventData<Tag> eventData)
         {
-            var eto = _objectMapper.Map<ProductTag, ProductTagEto>(eventData.Entity);
+            var eto = _objectMapper.Map<Tag, ProductTagEto>(eventData.Entity);
 
             var distributedEvent = new EntityUpdatedEvent<ProductTagEto>(eto);
 
             await _publishEndPoint.Publish(distributedEvent);
         }
 
-        public async Task HandleEventAsync(EntityDeletedEventData<ProductTag> eventData)
+        public async Task HandleEventAsync(EntityDeletedEventData<Tag> eventData)
         {
-            var eto = _objectMapper.Map<ProductTag, ProductTagEto>(eventData.Entity);
+            var eto = _objectMapper.Map<Tag, ProductTagEto>(eventData.Entity);
 
             var distributedEvent = new EntityDeletedEvent<ProductTagEto>(eto);
 

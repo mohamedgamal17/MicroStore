@@ -260,7 +260,7 @@ namespace MicroStore.Catalog.Application.Products
                                     x => x.ShortDescription,
                                     x => x.Categories.First().Name,
                                     x => x.Manufacturers.First().Name,
-                                    x => x.ProductTags.First().Name
+                                    x => x.Tags.First().Name
                                )
                          )
                         .Like(new List<Like> { new Like(new LikeDocument() { Id = productId }) })

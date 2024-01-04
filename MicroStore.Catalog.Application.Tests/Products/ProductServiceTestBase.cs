@@ -91,25 +91,25 @@ namespace MicroStore.Catalog.Application.Tests.Products
             return data;
         }
 
-        public async Task<List<ProductTag>> CreateFakeProductTags()
+        public async Task<List<Tag>> CreateFakeProductTags()
         {
-            var insertedData = new List<ProductTag>
+            var insertedData = new List<Tag>
             {
-                new ProductTag { Name = Guid.NewGuid().ToString() },
-                new ProductTag { Name = Guid.NewGuid().ToString() },
-                new ProductTag { Name = Guid.NewGuid().ToString() },
+                new Tag { Name = Guid.NewGuid().ToString() },
+                new Tag { Name = Guid.NewGuid().ToString() },
+                new Tag { Name = Guid.NewGuid().ToString() },
             };
 
-            var unInsertedData = new List<ProductTag>
+            var unInsertedData = new List<Tag>
             {
-                new ProductTag { Name = Guid.NewGuid().ToString() },
-                new ProductTag { Name = Guid.NewGuid().ToString() },
-                new ProductTag { Name = Guid.NewGuid().ToString() },
+                new Tag { Name = Guid.NewGuid().ToString() },
+                new Tag { Name = Guid.NewGuid().ToString() },
+                new Tag { Name = Guid.NewGuid().ToString() },
             };
 
             await InsertMany(insertedData);
 
-            var data = new List<ProductTag>();
+            var data = new List<Tag>();
 
             data.AddRange(insertedData);
 

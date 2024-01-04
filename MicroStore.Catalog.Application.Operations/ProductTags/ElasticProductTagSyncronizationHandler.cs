@@ -28,16 +28,16 @@ namespace MicroStore.Catalog.Application.Operations.ProductTags
 
         public async Task Consume(ConsumeContext<EntityCreatedEvent<ProductTagEto>> context)
         {
-            var elasticEntity = _objectMapper.Map<ProductTagEto, ElasticProductTag>(context.Message.Entity);
+            var elasticEntity = _objectMapper.Map<ProductTagEto, ElasticTag>(context.Message.Entity);
 
             var response = await _elasticsearchClient.IndexAsync(elasticEntity);
         }
 
         public async Task Consume(ConsumeContext<EntityUpdatedEvent<ProductTagEto>> context)
         {
-            var elasticEntity = _objectMapper.Map<ProductTagEto, ElasticProductTag>(context.Message.Entity);
+            var elasticEntity = _objectMapper.Map<ProductTagEto, ElasticTag>(context.Message.Entity);
 
-             await _elasticsearchClient.IndexAsync<ElasticProductTag>(elasticEntity);
+             await _elasticsearchClient.IndexAsync<ElasticTag>(elasticEntity);
 
             var productQueryDescriptor = PrepareUpdateProductQueryDescriptor(elasticEntity);
 
@@ -46,21 +46,21 @@ namespace MicroStore.Catalog.Application.Operations.ProductTags
 
         public async Task Consume(ConsumeContext<EntityDeletedEvent<ProductTagEto>> context)
         {
-            var response = await _elasticsearchClient.DeleteAsync<ElasticProductTag>(context.Message.Entity.Id);
+            var response = await _elasticsearchClient.DeleteAsync<ElasticTag>(context.Message.Entity.Id);
         }
 
-        private UpdateByQueryRequestDescriptor<ElasticProduct> PrepareUpdateProductQueryDescriptor(ElasticProductTag elasticEntity)
+        private UpdateByQueryRequestDescriptor<ElasticProduct> PrepareUpdateProductQueryDescriptor(ElasticTag elasticEntity)
         {
             var queryDescriptor = new UpdateByQueryRequestDescriptor<ElasticProduct>(IndexName.From<ElasticProduct>())
                 .Script(new Script(new InlineScript
                 {
                     Source = @"
-                            for(int i =0; i< ctx._source.productTags.size(); i++)
+                            for(int i =0; i< ctx._source.tags.size(); i++)
                             {
-                                if(ctx._source.productTags[i].id == params.id)
+                                if(ctx._source.tags[i].id == params.id)
                                 {
-                                    ctx._source.productTags[i].name = params.name;
-                                    ctx._source.productTags[i].description = params.description;
+                                    ctx._source.tags[i].name = params.name;
+                                    ctx._source.tags[i].description = params.description;
                                     break;
                                 }
                             }

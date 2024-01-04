@@ -34,7 +34,7 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
                 return left.Id == right;
             });
 
-            product.ProductTags.OrderBy(x => x.Name).Should().Equal(model.ProductTags?.OrderBy(x => x), (left, right) =>
+            product.Tags.OrderBy(x => x.Name).Should().Equal(model.ProductTags?.OrderBy(x => x), (left, right) =>
             {
                 return left.Name == right;
             });
@@ -81,8 +81,8 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
                 .ForEach(manufacturerTuple =>  manufacturerTuple.First.AssertElasticProductManufacturer(manufacturerTuple.Second));
 
 
-            elasticProduct.ProductTags.OrderBy(x => x.Id)
-                .Zip(product.ProductTags.OrderBy(x => x.Id))
+            elasticProduct.Tags.OrderBy(x => x.Id)
+                .Zip(product.Tags.OrderBy(x => x.Id))
                 .ToList()
                 .ForEach(productTagTuple => productTagTuple.First.AssertElasticProductTag(productTagTuple.Second));
 
@@ -114,13 +114,13 @@ namespace MicroStore.Catalog.Application.Tests.Extensions
         }
 
 
-        public static void AssertProductTagModel(this ProductTag productTag, ProductTagModel model)
+        public static void AssertProductTagModel(this Tag productTag, ProductTagModel model)
         {
             productTag.Name.Should().Be(model.Name);
             productTag.Description.Should().Be(model.Description);
         }
 
-        public static void AssertElasticProductTag(this ElasticProductTag elasticProductTag, ProductTag productTag)
+        public static void AssertElasticProductTag(this ElasticTag elasticProductTag, Tag productTag)
         {
             elasticProductTag.Id.Should().Be(productTag.Id);
             elasticProductTag.Name.Should().Be(productTag.Name);

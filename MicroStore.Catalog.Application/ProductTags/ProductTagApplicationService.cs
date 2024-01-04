@@ -12,12 +12,12 @@ namespace MicroStore.Catalog.Application.ProductTags
 {
     public class ProductTagApplicationService : CatalogApplicationService , IProductTagApplicationService
     {
-        private readonly IRepository<ProductTag> _productTagRepository;
+        private readonly IRepository<Tag> _productTagRepository;
 
         private readonly ICatalogDbContext _catalogDbContext;
 
         private readonly ElasticsearchClient _elasticSearchClient;
-        public ProductTagApplicationService(IRepository<ProductTag> productTagRepository, ICatalogDbContext catalogDbContext, ElasticsearchClient elasticSearchClient)
+        public ProductTagApplicationService(IRepository<Tag> productTagRepository, ICatalogDbContext catalogDbContext, ElasticsearchClient elasticSearchClient)
         {
             _productTagRepository = productTagRepository;
             _catalogDbContext = catalogDbContext;
@@ -33,7 +33,7 @@ namespace MicroStore.Catalog.Application.ProductTags
                 return new Result<ProductTagDto>(validationResult.Exception);
             }
 
-            var productTag = new ProductTag
+            var productTag = new Tag
             {
                 Name = model.Name,
                 Description = model.Description,
@@ -41,32 +41,32 @@ namespace MicroStore.Catalog.Application.ProductTags
 
             await _productTagRepository.InsertAsync(productTag,cancellationToken: cancellationToken);
 
-            return ObjectMapper.Map<ProductTag, ProductTagDto>(productTag);
+            return ObjectMapper.Map<Tag, ProductTagDto>(productTag);
 
         }
 
-        public async Task<Result<ElasticProductTag>> GetAsync(string productTagId, CancellationToken cancellationToken = default)
+        public async Task<Result<ElasticTag>> GetAsync(string productTagId, CancellationToken cancellationToken = default)
         {
-            var response = await _elasticSearchClient.GetAsync<ElasticProductTag>(productTagId, cancellationToken);
+            var response = await _elasticSearchClient.GetAsync<ElasticTag>(productTagId, cancellationToken);
 
             if (!response.IsValidResponse)
             {
-                return new Result<ElasticProductTag>(new EntityNotFoundException(typeof(ElasticProductTag), productTagId));
+                return new Result<ElasticTag>(new EntityNotFoundException(typeof(ElasticTag), productTagId));
             }
            
             return response.Source!;
         }
 
-        public async Task<Result<List<ElasticProductTag>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<List<ElasticTag>>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var response = await _elasticSearchClient.SearchAsync<ElasticProductTag>(desc => desc
+            var response = await _elasticSearchClient.SearchAsync<ElasticTag>(desc => desc
                 .Query(qr => qr.MatchAll())
                 .Size(5000)
             );
 
             if (!response.IsValidResponse)
             {
-                return new List<ElasticProductTag>();
+                return new List<ElasticTag>();
             }
 
             return response.Documents.ToList();
@@ -79,7 +79,7 @@ namespace MicroStore.Catalog.Application.ProductTags
 
             if(productTag == null)
             {
-                return new Result<Unit>(new EntityNotFoundException(typeof(ProductTag), productTagId));
+                return new Result<Unit>(new EntityNotFoundException(typeof(Tag), productTagId));
             }
 
             await _productTagRepository.DeleteAsync(productTag, cancellationToken: cancellationToken);
@@ -93,7 +93,7 @@ namespace MicroStore.Catalog.Application.ProductTags
 
             if (productTag == null)
             {
-                return new Result<ProductTagDto>(new EntityNotFoundException(typeof(ProductTag), productTagId));
+                return new Result<ProductTagDto>(new EntityNotFoundException(typeof(Tag), productTagId));
             }
 
             var validationResult = await ValidateProductTag(model, cancellationToken: cancellationToken);
@@ -109,7 +109,7 @@ namespace MicroStore.Catalog.Application.ProductTags
 
             await _productTagRepository.UpdateAsync(productTag, cancellationToken: cancellationToken);
 
-            return ObjectMapper.Map<ProductTag, ProductTagDto>(productTag);
+            return ObjectMapper.Map<Tag, ProductTagDto>(productTag);
         }
 
         public async Task<Result<Unit>> ValidateProductTag(ProductTagModel model , string? productTagId = null, CancellationToken cancellationToken= default)

@@ -99,7 +99,7 @@ namespace MicroStore.Catalog.Application.Tests
 
             elasticClient.Indices.Delete(IndexName.From<ElasticManufacturer>());
 
-            elasticClient.Indices.Delete(IndexName.From<ElasticProductTag>());
+            elasticClient.Indices.Delete(IndexName.From<ElasticTag>());
 
             elasticClient.Indices.Delete(IndexName.From<ElasticSpecificationAttribute>());
 

@@ -19,7 +19,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Internals
                 .ForMember(x => x.Dimensions, opt => opt.MapFrom(c => c.Dimensions))
                 .ForMember(x => x.Categories, opt => opt.MapFrom(c => c.Categories))
                 .ForMember(x => x.Manufacturers, opt => opt.MapFrom(c => c.Manufacturers))
-                .ForMember(x => x.ProductTags, opt => opt.MapFrom(c => c.ProductTags))
+                .ForMember(x => x.ProductTags, opt => opt.MapFrom(c => c.Tags))
                 .ForMember(x => x.SpecificationAttributes, opt => opt.MapFrom(c => c.SpecificationAttributes));
 
             CreateMap<Category, ProductCategoryDto>()

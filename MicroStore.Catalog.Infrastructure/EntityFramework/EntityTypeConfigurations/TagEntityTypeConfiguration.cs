@@ -4,9 +4,9 @@ using MicroStore.Catalog.Domain.Entities;
 
 namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurations
 {
-    public class ProductTagEntityTypeConfiguration : IEntityTypeConfiguration<ProductTag>
+    public class TagEntityTypeConfiguration : IEntityTypeConfiguration<Tag>
     {
-        public void Configure(EntityTypeBuilder<ProductTag> builder)
+        public void Configure(EntityTypeBuilder<Tag> builder)
         {
             builder.Property(x => x.Name).HasMaxLength(256);
 

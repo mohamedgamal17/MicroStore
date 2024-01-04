@@ -15,14 +15,14 @@ namespace MicroStore.Catalog.Application.Products
     {
         private readonly IRepository<Product> _productRepository;
 
-        private readonly IRepository<ProductTag> _productTagRepository;
+        private readonly IRepository<Tag> _productTagRepository;
 
         private readonly IRepository<SpecificationAttribute> _specificationAttributeRepository;
 
         private readonly IRepository<Category> _categoryRepository;
 
         private readonly IRepository<Manufacturer> _manufacturerRepository;
-        public ProductCommandService(IRepository<Product> productRepository, IRepository<ProductTag> productTagRepository, IRepository<SpecificationAttribute> specificationAttributeRepository, IRepository<Category> categoryRepository, IRepository<Manufacturer> manufacturerRepository)
+        public ProductCommandService(IRepository<Product> productRepository, IRepository<Tag> productTagRepository, IRepository<SpecificationAttribute> specificationAttributeRepository, IRepository<Category> categoryRepository, IRepository<Manufacturer> manufacturerRepository)
         {
             _productRepository = productRepository;
             _productTagRepository = productTagRepository;
@@ -113,7 +113,7 @@ namespace MicroStore.Catalog.Application.Products
 
             if(model.ProductTags != null)
             {
-                product.ProductTags = await PrepareProductTags(model.ProductTags, cancellationToken);
+                product.Tags = await PrepareProductTags(model.ProductTags, cancellationToken);
             }
 
             if(model.ProductImages != null)
@@ -131,13 +131,13 @@ namespace MicroStore.Catalog.Application.Products
             }
         }
 
-        private async Task<List<ProductTag>> PrepareProductTags(HashSet<string> tags, CancellationToken cancellationToken )
+        private async Task<List<Tag>> PrepareProductTags(HashSet<string> tags, CancellationToken cancellationToken )
         {
             var productTags = await _productTagRepository.GetListAsync(x => tags.Contains(x.Name), cancellationToken: cancellationToken);
 
             foreach (var tag in tags.Where(x => !productTags.Select(c => c.Name).Contains(x)))
             {
-                productTags.Add(new ProductTag { Name = tag });
+                productTags.Add(new Tag { Name = tag });
             }
 
             return productTags;

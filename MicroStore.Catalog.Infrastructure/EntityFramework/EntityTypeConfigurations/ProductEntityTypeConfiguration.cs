@@ -80,7 +80,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.HasMany(x => x.ProductImages).WithOne().HasForeignKey(x=> x.ProductId);
 
-            builder.HasMany(x => x.ProductTags).WithMany(x=> x.Products);
+            builder.HasMany(x => x.Tags).WithMany(x=> x.Products);
 
             builder.HasMany(x => x.SpecificationAttributes).WithOne().HasForeignKey(x=> x.ProductId).OnDelete(DeleteBehavior.Cascade);
 
@@ -94,7 +94,7 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Navigation(x => x.ProductImages).AutoInclude();
 
-            builder.Navigation(x => x.ProductTags).AutoInclude();
+            builder.Navigation(x => x.Tags).AutoInclude();
 
             builder.Navigation(x => x.SpecificationAttributes).AutoInclude();
 

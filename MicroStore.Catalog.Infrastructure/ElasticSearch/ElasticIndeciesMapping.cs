@@ -54,9 +54,9 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
         }
 
 
-        public static CreateIndexRequestDescriptor<ElasticProductTag> ElasticProductTagMappings(string indexName)
+        public static CreateIndexRequestDescriptor<ElasticTag> ElasticProductTagMappings(string indexName)
         {
-            return new CreateIndexRequestDescriptor<ElasticProductTag>(IndexName.From<ElasticProductTag>())
+            return new CreateIndexRequestDescriptor<ElasticTag>(IndexName.From<ElasticTag>())
                 .Mappings(mp => mp
                     .Properties(pr => pr
                         .Text(x => x.Name)
@@ -124,11 +124,11 @@ namespace MicroStore.Catalog.Infrastructure.ElasticSearch
                                 .Text(x => x.Manufacturers.First().Description)
                             )
                         )
-                        .Nested(x => x.ProductTags, cfg => cfg
+                        .Nested(x => x.Tags, cfg => cfg
                             .Properties(prx => prx
-                                .Keyword(x => x.ProductTags.First().Id)
-                                .Keyword(x => x.ProductTags.First().Name)
-                                .Text(x => x.ProductTags.First().Description)
+                                .Keyword(x => x.Tags.First().Id)
+                                .Keyword(x => x.Tags.First().Name)
+                                .Text(x => x.Tags.First().Description)
                             )
                         )
                         .Nested(x => x.ProductImages, cfg => cfg

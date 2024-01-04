@@ -8,7 +8,7 @@ namespace MicroStore.Catalog.Application.Operations.ProductTags
     {
         public ProductTagProfile()
         {
-            CreateMap<ProductTag, ElasticProductTag>();
+            CreateMap<Tag, ElasticTag>();
         }
     }
 }

@@ -12,10 +12,10 @@ namespace MicroStore.Catalog.Application.Operations.Etos
         public double OldPrice { get; set; }
         public WeightEto Weight { get; set; }
         public DimensionEto Dimensions { get; set; }
-        public List<ProductCategoryEto> ProductCategories { get; set; }
-        public List<ProductManufacturerEto> ProductManufacturers { get; set; }
+        public List<ProductCategoryEto> Categories { get; set; }
+        public List<ProductManufacturerEto> Manufacturers { get; set; }
         public List<ProductImageEto> ProductImages { get; set; }
-        public List<ProductTagEto> ProductTags { get; set; }
+        public List<ProductTagEto> Tags { get; set; }
         public List<ProductSpecificationAttributeEto> SpecificationAttributes { get; set; }
     }
 

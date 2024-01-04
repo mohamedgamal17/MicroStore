@@ -8,9 +8,9 @@ namespace MicroStore.Catalog.Application.Operations.Mappers
     {
         public ProductTagMapper()
         {
-            CreateMap<ProductTag, ProductTagEto>();
+            CreateMap<Tag, ProductTagEto>();
 
-            CreateMap<ProductTagEto, ElasticProductTag>();
+            CreateMap<ProductTagEto, ElasticTag>();
         }
     }
 }

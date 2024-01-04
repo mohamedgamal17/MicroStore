@@ -16,7 +16,7 @@ namespace MicroStore.Catalog.Entities.ElasticSearch
         public List<ElasticProductCategory> Categories { get; set; }
         public List<ElasticProductManufacturer> Manufacturers { get; set; }
         public List<ElasticProductImage> ProductImages { get; set; }
-        public List<ElasticProductTag> ProductTags { get; set; }
+        public List<ElasticTag> Tags { get; set; }
         public List<ElasticProductSpecificationAttribute> SpecificationAttributes { get; set; }
 
         public ElasticProduct()
@@ -24,7 +24,7 @@ namespace MicroStore.Catalog.Entities.ElasticSearch
             Categories = new List<ElasticProductCategory>();
             Manufacturers = new List<ElasticProductManufacturer>();
             ProductImages = new List<ElasticProductImage>();
-            ProductTags = new List<ElasticProductTag>();
+            Tags = new List<ElasticTag>();
             SpecificationAttributes = new List<ElasticProductSpecificationAttribute>();
         }
     }

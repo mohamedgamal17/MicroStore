@@ -13,7 +13,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Common
 
         DbSet<ProductReview> ProductReviews { get; set; }
 
-        DbSet<ProductTag> ProductTags { get; set; }
+        DbSet<Tag> ProductTags { get; set; }
 
         DbSet<SpecificationAttribute> SpecificationAttributes { get; set; }
     }

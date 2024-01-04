@@ -137,21 +137,21 @@ namespace MicroStore.Catalog.Application.Operations.Products
                     Unit = Enum.Parse<DimensionUnit>(productEto.Dimensions.Unit)
                 },
 
-                Categories = productEto.ProductCategories?.Select(x => new ElasticProductCategory
+                Categories = productEto.Categories?.Select(x => new ElasticProductCategory
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description
                 }).ToList(),
 
-                Manufacturers = productEto.ProductManufacturers?.Select(x => new ElasticProductManufacturer
+                Manufacturers = productEto.Manufacturers?.Select(x => new ElasticProductManufacturer
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description
                 }).ToList(),
 
-                ProductTags = productEto.ProductTags?.Select(x => new ElasticProductTag
+                Tags = productEto.Tags?.Select(x => new ElasticTag
                 {
                     Id = x.Id,
                     Name = x.Name,

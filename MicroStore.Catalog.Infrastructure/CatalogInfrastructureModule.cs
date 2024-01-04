@@ -89,7 +89,7 @@ namespace MicroStore.Catalog.Infrastructure
                 .DefaultMappingFor<ElasticProduct>(m => m.IndexName(appsettings.ElasticSearch.ProductIndex))
                 .DefaultMappingFor<ElasticCategory>(m => m.IndexName(appsettings.ElasticSearch.CategoryIndex))
                 .DefaultMappingFor<ElasticManufacturer>(m => m.IndexName(appsettings.ElasticSearch.ManufacturerIndex))
-                .DefaultMappingFor<ElasticProductTag>(m => m.IndexName(appsettings.ElasticSearch.ProductTagIndex))
+                .DefaultMappingFor<ElasticTag>(m => m.IndexName(appsettings.ElasticSearch.ProductTagIndex))
                 .DefaultMappingFor<ElasticSpecificationAttribute>(m => m.IndexName(appsettings.ElasticSearch.SpecificationAttributeIndex))
                 .DefaultMappingFor<ElasticProductReview>(m => m.IndexName(appsettings.ElasticSearch.ProductReviewIndex))
                 .DefaultMappingFor<ElasticProductExpectedRating>(m => m.IndexName(appsettings.ElasticSearch.ProductExpectedRatingIndex));
