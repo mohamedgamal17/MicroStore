@@ -40,6 +40,7 @@
 
   <ItemGroup>
 		<Protobuf Include="Protos\category.proto" AdditionalImportDirs="\protos" GrpcServices="Server" />
+		<Protobuf Include="Protos\manufacturer.proto" AdditionalImportDirs="\protos" GrpcServices="Server" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />

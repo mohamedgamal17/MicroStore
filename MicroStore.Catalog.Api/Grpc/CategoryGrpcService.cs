@@ -16,7 +16,7 @@ namespace MicroStore.Catalog.Api.Grpc
         public CategoryGrpcService(ICategoryCommandService catalogCommandService, ICategoryQueryService catalogQueryService)
         {
             _catalogCommandService = catalogCommandService;
-            _catalogQueryService = catalogQueryService;
+            _catalogQueryService = catalogQueryService;           
         }
         public override async Task<CategoryResponse> Create(CreateCategoryRequest request, ServerCallContext context)
         {

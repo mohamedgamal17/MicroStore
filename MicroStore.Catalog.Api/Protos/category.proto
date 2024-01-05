@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "MicroStore.Catalog.Api.Grpc";
 
+import "google/protobuf/timestamp.proto";
+
 package CatalogApi;
 
 service CategoryService{
