@@ -63,6 +63,11 @@ namespace MicroStore.Catalog.Api.Controllers
 
             var result = await _productCommandService.CreateAsync(model);
 
+            if (result.IsFailure)
+            {
+                return result.ToFailure();
+            }
+
             return result.ToCreatedAtAction(nameof(GetCatalogProduct), new { id = result.Value?.Id });
         }
 

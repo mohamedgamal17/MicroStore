@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroStore.Catalog.Api.Grpc";
+
+import "Protos/error.proto";
+
+package CatalogApi;
+
+service CategoryService{
+	rpc Create(CreateCategoryRequest) returns(CategoryResponse);
+	rpc Update(UpdateCategoryRequest) returns(CategoryResponse);
+	rpc GetList(CategoryListRequest) returns(ListCategoryResponse);
+	rpc GetById(GetByIdRequest) returns (CategoryResponse);
+}
+
+message CreateCategoryRequest{
+	string name = 1;
+	string description = 2;
+}
+
+message UpdateCategoryRequest{
+	string id = 1;
+    string name = 2;
+	string description = 3;
+}
+
+message CategoryListRequest{
+	string name= 1;
+	string sortBy = 2;
+	bool desc= 3;
+}
+
+message GetByIdRequest{
+	string id = 1;
+}
+
+message CategoryResponse
+{
+	string id = 1;
+	string name = 2;
+	optional string description = 3;
+	optional google.protobuf.Timestamp createdAt = 4;
+	optional string creatorId= 5;
+}
+
+message CategoryPagedResponse
+{
+	repeated  CategoryResponse items =1;
+	int32 skip =  2;
+	int32 length = 3;
+	int32 totalCount = 4;
+}
+
+message ListCategoryResponse{
+	repeated CategoryResponse data =1;
+}
+
+
+
+
+

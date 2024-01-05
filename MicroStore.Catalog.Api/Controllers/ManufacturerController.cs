@@ -59,6 +59,11 @@ namespace MicroStore.Catalog.Api.Controllers
 
             var result = await _manufacturerCommandService.CreateAsync(model);
 
+            if (result.IsFailure)
+            {
+                return result.ToFailure();
+            }
+
             return result.ToCreatedAtAction("GetManufacturerList", new { id = result.Value?.Id });
         }
 
@@ -66,7 +71,6 @@ namespace MicroStore.Catalog.Api.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ManufacturerDto)))]
         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
-
         public async Task<IActionResult> UpdateManufacturer(string id , ManufacturerModel model)
         {
             var validationResult = await ValidateModel(model);

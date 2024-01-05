@@ -20,9 +20,10 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
                 {
                     Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
                     Title = "Invalid entity state",
-                    Detail = ex.Message
+                    Detail = ex.Message,
+                    
                 }),
-
+                
                 EntityNotFoundException ex =>  new NotFoundObjectResult (new ProblemDetails
                 {
                     Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",

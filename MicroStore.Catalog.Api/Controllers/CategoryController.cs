@@ -60,13 +60,18 @@ namespace MicroStore.Catalog.Api.Controllers
 
             var result = await _categoryCommandService.CreateAsync(model);
 
+            if (result.IsFailure)
+            {
+                return result.ToFailure();
+            }
+
             return result.ToCreatedAtAction(nameof(GetCatalogCategory), routeValues : new { id = result.Value.Id });
         }
 
         [Route("{id}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDto))]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> Put(string id, [FromBody] CategoryModel model)
         {
             var validationResult = await ValidateModel(model);

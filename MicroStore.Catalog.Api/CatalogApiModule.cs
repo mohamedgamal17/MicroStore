@@ -6,12 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.Catalog.Api.Grpc;
 using MicroStore.Catalog.Api.Infrastructure;
 using MicroStore.Catalog.Api.OpenApi;
 using MicroStore.Catalog.Application;
 using MicroStore.Catalog.Domain.Configuration;
 using MicroStore.Catalog.Infrastructure;
 using MicroStore.Catalog.Infrastructure.EntityFramework;
+using ProtoBuf.Grpc.Server;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
@@ -70,6 +72,8 @@ namespace MicroStore.Catalog.Api
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+
+            context.Services.AddCodeFirstGrpc();
 
         }
 
@@ -157,8 +161,10 @@ namespace MicroStore.Catalog.Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseAbpSerilogEnrichers();
-            app.UseConfiguredEndpoints();
-            //app.MapControllers();
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<CategoryGrpcService>();
+            });
         }
     }
 
