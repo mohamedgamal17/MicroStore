@@ -2,8 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "MicroStore.Catalog.Api.Grpc";
 
-import "Protos/error.proto";
-
 package CatalogApi;
 
 service CategoryService{
