@@ -8,7 +8,7 @@ namespace MicroStore.Catalog.Application.Abstractions.ProductTags
         Task<Result<ProductTagDto>> CreateAsync(ProductTagModel model, CancellationToken cancellationToken = default);
         Task<Result<ProductTagDto>> UpdateAsync(string productTagId, ProductTagModel productTag, CancellationToken cancellationToken = default);
         Task<Result<Unit>> RemoveAsync(string productTagId, CancellationToken cancellationToken = default);
-        Task<Result<List<ElasticTag>>> ListAsync(CancellationToken cancellationToken = default);
-        Task<Result<ElasticTag>> GetAsync(string productTagId, CancellationToken cancellationToken = default);
+        Task<Result<List<ProductTagDto>>> ListAsync(CancellationToken cancellationToken = default);
+        Task<Result<ProductTagDto>> GetAsync(string productTagId, CancellationToken cancellationToken = default);
     }
 }

@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Protos\tag.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
     <PackageReference Include="IdentityModel" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
@@ -41,6 +45,7 @@
   <ItemGroup>
 		<Protobuf Include="Protos\category.proto" AdditionalImportDirs="\protos" GrpcServices="Server" />
 		<Protobuf Include="Protos\manufacturer.proto" AdditionalImportDirs="\protos" GrpcServices="Server" />
+		<Protobuf Include="Protos\tag.proto" GrpcServices="Server" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />

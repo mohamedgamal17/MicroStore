@@ -45,19 +45,19 @@ namespace MicroStore.Catalog.Application.ProductTags
 
         }
 
-        public async Task<Result<ElasticTag>> GetAsync(string productTagId, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductTagDto>> GetAsync(string productTagId, CancellationToken cancellationToken = default)
         {
             var response = await _elasticSearchClient.GetAsync<ElasticTag>(productTagId, cancellationToken);
 
             if (!response.IsValidResponse)
             {
-                return new Result<ElasticTag>(new EntityNotFoundException(typeof(ElasticTag), productTagId));
+                return new Result<ProductTagDto>(new EntityNotFoundException(typeof(ElasticTag), productTagId));
             }
            
-            return response.Source!;
+            return ObjectMapper.Map<ElasticTag, ProductTagDto>(response.Source!);
         }
 
-        public async Task<Result<List<ElasticTag>>> ListAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<List<ProductTagDto>>> ListAsync(CancellationToken cancellationToken = default)
         {
             var response = await _elasticSearchClient.SearchAsync<ElasticTag>(desc => desc
                 .Query(qr => qr.MatchAll())
@@ -66,11 +66,12 @@ namespace MicroStore.Catalog.Application.ProductTags
 
             if (!response.IsValidResponse)
             {
-                return new List<ElasticTag>();
+                return new List<ProductTagDto>();
             }
 
-            return response.Documents.ToList();
+            var result = response.Documents.ToList();
 
+            return ObjectMapper.Map<List<ElasticTag>, List<ProductTagDto>>(result);
         }
 
         public async Task<Result<Unit>> RemoveAsync(string productTagId, CancellationToken cancellationToken = default)

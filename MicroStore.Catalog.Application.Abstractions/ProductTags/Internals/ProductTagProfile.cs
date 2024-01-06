@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 
 namespace MicroStore.Catalog.Application.Abstractions.ProductTags.Internals
 {
@@ -8,6 +9,9 @@ namespace MicroStore.Catalog.Application.Abstractions.ProductTags.Internals
         public ProductTagProfile()
         {
             CreateMap<Tag, ProductTagDto>();
+
+            CreateMap<ElasticTag, ProductTagDto>();
+
         }
 
     }
