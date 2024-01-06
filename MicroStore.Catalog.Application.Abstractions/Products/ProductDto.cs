@@ -16,8 +16,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Products
         public DimensionModel Dimensions { get; set; }
         public List<ProductCategoryDto> Categories { get; set; }
         public List<ProductManufacturerDto> Manufacturers { get; set; }
-        public List<ProductImageDto> ProductImages { get; set; }
-        public List<ProductTagDto> ProductTags { get; set; }
-        public List<ProductSpecificationAttributeDto> SpecificationAttributes { get; set; }
+        public List<ProductImageDto> Images { get; set; }
+        public List<ProductTagDto> Tags { get; set; }
     }
 }

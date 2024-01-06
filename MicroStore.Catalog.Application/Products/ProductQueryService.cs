@@ -9,6 +9,7 @@ using MicroStore.Catalog.Application.Abstractions.Products;
 using MicroStore.Catalog.Application.Extensions;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.Validation;
 namespace MicroStore.Catalog.Application.Products
 {
@@ -27,56 +28,70 @@ namespace MicroStore.Catalog.Application.Products
             _elasticSearchClient = elasticSearchClient;
         }
 
-        public async Task<Result<ElasticProduct>> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductDto>> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            var response = await _elasticSearchClient.GetAsync<ElasticProduct>(id);
+            var result = await _elasticSearchClient.GetAsync<ElasticProduct>(id);
 
-            if (!response.IsValidResponse)
+            if (!result.IsValidResponse)
             {
-                return new Result<ElasticProduct>(new EntityNotFoundException(typeof(ElasticProduct), id));
+                return new Result<ProductDto>(new EntityNotFoundException(typeof(ElasticProduct), id));
             }
 
-            return response.Source!;
+            var proudct = ObjectMapper.Map<ElasticProduct, ProductDto>(result.Source!);
+
+            return proudct;
         }
 
 
-        public async Task<Result<PagedResult<ElasticProduct>>> ListAsync(ProductListQueryModel queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ProductDto>>> ListAsync(ProductListQueryModel queryParams, CancellationToken cancellationToken = default)
         {
-            var response = await _elasticSearchClient.SearchAsync(PreapreSearchRequestDescriptor(queryParams));
+            var result = await _elasticSearchClient.SearchAsync(PreapreSearchRequestDescriptor(queryParams));
 
-            if (!response.IsValidResponse)
+            if (!result.IsValidResponse)
             {
-                return new PagedResult<ElasticProduct>(new List<ElasticProduct>(), 0, 0, 0);
+                return new PagedResult<ProductDto>(new List<ProductDto>(), 0, 0, 0);
             }
 
-            return response.ToPagedResult(queryParams.Skip, queryParams.Length);
+            var paged = result.ToPagedResult(queryParams.Skip, queryParams.Length);
+
+            var response = new PagedResult<ProductDto>
+            {
+                Skip = paged.Skip,
+                Lenght = paged.Lenght,
+                TotalCount = paged.TotalCount,
+                Items = ObjectMapper.Map<List<ElasticProduct>, List<ProductDto>>(paged.Items.ToList())
+            };
+
+            return response;
         }
 
-        public async Task<Result<List<ElasticProductImage>>> ListProductImagesAsync(string productid, CancellationToken cancellationToken = default)
+        public async Task<Result<List<ProductImageDto>>> ListProductImagesAsync(string productid, CancellationToken cancellationToken = default)
         {
 
             var response = await _elasticSearchClient.GetAsync<ElasticProduct>(productid);
 
             if (!response.IsValidResponse)
             {
-                return new Result<List<ElasticProductImage>>(new EntityNotFoundException(typeof(ElasticProduct), productid));
+                return new Result<List<ProductImageDto>>(new EntityNotFoundException(typeof(ElasticProduct), productid));
             }
 
             var product = response.Source!;
 
-            return product.ProductImages;
+            var images = product.ProductImages;
+
+            return ObjectMapper.Map<List<ElasticProductImage>, List<ProductImageDto>>(images);
         }
 
-        public async Task<Result<PagedResult<ElasticProduct>>> SearchByImage(ProductSearchByImageQueryModel queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ProductDto>>> SearchByImage(ProductSearchByImageQueryModel queryParams, CancellationToken cancellationToken = default)
         {
             var featureResult = await _imageService.Descripe(queryParams.Image);
 
             if (featureResult.IsFailure)
             {
-                return new Result<PagedResult<ElasticProduct>>(featureResult.Exception);
+                return new Result<PagedResult<ProductDto>>(featureResult.Exception);
             }
 
-            var response = await _elasticSearchClient.SearchAsync<ElasticProduct>(sr => sr
+            var result = await _elasticSearchClient.SearchAsync<ElasticProduct>(sr => sr
                     .Knn(k => k
                         .Field(x => x.ProductImages.First().Features)
                         .QueryVector(featureResult.Value)
@@ -92,17 +107,27 @@ namespace MicroStore.Catalog.Application.Products
                 );
 
 
-            if (!response.IsValidResponse)
+            if (!result.IsValidResponse)
             {
-                return new PagedResult<ElasticProduct>(new List<ElasticProduct>(), 0, 0, 0);
+                return new PagedResult<ProductDto>(new List<ProductDto>(), 0, 0, 0);
             }
 
-            return response.ToPagedResult(queryParams.Skip,queryParams.Length);
+            var paged = result.ToPagedResult(queryParams.Skip,queryParams.Length);
+
+            var response = new PagedResult<ProductDto>
+            {
+                Skip = paged.Skip,
+                Lenght = paged.Lenght,
+                TotalCount = paged.TotalCount,
+                Items = ObjectMapper.Map<List<ElasticProduct>, List<ProductDto>>(paged.Items.ToList())
+            };
+
+            return response;
         }
 
 
 
-        public async Task<Result<PagedResult<ElasticProduct>>> GetUserRecommendation(string userId,
+        public async Task<Result<PagedResult<ProductDto>>> GetUserRecommendation(string userId,
             PagingQueryParams pagingParams, CancellationToken cancellationToken)
         {
             var (expectedProducts, count) = await GetUserRecommandedProduct(userId, pagingParams.Skip, pagingParams.Length);
@@ -124,22 +149,40 @@ namespace MicroStore.Catalog.Application.Products
                 .Size(pagingParams.Length)
             );
 
+            var paged = productsResponse.ToPagedResult(pagingParams.Skip, pagingParams.Length);
 
-            return new PagedResult<ElasticProduct>(productsResponse.Documents, count, pagingParams.Skip, pagingParams.Length);
+            var response = new PagedResult<ProductDto>
+            {
+                Skip = paged.Skip,
+                Lenght = paged.Lenght,
+                TotalCount = paged.TotalCount,
+                Items = ObjectMapper.Map<List<ElasticProduct>, List<ProductDto>>(paged.Items.ToList())
+            };
 
+            return response;
         }
 
 
-        public async Task<Result<PagedResult<ElasticProduct>>> GetSimilarItems(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<ProductDto>>> GetSimilarItems(string productId, PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
-            var response = await _elasticSearchClient.SearchAsync(PreapreSimilarItemsSearchQuery(productId, queryParams.Skip, queryParams.Length));
+            var result = await _elasticSearchClient.SearchAsync(PreapreSimilarItemsSearchQuery(productId, queryParams.Skip, queryParams.Length));
 
-            if (!response.IsValidResponse)
+            if (!result.IsValidResponse)
             {
-                return new PagedResult<ElasticProduct>(new List<ElasticProduct>(), 0, 0, 0);
+                return new PagedResult<ProductDto>(new List<ProductDto>(), 0, 0, 0);
             }
 
-            return response.ToPagedResult(queryParams.Skip, queryParams.Length);
+            var paged = result.ToPagedResult(queryParams.Skip, queryParams.Length);
+
+            var response = new PagedResult<ProductDto>
+            {
+                Skip = paged.Skip,
+                Lenght = paged.Lenght,
+                TotalCount = paged.TotalCount,
+                Items = ObjectMapper.Map<List<ElasticProduct>, List<ProductDto>>(paged.Items.ToList())
+            };
+
+            return response;
         }
 
 
@@ -151,7 +194,7 @@ namespace MicroStore.Catalog.Application.Products
                 .Query(qr => qr
                     .Bool(bl => bl
                         .Must(mt => mt
-                            .When(queryParams.Name != null, act => act
+                            .When(!string.IsNullOrEmpty(queryParams.Name), act => act
                                 .MatchPhrasePrefix(mt => mt
                                     .Field(x => x.Name)
                                     .Query(queryParams.Name!)
@@ -159,12 +202,12 @@ namespace MicroStore.Catalog.Application.Products
                             )
                         )
                         .Filter(flt => flt
-                            .When(queryParams.Category != null, act => act
+                            .When(!string.IsNullOrEmpty(queryParams.Category), act => act
                                 .Nested(cf=> cf.Path(p=> p.Categories).Query(nqr=> nqr
                                     .Term(x=> x.Categories.First().Name,queryParams.Category!)
                                 ))
                             )
-                            .When(queryParams.Manufacturer != null, act => act
+                            .When(!string.IsNullOrEmpty(queryParams.Manufacturer), act => act
                                 .Nested(cf => cf.Path(p => p.Manufacturers).Query(nqr => nqr
                                     .Term(x => x.Manufacturers.First().Name, queryParams.Manufacturer!)
                                 ))
@@ -278,13 +321,13 @@ namespace MicroStore.Catalog.Application.Products
 
         }
 
-        public async Task<Result<ElasticProductImage>> GetProductImageAsync(string productId, string imageId, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductImageDto>> GetProductImageAsync(string productId, string imageId, CancellationToken cancellationToken = default)
         {
             var response = await _elasticSearchClient.GetAsync<ElasticProduct>(productId);
 
             if (!response.IsValidResponse)
             {
-                return new Result<ElasticProductImage>(new EntityNotFoundException(typeof(ElasticProduct), productId));
+                return new Result<ProductImageDto>(new EntityNotFoundException(typeof(ElasticProduct), productId));
             }
 
             var product = response.Source!;
@@ -293,10 +336,10 @@ namespace MicroStore.Catalog.Application.Products
 
             if(productImage == null)
             {
-                return new Result<ElasticProductImage>(new EntityNotFoundException(typeof(ElasticProductImage)));
+                return new Result<ProductImageDto>(new EntityNotFoundException(typeof(ElasticProductImage)));
             }
 
-            return productImage;
+           return ObjectMapper.Map<ElasticProductImage, ProductImageDto>(productImage);
         }
     }
 
