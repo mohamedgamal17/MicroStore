@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Protos\profile.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
 		  <PrivateAssets>all</PrivateAssets>
@@ -28,11 +32,19 @@
 	  <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
 	  <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 	  <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
+	  <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.177" />
+	  <PackageReference Include="Google.Protobuf" Version="3.19.3" />
+	  <PackageReference Include="Grpc.Core" Version="2.42.0" />
+	  <PackageReference Include="Grpc.Tools" Version="2.42.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
     <ProjectReference Include="..\MicroStore.Profiling.Application\MicroStore.Profiling.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\profile.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>
