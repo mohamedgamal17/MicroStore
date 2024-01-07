@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "MicroStore.Geographic.Host.Grpc";
+
+package GeographicApi; 
+
+
+service StateProvinceService{
+	rpc Create(CreateStateProvinceRequest) returns(StateProvinceResponse);
+	rpc Update(UpdateStateProvinceRequest) returns(StateProvinceResponse);
+	rpc GetList(StateProvinceListRequest) returns (StateProvinceListResponse);
+	rpc GetById(GetStateProvinceByIdRequest) returns(StateProvinceResponse);
+	rpc GetByCode(GetStateProvinceByCodeRequest) returns(StateProvinceResponse);
+}
+
+message CreateStateProvinceRequest{
+	string countryId = 1;
+	string name = 2;
+	string abbrevation = 3;
+}
+
+message UpdateStateProvinceRequest{
+	string countryId = 1;
+	string stateProvinceId = 2;
+	string name = 3;
+	string abbrevation = 4; 
+}
+
+message StateProvinceListRequest{
+	string countryId = 1;
+}
+
+message GetStateProvinceByIdRequest{
+	string countryId = 1;
+	string stateProvinceId= 2;
+}
+
+message GetStateProvinceByCodeRequest{
+	string countryCode = 1;
+	string stateProvinceCode = 2;
+}
+
+message StateProvinceResponse{
+	string id = 1;
+	string name =2;
+	string abbrevation = 3;
+	optional google.protobuf.Timestamp createdAt = 4;
+}
+
+message StateProvinceListResponse{
+	repeated StateProvinceResponse items = 1;
+}
+
