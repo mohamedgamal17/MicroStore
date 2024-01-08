@@ -3,6 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "MicroStore.Catalog.Api.Grpc";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 package CatalogApi;
 
@@ -16,18 +17,18 @@ service ManufacturerService{
 
 message CreateManufacturerRequest{
 	string name = 1;
-	optional string description = 2;
+	google.protobuf.StringValue description = 2;
 }
 
 message UpdateManufacturerRequest{
 	string id= 1;
     string name =2;
-	optional string description = 3;
+	google.protobuf.StringValue description = 3;
 }
 
 message ManufacturerListRequest{
-	optional string name = 1;
-	optional string sortBy = 2;
+	google.protobuf.StringValue name = 1;
+	google.protobuf.StringValue sortBy = 2;
 	bool desc = 3;
 }
 
@@ -39,9 +40,9 @@ message GetManufacturerByIdRequest{
 message ManufacturerResponse{
 	string id = 1;
 	string name =2;
-	optional string description = 3;
+	google.protobuf.StringValue description = 3;
     optional google.protobuf.Timestamp createdAt = 4;
-	optional string creatorId= 5;
+	google.protobuf.StringValue creatorId= 5;
 }
 
 message ManufacturerListResponse{

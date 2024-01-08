@@ -5,7 +5,7 @@ namespace MicroStore.Catalog.Application.Abstractions.ProductTags
     public class ProductTagModel
     {
         public string Name { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 
     public class ProductTagModelValidator : AbstractValidator<ProductTagModel>
@@ -22,7 +22,7 @@ namespace MicroStore.Catalog.Application.Abstractions.ProductTags
             RuleFor(x => x.Description)
                 .MaximumLength(650)
                 .WithMessage("Description maximum lenght is 650")
-                .When(x => x.Description != null);
+                .When(x => !x.Description.IsNullOrEmpty());
         }
     }
 }

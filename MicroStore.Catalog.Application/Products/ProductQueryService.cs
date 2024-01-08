@@ -212,13 +212,13 @@ namespace MicroStore.Catalog.Application.Products
                                     .Term(x => x.Manufacturers.First().Name, queryParams.Manufacturer!)
                                 ))
                             )
-                            .When(queryParams.MinPrice != null || queryParams.MaxPrice != null, act => act
+                            .When(queryParams.MinPrice > -1 || queryParams.MaxPrice > -1, act => act
                                 .Range(rng => rng
                                     .NumberRange(numrang => numrang
-                                        .When(queryParams.MinPrice != null, act =>
+                                        .When(queryParams.MinPrice > -1, act =>
                                             act.Field(x => x.Price).Gte(queryParams.MinPrice!)
                                         )
-                                        .When(queryParams.MaxPrice != null, act =>
+                                        .When(queryParams.MaxPrice > -1, act =>
                                             act.Field(x => x.Price).Lte(queryParams.MaxPrice!)
                                         )
                                     )

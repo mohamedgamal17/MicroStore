@@ -7,8 +7,8 @@ namespace MicroStore.Catalog.Application.Abstractions.Products
         public string? Category { get; set; }
         public string? Manufacturer { get; set; }
         public string? Tag { get; set; }
-        public double? MinPrice { get; set; }
-        public double? MaxPrice { get; set; }
+        public double MinPrice { get; set; } = -1;
+        public double MaxPrice { get; set; } = -1;
         public bool IsFeatured { get; set; }
     }
 }

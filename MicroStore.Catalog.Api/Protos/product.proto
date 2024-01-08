@@ -3,6 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "MicroStore.Catalog.Api.Grpc";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 package CatalogApi;
 
@@ -21,8 +22,8 @@ service ProductService{
 message CreateProductRequest{
     string name = 1;
 	string sku = 2;
-	optional string shortDescription = 3;
-	optional string longDescription = 4;
+	google.protobuf.StringValue shortDescription = 3;
+	google.protobuf.StringValue longDescription = 4;
 	double price = 5;
 	double oldPrice = 6;
 	bool IsFeatured = 7;
@@ -39,8 +40,8 @@ message UpdateProductRequest{
 	string id = 1;
 	string name = 2;
 	string sku =3;
-	optional string shortDescription = 4;
-	optional string longDescription = 5;
+	google.protobuf.StringValue shortDescription = 4;
+	google.protobuf.StringValue longDescription = 5;
 	double price = 6;
 	double oldPrice = 7;
 	bool IsFeatured = 8;
@@ -70,16 +71,17 @@ message DeleteProductImageRequest{
 	string imageId = 2;
 }
 message ProductListRequest{
-	 optional string Name = 1;
-     optional string Category =2;
-     optional string Manufacturer = 3; 
-     optional string Tag  = 4;
+	 google.protobuf.StringValue Name = 1;
+     google.protobuf.StringValue Category =2;
+     google.protobuf.StringValue Manufacturer = 3; 
+     google.protobuf.StringValue Tag  = 4;
      optional double MinPrice = 5;
      optional double MaxPrice = 6;
      optional bool IsFeatured = 7;
 	 int32 skip =  8;
 	 int32 length = 9;
 	 optional string sortBy = 10;
+
 }
 
 message GetProductByIdRequest{
@@ -153,13 +155,13 @@ message Dimension{
 message ProductCategoryResponse{
 	string id= 1;
 	string name = 2;
-	string description = 3;
+	google.protobuf.StringValue description = 3;
 }
 
 message ProductManufacturerResponse{
 	string id = 1;
 	string name = 2;
-	string description = 3;
+	google.protobuf.StringValue description = 3;
 }
 
 message ProductTagResponse{

@@ -11,7 +11,7 @@ namespace MicroStore.Profiling.Application.Domain
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
         public Phone Phone { get; set; }
-        public string? Avatar { get; set; }
+        public string Avatar { get; set; } = string.Empty;
         public List<Address> Addresses { get; set; } = new List<Address>();
 
         public Profile()

@@ -47,7 +47,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = (typeof(ManufacturerDto)))]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+        //[Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> CreateManufacturer(ManufacturerModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -70,7 +70,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{id}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ManufacturerDto)))]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+        //[Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> UpdateManufacturer(string id , ManufacturerModel model)
         {
             var validationResult = await ValidateModel(model);

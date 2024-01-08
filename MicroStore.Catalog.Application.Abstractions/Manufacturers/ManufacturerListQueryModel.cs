@@ -3,6 +3,6 @@ namespace MicroStore.Catalog.Application.Abstractions.Manufacturers
 {
     public class ManufacturerListQueryModel : SortingQueryParams
     {
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

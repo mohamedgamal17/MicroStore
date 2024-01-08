@@ -5,7 +5,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Manufacturers
     public class ManufacturerModel
     {
         public string Name { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 
     internal class ManufacturerModelValidation : AbstractValidator<ManufacturerModel>
@@ -21,7 +21,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Manufacturers
             RuleFor(x => x.Description)
                 .MaximumLength(500)
                 .WithMessage("Description maximum lenght is 500")
-                .When(x => x != null);
+                .When(x => !x.Description.IsNullOrEmpty());
         }
     }
 }

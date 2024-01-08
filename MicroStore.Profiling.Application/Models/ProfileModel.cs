@@ -12,7 +12,7 @@ namespace MicroStore.Profiling.Application.Models
         public DateTime BirthDate { get; set; }
         public string Gender { get; set; }
         public string Phone { get; set; }
-        public string? Avatar { get; set; }
+        public string Avatar { get; set; } = string.Empty;
         public List<AddressModel>? Addresses { get; set; }
     }
 

@@ -16,7 +16,10 @@ namespace MicroStore.Catalog.Infrastructure.EntityFramework.EntityTypeConfigurat
 
             builder.Property(x => x.ReviewText).HasMaxLength(600);
 
-            builder.Property(x => x.ReplayText).IsRequired(false).HasMaxLength(600);
+            builder.Property(x => x.ReplayText)
+                .IsRequired(false)
+                .HasMaxLength(600)
+                .HasDefaultValue(string.Empty);
 
             builder.Property(x => x.UserId).HasMaxLength(256);
 

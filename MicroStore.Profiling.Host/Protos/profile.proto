@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
-
+import "google/protobuf/wrappers.proto";
 option csharp_namespace = "MicroStore.Profiling.Host.Grpc";
 
 package ProfilingApi;
@@ -29,7 +29,7 @@ message ProfileRequest{
     optional google.protobuf.Timestamp birthDate = 5;
     Gender gender = 6;
     string phone = 7;
-    string avatar = 8;
+    google.protobuf.StringValue avatar = 8;
 }
 message CreateAddressRequest{
    string userId =1;
@@ -84,7 +84,7 @@ message ProfileResponse{
     optional google.protobuf.Timestamp birthDate = 5;
     Gender gender = 6;
     string phone = 7;
-    string avatar = 8;
+    google.protobuf.StringValue avatar = 8;
     repeated AddressResponse addresses = 9;
     optional google.protobuf.Timestamp createdAt = 10;
 

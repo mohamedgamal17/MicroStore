@@ -15,7 +15,7 @@ namespace MicroStore.Catalog.Domain.Entities
 
         public int Rating { get; set; }
 
-        public string? ReplayText { get; set; }
+        public string ReplayText { get; set; } 
 
         public Product Product { get; set; }
 

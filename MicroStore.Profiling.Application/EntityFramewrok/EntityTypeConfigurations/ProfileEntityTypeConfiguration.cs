@@ -16,7 +16,10 @@ namespace MicroStore.Profiling.Application.EntityFramewrok.EntityTypeConfigurati
 
             builder.Property(x=> x.LastName).HasMaxLength(256);
 
-            builder.Property(x => x.Avatar).HasMaxLength(800).IsRequired(false);
+            builder.Property(x => x.Avatar)
+                .HasMaxLength(800)
+                .IsRequired(false)
+                .HasDefaultValue(string.Empty);
 
             builder.OwnsOne(x => x.Phone, phoneNavigationBuilder =>
             {

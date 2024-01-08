@@ -1,8 +1,8 @@
 syntax = "proto3";
 
 option csharp_namespace = "MicroStore.Catalog.Api.Grpc";
-
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 package CatalogApi;
 
@@ -15,13 +15,13 @@ service TagService{
 
 message CreateTagRequest{
 	string name= 1;
-	optional string description=2;
+	google.protobuf.StringValue description=2;
 }
 
 message UpdateTagRequest{
 	string id = 1;
 	string name =2;
-	optional string description=3;
+	google.protobuf.StringValue description=3;
 }
 
 message TagListRequest{}
@@ -32,10 +32,10 @@ message GetTagByIdRequest{
 
 message TagResponse{
 	string id = 1;
-	string name= 2;
-	optional string description = 3;
-	optional google.protobuf.Timestamp createdAt = 4;
-	optional string creatorId= 5;
+	google.protobuf.StringValue name= 2;
+	google.protobuf.StringValue description = 3;
+	google.protobuf.Timestamp createdAt = 4;
+	google.protobuf.StringValue creatorId= 5;
 }
 
 message TagListResponse{

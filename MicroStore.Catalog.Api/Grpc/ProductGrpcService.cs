@@ -80,6 +80,8 @@ namespace MicroStore.Catalog.Api.Grpc
                 SortBy = request.SortBy
             };
 
+          
+
             var validationResult = await ValidateModel(model);
 
             if (!validationResult.IsValid)

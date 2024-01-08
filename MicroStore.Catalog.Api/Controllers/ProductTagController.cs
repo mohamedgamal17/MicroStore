@@ -37,7 +37,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpPost]
         [Route("")]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+     //   [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> CreateAsync(ProductTagModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -54,7 +54,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+       // [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> UpdateAsync(string id , ProductTagModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -71,7 +71,7 @@ namespace MicroStore.Catalog.Api.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+       // [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> DeleteAsync(string id)
         {
             var result = await _productTagApplicationService.RemoveAsync(id);

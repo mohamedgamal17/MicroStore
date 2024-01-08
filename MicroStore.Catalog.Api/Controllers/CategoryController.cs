@@ -48,7 +48,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CategoryDto))]
-        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+       // [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> Post([FromBody]CategoryModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -71,7 +71,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{id}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDto))]
-         [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+        //[Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> Put(string id, [FromBody] CategoryModel model)
         {
             var validationResult = await ValidateModel(model);

@@ -4,6 +4,6 @@ namespace MicroStore.Catalog.Application.Abstractions.Categories
 {
     public class CategoryListQueryModel : SortingQueryParams
     {
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }
