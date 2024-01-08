@@ -10,10 +10,10 @@ namespace MicroStore.Shipping.Domain.Entities
         public string OrderNumber { get; set; }
         public string UserId { get; set; }
         public Address Address { get; set; }
-        public string? ShipmentExternalId { get;  set; }
-        public string? ShipmentLabelExternalId { get;  set; }
-        public string? TrackingNumber { get;  set; }
-        public string? SystemName { get;  set; }
+        public string ShipmentExternalId { get; set; } = string.Empty;
+        public string ShipmentLabelExternalId { get; set; } = string.Empty;
+        public string TrackingNumber { get; set; } = string.Empty;
+        public string SystemName { get; set; } = string.Empty;
         public ShipmentStatus Status { get;  set; }
         public List<ShipmentItem> Items { get; set; } = new List<ShipmentItem>();     
 

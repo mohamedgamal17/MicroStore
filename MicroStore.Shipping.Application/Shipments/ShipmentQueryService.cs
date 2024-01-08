@@ -119,7 +119,7 @@ namespace MicroStore.Shipping.Application.Shipments
                 query = query.Where(x => x.TrackingNumber.ToLower().Contains(tracknumber));
             }
 
-            if (model.Status != null)
+            if (model.Status != -1)
             {
                 var state = (ShipmentStatus)model.Status;
 
@@ -131,15 +131,15 @@ namespace MicroStore.Shipping.Application.Shipments
                 query = query.Where(x => x.Address.CountryCode == model.Country);
             }
 
-            if(model.StartDate != null)
+            if(model.StartDate != DateTime.MinValue)
             {
-                var startDate = model.StartDate.Value;
+                var startDate = model.StartDate;
                 query = query.Where(x => x.CreationTime >= startDate);
             }
 
-            if (model.EndDate != null)
+            if (model.EndDate != DateTime.MinValue)
             {
-                var endDate = model.EndDate.Value;
+                var endDate = model.EndDate;
                 query = query.Where(x => x.CreationTime <= endDate);
             }
 
