@@ -12,14 +12,14 @@ namespace MicroStore.Payment.Application.Domain
         public double TaxCost { get; set; }
         public double ShippingCost { get; set; }
         public double TotalCost { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         public List<PaymentRequestProduct> Items { get; set; }
-        public string? PaymentGateway { get; private set; }
-        public string? TransctionId { get; private set; }
+        public string PaymentGateway { get; private set; } = string.Empty;
+        public string TransctionId { get; private set; } = string.Empty;
         public PaymentStatus State { get; private set; }
-        public DateTime? CapturedAt { get; private set; }
-        public DateTime? RefundedAt { get; set; }
-        public DateTime? FaultAt { get; private set; }
+        public DateTime CapturedAt { get; private set; } 
+        public DateTime RefundedAt { get; set; } 
+        public DateTime FaultAt { get; private set; } 
 
 
         public PaymentRequest()
@@ -86,7 +86,7 @@ namespace MicroStore.Payment.Application.Domain
             }
         }
 
-        public void MarkAsRefunded(DateTime refundedAt, string? description)
+        public void MarkAsRefunded(DateTime refundedAt, string description = "")
         {
             if (State == PaymentStatus.Payed)
             {

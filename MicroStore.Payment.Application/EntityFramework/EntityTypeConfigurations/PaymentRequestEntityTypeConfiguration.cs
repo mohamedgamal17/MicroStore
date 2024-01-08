@@ -19,10 +19,29 @@ namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfiguration
 
             builder.Property(x => x.UserId).HasMaxLength(265).IsRequired();
 
-            builder.Property(x => x.TransctionId).HasMaxLength(265);
+            builder.Property(x => x.TransctionId).HasMaxLength(265)
+                .IsRequired(false)
+                .HasDefaultValue(string.Empty);
 
-            builder.Property(x => x.Description).HasMaxLength(500);
-                
+            builder.Property(x => x.PaymentGateway).HasMaxLength(265)
+                .IsRequired(false)
+                .HasDefaultValue(string.Empty);
+
+            builder.Property(x => x.Description).HasMaxLength(500)
+                .IsRequired(false)
+                .HasDefaultValue(string.Empty);
+
+
+            builder.Property(x => x.CapturedAt)
+                .HasDefaultValue(DateTime.MinValue);
+
+
+            builder.Property(x => x.FaultAt)
+                .HasDefaultValue(DateTime.MinValue);
+
+            builder.Property(x => x.RefundedAt)
+                .HasDefaultValue(DateTime.MinValue);
+
             builder.HasIndex(x => x.OrderId).IsUnique();
 
             builder.HasIndex(x => x.OrderNumber).IsUnique();

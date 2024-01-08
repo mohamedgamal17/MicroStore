@@ -18,7 +18,10 @@ namespace MicroStore.Payment.Application.EntityFramework.EntityTypeConfiguration
 
             builder.Property(x => x.Name).HasMaxLength(300);
 
-            builder.Property(x => x.Thumbnail).HasMaxLength(500);
+            builder.Property(x => x.Thumbnail)
+                .HasMaxLength(500)
+                .IsRequired(false)
+                .HasDefaultValue(string.Empty);
 
             builder.HasIndex(x => x.ProductId);
 

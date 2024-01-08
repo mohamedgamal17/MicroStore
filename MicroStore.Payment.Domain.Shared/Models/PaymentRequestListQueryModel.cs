@@ -4,12 +4,12 @@ namespace MicroStore.Payment.Domain.Shared.Models
 {
     public class PaymentRequestListQueryModel : PagingAndSortingQueryParams
     {
-        public string? OrderNumber { get; set; }
-        public string? Status { get; set; }
-        public double? MinPrice { get; set; }
-        public double? MaxPrice { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public string OrderNumber { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public double MinPrice { get; set; } = -1;
+        public double MaxPrice { get; set; } = -1;
+        public DateTime StartDate { get; set; } = DateTime.MinValue;
+        public DateTime EndDate { get; set; } = DateTime.MinValue;
 
     }
 
@@ -35,7 +35,7 @@ namespace MicroStore.Payment.Domain.Shared.Models
             RuleFor(x => x.Status)
                 .Must((x) => _paymentStatus.Any(c => c.ToUpper() == x.ToUpper()))
                 .WithMessage("Invalid payment status")
-                .When(x => x.Status != null);
+                .When(x => !x.Status.IsNullOrEmpty());
         }
     }
 }

@@ -116,7 +116,7 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
         private IQueryable<PaymentRequest> ApplyFilter(IQueryable<PaymentRequest> query, PaymentRequestListQueryModel model , string? userId = null)
         {
-            if (userId != null)
+            if (!userId.IsNullOrEmpty())
             {
                 query = query.Where(x => x.UserId == userId);
             }
@@ -128,46 +128,45 @@ namespace MicroStore.Payment.Application.PaymentRequests
                 query = query.Where(x => x.OrderNumber.ToLower().Contains(orderNumber));
             }
 
-            if (model.Status != null)
+            if (!model.Status.IsNullOrEmpty())
             {
                 var status = Enum.Parse<PaymentStatus>(model.Status);
 
                 query = query.Where(x => x.State == status);
             }
 
-            if(model.MinPrice != null)
+            if(model.MinPrice  > -1)
             {
                 query = query.Where(x => x.TotalCost >= model.MinPrice);
             }
 
-            if(model.MaxPrice != null)
+            if(model.MaxPrice > -1)
             {
                 query= query.Where(x=>x.TotalCost <=model.MaxPrice);
             }
 
-            if (model.StartDate != null)
+            if (model.StartDate != DateTime.MinValue)
             {
-                var startDate = model.StartDate.Value;
+                var startDate = model.StartDate;
 
                 query = query.Where(x => x.CreationTime >= startDate);
             }
 
-            if(model.EndDate != null)
+            if(model.EndDate != DateTime.MinValue)
             {
-                var endDate = model.EndDate.Value;
+                var endDate = model.EndDate;
                 query = query.Where(x => x.CreationTime <= endDate);
             }
 
-            if(model.SortBy != null)
+            if(!model.SortBy.IsNullOrEmpty())
             {
-                query = TryToSort(query, model.SortBy, model.Desc);
+                query = TryToSort(query, model.SortBy!, model.Desc);
 
             }
             else
             {
                 query = query.OrderByDescending(x => x.CreationTime);
             }
-
 
             return query;
         }
