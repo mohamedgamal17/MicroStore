@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿    using FluentValidation;
 using FluentValidation.Results;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -83,6 +83,44 @@ namespace MicroStore.Payment.Api.Host.Grpc
 
             var result = await _paymentRequestCommandService.CompleteAsync(model);
 
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            return PreparePaymentResponse(result.Value);
+        }
+
+        public override async Task<PaymentListResponse> GetList(PaymentListRequest request, ServerCallContext context)
+        {
+            var model = PreparePaymentListQueryModel(request);
+
+            var validationResult = await ValidateModel(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.ThrowRpcException();
+            }
+
+            var result = await _paymentRequestQueryService.ListPaymentAsync(model);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            return PreparePaymentListResponse(result.Value);
+        }
+
+        public override async Task<PaymentResponse> GetById(GetPaymentByIdReqeust request, ServerCallContext context)
+        {
+            var result = await _paymentRequestQueryService.GetAsync(request.Id);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
             return PreparePaymentResponse(result.Value);
         }
         private CreatePaymentRequestModel PreparePaymentReqeustModel(CreatePaymentRequest request)
@@ -130,6 +168,26 @@ namespace MicroStore.Payment.Api.Host.Grpc
                 GatewayName = request.GatewayName
             };
         }
+
+        private PaymentRequestListQueryModel PreparePaymentListQueryModel(PaymentListRequest request)
+        {
+            var model = new PaymentRequestListQueryModel
+            {
+                OrderNumber = request.OrderNumber,
+                Status = request.Status,
+                MinPrice = request.MinPrice,
+                MaxPrice = request.MaxPrice,
+                Skip = request.Skip,
+                Length = request.Length,
+                SortBy = request.SortBy,
+                Desc = request.Desc,
+                StartDate = request.StartDate?.ToDateTime() ?? DateTime.MinValue,
+                EndDate = request.EndDate?.ToDateTime() ?? DateTime.MinValue,
+            };
+
+            return model;
+
+        }
         private PaymentResponse PreparePaymentResponse(PaymentRequestDto payment)
         {
             var response = new PaymentResponse
@@ -147,28 +205,18 @@ namespace MicroStore.Payment.Api.Host.Grpc
                 Status = payment.Status,
                 CreatedAt = payment.CreationTime.ToTimestamp(),
                 Description = payment.Description,
-                
+                CapturedAt = payment.CapturedAt.ToTimestamp(),
+                RefundedAt = payment.RefundedAt.ToTimestamp(),
+                FaultAt =payment.FaultAt.ToTimestamp()
+
             };
 
-            payment.Items.ForEach(product =>
+
+            payment.Items?.ForEach(product =>
             {
                 response.Items.Add(PreparePaymentProductRequest(product));
             });
 
-            if(payment.CapturedAt != null)
-            {
-                response.CapturedAt = payment.CapturedAt.Value.ToTimestamp();
-            }
-
-            if (payment.RefundedAt != null)
-            {
-                response.RefundedAt = payment.RefundedAt.Value.ToTimestamp();
-            }
-
-            if (payment.FaultAt != null)
-            {
-                response.FaultAt = payment.FaultAt.Value.ToTimestamp();
-            }
 
             return response;
         }
@@ -197,6 +245,7 @@ namespace MicroStore.Payment.Api.Host.Grpc
                 Length = paged.Lenght,
                 TotalCount = paged.TotalCount
             };
+
 
             foreach(var item in paged.Items)
             {

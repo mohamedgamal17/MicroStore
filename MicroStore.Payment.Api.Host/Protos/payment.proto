@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
-
+import "google/protobuf/wrappers.proto";
 
 
 option csharp_namespace = "MicroStore.Payment.Api.Host.Grpc";
@@ -24,10 +24,7 @@ message CreatePaymentRequest{
     double shippingCost = 6; 
     double totalCost = 7;
     string description = 8;
-    string paymentGateway = 9;
-    string transctionId =10;
-    string Status =11;
-    repeated PaymentProductRequest Items = 12;
+    repeated PaymentProductRequest Items = 9;
 }
 
 
@@ -35,7 +32,7 @@ message PaymentProductRequest{
     string productId = 2;
     string name = 3;
     string sku = 4;
-    string thumbnail = 5;
+    google.protobuf.StringValue thumbnail = 5;
     int32 quantity = 6;
     double unitPrice = 7;
 }
@@ -53,13 +50,16 @@ message CompletePaymentRequest{;
 }
 
 message PaymentListRequest{
-    string orderNumber = 1;
-    string Status = 2;
+    google.protobuf.StringValue orderNumber = 1;
+    google.protobuf.StringValue Status = 2;
     double minPrice = 3;
-    optional google.protobuf.Timestamp startDate = 4;
-    optional google.protobuf.Timestamp endDate = 5;
-    int32 skip = 6;
-    int32 length = 7;
+    double maxPrice = 4;
+    optional google.protobuf.Timestamp startDate = 5;
+    optional google.protobuf.Timestamp endDate = 6;
+    int32 skip = 7;
+    int32 length = 8;
+    string sortBy = 10;
+    bool desc = 11;
 }
 
 
@@ -74,8 +74,8 @@ message PaymentResponse{
     double shippingCost = 7; 
     double totalCost = 8;
     string description = 9;
-    string paymentGateway = 10;
-    string transctionId =11;
+    google.protobuf.StringValue paymentGateway = 10;
+    google.protobuf.StringValue transctionId =11;
     string Status =12;
     repeated PaymentItemResponse Items = 13;
     optional google.protobuf.Timestamp createdAt = 14;
