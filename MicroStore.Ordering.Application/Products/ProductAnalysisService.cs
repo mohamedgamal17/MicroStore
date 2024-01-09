@@ -126,12 +126,12 @@ namespace MicroStore.Ordering.Application.Products
                .AsNoTracking();
 
 
-            if(model.StartDate != null)
+            if(model.StartDate != DateTime.MinValue)
             {
                 query = query.Where(x=> x.Date >= model.StartDate);
             }
 
-            if(model.EndDate != null)
+            if(model.EndDate != DateTime.MinValue)
             {
                 query= query.Where(x=> x.Date <= model.EndDate);
             }

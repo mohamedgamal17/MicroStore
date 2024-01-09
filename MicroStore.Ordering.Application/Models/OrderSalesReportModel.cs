@@ -4,9 +4,9 @@ namespace MicroStore.Ordering.Application.Models
 {
     public class OrderSalesReportModel : PagingQueryParams
     {
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.MinValue;
+        public DateTime EndDate { get; set; } = DateTime.MinValue;
         public ReportPeriod Period { get; set; }
-        public string? Status { get; set; }
+        public string Status { get; set; }
     }
 }

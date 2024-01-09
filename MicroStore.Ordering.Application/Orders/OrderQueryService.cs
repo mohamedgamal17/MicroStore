@@ -117,17 +117,17 @@ namespace MicroStore.Ordering.Application.Orders
                 query = query.Where(x => states.Contains(x.CurrentState));
             }
 
-            if (model.StartSubmissionDate != null)
+            if (model.StartSubmissionDate != DateTime.MinValue)
             {
                 query = query.Where(x => x.SubmissionDate >= model.StartSubmissionDate);
             }
 
-            if (model.EndSubmissionDate != null)
+            if (model.EndSubmissionDate != DateTime.MinValue)
             {
                 query = query.Where(x => x.SubmissionDate <= model.EndSubmissionDate);
             }
 
-            if(model.OrderNumber != null)
+            if(!string.IsNullOrEmpty(model.OrderNumber))
             {
                 query = from order in query
                         where order.OrderNumber == model.OrderNumber

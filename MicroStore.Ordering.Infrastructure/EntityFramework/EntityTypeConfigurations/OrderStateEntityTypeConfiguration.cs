@@ -14,9 +14,14 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigura
 
             entity.Property(x => x.OrderNumber).HasMaxLength(265);
 
-            entity.Property(x => x.PaymentId).IsRequired(false).HasMaxLength(256);
+            entity.Property(x => x.PaymentId)
+                .IsRequired(false)
+                .HasMaxLength(256)
+                .HasDefaultValue(string.Empty);
 
-            entity.Property(x => x.ShipmentId).HasMaxLength(256);
+            entity.Property(x => x.ShipmentId)
+                .HasMaxLength(256)
+                .HasDefaultValue(string.Empty);
 
             entity.OwnsOne(x => x.ShippingAddress, navigationBuilder =>
             {
@@ -121,7 +126,11 @@ namespace MicroStore.Ordering.Infrastructure.EntityFramework.EntityTypeConfigura
                   .HasDefaultValue(string.Empty)
                   .HasMaxLength(100);
             });
-            entity.Property(x => x.CancellationReason).HasMaxLength(500);
+            entity.Property(x => x.CancellationReason)
+                .IsRequired(false)
+                .HasMaxLength(500)
+                .HasDefaultValue(string.Empty);
+
             entity.Property(x => x.CurrentState).HasMaxLength(256);
             entity.HasMany(x => x.OrderItems).WithOne();
             entity.HasIndex(x => x.UserId);
