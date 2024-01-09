@@ -21,7 +21,7 @@ namespace MicroStore.Ordering.Application.Orders
             _orderRepository = orderRepository;
         }
 
-        public async Task<Result<OrderSubmitedDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<OrderDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default)
         {
             var orderSubmitedEvent = new OrderSubmitedEvent
             {
@@ -105,7 +105,7 @@ namespace MicroStore.Ordering.Application.Orders
             if (order.CurrentState == OrderStatusConst.Cancelled)
             {
                 return new Result<Unit>(new BusinessException("order state is already canceled"));
-                 }
+            }
 
             var orderCancelledEvent = new OrderCancelledEvent
             {
@@ -120,22 +120,37 @@ namespace MicroStore.Ordering.Application.Orders
         }
 
 
-        private OrderSubmitedDto PrepareSubmitOrderResponse(OrderSubmitedEvent orderSubmitedEvent)
+        private OrderDto PrepareSubmitOrderResponse(OrderSubmitedEvent orderSubmitedEvent)
         {
-            return new OrderSubmitedDto
+            return new OrderDto
             {
 
                 Id = orderSubmitedEvent.OrderId,
                 OrderNumber = orderSubmitedEvent.OrderNumber,
-                ShippingAddress = orderSubmitedEvent.ShippingAddress,
-                BillingAddress = orderSubmitedEvent.BillingAddress,
+                ShippingAddress = PrepareAddress(orderSubmitedEvent.ShippingAddress),
+                BillingAddress = PrepareAddress(orderSubmitedEvent.BillingAddress),
                 UserId = orderSubmitedEvent.UserName,
                 ShippingCost = orderSubmitedEvent.ShippingCost,
                 TaxCost = orderSubmitedEvent.TaxCost,
                 SubTotal = orderSubmitedEvent.SubTotal,
                 TotalPrice = orderSubmitedEvent.TotalPrice,
                 SubmissionDate = orderSubmitedEvent.SubmissionDate,
-                OrderItems = orderSubmitedEvent.OrderItems
+            };
+        }
+
+        private AddressDto PrepareAddress(AddressModel model)
+        {
+            return new AddressDto
+            {
+                Name = model.Name,
+                CountryCode = model.CountryCode,
+                City = model.City,
+                State = model.State,
+                AddressLine1 = model.AddressLine1,
+                AddressLine2 = model.AddressLine2,
+                PostalCode = model.PostalCode,
+                Phone = model.Phone,
+                Zip = model.Zip
             };
         }
     }

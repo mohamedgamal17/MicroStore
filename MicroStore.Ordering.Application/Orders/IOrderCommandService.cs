@@ -6,7 +6,7 @@ namespace MicroStore.Ordering.Application.Orders
 {
     public interface IOrderCommandService : IApplicationService
     {
-        Task<Result<OrderSubmitedDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default);
+        Task<Result<OrderDto>> CreateOrderAsync(CreateOrderModel model, CancellationToken cancellationToken = default);
         Task<Result<Unit>> FullfillOrderAsync(Guid orderId,FullfillOrderModel model , CancellationToken cancellationToken = default);
         Task<Result<Unit>> CompleteOrderAsync(Guid orderId, CancellationToken cancellationToken = default);
         Task<Result<Unit>> CancelOrderAsync(Guid orderId, CancelOrderModel model, CancellationToken cancellationToken = default);

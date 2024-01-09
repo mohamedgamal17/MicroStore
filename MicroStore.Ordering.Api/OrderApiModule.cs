@@ -23,6 +23,7 @@ using MicroStore.Ordering.Application.Security;
 using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
+using MicroStore.Ordering.Api.Grpc;
 
 namespace MicroStore.Ordering.Api
 {
@@ -66,6 +67,8 @@ namespace MicroStore.Ordering.Api
                 opt.MapToStatusCode<HttpRequestException>(StatusCodes.Status502BadGateway);
 
             });
+
+            context.Services.AddGrpc();
         }
 
         private void ConfigureAuthentication(IServiceCollection services)
@@ -159,7 +162,10 @@ namespace MicroStore.Ordering.Api
             app.UseAuthorization();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
-
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<OrderGrpcService>();
+            });
             //app.MapControllers();
         }
     }

@@ -1,0 +1,115 @@
+syntax = "proto3";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "MicroStore.Ordering.Api.Grpc";
+
+service OrderService{
+    rpc Create(CreateOrderRequest) returns(OrderResponse);
+    rpc Fullfill(FullfillOrderRequest) returns(EmptyResponse);
+    rpc Complete(CompleteOrderReqeust) returns(EmptyResponse);
+    rpc Cancel(CancelOrderReqeust) returns(EmptyResponse);
+    rpc GetList(OrderListReqeust) returns(OrderListResponse);
+    rpc GetbyId(GetOrderByIdReqeuest) returns(OrderResponse);
+}
+
+message CreateOrderRequest{
+    string userId = 1;
+    Address shippingAddress= 2;
+    Address billingAddress = 3;
+    double shippingCost = 4; 
+    double taxCost = 5; 
+    double subTotal = 6;
+    double totalPrice = 7;
+    repeated OrderItemReqeust items = 8;
+} 
+
+message FullfillOrderRequest{
+    string orderId = 1;
+    string shipmentId = 2;
+}
+
+message CompleteOrderReqeust{
+    string orderId = 1;
+}
+
+message CancelOrderReqeust{
+    string orderId = 1;
+    string reason = 2;
+}
+
+
+
+message OrderItemReqeust{
+    string name =1;
+    string sku =2;
+    string productId =3;
+    string thumbnail =4;
+    int32 Quantity =5;
+    double UnitPrice =6;
+}
+
+message OrderListReqeust{
+    google.protobuf.StringValue orderNumber = 1;
+    google.protobuf.StringValue States =2;
+    google.protobuf.Timestamp startSubmissionDate = 3;
+    google.protobuf.Timestamp endSubmissionDate = 4;
+    int32 skip = 5;
+    int32 length = 6;
+    bool desc = 7;
+    google.protobuf.StringValue sortBy = 8;
+}
+
+message GetOrderByIdReqeuest{
+    string orderId= 1;
+}
+
+message OrderListResponse{
+    repeated OrderResponse items = 1;
+    int32 skip = 2;
+    int32 length = 3;
+    int64 totalCount = 4;
+}
+
+message OrderResponse{
+    string id =1;
+    string orderNumber = 2;
+    Address shippingAddress= 3;
+    Address billingAddress = 4;
+    string userId = 5;
+    google.protobuf.StringValue paymentId =6;
+    google.protobuf.StringValue shipmentId = 7;
+    double shippingCost = 8; 
+    double taxCost = 9; 
+    double subTotal = 10;
+    double totalPrice = 11;
+    google.protobuf.Timestamp submissionDate = 12;
+    google.protobuf.Timestamp shippedDate = 13;
+    string currentState =14;
+    repeated OrderItemResponse items = 15;
+}
+
+message OrderItemResponse{
+    string id =1;
+    string name =2;
+    string sku =3;
+    string productId =4;
+    string thumbnail =5;
+    int32 Quantity =6;
+    double UnitPrice =7;
+}
+
+message Address{
+     string name =1;
+     string Phone = 2;
+     string countryCode =3;
+     string stateProvince = 4;
+     string city= 5;
+     string postalCode =6;
+     string zip =7;
+     string AddressLine1 = 8;
+     string AddressLine2 = 9;
+}
+
+message EmptyResponse{
+
+}
