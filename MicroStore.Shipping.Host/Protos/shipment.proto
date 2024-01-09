@@ -1,0 +1,184 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroStore.Shipping.Host.Grpc";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package ShippingApi;
+
+
+service ShipmentService{
+    rpc Create(CreateShipmentReqeust) returns(ShipmentResponse);
+    rpc Fullfill(FullfillRequest) returns(ShipmentResponse);
+    rpc BuyLabel(BuyShipmentLabelRequest) returns(ShipmentResponse);
+    rpc GetRates(GetShipmentRateReqeust) returns(ShipmentRateListResponse);
+    rpc GetList(ShipmentListRequest) returns(ShipmentListResponse);
+    rpc GetById(GetShipmentById) returns(ShipmentResponse);
+}
+
+enum ShipmentStatus{
+     Created = 0;
+
+     Fullfilled = 5;
+
+     Shipping = 10;
+
+     Completed = 15;
+}
+
+enum WeightUnit{
+	Gram = 0;
+	Pound = 5;
+	KilogGram = 10;
+}
+
+enum DimensionUnit{
+	CentiMeter = 0;
+    Inch = 5;
+}
+
+message Weight{
+	double value = 1;
+	WeightUnit unit= 2;
+}
+
+message Dimension{
+	double width = 1;
+    double length = 2; 
+    double height = 3;
+	DimensionUnit unit = 4;
+}
+
+message CreateShipmentReqeust{
+    string orderId = 1;
+    string userId = 2;
+    string  orderNumber= 3;
+    AddressRequest address = 4;
+    repeated ShipmentItemResponse items = 5;
+}
+
+
+message ShipmentItemRequest{
+    string name =1;
+    string sku =2;
+    string productId =3;
+    string thumbnail =4;
+    int32 Quantity =5;
+    double UnitPrice =6;
+    Weight Weight =7;
+    Dimension Dimension = 8;
+}
+message AddressRequest{
+     string name =1;
+     string Phone = 2;
+     string countryCode =3;
+     string stateProvince = 4;
+     string city= 5;
+     string postalCode =6;
+     string zip =7;
+     string AddressLine1 = 8;
+     string AddressLine2 = 9;
+}
+
+message FullfillRequest{
+    string shipmentId= 1;
+     Weight Weight = 2;
+     Dimension Dimension =3;
+}
+
+message BuyShipmentLabelRequest{
+    string shipmentId= 1;
+    string shipmentRateId = 2;
+}
+
+message GetShipmentRateReqeust{
+    string shipmentId= 1;
+}
+
+message ShipmentListRequest{
+     google.protobuf.StringValue orderNumber = 1;
+     google.protobuf.StringValue trackingNumber =2;
+     int32 Status = 3;
+     google.protobuf.StringValue  country =4;
+     optional google.protobuf.Timestamp startDate = 5;
+     optional google.protobuf.Timestamp endDate =6;
+     int32 skip = 7;
+     int32 length = 8;
+     string sortBy = 9;
+     bool desc = 10;
+}
+
+message GetShipmentById{
+    string id = 1;
+}
+
+message ShipmentListResponse{
+    int32 skip = 1;
+    int32 length = 2;
+    int64 totalCount=  4;
+    repeated ShipmentResponse items =5;
+}
+
+message ShipmentResponse{
+	string id= 1;
+    string orderId = 2;
+    string userId = 3;
+    string  orderNumber= 4;
+    AddressResposne address = 5;
+    google.protobuf.StringValue  shipmentExternalId =6;
+    google.protobuf.StringValue  trackingNumber = 7;
+    google.protobuf.StringValue  shipmentLabelExternalId = 8;
+    google.protobuf.StringValue  systemName = 9;
+    ShipmentStatus status  = 10;
+    repeated ShipmentItemResponse items = 11;
+}
+
+message AddressResposne{
+	 string name =1;
+     string Phone = 2;
+     string countryCode =3;
+     string stateProvince = 4;
+     string city= 5;
+     string postalCode =6;
+     string zip =7;
+     string AddressLine1 = 8;
+     string AddressLine2 = 9;
+}
+
+message ShipmentItemResponse{
+    string id =1;
+    string name =2;
+    string sku =3;
+    string productId =4;
+    string thumbnail =5;
+    int32 Quantity =6;
+    double UnitPrice =7;
+    Weight Weight =8;
+    Dimension Dimension = 9;
+}
+
+
+message ShipmentRateListResponse{
+    repeated ShipmentRateResponse items =1;
+}
+
+message ShipmentRateResponse{
+     string carrierId = 1;
+     MoneyResponse amount = 2;
+     ServiceLevelResponse serviceLevel = 3;
+     int32 Days = 4;
+}
+
+message MoneyResponse {
+	double value = 1;
+	google.protobuf.StringValue currency = 2;
+}
+
+message ServiceLevelResponse{
+    string name = 1;
+    string code= 2;
+}
+
+
+

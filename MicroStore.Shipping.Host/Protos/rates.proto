@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+
+option csharp_namespace = "MicroStore.Shipping.Host.Grpc";
+import "google/protobuf/timestamp.proto";
+import "Protos/shipment.proto";
+
+package ShippingApi;
+
+service RateService{
+	rpc Estimate(EstimateShippingRateRequest) returns(RateListResponse);
+}
+
+
+message EstimateShippingRateRequest{
+	ShippingApi.AddressRequest address= 1;
+	repeated ShipmentItemEstimatedRequest items =2;
+}
+
+message  ShipmentItemEstimatedRequest{
+	 string name = 1;
+     string sku =2; 
+     ShippingApi.MoneyResponse unitPrice =3;
+     int32 quantity = 4;
+     ShippingApi.Weight weight = 5;
+}
+
+message RateListResponse{
+	repeated RateResponse items= 1;
+}
+
+message RateResponse{
+	string name=  1;
+	ShippingApi.MoneyResponse money = 2;
+	int32 estimatedDays= 3;
+    optional google.protobuf.Timestamp shippingDate = 6;
+}
+
+
+

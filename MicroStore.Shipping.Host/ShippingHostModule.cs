@@ -24,6 +24,7 @@ using MicroStore.Shipping.Application.Abstraction.Configuration;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.Shipping.Application;
 using MicroStore.Shipping.Infrastructure;
+using MicroStore.Shipping.Host.Grpc;
 
 namespace MicroStore.Shipping.Host
 {
@@ -73,6 +74,9 @@ namespace MicroStore.Shipping.Host
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+
+            context.Services.AddGrpc();
+
         }
 
         private void ConfigureAuthentication(IServiceCollection services)
@@ -149,6 +153,13 @@ namespace MicroStore.Shipping.Host
             app.UseAuthorization();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<ShipmentGrpcService>();
+                endpoints.MapGrpcService<RateGrpcService>();
+                endpoints.MapGrpcService<AddressGrpcService>();
+            });
+
         }
 
         public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
