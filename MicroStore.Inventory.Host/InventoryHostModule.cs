@@ -22,6 +22,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using MicroStore.Inventory.Host.OpenApi;
 using MicroStore.Inventory.Application;
 using MicroStore.Inventory.Infrastructure;
+using MicroStore.Inventory.Host.Grpc;
 
 namespace MicroStore.Inventory.Host
 {
@@ -62,6 +63,8 @@ namespace MicroStore.Inventory.Host
 
             context.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>()
                 .AddSwaggerGen();
+
+            context.Services.AddGrpc();
 
         }
         public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
@@ -140,8 +143,10 @@ namespace MicroStore.Inventory.Host
             app.UseAuthorization();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
-
-            //app.MapControllers();
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<InventoryItemGrpcService>();
+            });
         }
 
     }

@@ -1,0 +1,45 @@
+syntax = "proto3";
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "MicroStore.Inventory.Host.Grpc";
+
+package InventoryApi;
+
+service InventoryItemService{
+	rpc Update(UpdateInventoryItemRequest) returns(InventoryItemResponse);
+	rpc GetList(InventoryItemListRequest) returns(InventoryItemListResponse);
+	rpc GetById(GetInventoryItemByIdReqeust) returns(InventoryItemResponse);
+}
+
+
+message UpdateInventoryItemRequest{
+	string productId= 1;
+	int32 stock = 2;
+}
+
+message InventoryItemListRequest{
+	int32 skip = 1;
+    int32 length = 2;
+
+}
+
+message GetInventoryItemByIdReqeust{
+	string productId = 1;
+}
+
+
+message InventoryItemListResponse{
+	repeated InventoryItemResponse items = 1;
+	int32 skip = 2;
+    int32 length = 3;
+    int64 totalCount = 4;
+}
+
+message InventoryItemResponse{
+	string id=  1;
+	string sku =2;
+    string name =3;
+    google.protobuf.StringValue thumbnail = 4;
+    int32 stock = 5;
+    int32 allocatedStock  = 6;
+}
