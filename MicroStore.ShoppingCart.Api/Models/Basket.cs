@@ -38,7 +38,7 @@ namespace MicroStore.ShoppingCart.Api.Models
         }
 
 
-        public Result<Unit> RemoveProduct(string productId , int? count )
+        public Result<Unit> RemoveProduct(string productId , int count = 0)
         {
             BasketItem? basketItem = Items.SingleOrDefault(x => x.ProductId == productId);
 
@@ -48,13 +48,13 @@ namespace MicroStore.ShoppingCart.Api.Models
             }
 
 
-            if(count == null || basketItem.Quantity <= count.Value)
+            if(count <= 0 || basketItem.Quantity <= count)
             {
                 Items.Remove(basketItem);
             }
             else
             {
-                basketItem.Quantity -= count.Value;
+                basketItem.Quantity -= count;
             }
 
 

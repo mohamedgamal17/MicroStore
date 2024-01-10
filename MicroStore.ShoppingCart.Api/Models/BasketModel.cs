@@ -43,7 +43,7 @@ namespace MicroStore.ShoppingCart.Api.Models
     public class RemoveBasketItemModel
     {
         public string ProductId { get; set; }
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; } = 0;
     }
 
     public class RemoveBasketItemModelValidator : AbstractValidator<RemoveBasketItemModel>
@@ -56,12 +56,6 @@ namespace MicroStore.ShoppingCart.Api.Models
               .Must((productId) => Guid.TryParse(productId, out _))
               .MaximumLength(256)
               .WithMessage("Product Id maximum lenght is 256");
-
-            RuleFor(x => x.Quantity!.Value)
-                .GreaterThan(0)
-                .WithMessage("Removed quantity should not be negative or zero")
-                .When(x => x.Quantity != null);
-
 
         }
     }

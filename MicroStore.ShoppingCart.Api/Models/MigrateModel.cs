@@ -2,16 +2,16 @@
 
 namespace MicroStore.ShoppingCart.Api.Models
 {
-    public class MigrateDto
+    public class MigrateModel
     {
         public string FromUserId { get; set; }
         public string ToUserId { get; set; }
 
     }
 
-    public class MigrateDtoValidator : AbstractValidator<MigrateDto>
+    public class MigrateModelValidator : AbstractValidator<MigrateModel>
     {
-        public MigrateDtoValidator()
+        public MigrateModelValidator()
         {
             RuleFor(x => x.FromUserId)
                 .NotEmpty()

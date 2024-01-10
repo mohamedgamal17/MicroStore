@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using MicroStore.BuildingBlocks.AspNetCore;
 using MicroStore.BuildingBlocks.AspNetCore.Infrastructure;
 using MicroStore.ShoppingCart.Api.Configuration;
+using MicroStore.ShoppingCart.Api.Grpc;
 using MicroStore.ShoppingCart.Api.Models;
 using MicroStore.ShoppingCart.Api.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -55,6 +56,8 @@ namespace MicroStore.ShoppingCart.Api
             .AddHttpClient();
 
             ConfigureAuthentication(context.Services);
+
+            context.Services.AddGrpc();
         }
 
         private void ConfigureAuthentication(IServiceCollection services)
@@ -124,6 +127,11 @@ namespace MicroStore.ShoppingCart.Api
             app.UseAuthorization();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
+
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<BasketGrpcService>();
+            });
         }
 
        
