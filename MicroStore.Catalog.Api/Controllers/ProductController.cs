@@ -74,7 +74,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{id}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-        //[Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] ProductModel model)
         {
             var validationResult = await ValidateModel(model);
@@ -133,7 +133,7 @@ namespace MicroStore.Catalog.Api.Controllers
         [Route("{productId}/productimages")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductImageDto))]
-        //[Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
+        [Authorize(Policy = ApplicationAuthorizationPolicy.RequeireAuthenticatedUser)]
         public async Task<IActionResult> AddProductImage(string productId, [FromBody] ProductImageModel model)
         {
             var validationResult = await ValidateModel(model);

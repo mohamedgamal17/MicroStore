@@ -2,6 +2,7 @@
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Domain.ValueObjects;
 using MicroStore.Catalog.Entities.ElasticSearch;
+using MicroStore.Catalog.Entities.ElasticSearch.Common;
 namespace MicroStore.Catalog.Application.Abstractions.Products.Internals
 {
     internal class ProductProfile : Profile
@@ -81,6 +82,10 @@ namespace MicroStore.Catalog.Application.Abstractions.Products.Internals
 
             CreateMap<Weight, WeightModel>()
                 .ForMember(x => x.Unit, opt => opt.MapFrom(c => c.Unit.ToString()));
+
+            CreateMap<ElasticWeight, WeightModel>();
+            CreateMap<ElasticDimension, DimensionModel>();
+
         }
     }
 }

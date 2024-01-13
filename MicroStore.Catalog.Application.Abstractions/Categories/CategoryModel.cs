@@ -25,7 +25,7 @@ namespace MicroStore.Catalog.Application.Abstractions.Categories
                 .WithMessage("Category description minimum chars is 3")
                 .MaximumLength(850)
                 .WithMessage("category description maximum length is 850")
-                .Unless(x => x.Description.IsNullOrEmpty());
+                .When(x => !x.Description.IsNullOrEmpty());
         }
     }
 }
