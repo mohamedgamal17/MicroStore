@@ -66,7 +66,7 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Orders
                 ProductId = bestSellerReport.ProductId,
                 Amount =  bestSellerReport.Amount,
                 Name = product.Name,
-                Thumbnail = product.ProductImages.FirstOrDefault()?.Image,
+                Thumbnail = product.Images.FirstOrDefault()?.Image,
                 Quantity = bestSellerReport.Quantity,
 
             };

@@ -14,8 +14,8 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Entities.Catalog
         public double OldPrice { get; set; }
         public Weight Weight { get; set; }
         public Dimension Dimensions { get; set; }
-        public List<ProductCategory> ProductCategories { get; set; }
-        public List<ProductManufacturer> ProductManufacturers { get; set; }
-        public List<ProductImage> ProductImages { get; set; }
+        public List<ProductCategory> Categories { get; set; }
+        public List<ProductManufacturer> Manufacturers { get; set; }
+        public List<ProductImage> Images { get; set; }
     }
 }

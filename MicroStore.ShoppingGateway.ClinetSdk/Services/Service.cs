@@ -12,9 +12,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services
         {
             ContractResolver = new DefaultContractResolver
             {
-                NamingStrategy = new SnakeCaseNamingStrategy()
-            }
-
+                NamingStrategy = new SnakeCaseNamingStrategy(),
+            },
+            NullValueHandling = NullValueHandling.Ignore
         };
         protected Service(MicroStoreClinet microStoreClinet)
         {
