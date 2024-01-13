@@ -26,20 +26,22 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
 
                      if(TryToGetPropertyValueValue(p, request, out var val))
                      {
+                         value = val.ToString();
 
-                         if(val.GetType() == typeof(DateTime))
+                         if (!string.IsNullOrEmpty(value))
                          {
-                             DateTime dateTime = (DateTime)val;
+                             if (p.GetType() == typeof(DateTime))
+                             {
+                                 DateTime dateTime = DateTime.Parse(value);
 
-                             dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)),  dateTime.ToString("yyyy-MM-ddTHH:mm:ss"));
+                                 dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)), dateTime.ToString("yyyy-MM-ddTHH:mm:ss"));
 
+                             }
+                             else
+                             {
+                                 dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)), value);
+                             }
                          }
-                         else
-                         {
-                             dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)),val.ToString());
-                         }
-
-             
                      }
 
                  });

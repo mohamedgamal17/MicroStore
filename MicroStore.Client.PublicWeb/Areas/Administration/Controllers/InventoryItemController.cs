@@ -57,10 +57,14 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit( InventoryItemModel model)
+        public async Task<IActionResult> Edit(InventoryItemModel model)
         {
             if (!ModelState.IsValid)
             {
+                var item = await _inventoryItemService.GetAsync(model.Id);
+
+                ViewBag.InventoryItem = ObjectMapper.Map<InventoryItem, InventoryItemVM>(item);
+
                 return View(model);
             }
 

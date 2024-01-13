@@ -3,7 +3,7 @@
     [Serializable]
     public class ProductCategory : BaseEntity<string>
     {
-        public string CategoryId { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

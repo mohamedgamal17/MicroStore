@@ -13,9 +13,9 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Services.Catalog
         public bool IsFeatured { get; set; }
         public Weight Weight { get; set; }
         public Dimension Dimensions { get; set; }
-        public string[] CategoriesIds { get; set; }
-        public string[] ManufacturersIds { get; set; }
-        public List<ProductImageModel> ProductImages{ get; set; }
+        public string[] Categories { get; set; }
+        public string[] Manufacturers { get; set; }
+        public List<ProductImageModel> Images{ get; set; }
     } 
 
 

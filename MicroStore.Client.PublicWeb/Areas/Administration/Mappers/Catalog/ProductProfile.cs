@@ -22,16 +22,16 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Catalog
             CreateMap<PagedList<Product>, PagedList<ProductVM>>();
 
             CreateMap<Product, ProductModel>()
-                .ForMember(x => x.CategoriesIds, opt => opt.MapFrom(c => c.Categories.Select(x => x.CategoryId).ToArray()))
-                .ForMember(x => x.ManufacturersIds, opt => opt.MapFrom(c => c.Manufacturers.Select(x => x.ManufacturerId).ToArray()));
+                .ForMember(x => x.CategoriesIds, opt => opt.MapFrom(c => c.Categories.Select(x => x.Id).ToArray()))
+                .ForMember(x => x.ManufacturersIds, opt => opt.MapFrom(c => c.Manufacturers.Select(x => x.Id).ToArray()));
 
 
 
             CreateMap<ProductModel,ProductRequestOptions >()
                 .ForMember(x => x.Dimensions, opt => opt.MapFrom(c => c.Dimensions))
                 .ForMember(x => x.Weight, opt => opt.MapFrom(c => c.Weight))
-                .ForMember(x => x.CategoriesIds, opt => opt.MapFrom(c => c.CategoriesIds))
-                .ForMember(x => x.ManufacturersIds, opt => opt.MapFrom(c => c.ManufacturersIds));
+                .ForMember(x => x.Categories, opt => opt.MapFrom(c => c.CategoriesIds))
+                .ForMember(x => x.Manufacturers, opt => opt.MapFrom(c => c.ManufacturersIds));
 
 
             CreateMap<ProductImage, ProductImageVM>();

@@ -24,6 +24,8 @@
 @section Scripts{
     <script>
         $(document).ready(function(){
+            $('#StartDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $('#EndDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
             var shipmentTable = $("#ShipmentTable").DataTable(
                 abp.libs.datatables.normalizeConfiguration({
                     ajax: {
