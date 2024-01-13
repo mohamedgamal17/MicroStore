@@ -18,6 +18,7 @@ using MicroStore.Profiling.Host.OpenApi;
 using MicroStore.Profiling.Application.EntityFramewrok;
 using MicroStore.Profiling.Application.Configuration;
 using MicroStore.Profiling.Application.Security;
+using MicroStore.Profiling.Host.Grpc;
 
 namespace MicroStore.Profiling.Host
 {
@@ -59,6 +60,7 @@ namespace MicroStore.Profiling.Host
 
             });
 
+            context.Services.AddGrpc();
         }
         public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
         {
@@ -102,7 +104,11 @@ namespace MicroStore.Profiling.Host
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseAbpSerilogEnrichers();
-            app.UseConfiguredEndpoints();
+            app.UseConfiguredEndpoints(); 
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<ProfileGrpcService>();
+            });
         }
         private void ConfigureAuthentication(IServiceCollection services)
         {

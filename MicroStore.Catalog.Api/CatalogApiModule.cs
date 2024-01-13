@@ -166,6 +166,7 @@ namespace MicroStore.Catalog.Api
                 endpoints.MapGrpcService<CategoryGrpcService>();
                 endpoints.MapGrpcService<ManufacturerGrpcService>();
                 endpoints.MapGrpcService<TagGrpcService>();
+                endpoints.MapGrpcService<ProductGrpcService>();
             });
         }
     }

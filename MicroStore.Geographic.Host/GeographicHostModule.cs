@@ -21,6 +21,7 @@ using MicroStore.Geographic.Host.OpenApi;
 using MicroStore.Geographic.Application.Configuration;
 using MicroStore.Geographic.Application.Security;
 using IdentityModel;
+using MicroStore.Geographic.Host.Grpc;
 namespace MicroStore.Geographic.Host
 {
     [DependsOn(typeof(GeographicApplicationModule),
@@ -61,6 +62,8 @@ namespace MicroStore.Geographic.Host
 
             });
 
+
+            context.Services.AddGrpc();
         }
         public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
         {
@@ -106,7 +109,11 @@ namespace MicroStore.Geographic.Host
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
 
-            //app.MapControllers();
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<CountryGrpcService>();
+                endpoints.MapGrpcService<StateProvinceGrpcService>();
+            });
         }
         private void ConfigureAuthentication(IServiceCollection services)
         {

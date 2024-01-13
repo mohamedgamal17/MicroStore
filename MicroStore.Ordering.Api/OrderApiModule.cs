@@ -166,7 +166,6 @@ namespace MicroStore.Ordering.Api
             {
                 endpoints.MapGrpcService<OrderGrpcService>();
             });
-            //app.MapControllers();
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MicroStore.BuildingBlocks.AspNetCore;
+using MicroStore.Payment.Api.Host.Grpc;
 using MicroStore.Payment.Api.Host.OpenApi;
 using MicroStore.Payment.Application;
 using MicroStore.Payment.Application.EntityFramework;
@@ -59,6 +60,8 @@ namespace MicroStore.Payment.Api.Host
 
             context.Services.AddScoped<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>()
                 .AddSwaggerGen();
+
+            context.Services.AddGrpc();
         }
 
         private void ConfigureAuthentication(IServiceCollection services)
@@ -154,6 +157,11 @@ namespace MicroStore.Payment.Api.Host
             app.UseAuthorization();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
+
+            app.UseConfiguredEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<PaymentGrpcService>();
+            });
         }
 
     }
