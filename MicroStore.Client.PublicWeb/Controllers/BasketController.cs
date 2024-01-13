@@ -108,6 +108,6 @@ namespace MicroStore.Client.PublicWeb.Controllers
     public class RemoveBasketItemModel
     {
         public Guid ProductId { get; set; }
-        public int? Quantity { get; set; } 
+        public int Quantity { get; set; } 
     }
 }

@@ -33,7 +33,7 @@
             @foreach (var product in Model.Products)
             {
                 var productName = product.Name;
-                var productImage = product.ProductImages?.OrderBy(x => x.DisplayOrder)
+                var productImage = product.Images?.OrderBy(x => x.DisplayOrder)
                 .FirstOrDefault()?.Image ?? @"/user-content/no-image.png";
                 var productsku = product.Sku;
                 var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));

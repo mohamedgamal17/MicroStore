@@ -15,8 +15,8 @@
                             {
                                 @foreach (var product in Model.Products)
                                 {
-                                    var frontImage = product.ProductImages.FirstOrDefault()?.Image ?? "/user-content/no-image.png";
-                                    var backImage = product.ProductImages.Count > 1 ? product.ProductImages[1].Image : frontImage;
+                                    var frontImage = product.Images.FirstOrDefault()?.Image ?? "/user-content/no-image.png";
+                                    var backImage = product.Images.Count > 1 ? product.Images[1].Image : frontImage;
                                     var productName = product.Name;
                                     var productPrice = product.Price.ToString("C", new CultureInfo("en-US"));
                                     bool isItemInBasket = Model.UserBasket.Items?.Any(x => x.ProductId == product.Id) ?? false;

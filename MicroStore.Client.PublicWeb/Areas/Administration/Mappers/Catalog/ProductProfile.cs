@@ -12,18 +12,18 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Mappers.Catalog
         public ProductProfile()
         {
             CreateMap<Product, ProductVM>()
-                .ForMember(x => x.ProductImages, opt => opt.MapFrom(c => c.ProductImages))
-                .ForMember(x => x.Categories, opt => opt.MapFrom(c => c.ProductCategories))
+                .ForMember(x => x.ProductImages, opt => opt.MapFrom(c => c.Images))
+                .ForMember(x => x.Categories, opt => opt.MapFrom(c => c.Categories))
                 .ForMember(x => x.Dimension, opt => opt.MapFrom(c => c.Dimensions))
                 .ForMember(x => x.Weight, opt => opt.MapFrom(c => c.Weight))
-                .ForMember(x => x.ProductImages, opt => opt.MapFrom(c => c.ProductImages));
+                .ForMember(x => x.ProductImages, opt => opt.MapFrom(c => c.Images));
 
             
             CreateMap<PagedList<Product>, PagedList<ProductVM>>();
 
             CreateMap<Product, ProductModel>()
-                .ForMember(x => x.CategoriesIds, opt => opt.MapFrom(c => c.ProductCategories.Select(x => x.CategoryId).ToArray()))
-                .ForMember(x => x.ManufacturersIds, opt => opt.MapFrom(c => c.ProductManufacturers.Select(x => x.ManufacturerId).ToArray()));
+                .ForMember(x => x.CategoriesIds, opt => opt.MapFrom(c => c.Categories.Select(x => x.CategoryId).ToArray()))
+                .ForMember(x => x.ManufacturersIds, opt => opt.MapFrom(c => c.Manufacturers.Select(x => x.ManufacturerId).ToArray()));
 
 
 

@@ -49,6 +49,11 @@
                                 <a href="/products/Details/@item.ExternalProductId">
                                     @{
                                         string imageUrl = item.Thumbnail ?? "/user-content/no-image.png";
+
+                                        if (string.IsNullOrEmpty(imageUrl))
+                                        {
+                                            imageUrl = "/user-content/no-image.png";
+                                        }
                                         <img class="img-size w-75" src="@imageUrl" />
                                     }
                                 </a>

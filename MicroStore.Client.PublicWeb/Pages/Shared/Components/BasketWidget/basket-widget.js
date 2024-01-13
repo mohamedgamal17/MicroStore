@@ -11,7 +11,8 @@
                         url: "/api/basket",
                         method: "DELETE",
                         data: JSON.stringify({
-                            productId: productId
+                            productId: productId,
+                            quantity: -1
                         }),
 
                         success: function () {
