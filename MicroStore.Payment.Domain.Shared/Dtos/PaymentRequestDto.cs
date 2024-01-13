@@ -11,7 +11,7 @@ namespace MicroStore.Payment.Domain.Shared.Dtos
         public double TaxCost { get; set; }
         public double ShippingCost { get; set; }
         public double TotalCost { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; }
         public List<PaymentRequestProductDto> Items { get; set; }
         public string PaymentGateway { get; private set; }
         public string TransctionId { get; private set; }

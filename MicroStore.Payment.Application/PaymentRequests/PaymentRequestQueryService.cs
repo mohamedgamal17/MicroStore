@@ -75,14 +75,16 @@ namespace MicroStore.Payment.Application.PaymentRequests
               .AsNoTracking();
               
 
-
             query = ApplyFilter(query, queryParams, userId);
 
-            var result = await query
-                .ProjectTo<PaymentRequestDto>(MapperAccessor.Mapper.ConfigurationProvider)
+            var queryResult = await query
                 .PageResult(queryParams.Skip, queryParams.Length, cancellationToken);
 
-            return result;
+            var items = ObjectMapper.Map<IEnumerable<PaymentRequest>, IEnumerable<PaymentRequestDto>>(queryResult.Items);
+
+            var pagedResult = new PagedResult<PaymentRequestDto>(items, queryResult.TotalCount, queryResult.Skip, queryResult.Lenght);
+
+            return pagedResult;
         }
 
         public async Task<Result<PagedResult<PaymentRequestDto>>> SearchByOrderNumber(PaymentRequestSearchModel model, CancellationToken cancellationToken = default)
