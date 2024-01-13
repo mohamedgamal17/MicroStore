@@ -135,6 +135,7 @@ namespace MicroStore.Ordering.Application.Orders
                 SubTotal = orderSubmitedEvent.SubTotal,
                 TotalPrice = orderSubmitedEvent.TotalPrice,
                 SubmissionDate = orderSubmitedEvent.SubmissionDate,
+                CurrentState = OrderStatusConst.Submited,                
             };
         }
 
