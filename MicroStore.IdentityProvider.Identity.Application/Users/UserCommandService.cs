@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Utils.Results;
+using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Application.Extensions;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Dtos;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
@@ -13,16 +14,17 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
         private readonly RoleManager<ApplicationIdentityRole> _roleManager;
 
         private readonly ApplicationUserManager _userManager;
-        public UserCommandService(RoleManager<ApplicationIdentityRole> roleManager, ApplicationUserManager userManager)
+
+        private readonly IIdentityUserRepository _identityRepository;
+        public UserCommandService(RoleManager<ApplicationIdentityRole> roleManager, ApplicationUserManager userManager, IIdentityUserRepository identityRepository)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _identityRepository = identityRepository;
         }
 
         public async Task<Result<IdentityUserDto>> CreateUserAsync(UserModel model, CancellationToken cancellationToken = default)
         {
-
-
             var applicationUser = new ApplicationIdentityUser();
 
             await PrepareUserEntity(model, applicationUser, cancellationToken);
@@ -45,7 +47,9 @@ namespace MicroStore.IdentityProvider.Identity.Application.Users
                 return identityResult.ConvertToResult<IdentityUserDto>();
             }
 
-            return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(applicationUser);
+            var user = await _identityRepository.FindById(applicationUser.Id);
+
+            return ObjectMapper.Map<ApplicationIdentityUser, IdentityUserDto>(user);
         }
 
 

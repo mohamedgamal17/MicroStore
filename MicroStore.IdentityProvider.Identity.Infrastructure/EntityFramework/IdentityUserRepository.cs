@@ -1,4 +1,5 @@
-﻿using MicroStore.IdentityProvider.Identity.Application;
+﻿using Microsoft.EntityFrameworkCore;
+using MicroStore.IdentityProvider.Identity.Application;
 using MicroStore.IdentityProvider.Identity.Application.Common;
 using MicroStore.IdentityProvider.Identity.Domain.Shared.Entites;
 using MicroStore.IdentityProvider.Identity.Infrastructure.Extensions;
@@ -10,10 +11,11 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework
     {
         private readonly ApplicationUserManager _userManager;
 
-        public IdentityUserRepository(ApplicationUserManager userManager)
+        private readonly IApplicationIdentityDbContext _applicationIdentityDbContext;
+        public IdentityUserRepository(ApplicationUserManager userManager, IApplicationIdentityDbContext applicationIdentityDbContext)
         {
             _userManager = userManager;
-
+            _applicationIdentityDbContext = applicationIdentityDbContext;
         }
 
         public async Task<ApplicationIdentityUser> CreateAsync(ApplicationIdentityUser user, string? password = null, CancellationToken cancellationToken = default)
@@ -57,7 +59,7 @@ namespace MicroStore.IdentityProvider.Identity.Infrastructure.EntityFramework
 
         public async Task<ApplicationIdentityUser?> FindById(string userId, CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _applicationIdentityDbContext.Users.SingleOrDefaultAsync(x => x.Id == userId);
 
             return user;
         }
