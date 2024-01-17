@@ -181,6 +181,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Abstractions", "MicroStore.Catalog.Application.Abstractions\MicroStore.Catalog.Application.Abstractions.csproj", "{CAAB8E18-43BC-4783-BB1F-5A4010224CC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Bff.Shopping", "MicroStore.Bff.Shopping\MicroStore.Bff.Shopping.csproj", "{ABB8081D-6C9C-421B-B592-7299C3A97CD7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -419,6 +421,10 @@ Global
 		{CAAB8E18-43BC-4783-BB1F-5A4010224CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAAB8E18-43BC-4783-BB1F-5A4010224CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAAB8E18-43BC-4783-BB1F-5A4010224CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABB8081D-6C9C-421B-B592-7299C3A97CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABB8081D-6C9C-421B-B592-7299C3A97CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABB8081D-6C9C-421B-B592-7299C3A97CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABB8081D-6C9C-421B-B592-7299C3A97CD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -511,6 +517,7 @@ Global
 		{17FC479A-6B07-42D8-ABB4-F93A821B36C7} = {6656C087-47D6-4B1D-A6F9-38244CC40930}
 		{9AED0E1E-DDB2-4BBB-A33F-45C2B6C0E556} = {E667C85C-80E1-4045-88A8-3BC69F2253AE}
 		{CAAB8E18-43BC-4783-BB1F-5A4010224CC4} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
+		{ABB8081D-6C9C-421B-B592-7299C3A97CD7} = {BD70AA12-DA39-4282-A2B0-5D2BA8381915}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
