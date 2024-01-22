@@ -46,7 +46,8 @@ message StateProvinceResponse{
 	string id = 1;
 	string name =2;
 	string abbrevation = 3;
-	optional google.protobuf.Timestamp createdAt = 4;
+	optional google.protobuf.Timestamp createdAt = 4; 
+	optional google.protobuf.Timestamp modifiedAt = 5;
 }
 
 message StateProvinceListResponse{

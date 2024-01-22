@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "Protos/stateProvince.proto";
-
+import "google/protobuf/timestamp.proto";
 option csharp_namespace = "MicroStore.Geographic.Host.Grpc";
 
 package GeographicApi; 
@@ -48,6 +48,8 @@ message CountryResponse{
    string threeLetterIsoCode =4;
    int32 numericIsoCode =5;
    repeated GeographicApi.StateProvinceResponse States = 6;
+   optional google.protobuf.Timestamp createdAt = 7;
+   optional google.protobuf.Timestamp modifiedAt = 8;
 }
 
 message CountryListResponse{

@@ -27,7 +27,8 @@ namespace MicroStore.Geographic.Host.Grpc
                 Id = stateProvince.Id,
                 Name = stateProvince.Name,
                 Abbrevation = stateProvince.Abbreviation,
-                CreatedAt = Timestamp.FromDateTime(stateProvince.CreationTime)
+                CreatedAt = stateProvince.CreationTime.ToUniversalTime().ToTimestamp(),
+                ModifiedAt = stateProvince.LastModificationTime?.ToUniversalTime().ToTimestamp()
             };
         }
 

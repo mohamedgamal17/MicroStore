@@ -125,6 +125,8 @@ namespace MicroStore.Geographic.Host.Grpc
                 TwoLetterIsoCode = country.TwoLetterIsoCode,
                 ThreeLetterIsoCode = country.ThreeLetterIsoCode,
                 NumericIsoCode = country.NumericIsoCode,
+                CreatedAt = country.CreationTime.ToUniversalTime().ToTimestamp(),
+                ModifiedAt = country.LastModificationTime?.ToUniversalTime().ToTimestamp()
             };
 
 
@@ -135,7 +137,8 @@ namespace MicroStore.Geographic.Host.Grpc
                     Id = state.Id,
                     Name = state.Name,
                     Abbrevation = state.Abbreviation,
-                    CreatedAt = Timestamp.FromDateTime(state.CreationTime)
+                    CreatedAt = state.CreationTime.ToUniversalTime().ToTimestamp(),
+                    ModifiedAt = state.LastModificationTime?.ToUniversalTime().ToTimestamp()
                 };
 
                 respoonse.States.Add(stateResponse);
@@ -155,7 +158,9 @@ namespace MicroStore.Geographic.Host.Grpc
                     Name = x.Name,
                     TwoLetterIsoCode = x.TwoLetterIsoCode,
                     ThreeLetterIsoCode = x.ThreeLetterIsoCode,
-                    NumericIsoCode = x.NumericIsoCode
+                    NumericIsoCode = x.NumericIsoCode,
+                    CreatedAt = x.CreationTime.ToUniversalTime().ToTimestamp(),
+                    ModifiedAt = x.LastModificationTime?.ToUniversalTime().ToTimestamp()
                 };
 
 
