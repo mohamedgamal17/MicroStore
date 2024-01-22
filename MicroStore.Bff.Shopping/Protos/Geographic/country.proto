@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "Protos/Geographic/stateProvince.proto";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "MicroStore.Bff.Shopping.Grpc.Geographic";
+
+package GeographicApi; 
+
+service CountryService{
+	rpc Create(CreateCountryRequest) returns(CountryResponse);
+	rpc Update(UpdateCountryRequest) returns(CountryResponse);
+	rpc GetList(CountryListRequest) returns(CountryListResponse);
+	rpc GetById(GetCountryByIdRequest) returns (CountryResponse);
+	rpc GetByCode(GetCountryByCodeRequest) returns(CountryResponse);
+}
+
+message CreateCountryRequest{
+	string name = 1;
+	string twoLetterIsoCode = 2;
+	string threeLetterIsoCode = 3;
+	int32 numericIsoCode =5;
+}
+
+message UpdateCountryRequest{
+	string id = 1;
+    string name = 2;
+	string twoLetterIsoCode = 3;
+	string threeLetterIsoCode = 4;
+	int32 numericIsoCode =5;
+}
+
+
+message CountryListRequest{
+
+}
+
+message GetCountryByIdRequest{
+	string id = 1;
+}
+
+message GetCountryByCodeRequest{
+	string code = 1;
+}
+message CountryResponse{
+   string id= 1;
+   string name =2;
+   string twoLetterIsoCode = 3;
+   string threeLetterIsoCode =4;
+   int32 numericIsoCode =5;
+   repeated GeographicApi.StateProvinceResponse States = 6;	
+   optional google.protobuf.Timestamp createdAt = 7; 
+   optional google.protobuf.Timestamp modifiedAt = 8;
+}
+
+message CountryListResponse{
+	repeated CountryResponse Items = 1;
+}
+
+
