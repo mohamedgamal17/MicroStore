@@ -71,6 +71,7 @@ namespace MicroStore.Bff.Shopping.Filters
             };
 
             context.ExceptionHandled = true;
+
         }
 
         private HttpValidationProblemDetails MapGrpcErrorToProblemDetails(GrpcError grpcError)

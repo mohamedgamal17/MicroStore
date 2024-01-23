@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MicroStore.Bff.Shopping.Data.Geographic;
 using MicroStore.Bff.Shopping.Models.Geographic;
 using MicroStore.Bff.Shopping.Services.Geographic;
@@ -41,6 +42,7 @@ namespace MicroStore.Bff.Shopping.Controllers
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Country))]
+        [Authorize]
         public async Task<Country> CreateAsync(CountryModel model)
         {
             var result = await _countryService.CreateAsync(model);
@@ -51,6 +53,7 @@ namespace MicroStore.Bff.Shopping.Controllers
         [HttpPut]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Country))]
+        [Authorize]
         public async Task<Country> UpdateAsync(string id,CountryModel model)
         {
             var result = await _countryService.UpdateAsync(id, model);
