@@ -137,13 +137,34 @@ namespace MicroStore.IdentityProvider.Host
                         JwtClaimTypes.Name,
                         JwtClaimTypes.Role
                     }
+                },
+
+                new ApiResource("bff-aggregator","Shopping gateway")
+                {
+                    Scopes ={ "shoppinggateway.access" , "mvcgateway.ordering.read" , "mvcgateway.ordering.write" , "mvcgateway.billing.read" ,
+                          "mvcgateway.billing.write" , "mvcgateway.shipping.read", "mvcgateway.inventory.read","mvcgateway.inventory.write" ,
+                            "mvcgateway.profiling.access","mvcgateway.profiling.read",
+                            "mvcgateway.profiling.write",
+                          IdentityServerConstants.StandardScopes.OfflineAccess
+                    },
+
+                    ApiSecrets =  { new Secret("31830d9e-7d11-4594-a296-ea2573f4ebc6".Sha512())},
+
+                    UserClaims =
+                    {
+                        JwtClaimTypes.GivenName,
+                        JwtClaimTypes.FamilyName,
+                        JwtClaimTypes.Email,
+                        JwtClaimTypes.BirthDate,
+                        JwtClaimTypes.Name,
+                        JwtClaimTypes.Role
+                    }
                 }
             };
 
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // m2m client credentials flow client
                 new Client
                 {
                     ClientId = "gatewaytodownstreamtokenexchangeclient",
@@ -160,6 +181,50 @@ namespace MicroStore.IdentityProvider.Host
                     AllowOfflineAccess = false,
                     PairWiseSubjectSalt =  ""
 
+                },
+
+                new Client
+                {
+                    ClientId = "bffaggregatortodownstreamtokenexchangeclient",
+                    ClientName = "Client Credentials Client",
+
+                    AllowedGrantTypes = new List<string> { "urn:ietf:params:oauth:grant-type:token-exchange"},
+                    ClientSecrets = { new Secret("d8a595f2-db24-4156-ba92-6140a390dbdb".Sha512()) },
+
+                    AllowedScopes = { "catalog.access" , "basket.access" , "ordering.access" , "billing.access" , "shipping.access" , "inventory.access" ,"ordering.read" ,"ordering.write" , "billing.read" ,"billing.write" , "shipping.read", "api-sample" , "geographic.access",
+                        "profiling.access",  "profiling.read", "profiling.write"
+
+                    },
+                    AccessTokenLifetime = (int) TimeSpan.FromDays(7).TotalSeconds,
+                    AllowOfflineAccess = false,
+                    PairWiseSubjectSalt =  ""
+
+                },
+
+                //bff-aggregator swagger client
+                new Client
+                {
+
+                    ClientId = "bffaggregatorswaggerclient",
+                    ClientSecrets = { new Secret("b9007373-4b95-469e-a883-7dc4af57cdc1".Sha512()) },
+
+                    AllowedGrantTypes = new List<string> { OpenIdConnectGrantTypes.AuthorizationCode },
+
+                    AccessTokenType  = AccessTokenType.Jwt,
+
+                    AccessTokenLifetime = (int) TimeSpan.FromMinutes(15).TotalSeconds,
+
+                    ClientName ="Shopping Gateway Swagger Client",
+
+                    AllowedCorsOrigins = new List<string> { "https://localhost:7100"},
+                    RedirectUris = { "https://localhost:7100/swagger/oauth2-redirect.html" },
+
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "access_control", "shoppinggateway.access" ,"mvcgateway.ordering.read" , "mvcgateway.ordering.write", "mvcgateway.billing.read","mvcgateway.billing.write","mvcgateway.shipping.read","mvcgateway.inventory.read","mvcgateway.inventory.write" , "mvcgateway.profiling.read", "mvcgateway.profiling.write"},
+
+                    RequirePkce = true,
+
+                    RequireConsent = true,
                 },
 
                 // interactive client using code flow + pkce
@@ -197,9 +262,6 @@ namespace MicroStore.IdentityProvider.Host
                     RequirePkce = true,
 
                     RequireConsent = true,
-
-
-
                 },
                  new Client
                 {
