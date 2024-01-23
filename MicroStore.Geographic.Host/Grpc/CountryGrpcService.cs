@@ -7,19 +7,24 @@ using Volo.Abp.DependencyInjection;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Geographic.Application.Countries;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authorization;
+using MicroStore.Geographic.Application.Security;
 namespace MicroStore.Geographic.Host.Grpc
 {
     public class CountryGrpcService : CountryService.CountryServiceBase
     {
         private readonly ICountryApplicationService _countryApplicationService;
 
-        public CountryGrpcService(ICountryApplicationService countryApplicationService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+        public CountryGrpcService(ICountryApplicationService countryApplicationService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _countryApplicationService = countryApplicationService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+       
 
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
         public override async Task<CountryResponse> Create(CreateCountryRequest request, ServerCallContext context)
         {
             var model = PrepareCountryMode(request);
@@ -41,6 +46,7 @@ namespace MicroStore.Geographic.Host.Grpc
             return PrepareCountryResponse(result.Value);
         }
 
+        [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
         public override async Task<CountryResponse> Update(UpdateCountryRequest request, ServerCallContext context)
         {
             var model = PrepareCountryMode(request);

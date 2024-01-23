@@ -12,13 +12,12 @@ namespace MicroStore.Geographic.Host.Grpc
     public class StateProvinceGrpcService : StateProvinceService.StateProvinceServiceBase
     {
         private readonly IStateProvinceApplicationService _stateProvinceApplicationService;
-
-        public StateProvinceGrpcService(IStateProvinceApplicationService stateProvinceApplicationService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+        public StateProvinceGrpcService(IStateProvinceApplicationService stateProvinceApplicationService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _stateProvinceApplicationService = stateProvinceApplicationService;
+            LazyServiceProvider = lazyServiceProvider;
         }
-
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
         private StateProvinceResponse PrepareStateProvinceResponse(StateProvinceDto stateProvince)
         {

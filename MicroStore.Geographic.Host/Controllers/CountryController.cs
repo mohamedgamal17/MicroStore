@@ -79,7 +79,6 @@ namespace MicroStore.Geographic.Host.Controllers
         [HttpPut]
         [Route("{countryId}")]
         [Authorize(Policy = ApplicationSecurityPolicies.RequireAuthenticatedUser)]
-
         public async Task<IActionResult> UpdateCountry(string countryId , [FromBody]  CountryModel model)
         {
             var validationResult = await ValidateModel(model);
