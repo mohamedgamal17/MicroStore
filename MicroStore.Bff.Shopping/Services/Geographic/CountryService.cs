@@ -30,6 +30,15 @@ namespace MicroStore.Bff.Shopping.Services.Geographic
             return MapCountry(result);
         }
 
+        public async Task<Country> GetByCodeAsync(string code)
+        {
+            var request = new GetCountryByCodeRequest { Code = code };
+
+            var result = await _countryServiceClient.GetByCodeAsync(request);
+
+            return MapCountry(result);
+        }
+
         public async Task<Country> CreateAsync(CountryModel model)
         {
             var request = new CreateCountryRequest
