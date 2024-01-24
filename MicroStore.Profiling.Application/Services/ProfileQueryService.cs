@@ -13,7 +13,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace MicroStore.Profiling.Application.Services
 {
-    public class ProfileQueryService : ApplicationService, IProfileQueryService
+    public class ProfileQueryService : ProfilingApplicationService, IProfileQueryService
     {
         private readonly ApplicationDbContext _applicationDbContext;
 

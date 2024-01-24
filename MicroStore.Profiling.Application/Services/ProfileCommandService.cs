@@ -2,13 +2,14 @@
 using MicroStore.Profiling.Application.Domain;
 using MicroStore.Profiling.Application.Dtos;
 using MicroStore.Profiling.Application.Models;
+using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Profiling.Application.Services
 {
-    public class ProfileCommandService : ApplicationService, IProfileCommandService
+    public class ProfileCommandService : ProfilingApplicationService, IProfileCommandService
     {
         private readonly IRepository<Profile> _profileRepository;
 
@@ -18,6 +19,14 @@ namespace MicroStore.Profiling.Application.Services
         }
         public async Task<Result<ProfileDto>> CreateAsync(CreateProfileModel model, CancellationToken cancellationToken)
         {
+
+            bool isUserHasProfile = await _profileRepository.AnyAsync(x => x.UserId == model.UserId);
+
+            if (isUserHasProfile)
+            {
+                return new Result<ProfileDto>(new UserFriendlyException("User already has profile"));
+            }
+
             var profile = ObjectMapper.Map<CreateProfileModel, Profile>(model);
 
             await _profileRepository.InsertAsync(profile);

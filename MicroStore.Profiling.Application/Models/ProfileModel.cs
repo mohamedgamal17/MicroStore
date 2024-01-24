@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using MicroStore.Profiling.Application.Domain;
+using MicroStore.Profiling.Application.EntityFramewrok;
 using PhoneNumbers;
 using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Profiling.Application.Models
@@ -82,20 +84,13 @@ namespace MicroStore.Profiling.Application.Models
 
     internal class CreateProfileModelValidation : ProfileModelValidationBase<CreateProfileModel>
     {
-
-        private readonly IRepository<Profile> _profileRepository;
-
-        public CreateProfileModelValidation(IRepository<Profile> profileRepository)
+        public CreateProfileModelValidation()
         {
-            _profileRepository = profileRepository;
-
             RuleFor(x => x.UserId)
                 .NotNull()
                 .WithMessage("User Id is required")
-                .MaximumLength(256)
-                .MustAsync(async (userId, ct) => await _profileRepository.AllAsync(x => x.UserId != userId))
-                .WithMessage("User already has profile");
-          
+                .MaximumLength(256);
+  
         }
     }
 }
