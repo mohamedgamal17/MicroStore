@@ -3,15 +3,47 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.AspNetCore.Grpc;
-using System.Net.NetworkInformation;
 
 namespace MicroStore.Bff.Shopping.Filters
 {
     public class ExceptionHandlerFilter : IAsyncExceptionFilter
     {
+        private readonly ILogger<ExceptionHandlerFilter> _logger;
+
+        public ExceptionHandlerFilter(ILogger<ExceptionHandlerFilter> logger)
+        {
+            _logger = logger;
+        }
+
         public async Task OnExceptionAsync(ExceptionContext context)
         {
-           await HandleGrpcException(context);
+            if(context.Exception is RpcException)
+            {
+                await HandleGrpcException(context);
+            }
+            else
+            {
+                _logger.LogException(context.Exception);
+
+                var response = new ProblemDetails
+                {
+                    Title = "Internal Server Error",
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.6.3",
+                    Detail = "Internal Server Error",
+                    Status = StatusCodes.Status500InternalServerError
+                };
+
+                var statusCode = StatusCodes.Status502BadGateway;
+
+                context.Result = new ObjectResult(response)
+                {
+                    StatusCode = statusCode
+                };
+
+                context.ExceptionHandled = true;
+            }
+
+       
         }
 
 
