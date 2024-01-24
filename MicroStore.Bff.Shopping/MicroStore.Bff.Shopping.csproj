@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Protos\country.proto" />
+    <None Remove="Protos\Profiling\profile.proto" />
     <None Remove="Protos\stateProvince.proto" />
   </ItemGroup>
 
@@ -33,6 +34,7 @@
   <ItemGroup>
     <Protobuf Include="Protos\Geographic\country.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Geographic\stateProvince.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Profiling\profile.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

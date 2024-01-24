@@ -84,7 +84,7 @@ namespace MicroStore.Bff.Shopping.Services.Geographic
             {
                 Id = response.Id,
                 Name = response.Name,
-                Abbrevation = response.Abbrevation,
+                Abbreviation = response.Abbrevation,
                 CreatedAt = response.CreatedAt.ToDateTime(),
                 ModifiedAt = response.ModifiedAt?.ToDateTime()
             };

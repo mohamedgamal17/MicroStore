@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using MicroStore.Bff.Shopping.Helpers;
 using MicroStore.Bff.Shopping.Infrastructure;
 using Microsoft.OpenApi.Models;
+using MicroStore.Bff.Shopping.Services.Profiling;
 namespace MicroStore.Bff.Shopping
 {
     public static class ServiceCollectionExtensions
@@ -54,14 +55,18 @@ namespace MicroStore.Bff.Shopping
                 opt.Address = new Uri(grpcConfig.Geographic);
             }).AddInterceptor<GrpcClientTokenInterceptor>();
 
-
-
             services.AddGrpcClient<Grpc.Geographic.StateProvinceService.StateProvinceServiceClient>(opt =>
             {
                 opt.Address = new Uri(grpcConfig.Geographic);
 
             }).AddInterceptor<GrpcClientTokenInterceptor>();
-      
+
+            services.AddGrpcClient<Grpc.Profiling.ProfileService.ProfileServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Profiling);
+
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
         }
 
         public static void ConfigureAuthentication(IServiceCollection services , IConfiguration config)
@@ -110,6 +115,8 @@ namespace MicroStore.Bff.Shopping
 
             services.AddTransient<ITokenService, TokenService>();
 
+            services.AddTransient<ApplicationCurrentUser>();
+
             services.AddAccessTokenManagement();
         }
 
@@ -156,6 +163,10 @@ namespace MicroStore.Bff.Shopping
         private static void RegisterApplicationService(IServiceCollection services)
         {
             services.AddTransient<CountryService>();
+
+            services.AddTransient<StateProvinceService>();
+
+            services.AddTransient<ProfilingService>();
         }
     }
 }

@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using MicroStore.Bff.Shopping.Data.Geographic;
 using MicroStore.Bff.Shopping.Models.Geographic;
 using MicroStore.Bff.Shopping.Services.Geographic;
-namespace MicroStore.Bff.Shopping.Controllers
+namespace MicroStore.Bff.Shopping.Areas.Administration
 {
-    [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "Administration")]
+    [Route("api/administration/countries")]
     [ApiController]
     public class CountryController : ControllerBase
     {
@@ -54,7 +55,7 @@ namespace MicroStore.Bff.Shopping.Controllers
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Country))]
         [Authorize]
-        public async Task<Country> UpdateAsync(string id,CountryModel model)
+        public async Task<Country> UpdateAsync(string id, CountryModel model)
         {
             var result = await _countryService.UpdateAsync(id, model);
 
@@ -106,7 +107,7 @@ namespace MicroStore.Bff.Shopping.Controllers
         [HttpPut]
         [Route("{countryId}/stateprovinces/{stateProvinceId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StateProvince))]
-        public async Task<StateProvince> CreateStateProvincesAsync(string countryId,string stateProvinceId, StateProvinceModel model)
+        public async Task<StateProvince> CreateStateProvincesAsync(string countryId, string stateProvinceId, StateProvinceModel model)
         {
             var result = await _stateProvinceService.UpdateAsync(countryId, stateProvinceId, model);
 

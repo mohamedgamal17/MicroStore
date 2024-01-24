@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+option csharp_namespace = "MicroStore.Bff.Shopping.Grpc.Profiling";
+
+package ProfilingApi;
+
+service ProfileService{
+    rpc Create(ProfileRequest) returns(ProfileResponse);
+    rpc Update(ProfileRequest) returns(ProfileResponse);
+    rpc CreateAddress(CreateAddressRequest) returns(AddressResponse);
+    rpc UpdateAddress(UpdateAddressReqeust) returns(AddressResponse);
+    rpc DeleteAddress(DeleteAddressReqeust) returns(EmptyResponse);
+    rpc GetList(ProfileListRequest) returns(ProfileListResponse);
+    rpc GetByUserId(GetProfileByUserIdRequest) returns(ProfileResponse);
+    rpc GetAddressList(GetAddressListRequest) returns(AddressListResponse);
+    rpc GetAddressById(GetAddressByIdReqeuest) returns(AddressResponse);
+}
+
+
+enum Gender{
+   Male = 0;
+   Female = 5;
+}
+message ProfileRequest{
+    string userId =1;
+    string firstName = 3;
+    string lastName = 4;
+    optional google.protobuf.Timestamp birthDate = 5;
+    Gender gender = 6;
+    string phone = 7;
+    google.protobuf.StringValue avatar = 8;
+    AddressReqeustList addresses = 9;
+}
+message CreateAddressRequest{
+   string userId =1;
+   string name = 2;
+   string phone = 3;
+   string countryCode= 4;
+   string stateProvince= 5;
+   string city = 6;
+   string postalCode= 7;
+   string zip = 8;
+   string addressLine1 = 9;
+   string addressLine2= 10;
+}
+
+message UpdateAddressReqeust{
+   string userId =1;
+   string id = 2;
+   string name = 3;
+   string phone = 4;
+   string countryCode= 5;
+   string stateProvince= 6;
+   string city = 7;
+   string postalCode= 8;
+   string zip = 9;
+   string addressLine1 = 10;
+   string addressLine2= 11;
+}
+
+message DeleteAddressReqeust{
+    string userId= 1;
+    string addressId= 2;
+}
+
+message AddressReqeuest{
+   string name = 2;
+   string phone = 3;
+   string countryCode= 4;
+   string stateProvince= 5;
+   string city = 6;
+   string postalCode= 7;
+   string zip = 8;
+   string addressLine1 = 9;
+   string addressLine2= 10;
+}
+
+message AddressReqeustList{
+    repeated AddressReqeuest items = 1;
+}
+
+message ProfileListRequest{
+    int32 skip = 1;
+    int32 length = 2;
+}
+
+message GetProfileByUserIdRequest{
+    string userId = 1;
+}
+
+message GetAddressListRequest{
+    string userId = 1;
+}
+
+message GetAddressByIdReqeuest{
+    string userId= 1;
+    string addressId= 2;
+}
+
+message ProfileResponse{
+    string id = 1;
+    string userId = 2;
+    string firstName = 3;
+    string lastName = 4;
+    optional google.protobuf.Timestamp birthDate = 5;
+    Gender gender = 6;
+    string phone = 7;
+    google.protobuf.StringValue avatar = 8;
+    repeated AddressResponse addresses = 9;
+    optional google.protobuf.Timestamp createdAt = 10;
+    optional google.protobuf.Timestamp modifiedAt = 11;
+
+}
+
+message ProfileListResponse{
+    repeated ProfileResponse items =1;
+    int32 skip =  2;
+	int32 length = 3;
+	int64 totalCount = 4;
+}
+
+message AddressResponse{
+   string id = 1;
+   string name = 2;
+   string phone = 3;
+   string countryCode= 4;
+   string stateProvince= 5;
+   string city = 6;
+   string postalCode= 7;
+   string zip = 8;
+   string addressLine1 = 9;
+   string addressLine2= 10;
+}
+
+message AddressListResponse{
+    repeated AddressResponse items = 1;
+}
+
+message EmptyResponse{
+
+}
+
+
+
