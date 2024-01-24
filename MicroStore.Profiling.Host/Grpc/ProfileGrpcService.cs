@@ -9,20 +9,26 @@ using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.Profiling.Application.Services;
 using MicroStore.BuildingBlocks.Utils.Paging.Params;
 using MicroStore.BuildingBlocks.Utils.Paging;
+using Volo.Abp.Uow;
 namespace MicroStore.Profiling.Host.Grpc
 {
-    public class ProfileGrpcService : ProfileService.ProfileServiceBase
+    public class ProfileGrpcService : ProfileService.ProfileServiceBase ,IUnitOfWorkEnabled
     {
         private readonly IProfileCommandService _profileCommandService;
 
         private readonly IProfileQueryService _profileQueryService;
-        public ProfileGrpcService(IProfileCommandService profileCommandService, IProfileQueryService profileQueryService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
+        private readonly IServiceProvider _serviceProvider;
+        public ProfileGrpcService(IProfileCommandService profileCommandService, IProfileQueryService profileQueryService, IAbpLazyServiceProvider lazyServiceProvider, IServiceProvider serviceProvider)
         {
             _profileCommandService = profileCommandService;
             _profileQueryService = profileQueryService;
+            LazyServiceProvider = lazyServiceProvider;
+            _serviceProvider = serviceProvider;
         }
 
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
 
         public override async Task<ProfileResponse> Create(ProfileRequest request, ServerCallContext context)
         {
@@ -139,6 +145,17 @@ namespace MicroStore.Profiling.Host.Grpc
             return PrepareAddressResponse(result.Value);
         }
 
+        public override async Task<EmptyResponse> DeleteAddress(DeleteAddressReqeust request, ServerCallContext context)
+        {
+            var result = await _profileCommandService.RemoveAddressAsync(request.UserId, request.AddressId);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            return new EmptyResponse();
+        }
         public override async Task<AddressListResponse> GetAddressList(GetAddressListRequest request, ServerCallContext context)
         {
             var result = await _profileQueryService.ListAddressesAsync(request.UserId);
@@ -165,7 +182,7 @@ namespace MicroStore.Profiling.Host.Grpc
         }
         private CreateProfileModel PrepareCreateProfileModel(ProfileRequest request)
         {
-            return new CreateProfileModel
+            var model = new CreateProfileModel
             {
                 UserId = request.UserId,
                 FirstName = request.FirstName,
@@ -175,11 +192,29 @@ namespace MicroStore.Profiling.Host.Grpc
                 BirthDate = request.BirthDate.ToDateTime(),
                 Gender = request.Gender.ToString()
             };
+
+            if(request.Addresses != null && request.Addresses.Items.Count > 0)
+            {
+                model.Addresses = request.Addresses.Items.Select(x => new AddressModel
+                {
+                    Name = x.Name,
+                    CountryCode = x.CountryCode,
+                    State = x.StateProvince,
+                    City = x.City,
+                    AddressLine1 = x.AddressLine1,
+                    AddressLine2 = x.AddressLine2,
+                    Phone = x.Phone,
+                    PostalCode = x.PostalCode,
+                    Zip = x.Zip
+                }).ToList();
+            }
+
+            return model;
         }
 
         private ProfileModel PrepareUpdateProfileModel(ProfileRequest request)
         {
-            return new ProfileModel
+            var model =  new ProfileModel
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
@@ -188,6 +223,24 @@ namespace MicroStore.Profiling.Host.Grpc
                 BirthDate = request.BirthDate.ToDateTime(),
                 Gender = request.Gender.ToString()
             };
+
+            if (request.Addresses != null && request.Addresses.Items.Count > 0)
+            {
+                model.Addresses = request.Addresses.Items.Select(x => new AddressModel
+                {
+                    Name = x.Name,
+                    CountryCode = x.CountryCode,
+                    State = x.StateProvince,
+                    City = x.City,
+                    AddressLine1 = x.AddressLine1,
+                    AddressLine2 = x.AddressLine2,
+                    Phone = x.Phone,
+                    PostalCode = x.PostalCode,
+                    Zip = x.Zip
+                }).ToList();
+            }
+
+            return model;
         }
 
         private ProfileListResponse PrepareProfileListResponse(PagedResult<ProfileDto> paged)
@@ -216,9 +269,10 @@ namespace MicroStore.Profiling.Host.Grpc
                 Avatar = profile.Avatar,
                 Gender = System.Enum.Parse<Gender>(profile.Gender),
                 UserId = profile.UserId,
-                BirthDate = Timestamp.FromDateTime(profile.BirthDate),
+                BirthDate = Timestamp.FromDateTime(profile.BirthDate.ToUniversalTime()),
                 Phone = profile.Phone,
-                CreatedAt = Timestamp.FromDateTime(profile.CreationTime)
+                CreatedAt = Timestamp.FromDateTime(profile.CreationTime.ToUniversalTime()),
+                ModifiedAt = profile.LastModificationTime?.ToUniversalTime().ToTimestamp()
             };
 
             if(profile.Addresses != null)
@@ -299,7 +353,7 @@ namespace MicroStore.Profiling.Host.Grpc
         }
         private IValidator<T>? ResolveValidator<T>()
         {
-            return LazyServiceProvider.LazyGetService<IValidator<T>>();
+            return _serviceProvider.GetService<IValidator<T>>();
         }
     }
 }
