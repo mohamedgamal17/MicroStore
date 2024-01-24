@@ -14,7 +14,7 @@ namespace MicroStore.BuildingBlocks.AspNetCore.Extensions
             return exception switch
             {
 
-                BusinessException ex => GrpcError.BussniessLogicError(ex.Details),
+                BusinessException ex => GrpcError.BussniessLogicError(ex.Message),
 
                 EntityNotFoundException ex => GrpcError.NotFoundError(ex.Message),
 
