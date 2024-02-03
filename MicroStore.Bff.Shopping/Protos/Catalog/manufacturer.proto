@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroStore.Bff.Shopping.Grpc.Catalog";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package CatalogApi;
+
+service ManufacturerService{
+	rpc Create(CreateManufacturerRequest) returns(ManufacturerResponse);
+	rpc Update(UpdateManufacturerRequest) returns(ManufacturerResponse);
+	rpc GetList(ManufacturerListRequest) returns(ManufacturerListResponse);
+	rpc GetById(GetManufacturerByIdRequest) returns(ManufacturerResponse);	
+}
+
+
+message CreateManufacturerRequest{
+	string name = 1;
+	google.protobuf.StringValue description = 2;
+}
+
+message UpdateManufacturerRequest{
+	string id= 1;
+    string name =2;
+	google.protobuf.StringValue description = 3;
+}
+
+message ManufacturerListRequest{
+	google.protobuf.StringValue name = 1;
+	google.protobuf.StringValue sortBy = 2;
+	bool desc = 3;
+}
+
+message GetManufacturerByIdRequest{
+	string id = 1;
+}
+
+
+message ManufacturerResponse{
+	string id = 1;
+	string name =2;
+	google.protobuf.StringValue description = 3;
+    optional google.protobuf.Timestamp createdAt = 4;
+	optional google.protobuf.Timestamp modifiedAt=6;
+}
+
+message ManufacturerListResponse{
+	repeated ManufacturerResponse data = 1;
+}
+
+

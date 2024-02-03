@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroStore.Bff.Shopping.Grpc.Catalog";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package CatalogApi;
+
+service TagService{
+	rpc Create(CreateTagRequest) returns(TagResponse);
+	rpc Update(UpdateTagRequest) returns(TagResponse);
+	rpc GetList(TagListRequest) returns(TagListResponse);
+	rpc GetbyId(GetTagByIdRequest) returns(TagResponse);
+}
+
+message CreateTagRequest{
+	string name= 1;
+	google.protobuf.StringValue description=2;
+}
+
+message UpdateTagRequest{
+	string id = 1;
+	string name =2;
+	google.protobuf.StringValue description=3;
+}
+
+message TagListRequest{}
+
+message GetTagByIdRequest{
+	string id= 1;
+}
+
+message TagResponse{
+	string id = 1;
+	google.protobuf.StringValue name= 2;
+	google.protobuf.StringValue description = 3;
+	google.protobuf.Timestamp createdAt = 4;
+	google.protobuf.Timestamp modifiedAt= 5;
+}
+
+message TagListResponse{
+	repeated TagResponse data=1;
+}

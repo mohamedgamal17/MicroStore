@@ -7,6 +7,7 @@ using MicroStore.Bff.Shopping.Helpers;
 using MicroStore.Bff.Shopping.Infrastructure;
 using Microsoft.OpenApi.Models;
 using MicroStore.Bff.Shopping.Services.Profiling;
+using MicroStore.Bff.Shopping.Services.Catalog;
 namespace MicroStore.Bff.Shopping
 {
     public static class ServiceCollectionExtensions
@@ -67,6 +68,29 @@ namespace MicroStore.Bff.Shopping
 
             }).AddInterceptor<GrpcClientTokenInterceptor>();
 
+            services.AddGrpcClient<Grpc.Catalog.CategoryService.CategoryServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Catalog);
+
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+            services.AddGrpcClient<Grpc.Catalog.ManufacturerService.ManufacturerServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Catalog);
+
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+            services.AddGrpcClient<Grpc.Catalog.TagService.TagServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Catalog);
+
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+            services.AddGrpcClient<Grpc.Catalog.ProductService.ProductServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Catalog);
+
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
         }
 
         public static void ConfigureAuthentication(IServiceCollection services , IConfiguration config)
@@ -167,6 +191,8 @@ namespace MicroStore.Bff.Shopping
             services.AddTransient<StateProvinceService>();
 
             services.AddTransient<ProfilingService>();
+
+            services.AddTransient<CategoryService>();
         }
     }
 }

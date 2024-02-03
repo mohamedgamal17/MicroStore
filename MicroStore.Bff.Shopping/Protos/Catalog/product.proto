@@ -1,0 +1,207 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroStore.Bff.Shopping.Grpc.Catalog";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package CatalogApi;
+
+service ProductService{
+	rpc Create(CreateProductRequest) returns(ProductResponse);
+	rpc Update(UpdateProductRequest) returns(ProductResponse);
+	rpc GetList(ProductListRequest) returns (ProductListResponse);
+	rpc GetById(GetProductByIdRequest) returns (ProductResponse);
+	rpc CreateProductImage(CreateProductImageRequest) returns(ProductImageResponse);
+	rpc UpdateProductImage(UpdateProductImageRequest) returns (ProductImageResponse);
+	rpc DeleteProductImage(DeleteProductImageRequest) returns (Empty);
+	rpc GetProductImageList(ProductImageListRequest) returns(ProductImageListResponse);
+	rpc GetProductImageById(GetProductImageByIdRequest) returns(ProductImageResponse);
+} 
+
+
+message ProductImageListRequest{
+	string productId= 1;
+}
+
+message ProductCategoryListModel{
+	repeated string categories = 1;
+}
+
+message ProductManufacturerListModel{
+	repeated string manufacturers =1;
+}
+
+message ProductTagListModel{
+	repeated string tags = 1;
+}
+
+message ProductImageListModel{
+	repeated ProductImageRequest images = 1;
+}
+
+message CreateProductRequest{
+    string name = 1;
+	string sku = 2;
+	google.protobuf.StringValue shortDescription = 3;
+	google.protobuf.StringValue longDescription = 4;
+	double price = 5;
+	double oldPrice = 6;
+	bool IsFeatured = 7;
+    Weight weight = 8;
+	Dimension dimension = 9;
+	ProductCategoryListModel categories = 10;
+	ProductManufacturerListModel manufacturers = 11;
+	ProductTagListModel tags = 12;
+	ProductImageListModel images = 13;
+}
+
+
+
+message UpdateProductRequest{
+	string id = 1;
+	string name = 2;
+	string sku =3;
+	google.protobuf.StringValue shortDescription = 4;
+	google.protobuf.StringValue longDescription = 5;
+	double price = 6;
+	double oldPrice = 7;
+	bool IsFeatured = 8;
+    Weight weight = 9;
+	Dimension dimension = 10;
+	ProductCategoryListModel categories = 11;
+	ProductManufacturerListModel manufacturers = 12;
+	ProductTagListModel tags = 13;
+	ProductImageListModel images = 14;
+}
+
+message CreateProductImageRequest{
+	string productId =1;
+	string image = 2;
+	int32 displayOrder = 3;
+}
+
+message UpdateProductImageRequest{
+	string productId=  1;
+	string imageId = 2;
+    string image = 3;
+	int32 displayOrder = 4;
+}
+
+message DeleteProductImageRequest{
+    string productId=  1;
+	string imageId = 2;
+}
+message ProductListRequest{
+	 google.protobuf.StringValue Name = 1;
+     google.protobuf.StringValue Category =2;
+     google.protobuf.StringValue Manufacturer = 3; 
+     google.protobuf.StringValue Tag  = 4;
+     optional double MinPrice = 5;
+     optional double MaxPrice = 6;
+     optional bool IsFeatured = 7;
+	 int32 skip =  8;
+	 int32 length = 9;
+	 optional string sortBy = 10;
+
+}
+
+message GetProductByIdRequest{
+	optional string id = 1;
+}
+
+message ProductListResponse{
+    repeated  ProductResponse items =1;
+	int32 skip =  2;
+	int32 length = 3;
+	int64 totalCount = 4;
+}
+
+message ProductResponse{
+	string id = 1;
+	string name = 2;
+	string sku = 3;
+	string shortDescription = 4;
+	string longDescription = 5;
+	double price= 6;
+	double oldPrice =7;
+	bool isFeatured = 8;
+	Weight Weight =  9;
+	Dimension Dimensions = 10;
+	repeated ProductCategoryResponse Categories =  11;
+	repeated ProductManufacturerResponse Manufacturers = 12;
+	repeated ProductTagResponse Tags = 13;
+	repeated ProductImageResponse Images = 14;
+
+}
+
+
+
+message GetProductImageByIdRequest{
+	string productId = 1;
+	string productImageId = 2;
+}
+
+enum WeightUnit{
+	Gram = 0;
+	Pound = 5;
+	KilogGram = 10;
+}
+
+enum DimensionUnit{
+	CentiMeter = 0;
+    Inch = 5;
+}
+
+message Weight{
+	double value = 1;
+	WeightUnit unit= 2;
+}
+
+message Dimension{
+	double width = 1;
+    double length = 2; 
+    double height = 3;
+	DimensionUnit unit = 4;
+}
+
+message ProductCategoryResponse{
+	string id= 1;
+	string name = 2;
+	google.protobuf.StringValue description = 3;
+}
+
+message ProductManufacturerResponse{
+	string id = 1;
+	string name = 2;
+	google.protobuf.StringValue description = 3;
+}
+
+message ProductTagResponse{
+	string id = 1;
+	string name = 2;
+}
+
+message ProductImageResponse{
+	string id= 1;
+	string image =2;
+	int32 displayOrder = 3;
+}
+
+message ProductImageRequest
+{
+	string image = 1;
+	int32 displayOrder = 2;
+}
+
+
+message ProductImageListResponse{
+	 repeated ProductImageResponse items = 1;
+}
+
+
+
+message Empty {
+
+}
+
