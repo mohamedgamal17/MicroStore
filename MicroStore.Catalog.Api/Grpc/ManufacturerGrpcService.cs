@@ -135,7 +135,8 @@ namespace MicroStore.Catalog.Api.Grpc
                 Id = manufacturer.Id,
                 Name = manufacturer.Name,
                 Description = manufacturer.Description,
-                CreatedAt = Timestamp.FromDateTime(manufacturer.CreationTime)
+                CreatedAt = Timestamp.FromDateTime(manufacturer.CreationTime.ToUniversalTime()),
+                ModifiedAt = manufacturer.LastModificationTime?.ToUniversalTime().ToTimestamp()
             };
         }
 

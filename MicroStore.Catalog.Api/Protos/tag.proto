@@ -35,7 +35,7 @@ message TagResponse{
 	google.protobuf.StringValue name= 2;
 	google.protobuf.StringValue description = 3;
 	google.protobuf.Timestamp createdAt = 4;
-	google.protobuf.StringValue creatorId= 5;
+	google.protobuf.Timestamp modifiedAt= 5;
 }
 
 message TagListResponse{

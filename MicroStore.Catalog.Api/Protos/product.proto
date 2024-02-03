@@ -19,6 +19,22 @@ service ProductService{
 	rpc GetProductImageById(GetProductImageByIdRequest) returns(ProductImageResponse);
 } 
 
+message ProductCategoryListModel{
+	repeated string categories = 1;
+}
+
+message ProductManufacturerListModel{
+	repeated string manufacturers =1;
+}
+
+message ProductTagListModel{
+	repeated string tags = 1;
+}
+
+message ProductImageListModel{
+	repeated ProductImageRequest images = 1;
+}
+
 message CreateProductRequest{
     string name = 1;
 	string sku = 2;
@@ -29,12 +45,13 @@ message CreateProductRequest{
 	bool IsFeatured = 7;
     Weight weight = 8;
 	Dimension dimension = 9;
-	repeated string categories = 10;
-	repeated string manufacturers = 11;
-	repeated string tags = 12;
-	repeated ProductImageRequest images = 13;
-
+	ProductCategoryListModel categories = 10;
+	ProductManufacturerListModel manufacturers = 11;
+	ProductTagListModel tags = 12;
+	ProductImageListModel images = 13;
 }
+
+
 
 message UpdateProductRequest{
 	string id = 1;
@@ -47,12 +64,11 @@ message UpdateProductRequest{
 	bool IsFeatured = 8;
     Weight weight = 9;
 	Dimension dimension = 10;
-	repeated string categories = 11;
-	repeated string manufacturers = 12;
-	repeated string tags = 13;
-	repeated ProductImageRequest images = 14;
+	ProductCategoryListModel categories = 11;
+	ProductManufacturerListModel manufacturers = 12;
+	ProductTagListModel tags = 13;
+	ProductImageListModel images = 14;
 }
-
 message CreateProductImageRequest{
 	string productId =1;
 	string image = 2;

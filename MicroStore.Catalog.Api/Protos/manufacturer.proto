@@ -42,7 +42,7 @@ message ManufacturerResponse{
 	string name =2;
 	google.protobuf.StringValue description = 3;
     optional google.protobuf.Timestamp createdAt = 4;
-	google.protobuf.StringValue creatorId= 5;
+	optional google.protobuf.Timestamp modifiedAt= 5;
 }
 
 message ManufacturerListResponse{

@@ -85,7 +85,7 @@ namespace MicroStore.Catalog.Api.Grpc
             return PrepareListCategoryResponse(result.Value);
         }
 
-        public override async Task<CategoryResponse> GetById(GetByIdRequest request, ServerCallContext context)
+        public override async Task<CategoryResponse> GetById(GetCategoryByIdRequest request, ServerCallContext context)
         {
             var result = await _catalogQueryService.GetAsync(request.Id);
 
@@ -141,7 +141,8 @@ namespace MicroStore.Catalog.Api.Grpc
                 Id = category.Id,
                 Name = category.Name,
                 Description = category.Description ?? string.Empty,
-                CreatedAt = Timestamp.FromDateTime(category.CreationTime)
+                CreatedAt = Timestamp.FromDateTime(category.CreationTime.ToUniversalTime()),
+                ModifiedAt = category.LastModificationTime?.ToUniversalTime().ToTimestamp()
             };
 
             return response;

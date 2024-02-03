@@ -11,7 +11,7 @@ service CategoryService{
 	rpc Create(CreateCategoryRequest) returns(CategoryResponse);
 	rpc Update(UpdateCategoryRequest) returns(CategoryResponse);
 	rpc GetList(CategoryListRequest) returns(ListCategoryResponse);
-	rpc GetById(GetByIdRequest) returns (CategoryResponse);
+	rpc GetById(GetCategoryByIdRequest) returns (CategoryResponse);
 }
 
 message CreateCategoryRequest{
@@ -31,7 +31,7 @@ message CategoryListRequest{
 	bool desc= 3;
 }
 
-message GetByIdRequest{
+message GetCategoryByIdRequest{
 	string id = 1;
 }
 
@@ -41,7 +41,7 @@ message CategoryResponse
 	string name = 2;
 	optional string description = 3;
 	optional google.protobuf.Timestamp createdAt = 4;
-	optional google.protobuf.StringValue creatorId= 5;
+	optional google.protobuf.Timestamp modifiedAt= 5;
 }
 
 message CategoryPagedResponse

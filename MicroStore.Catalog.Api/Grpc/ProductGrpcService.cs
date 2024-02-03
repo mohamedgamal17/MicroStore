@@ -233,17 +233,26 @@ namespace MicroStore.Catalog.Api.Grpc
                 };
             }
 
-            model.Categories = request.Categories.ToHashSet();
 
-            model.Manufacturers = request.Manufacturers.ToHashSet();
-
-            model.ProductImages = request.Images.Select(x => new ProductImageModel
+            if(request.Categories != null)
             {
-                Image = x.Image,
-                DisplayOrder = x.DisplayOrder
-            }).ToList();
+                model.Categories = request.Categories.Categories.ToHashSet();
+            }
 
-
+            if(request.Manufacturers != null)
+            {
+                model.Manufacturers = request.Manufacturers.Manufacturers.ToHashSet();
+            }
+            
+            if(request.Images != null)
+            {
+                model.ProductImages = request.Images.Images.Select(x => new ProductImageModel
+                {
+                    Image = x.Image,
+                    DisplayOrder = x.DisplayOrder
+                }).ToList();
+            }
+           
             return model;
         }
         private ProductModel PrepareProductModel(UpdateProductRequest request)
@@ -279,15 +288,25 @@ namespace MicroStore.Catalog.Api.Grpc
                 };
             }
 
-            model.Categories = request.Categories.ToHashSet();
 
-            model.Manufacturers = request.Manufacturers.ToHashSet();
-
-            model.ProductImages = request.Images.Select(x => new ProductImageModel
+            if (request.Categories != null)
             {
-                Image = x.Image,
-                DisplayOrder = x.DisplayOrder
-            }).ToList();
+                model.Categories = request.Categories.Categories.ToHashSet();
+            }
+
+            if (request.Manufacturers != null)
+            {
+                model.Manufacturers = request.Manufacturers.Manufacturers.ToHashSet();
+            }
+
+            if (request.Images != null)
+            {
+                model.ProductImages = request.Images.Images.Select(x => new ProductImageModel
+                {
+                    Image = x.Image,
+                    DisplayOrder = x.DisplayOrder
+                }).ToList();
+            }
 
 
             return model;

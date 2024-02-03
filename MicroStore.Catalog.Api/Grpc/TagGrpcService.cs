@@ -113,7 +113,8 @@ namespace MicroStore.Catalog.Api.Grpc
                 Id = tag.Id,
                 Name = tag.Name,
                 Description = tag.Description,
-                CreatedAt = Timestamp.FromDateTime(tag.CreationTime)
+                CreatedAt = Timestamp.FromDateTime(tag.CreationTime.ToUniversalTime()),
+                ModifiedAt = tag.LastModificationTime?.ToUniversalTime().ToTimestamp()
             };
         }
 
