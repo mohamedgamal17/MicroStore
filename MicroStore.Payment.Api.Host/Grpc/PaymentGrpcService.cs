@@ -91,6 +91,19 @@ namespace MicroStore.Payment.Api.Host.Grpc
             return PreparePaymentResponse(result.Value);
         }
 
+        public override async Task<PaymentResponse> Refund(RefundPaymentRequest request, ServerCallContext context)
+        {
+
+            var result = await _paymentRequestCommandService.RefundPaymentAsync(request.PaymentRequestId);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            return PreparePaymentResponse(result.Value);
+        }
+
         public override async Task<PaymentListResponse> GetList(PaymentListRequest request, ServerCallContext context)
         {
             var model = PreparePaymentListQueryModel(request);
@@ -102,7 +115,7 @@ namespace MicroStore.Payment.Api.Host.Grpc
                 validationResult.ThrowRpcException();
             }
 
-            var result = await _paymentRequestQueryService.ListPaymentAsync(model);
+            var result = await _paymentRequestQueryService.ListPaymentAsync(model , request.UserId);
 
             if (result.IsFailure)
             {
@@ -202,12 +215,13 @@ namespace MicroStore.Payment.Api.Host.Grpc
                 TaxCost = payment.TaxCost,
                 SubTotal = payment.SubTotal,
                 TotalCost = payment.TotalCost,
-                Status = payment.Status,
+                Status = System.Enum.Parse<PaymentStatus>(payment.Status),
                 CreatedAt = payment.CreationTime.ToTimestamp(),
                 Description = payment.Description,
                 CapturedAt = payment.CapturedAt.ToTimestamp(),
                 RefundedAt = payment.RefundedAt.ToTimestamp(),
-                FaultAt =payment.FaultAt.ToTimestamp()
+                FaultAt =payment.FaultAt.ToTimestamp(),
+                ModifiedAt = payment.LastModificationTime?.ToTimestamp()
 
             };
 
@@ -257,6 +271,7 @@ namespace MicroStore.Payment.Api.Host.Grpc
 
         private PaymentProcessResponse PreparePaymentProcessResponse(PaymentProcessResultDto paymentProcess)
         {
+            
             var response = new PaymentProcessResponse
             {
                 SessionId = paymentProcess.SessionId,
@@ -265,7 +280,8 @@ namespace MicroStore.Payment.Api.Host.Grpc
                 CancelUrl = paymentProcess.CancelUrl,
                 CheckoutLink = paymentProcess.CheckoutLink,
                 AmountSubTotal = paymentProcess.AmountSubTotal,
-                AmountTotal = paymentProcess.AmountTotal
+                AmountTotal = paymentProcess.AmountTotal,
+                Provider = paymentProcess.Provider
             };
 
             return response;

@@ -10,6 +10,7 @@ service PaymentService{
     rpc Create(CreatePaymentRequest) returns(PaymentResponse);
     rpc Process(ProcessPaymentReqeust) returns(PaymentProcessResponse);
     rpc Complete(CompletePaymentRequest) returns(PaymentResponse);
+    rpc Refund(RefundPaymentRequest) returns(PaymentResponse);
     rpc GetList(PaymentListRequest) returns(PaymentListResponse);
     rpc GetById(GetPaymentByIdReqeust) returns(PaymentResponse);
 }
@@ -49,15 +50,20 @@ message CompletePaymentRequest{;
     string sessionId = 2;
 }
 
+message RefundPaymentRequest{
+    string paymentRequestId =1; 
+}
+
 message PaymentListRequest{
     google.protobuf.StringValue orderNumber = 1;
     google.protobuf.StringValue Status = 2;
-    double minPrice = 3;
-    double maxPrice = 4;
-    optional google.protobuf.Timestamp startDate = 5;
-    optional google.protobuf.Timestamp endDate = 6;
-    int32 skip = 7;
-    int32 length = 8;
+    google.protobuf.StringValue userId= 3;
+    double minPrice = 4;
+    double maxPrice = 5;
+    optional google.protobuf.Timestamp startDate = 6;
+    optional google.protobuf.Timestamp endDate = 7;
+    int32 skip = 8;
+    int32 length = 9;
     string sortBy = 10;
     bool desc = 11;
 }
@@ -76,12 +82,13 @@ message PaymentResponse{
     string description = 9;
     google.protobuf.StringValue paymentGateway = 10;
     google.protobuf.StringValue transctionId =11;
-    string Status =12;
+    PaymentStatus Status =12;
     repeated PaymentItemResponse Items = 13;
     optional google.protobuf.Timestamp createdAt = 14;
     optional google.protobuf.Timestamp capturedAt = 15;
     optional google.protobuf.Timestamp refundedAt = 16;
     optional google.protobuf.Timestamp faultAt = 17;
+    optional google.protobuf.Timestamp modifiedAt = 18;
 }
 
 message PaymentItemResponse{
@@ -95,14 +102,14 @@ message PaymentItemResponse{
 }
 
 message PaymentProcessResponse{
-    string id = 1;
-    string sessionId = 2;
-    string transactionId = 3;
-    double amountSubTotal = 4;
-    double amountTotal = 5;
-    string checkoutLink = 6;
-    string cancelUrl = 7;
-    string successUrl = 8;
+    string sessionId = 1;
+    string transactionId = 2;
+    double amountSubTotal = 3;
+    double amountTotal = 4;
+    string checkoutLink = 5;
+    string cancelUrl = 6;
+    string successUrl = 7;
+    string provider = 8;
 }
 
 message PaymentListResponse{
@@ -114,5 +121,18 @@ message PaymentListResponse{
 
 message GetPaymentByIdReqeust{
     string id = 1;
+}
+
+enum PaymentStatus
+{
+   Waiting = 0;
+
+   Payed = 5;
+
+   UnPayed = 10;
+
+   Refunded = 15;
+
+   Faild = 20;
 }
 
