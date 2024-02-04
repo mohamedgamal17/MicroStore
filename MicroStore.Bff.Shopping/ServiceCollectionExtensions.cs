@@ -8,6 +8,7 @@ using MicroStore.Bff.Shopping.Infrastructure;
 using Microsoft.OpenApi.Models;
 using MicroStore.Bff.Shopping.Services.Profiling;
 using MicroStore.Bff.Shopping.Services.Catalog;
+using MicroStore.Bff.Shopping.Services.Billing;
 namespace MicroStore.Bff.Shopping
 {
     public static class ServiceCollectionExtensions
@@ -90,6 +91,11 @@ namespace MicroStore.Bff.Shopping
             {
                 opt.Address = new Uri(grpcConfig.Catalog);
 
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+            services.AddGrpcClient<Grpc.Billing.PaymentService.PaymentServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Billing);
             }).AddInterceptor<GrpcClientTokenInterceptor>();
         }
 
@@ -193,6 +199,14 @@ namespace MicroStore.Bff.Shopping
             services.AddTransient<ProfilingService>();
 
             services.AddTransient<CategoryService>();
+
+            services.AddTransient<ManufacturerService>();
+
+            services.AddTransient<ProductTagService>();
+
+            services.AddTransient<ProductService>();
+
+            services.AddTransient<PaymentService>();
         }
     }
 }

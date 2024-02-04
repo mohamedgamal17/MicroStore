@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+
+option csharp_namespace = "MicroStore.Bff.Shopping.Grpc.Billing";
+
+service PaymentService{
+    rpc Create(CreatePaymentRequest) returns(PaymentResponse);
+    rpc Process(ProcessPaymentReqeust) returns(PaymentProcessResponse);
+    rpc Complete(CompletePaymentRequest) returns(PaymentResponse);
+    rpc Refund(RefundPaymentRequest) returns(PaymentResponse);
+    rpc GetList(PaymentListRequest) returns(PaymentListResponse);
+    rpc GetById(GetPaymentByIdReqeust) returns(PaymentResponse);
+}
+
+
+message CreatePaymentRequest{
+    string orderId = 1;
+    string orderNumber= 2;
+    string userId = 3;
+    double subTotal = 4;
+    double taxCost = 5;
+    double shippingCost = 6; 
+    double totalCost = 7;
+    string description = 8;
+    repeated PaymentProductRequest Items = 9;
+}
+
+
+message PaymentProductRequest{
+    string productId = 2;
+    string name = 3;
+    string sku = 4;
+    google.protobuf.StringValue thumbnail = 5;
+    int32 quantity = 6;
+    double unitPrice = 7;
+}
+
+message ProcessPaymentReqeust{       
+    string id = 1;
+    string gatewayName=2;
+    string returnUrl =3;
+    string cancelUrl = 4;
+}
+
+message CompletePaymentRequest{;
+    string gatewayName=1;
+    string sessionId = 2;
+}
+
+message RefundPaymentRequest{
+    string paymentRequestId =1; 
+}
+
+message PaymentListRequest{
+    google.protobuf.StringValue orderNumber = 1;
+    google.protobuf.StringValue Status = 2;
+    google.protobuf.StringValue userId= 3;
+    double minPrice = 4;
+    double maxPrice = 5;
+    optional google.protobuf.Timestamp startDate = 6;
+    optional google.protobuf.Timestamp endDate = 7;
+    int32 skip = 8;
+    int32 length = 9;
+    string sortBy = 10;
+    bool desc = 11;
+}
+
+
+
+message PaymentResponse{
+	string id = 1;
+	string orderId = 2;
+    string orderNumber= 3;
+    string userId = 4;
+    double subTotal = 5;
+    double taxCost = 6;
+    double shippingCost = 7; 
+    double totalCost = 8;
+    string description = 9;
+    google.protobuf.StringValue paymentGateway = 10;
+    google.protobuf.StringValue transctionId =11;
+    PaymentStatus Status =12;
+    repeated PaymentItemResponse Items = 13;
+    optional google.protobuf.Timestamp createdAt = 14;
+    optional google.protobuf.Timestamp capturedAt = 15;
+    optional google.protobuf.Timestamp refundedAt = 16;
+    optional google.protobuf.Timestamp faultAt = 17;
+    optional google.protobuf.Timestamp modifiedAt = 18;
+}
+
+message PaymentItemResponse{
+    string id = 1;
+    string productId = 2;
+    string name = 3;
+    string sku = 4;
+    string thumbnail = 5;
+    int32 quantity = 6;
+    double unitPrice = 7;
+}
+
+message PaymentProcessResponse{
+    string sessionId = 1;
+    string transactionId = 2;
+    double amountSubTotal = 3;
+    double amountTotal = 4;
+    string checkoutLink = 5;
+    string cancelUrl = 6;
+    string successUrl = 7;
+    string provider = 8;
+}
+
+message PaymentListResponse{
+    int32 skip = 1;
+    int32 length = 2;
+    int64 totalCount=  4;
+    repeated PaymentResponse items = 5;
+}
+
+message GetPaymentByIdReqeust{
+    string id = 1;
+}
+enum PaymentStatus
+{
+   Waiting = 0;
+
+   Payed = 5;
+
+   UnPayed = 10;
+
+   Refunded = 15;
+
+   Faild = 20;
+}
