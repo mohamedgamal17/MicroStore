@@ -55,7 +55,7 @@ message CreateShipmentReqeust{
     string userId = 2;
     string  orderNumber= 3;
     AddressRequest address = 4;
-    repeated ShipmentItemResponse items = 5;
+    repeated ShipmentItemRequest items = 5;
 }
 
 
@@ -97,16 +97,17 @@ message GetShipmentRateReqeust{
 }
 
 message ShipmentListRequest{
-     google.protobuf.StringValue orderNumber = 1;
-     google.protobuf.StringValue trackingNumber =2;
-     int32 Status = 3;
-     google.protobuf.StringValue  country =4;
-     optional google.protobuf.Timestamp startDate = 5;
-     optional google.protobuf.Timestamp endDate =6;
-     int32 skip = 7;
-     int32 length = 8;
-     string sortBy = 9;
-     bool desc = 10;
+    google.protobuf.StringValue userId= 1;
+     google.protobuf.StringValue orderNumber = 2;
+     google.protobuf.StringValue trackingNumber =3;
+     int32 Status = 4;
+     google.protobuf.StringValue  country =5;
+     optional google.protobuf.Timestamp startDate = 6;
+     optional google.protobuf.Timestamp endDate =7;
+     int32 skip = 8;
+     int32 length = 9;
+     string sortBy = 10;
+     bool desc = 11;
 }
 
 message GetShipmentById{
@@ -132,6 +133,8 @@ message ShipmentResponse{
     google.protobuf.StringValue  systemName = 9;
     ShipmentStatus status  = 10;
     repeated ShipmentItemResponse items = 11;
+    optional google.protobuf.Timestamp createdAt = 12;
+    optional google.protobuf.Timestamp modifiedAt = 13;
 }
 
 message AddressResposne{

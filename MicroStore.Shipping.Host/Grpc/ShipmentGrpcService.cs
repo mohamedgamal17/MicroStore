@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MicroStore.BuildingBlocks.AspNetCore.Extensions;
 using MicroStore.BuildingBlocks.Utils.Paging;
@@ -108,7 +109,7 @@ namespace MicroStore.Shipping.Host.Grpc
                 validationResult.ThrowRpcException();
             }
 
-            var result = await _shipmentQueryService.ListAsync(model);
+            var result = await _shipmentQueryService.ListAsync(model, request.UserId);
 
             if (result.IsFailure)
             {
@@ -241,7 +242,7 @@ namespace MicroStore.Shipping.Host.Grpc
                 TrackingNumber = shipment.TrackingNumber,
                 UserId = shipment.UserId,
                 SystemName = shipment.SystemName,
-                Status = Enum.Parse<ShipmentStatus>(shipment.Status),
+                Status = System.Enum.Parse<ShipmentStatus>(shipment.Status),
                 Address = new AddressResposne
                 {
                     Name = shipment.Address.Name,
@@ -254,7 +255,8 @@ namespace MicroStore.Shipping.Host.Grpc
                     Phone = shipment.Address.Phone,
                     Zip = shipment.Address.Zip
                 },
-
+                CreatedAt = shipment.CreationTime.ToUniversalTime().ToTimestamp(),
+                ModifiedAt = shipment.LastModificationTime?.ToUniversalTime().ToTimestamp()
             };
 
             if(shipment.Items != null)
@@ -275,12 +277,12 @@ namespace MicroStore.Shipping.Host.Grpc
                             Length = item.Dimension.Lenght,
                             Height = item.Dimension.Height,
                             Width = item.Dimension.Width,
-                            Unit = Enum.Parse<DimensionUnit>(item.Dimension.Unit),
+                            Unit = System.Enum.Parse<DimensionUnit>(item.Dimension.Unit),
                         },
                         Weight = new Weight
                         {
                             Value = item.Weight.Value,
-                            Unit = Enum.Parse<WeightUnit>(item.Weight.Unit)
+                            Unit = System.Enum.Parse<WeightUnit>(item.Weight.Unit)
                         }
                     };
 
