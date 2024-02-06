@@ -14,6 +14,9 @@
     <None Remove="Protos\Catalog\tag.proto" />
     <None Remove="Protos\country.proto" />
     <None Remove="Protos\Profiling\profile.proto" />
+    <None Remove="Protos\Shipping\address.proto" />
+    <None Remove="Protos\Shipping\rates.proto" />
+    <None Remove="Protos\Shipping\shipment.proto" />
     <None Remove="Protos\stateProvince.proto" />
   </ItemGroup>
 
@@ -49,6 +52,9 @@
     <Protobuf Include="Protos\Geographic\country.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Geographic\stateProvince.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Profiling\profile.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Shipping\address.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Shipping\rates.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Shipping\shipment.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

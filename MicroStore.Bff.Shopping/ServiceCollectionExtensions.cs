@@ -9,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using MicroStore.Bff.Shopping.Services.Profiling;
 using MicroStore.Bff.Shopping.Services.Catalog;
 using MicroStore.Bff.Shopping.Services.Billing;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 namespace MicroStore.Bff.Shopping
 {
     public static class ServiceCollectionExtensions
@@ -97,6 +99,23 @@ namespace MicroStore.Bff.Shopping
             {
                 opt.Address = new Uri(grpcConfig.Billing);
             }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+
+            services.AddGrpcClient<Grpc.Shipping.ShipmentService.ShipmentServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Shipping);
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+            services.AddGrpcClient<Grpc.Shipping.RateService.RateServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Shipping);
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+            services.AddGrpcClient<Grpc.Shipping.AddressService.AddressServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Shipping);
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
         }
 
         public static void ConfigureAuthentication(IServiceCollection services , IConfiguration config)
@@ -192,21 +211,19 @@ namespace MicroStore.Bff.Shopping
         }
         private static void RegisterApplicationService(IServiceCollection services)
         {
-            services.AddTransient<CountryService>();
 
-            services.AddTransient<StateProvinceService>();
+            var assembly = Assembly.GetExecutingAssembly();
 
-            services.AddTransient<ProfilingService>();
+            var types = assembly.GetTypes()
+                .Where(x => !x.Namespace?.Contains("Grpc") ?? false)
+                .Where(x => x.IsClass)
+                .Where(x => x.Name.EndsWith("Service"))
+                .ToList();
 
-            services.AddTransient<CategoryService>();
-
-            services.AddTransient<ManufacturerService>();
-
-            services.AddTransient<ProductTagService>();
-
-            services.AddTransient<ProductService>();
-
-            services.AddTransient<PaymentService>();
+            foreach (var type in types)
+            {
+                services.AddTransient(type);
+            }
         }
     }
 }

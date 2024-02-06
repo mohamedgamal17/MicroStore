@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroStore.Bff.Shopping.Grpc.Shipping";
+import "google/protobuf/wrappers.proto";
+import "Protos/Shipping/shipment.proto";
+
+package ShippingApi;
+
+service AddressService{
+	rpc Validate(ShippingApi.AddressRequest) returns(AddressValidationResultResponse);
+}
+
+message AddressValidationResponse{
+	 google.protobuf.StringValue type = 1;
+     google.protobuf.StringValue code = 2;
+     google.protobuf.StringValue message = 3;
+}
+
+message  AddressValidationResultResponse{
+    bool isValid = 1;
+    repeated AddressValidationResponse messages = 2;
+}

@@ -39,7 +39,7 @@ namespace MicroStore.Bff.Shopping.Areas.FrontEnd
 
 
         [HttpGet]
-        [Route("/{productId}/images")]
+        [Route("{productId}/images")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProductImage>))]
         public async Task<List<ProductImage>> ListProductImagesAsync(string productId)
         {
@@ -49,7 +49,7 @@ namespace MicroStore.Bff.Shopping.Areas.FrontEnd
         }
 
         [HttpGet]
-        [Route("/{productId}/images/{imageId}")]
+        [Route("{productId}/images/{imageId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductImage))]
         public async Task<ProductImage> GetProductImageAsync(string productId, string imageId)
         {

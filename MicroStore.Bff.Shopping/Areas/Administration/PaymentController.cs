@@ -19,7 +19,7 @@ namespace MicroStore.Bff.Shopping.Areas.Administration
         }
 
         [Route("")]
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedList<Payment>))]
         public async Task<ActionResult<PagedList<Payment>>> ListPayments(string? userId = null, string? orderNumber = null, string? status = null, double minPrice = -1, double maxPrice = -1, DateTime? startDate = null, DateTime? endDate = null, int skip = 0, int length = 10, string? sortBy = null, bool desc = false)
         {
