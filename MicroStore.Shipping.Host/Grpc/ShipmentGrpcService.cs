@@ -119,6 +119,42 @@ namespace MicroStore.Shipping.Host.Grpc
             return PrepareShipmentListResponse(result.Value);
         }
 
+        public override async Task<ShipmentListByOrderResponse> GetListByOrderIds(ShipmentListByOrderIdsRequest request, ServerCallContext context)
+        {
+            var result = await _shipmentQueryService.ListByOrderIds(request.OrderIds.ToList());
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            var response = new ShipmentListByOrderResponse();
+
+            foreach (var item in result.Value)
+            {
+                response.Items.Add(PrepareShipmentResponse(item));
+            }
+
+            return response;
+        }
+
+        public override async Task<ShipmentListByOrderResponse> GetListByOrderNumbers(ShipmentListByOrderNumbersRequest request, ServerCallContext context)
+        {
+            var result = await _shipmentQueryService.ListByOrderNumbers(request.OrderNumbers.ToList());
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            var response = new ShipmentListByOrderResponse();
+
+            foreach (var item in result.Value)
+            {
+                response.Items.Add(PrepareShipmentResponse(item));
+            }
+            return response;
+        }
         public override async Task<ShipmentResponse> GetById(GetShipmentById request, ServerCallContext context)
         {
             var result = await _shipmentQueryService.GetAsync(request.Id);
@@ -127,6 +163,31 @@ namespace MicroStore.Shipping.Host.Grpc
             {
                 result.Exception.ThrowRpcException();
             }
+
+            return PrepareShipmentResponse(result.Value);
+        }
+
+        public override async Task<ShipmentResponse> GetByOrderId(GetShipmentByOrderIdRequest request, ServerCallContext context)
+        {
+            var result = await _shipmentQueryService.GetByOrderIdAsync(request.OrderId);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            return PrepareShipmentResponse(result.Value);
+        }
+
+        public override async Task<ShipmentResponse> GetByOrderNumber(GetShipmentByOrderNumberRequest request, ServerCallContext context)
+        {
+            var result = await _shipmentQueryService.GetByOrderNumberAsync(request.OrderNumber);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
             return PrepareShipmentResponse(result.Value);
         }
         private ShipmentModel PrepareShipmentModel(CreateShipmentReqeust request)

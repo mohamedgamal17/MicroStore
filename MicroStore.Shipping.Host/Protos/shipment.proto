@@ -14,7 +14,11 @@ service ShipmentService{
     rpc BuyLabel(BuyShipmentLabelRequest) returns(ShipmentResponse);
     rpc GetRates(GetShipmentRateReqeust) returns(ShipmentRateListResponse);
     rpc GetList(ShipmentListRequest) returns(ShipmentListResponse);
+    rpc GetListByOrderIds(ShipmentListByOrderIdsRequest) returns(ShipmentListByOrderResponse);
+    rpc GetListByOrderNumbers(ShipmentListByOrderNumbersRequest) returns(ShipmentListByOrderResponse);
     rpc GetById(GetShipmentById) returns(ShipmentResponse);
+    rpc GetByOrderId(GetShipmentByOrderIdRequest) returns(ShipmentResponse);
+    rpc GetByOrderNumber(GetShipmentByOrderNumberRequest) returns(ShipmentResponse);
 }
 
 enum ShipmentStatus{
@@ -110,10 +114,26 @@ message ShipmentListRequest{
      bool desc = 11;
 }
 
+message ShipmentListByOrderIdsRequest{
+    repeated string orderIds =1;
+}
+
+message ShipmentListByOrderNumbersRequest{
+    repeated string orderNumbers =1;
+}
+
 message GetShipmentById{
     string id = 1;
 }
 
+message GetShipmentByOrderIdRequest{
+    string orderId = 1;
+}
+
+message GetShipmentByOrderNumberRequest
+{
+    string orderNumber= 1;
+}
 message ShipmentListResponse{
     int32 skip = 1;
     int32 length = 2;
@@ -121,6 +141,9 @@ message ShipmentListResponse{
     repeated ShipmentResponse items =5;
 }
 
+message ShipmentListByOrderResponse{
+     repeated ShipmentResponse items =1;
+}
 message ShipmentResponse{
 	string id= 1;
     string orderId = 2;

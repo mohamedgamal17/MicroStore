@@ -10,6 +10,7 @@ using MicroStore.Shipping.Domain.Entities;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Validation;
+using static MassTransit.ValidationResultExtensions;
 namespace MicroStore.Shipping.Application.Shipments
 {
     [DisableValidation]
@@ -81,6 +82,39 @@ namespace MicroStore.Shipping.Application.Shipments
 
             return ObjectMapper.Map<PagedResult<Shipment>, PagedResult<ShipmentDto>>(result);
         }
+
+        public async Task<Result<List<ShipmentDto>>> ListByOrderIds(List<string> orderIds, CancellationToken cancellationToken = default)
+        {
+            if(orderIds != null && orderIds.Count > 0)
+            {
+                var query = _shippingDbContext.Shipments.AsNoTracking()
+                    .AsQueryable();
+
+                var shipments = await query.Where(x => orderIds.Contains(x.OrderId)).ToListAsync();
+
+
+                return ObjectMapper.Map<List<Shipment>, List<ShipmentDto>>(shipments);
+            }
+
+            return new List<ShipmentDto>();
+        }
+
+        public async Task<Result<List<ShipmentDto>>> ListByOrderNumbers(List<string> orderNumbers, CancellationToken cancellationToken = default)
+        {
+            if (orderNumbers != null && orderNumbers.Count > 0)
+            {
+                var query = _shippingDbContext.Shipments.AsNoTracking()
+                    .AsQueryable();
+
+                var shipments = await query.Where(x => orderNumbers.Contains(x.OrderNumber)).ToListAsync();
+
+
+                return ObjectMapper.Map<List<Shipment>, List<ShipmentDto>>(shipments);
+            }
+
+            return new List<ShipmentDto>();
+        }
+
 
         public async Task<Result<PagedResult<ShipmentDto>>> SearchByOrderNumber(ShipmentSearchByOrderNumberModel model, CancellationToken cancellationToken = default)
         {
