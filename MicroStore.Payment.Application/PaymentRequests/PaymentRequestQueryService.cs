@@ -172,5 +172,33 @@ namespace MicroStore.Payment.Application.PaymentRequests
 
             return query;
         }
+
+        public async Task<Result<List<PaymentRequestDto>>> ListPaymentByOrderIdsAsync(List<string> orderIds, CancellationToken cancellationToken = default)
+        {
+            if(orderIds != null && orderIds.Count  > 0)
+            {
+                var query = _paymentDbContext.PaymentRequests.AsNoTracking();
+
+                var payments = await query.Where(x => orderIds.Contains(x.OrderId)).ToListAsync(cancellationToken);
+
+                return ObjectMapper.Map<List<PaymentRequest>, List<PaymentRequestDto>>(payments);
+            }
+
+            return new List<PaymentRequestDto>();
+        }
+
+        public async Task<Result<List<PaymentRequestDto>>> ListPaymentByOrderNumbersAsync(List<string> orderNumbers, CancellationToken cancellationToken = default)
+        {
+            if (orderNumbers != null && orderNumbers.Count > 0)
+            {
+                var query = _paymentDbContext.PaymentRequests.AsNoTracking();
+
+                var payments = await query.Where(x => orderNumbers.Contains(x.OrderNumber)).ToListAsync(cancellationToken);
+
+                return ObjectMapper.Map<List<PaymentRequest>, List<PaymentRequestDto>>(payments);
+            }
+
+            return new List<PaymentRequestDto>();
+        }
     }
 }

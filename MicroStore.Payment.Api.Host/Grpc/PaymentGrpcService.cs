@@ -1,4 +1,4 @@
-﻿    using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -125,11 +125,73 @@ namespace MicroStore.Payment.Api.Host.Grpc
             return PreparePaymentListResponse(result.Value);
         }
 
+        public override async Task<PaymentListByOrderResponse> GetListByOrderIds(PaymentListByOrderIdsRequest request, ServerCallContext context)
+        {
+
+            var result = await _paymentRequestQueryService.ListPaymentByOrderIdsAsync(request.OrderIds.ToList());
+
+            var response = new PaymentListByOrderResponse();
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            foreach (var item in result.Value)
+            {
+                response.Items.Add(PreparePaymentResponse(item));
+            }
+
+            return response;
+        }
+
+        public override async Task<PaymentListByOrderResponse> GetListByOrderNumbers(PaymentListByOrderNumbersRequest request, ServerCallContext context)
+        {
+            var result = await _paymentRequestQueryService.ListPaymentByOrderNumbersAsync(request.OrderNumbers.ToList());
+
+            var response = new PaymentListByOrderResponse();
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            foreach (var item in result.Value)
+            {
+                response.Items.Add(PreparePaymentResponse(item));
+            }
+
+            return response;
+        }
         public override async Task<PaymentResponse> GetById(GetPaymentByIdReqeust request, ServerCallContext context)
         {
             var result = await _paymentRequestQueryService.GetAsync(request.Id);
 
             if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            return PreparePaymentResponse(result.Value);
+        }
+
+        public override async Task<PaymentResponse> GetByOrderId(GetPaymentByOrderIdRequest request, ServerCallContext context)
+        {
+            var result = await _paymentRequestQueryService.GetByOrderIdAsync(request.OrderId);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            return PreparePaymentResponse(result.Value);
+        }
+
+        public override async Task<PaymentResponse> GetByOrderNumber(GetPaymentByOrderNumberRequest request, ServerCallContext context)
+        {
+            var result = await _paymentRequestQueryService.GetByOrderNumberAsync(request.OrderNumber);
+
+            if(result.IsFailure)
             {
                 result.Exception.ThrowRpcException();
             }

@@ -12,7 +12,12 @@ service PaymentService{
     rpc Complete(CompletePaymentRequest) returns(PaymentResponse);
     rpc Refund(RefundPaymentRequest) returns(PaymentResponse);
     rpc GetList(PaymentListRequest) returns(PaymentListResponse);
+    rpc GetListByOrderIds(PaymentListByOrderIdsRequest) returns(PaymentListByOrderResponse);
+    rpc GetListByOrderNumbers(PaymentListByOrderNumbersRequest) returns(PaymentListByOrderResponse);
     rpc GetById(GetPaymentByIdReqeust) returns(PaymentResponse);
+    rpc GetByOrderNumber(GetPaymentByOrderNumberRequest) returns(PaymentResponse);
+    rpc GetByOrderId(GetPaymentByOrderIdRequest) returns(PaymentResponse);
+
 }
 
 
@@ -68,7 +73,13 @@ message PaymentListRequest{
     bool desc = 11;
 }
 
+message PaymentListByOrderIdsRequest{
+   repeated string orderIds = 1;
+}
 
+message PaymentListByOrderNumbersRequest{
+   repeated string orderNumbers = 1;
+}
 
 message PaymentResponse{
 	string id = 1;
@@ -119,8 +130,19 @@ message PaymentListResponse{
     repeated PaymentResponse items = 5;
 }
 
+message PaymentListByOrderResponse{
+    repeated PaymentResponse items = 1;
+}
+
 message GetPaymentByIdReqeust{
     string id = 1;
+}
+
+message GetPaymentByOrderIdRequest{
+    string orderId=  1;
+}
+message GetPaymentByOrderNumberRequest{
+    string orderNumber=  1;
 }
 
 enum PaymentStatus

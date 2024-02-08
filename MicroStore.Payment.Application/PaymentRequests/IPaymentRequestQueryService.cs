@@ -12,6 +12,10 @@ namespace MicroStore.Payment.Application.PaymentRequests
         Task<Result<PaymentRequestDto>> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default);
         Task<Result<PagedResult<PaymentRequestDto>>> ListPaymentAsync(PaymentRequestListQueryModel queryParams, string? userId = null, CancellationToken cancellationToken = default);
 
+        Task<Result<List<PaymentRequestDto>>> ListPaymentByOrderIdsAsync(List<string> orderIds, CancellationToken cancellationToken = default);
+
+        Task<Result<List<PaymentRequestDto>>> ListPaymentByOrderNumbersAsync(List<string> orderNumbers, CancellationToken cancellationToken = default);
+
         Task<Result<PagedResult<PaymentRequestDto>>> SearchByOrderNumber(PaymentRequestSearchModel model , CancellationToken cancellationToken = default);
 
     }
