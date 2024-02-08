@@ -46,8 +46,8 @@ namespace MicroStore.Bff.Shopping.Services.Shipping
             {
                 var estimatedItem = new ShipmentItemEstimatedRequest
                 {
-                    Name = item.name,
-                    Sku = item.sku,
+                    Name = item.Name,
+                    Sku = item.Sku,
                     Quantity = item.Quantity,
                     UnitPrice = new MoneyResponse
                     {

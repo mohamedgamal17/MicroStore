@@ -21,7 +21,7 @@ namespace MicroStore.Bff.Shopping.Areas.Administration
         [Route("")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedList<Shipment>))]
-        public async Task<ActionResult<PagedList<Shipment>>> ListAsync(string? userId = null,string? orderNumber = null, string? trackingNumber = null, int status = -1, string? country = null, DateTime? startDate = null, DateTime? endDate = null, int skip = 0, int length = 10, string? sortBy = null, bool desc = false)
+        public async Task<ActionResult<PagedList<Shipment>>> ListAsync(string userId = "", string orderNumber = "", string trackingNumber = "", int status = -1, string country = "", DateTime startDate = default, DateTime endDate = default, int skip = 0, int length = 10, string sortBy = "", bool desc = false)
         {
 
             var response = await _shipmentService.ListAsync(userId, orderNumber, trackingNumber, status, country, startDate, endDate, skip, length, sortBy, desc);

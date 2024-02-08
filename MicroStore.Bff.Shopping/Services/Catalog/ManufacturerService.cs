@@ -13,7 +13,7 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
             _manufacturerServiceClient = manufacturerServiceClient;
         }
 
-        public async Task<List<Manufacturer>> ListAsync(string? name = null, string? sortBy = null, bool desc = false)
+        public async Task<List<Manufacturer>> ListAsync(string name = "", string sortBy = "", bool desc = false)
         {
             var request = new ManufacturerListRequest
             {

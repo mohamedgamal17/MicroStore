@@ -13,7 +13,7 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
             _categoryServiceClient = categoryServiceClient;
         }
 
-        public async Task<List<Category>> ListAsync(string? name = null, string? sortBy = null, bool desc= false , CancellationToken cancellationToken = default)
+        public async Task<List<Category>> ListAsync(string name = "", string sortBy = "", bool desc= false , CancellationToken cancellationToken = default)
         {
             var request = new CategoryListRequest
             {

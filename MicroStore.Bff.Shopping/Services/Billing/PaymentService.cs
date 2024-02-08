@@ -14,7 +14,7 @@ namespace MicroStore.Bff.Shopping.Services.Billing
             _paymentService = paymentService;
         }
 
-        public async Task<PagedList<Payment>> ListAsync(string? userId = null,string? orderNumber = null, string? status = null, double minPrice = -1, double maxPrice = -1, DateTime? startDate = null , DateTime? endDate = null , int skip = 0, int length = 10 , string? sortBy = null , bool desc = false ,CancellationToken cancellationToken = default)
+        public async Task<PagedList<Payment>> ListAsync(string userId = "",string orderNumber = "", string status = "", double minPrice = -1, double maxPrice = -1, DateTime startDate =  default , DateTime endDate = default , int skip = 0, int length = 10 , string sortBy = "" , bool desc = false ,CancellationToken cancellationToken = default)
         {
             var request = new PaymentListRequest
             {
@@ -23,8 +23,8 @@ namespace MicroStore.Bff.Shopping.Services.Billing
                 Status = status,
                 MinPrice = minPrice,
                 MaxPrice = maxPrice,
-                StartDate = startDate?.ToUniversalTime().ToTimestamp(),
-                EndDate = endDate?.ToUniversalTime().ToTimestamp(),
+                StartDate = startDate.ToUniversalTime().ToTimestamp(),
+                EndDate = endDate.ToUniversalTime().ToTimestamp(),
                 Skip = skip,
                 Length = length,
                 SortBy = sortBy,

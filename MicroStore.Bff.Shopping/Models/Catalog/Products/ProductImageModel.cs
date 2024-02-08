@@ -4,5 +4,11 @@
     {
         public string Image { get; set; }
         public int DisplayOrder { get; set; }
+
+        public ProductImageModel()
+        {
+            Image = string.Empty;
+            DisplayOrder = 0;
+        }
     }
 }

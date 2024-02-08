@@ -34,8 +34,8 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
             return PrepareProduct(response);
         }
 
-        public async Task<PagedList<Product>> ListAsync(string name , string categories , string manufacturers,  string tags ,  bool isFeatured  , double minPrice , double maxPrice,
-            int skip , int length , string sortBy)
+        public async Task<PagedList<Product>> ListAsync(string name = "", string categories ="" , string manufacturers ="",  string tags ="",  bool isFeatured  =false, double minPrice = -1 , double maxPrice = -1,
+            int skip  = 0, int length = 10 , string sortBy = "", bool desc = false, CancellationToken cancellationToken =default)
         {
             var request = new ProductListRequest
             {
@@ -48,7 +48,8 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
                 MaxPrice = maxPrice,
                 Skip = skip,
                 Length = length,
-                SortBy = sortBy
+                SortBy = sortBy,
+                Desc = desc
             };
 
             var response = await _productServiceClient.GetListAsync(request);

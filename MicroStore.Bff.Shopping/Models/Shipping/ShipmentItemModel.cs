@@ -12,5 +12,17 @@ namespace MicroStore.Bff.Shopping.Models.Shipping
         public double UnitPrice { get; set; }
         public WeightModel Weight { get; set; }
         public DimensionModel Dimension { get; set; }
+
+        public ShipmentItemModel()
+        {
+            Name = string.Empty;
+            Sku = string.Empty;
+            ProductId = string.Empty;
+            Thumbnail = string.Empty;
+            Quantity = 0;
+            UnitPrice = 0;
+            Weight = new WeightModel();
+            Dimension = new DimensionModel();
+        }
     }
 }

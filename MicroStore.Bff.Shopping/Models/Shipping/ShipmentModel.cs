@@ -9,5 +9,14 @@ namespace MicroStore.Bff.Shopping.Models.Shipping
         public string UserId { get; set; }
         public AddressModel Address { get; set; }
         public List<ShipmentItemModel> Items { get; set; }
+
+        public ShipmentModel()
+        {
+            OrderId = string.Empty;
+            OrderNumber = string.Empty;
+            UserId = string.Empty;
+            Address = new AddressModel();
+            Items = new List<ShipmentItemModel>();
+        }
     }
 }

@@ -49,7 +49,7 @@ namespace MicroStore.Bff.Shopping.Services.Shipping
             return await PrepareShipment(response);
         }
 
-        public async Task<PagedList<Shipment>> ListAsync(string? userId =null,string? orderNumber = null,string? trackingNumber = null ,int status = -1, string? country= null, DateTime? startDate = null, DateTime? endDate = null, int skip = 0 , int length = 10 , string? sortBy = null, bool desc = false   ,CancellationToken cancellationToken = default)
+        public async Task<PagedList<Shipment>> ListAsync(string userId = "",string orderNumber = "",string trackingNumber = "" ,int status = -1, string country= "", DateTime startDate = default, DateTime endDate = default, int skip = 0 , int length = 10 , string sortBy = "", bool desc = false   ,CancellationToken cancellationToken = default)
         {
             var request = new ShipmentListRequest
             {
@@ -58,8 +58,8 @@ namespace MicroStore.Bff.Shopping.Services.Shipping
                 TrackingNumber = trackingNumber,
                 Status = status,
                 Country = country,
-                StartDate = startDate?.ToUniversalTime().ToTimestamp(),
-                EndDate = startDate?.ToUniversalTime().ToTimestamp(),
+                StartDate = startDate.ToUniversalTime().ToTimestamp(),
+                EndDate = endDate.ToUniversalTime().ToTimestamp(),
                 Skip = skip,
                 Length = length,
                 SortBy = sortBy,

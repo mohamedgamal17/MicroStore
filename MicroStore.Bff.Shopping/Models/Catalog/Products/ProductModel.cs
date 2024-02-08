@@ -5,8 +5,8 @@ namespace MicroStore.Bff.Shopping.Models.Catalog.Products
     {
         public string Name { get; set; }
         public string Sku { get; set; }
-        public string ShortDescription { get; set; } = string.Empty;
-        public string LongDescription { get; set; } = string.Empty;
+        public string ShortDescription { get; set; } 
+        public string LongDescription { get; set; }
         public bool IsFeatured { get; set; }
         public double Price { get; set; }
         public double OldPrice { get; set; }
@@ -16,5 +16,18 @@ namespace MicroStore.Bff.Shopping.Models.Catalog.Products
         public HashSet<string>? Manufacturers { get; set; }
         public HashSet<string>? ProductTags { get; set; }
         public List<ProductImageModel>? ProductImages { get; set; }
+
+        public ProductModel()
+        {
+            Name = string.Empty;
+            Sku = string.Empty;
+            ShortDescription = string.Empty;
+            LongDescription = string.Empty;
+            IsFeatured = false;
+            Price = 0;
+            OldPrice = 0;
+            Weight = new WeightModel();
+            Dimensions = new DimensionModel();
+        }
     }
 }

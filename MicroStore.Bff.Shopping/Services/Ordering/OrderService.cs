@@ -67,15 +67,15 @@ namespace MicroStore.Bff.Shopping.Services.Ordering
             var response = await _orderServiceClient.CancelAsync(request);
         }
 
-        public async Task<PagedList<Order>> ListAsync(string? userId = null,string? orderNumber = null, string? states = null, DateTime? startDate =null, DateTime? endDate = null, int skip =0 , int length =10, string? sortBy = null, bool desc = false,CancellationToken cancellationToken = default)
+        public async Task<PagedList<Order>> ListAsync(string userId = "",string orderNumber = "", string states = "", DateTime startDate =default, DateTime endDate = default, int skip =0 , int length =10, string sortBy = "", bool desc = false,CancellationToken cancellationToken = default)
         {
             var request = new OrderListReqeust
             {
                 UserId = userId,
                 OrderNumber = orderNumber,
                 States = states,
-                StartSubmissionDate = startDate?.ToUniversalTime().ToTimestamp(),
-                EndSubmissionDate = endDate?.ToUniversalTime().ToTimestamp(),
+                StartSubmissionDate = startDate.ToUniversalTime().ToTimestamp(),
+                EndSubmissionDate = endDate.ToUniversalTime().ToTimestamp(),
                 Skip = skip,
                 Length = length,
                 SortBy = sortBy,

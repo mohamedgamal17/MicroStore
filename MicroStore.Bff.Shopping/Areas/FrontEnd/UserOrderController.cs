@@ -26,7 +26,7 @@ namespace MicroStore.Bff.Shopping.Areas.FrontEnd
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedList<Order>))]
-        public async Task<ActionResult<Order>> ListOrders(string? orderNumber = null, string? states = null, DateTime? startDate = null, DateTime? endDate = null, int skip = 0, int length = 10, string? sortBy = null, bool desc = false)
+        public async Task<ActionResult<Order>> ListOrders(string orderNumber = "", string states = "", DateTime startDate = default, DateTime endDate = default, int skip = 0, int length = 10, string sortBy = "", bool desc = false)
         {
             string userId = _workContext.User!.Id!;
 

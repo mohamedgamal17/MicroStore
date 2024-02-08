@@ -11,5 +11,15 @@
         public string Zip { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
+
+        public AddressModel()
+        {
+            Name = string.Empty;
+            Phone = string.Empty;
+            Country = string.Empty;
+            State = string.Empty;
+            City = string.Empty;
+            PostalCode = string.Empty;
+        }
     }
 }

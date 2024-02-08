@@ -103,6 +103,7 @@ message ProductListRequest{
 	 int32 skip =  8;
 	 int32 length = 9;
 	 optional string sortBy = 10;
+	 bool desc = 11;
 
 }
 

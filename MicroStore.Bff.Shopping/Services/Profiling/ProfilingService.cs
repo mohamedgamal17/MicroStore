@@ -19,7 +19,7 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             _countryService = countryService;
         }
 
-        public async Task<PagedList<UserProfile>> ListAsync(int skip, int length, CancellationToken cancellationToken = default)
+        public async Task<PagedList<UserProfile>> ListAsync(int skip = 0, int length = 10, CancellationToken cancellationToken = default)
         {
             ProfileListRequest request = new ProfileListRequest
             {
