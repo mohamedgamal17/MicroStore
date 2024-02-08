@@ -13,6 +13,7 @@ service ProfileService{
     rpc UpdateAddress(UpdateAddressReqeust) returns(AddressResponse);
     rpc DeleteAddress(DeleteAddressReqeust) returns(EmptyResponse);
     rpc GetList(ProfileListRequest) returns(ProfileListResponse);
+    rpc GetListByIds(ProfileListByIdsRequest) returns(ProfileListByIdsResponse);
     rpc GetByUserId(GetProfileByUserIdRequest) returns(ProfileResponse);
     rpc GetAddressList(GetAddressListRequest) returns(AddressListResponse);
     rpc GetAddressById(GetAddressByIdReqeuest) returns(AddressResponse);
@@ -33,6 +34,8 @@ message ProfileRequest{
     google.protobuf.StringValue avatar = 8;
     AddressReqeustList addresses = 9;
 }
+
+
 message CreateAddressRequest{
    string userId =1;
    string name = 2;
@@ -86,6 +89,10 @@ message ProfileListRequest{
     int32 length = 2;
 }
 
+message ProfileListByIdsRequest{
+    repeated string ids = 1;
+}
+
 message GetProfileByUserIdRequest{
     string userId = 1;
 }
@@ -119,6 +126,10 @@ message ProfileListResponse{
     int32 skip =  2;
 	int32 length = 3;
 	int64 totalCount = 4;
+}
+
+message ProfileListByIdsResponse{
+   repeated ProfileResponse items = 1;
 }
 
 message AddressResponse{

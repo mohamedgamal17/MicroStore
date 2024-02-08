@@ -6,11 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using MicroStore.Bff.Shopping.Helpers;
 using MicroStore.Bff.Shopping.Infrastructure;
 using Microsoft.OpenApi.Models;
-using MicroStore.Bff.Shopping.Services.Profiling;
-using MicroStore.Bff.Shopping.Services.Catalog;
-using MicroStore.Bff.Shopping.Services.Billing;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 namespace MicroStore.Bff.Shopping
 {
     public static class ServiceCollectionExtensions
@@ -26,7 +23,7 @@ namespace MicroStore.Bff.Shopping
             ConfigureSwagger(services, config);
 
             RegisterApplicationService(services);
-           
+
             return services;
         }
 
@@ -43,6 +40,12 @@ namespace MicroStore.Bff.Shopping
             services.AddHttpContextAccessor();
 
             services.AddEndpointsApiExplorer();
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+
+            });
         }
         private static void RegisterGrpc(IServiceCollection services, IConfiguration config)
         {
@@ -115,6 +118,13 @@ namespace MicroStore.Bff.Shopping
             {
                 opt.Address = new Uri(grpcConfig.Shipping);
             }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+
+            services.AddGrpcClient<Grpc.Ordering.OrderService.OrderServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Ordering);
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
 
         }
 

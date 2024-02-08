@@ -18,7 +18,24 @@ namespace MicroStore.Bff.Shopping.Services.Geographic
 
             var result = await _countryServiceClient.GetListAsync(request);
 
-            return result.Items.Select(MapCountry).ToList();
+            return result.Items.Select(PrepareCountry).ToList();
+        }
+
+        public async Task<List<Country>> ListByCodesAsync(List<string> codes, CancellationToken cancellationToken = default)
+        {
+            var request = new CountryListByCodesRequest(); 
+
+            if(codes != null && codes.Count > 0)
+            {
+                foreach (var item in codes)
+                {
+                    request.Codes.Add(item);
+                }
+            }
+
+            var response = await _countryServiceClient.GetListByCodesAsync(request);
+
+            return response.Items.Select(PrepareCountry).ToList();
         }
 
         public async Task<Country> GetById(string id)
@@ -27,7 +44,7 @@ namespace MicroStore.Bff.Shopping.Services.Geographic
 
             var result = await _countryServiceClient.GetByIdAsync(request);
 
-            return MapCountry(result);
+            return PrepareCountry(result);
         }
 
         public async Task<Country> GetByCodeAsync(string code)
@@ -36,7 +53,7 @@ namespace MicroStore.Bff.Shopping.Services.Geographic
 
             var result = await _countryServiceClient.GetByCodeAsync(request);
 
-            return MapCountry(result);
+            return PrepareCountry(result);
         }
 
         public async Task<Country> CreateAsync(CountryModel model)
@@ -51,7 +68,7 @@ namespace MicroStore.Bff.Shopping.Services.Geographic
 
             var result = await _countryServiceClient.CreateAsync(request);
 
-            return MapCountry(result);
+            return PrepareCountry(result);
         }
 
         public async Task<Country> UpdateAsync(string id ,CountryModel model)
@@ -67,10 +84,10 @@ namespace MicroStore.Bff.Shopping.Services.Geographic
 
             var result = await _countryServiceClient.UpdateAsync(request);
 
-            return MapCountry(result);
+            return PrepareCountry(result);
         }
 
-        private Country MapCountry(CountryResponse response)
+        private Country PrepareCountry(CountryResponse response)
         {
             var country = new Country
             {

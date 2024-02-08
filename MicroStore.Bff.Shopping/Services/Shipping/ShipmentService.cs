@@ -1,8 +1,8 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using MicroStore.Bff.Shopping.Data;
 using MicroStore.Bff.Shopping.Data.Common;
+using MicroStore.Bff.Shopping.Data.Geographic;
 using MicroStore.Bff.Shopping.Data.Shipping;
-using MicroStore.Bff.Shopping.Grpc.Geographic;
 using MicroStore.Bff.Shopping.Grpc.Shipping;
 using MicroStore.Bff.Shopping.Models.Shipping;
 namespace MicroStore.Bff.Shopping.Services.Shipping
@@ -11,12 +11,11 @@ namespace MicroStore.Bff.Shopping.Services.Shipping
     {
         private readonly Grpc.Shipping.ShipmentService.ShipmentServiceClient _shipmentServiceClient;
 
-        private readonly Grpc.Geographic.CountryService.CountryServiceClient _countryServiceClient;
-
-        public ShipmentService(Grpc.Shipping.ShipmentService.ShipmentServiceClient shipmentServiceClient, Grpc.Geographic.CountryService.CountryServiceClient countryServiceClient)
+        private readonly Services.Geographic.CountryService _countryService;
+        public ShipmentService(Grpc.Shipping.ShipmentService.ShipmentServiceClient shipmentServiceClient, Services.Geographic.CountryService countryService)
         {
             _shipmentServiceClient = shipmentServiceClient;
-            _countryServiceClient = countryServiceClient;
+            _countryService = countryService;
         }
 
         public async Task<Shipment> CreateAsync(ShipmentModel model, CancellationToken cancellationToken = default)
@@ -75,17 +74,58 @@ namespace MicroStore.Bff.Shopping.Services.Shipping
                 Length = response.Length,
                 Skip = response.Skip,
                 TotalCount = response.TotalCount,
-                Items = await Task.WhenAll(response.Items.Select(PrepareShipment))
+                Items = await PrepareShipmentList(response.Items)
             };
 
             return paged;
         }
+
+        public async Task<List<Shipment>> ListByOrderIds(List<string> orderIds , CancellationToken cancellationToken = default)
+        {
+            var request = new ShipmentListByOrderIdsRequest();
+
+            orderIds?.ForEach(id => request.OrderIds.Add(id));
+
+            var response = await _shipmentServiceClient.GetListByOrderIdsAsync(request);
+ 
+            return await PrepareShipmentList(response.Items);
+        }
+
+        public async Task<List<Shipment>> ListByOrderNumbers(List<string> orderNumbers, CancellationToken cancellationToken = default)
+        {
+            var request = new ShipmentListByOrderNumbersRequest();
+
+            orderNumbers?.ForEach(num => request.OrderNumbers.Add(num));
+
+            var response = await _shipmentServiceClient.GetListByOrderNumbersAsync(request);
+
+            return await PrepareShipmentList(response.Items);
+        }
+
 
         public async Task<Shipment> GetAsync(string shipmentId , CancellationToken cancellationToken = default)
         {
             var request = new GetShipmentById { Id = shipmentId };
 
             var response = await _shipmentServiceClient.GetByIdAsync(request);
+
+            return await PrepareShipment(response);
+        }
+
+        public async Task<Shipment> GetByOrderIdAsync(string orderId , CancellationToken cancellationToken = default)
+        {
+            var request = new GetShipmentByOrderIdRequest { OrderId = orderId };
+
+            var response = await _shipmentServiceClient.GetByOrderIdAsync(request);
+
+            return await PrepareShipment(response);
+        }
+
+        public async Task<Shipment> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
+        {
+            var request = new GetShipmentByOrderNumberRequest { OrderNumber = orderNumber };
+
+            var response = await _shipmentServiceClient.GetByOrderNumberAsync(request);
 
             return await PrepareShipment(response);
         }
@@ -237,13 +277,97 @@ namespace MicroStore.Bff.Shopping.Services.Shipping
             return shipment;
         }
 
+
+        private async Task<List<Shipment>> PrepareShipmentList(IEnumerable<ShipmentResponse> response)
+        {
+            var countryCodes = response.Select(x => x.Address.CountryCode).ToList();
+
+            var countries = await _countryService.ListByCodesAsync(countryCodes);
+
+            List<Shipment> shipments = new List<Shipment>();
+
+            foreach (var item in response)
+            {
+                var country = countries.Single(x => x.TwoLetterIsoCode == item.Address.CountryCode || x.ThreeLetterIsoCode == item.Address.CountryCode);
+
+                shipments.Add(PrepareShipment(item, country));
+            }
+
+            return shipments;
+        }
+        private Shipment PrepareShipment(ShipmentResponse response , Country country)
+        {
+            var stateProvince = country.StateProvinces.Single(x => x.Abbreviation == response.Address.StateProvince);
+            var shipment = new Shipment
+            {
+                Id = response.Id,
+                ShipmentExternalId = response.ShipmentExternalId,
+                ShipmentLabelExternalId = response.ShipmentLabelExternalId,
+                TrackingNumber = response.TrackingNumber,
+                OrderId = response.OrderId,
+                OrderNumber = response.OrderNumber,
+                UserId = response.UserId,
+                Status = (Data.Shipping.ShipmentStatus)response.Status,
+                SystemName = response.SystemName,
+                Address = new Address
+                {
+                    Name = response.Address.Name,
+                    Country = new AddressCountry
+                    {
+                        Name = country.Name,
+                        TwoIsoCode = country.TwoLetterIsoCode,
+                        ThreeIsoCode = country.ThreeLetterIsoCode,
+                        NumericIsoCode = country.NumericIsoCode
+                    },
+                    State = new AddressStateProvince
+                    {
+                        Name = stateProvince.Name,
+                        Abbreviation = stateProvince.Abbreviation
+                    },
+                    City = response.Address.City,
+                    AddressLine1 = response.Address.AddressLine1,
+                    AddressLine2 = response.Address.AddressLine2,
+                    Phone = response.Address.Phone,
+                    PostalCode = response.Address.PostalCode,
+                    Zip = response.Address.Zip
+
+                },
+                Items = response.Items.Select(x => new ShipmentItem
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Sku = x.Sku,
+                    ProductId = x.ProductId,
+                    Thumbnail = x.Thumbnail,
+                    Dimension = new Data.Common.Dimension
+                    {
+                        Height = x.Dimension.Height,
+                        Width = x.Dimension.Width,
+                        Length = x.Dimension.Length,
+                        Unit = (Data.Common.DimensionUnit)x.Dimension.Unit
+                    },
+                    Weight = new Data.Common.Weight
+                    {
+                        Value = x.Weight.Value,
+                        Unit = (Data.Common.WeightUnit)x.Weight.Unit
+                    },
+                    Quantity = x.Quantity,
+                    UnitPrice = x.UnitPrice
+                }).ToList(),
+                CreatedAt = response.CreatedAt.ToDateTime(),
+                ModifiedAt = response.ModifiedAt?.ToDateTime()
+
+            };
+
+            return shipment;
+        }
+
         private async Task<Address> PrepareAddress(AddressResposne response)
         {
-            var request = new GetCountryByCodeRequest { Code = response.CountryCode };
 
-            var country = await _countryServiceClient.GetByCodeAsync(request);
+            var country = await _countryService.GetByCodeAsync(response.CountryCode);
 
-            var stateProvince = country.States.Single(x => x.Abbrevation == response.StateProvince);
+            var stateProvince = country.StateProvinces.Single(x => x.Abbreviation == response.StateProvince);
 
             var address = new Address
             {
@@ -258,7 +382,7 @@ namespace MicroStore.Bff.Shopping.Services.Shipping
                 State = new AddressStateProvince
                 {
                     Name = stateProvince.Name,
-                    Abbreviation = stateProvince.Abbrevation
+                    Abbreviation = stateProvince.Abbreviation
                 },
                 City = response.City,
                 AddressLine1 = response.AddressLine1,

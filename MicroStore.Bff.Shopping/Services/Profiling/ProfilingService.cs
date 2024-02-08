@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using MicroStore.Bff.Shopping.Data;
+using MicroStore.Bff.Shopping.Data.Geographic;
 using MicroStore.Bff.Shopping.Data.Profiling;
 using MicroStore.Bff.Shopping.Grpc.Profiling;
 using MicroStore.Bff.Shopping.Models.Common;
@@ -18,7 +19,7 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             _countryService = countryService;
         }
 
-        public async Task<PagedList<UserProfile>> ListAsync(int skip , int length , CancellationToken cancellationToken = default)
+        public async Task<PagedList<UserProfile>> ListAsync(int skip, int length, CancellationToken cancellationToken = default)
         {
             ProfileListRequest request = new ProfileListRequest
             {
@@ -43,7 +44,18 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             return result;
         }
 
-        public async Task<UserProfile> GetUserAsync(string userId , CancellationToken cancellationToken = default)
+        public async Task<List<UserProfile>> ListByIdsAsync(List<string> ids, CancellationToken cancellationToken = default)
+        {
+            var request = new ProfileListByIdsRequest();
+
+            ids.ForEach(id => request.Ids.Add(id));
+
+            var response = await _profilingClient.GetListByIdsAsync(request);
+
+            return (await Task.WhenAll(response.Items.Select(PrepareUserProfile))).ToList();
+        }
+
+        public async Task<UserProfile> GetUserAsync(string userId, CancellationToken cancellationToken = default)
         {
             var request = new GetProfileByUserIdRequest { UserId = userId };
 
@@ -52,7 +64,7 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             return await PrepareUserProfile(response);
         }
 
-        public async Task<List<Address>> ListUserAddressAsync(string userId , CancellationToken cancellationToken = default)
+        public async Task<List<Address>> ListUserAddressAsync(string userId, CancellationToken cancellationToken = default)
         {
             var request = new GetAddressListRequest { UserId = userId };
 
@@ -65,7 +77,7 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             return addresses.ToList();
         }
 
-        public async Task<Address> GetUserAddressAsync(string userId, string addressId , CancellationToken cancellationToken = default)
+        public async Task<Address> GetUserAddressAsync(string userId, string addressId, CancellationToken cancellationToken = default)
         {
             var request = new GetAddressByIdReqeuest { UserId = userId, AddressId = addressId };
 
@@ -74,8 +86,8 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             return await PrepareAddress(response);
         }
 
-        
-        public async Task<UserProfile> CreateAsync(string userId,  UserProfileModel model , CancellationToken cancellationToken = default)
+
+        public async Task<UserProfile> CreateAsync(string userId, UserProfileModel model, CancellationToken cancellationToken = default)
         {
             var request = PrepareProfileReqeuest(userId, model);
 
@@ -84,16 +96,16 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             return await PrepareUserProfile(response);
         }
 
-        public async Task<UserProfile> UpdateAsync(string userId, UserProfileModel model, CancellationToken cancellationToken= default)
+        public async Task<UserProfile> UpdateAsync(string userId, UserProfileModel model, CancellationToken cancellationToken = default)
         {
-            var request = PrepareProfileReqeuest(userId,model);
+            var request = PrepareProfileReqeuest(userId, model);
 
             var response = await _profilingClient.CreateAsync(request);
 
             return await PrepareUserProfile(response);
         }
 
-        public async Task<Address> CreateAddressAsync(string userId , AddressModel model , CancellationToken cancellationToken = default)
+        public async Task<Address> CreateAddressAsync(string userId, AddressModel model, CancellationToken cancellationToken = default)
         {
             var request = new CreateAddressRequest
             {
@@ -114,7 +126,7 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             return await PrepareAddress(response);
         }
 
-        public async Task<Address> UpdateAddressAsync(string userId, string addressId , AddressModel model, CancellationToken cancellationToken = default)
+        public async Task<Address> UpdateAddressAsync(string userId, string addressId, AddressModel model, CancellationToken cancellationToken = default)
         {
             var request = new UpdateAddressReqeust
             {
@@ -136,7 +148,7 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             return await PrepareAddress(response);
         }
 
-        public async Task RemoveAddressAsync(string userId , string addressId , CancellationToken cancellationToken = default)
+        public async Task RemoveAddressAsync(string userId, string addressId, CancellationToken cancellationToken = default)
         {
             var request = new DeleteAddressReqeust { UserId = userId, AddressId = addressId };
 
@@ -159,21 +171,19 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
                 ModifiedAt = response.ModifiedAt?.ToDateTime()
             };
 
-            if(response.Addresses.Count > 0)
+            if (response.Addresses.Count > 0)
             {
+                List<Country> countries = await _countryService.ListByCodesAsync(response.Addresses.Select(x => x.CountryCode).ToList());
+
                 userProfile.Addresses = new List<Address>();
 
-                List<Task<Address>> tasks = new List<Task<Address>>();
 
                 foreach (var addressResponse in response.Addresses)
                 {
-                    tasks.Add(PrepareAddress(addressResponse));
+                    var country = countries.Single(x => x.TwoLetterIsoCode == addressResponse.CountryCode || x.ThreeLetterIsoCode == addressResponse.CountryCode);
+
+                    userProfile.Addresses.Add(PrepareAddress(addressResponse, country));
                 }
-
-                 var addresses =  await Task.WhenAll(tasks);
-
-
-                userProfile.Addresses.AddRange(addresses);
             }
 
             return userProfile;
@@ -181,10 +191,11 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
 
 
 
+
         private async Task<Address> PrepareAddress(AddressResponse response)
         {
             var country = await _countryService.GetByCodeAsync(response.CountryCode);
-            var stateProvince =  country.StateProvinces.Single(x => x.Abbreviation == response.StateProvince);
+            var stateProvince = country.StateProvinces.Single(x => x.Abbreviation == response.StateProvince);
 
             return new Address
             {
@@ -212,7 +223,40 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
         }
 
 
-        private ProfileRequest PrepareProfileReqeuest(string userId,UserProfileModel model)
+        private Address PrepareAddress(AddressResponse response, Country country)
+        {
+            var stateProvince = country.StateProvinces.Single(x => x.Abbreviation == response.StateProvince);
+
+            var address = new Address
+            {
+                Id = response.Id,
+                Name = response.Name,
+                Country = new Data.Common.AddressCountry
+                {
+                    Name = country.Name,
+                    TwoIsoCode = country.TwoLetterIsoCode,
+                    ThreeIsoCode = country.TwoLetterIsoCode,
+                    NumericIsoCode = country.NumericIsoCode
+                },
+                State = new Data.Common.AddressStateProvince
+                {
+                    Name = stateProvince.Name,
+                    Abbreviation = stateProvince.Abbreviation
+                },
+                City = response.City,
+                AddressLine1 = response.AddressLine1,
+                AddressLine2 = response.AddressLine2,
+                Phone = response.Phone,
+                PostalCode = response.PostalCode,
+                Zip = response.Zip
+            };
+
+
+            return address;
+        }
+
+
+        private ProfileRequest PrepareProfileReqeuest(string userId, UserProfileModel model)
         {
             var request = new ProfileRequest
             {
@@ -226,7 +270,7 @@ namespace MicroStore.Bff.Shopping.Services.Profiling
             };
 
 
-            if(model.Addresses != null)
+            if (model.Addresses != null)
             {
                 var addressList = new AddressReqeustList();
 

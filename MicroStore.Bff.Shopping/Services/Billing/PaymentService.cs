@@ -44,11 +44,52 @@ namespace MicroStore.Bff.Shopping.Services.Billing
 
             return pagedList;
         }
+
+        public async Task<List<Payment>> ListByOrderIdsAsync(List<string> orderIds, CancellationToken cancellationToken = default)
+        {
+            var request = new PaymentListByOrderIdsRequest();
+
+            orderIds?.ForEach(id => request.OrderIds.Add(request.OrderIds));
+
+            var response = await _paymentService.GetListByOrderIdsAsync(request);
+
+            return response.Items.Select(PreparePayment).ToList();
+        }
+
+
+        public async Task<List<Payment>> ListByOrderNumbersAsync(List<string> orderNumbers ,CancellationToken cancellationToken = default)
+        {
+            var request = new PaymentListByOrderNumbersRequest();
+
+            request.OrderNumbers.AddRange(orderNumbers);
+
+            var response = await _paymentService.GetListByOrderNumbersAsync(request);
+
+            return response.Items.Select(PreparePayment).ToList();
+        }
         public async Task<Payment> GetAsync(string paymentId , CancellationToken cancellationToken = default)
         {
             var request = new GetPaymentByIdReqeust { Id = paymentId };
 
             var response = await _paymentService.GetByIdAsync(request);
+
+            return PreparePayment(response);
+        }
+
+        public async Task<Payment> GetByOrderIdAsync(string orderId,  CancellationToken cancellationToken = default)
+        {
+            var request = new GetPaymentByOrderIdRequest { OrderId = orderId };
+
+            var response = await _paymentService.GetByOrderIdAsync(request);
+
+            return PreparePayment(response);
+        }
+
+        public async Task<Payment> GetByOrderNumberAsync(string orderNumber, CancellationToken cancellationToken = default)
+        {
+            var request = new GetPaymentByOrderNumberRequest { OrderNumber = orderNumber };
+
+            var response = await _paymentService.GetByOrderNumberAsync(request);
 
             return PreparePayment(response);
         }

@@ -6,7 +6,7 @@ namespace MicroStore.Bff.Shopping.Areas.FrontEnd
     [ApiExplorerSettings(GroupName = "FrontEnd")]
     [Route("api/frontend/categories")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoryController : Controller
     {
 
         private readonly CategoryService _categoryService;
@@ -18,7 +18,7 @@ namespace MicroStore.Bff.Shopping.Areas.FrontEnd
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(List<Category>))]
-        public async Task<List<Category>> ListAsync(string name = "" , string sortBy =  "",  bool desc = false )
+        public async Task<List<Category>> ListAsync(string name = "" , string sortBy =  "", [FromQuery] bool desc = false )
         {
             var result = await _categoryService.ListAsync(name, sortBy, desc);
 
