@@ -10,6 +10,7 @@ service OrderService{
     rpc Cancel(CancelOrderReqeust) returns(EmptyResponse);
     rpc GetList(OrderListReqeust) returns(OrderListResponse);
     rpc GetbyId(GetOrderByIdReqeuest) returns(OrderResponse);
+    rpc GetByNumber(GetOrderByNumberRequest) returns(OrderResponse);
 }
 
 message CreateOrderRequest{
@@ -49,18 +50,23 @@ message OrderItemReqeust{
 }
 
 message OrderListReqeust{
-    google.protobuf.StringValue orderNumber = 1;
-    google.protobuf.StringValue States =2;
-    google.protobuf.Timestamp startSubmissionDate = 3;
-    google.protobuf.Timestamp endSubmissionDate = 4;
-    int32 skip = 5;
-    int32 length = 6;
-    bool desc = 7;
-    google.protobuf.StringValue sortBy = 8;
+    google.protobuf.StringValue userId = 1;
+    google.protobuf.StringValue orderNumber = 2;
+    google.protobuf.StringValue States =3;
+    google.protobuf.Timestamp startSubmissionDate = 4;
+    google.protobuf.Timestamp endSubmissionDate = 5;
+    int32 skip = 6;
+    int32 length = 7;
+    bool desc = 8;
+    google.protobuf.StringValue sortBy = 9;
 }
 
 message GetOrderByIdReqeuest{
     string orderId= 1;
+}
+
+message GetOrderByNumberRequest{
+    string orderNumber=  2;
 }
 
 message OrderListResponse{

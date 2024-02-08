@@ -120,7 +120,7 @@ namespace MicroStore.Ordering.Api.Grpc
                 validationResult.ThrowRpcException();
             }
 
-            var result = await _orderQueryService.ListAsync(model);
+            var result = await _orderQueryService.ListAsync(model, request.UserId);
 
             if (result.IsFailure)
             {
@@ -140,6 +140,19 @@ namespace MicroStore.Ordering.Api.Grpc
             {
                 result.Exception.ThrowRpcException();
             }
+            return PrepareOrderResponse(result.Value);
+        }
+
+        public override async Task<OrderResponse> GetByNumber(GetOrderByNumberRequest request, ServerCallContext context)
+        {
+
+            var result = await _orderQueryService.GetByOrderNumberAsync(request.OrderNumber);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
             return PrepareOrderResponse(result.Value);
         }
 
