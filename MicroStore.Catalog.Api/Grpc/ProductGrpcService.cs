@@ -79,7 +79,8 @@ namespace MicroStore.Catalog.Api.Grpc
                 IsFeatured = request.IsFeatured,
                 Length = request.Length,
                 Skip = request.Skip,
-                SortBy = request.SortBy
+                SortBy = request.SortBy,
+                Desc = request.Desc
             };
 
           
