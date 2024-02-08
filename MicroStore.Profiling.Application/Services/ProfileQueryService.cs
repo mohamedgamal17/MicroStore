@@ -94,6 +94,21 @@ namespace MicroStore.Profiling.Application.Services
 
             return address;
         }
-     
+
+        public async Task<Result<List<ProfileDto>>> ListByIdsAsync(List<string> ids, CancellationToken cancellationToken = default)
+        {
+            if(ids != null && ids.Count > 0)
+            {
+                var query = _applicationDbContext.Profiles.AsNoTracking();
+
+
+                var profiles = await query.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+
+                return ObjectMapper.Map<List<Profile>, List<ProfileDto>>(profiles);
+            }
+
+            return new List<ProfileDto>();
+           
+        }
     }
 }

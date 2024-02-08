@@ -90,7 +90,22 @@ namespace MicroStore.Profiling.Host.Grpc
             return PrepareProfileListResponse(result.Value);
         }
 
-       
+        public override async Task<ProfileListByIdsResponse> GetListByIds(ProfileListByIdsRequest request, ServerCallContext context)
+        {
+            var result = await _profileQueryService.ListByIdsAsync(request.Ids.ToList());
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            var response = new ProfileListByIdsResponse();
+
+            result.Value.ForEach(item => response.Items.Add(PrepareProfileResponse(item)));
+
+            return response;
+        }
+
         public override async Task<ProfileResponse> GetByUserId(GetProfileByUserIdRequest request, ServerCallContext context)
         {
             var result = await _profileQueryService.GetAsync(request.UserId);
