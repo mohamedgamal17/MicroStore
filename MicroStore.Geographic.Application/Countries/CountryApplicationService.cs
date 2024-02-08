@@ -135,5 +135,19 @@ namespace MicroStore.Geographic.Application.Countries
 
             return Unit.Value;
         }
+
+        public async Task<List<CountryDto>> ListByCodesAsync(List<string> codes, CancellationToken cancellationToken = default)
+        {
+            if(codes != null && codes.Count > 0)
+            {
+                var query = await _countryRepository.WithDetailsAsync(x => x.StateProvinces);
+
+                var result = await query.Where(x => codes.Contains(x.TwoLetterIsoCode) || codes.Contains(x.ThreeLetterIsoCode)).ToListAsync(cancellationToken);
+
+                return ObjectMapper.Map<List<Country>, List<CountryDto>>(result);
+            }
+
+            return new List<CountryDto>();
+        }
     }
 }

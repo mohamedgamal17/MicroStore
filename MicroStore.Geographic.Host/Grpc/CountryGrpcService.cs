@@ -75,6 +75,20 @@ namespace MicroStore.Geographic.Host.Grpc
             return PrepareCountryListResponse(result);
         }
 
+        public override async Task<CountryListResponse> GetListByCodes(CountryListByCodesRequest request, ServerCallContext context)
+        {
+            var result = await _countryApplicationService.ListByCodesAsync(request.Codes.ToList());
+
+            var response = new CountryListResponse();
+
+            foreach (var item in result)
+            {
+                response.Items.Add(PrepareCountryResponse(item));
+            }
+
+            return response;
+        }
+
         public override async Task<CountryResponse> GetById(GetCountryByIdRequest request, ServerCallContext context)
         {
             var result = await _countryApplicationService.GetAsync(request.Id);

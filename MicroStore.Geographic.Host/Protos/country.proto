@@ -10,6 +10,7 @@ service CountryService{
 	rpc Create(CreateCountryRequest) returns(CountryResponse);
 	rpc Update(UpdateCountryRequest) returns(CountryResponse);
 	rpc GetList(CountryListRequest) returns(CountryListResponse);
+	rpc GetListByCodes(CountryListByCodesRequest) returns(CountryListResponse);
 	rpc GetById(GetCountryByIdRequest) returns (CountryResponse);
 	rpc GetByCode(GetCountryByCodeRequest) returns(CountryResponse);
 }
@@ -32,6 +33,10 @@ message UpdateCountryRequest{
 
 message CountryListRequest{
 
+}
+
+message CountryListByCodesRequest{
+	repeated string codes= 1;
 }
 
 message GetCountryByIdRequest{

@@ -14,6 +14,8 @@ namespace MicroStore.Geographic.Application.Countries
         Task<Result<Unit>> DeleteAsync(string countryId, CancellationToken cancellationToken = default);
 
         Task<List<CountryListDto>> ListAsync(CancellationToken cancellationToken = default);
+
+        Task<List<CountryDto>> ListByCodesAsync(List<string> codes, CancellationToken cancellationToken = default);
         
         Task<Result<CountryDto>> GetAsync(string countryId, CancellationToken cancellationToken = default);
 
