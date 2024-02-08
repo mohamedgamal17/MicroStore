@@ -14,13 +14,15 @@ namespace MicroStore.Catalog.Api.Grpc
 
         private readonly IProductQueryService _productQueryService;
 
-        public ProductGrpcService(IProductCommandService productCommandService, IProductQueryService productQueryService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+        public ProductGrpcService(IProductCommandService productCommandService, IProductQueryService productQueryService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _productCommandService = productCommandService;
             _productQueryService = productQueryService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
 
         public override async Task<ProductResponse> Create(CreateProductRequest request, ServerCallContext context)
         {

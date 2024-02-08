@@ -13,10 +13,11 @@ namespace MicroStore.Catalog.Api.Grpc
 
         private readonly ICategoryQueryService _catalogQueryService;
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
-        public CategoryGrpcService(ICategoryCommandService catalogCommandService, ICategoryQueryService catalogQueryService)
+        public CategoryGrpcService(ICategoryCommandService catalogCommandService, ICategoryQueryService catalogQueryService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _catalogCommandService = catalogCommandService;
-            _catalogQueryService = catalogQueryService;           
+            _catalogQueryService = catalogQueryService;
+            LazyServiceProvider = lazyServiceProvider;
         }
         public override async Task<CategoryResponse> Create(CreateCategoryRequest request, ServerCallContext context)
         {
@@ -119,8 +120,10 @@ namespace MicroStore.Catalog.Api.Grpc
         {
             var validator = ResolveValidator<TModel>();
 
-            if (validator == null) return new ValidationResult();
-
+            if (validator == null)
+            {
+                return new ValidationResult();
+            }
             return await validator.ValidateAsync(model);
         }
 

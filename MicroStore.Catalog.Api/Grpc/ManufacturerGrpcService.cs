@@ -12,18 +12,14 @@ namespace MicroStore.Catalog.Api.Grpc
         private readonly IManufacturerCommandService _manufacturerCommandService;
 
         private readonly IManufacturerQueryService _manufacturerQueryService;
-
-        public ManufacturerGrpcService(IManufacturerQueryService manufacturerQueryService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+        public ManufacturerGrpcService(IManufacturerQueryService manufacturerQueryService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _manufacturerQueryService = manufacturerQueryService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
-        public ManufacturerGrpcService(IManufacturerCommandService manufacturerCommandService)
-        {
-            _manufacturerCommandService = manufacturerCommandService;
-        }
 
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
         public override async Task<ManufacturerResponse> Create(CreateManufacturerRequest request, ServerCallContext context)
         {

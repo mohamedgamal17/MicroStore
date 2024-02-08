@@ -11,13 +11,14 @@ namespace MicroStore.Catalog.Api.Grpc
     public class TagGrpcService : TagService.TagServiceBase
     {
         private readonly IProductTagApplicationService _productTagApplicationService;
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
-        public TagGrpcService(IProductTagApplicationService productTagApplicationService)
+        public TagGrpcService(IProductTagApplicationService productTagApplicationService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _productTagApplicationService = productTagApplicationService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
 
         public override async Task<TagResponse> Create(CreateTagRequest request, ServerCallContext context)
