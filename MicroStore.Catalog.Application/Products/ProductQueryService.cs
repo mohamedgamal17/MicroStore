@@ -200,19 +200,8 @@ namespace MicroStore.Catalog.Application.Products
                                     .Query(queryParams.Name!)
                                 )
                             )
-                        )
-                        .Filter(flt => flt
-                            .When(!string.IsNullOrEmpty(queryParams.Category), act => act
-                                .Nested(cf=> cf.Path(p=> p.Categories).Query(nqr=> nqr
-                                    .Term(x=> x.Categories.First().Name,queryParams.Category!)
-                                ))
-                            )
-                            .When(!string.IsNullOrEmpty(queryParams.Manufacturer), act => act
-                                .Nested(cf => cf.Path(p => p.Manufacturers).Query(nqr => nqr
-                                    .Term(x => x.Manufacturers.First().Name, queryParams.Manufacturer!)
-                                ))
-                            )
-                            .When(queryParams.MinPrice > -1 || queryParams.MaxPrice > -1, act => act
+                           
+                             .When(queryParams.MinPrice > -1 || queryParams.MaxPrice > -1, act => act
                                 .Range(rng => rng
                                     .NumberRange(numrang => numrang
                                         .When(queryParams.MinPrice > -1, act =>
@@ -224,10 +213,34 @@ namespace MicroStore.Catalog.Application.Products
                                     )
                                 )
 
-                            ).When(queryParams.IsFeatured, act => act
+                            )
+
+     
+                        )
+
+                     .Filter(flt=>  flt
+                        .When(!string.IsNullOrEmpty(queryParams.Category), act => act
+                                .Nested(cf => cf.Path(p => p.Categories).Query(nqr => nqr
+                                    .Match(mt => mt
+                                        .Field(f => f.Categories.First().Name)
+                                        .Query(queryParams.Category!)
+                                        )
+                                ))
+                         )
+                        .When(!string.IsNullOrEmpty(queryParams.Category), act => act
+                                .Nested(cf => cf.Path(p => p.Categories).Query(nqr => nqr
+                                    .Match(mt => mt
+                                        .Field(f => f.Categories.First().Name)
+                                        .Query(queryParams.Category!)
+                                        )
+                                ))
+                            )
+
+                         .When(queryParams.IsFeatured, act => act
                                 .Term(x => x.IsFeatured, true)
                             )
-                        )
+                      )
+                    
                     )
 
                 )
