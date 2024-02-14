@@ -11,12 +11,14 @@
 }
 <div class="container mt-3">
     <form class="theme-form" method="post" enctype="multipart/form-data">
+        <div class="text-danger text-left text-lg">
+            @Html.ValidationSummary()
+        </div>
         <div class="row">
             <div class="col-sm-12 mb-3 mt-3">
                 <h5 class="mb-3">PERSONAL DETAIL</h5>
 
                 <div class="mt-3 mb-3">
-                    @Html.ValidationSummary()
                     @Html.HiddenFor(x=> x.ReturnUrl)
                 </div>
                 <div class="form-row row">

@@ -2,7 +2,12 @@
 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
     <div class="image">
         @{
-            var userImage =  Model.User.Avatar ??  "/images/user.png";
+            var userImage =   Model.User.Avatar ;
+
+            if (string.IsNullOrEmpty(userImage))
+            {
+                userImage = "/images/user.png";
+            }
         }
         <img src="@userImage" class="img-circle elevation-2" alt="User Image">
     </div>

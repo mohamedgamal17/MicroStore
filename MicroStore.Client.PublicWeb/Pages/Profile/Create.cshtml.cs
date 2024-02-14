@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MicroStore.AspNetCore.UI;
 using MicroStore.Client.PublicWeb.Consts;
+using MicroStore.Client.PublicWeb.Extensions;
 using MicroStore.Client.PublicWeb.Infrastructure;
 using MicroStore.Client.PublicWeb.Models;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Profiling;
@@ -124,6 +125,8 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
                 await PreapreGeographicSelectedLists(Address.Country, Address.StateProvince);
 
                 uINotificationManager.Error(ex.Error.Title);
+
+                ex.Error.MapToModelState(ModelState);
 
                 return Page();
             }

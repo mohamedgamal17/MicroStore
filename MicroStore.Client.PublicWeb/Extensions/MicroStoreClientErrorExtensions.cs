@@ -11,12 +11,12 @@ namespace MicroStore.Client.PublicWeb.Extensions
         {
             if(error != null)
             {
-                if (error.Title != null) modelState.AddModelError("", error.Title);
-                if (error.Type != null) modelState.AddModelError("", error.Type);
-                if (error.Detail != null) modelState.AddModelError("", error.Detail);
+                //if (error.Title != null) modelState.AddModelError("", error.Title);
+                //if (error.Type != null) modelState.AddModelError("", error.Type);
+                //if (error.Detail != null) modelState.AddModelError("", error.Detail);
                 if (error.Errors != null)
                 {
-                    error.Errors.ForEach(error => modelState.AddModelError("", string.Format("{0}:{1}", error.Key, error.Value.JoinAsString(" , "))));
+                    error.Errors.ForEach(error => modelState.AddModelError("", string.Format("{0} : {1}", error.Key, error.Value.JoinAsString(" , "))));
                 }
 
 

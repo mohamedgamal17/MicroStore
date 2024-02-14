@@ -74,10 +74,41 @@
                         {
                             title: "State",
                             data: "currentState",
+                            render: function(data, type,row){
+
+                                var badgebg;
+                                switch (row.currentState.toLowerCase()) {
+                                    case "completed":
+                                        badgebg = "bg-success";
+                                        break;
+                                    case "cancelled":
+                                        badgebg = "bg-danger";
+                                        break;
+                                    case "fullfilled":
+                                        badgebg = "bg-warning";
+                                        break;
+                                    case "Approved":
+                                        badgebg = "bg-info";
+                                        break;
+                                    default:
+                                        badgebg = "bg-secondary"
+                                        break;
+
+                                }
+                                return `<span class='badge ${badgebg}  text-bg-light'>${row.currentState}</span>`
+                            }
                         },
                         {
                             title: "Total Price",
                             data: "totalPrice",
+                            render: function (data, type, row) {
+                                var priceFormat = new Intl.NumberFormat('en-US', {
+                                    style: 'currency',
+                                    currency: 'USD',
+                                })
+
+                                return priceFormat.format(row.totalPrice)
+                            },
                         },
                         {
                             title: "Actions",

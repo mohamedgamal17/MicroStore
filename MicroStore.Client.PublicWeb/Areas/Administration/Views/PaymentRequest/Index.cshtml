@@ -94,7 +94,27 @@
                         {
                             title: 'Status',
                             data: "status",
-                            orderable: false
+                            orderable: false,
+                            render: function (data, type, row) {
+
+                                var badgebg;
+                                switch (row.status.toLowerCase()) {
+                                    case "payed":
+                                        badgebg = "bg-success";
+                                        break;
+                                    case "waiting":
+                                        badgebg = "bg-danger";
+                                        break;
+                                    case "unpayed":
+                                        badgebg = "bg-secondary";
+                                        break;
+                                    default:
+                                        badgebg = "bg-danger"
+                                        break;
+
+                                }
+                                return `<span class='badge ${badgebg}  text-bg-light'>${row.status}</span>`
+                            }
                         },
                         {
                             title: 'Created At',

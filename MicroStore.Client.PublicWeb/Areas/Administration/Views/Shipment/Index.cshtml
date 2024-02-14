@@ -73,6 +73,30 @@
                             title: "Status",
                             data: "status",
                             orderable: false,
+
+                            render: function (data, type, row) {
+
+                                var badgebg;
+                                switch (row.status.toLowerCase()) {
+                                    case "cancelled":
+                                        badgebg = "bg-danger";
+                                        break;
+                                    case "shipping":
+                                        badgebg = "bg-warning";
+                                        break;
+                                    case "fullfilled":
+                                        badgebg = "bg-info";
+                                        break;
+                                    case "completed":
+                                        badgebg = "bg-success";
+                                        break;
+                                    default:
+                                        badgebg = "bg-secondary"
+                                        break;
+
+                                }
+                                return `<span class='badge ${badgebg} text-bg-light'>${row.status}</span>`
+                            }
                         },
                         {
                             title: "Created At",

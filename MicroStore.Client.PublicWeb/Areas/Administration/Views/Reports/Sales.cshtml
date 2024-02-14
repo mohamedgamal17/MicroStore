@@ -40,8 +40,11 @@
 @section Scripts{
     <script>
 
-        $(function(){
 
+        $(document).ready(function () {
+
+            $('#StartDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $('#EndDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
             var reportTable = $("#ReportTable").DataTable(
                 abp.libs.datatables.normalizeConfiguration({
                     ajax:{
@@ -49,7 +52,7 @@
                         data: function (data) {
                             data.startDate = $("#StartDate").val();
                             data.endDate = $("#EndDate").val();
-                            data.groupBy = $("#groupBy").val();
+                            data.groupBy = $("#GroupBy").val();
                         }
                     },
                     paging: true,
@@ -118,11 +121,12 @@
 
             $("#ReportFilterForm").on('submit',function(evt){
                 evt.preventDefault();
+                console.log($("#GroupBy").val())
                 reportTable.ajax.reload()
             })
 
 
-        })();
+        });
     </script>
 
 }

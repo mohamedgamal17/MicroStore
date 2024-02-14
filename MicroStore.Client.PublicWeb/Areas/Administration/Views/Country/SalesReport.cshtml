@@ -40,7 +40,8 @@
 @section Scripts{
     <script>
         $(function(){
-
+            $('#StartDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $('#EndDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
             var reportTable = $("#ReportTable").DataTable(
                 abp.libs.datatables.normalizeConfiguration({
                     ajax: {
@@ -114,6 +115,11 @@
 
                 })
             )
+
+            $("#ReportFilterForm").on('submit', function (evt) {
+                evt.preventDefault();
+                reportTable.ajax.reload()
+            })
         })();
     </script>
 }
