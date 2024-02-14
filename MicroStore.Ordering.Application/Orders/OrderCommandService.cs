@@ -104,7 +104,7 @@ namespace MicroStore.Ordering.Application.Orders
 
             if (order.CurrentState == OrderStatusConst.Cancelled)
             {
-                return new Result<Unit>(new BusinessException("order state is already canceled"));
+                return new Result<Unit>(new UserFriendlyException("order state is already canceled"));
             }
 
             var orderCancelledEvent = new OrderCancelledEvent
