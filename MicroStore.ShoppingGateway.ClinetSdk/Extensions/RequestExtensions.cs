@@ -37,6 +37,12 @@ namespace MicroStore.ShoppingGateway.ClinetSdk.Extensions
                                  dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)), dateTime.ToString("yyyy-MM-ddTHH:mm:ss"));
 
                              }
+                             else if(p.GetType().IsEnum)
+                             {
+                                 int enumVal = Convert.ToInt32(val);
+
+                                 dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)), enumVal.ToString());
+                             }
                              else
                              {
                                  dictionary.Add(string.Format("{0}", ConvertToSnakeCase(p.Name)), value);
