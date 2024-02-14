@@ -93,7 +93,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             {
                 ex.Error.MapToModelState(ModelState);
 
-                return RedirectToAction("Details", new {orderId = model.OrderId});
+                return RedirectToAction("Details", new {id = model.OrderId});
             }
         }
 
@@ -242,7 +242,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 await _orderService.CancelAsync(model.Id, requestOptions);
 
-                return RedirectToAction("Details", new { orderId = model.Id });
+                return RedirectToAction("Details", new { id = model.Id });
 
             }
             catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadRequest || ex.StatusCode == HttpStatusCode.NotFound)
