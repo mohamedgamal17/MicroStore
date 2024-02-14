@@ -16,10 +16,11 @@ namespace MicroStore.Payment.Api.Host.Grpc
         private readonly IPaymentRequestCommandService _paymentRequestCommandService;
         private readonly IPaymentRequestQueryService _paymentRequestQueryService;
 
-        public PaymentGrpcService(IPaymentRequestCommandService paymentRequestCommandService, IPaymentRequestQueryService paymentRequestQueryService)
+        public PaymentGrpcService(IPaymentRequestCommandService paymentRequestCommandService, IPaymentRequestQueryService paymentRequestQueryService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _paymentRequestCommandService = paymentRequestCommandService;
             _paymentRequestQueryService = paymentRequestQueryService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
@@ -278,12 +279,12 @@ namespace MicroStore.Payment.Api.Host.Grpc
                 SubTotal = payment.SubTotal,
                 TotalCost = payment.TotalCost,
                 Status = System.Enum.Parse<PaymentStatus>(payment.Status),
-                CreatedAt = payment.CreationTime.ToTimestamp(),
-                Description = payment.Description,
-                CapturedAt = payment.CapturedAt.ToTimestamp(),
-                RefundedAt = payment.RefundedAt.ToTimestamp(),
-                FaultAt =payment.FaultAt.ToTimestamp(),
-                ModifiedAt = payment.LastModificationTime?.ToTimestamp()
+                CreatedAt = payment.CreationTime.ToUniversalTime().ToTimestamp(),
+                Description = payment.Description ?? string.Empty,
+                CapturedAt = payment.CapturedAt.ToUniversalTime().ToTimestamp(),
+                RefundedAt = payment.RefundedAt.ToUniversalTime().ToTimestamp(),
+                FaultAt =payment.FaultAt.ToUniversalTime().ToTimestamp(),
+                ModifiedAt = payment.LastModificationTime?.ToUniversalTime().ToTimestamp()
 
             };
 

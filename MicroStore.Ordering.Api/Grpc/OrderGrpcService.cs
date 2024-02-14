@@ -15,10 +15,11 @@ namespace MicroStore.Ordering.Api.Grpc
         private readonly IOrderCommandService _orderCommandService;
         private readonly IOrderQueryService _orderQueryService;
 
-        public OrderGrpcService(IOrderCommandService orderCommandService, IOrderQueryService orderQueryService)
+        public OrderGrpcService(IOrderCommandService orderCommandService, IOrderQueryService orderQueryService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _orderCommandService = orderCommandService;
             _orderQueryService = orderQueryService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
@@ -241,8 +242,8 @@ namespace MicroStore.Ordering.Api.Grpc
                 BillingAddress = PrepareAddress(order.BillingAddress),
                 ShippingAddress = PrepareAddress(order.ShippingAddress),
                 CurrentState = order.CurrentState,
-                ShippedDate = order.ShippedDate.ToTimestamp(),
-                SubmissionDate = order.SubmissionDate.ToTimestamp(),
+                ShippedDate = order.ShippedDate.ToUniversalTime().ToTimestamp(),
+                SubmissionDate = order.SubmissionDate.ToUniversalTime().ToTimestamp(),
                 
             };
 
@@ -298,7 +299,7 @@ namespace MicroStore.Ordering.Api.Grpc
                 Name = orderItem.Name,
                 Sku = orderItem.Sku,
                 ProductId = orderItem.ExternalProductId,
-                Thumbnail = orderItem.Thumbnail,
+                Thumbnail = orderItem.Thumbnail ?? string.Empty,
                 Quantity = orderItem.Quantity,
                 UnitPrice = orderItem.UnitPrice
             };

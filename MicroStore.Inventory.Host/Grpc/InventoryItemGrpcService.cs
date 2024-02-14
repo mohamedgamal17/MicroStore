@@ -16,10 +16,11 @@ namespace MicroStore.Inventory.Host.Grpc
 
         private readonly IProductQueryService _productQueryService;
 
-        public InventoryItemGrpcService(IProductCommandService productCommandService, IProductQueryService productQueryService)
+        public InventoryItemGrpcService(IProductCommandService productCommandService, IProductQueryService productQueryService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _productCommandService = productCommandService;
             _productQueryService = productQueryService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
         public IAbpLazyServiceProvider LazyServiceProvider { get; set; }

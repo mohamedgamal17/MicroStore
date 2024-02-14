@@ -13,13 +13,12 @@ namespace MicroStore.Shipping.Host.Grpc
     public class RateGrpcService : RateService.RateServiceBase
     {
         private readonly IRateApplicationService _rateApplicationService;
-
-        public RateGrpcService(IRateApplicationService rateApplicationService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+        public RateGrpcService(IRateApplicationService rateApplicationService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _rateApplicationService = rateApplicationService;
+            LazyServiceProvider = lazyServiceProvider;
         }
-
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
         public override async Task<RateListResponse> Estimate(EstimateShippingRateRequest request, ServerCallContext context)
         {

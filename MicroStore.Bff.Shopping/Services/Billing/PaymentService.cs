@@ -49,7 +49,7 @@ namespace MicroStore.Bff.Shopping.Services.Billing
         {
             var request = new PaymentListByOrderIdsRequest();
 
-            orderIds?.ForEach(id => request.OrderIds.Add(request.OrderIds));
+            request.OrderIds.AddRange(orderIds);
 
             var response = await _paymentService.GetListByOrderIdsAsync(request);
 

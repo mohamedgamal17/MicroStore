@@ -14,14 +14,15 @@ namespace MicroStore.Shipping.Host.Grpc
     {
         private readonly IShipmentCommandService _shipmentCommandService;
         private readonly IShipmentQueryService _shipmentQueryService;
-
-        public ShipmentGrpcService(IShipmentCommandService shipmentCommandService, IShipmentQueryService shipmentQueryService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+        public ShipmentGrpcService(IShipmentCommandService shipmentCommandService, IShipmentQueryService shipmentQueryService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _shipmentCommandService = shipmentCommandService;
             _shipmentQueryService = shipmentQueryService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
 
 
         public override async Task<ShipmentResponse> Create(CreateShipmentReqeust request, ServerCallContext context)
@@ -343,7 +344,7 @@ namespace MicroStore.Shipping.Host.Grpc
                         Weight = new Weight
                         {
                             Value = item.Weight.Value,
-                            Unit = System.Enum.Parse<WeightUnit>(item.Weight.Unit)
+                            Unit = System.Enum.Parse<WeightUnit>(item.Weight.Unit,true)
                         }
                     };
 

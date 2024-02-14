@@ -10,13 +10,12 @@ namespace MicroStore.Shipping.Host.Grpc
     public class AddressGrpcService : AddressService.AddressServiceBase
     {
         private readonly IAddressApplicationService _addressApplicationService;
-
-        public AddressGrpcService(IAddressApplicationService addressApplicationService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+        public AddressGrpcService(IAddressApplicationService addressApplicationService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _addressApplicationService = addressApplicationService;
+            LazyServiceProvider = lazyServiceProvider;
         }
-
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
 
         public override async Task<AddressValidationResultResponse> Validate(AddressRequest request, ServerCallContext context)
         {

@@ -12,12 +12,14 @@ namespace MicroStore.ShoppingCart.Api.Grpc
     {
         private readonly IBasketService _basketService;
 
-        public BasketGrpcService(IBasketService basketService)
+        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+        public BasketGrpcService(IBasketService basketService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _basketService = basketService;
+            LazyServiceProvider = lazyServiceProvider;
         }
 
-        public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+
         public override async Task<BasketResponse> CreateOrUpdate(BasketRequest request, ServerCallContext context)
         {
             var model = PrepareBasketModel(request);

@@ -149,7 +149,7 @@ message GetProductImageByIdRequest{
 enum WeightUnit{
 	Gram = 0;
 	Pound = 5;
-	KilogGram = 10;
+	KiloGram = 10;
 }
 
 enum DimensionUnit{

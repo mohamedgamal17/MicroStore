@@ -102,7 +102,7 @@ namespace MicroStore.Profiling.Application.Services
                 var query = _applicationDbContext.Profiles.AsNoTracking();
 
 
-                var profiles = await query.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+                var profiles = await query.Where(x => ids.Contains(x.UserId)).ToListAsync(cancellationToken);
 
                 return ObjectMapper.Map<List<Profile>, List<ProfileDto>>(profiles);
             }
