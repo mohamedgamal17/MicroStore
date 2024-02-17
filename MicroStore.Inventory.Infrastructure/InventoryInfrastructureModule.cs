@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MicroStore.Inventory.Application.Common;
 using MicroStore.Inventory.Infrastructure.EntityFramework;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EventBus;
@@ -31,6 +32,8 @@ namespace MicroStore.Inventory.Infrastructure
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Enabled;
                 options.IsolationLevel = System.Data.IsolationLevel.ReadCommitted;
             });
+
+            context.Services.AddTransient<IProductRepository, ProductRepository>();
 
         }
     }

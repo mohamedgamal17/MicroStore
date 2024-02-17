@@ -39,22 +39,6 @@ namespace MicroStore.Inventory.Application.Products
             return result;
         }
 
-        public async Task<Result<ProductDto>> GetBySkyAsync(string sku, CancellationToken cancellationToken = default)
-        {
-            var query = _inventoryDbContext.Products
-             .AsNoTracking()
-             .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider);
-
-            var result = await query.SingleOrDefaultAsync(x => x.Sku == sku, cancellationToken);
-
-            if (result == null)
-            {
-                return new Result<ProductDto>(new EntityNotFoundException($"product with product sku {sku} is not exist"));
-
-            }
-
-            return result;
-        }
 
         public async Task<Result<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
@@ -68,19 +52,5 @@ namespace MicroStore.Inventory.Application.Products
             return result;
         }
 
-        public async Task<Result<PagedResult<ProductDto>>> Search(ProductSearchModel model, CancellationToken cancellationToken = default)
-        {
-            var productsQuery = _inventoryDbContext.Products
-                .AsNoTracking()
-                .ProjectTo<ProductDto>(MapperAccessor.Mapper.ConfigurationProvider)
-                .AsQueryable();
-
-            productsQuery = from product in productsQuery
-                            where product.Name.Contains(model.KeyWords) ||
-                                  product.Sku.Contains(model.KeyWords)
-                            select product;
-
-            return await productsQuery.PageResult(model.Skip, model.Length, cancellationToken);
-        }
     }
 }

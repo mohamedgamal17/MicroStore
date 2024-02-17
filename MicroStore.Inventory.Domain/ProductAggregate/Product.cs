@@ -11,9 +11,6 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
     public class Product : BasicAggregateRoot<string>
     {
    
-        public string Sku { get; set; }
-        public string Name { get; set; }
-        public string? Thumbnail { get; set; }
         public int Stock { get; private set; }
         public int AllocatedStock { get; private set; }
         public Product(string id)
@@ -21,19 +18,18 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
             Id = id;
         }
 
-        public Product(string id ,string name , string sku , int stock)
-        {
-            Id = id;
-            Name = name;
-            Sku = sku;
-            Stock = stock;
-        }
 
         public Product()
         {
             Id = Guid.NewGuid().ToString();
         }
 
+
+        public Product (int stock)
+        {
+            Id = Guid.NewGuid().ToString();
+            Stock = stock;
+        }
 
         public void UpdateInventory(int stock)
         {
@@ -61,8 +57,8 @@ namespace MicroStore.Inventory.Domain.ProductAggregate
         {
             if (Stock < quantity)
             {
-                return new Result<Unit>(new BusinessException(
-                     $"Current product : {Name} \n \t stock is less than requested allocated quantity"));
+                return new Result<Unit>(new UserFriendlyException(
+                     $"Current product  \n \t stock is less than requested allocated quantity"));
             }
 
             return Unit.Value;

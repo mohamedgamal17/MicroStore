@@ -14,8 +14,6 @@ using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using MicroStore.Inventory.Domain.ProductAggregate;
-using MicroStore.Inventory.Domain.OrderAggregate;
-
 namespace MicroStore.Inventory.Application.Tests
 {
 

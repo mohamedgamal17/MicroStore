@@ -37,9 +37,6 @@ message InventoryItemListResponse{
 
 message InventoryItemResponse{
 	string id=  1;
-	string sku =2;
-    string name =3;
-    google.protobuf.StringValue thumbnail = 4;
-    int32 stock = 5;
-    int32 allocatedStock  = 6;
+    int32 stock =2;
+    int32 allocatedStock  = 3;
 }

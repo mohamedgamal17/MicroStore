@@ -2,20 +2,16 @@
 using Microsoft.Extensions.Logging;
 using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Orders;
+using MicroStore.Inventory.Domain.Exceptions;
 using MicroStore.Inventory.IntegrationEvents;
 
 namespace MicroStore.Inventory.Application.Consumers
 {
     public class AllocateOrderStockIntegrationEventConsumer : IConsumer<AllocateOrderStockIntegrationEvent>
     {
-
-
         private readonly ILogger<AllocateOrderStockIntegrationEventConsumer> _logger;
 
-
         private readonly IOrderCommandService _orderCommandService;
-
-
         public AllocateOrderStockIntegrationEventConsumer(ILogger<AllocateOrderStockIntegrationEventConsumer> logger, IOrderCommandService orderCommandService)
         {
             _logger = logger;
@@ -29,32 +25,22 @@ namespace MicroStore.Inventory.Application.Consumers
                 _logger.LogDebug("Consuming {EventName} : For Order : {OrderId}", nameof(AllocateOrderStockIntegrationEvent), context.Message.OrderId);
             }
 
-            var result = await _orderCommandService.AllocateOrderStockAsync(new AllocateOrderStockModel
+            var result = await _orderCommandService.AllocateOrderStockAsync(new OrderStockModel
             {
-                OrderId = context.Message.OrderId,
-                OrderNumber = context.Message.OrderNumber,
-                PaymentId = context.Message.PaymentId,
-                UserId = context.Message.UserId,
-                ShippingAddress = MapAddressModel(context.Message.ShippingAddress),
-                BillingAddres = MapAddressModel(context.Message.BillingAddres),
-                ShippingCost = context.Message.ShippingCost,
-                TaxCost = context.Message.TaxCost,
-                SubTotal = context.Message.SubTotal,
-                TotalPrice = context.Message.TotalPrice,
                 Items = MapeOrderItems(context.Message.Items),
             });
 
 
             if (result.IsFailure)
             {
+                var details = ((OrderStockException)result.Exception).Details;
 
                 await context.Publish(new StockRejectedIntegrationEvent
                 {
                     OrderId = context.Message.OrderId,
                     OrderNumber = context.Message.OrderNumber,
-                    PaymentId = context.Message.PaymentId,
                     UserId= context.Message.UserId, 
-                    Details = result.Exception.Message
+                    Details = details
                 });
 
             }
@@ -64,7 +50,6 @@ namespace MicroStore.Inventory.Application.Consumers
                 {
                     OrderId = context.Message.OrderId,
                     OrderNumber = context.Message.OrderNumber,
-                    PaymentId= context.Message.PaymentId,
                     UserId = context.Message.UserId
                 });
             }
@@ -75,30 +60,9 @@ namespace MicroStore.Inventory.Application.Consumers
         {
             return products.Select(x => new OrderItemModel
             {
-               ItemId  = x.ItemId,
-               ProductId= x.ProductId,
-               Sku = x.Sku,
-               Name = x.Name,
-               Thumbnail = x.Thumbnail,
-               UnitPrice= x.UnitPrice,  
+               ProductId= x.ProductId, 
                Quantity = x.Quantity
             }).ToList();
-        }
-
-        private AddressModel MapAddressModel(MicroStore.Inventory.IntegrationEvents.Models.AddressModel addressModel)
-        {
-            return new AddressModel
-            {
-                Name = addressModel.Name,
-                Phone = addressModel.Phone,
-                CountryCode = addressModel.CountryCode,
-                City = addressModel.City,
-                State = addressModel.State,
-                PostalCode = addressModel.PostalCode,
-                Zip = addressModel.Zip,
-                AddressLine1 = addressModel.AddressLine1,
-                AddressLine2 = addressModel.AddressLine2,
-            };
         }
     }
 }

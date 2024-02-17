@@ -6,7 +6,6 @@ using MicroStore.Inventory.IntegrationEvents.Models;
 namespace MicroStore.Inventory.Application.Tests.Consumers
 {
     [NonParallelizable]
-
     public class When_allocate_order_stock_integration_event_consumed : BaseTestFixture
     {
 
@@ -21,16 +20,8 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
             {
                 OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                PaymentId = Guid.NewGuid().ToString(),
                 UserId = Guid.NewGuid().ToString(),
-                ShippingCost= 0,
-                TaxCost = 0,
-                SubTotal = 0,
-                TotalPrice = 0,
-                ShippingAddress = GenerateFakeAddress(),
-                BillingAddres = GenerateFakeAddress(),
                 Items = GenerateFakeOrderItem(fakeProducts, allocatedQuantity)
-
             };
 
             await TestHarness.Bus.Publish(integrationEvent);
@@ -49,33 +40,13 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
         }
 
 
-        private AddressModel GenerateFakeAddress()
-        {
-            return new AddressModel
-            {
-                CountryCode = Guid.NewGuid().ToString(),
-                City = Guid.NewGuid().ToString(),
-                State = Guid.NewGuid().ToString(),
-                PostalCode = Guid.NewGuid().ToString(),
-                Zip = Guid.NewGuid().ToString(),
-                AddressLine1 = Guid.NewGuid().ToString(),
-                AddressLine2 = Guid.NewGuid().ToString(),
-                Name = Guid.NewGuid().ToString(),
-                Phone = Guid.NewGuid().ToString(),
-            };
-        }
 
         private List<OrderItemModel> GenerateFakeOrderItem(List<Product> products , int quantity)
         {
             return products.Select(x => new OrderItemModel
             {
-                ItemId = Guid.NewGuid().ToString(),
-                Name = x.Name,
-                Sku = x.Sku,
                 ProductId = x.Id,
-                Thumbnail = x.Thumbnail,
                 Quantity = quantity,
-                UnitPrice = 50
             }).ToList();
         }
 
@@ -90,14 +61,7 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
             {
                 OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                PaymentId = Guid.NewGuid().ToString(),
                 UserId = Guid.NewGuid().ToString(),
-                ShippingCost = 0,
-                TaxCost = 0,
-                SubTotal = 0,
-                TotalPrice = 0,
-                ShippingAddress = GenerateFakeAddress(),
-                BillingAddres = GenerateFakeAddress(),
                 Items = GenerateFakeOrderItem(fakeProducts, allocatedQuantity)
 
             };
@@ -129,11 +93,11 @@ namespace MicroStore.Inventory.Application.Tests.Consumers
 
             List<Product> fakeProducts = new List<Product>();
 
-            fakeProducts.Add(await Insert(new Product(Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 5)));
+            fakeProducts.Add(await Insert(new Product(10)));
 
-            fakeProducts.Add(await Insert(new Product(Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 10)));
+            fakeProducts.Add(await Insert(new Product(10)));
 
-            fakeProducts.Add(await Insert(new Product( Guid.NewGuid().ToString() ,Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 15)));
+            fakeProducts.Add(await Insert(new Product(10)));
 
             return fakeProducts;
         }

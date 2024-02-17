@@ -1,7 +1,6 @@
 ﻿#nullable disable
 using Microsoft.EntityFrameworkCore;
 using MicroStore.Inventory.Application.Common;
-using MicroStore.Inventory.Domain.OrderAggregate;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using System.Reflection;
 using Volo.Abp.Data;
@@ -14,7 +13,6 @@ namespace MicroStore.Inventory.Infrastructure.EntityFramework
     public class InventoryDbContext : AbpDbContext<InventoryDbContext> , IInventoyDbContext
     {
         public DbSet<Product> Products { get; set; }
-        public DbSet<Order> Orders { get; set; }
         public InventoryDbContext(DbContextOptions<InventoryDbContext> options) 
             : base(options)
         {

@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using MicroStore.Inventory.Application.Models;
 using MicroStore.Inventory.Application.Orders;
 using MicroStore.Inventory.IntegrationEvents;
 namespace MicroStore.Inventory.Application.Consumers
@@ -16,7 +17,23 @@ namespace MicroStore.Inventory.Application.Consumers
 
         public async Task Consume(ConsumeContext<ReleaseOrderStockIntegrationEvent> context)
         {
-            await _orderCommandService.ReleaseOrderStockAsync(context.Message.OrderId);
+            var model = new OrderStockModel
+            {
+                Items = MapeOrderItems(context.Message.Items)
+            }; 
+
+
+            await _orderCommandService.ReleaseOrderStockAsync(model);
+        }
+
+
+        private List<OrderItemModel> MapeOrderItems(List<MicroStore.Inventory.IntegrationEvents.Models.OrderItemModel> products)
+        {
+            return products.Select(x => new OrderItemModel
+            {
+                ProductId = x.ProductId,
+                Quantity = x.Quantity
+            }).ToList();
         }
     }
 }

@@ -9,5 +9,6 @@ namespace MicroStore.Inventory.IntegrationEvents
         public string PaymentId { get; set; }
         public string UserId { get; set; }
 
+        public List<OrderItemModel> Items { get; set; }
     }
 }

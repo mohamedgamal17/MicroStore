@@ -6,6 +6,6 @@
         public string OrderNumber { get; set; }
         public string UserId { get; set; }
         public string PaymentId { get; set; }
-        public string Details { get; set; }
+        public Dictionary<string,string> Details { get; set; }
     }
 }

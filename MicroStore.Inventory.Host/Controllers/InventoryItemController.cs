@@ -41,17 +41,6 @@ namespace MicroStore.Inventory.Host.Controllers
 
 
         [HttpGet]
-        [Route("sku/{sku}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
-        public async Task<IActionResult> RetriveProductWithSku(string sku)
-        {
-
-            var result = await _productQueryService.GetBySkyAsync(sku);
-
-            return result.ToOk();
-        }
-
-        [HttpGet]
         [Route("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductDto))]
 
@@ -75,24 +64,7 @@ namespace MicroStore.Inventory.Host.Controllers
                 return InvalideModelState();
             }
 
-            var result = await _productCommandService.UpdateProductAsync(productId, model);
-
-            return result.ToOk();
-        }
-
-        [HttpPost]
-        [Route("search")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<ProductDto>))]
-        public async Task<IActionResult> Search(ProductSearchModel model)
-        {
-            var validationResult = await ValidateModel(model);
-
-            if (!validationResult.IsValid)
-            {
-                return InvalideModelState();
-            }
-
-            var result = await _productQueryService.Search(model);
+            var result = await _productCommandService.CreateOrUpdateAsync(productId, model);
 
             return result.ToOk();
         }

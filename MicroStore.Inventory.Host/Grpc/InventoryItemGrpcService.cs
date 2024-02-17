@@ -40,7 +40,7 @@ namespace MicroStore.Inventory.Host.Grpc
                 validationResult.ThrowRpcException();
             }
 
-            var result = await _productCommandService.UpdateProductAsync(request.ProductId, model);
+            var result = await _productCommandService.CreateOrUpdateAsync(request.ProductId, model);
 
             if (result.IsFailure)
             {
@@ -101,11 +101,7 @@ namespace MicroStore.Inventory.Host.Grpc
             return new InventoryItemResponse
             {
                 Id = product.Id,
-                Name = product.Name,
-                Sku = product.Sku,
                 Stock = product.Stock,
-                AllocatedStock = product.AllocatedStock,
-                Thumbnail = product.Thumbnail
             };
         }
 

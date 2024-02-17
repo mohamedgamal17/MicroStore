@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStore.BuildingBlocks.Utils.Results;
-using MicroStore.Inventory.Application.Dtos;
 using MicroStore.Inventory.Application.Models;
-using MicroStore.Inventory.Domain.OrderAggregate;
+using MicroStore.Inventory.Domain.Exceptions;
 using MicroStore.Inventory.Domain.ProductAggregate;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
@@ -10,22 +9,23 @@ using Volo.Abp.Validation;
 
 namespace MicroStore.Inventory.Application.Orders
 {
+    [DisableValidation]
     public class OrderCommandService :InventoryApplicationService ,IOrderCommandService
     {
         private readonly IRepository<Product> _productRepository;
 
-        private readonly IRepository<Order> _orderRepository;
 
-        public OrderCommandService(IRepository<Product> productRepository, IRepository<Order> orderRepository)
+        public OrderCommandService(IRepository<Product> productRepository)
         {
             _productRepository = productRepository;
-            _orderRepository = orderRepository;
         }
 
-        [DisableValidation]
-        public async Task<Result<OrderDto>> AllocateOrderStockAsync(AllocateOrderStockModel model, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> AllocateOrderStockAsync(OrderStockModel model, CancellationToken cancellationToken = default)
         {
             List<Result<Unit>> failureResults = new();
+
+
+            Dictionary<string, string> errors = new Dictionary<string, string>();
 
             foreach (var orderItem in model.Items)
             {
@@ -36,20 +36,13 @@ namespace MicroStore.Inventory.Application.Orders
 
                 if (result.IsFailure)
                 {
-                    failureResults.Add(result);
+                    errors[orderItem.ProductId] = result.Exception.Message; 
                 }
             }
 
-            if (failureResults.Any())
+            if (errors.Any())
             {
-
-                string details = failureResults.Select(x => x.ToString())
-                        .Aggregate((t1, t2) => t1 + "\n" + t2)!;
-
-
-
-                return   new Result<OrderDto>(new BusinessException(details));
-                
+                return   new Result<Unit>(new OrderStockException(errors));           
             }
 
             foreach (var orderItem in model.Items)
@@ -61,43 +54,13 @@ namespace MicroStore.Inventory.Application.Orders
                 await _productRepository.UpdateAsync(product, cancellationToken: cancellationToken);
             }
 
-            Order order = new Order(model.OrderId)
-            {
-
-                OrderNumber = model.OrderNumber,
-                PaymentId = model.PaymentId,
-                UserId = model.UserId,
-                ShippingAddress = model.ShippingAddress.AsAddressValueObject(),
-                BillingAddres = model.ShippingAddress.AsAddressValueObject(),
-                ShippingCost = model.ShippingCost,
-                TaxCost = model.TaxCost,
-                SubTotal = model.SubTotal,
-                TotalPrice = model.TotalPrice,
-                Items = model.Items.Select(x => new OrderItem(x.ItemId)
-                {
-                    ProductId = x.ProductId,
-                    Name = x.Name,
-                    Sku = x.Sku,
-                    Thumbnail = x.Thumbnail,
-                    Quantity = x.Quantity,
-                    UnitPrice = x.UnitPrice,
-
-                }).ToList()
-            };
-
-            await _orderRepository.InsertAsync(order,cancellationToken: cancellationToken);
-
-            return ObjectMapper.Map<Order, OrderDto>(order);
+            return Unit.Value;
         }
 
-        [DisableValidation]
-        public async Task<Result<OrderDto>> ReleaseOrderStockAsync(string orderId, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> ReleaseOrderStockAsync(OrderStockModel model, CancellationToken cancellationToken = default)
         {
-            var query = await _orderRepository.WithDetailsAsync(x => x.Items);
 
-            var order = await query.SingleAsync(x => x.Id == orderId,cancellationToken);
-
-            foreach (var orderItem in order.Items)
+            foreach (var orderItem in model.Items)
             {
                 Product product = await _productRepository.SingleAsync(x => x.Id == orderItem.ProductId, cancellationToken);
 
@@ -106,11 +69,7 @@ namespace MicroStore.Inventory.Application.Orders
                 await _productRepository.UpdateAsync(product,cancellationToken: cancellationToken);
             }
 
-            order.IsCancelled = true;
-
-            await _orderRepository.UpdateAsync(order,cancellationToken:cancellationToken);
-
-            return ObjectMapper.Map<Order, OrderDto>(order);
+            return Unit.Value;
         }
     }
 
