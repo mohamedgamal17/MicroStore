@@ -181,7 +181,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Abstractions", "MicroStore.Catalog.Application.Abstractions\MicroStore.Catalog.Application.Abstractions.csproj", "{CAAB8E18-43BC-4783-BB1F-5A4010224CC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStore.Bff.Shopping", "MicroStore.Bff.Shopping\MicroStore.Bff.Shopping.csproj", "{ABB8081D-6C9C-421B-B592-7299C3A97CD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Bff.Shopping", "MicroStore.Bff.Shopping\MicroStore.Bff.Shopping.csproj", "{ABB8081D-6C9C-421B-B592-7299C3A97CD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -11,6 +11,7 @@ service ProductService{
 	rpc Create(CreateProductRequest) returns(ProductResponse);
 	rpc Update(UpdateProductRequest) returns(ProductResponse);
 	rpc GetList(ProductListRequest) returns (ProductListResponse);
+	rpc GetListByIds(ProductListByIdsRequest) returns (ProductListByIdsResponse);
 	rpc GetById(GetProductByIdRequest) returns (ProductResponse);
 	rpc CreateProductImage(CreateProductImageRequest) returns(ProductImageResponse);
 	rpc UpdateProductImage(UpdateProductImageRequest) returns (ProductImageResponse);
@@ -18,11 +19,6 @@ service ProductService{
 	rpc GetProductImageList(ProductImageListRequest) returns(ProductImageListResponse);
 	rpc GetProductImageById(GetProductImageByIdRequest) returns(ProductImageResponse);
 } 
-
-
-message ProductImageListRequest{
-	string productId= 1;
-}
 
 message ProductCategoryListModel{
 	repeated string categories = 1;
@@ -74,7 +70,6 @@ message UpdateProductRequest{
 	ProductTagListModel tags = 13;
 	ProductImageListModel images = 14;
 }
-
 message CreateProductImageRequest{
 	string productId =1;
 	string image = 2;
@@ -103,8 +98,12 @@ message ProductListRequest{
 	 int32 skip =  8;
 	 int32 length = 9;
 	 optional string sortBy = 10;
-	 bool desc = 11;
+	 	 bool desc = 11;
 
+}
+
+message ProductListByIdsRequest{
+	repeated string Ids = 1;
 }
 
 message GetProductByIdRequest{
@@ -116,6 +115,10 @@ message ProductListResponse{
 	int32 skip =  2;
 	int32 length = 3;
 	int64 totalCount = 4;
+}
+
+message ProductListByIdsResponse{
+	repeated ProductResponse items=  1;
 }
 
 message ProductResponse{
@@ -137,6 +140,15 @@ message ProductResponse{
 }
 
 
+message ProductImageRequest
+{
+	string image = 1;
+	int32 displayOrder = 2;
+}
+
+message ProductImageListRequest{
+	string productId= 1;
+}
 
 message GetProductImageByIdRequest{
 	string productId = 1;
@@ -146,7 +158,7 @@ message GetProductImageByIdRequest{
 enum WeightUnit{
 	Gram = 0;
 	Pound = 5;
-	KilogGram = 10;
+	KiloGram = 10;
 }
 
 enum DimensionUnit{
@@ -189,11 +201,6 @@ message ProductImageResponse{
 	int32 displayOrder = 3;
 }
 
-message ProductImageRequest
-{
-	string image = 1;
-	int32 displayOrder = 2;
-}
 
 
 message ProductImageListResponse{

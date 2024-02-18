@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroStore.Bff.Shopping.Grpc.ShoppingCart";
+
+package BasketApi;
+
+service BasketService{
+	rpc CreateOrUpdate(BasketRequest) returns(BasketResponse);
+	rpc AddOrUpdateItem(AddOrUpdateBasketItemRequest) returns(BasketResponse);
+	rpc RemoveProduct(RemoveBasketItemRequest) returns(BasketResponse);
+	rpc Migrate(MigrateRequest) returns(BasketResponse);
+	rpc Clear(CleareUserBasketReqeust) returns(Empty) ;
+	rpc GetByUserId(GetByUserIdRequest) returns(BasketResponse);
+}
+
+message BasketRequest{
+	string userId = 1;
+	repeated BasketItemRequest items= 2;
+}
+
+message BasketItemRequest{
+	string productId=  1;
+	int32 quantity = 2;
+}
+
+message AddOrUpdateBasketItemRequest{
+	string userId= 1;
+	string productId = 2;
+	int32 quantity = 3;
+}
+
+message RemoveBasketItemRequest{
+	string userId = 1;
+	string productId =2;
+}
+
+message MigrateRequest{
+	string FromUserId = 1;
+	string ToUserId = 2;
+}
+
+message GetByUserIdRequest{
+	string userId= 1;
+}
+
+message CleareUserBasketReqeust{
+	string userId= 1;
+}
+
+message BasketResponse{
+	string userId = 1;
+	repeated BasketItemResponse items= 2;
+}
+
+message BasketItemResponse{
+	 string productId = 1;
+     int32 quantity = 2;
+}
+
+message Empty{
+
+}
+
+

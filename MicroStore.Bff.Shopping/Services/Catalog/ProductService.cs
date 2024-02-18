@@ -89,6 +89,25 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
             return paged;
         }
 
+        public async Task<List<Product>> ListByIdsAsync(List<string> ids, CancellationToken cancellationToken = default)
+        {
+            var request = new ProductListByIdsRequest();
+
+            request.Ids.AddRange(ids);
+
+            var inventoryRequest = new InventoryItemListByIdsRequest();
+
+            inventoryRequest.Ids.AddRange(ids);
+
+            var productResponseTask =  _productServiceClient.GetListByIdsAsync(request).ResponseAsync;
+
+            var inventoryResponseTask =  _inventoryServiceClient.GetListByIdsAsync(inventoryRequest).ResponseAsync;
+  
+            await Task.WhenAll(productResponseTask, inventoryResponseTask);
+
+            return PrepareProductList(productResponseTask.Result.Items, inventoryResponseTask.Result.Items);
+        }
+
         public async Task<Product> GetAsync(string productId , CancellationToken cancellationToken = default)
         {
             var request = new GetProductByIdRequest { Id = productId };
