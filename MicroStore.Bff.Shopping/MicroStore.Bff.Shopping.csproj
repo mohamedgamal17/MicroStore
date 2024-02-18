@@ -13,6 +13,7 @@
     <None Remove="Protos\Catalog\product.proto" />
     <None Remove="Protos\Catalog\tag.proto" />
     <None Remove="Protos\country.proto" />
+    <None Remove="Protos\Inventory\inventoryitem.proto" />
     <None Remove="Protos\Ordering\order.proto" />
     <None Remove="Protos\Profiling\profile.proto" />
     <None Remove="Protos\Shipping\address.proto" />
@@ -52,6 +53,7 @@
     <Protobuf Include="Protos\Catalog\tag.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Geographic\country.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Geographic\stateProvince.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Inventory\inventoryitem.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Ordering\order.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Profiling\profile.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Shipping\address.proto" GrpcServices="Client" />

@@ -125,6 +125,12 @@ namespace MicroStore.Bff.Shopping
                 opt.Address = new Uri(grpcConfig.Ordering);
             }).AddInterceptor<GrpcClientTokenInterceptor>();
 
+            services.AddGrpcClient<Grpc.Inventory.InventoryItemService.InventoryItemServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Inventory);
+
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
 
         }
 

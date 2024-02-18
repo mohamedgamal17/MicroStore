@@ -1,19 +1,21 @@
-﻿using MicroStore.Bff.Shopping.Data;
+﻿using Grpc.Core;
+using MicroStore.Bff.Shopping.Data;
 using MicroStore.Bff.Shopping.Data.Catalog;
 using MicroStore.Bff.Shopping.Grpc.Catalog;
+using MicroStore.Bff.Shopping.Grpc.Inventory;
 using MicroStore.Bff.Shopping.Models.Catalog.Products;
 using NUglify.Helpers;
-
 namespace MicroStore.Bff.Shopping.Services.Catalog
 {
     public class ProductService
     {
 
         private readonly Grpc.Catalog.ProductService.ProductServiceClient _productServiceClient;
-
-        public ProductService(Grpc.Catalog.ProductService.ProductServiceClient productServiceClient)
+        private readonly Grpc.Inventory.InventoryItemService.InventoryItemServiceClient _inventoryServiceClient;
+        public ProductService(Grpc.Catalog.ProductService.ProductServiceClient productServiceClient, Grpc.Inventory.InventoryItemService.InventoryItemServiceClient inventoryServiceClient)
         {
             _productServiceClient = productServiceClient;
+            _inventoryServiceClient = inventoryServiceClient;
         }
 
         public async Task<Product> CreateAsync(ProductModel model, CancellationToken cancellationToken = default)
@@ -22,7 +24,15 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
 
             var response = await _productServiceClient.CreateAsync(request);
 
-            return PrepareProduct(response);
+            var inventoryRequest = new UpdateInventoryItemRequest
+            {
+                ProductId = response.Id,
+                Stock = model.Inventory.Stock
+            };
+
+            var inventoryResponse = await _inventoryServiceClient.UpdateAsync(inventoryRequest);
+
+            return PrepareProduct(response, inventoryResponse);
         }
 
         public async Task<Product> UpdateAsync(string productId, ProductModel model ,CancellationToken cancellationToken = default)
@@ -31,7 +41,15 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
 
             var response = await _productServiceClient.UpdateAsync(request);
 
-            return PrepareProduct(response);
+            var inventoryRequest = new UpdateInventoryItemRequest
+            {
+                ProductId = response.Id,
+                Stock = model.Inventory.Stock
+            };
+
+            var inventoryResponse = await _inventoryServiceClient.UpdateAsync(inventoryRequest);
+
+            return PrepareProduct(response, inventoryResponse);
         }
 
         public async Task<PagedList<Product>> ListAsync(string name = "", string categories ="" , string manufacturers ="",  string tags ="",  bool isFeatured  =false, double minPrice = -1 , double maxPrice = -1,
@@ -54,12 +72,18 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
 
             var response = await _productServiceClient.GetListAsync(request);
 
+            var inventoryRequest = new InventoryItemListByIdsRequest();
+
+            inventoryRequest.Ids.AddRange(response.Items.Select(x => x.Id));
+
+            var inventoryResponse = await _inventoryServiceClient.GetListByIdsAsync(inventoryRequest);
+
             var paged = new PagedList<Product>
             {
                 Length = response.Length,
                 Skip = response.Skip,
                 TotalCount = response.TotalCount,
-                Items = response.Items.Select(PrepareProduct)
+                Items = PrepareProductList(response.Items, inventoryResponse.Items)
             };
 
             return paged;
@@ -69,9 +93,20 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
         {
             var request = new GetProductByIdRequest { Id = productId };
 
-            var response = await _productServiceClient.GetByIdAsync(request);
+            var productResponse = await _productServiceClient.GetByIdAsync(request);
 
-            return PrepareProduct(response);
+            GetInventoryItemByIdReqeust inventoryRequest = new GetInventoryItemByIdReqeust { ProductId = productResponse.Id };
+
+            InventoryItemResponse? inventoryResponse = default(InventoryItemResponse);
+
+            try
+            {
+
+               inventoryResponse =  await _inventoryServiceClient.GetByIdAsync(inventoryRequest);
+
+            }catch(RpcException ex)  when(ex.StatusCode == StatusCode.NotFound) { }
+            
+            return PrepareProduct(productResponse, inventoryResponse);
         }
 
         public async Task<ProductImage> CreateProductImageAsync(string productId,  ProductImageModel model , CancellationToken cancellationToken = default)
@@ -153,7 +188,23 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
             };
         }
 
-        private Product PrepareProduct(ProductResponse response)
+        private List<Product> PrepareProductList(IEnumerable<ProductResponse> products , IEnumerable<InventoryItemResponse> inventoryItems)
+        {
+            List<Product> result = new List<Product>();
+
+            foreach (var item in products)
+            {
+                var inventory = inventoryItems.SingleOrDefault(x => x.Id == item.Id);
+
+                var product = PrepareProduct(item, inventory);
+
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        private Product PrepareProduct(ProductResponse response , InventoryItemResponse? itemResponse = null)
         {
             var product = new Product
             {
@@ -164,7 +215,11 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
                 LongDescription = response.LongDescription,
                 IsFeatured = response.IsFeatured,
                 OldPrice = response.OldPrice,
-                Price = response.Price
+                Price = response.Price,
+                Inventory = new ProductInventory
+                {
+                    Stock = itemResponse?.Stock ?? 0
+                }
             };
 
             if (response.Weight != null)
@@ -228,6 +283,7 @@ namespace MicroStore.Bff.Shopping.Services.Catalog
                     DisplayOrder = x.DisplayOrder
                 }).ToList();
             }
+
 
             return product;
 

@@ -9,6 +9,7 @@
         public string Shipping => FindByKey(nameof(Shipping));
         public string Profiling => FindByKey(nameof(Profiling));
         public string Geographic => FindByKey(nameof(Geographic));
+        public string Inventory => FindByKey(nameof(Inventory));
         private string FindByKey(string key)
         {
             if(TryGetValue(key,  out var value))

@@ -12,14 +12,10 @@ namespace MicroStore.Bff.Shopping.Data.Catalog
         public double OldPrice { get; set; }
         public Weight Weight { get; set; }
         public Dimension Dimensions { get; set; }
+        public ProductInventory Inventory { get; set; }
         public List<ProductCategory> Categories { get; set; }
         public List<ProductManufacturer> Manufacturers { get; set; }
         public List<ProductImage> Images { get; set; }
         public List<ProductTag> Tags { get; set; }
-    }
-    public class ProductImage : Entity<string>
-    {
-        public string Image { get; set; }
-        public int DisplayOrder { get; set; }
     }
 }

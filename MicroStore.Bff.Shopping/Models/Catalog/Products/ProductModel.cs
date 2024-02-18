@@ -12,6 +12,7 @@ namespace MicroStore.Bff.Shopping.Models.Catalog.Products
         public double OldPrice { get; set; }
         public WeightModel Weight { get; set; }
         public DimensionModel Dimensions { get; set; }
+        public ProductInventoryModel Inventory { get; set; }
         public HashSet<string>? Categories { get; set; }
         public HashSet<string>? Manufacturers { get; set; }
         public HashSet<string>? ProductTags { get; set; }
@@ -28,6 +29,7 @@ namespace MicroStore.Bff.Shopping.Models.Catalog.Products
             OldPrice = 0;
             Weight = new WeightModel();
             Dimensions = new DimensionModel();
+            Inventory = new ProductInventoryModel();
         }
     }
 }
