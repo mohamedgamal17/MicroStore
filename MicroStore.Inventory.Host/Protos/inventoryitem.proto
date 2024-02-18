@@ -8,7 +8,9 @@ package InventoryApi;
 service InventoryItemService{
 	rpc Update(UpdateInventoryItemRequest) returns(InventoryItemResponse);
 	rpc GetList(InventoryItemListRequest) returns(InventoryItemListResponse);
+	rpc GetListByIds(InventoryItemListByIdsRequest) returns(InventoryItemListByIdsResponse);
 	rpc GetById(GetInventoryItemByIdReqeust) returns(InventoryItemResponse);
+
 }
 
 
@@ -23,6 +25,10 @@ message InventoryItemListRequest{
 
 }
 
+message InventoryItemListByIdsRequest{
+	repeated string ids = 1;
+}
+
 message GetInventoryItemByIdReqeust{
 	string productId = 1;
 }
@@ -33,6 +39,10 @@ message InventoryItemListResponse{
 	int32 skip = 2;
     int32 length = 3;
     int64 totalCount = 4;
+}
+
+message InventoryItemListByIdsResponse{
+	repeated InventoryItemResponse items = 2;
 }
 
 message InventoryItemResponse{

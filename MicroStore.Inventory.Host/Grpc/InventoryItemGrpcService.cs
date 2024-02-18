@@ -15,7 +15,7 @@ namespace MicroStore.Inventory.Host.Grpc
         private readonly IProductCommandService _productCommandService;
 
         private readonly IProductQueryService _productQueryService;
-
+            
         public InventoryItemGrpcService(IProductCommandService productCommandService, IProductQueryService productQueryService, IAbpLazyServiceProvider lazyServiceProvider)
         {
             _productCommandService = productCommandService;
@@ -67,6 +67,24 @@ namespace MicroStore.Inventory.Host.Grpc
             }
 
             return PrepareInventoryItemListResponse(result.Value);
+        }
+
+        public override async Task<InventoryItemListByIdsResponse> GetListByIds(InventoryItemListByIdsRequest request, ServerCallContext context)
+        {
+            var ids = request.Ids.ToList();
+
+            var result = await _productQueryService.ListByIdsAsync(ids);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            var response = new InventoryItemListByIdsResponse();
+
+            result.Value.ForEach(item => response.Items.Add(PrepareInventoryItemResponse(item)));
+
+            return response;
         }
 
         public override async Task<InventoryItemResponse> GetById(GetInventoryItemByIdReqeust request, ServerCallContext context)

@@ -11,6 +11,8 @@ namespace MicroStore.Inventory.Application.Products
     {
         Task<Result<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams , CancellationToken cancellationToken = default);
 
+        Task<Result<List<ProductDto>>> ListByIdsAsync(List<string> ids, CancellationToken cancellationToken = default);
+
         Task<Result<ProductDto>> GetAsync(string id , CancellationToken cancellationToken = default);
     }
 }

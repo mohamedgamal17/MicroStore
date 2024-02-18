@@ -39,6 +39,16 @@ namespace MicroStore.Inventory.Application.Products
             return result;
         }
 
+        public async Task<Result<List<ProductDto>>> ListByIdsAsync(List<string> ids, CancellationToken cancellationToken = default)
+        {
+            var query = _inventoryDbContext.Products
+                .AsNoTracking();
+
+
+            var result = await query.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+
+            return ObjectMapper.Map<List<Product>, List<ProductDto>>(result);
+        }
 
         public async Task<Result<PagedResult<ProductDto>>> ListAsync(PagingQueryParams queryParams, CancellationToken cancellationToken = default)
         {
