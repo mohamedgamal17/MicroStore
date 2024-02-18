@@ -1,5 +1,4 @@
 ﻿using MicroStore.Bff.Shopping.Config;
-using MicroStore.Bff.Shopping.Services.Geographic;
 using MicroStore.Bff.Shopping.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -99,6 +98,12 @@ namespace MicroStore.Bff.Shopping
             }).AddInterceptor<GrpcClientTokenInterceptor>();
 
             services.AddGrpcClient<Grpc.Billing.PaymentService.PaymentServiceClient>(opt =>
+            {
+                opt.Address = new Uri(grpcConfig.Billing);
+            }).AddInterceptor<GrpcClientTokenInterceptor>();
+
+
+            services.AddGrpcClient<Grpc.Billing.PaymentSystemService.PaymentSystemServiceClient>(opt =>
             {
                 opt.Address = new Uri(grpcConfig.Billing);
             }).AddInterceptor<GrpcClientTokenInterceptor>();

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Protos\Billing\payment.proto" />
+    <None Remove="Protos\Billing\paymentsystem.proto" />
     <None Remove="Protos\Catalog\category.proto" />
     <None Remove="Protos\Catalog\manufacturer.proto" />
     <None Remove="Protos\Catalog\product.proto" />
@@ -44,6 +45,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\Billing\payment.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Billing\paymentsystem.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Catalog\category.proto" GrpcServices="Client">
       <AdditionalImportDirs>\protos</AdditionalImportDirs>
     </Protobuf>
