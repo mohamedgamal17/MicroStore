@@ -11,6 +11,7 @@ service ProductService{
 	rpc Create(CreateProductRequest) returns(ProductResponse);
 	rpc Update(UpdateProductRequest) returns(ProductResponse);
 	rpc GetList(ProductListRequest) returns (ProductListResponse);
+	rpc GetListByIds(ProductListByIdsRequest) returns (ProductListByIdsResponse);
 	rpc GetById(GetProductByIdRequest) returns (ProductResponse);
 	rpc CreateProductImage(CreateProductImageRequest) returns(ProductImageResponse);
 	rpc UpdateProductImage(UpdateProductImageRequest) returns (ProductImageResponse);
@@ -101,6 +102,10 @@ message ProductListRequest{
 
 }
 
+message ProductListByIdsRequest{
+	repeated string Ids = 1;
+}
+
 message GetProductByIdRequest{
 	optional string id = 1;
 }
@@ -110,6 +115,10 @@ message ProductListResponse{
 	int32 skip =  2;
 	int32 length = 3;
 	int64 totalCount = 4;
+}
+
+message ProductListByIdsResponse{
+	repeated ProductResponse items=  1;
 }
 
 message ProductResponse{

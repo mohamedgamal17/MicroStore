@@ -102,6 +102,24 @@ namespace MicroStore.Catalog.Api.Grpc
             return PrepareProductListResponse(result.Value);
         }
 
+
+        public override async Task<ProductListByIdsResponse> GetListByIds(ProductListByIdsRequest request, ServerCallContext context)
+        {
+            var ids = request.Ids.ToList();
+
+            var result = await _productQueryService.ListByIdsAsync(ids);
+
+            if (result.IsFailure)
+            {
+                result.Exception.ThrowRpcException();
+            }
+
+            var response = new ProductListByIdsResponse();
+
+            response.Items.AddRange(result.Value.Select(PrepareProductResponse));
+
+            return response;
+        }
         public override async Task<ProductResponse> GetById(GetProductByIdRequest request, ServerCallContext context)
         {
             var result = await _productQueryService.GetAsync(request.Id);

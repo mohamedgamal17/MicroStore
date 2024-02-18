@@ -65,6 +65,29 @@ namespace MicroStore.Catalog.Application.Products
             return response;
         }
 
+        public async Task<Result<List<ProductDto>>> ListByIdsAsync(List<string> ids , CancellationToken cancellationToken = default)
+        {
+            int take = ids.Count;
+
+            var response = await _elasticSearchClient.SearchAsync<ElasticProduct>(qr => qr
+                .Query(qrs => qrs
+                    .Ids(id => id
+                        .Values(new Ids(ids))
+                    )
+                )
+                .From(0)
+                .Size(take)
+            );
+
+            if (!response.IsValidResponse)
+            {
+                return new List<ProductDto>();
+            }
+
+
+            return ObjectMapper.Map<List<ElasticProduct>, List<ProductDto>>(response.Documents.ToList());
+        }
+
         public async Task<Result<List<ProductImageDto>>> ListProductImagesAsync(string productid, CancellationToken cancellationToken = default)
         {
 
