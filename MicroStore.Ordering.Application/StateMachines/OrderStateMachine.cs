@@ -5,6 +5,7 @@ using MicroStore.Ordering.Application.Domain;
 using MicroStore.Ordering.Application.Dtos;
 using MicroStore.Ordering.Application.Models;
 using MicroStore.Ordering.Application.StateMachines.Activities;
+using System.Text;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
 
@@ -112,7 +113,16 @@ namespace MicroStore.Ordering.Application.StateMachines
                         .Then((context) =>
                         {
                             context.Saga.CancellationDate = DateTime.UtcNow;
-                            context.Saga.CancellationReason = context.Message.Details;
+
+                            List<OrderItemEntity> items = context.Saga.OrderItems
+                            .Where(x => context.Message.Details.ContainsKey(x.ExternalProductId))
+                            .ToList();
+
+                            StringBuilder stringBuilder = new StringBuilder();
+
+                            items.ForEach(item => stringBuilder.AppendLine($"Product : {item.Name} has not required stock"));
+
+                            context.Saga.CancellationReason = stringBuilder.ToString();
                         })
                         .TransitionTo(Cancelled)
                         .Activity(x => x.OfType<OrderStockRejectedActivity>())

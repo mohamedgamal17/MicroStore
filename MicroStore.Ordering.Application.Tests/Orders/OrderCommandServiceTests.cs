@@ -199,7 +199,7 @@ namespace MicroStore.Ordering.Application.Tests.Orders
 
             result.IsFailure.Should().BeTrue();
 
-            result.Exception.Should().BeOfType<BusinessException>();
+            result.Exception.Should().BeOfType<UserFriendlyException>();
 
         }
 

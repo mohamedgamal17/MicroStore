@@ -34,7 +34,7 @@ namespace MicroStore.Ordering.Application.Tests.Consumers
             {
                 OrderId = Guid.NewGuid().ToString(),
                 OrderNumber = Guid.NewGuid().ToString(),
-                Details = Guid.NewGuid().ToString(),
+                Details = new Dictionary<string, string>(),
             });
 
             Assert.That(await TestHarness.Published.Any<OrderStockRejectedEvent>());

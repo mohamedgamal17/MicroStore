@@ -61,9 +61,9 @@ namespace MicroStore.Ordering.Application.Tests.StateMachines
                     new OrderStockRejectedEvent
                     {
                         OrderId = _fakeOrderData.OrderId,
-                        Details = "FakeFaultReason"
+                        Details = new Dictionary<string, string>()
                     }
-                );
+                ); 
 
             instance = await Repository.ShouldContainSagaInState(_fakeOrderData.OrderId, Machine, x => x.Cancelled, TestHarness.TestTimeout);
 

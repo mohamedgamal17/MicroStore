@@ -2,6 +2,8 @@
 using MicroStore.Inventory.IntegrationEvents;
 using MicroStore.Ordering.Application.Domain;
 using MicroStore.Payment.IntegrationEvents;
+using MicroStore.Inventory.IntegrationEvents.Models;
+
 using Volo.Abp.DependencyInjection;
 namespace MicroStore.Ordering.Application.StateMachines.Activities
 {
@@ -26,7 +28,8 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
                 OrderId = context.Saga.CorrelationId.ToString(),
                 OrderNumber = context.Saga.OrderNumber,
                 PaymentId = context.Saga.PaymentId,
-                UserId = context.Saga.UserId
+                UserId = context.Saga.UserId,
+                Items= MapStockItems(context.Saga.OrderItems)
 
             });
         }
@@ -39,6 +42,16 @@ namespace MicroStore.Ordering.Application.StateMachines.Activities
         public void Probe(ProbeContext context)
         {
             context.CreateScope("order-cancelled");
+        }
+
+
+        private List<OrderItemModel> MapStockItems(List<OrderItemEntity> stockItems)
+        {
+            return stockItems.Select(x => new OrderItemModel
+            {
+                ProductId = x.ExternalProductId.ToString(),
+                Quantity = x.Quantity
+            }).ToList();
         }
     }
 }

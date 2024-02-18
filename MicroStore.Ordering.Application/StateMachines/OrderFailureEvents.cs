@@ -13,7 +13,7 @@ namespace MicroStore.Ordering.Application.StateMachines
     {
         public Guid OrderId { get; set; }
         public string OrderNumber { get; set; }
-        public string Details { get; set; }
+        public Dictionary<string,string> Details { get; set; }
     }
 
     public class OrderShippmentFailedEvent
