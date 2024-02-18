@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <None Remove="Protos\payment.proto" />
+    <None Remove="Protos\paymentsystem.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +48,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\payment.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\paymentsystem.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

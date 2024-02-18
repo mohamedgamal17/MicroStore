@@ -161,6 +161,7 @@ namespace MicroStore.Payment.Api.Host
             app.UseConfiguredEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<PaymentGrpcService>();
+                endpoints.MapGrpcService<PaymentSystemGrpcService>();
             });
         }
 

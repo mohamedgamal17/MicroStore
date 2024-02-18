@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace =  "MicroStore.Payment.Api.Host.Grpc";
+
+
+service PaymentSystemService{
+
+    rpc GetList(PaymentSystemListRequest) returns(PaymentSystemListResponse);
+}
+
+
+message PaymentSystemListRequest{
+
+}
+
+message PaymentSystemListResponse{
+    repeated PaymentSystemResponse items = 1;
+    
+}
+message PaymentSystemResponse{
+	string Name = 1;
+    string DisplayName =2;
+    string Image =3;
+    bool IsEnabled =  4;
+}
