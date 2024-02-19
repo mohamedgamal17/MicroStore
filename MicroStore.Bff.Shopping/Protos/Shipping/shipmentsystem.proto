@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace ="MicroStore.Bff.Shopping.Grpc.Shipping";
+
+
+service ShipmentSystemService{
+    rpc GetList(ShipmentSystemListRequest) returns(ShipmentSystemListResponse);
+}
+
+
+message ShipmentSystemListRequest{
+
+}
+
+message ShipmentSystemListResponse{
+    repeated ShipmentSystemResponse items= 1;
+}
+
+message ShipmentSystemResponse{
+	string Name = 1;
+    string DisplayName =2;
+    string Image =3;
+    bool IsEnabled =  4;
+}

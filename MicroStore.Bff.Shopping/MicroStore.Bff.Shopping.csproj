@@ -20,6 +20,7 @@
     <None Remove="Protos\Shipping\address.proto" />
     <None Remove="Protos\Shipping\rates.proto" />
     <None Remove="Protos\Shipping\shipment.proto" />
+    <None Remove="Protos\Shipping\shipmentsystem.proto" />
     <None Remove="Protos\ShoppingCart\basket.proto" />
     <None Remove="Protos\stateProvince.proto" />
   </ItemGroup>
@@ -62,6 +63,7 @@
     <Protobuf Include="Protos\Shipping\address.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Shipping\rates.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\Shipping\shipment.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Shipping\shipmentsystem.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\ShoppingCart\basket.proto" GrpcServices="Client" />
   </ItemGroup>
 
