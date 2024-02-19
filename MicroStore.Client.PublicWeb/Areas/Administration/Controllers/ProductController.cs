@@ -14,6 +14,8 @@ using System.Net;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Entities.Orderes;
 using MimeMapping;
+using MicroStore.ShoppingGateway.ClinetSdk.Services.Inventory;
+using MicroStore.ShoppingGateway.ClinetSdk.Entities.Inventory;
 
 namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 {
@@ -35,7 +37,9 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
         private readonly ProductAnalysisService _productAnalysisService;
 
         private readonly ProductImageService _productImageService;
-        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IObjectStorageProvider objectStorageProvider, ManufacturerService manufacturerService, ProductAnalysisService productAnalysisService, ProductImageService productImageService)
+
+        private readonly InventoryItemService _inventoryItemService;
+        public ProductController(ProductService productService, CategoryService categoryService, ILogger<ProductController> logger, IObjectStorageProvider objectStorageProvider, ManufacturerService manufacturerService, ProductAnalysisService productAnalysisService, ProductImageService productImageService, InventoryItemService inventoryItemService)
         {
             _productService = productService;
             _categoryService = categoryService;
@@ -44,6 +48,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             _manufacturerService = manufacturerService;
             _productAnalysisService = productAnalysisService;
             _productImageService = productImageService;
+            _inventoryItemService = inventoryItemService;
         }
 
         public async Task<IActionResult> Index()
@@ -126,6 +131,17 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
 
                 NotificationManager.Success("Product has been created successfully !");
 
+                try
+                {
+                    await _inventoryItemService.UpdateAsync(response.Id, new InventoryItemRequestOptions { Stock = model.Stock });
+
+                }
+                catch (MicroStoreClientException ex) when(ex.StatusCode == HttpStatusCode.BadGateway)
+                {
+
+                    NotificationManager.Warning("Inventory Api is not working now !!");
+                }
+
                 return RedirectToAction("Edit" , new { id= response.Id });
 
             }
@@ -145,6 +161,18 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             var product = await _productService.GetAsync(id);
 
             var model = ObjectMapper.Map<Product, ProductModel>(product);
+
+            try
+            {
+               var inventory =  await _inventoryItemService.GetAsync(id);
+
+                model.Stock = inventory.Stock;
+            }
+            catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadGateway)
+            {
+
+                NotificationManager.Warning("Inventory Api is not working now !!");
+            }
 
             ViewBag.Product = ObjectMapper.Map<Product, ProductVM>(product);
 
@@ -181,6 +209,15 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
                 await _productService.UpdateAsync(model.Id, requestOptions);
 
                 NotificationManager.Success("Product has been updated successfully !");
+
+                try
+                {
+                   await _inventoryItemService.UpdateAsync(model.Id, new InventoryItemRequestOptions { Stock = model.Stock });
+
+                }
+                catch (MicroStoreClientException ex) when (ex.StatusCode == HttpStatusCode.BadGateway)
+                {
+                }
 
                 return RedirectToAction("Edit", new {id = model.Id });
 

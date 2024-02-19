@@ -1,0 +1,27 @@
+﻿@model MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Products.ProductModel
+@using MicroStore.ShoppingGateway.ClinetSdk.Common
+
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title><p class="card-title text-lg "><i class="fas fa-info mr-1 text-lightblue"></i> Inventory Info</p></abp-card-title>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus text-lg"></i></button>
+        </div>
+    </abp-card-header>
+    <abp-card-body>
+
+        <div class="form-group row mb-3">
+            <div class="col-sm-3">
+                <div class="float-sm-left float-md-right">
+                    <micro-label asp-for="@Model.Stock"></micro-label>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <input asp-for="@Model.Stock" id="@Html.IdFor(x=> x.Stock)" class="form-control" />
+                <span class="text-danger" asp-validation-for="@Model.Stock"></span>
+            </div>
+        </div>
+
+    </abp-card-body>
+</abp-card>

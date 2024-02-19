@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Administration\Views\Product\_CreateOrUpdate.Inventory.cshtml" />
     <Content Remove="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <Content Remove="Pages\NotFound.cshtml" />
@@ -73,6 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\Administration\Views\Product\_CreateOrUpdate.Inventory.cshtml" />
     <None Include="Areas\Administration\Views\Product\_CreateOrUpdate.Shipping.cshtml" />
     <None Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <None Include="Pages\Index.cshtml" />

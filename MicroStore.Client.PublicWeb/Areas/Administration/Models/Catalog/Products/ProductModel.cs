@@ -22,6 +22,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Models.Catalog.Produc
         public double OldPrice { get; set; }
         public WeightModel Weight { get; set; } = new WeightModel();
         public DimensionModel Dimensions { get; set; } = new DimensionModel();
+        public int Stock { get; set; }
     }
 
 

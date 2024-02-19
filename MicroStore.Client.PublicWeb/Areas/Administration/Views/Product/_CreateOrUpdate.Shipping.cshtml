@@ -20,8 +20,8 @@
                 <div class="col-sm-12">
                     <div class="input-group">
                         <input asp-for="@Model.Weight.Value" type="number" class="form-control" placeholder="Value" />
-                        <select asp-for="@Model.Weight.Unit" asp-items="@(Html.GetEnumSelectList<WeightUnit>())" 
-                            class="form-control"></select>
+                        <select asp-for="@Model.Weight.Unit" asp-items="@(Html.GetEnumSelectList<WeightUnit>())"
+                                class="form-control"></select>
 
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <input asp-for="@Model.Dimensions.Length" type="number" class="form-control" placeholder="Lenght" />
                     <input asp-for="@Model.Dimensions.Width" type="number" class="form-control" placeholder="Width" />
                     <input asp-for="@Model.Dimensions.Height" type="number" class="form-control" placeholder="Height" />
-                    <select asp-for="@Model.Dimensions.Unit" asp-items="@(Html.GetEnumSelectList<DimensionUnit>())"                             class="form-control"></select>
+                    <select asp-for="@Model.Dimensions.Unit" asp-items="@(Html.GetEnumSelectList<DimensionUnit>())" class="form-control"></select>
                 </div>
 
                 <div class="col-sm-12 row">
