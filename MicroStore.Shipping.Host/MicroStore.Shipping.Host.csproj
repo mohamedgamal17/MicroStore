@@ -17,6 +17,7 @@
     <None Remove="Protos\address.proto" />
     <None Remove="Protos\rates.proto" />
     <None Remove="Protos\shipment.proto" />
+    <None Remove="Protos\shipmentsystem.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +53,7 @@
     <Protobuf Include="Protos\address.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\rates.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\shipment.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\shipmentsystem.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

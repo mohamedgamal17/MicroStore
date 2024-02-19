@@ -158,6 +158,7 @@ namespace MicroStore.Shipping.Host
                 endpoints.MapGrpcService<ShipmentGrpcService>();
                 endpoints.MapGrpcService<RateGrpcService>();
                 endpoints.MapGrpcService<AddressGrpcService>();
+                endpoints.MapGrpcService<ShipmentSystemGrpcService>();
             });
 
         }
