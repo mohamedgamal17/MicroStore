@@ -18,7 +18,6 @@ using MicroStore.ShoppingGateway.ClinetSdk.Services.Cart;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Orders;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Shipping;
-
 namespace MicroStore.Client.PublicWeb.Pages.Payment
 {
     [Authorize]
@@ -149,75 +148,86 @@ namespace MicroStore.Client.PublicWeb.Pages.Payment
 
             };
 
-            var estimateRateResponse = await _shipmentRateService.EstimateAsync(rateRequestOptions);
-
-            double shippingCost = estimateRateResponse.Where(x => x.EstaimatedDays < 7).Select(x => x.Money.Value).Min();
-
-            double subTotal = Basket.Items.Sum(x => x.Price * x.Quantity);
-
-            double total = subTotal + shippingCost;
-
-            OrderSubmitRequestOptions submitRequestOptions = new OrderSubmitRequestOptions
+            try
             {
-                BillingAddress = billingAddress,
+                var estimateRateResponse = await _shipmentRateService.EstimateAsync(rateRequestOptions);
 
-                ShippingAddress = shippingAddress,
+                double shippingCost = estimateRateResponse.Where(x => x.EstaimatedDays < 7).Select(x => x.Money.Value).Min();
 
-                TaxCost = 0,
+                double subTotal = Basket.Items.Sum(x => x.Price * x.Quantity);
 
-                ShippingCost = shippingCost,
+                double total = subTotal + shippingCost;
 
-                SubTotal = subTotal,
+                OrderSubmitRequestOptions submitRequestOptions = new OrderSubmitRequestOptions
+                {
+                    BillingAddress = billingAddress,
 
-                TotalPrice = total,
+                    ShippingAddress = shippingAddress,
 
-                Items = PrepareOrderItemReequest(Basket)
+                    TaxCost = 0,
 
-            };
+                    ShippingCost = shippingCost,
 
-            var orderResponse = await _userOrderService.SubmitOrderAsync(submitRequestOptions);
+                    SubTotal = subTotal,
 
-            var paymentRequestOptions = new PaymentRequestOptions
+                    TotalPrice = total,
+
+                    Items = PrepareOrderItemReequest(Basket)
+
+                };
+
+                var orderResponse = await _userOrderService.SubmitOrderAsync(submitRequestOptions);
+
+                var paymentRequestOptions = new PaymentRequestOptions
+                {
+                    OrderId = orderResponse.Id.ToString(),
+                    OrderNumber = orderResponse.OrderNumber,
+                    ShippingCost = orderResponse.ShippingCost,
+                    TaxCost = orderResponse.TaxCost,
+                    SubTotal = orderResponse.SubTotal,
+                    TotalCost = orderResponse.TotalPrice,
+                    Items = PreparePaymentProductCreateRequest(Basket)
+                };
+
+                var paymentResponse = await _userPaymentRequestService.CreateAsync(paymentRequestOptions);
+                var processPaymentRequestOptions = new PaymentProcessRequestOptions
+                {
+                    GatewayName = PaymentMethod,
+                    ReturnUrl = string.Format("{0}{1}", HttpContext.GetHostUrl(), Url.Page("/Payment/Complete")),
+                    CancelUrl = string.Format("{0}{1}", HttpContext.GetHostUrl(), Url.Page("/Index"))
+                };
+
+                var paymentProcessResponse = await _userPaymentRequestService.ProcessAsync(paymentResponse.Id, processPaymentRequestOptions);
+
+                var PaymentSessionModel = new PaymentSessionModel
+                {
+                    OrderId = orderResponse.Id,
+                    OrderNumber = orderResponse.OrderNumber,
+                    PaymentRequestId = paymentResponse.Id,
+                    Provider = paymentProcessResponse.Provider,
+                    SessionId = paymentProcessResponse.SessionId,
+                    CheckoutUrl = paymentProcessResponse.CheckoutLink
+                };
+
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    Expires = DateTime.UtcNow.AddHours(1)
+                };
+
+                _cookieManager.Set(PaymentConsts.Cookie, PaymentSessionModel, cookieOptions);
+
+                return Redirect(paymentProcessResponse.CheckoutLink);
+            }
+            catch(MicroStoreClientException ex) when(ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                OrderId = orderResponse.Id.ToString(),
-                OrderNumber = orderResponse.OrderNumber,
-                ShippingCost = orderResponse.ShippingCost,
-                TaxCost = orderResponse.TaxCost,
-                SubTotal = orderResponse.SubTotal,
-                TotalCost = orderResponse.TotalPrice,
-                Items = PreparePaymentProductCreateRequest(Basket)
-            };
+                _notificationManager.Error(ex.Error.Detail);
 
-            var paymentResponse = await _userPaymentRequestService.CreateAsync(paymentRequestOptions);
-            var processPaymentRequestOptions = new PaymentProcessRequestOptions
-            {
-                GatewayName = PaymentMethod,
-                ReturnUrl = string.Format("{0}{1}", HttpContext.GetHostUrl() ,Url.Page("/Payment/Complete")),
-                CancelUrl = string.Format("{0}{1}", HttpContext.GetHostUrl(), Url.Page("/Index"))
-            };
+                return Page();
+            }
 
-            var paymentProcessResponse = await _userPaymentRequestService.ProcessAsync(paymentResponse.Id, processPaymentRequestOptions);
 
-            var PaymentSessionModel = new PaymentSessionModel
-            {
-                OrderId = orderResponse.Id,
-                OrderNumber = orderResponse.OrderNumber,
-                PaymentRequestId = paymentResponse.Id,
-                Provider = paymentProcessResponse.Provider,
-                SessionId = paymentProcessResponse.SessionId,
-                CheckoutUrl = paymentProcessResponse.CheckoutLink
-            };
-
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                Expires = DateTime.UtcNow.AddHours(1)
-            };
-
-            _cookieManager.Set(PaymentConsts.Cookie, PaymentSessionModel, cookieOptions);
-
-            return Redirect(paymentProcessResponse.CheckoutLink);
         }
 
         private Address MapAddress(AddressModel model)
