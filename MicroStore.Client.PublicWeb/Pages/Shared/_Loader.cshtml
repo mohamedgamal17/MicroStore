@@ -19,7 +19,7 @@
                                 {
                                     <li><a asp-page="/Profile/Index">Profile</a></li>
                                     <li><a asp-page="/Orders/Index">My Orders</a></li>
-                                    <li><a href="javascript:void(0)" id="btn-logout">Logout</a></li>
+                                    <li><a href="javascript:void(0)" >Logout</a></li>
                                     <form method="post" asp-controller="Authentication" asp-action="Logout" id="logout-form">
                                         @Html.AntiForgeryToken()
                                     </form>
