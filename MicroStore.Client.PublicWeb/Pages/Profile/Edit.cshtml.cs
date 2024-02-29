@@ -13,6 +13,7 @@ using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 using MimeMapping;
+using System.Globalization;
 using System.Net;
 namespace MicroStore.Client.PublicWeb.Pages.Profile
 {
@@ -54,9 +55,8 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
         }
 
 
-        public  async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
-
             if (!ModelState.IsValid)
             {
                 UserProfile = (User)HttpContext.Items[HttpContextSharedItemsConsts.UserProfile]!;

@@ -39,7 +39,6 @@
     <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <Content Remove="Pages\NotFound.cshtml" />
     <Content Remove="Pages\Profile.cshtml" />
-    <Content Remove="Pages\Profile\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,7 +78,6 @@
     <None Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
     <None Include="Pages\Index.cshtml" />
     <None Include="Pages\NotFound.cshtml" />
-    <None Include="Pages\Profile\Edit.cshtml" />
     <None Include="Pages\Profile\Index.cshtml" />
     <None Include="Pages\Shared\Components\BasketWidget\Default.cshtml" />
     <None Include="Pages\Shared\Components\CartWidget\Default.cshtml" />
@@ -137,15 +135,10 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\NotFound.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Profile.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Profile\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Profile.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Profile\Edit.cshtml" />
   </ItemGroup>
 
 </Project>

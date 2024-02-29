@@ -1,4 +1,4 @@
-﻿@page  
+﻿@page
 @using MicroStore.Client.PublicWeb.Pages.Profile;
 @using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 @model EditModel
@@ -9,7 +9,6 @@
     ViewData["BreadCrumb.Title"] = "Edit Profile";
     ViewData["BreadCrumb.Page"] = "Edit Profile";
 }
-
 
 <div class="container mt-3">
     <form class="theme-form" method="post" enctype="multipart/form-data">
@@ -34,14 +33,9 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                           <label class="form-label" asp-for="Profile.BirthDate"></label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                </div>
-                            <input type="text" asp-for="Profile.BirthDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric">
-                            </div>
-                            <span class="text-danger" asp-validation-for="Profile.BirthDate" />
+                        <label class="form-label" asp-for="Profile.BirthDate"></label>
+                        <input type="date" class="form-control"  asp-for="Profile.BirthDate"/>
+                        <span class="text-danger" asp-validation-for="Profile.BirthDate" />
                     </div>
                     <div class="col-md-6">
                         <abp-select asp-for="Profile.Gender" asp-items="@Html.GetEnumSelectList<Gender>()"></abp-select>
@@ -60,12 +54,10 @@
     </form>
 </div>
 
-@section Scripts{
+@section Scripts {
     <script>
 
         $(document).ready(function () {
-
-            $("#Profile_BirthDate").inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
 
             const phoneinput = document.querySelector("#Profile_Phone");
 
@@ -83,4 +75,3 @@
         })
     </script>
 }
-

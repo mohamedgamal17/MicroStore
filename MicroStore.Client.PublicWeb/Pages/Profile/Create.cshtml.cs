@@ -13,6 +13,7 @@ using MicroStore.ShoppingGateway.ClinetSdk.Exceptions;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Geographic;
 using MicroStore.ShoppingGateway.ClinetSdk.Services.Profiling;
 using MimeMapping;
+using System.Globalization;
 using System.Net;
 namespace MicroStore.Client.PublicWeb.Pages.Profile
 {
@@ -58,7 +59,6 @@ namespace MicroStore.Client.PublicWeb.Pages.Profile
             }
 
             await next();
-
         }
 
         public async Task<IActionResult> OnGetAsync(string? returnUrl = null)
