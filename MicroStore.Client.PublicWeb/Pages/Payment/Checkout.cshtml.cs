@@ -152,7 +152,7 @@ namespace MicroStore.Client.PublicWeb.Pages.Payment
             {
                 var estimateRateResponse = await _shipmentRateService.EstimateAsync(rateRequestOptions);
 
-                double shippingCost = estimateRateResponse.Where(x => x.EstaimatedDays < 7).Select(x => x.Money.Value).Min();
+                double shippingCost = estimateRateResponse.Where(x => x.EstaimatedDays <= 3).Select(x => x.Money.Value).Min();
 
                 double subTotal = Basket.Items.Sum(x => x.Price * x.Quantity);
 

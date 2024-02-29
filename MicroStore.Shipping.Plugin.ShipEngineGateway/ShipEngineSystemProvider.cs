@@ -306,7 +306,7 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
         private List<EstimatedRateDto> PrepareEstimateRateDto(List<EstimatedRateResult> result)
         {
-            return result.Select(x => new EstimatedRateDto
+            return result.Where(x=> x.ValidationStatus != "invalid").Select(x => new EstimatedRateDto
             {
                 Name = x.ServiceType,
                 EstaimatedDays =  x.DeliveryDays ?? 0  ,
