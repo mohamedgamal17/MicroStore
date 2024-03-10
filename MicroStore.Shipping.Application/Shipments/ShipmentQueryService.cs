@@ -143,14 +143,21 @@ namespace MicroStore.Shipping.Application.Shipments
             if (!string.IsNullOrEmpty(model.OrderNumber))
             {
                 var orderNumber = model.OrderNumber.ToLower();
-                query = query.Where(x => x.OrderNumber.ToLower().Contains(orderNumber));
+
+                query = from shipment in query
+                        where shipment.OrderNumber.ToLower().StartsWith(orderNumber)
+                            || shipment.OrderNumber.Contains(orderNumber)
+                        select shipment;
             }
 
             if (!string.IsNullOrEmpty(model.TrackingNumber))
             {
                 var tracknumber = model.TrackingNumber.ToLower();
 
-                query = query.Where(x => x.TrackingNumber.ToLower().Contains(tracknumber));
+                query = from shipment in query
+                        where shipment.TrackingNumber.ToLower().StartsWith(tracknumber)
+                            || shipment.TrackingNumber.Contains(tracknumber)
+                        select shipment;
             }
 
             if (model.Status != -1)
