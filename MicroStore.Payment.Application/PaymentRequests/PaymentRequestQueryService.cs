@@ -127,7 +127,11 @@ namespace MicroStore.Payment.Application.PaymentRequests
             {
                 var orderNumber = model.OrderNumber.ToLower();
 
-                query = query.Where(x => x.OrderNumber.ToLower().Contains(orderNumber));
+                query = from paymentRequest in query
+                        where paymentRequest.OrderNumber == orderNumber
+                              || paymentRequest.OrderNumber.ToLower().StartsWith(orderNumber)
+                              || paymentRequest.OrderNumber.ToLower().Contains(orderNumber)
+                        select paymentRequest;
             }
 
             if (!model.Status.IsNullOrEmpty())
