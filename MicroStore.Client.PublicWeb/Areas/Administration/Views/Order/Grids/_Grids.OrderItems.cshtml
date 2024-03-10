@@ -29,7 +29,8 @@
                 {
                     <tr>
                         @{
-                            var itemImage = item.Thumbnail ?? @"/user-content/no-image.png";
+           
+                            var itemImage = !string.IsNullOrEmpty(item.Thumbnail) ? item.Thumbnail  : @"/user-content/no-image.png";
                             var productPrice = item.UnitPrice.ToString("C", new CultureInfo("en-US"));
                         }
                         <td><img src="@itemImage" style="max-width:45px; max-height:45px;"> </td>

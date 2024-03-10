@@ -27,8 +27,8 @@
 @section Scripts{
     <script>
         $(document).ready(function(){
-            $("#StartSubmissionDate").inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-            $("#EndSubmissionDate").inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $("#StartSubmissionDate").inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            $("#EndSubmissionDate").inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
             var orderTable = $("#OrderTable").DataTable(
                 abp.libs.datatables.normalizeConfiguration({
                     ajax: {
@@ -36,7 +36,12 @@
                         data: function (data) {
                             data.startSubmissionDate = $("#@Html.IdFor(x=> x.StartSubmissionDate)").val();
                             data.endSubmissionDate = $("#@Html.IdFor(x=> x.EndSubmissionDate)").val();
-                            data.orderNumber = $("#@Html.IdFor(x=> x.OrderNumber)").val();
+                            const orderNumber = $("#@Html.IdFor(x=> x.OrderNumber)").val();
+
+                            if(orderNumber){
+                                data.orderNumber = orderNumber.replace(/\s/g, "")
+                            }
+                            
                             data.states = $("#@Html.IdFor(x=> x.States)").val();
                         }
                     },
@@ -109,6 +114,20 @@
 
                                 return priceFormat.format(row.totalPrice)
                             },
+                        },
+                        {
+                            title:"Created At",
+                            data: "submissionDate",
+                            render: function (data, type, row) {
+                                var date = new Date(row.submissionDate);
+                                return date.toLocaleDateString("en-US", {
+                                    minute: "numeric",
+                                    hour: "numeric",
+                                    day: "numeric",
+                                    month: "numeric",
+                                    year: "numeric"
+                                });
+                            }
                         },
                         {
                             title: "Actions",

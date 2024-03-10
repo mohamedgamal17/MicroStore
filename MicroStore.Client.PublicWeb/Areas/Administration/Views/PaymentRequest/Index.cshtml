@@ -32,8 +32,8 @@
     <script>
         $(document).ready(function (){
 
-            $('#StartDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-            $('#EndDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $('#StartDate').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            $('#EndDate').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
 
             var paymentTable = $("#PaymentRequestsTable").DataTable(
                 abp.libs.datatables.normalizeConfiguration({
@@ -45,7 +45,11 @@
                             data.status = $("#Status").val();
                             data.minPrice = $("#MinPrice").val();
                             data.maxPrice = $("#MaxPrice").val();
-                            data.orderNumber = $("#OrderNumber").val();
+                            const orderNumber = $("#OrderNumber").val();
+
+                            if (orderNumber) {
+                                data.orderNumber = orderNumber.replace(/\s/g, "")
+                            }
                         }
                     },
                     serverSide: true,

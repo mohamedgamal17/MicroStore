@@ -40,8 +40,8 @@
 @section Scripts{
     <script>
         $(function(){
-            $('#StartDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-            $('#EndDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $('#StartDate').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            $('#EndDate').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
             var reportTable = $("#ReportTable").DataTable(
                 abp.libs.datatables.normalizeConfiguration({
                     ajax: {
@@ -107,7 +107,7 @@
                             data: "date",
                             render: function (data, type, row) {
                                 const date = new Date(row.date)
-                                return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                                return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' })
                             },
                             orderable: false
                         }

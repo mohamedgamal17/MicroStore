@@ -190,7 +190,7 @@ namespace MicroStore.Client.PublicWeb.Areas.Administration.Controllers
             var selectListItems = countries.Select(x => new SelectListItem
             {
                 Text = x.Name,
-                Value = x.ThreeLetterIsoCode
+                Value = x.TwoLetterIsoCode
             }).ToList();
 
             return selectListItems;

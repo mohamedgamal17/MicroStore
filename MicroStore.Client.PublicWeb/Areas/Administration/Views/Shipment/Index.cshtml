@@ -24,8 +24,8 @@
 @section Scripts{
     <script>
         $(document).ready(function(){
-            $('#StartDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-            $('#EndDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $('#StartDate').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            $('#EndDate').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
             var shipmentTable = $("#ShipmentTable").DataTable(
                 abp.libs.datatables.normalizeConfiguration({
                     ajax: {
@@ -35,8 +35,18 @@
                             data.endDate = $("#EndDate").val();
                             data.status = $("#Status").val();
                             data.country = $("#Country").val();
-                            data.trackingNumber = $("#TrackingNumber").val();
-                            data.orderNumber = $("#OrderNumber").val();
+                            
+                            const orderNumber = $("#OrderNumber").val();
+
+                            if (orderNumber) {
+                                data.orderNumber = orderNumber.replace(/\s/g, "")
+                            }
+
+                            const trackingNumber = $("#TrackingNumber").val();
+                            if(trackingNumber){
+                                data.trackingNumber = trackingNumber.replace(/\s/g, "");
+                            }
+
                         }
                     },
                     processing: true,
@@ -63,12 +73,37 @@
                             }
                         },
                         {
+                            title: "Tracking Number",
+                            data: "trackingNumber",
+                            render: function (data, type, row) {
+                                const trackingNumber = row.trackingNumber;
+
+                                if (trackingNumber) {
+                                    const arr = []
+
+                                    for (var i = 0; i < trackingNumber.length; i++) {
+                                        if (i % 3 == 0) {
+                                            arr.push(trackingNumber.substring(i, i + 3))
+                                        }
+                                    }
+
+                                    return arr.join(" ")
+                                }
+                                
+                            }
+                        },
+                        {
                             title: "Customer",
                             data: "user",
                             render: function (data, type, row) {
                                 return row.user.firstName + " " + row.user.lastName;
                             }
                         },
+                        {
+                            title: "Country",
+                            data: "address.country.name",
+                        },
+
                         {
                             title: "Status",
                             data: "status",
