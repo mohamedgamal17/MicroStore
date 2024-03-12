@@ -13,6 +13,11 @@
                 <h3 class="collapse-block-title">Categories</h3>
                 <div class="collection-collapse-block-content">
                     <div class="collection-brand-filter">
+                        <div class="form-check collection-filter-checkbox">
+                            <input type="radio" class="product-filter form-check-input" value="" id="Category_All" name="Category" 
+                                @(string.IsNullOrEmpty(Model.FilterCategory) ? "checked" : string.Empty)>
+                            <label class="form-check-label" for="Category_All">All</label>
+                        </div>
                         @foreach (var category in Model.Categories)
                         {
                             var isChecked = Model.FilterCategory == category.Name ? "checked" : string.Empty;
@@ -32,12 +37,16 @@
                 <h3 class="collapse-block-title">Brands</h3>
                 <div class="collection-collapse-block-content">
                     <div class="collection-brand-filter">
+                        <div class="form-check collection-filter-checkbox">
+                            <input type="radio" class="product-filter form-check-input " value="" id="Manufacturer_All" name="Manufacturer" @(string.IsNullOrEmpty(Model.FilterManufacturer) ? "checked" : string.Empty)>
+                        <label class="form-check-label" for="Manufacturer_All">All</label>
+                        </div>
                         @foreach (var manufacturer in Model.Manufacturers)
                         {
                             var isChecked = Model.FilterManufacturer == manufacturer.Name ? "checked" : string.Empty;
                             <div class="form-check collection-filter-checkbox">
                                 <input type="radio" class="product-filter form-check-input " id="@manufacturer.Name" name="Manufacturer" value="@manufacturer.Name" @isChecked>
-                                <label class="form-check-label" for="@manufacturer.Name">@manufacturer.Name</label>
+                                <label class="form-check-label" for="Manufacturer">@manufacturer.Name</label>
                             </div>
                         }
                     </div>

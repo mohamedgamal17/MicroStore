@@ -6,6 +6,7 @@
         var init = function (filter) {
             $wrapper.find("select[data-address-select='Country']")
                 .change(function () {
+                    $("#main-spinner").addClass("show")
                     var countryElement = $(this);
                     var countryIsoCode = countryElement.val();
                     var stateProvinceELement =countryElement
@@ -32,6 +33,10 @@
                             }
 
                         },
+
+                        complete: function () {
+                            $("#main-spinner").removeClass("show")
+                        }
 
                         error: function () {
                             abp.notifiy.error("UnExpected Error has been happend please refersh the page")

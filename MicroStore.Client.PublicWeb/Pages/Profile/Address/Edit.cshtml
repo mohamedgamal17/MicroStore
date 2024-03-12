@@ -73,31 +73,31 @@
 
 
             $("#Address_Country").change(function () {
+                $("#main-spinner").addClass("show")
                 var countryCode = $(this).val();
                 if (countryCode) {
-                    getStates(countryCode);
+                    abp.ajax({
+                        url: `/api/country/code/${countryCode}`,
+                        method: "GET",
+                        success: function (result) {
+                            var stateProvinceElment = $("#Address_StateProvince");
+                            stateProvinceElment.empty();
+                            $.each(result.stateProvinces, function (index, val) {
+                                stateProvinceElment.append(new Option(val.name, val.abbreviation));
+                            })
+                        },
+
+                        complete :function(){
+                            $("#main-spinner").removeClass("show")
+                        },
+                        error: function () {
+                            abp.notifiy.error("UnExpected Error has been happend please refersh the page")
+
+                        }
+                    })
                 }
 
             })
-
-            var getStates = function (countryCode) {
-                abp.ajax({
-                    url: `/api/country/code/${countryCode}`,
-                    method: "GET",
-                    success: function (result) {
-                        var stateProvinceElment = $("#Address_StateProvince");
-                        stateProvinceElment.empty();
-                        $.each(result.stateProvinces, function (index, val) {
-                            stateProvinceElment.append(new Option(val.name, val.abbreviation));
-                        })
-                    },
-
-                    error: function () {
-                        abp.notifiy.error("UnExpected Error has been happend please refersh the page")
-
-                    }
-                })
-            }
         });
     </script>
 }

@@ -72,14 +72,24 @@
                                                 <div class="container">
                                                     <div class="row">
                                                         <div class="col-xl-12">
-                                                            <form>
+                                                            <div class="d-flex justifiy-content-between">
+
+                                                            </div>
+                                                            <form method="get" action="/Products" id="productSearchForm">
                                                                 <div class="form-group">
                                                                     <input type="text" class="form-control"
-                                                                           id="exampleInputPassword1"
-                                                                           placeholder="Search a Product">
+                                                                           name="name"
+                                                                           id="ProductSearchName"
+                                                                           placeholder="Search a Product" required>
                                                                 </div>
-                                                                <button type="submit" class="btn btn-primary d-none" style="right: 45px!important">
-                                                                    <i class="fa fa-search"></i>
+                                                                <button type="submit" class="btn btn-primary " style="display: block!important;
+                                                                                position: absolute;
+                                                                                top: 5px;
+                                                                                background-color: transparent;
+                                                                                border: 0;
+                                                                                right:10px;
+                                                                                font-size: 24px;">
+                                                                    <img src="/frontend/images/icon/search.png"  class="img-fluid blur-up ls-is-cached lazyloaded" alt="">
                                                                 </button>
                                                             </form>
                                                             <form  action="/Products/ImageSearch" enctype="multipart/form-data"  
@@ -92,6 +102,7 @@
                                                                                 background-color: transparent;
                                                                                 border: 0;
                                                                                 font-size: 24px;
+                                                                                right : 30px;
                                                                             color: #777;
                                                                             "  type="button">
                                                                     <i class="fa fa-camera " style="display: block!important;"></i>

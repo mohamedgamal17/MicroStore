@@ -50,7 +50,9 @@
 
 <body class="theme-color-1">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
-
+    <div class="spanner d-flex justifiy-content-center align-item-center" id="main-spinner">
+        <div class="loader"></div>
+    </div>
     <div class="wrap-main">
 
         @await Html.PartialAsync("_Loader")

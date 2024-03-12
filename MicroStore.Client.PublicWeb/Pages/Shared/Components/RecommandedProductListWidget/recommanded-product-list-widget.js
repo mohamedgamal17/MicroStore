@@ -5,9 +5,9 @@
             $wrapper
                 .find(".add-to-cart")
                 .click(function () {
+                    $("#main-spinner").addClass("show")
                     var $this = $(this);
                     var productId = $this.parents(".product-box").attr("data-product-id");
-                    console.log(productId);
                     abp.ajax({
                         url: "/api/basket",
                         method: "POST",
@@ -21,6 +21,11 @@
                                 .refresh();
 
                             abp.notify.info("Added product to your basket.", "Successfully added")
+                        },
+
+                        complete: function () {
+                            $("#main-spinner").removeClass("show")
+
                         }
 
                     })

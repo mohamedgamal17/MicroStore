@@ -23,14 +23,24 @@
                     <div class="page-main-content">
                         <div class="row">
                             <div class="col-sm-12">
-                                @await Component.InvokeAsync(typeof(ProductListWidgetViewComponent), new
+                              
+                            
+                                <div class="product-section" >
+                                    @if (!string.IsNullOrEmpty(Model.Name))
                                     {
-                                        category = Model.Category,
-                                        manufacturer = Model.Manufacturer,
-                                        currentPage = Model.CurrentPage,
-                                        minPrice = Model.MinPrice,
-                                        maxPrice = Model.MaxPrice
-                                    })
+                                        <h3>Search Results For : @Model.Name</h3>
+                                    }
+                                    @await Component.InvokeAsync(typeof(ProductListWidgetViewComponent), new
+                                        {
+                                            name = Model.Name,
+                                            category = Model.Category,
+                                            manufacturer = Model.Manufacturer,
+                                            currentPage = Model.CurrentPage,
+                                            minPrice = Model.MinPrice,
+                                            maxPrice = Model.MaxPrice
+                                        })
+                                </div>
+                              
                             </div>
                         </div>
                     </div>

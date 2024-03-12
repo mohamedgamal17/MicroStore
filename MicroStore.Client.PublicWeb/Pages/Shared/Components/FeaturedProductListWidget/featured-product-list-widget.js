@@ -5,9 +5,10 @@
             $wrapper
                 .find(".quantity-right-plus")
                 .click(function () {
+                    $("#main-spinner").addClass("show")
                     var $this = $(this);
                     var parent = $this.parents(".product-box")
-                    console.log(parent);
+               
                     var productId = parent.attr("data-product-id");
                     abp.ajax({
                         url: "/api/basket",
@@ -32,14 +33,18 @@
                                 parent.childeren(".qty-box").addClass("open");
                             }
 
-                        }
+                        },
 
+                        complete: function () {
+                            $("#main-spinner").removeClass("show")
+                        }
                     })
                 });
 
             $wrapper
                 .find(".quantity-left-minus")
                 .click(function () {
+                    $("#main-spinner").addClass("show")
                     var $this = $(this);
                     var parent = $this.parents(".product-box")
                     var productId = parent.attr("data-product-id");
@@ -67,6 +72,9 @@
                             }
 
 
+                        },
+                        complete: function () {
+                            $("#main-spinner").removeClass("show")
                         }
 
                     })
@@ -74,10 +82,10 @@
 
             $wrapper
                 .find(".add_cart").click(function () {
+                    $("#main-spinner").addClass("show")
                     var $this = $(this);
                     var parent = $this.parents(".product-box")
                     var productId = parent.attr("data-product-id");
-
                     abp.ajax({
                         url: "/api/basket",
                         method: "POST",
@@ -94,6 +102,11 @@
                             parent.find(".input-number").val(1);
 
                             parent.find(".qty-box").addClass("open");
+                        },
+
+                        complete: function () {
+                            $("#main-spinner").removeClass("show")
+
                         }
                     });
                 })

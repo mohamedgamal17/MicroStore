@@ -2,9 +2,9 @@
     abp.widgets.OrderDetailsWidget = function ($wrapper) {
         var init = function (filter) {
             $(".buy-again").click(function () {
+                $("#main-spinner").addClass("show")
                 var $this = $(this);
                 var productId = $this.parents("[data-product-id]").attr("data-product-id");
-
                 abp.ajax({
                     url: "/api/basket",
                     method: "POST",
@@ -26,6 +26,10 @@
 
 
                         abp.notify.info("Added product to your basket.", "Successfully added")
+                    },
+
+                    complete: function () {
+                        $("#main-spinner").removeClass("show")
                     }
                 });
 

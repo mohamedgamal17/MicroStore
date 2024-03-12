@@ -28,12 +28,13 @@ namespace MicroStore.Client.PublicWeb.Components.ProductListWidget
             _basketService = basketService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int currentPage = 1 ,int pageSize = 24,bool isFeatured = false,string? category = null,string? manufacturer = null,  double? minPrice = null, double? maxPrice = null)
+        public async Task<IViewComponentResult> InvokeAsync(int currentPage = 1 ,int pageSize = 24, string? name = null ,bool isFeatured = false,string? category = null,string? manufacturer = null,  double? minPrice = null, double? maxPrice = null)
         {
             var requestOptions = new ProductListRequestOptions
             {
                 Skip = (currentPage - 1) * pageSize,
                 Length = pageSize,
+                Name = name,
                 Category = category,
                 Manufacturer = manufacturer,
                 IsFeatured = isFeatured,
@@ -49,7 +50,7 @@ namespace MicroStore.Client.PublicWeb.Components.ProductListWidget
             var userBasket = await _basketService.RetrieveAsync(_workContext.TryToGetCurrentUserId());
 
             var queryDictionary = new Dictionary<string, string>();
-
+            if (name != null) queryDictionary.Add(nameof(name), name);
             queryDictionary.Add(nameof(isFeatured), isFeatured.ToString());
             if (category != null) queryDictionary.Add(nameof(category), category);
             if (manufacturer != null) queryDictionary.Add(nameof(manufacturer), manufacturer);

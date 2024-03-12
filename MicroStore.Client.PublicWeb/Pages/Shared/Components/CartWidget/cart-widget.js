@@ -2,10 +2,9 @@
     abp.widgets.CartWidget = function ($wrapper) {
         var widgetManager = $wrapper.data("abp-widget-manager");
         var init = function ($filters) {
-            console.log("inited");
             $wrapper.find(".cart-widget-remove")
                 .click(function () {
-                    console.log("clicked")
+                    $("#main-spinner").addClass("show")
                     var $this = $(this);
                     var productId = $this.parents(".cart-item-wrapper").attr("data-product-id");
                     abp.ajax({
@@ -27,6 +26,9 @@
                        
 
                             abp.notify.info("Removed the product from your basket.", "Removed basket item");
+                        },
+                        complete: function () {
+                            $("#main-spinner").removeClass("show")
                         }
                     })
                 })
