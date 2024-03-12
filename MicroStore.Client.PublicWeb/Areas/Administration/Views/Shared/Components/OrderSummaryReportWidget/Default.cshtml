@@ -7,9 +7,7 @@
                 Model.SummaryReport.TotalUnShipped,
                 Model.SummaryReport.TotalUnApproved,
                 Model.SummaryReport.TotalUnfullfilled,
-                Model.SummaryReport.TotalUnShipped,
-                Model.SummaryReport.TotalCompleted,
-                Model.SummaryReport.TotalCancelled
+                Model.SummaryReport.TotalUnShipped
             };
 }
 
@@ -33,14 +31,12 @@
             'UnPayed',
             'UnApproved',
             'UnFullfilled',
-            'UnShipped',
-            'Completed',
-            'Cancelled',
+            'UnShipped'
         ],
         datasets: [
             {
                 data: @Html.Raw(Json.Serialize(data)),
-                backgroundColor: ['#d2d6de', '#3c8dbc', '#00c0ef', '#f39c12', '#00a65a', '#f56954',],
+                backgroundColor: ['#f56954', '#3c8dbc', '#00c0ef', '#f39c12', ],
             }
         ]
     }
