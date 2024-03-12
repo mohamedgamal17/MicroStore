@@ -22,12 +22,13 @@
                                 .data("abp-widget-manager")
                                 .refresh();
 
-                            abp.notify.info("Removed the product from your basket.", "Removed basket item");
+                            abp.notify.success("Removed the product from your basket.", "Removed basket item")
                         },
-
+                        error: function (err) {
+                            abp.notify.error("Error", "Unexpected error has been happened")
+                        },
                         complete: function () {
                             $("#main-spinner").removeClass("show")
-
                         }
                     })
                 });
@@ -51,6 +52,12 @@
                             $('.abp-widget-wrapper[data-widget-name="CartWidget"]')
                                 .data("abp-widget-manager")
                                 .refresh();
+
+                            abp.notify.success("Added product to your basket.", "Successfully added")
+                        },
+
+                        error: function (err) {
+                            abp.notify.error("Error", "Unexpected error has been happened")
                         },
                         complete: function () {
                             $("#main-spinner").removeClass("show")
@@ -78,6 +85,12 @@
                             $('.abp-widget-wrapper[data-widget-name="CartWidget"]')
                                 .data("abp-widget-manager")
                                 .refresh();
+
+                            abp.notify.success("Removed the product from your basket.", "Removed basket item")
+                        },
+
+                        error: function (err) {
+                            abp.notify.error("Error", "Unexpected error has been happened")
                         },
                         complete: function () {
                             $("#main-spinner").removeClass("show")

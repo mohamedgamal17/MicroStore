@@ -53,8 +53,12 @@
                                 parent.childeren(".qty-box").addClass("open");
                             }
 
+                            abp.notify.success("Added product to your basket.", "Successfully added")
                         },
 
+                        error: function (err) {
+                            abp.notify.error("Error", "Unexpected error has been happened")
+                        },
                         complete: function () {
                             $("#main-spinner").removeClass("show")
                         }
@@ -92,7 +96,11 @@
                                 parent.find(".qty-box").removeClass("open");
                             }
 
+                            abp.notify.success("Removed the product from your basket.", "Removed basket item")
+                        },
 
+                        error: function (err) {
+                            abp.notify.error("Error", "Unexpected error has been happened")
                         },
                         complete: function () {
                             $("#main-spinner").removeClass("show")
@@ -123,6 +131,11 @@
                             parent.find(".input-number").val(1);
 
                             parent.find(".qty-box").addClass("open");
+                            abp.notify.success("Added product to your basket.", "Successfully added")
+                        },
+
+                        error: function (err) {
+                            abp.notify.error("Error", "Unexpected error has been happened")
                         },
                         complete: function () {
                             $("#main-spinner").removeClass("show")

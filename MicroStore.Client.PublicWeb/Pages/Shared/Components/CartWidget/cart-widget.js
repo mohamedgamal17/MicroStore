@@ -25,7 +25,10 @@
 
                        
 
-                            abp.notify.info("Removed the product from your basket.", "Removed basket item");
+                            abp.notify.success("Removed the product from your basket.", "Removed basket item");
+                        },
+                        error: function (err) {
+                            abp.notify.error("Error", "Unexpected error has been happened")
                         },
                         complete: function () {
                             $("#main-spinner").removeClass("show")

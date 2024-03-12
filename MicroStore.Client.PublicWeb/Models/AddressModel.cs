@@ -21,7 +21,7 @@ namespace MicroStore.Client.PublicWeb.Models
         [DisplayName("Address Line 1")]
         public string AddressLine1 { get; set; }
 
-        [DisplayName("Address Line 1")]
+        [DisplayName("Address Line 2")]
         public string? AddressLine2 { get; set; }
 
         [DisplayName("Postal Code")]

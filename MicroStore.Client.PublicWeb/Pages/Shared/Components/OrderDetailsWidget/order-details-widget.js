@@ -25,9 +25,12 @@
                             })
 
 
-                        abp.notify.info("Added product to your basket.", "Successfully added")
+                        abp.notify.success("Added product to your basket.", "Successfully added")
                     },
 
+                    error: function (err) {
+                        abp.notify.error("Error" , "Unexpected error has been happened")
+                    },
                     complete: function () {
                         $("#main-spinner").removeClass("show")
                     }
