@@ -1,5 +1,6 @@
 ﻿@using MicroStore.Client.PublicWeb.Bundling
 @using System.Globalization
+@using MicroStore.Client.PublicWeb.Theming
 @using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming;
@@ -16,21 +17,25 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
     <abp-style-bundle name="@StandardBundles.Styles.Global" />
     <abp-style-bundle name="@ApplicationStandardBundles.Styles.Global" />
+    <abp-style-bundle name="@StandardApplicationLayout.BackEnd" />
 
     @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
 
     @RenderSection("Styles", required: false)
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
+
     <div class="wrapper">
+        <div class="spanner d-flex justifiy-content-center align-item-center" id="main-spinner">
+            <div class="loader"></div>
+        </div>
         @{
             await Html.RenderPartialAsync("_Header");
         }
-
-
 
         @await Component.InvokeAsync("Sidebar")
 
@@ -41,7 +46,7 @@
             @await Html.PartialAsync("_NotificationView")
             @RenderBody()
         </div>
-     
+
 
 
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)

@@ -147,8 +147,11 @@
 
             $("#Status").select2();
             $("#AdvancedSearchForm").on('submit', function (evt) {
-                evt.preventDefault();
-                paymentTable.ajax.reload();
+                $("#main-spinner").addClass("show")
+                evt.preventDefault()
+                paymentTable.ajax.reload((callback) => {
+                    $("#main-spinner").removeClass("show")
+                })
             });
         })
     </script>

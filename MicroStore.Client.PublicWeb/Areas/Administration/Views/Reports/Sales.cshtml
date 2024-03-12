@@ -120,9 +120,11 @@
             )
 
             $("#ReportFilterForm").on('submit',function(evt){
-                evt.preventDefault();
-                console.log($("#GroupBy").val())
-                reportTable.ajax.reload()
+                $("#main-spinner").addClass("show")
+                evt.preventDefault()
+                reportTable.ajax.reload((callback) => {
+                    $("#main-spinner").removeClass("show")
+                })
             })
 
 

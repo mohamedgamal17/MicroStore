@@ -74,8 +74,11 @@
             )
 
             $("#AdvancedSearchForm").on('submit', function (evt) {
-                evt.preventDefault();
-                manufacturerTable.ajax.reload();
+                $("#main-spinner").addClass("show")
+                evt.preventDefault()
+                manufacturerTable.ajax.reload((callback) => {
+                    $("#main-spinner").removeClass("show")
+                })
             });
         })
     </script>

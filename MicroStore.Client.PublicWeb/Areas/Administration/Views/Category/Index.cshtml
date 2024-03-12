@@ -75,9 +75,11 @@
             )
 
             $("#AdvancedSearchForm").on('submit', function (evt) {
-                evt.preventDefault();
-                console.log("posting")
-                categoryTable.ajax.reload();
+                $("#main-spinner").addClass("show")
+                evt.preventDefault()
+                categoryTable.ajax.reload((callback) => {
+                    $("#main-spinner").removeClass("show")
+                })
             });
         })
     </script>

@@ -124,8 +124,11 @@
 
 
             $("#AdvancedSearchForm").on('submit', function (evt) {
-                evt.preventDefault();
-                table.ajax.reload();
+                $("#main-spinner").addClass("show")
+                evt.preventDefault()
+                table.ajax.reload((callback) => {
+                    $("#main-spinner").removeClass("show")
+                })
             });
 
             $("#Category").select2({

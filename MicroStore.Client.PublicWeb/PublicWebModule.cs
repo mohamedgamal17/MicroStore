@@ -127,6 +127,13 @@ namespace MicroStore.Client.PublicWeb
                        bundle.AddContributors(typeof(FronEndThemeScriptContributor));
                    });
 
+                options
+                    .StyleBundles
+                    .Configure(StandardApplicationLayout.BackEnd, bundle =>
+                    {
+                        bundle.AddContributors(typeof(BackEndThemeStyleContributor));
+                    });
+
             });
 
             context.Services.AddCookieManager(options =>
