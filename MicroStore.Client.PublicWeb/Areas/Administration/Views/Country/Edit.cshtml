@@ -129,7 +129,10 @@
             })
 
             createStateModal.onResult(function (data) {
-                stateProvinceTable.ajax.reload();
+                $("#main-spinner").addClass("show")
+                stateProvinceTable.ajax.reload((callback) => {
+                    $("#main-spinner").removeClass("show")
+                });
             })
         })
     </script>
