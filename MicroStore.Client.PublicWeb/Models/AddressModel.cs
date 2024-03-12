@@ -51,8 +51,6 @@ namespace MicroStore.Client.PublicWeb.Models
             RuleFor(x => x.PhoneNumber)
                  .NotNull()
                  .WithMessage("Phone is required.")
-                 .MinimumLength(10)
-                 .WithMessage("Phone must not be less than 10 characters.")
                  .MaximumLength(50)
                  .WithMessage("Phone must not exceed 50 characters.")
                  .Must(ValidatePhone)
