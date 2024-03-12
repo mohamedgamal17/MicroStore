@@ -100,7 +100,7 @@
                 viewUrl: '/Administration/Product/CreateProductImageModal'
             });
 
-            var productImageEditMoadl = new abp.ModalManager({
+            var productImageEditModal = new abp.ModalManager({
                 viewUrl: '/Administration/Product/EditProductImageModal'
             })
 
@@ -135,7 +135,7 @@
                                         text: 'Edit',
                                         action: function (data) {
                                             var productId = $("input[name='Id']").val();
-                                            productImageEditMoadl.open({
+                                            productImageEditModal.open({
                                                 productId: productId,
                                                 productImageId: data.record.id,
                                             })
@@ -183,11 +183,17 @@
             });
 
             productImageCreateModal.onResult(function () {
-                productImageTable.ajax.reload();
+                $("#main-spinner").addClass("show")
+                productImageTable.ajax.reload((callback) => {
+                    $("#main-spinner").removeClass("show")
+                });
             });
 
-            productImageEditMoadl.onResult(function () {
-                productImageTable.ajax.reload();
+            productImageEditModal.onResult(function () {
+                $("#main-spinner").addClass("show")
+                productImageTable.ajax.reload((callback) => {
+                    $("#main-spinner").removeClass("show")
+                });
             })
 
             $("#CreateProductImageButton").on('click', function (e) {
