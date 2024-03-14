@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.SpecificationAttributes;
 using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Application.Operations.Etos;
@@ -7,6 +8,7 @@ using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 {
     public class SpeicificationAttributesTests : BaseTestFixture
@@ -33,10 +35,6 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
                 var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == val.Id, x => x.Options);
 
                 attribute.AssertSpecificationAttributeModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<SpecificationAttributeEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<SpecificationAttributeEto>>());
 
                 var elasticSpecificationAttribute = await FindElasticDoc<ElasticSpecificationAttribute>(attribute.Id);
 
@@ -80,10 +78,6 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
                 var attribute = await SingleAsync<SpecificationAttribute>(x => x.Id == val.Id, x => x.Options);
 
                 attribute.AssertSpecificationAttributeModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
 
                 var elasticSpecificationAttribute = await FindElasticDoc<ElasticSpecificationAttribute>(val.Id);
 
@@ -141,8 +135,6 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
                 attribute.Should().BeNull();
 
-                Assert.That(await TestHarness.Published.Any<EntityDeletedEvent<SpecificationAttributeEto>>());
-
                 var elasticSpecificationAttribute = await FindElasticDoc<ElasticSpecificationAttribute>(fakeAttribute.Id);
 
                 elasticSpecificationAttribute.Should().BeNull();
@@ -181,10 +173,7 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
                 var option = attibute.Options.Single(x => x.Name == model.Name);
 
                 option.AssertSpecificationAttributeOptionModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+              
             });    
         }
 
@@ -236,11 +225,7 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
                 var option = attribute.Options.Single(x => x.Id == optionId);
 
-                option.AssertSpecificationAttributeOptionModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
+                option.AssertSpecificationAttributeOptionModel(model);         
             });
 
 
@@ -316,9 +301,6 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
                 option.Should().BeNull();
 
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<SpecificationAttributeEto>>());
             });
    
         }
@@ -385,35 +367,39 @@ namespace MicroStore.Catalog.Application.Tests.SpecificationAttributes
 
         private async Task<SpecificationAttribute> CreateFakeSpecificationAttribute()
         {
-            SpecificationAttribute specificationAttribute = new SpecificationAttribute
+          
+
+            return await WithUnitOfWork(async (sp) =>
             {
-                Name = Guid.NewGuid().ToString(),
-                Description = Guid.NewGuid().ToString(),
-                Options=  new List<SpecificationAttributeOption>
+                SpecificationAttribute specificationAttribute = new SpecificationAttribute
                 {
-                    new SpecificationAttributeOption
+                    Name = Guid.NewGuid().ToString(),
+                    Description = Guid.NewGuid().ToString(),
+                    Options = new List<SpecificationAttributeOption>
                     {
-                        Name = Guid.NewGuid().ToString(),
-                    },
+                        new SpecificationAttributeOption
+                        {
+                            Name = Guid.NewGuid().ToString(),
+                        },
 
 
-                    new SpecificationAttributeOption
-                    {
-                        Name = Guid.NewGuid().ToString(),
-                    },
+                        new SpecificationAttributeOption
+                        {
+                            Name = Guid.NewGuid().ToString(),
+                        },
 
 
-                    new SpecificationAttributeOption
-                    {
-                        Name = Guid.NewGuid().ToString(),
-                    },
-                }
+                        new SpecificationAttributeOption
+                        {
+                            Name = Guid.NewGuid().ToString(),
+                        },
+                    }
 
-            };
+                };
+                var repository = sp.GetRequiredService<IRepository<SpecificationAttribute>>();
 
-            await Insert(specificationAttribute);
-
-            return specificationAttribute;
+                return await repository.InsertAsync(specificationAttribute);
+            });
         }
 
         private SpecificationAttributeOptionModel CreateFakeSpecificationAttributeOptionModel()

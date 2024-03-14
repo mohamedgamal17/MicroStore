@@ -1,6 +1,8 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.TestBase;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
 
 namespace MicroStore.Catalog.Application.Tests

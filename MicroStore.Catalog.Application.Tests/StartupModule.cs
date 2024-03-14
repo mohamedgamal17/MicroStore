@@ -16,6 +16,7 @@ using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Domain.Configuration;
 using Elastic.Clients.Elasticsearch;
 using MicroStore.Catalog.Entities.ElasticSearch;
+using MicroStore.Catalog.Infrastructure.ElasticSearch;
 namespace MicroStore.Catalog.Application.Tests
 {
     [DependsOn(typeof(CatalogInfrastructureModule))]
@@ -63,7 +64,11 @@ namespace MicroStore.Catalog.Application.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
 
                 dbContext.Database.Migrate();
+
+                InitializeElasticSearch(scope.ServiceProvider).Wait();
             }
+
+          
         }
 
 
@@ -83,10 +88,44 @@ namespace MicroStore.Catalog.Application.Tests
 
                 respawner.ResetAsync(config.GetConnectionString("DefaultConnection")!).Wait();
 
-                RemoveElasticSearchIndcies(scope.ServiceProvider);
+                //RemoveElasticSearchIndcies(scope.ServiceProvider);
             }
         }
 
+        private async Task InitializeElasticSearch(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var appsettings = scope.ServiceProvider.GetRequiredService<ApplicationSettings>();
+
+                var elasticClient = scope.ServiceProvider.GetRequiredService<ElasticsearchClient>();
+
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ImageVectorMappings(appsettings.ElasticSearch.ImageVectorIndex));
+
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticProductMappings(appsettings.ElasticSearch.ProductIndex));
+
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticCategoryMappings(appsettings.ElasticSearch.CategoryIndex));
+
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticManufacturerMappings(appsettings.ElasticSearch.ManufacturerIndex));
+
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticProductReviewMappings(appsettings.ElasticSearch.ProductReviewIndex));
+
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticSpecificationAttributeMappings(appsettings.ElasticSearch.SpecificationAttributeIndex));
+
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticProductTagMappings(appsettings.ElasticSearch.ProductTagIndex));
+
+                await elasticClient.Indices
+                    .CreateAsync(ElasticIndeciesMapping.ElasticProductExpectedRatingMappings(appsettings.ElasticSearch.ProductExpectedRatingIndex));
+
+            }
+        }
         private void RemoveElasticSearchIndcies(IServiceProvider serviceProvider)
         {
             var elasticClient = serviceProvider.GetRequiredService<ElasticsearchClient>();

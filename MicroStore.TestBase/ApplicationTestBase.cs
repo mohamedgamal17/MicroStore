@@ -20,7 +20,7 @@ namespace MicroStore.TestBase
     {
 
 
-        public async Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class
+        public virtual async Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class
         {
             using var dbContext = GetRequiredService<DbContext>();
 
@@ -31,7 +31,7 @@ namespace MicroStore.TestBase
             return entity;
         }
 
-        public async Task<IEnumerable<TEntity>> InsertMany<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
+        public virtual async Task<IEnumerable<TEntity>> InsertMany<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
         {
             using var dbContext = GetRequiredService<DbContext>();
 
@@ -43,7 +43,7 @@ namespace MicroStore.TestBase
         }
 
 
-        public async Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class
+        public virtual async Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class
         {
             using var dbContext = GetRequiredService<DbContext>();
 
@@ -55,7 +55,7 @@ namespace MicroStore.TestBase
 
         }
 
-        public async Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> expression , params Expression<Func<TEntity, object>>[] properties) where TEntity : class
+        public virtual async Task<TEntity> SingleAsync<TEntity>(Expression<Func<TEntity, bool>> expression , params Expression<Func<TEntity, object>>[] properties) where TEntity : class
         {
             using var dbContext = GetRequiredService<DbContext>();
 
@@ -69,7 +69,7 @@ namespace MicroStore.TestBase
             return await query.SingleAsync(expression);
         }
 
-        public async Task<TEntity?> SingleOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] properties) where TEntity : class
+        public virtual async Task<TEntity?> SingleOrDefaultAsync<TEntity>(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] properties) where TEntity : class
         {
             using var dbContext = GetRequiredService<DbContext>();
 
@@ -83,14 +83,14 @@ namespace MicroStore.TestBase
             return await query.SingleOrDefaultAsync(expression);
         }
 
-        public async Task<TEntity> FirstAsync<TEntity>() where TEntity : class
+        public virtual async Task<TEntity> FirstAsync<TEntity>() where TEntity : class
         {
             using var dbContext = GetRequiredService<DbContext>();
 
             return await dbContext.Set<TEntity>().FirstAsync();
         }
 
-        public async Task<TEntity?> FirstOrDefaut<TEntity>() where TEntity : class
+        public virtual async Task<TEntity?> FirstOrDefaut<TEntity>() where TEntity : class
         {
             using var dbContext = GetRequiredService<DbContext>();
 
@@ -98,7 +98,7 @@ namespace MicroStore.TestBase
         }
 
 
-        public async Task WithUnitOfWork(Func<IServiceProvider, Task> func)
+        public virtual async Task WithUnitOfWork(Func<IServiceProvider, Task> func)
         {
 
             using (var scope = ServiceProvider.CreateScope())
@@ -120,7 +120,7 @@ namespace MicroStore.TestBase
             }
         }
 
-        public async Task<TResult> WithUnitOfWork<TResult>(Func<IServiceProvider, Task<TResult>> func)
+        public virtual async Task<TResult> WithUnitOfWork<TResult>(Func<IServiceProvider, Task<TResult>> func)
         {
             using var scope = ServiceProvider.CreateScope();
 

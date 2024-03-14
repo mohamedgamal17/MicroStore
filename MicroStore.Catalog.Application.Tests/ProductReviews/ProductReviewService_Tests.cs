@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Operations.Etos;
-using MicroStore.Catalog.Application.Operations;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using Volo.Abp.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using MicroStore.Catalog.Application.Abstractions.ProductReveiws;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.ProductReviews
 {
@@ -34,10 +34,6 @@ namespace MicroStore.Catalog.Application.Tests.ProductReviews
                 var productReview = await SingleAsync<ProductReview>(x => x.Id == val.Id && x.ProductId == fakeProduct.Id);
 
                 productReview.AssertCreateProductReviewModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<ProductReviewEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<ProductReviewEto>>());
 
                 var elasticEntity = await FindElasticDoc<ElasticProductReview>(val.Id);
 
@@ -79,10 +75,6 @@ namespace MicroStore.Catalog.Application.Tests.ProductReviews
                 var productReview = await SingleAsync<ProductReview>(x => x.Id == val.Id && x.ProductId == fakeProductReview.ProductId);
 
                 productReview.AssertProductReviewModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductReviewEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductReviewEto>>());
 
                 var elasticEntity = await FindElasticDoc<ElasticProductReview>(val.Id);
 
@@ -237,28 +229,35 @@ namespace MicroStore.Catalog.Application.Tests.ProductReviews
             };
 
 
-            await Insert(product);
+            return await WithUnitOfWork((sp) =>
+            {
+                var repository = sp.GetRequiredService<IRepository<Product>>();
 
-            return product;
+                return repository.InsertAsync(product);
+            });
+
         }
 
         private async Task<ProductReview> GenerateProductReview()
         {
             var product = await GenerateProduct();
 
-            var productReview = new ProductReview
+            return await WithUnitOfWork(async (sp) =>
             {
-                ProductId = product.Id,
-                ReviewText = Guid.NewGuid().ToString(),
-                ReplayText = Guid.NewGuid().ToString(),
-                Rating = 5,
-                UserId = Guid.NewGuid().ToString(),
-                Title = Guid.NewGuid().ToString()
-            };
+                var productReview = new ProductReview
+                {
+                    ProductId = product.Id,
+                    ReviewText = Guid.NewGuid().ToString(),
+                    ReplayText = Guid.NewGuid().ToString(),
+                    Rating = 5,
+                    UserId = Guid.NewGuid().ToString(),
+                    Title = Guid.NewGuid().ToString()
+                };
 
-            await Insert(productReview);
+                var repository = sp.GetRequiredService<IRepository<ProductReview>>();
 
-            return productReview;
+                return await repository.InsertAsync(productReview);
+            });
         }
 
         private CreateProductReviewModel GenerateCreateProductReviewModel()

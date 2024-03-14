@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.Manufacturers;
-using MicroStore.Catalog.Application.Operations;
-using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 namespace MicroStore.Catalog.Application.Tests.Manufacturers
 {
     public class ManufacturerCommandServiceTest : ManufacturerCommandTestBase
@@ -36,10 +36,6 @@ namespace MicroStore.Catalog.Application.Tests.Manufacturers
                 var manufacturer = await SingleAsync<Manufacturer>(x => x.Id == result.Value.Id);
 
                 manufacturer.AssertManufacturerModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<ManufacturerEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<ManufacturerEto>>());
 
                 var elasticManufacturer = await FindElasticDoc<ElasticManufacturer>(manufacturer.Id);
 
@@ -89,10 +85,6 @@ namespace MicroStore.Catalog.Application.Tests.Manufacturers
                 var manufacturer = await SingleAsync<Manufacturer>(x => x.Id == fakeManufacturer.Id);
 
                 manufacturer.AssertManufacturerModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ManufacturerEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ManufacturerEto>>());
 
                 var elasticManufacturer = await FindElasticDoc<ElasticManufacturer>(manufacturer.Id);
 
@@ -150,15 +142,19 @@ namespace MicroStore.Catalog.Application.Tests.Manufacturers
     {
         public async Task<Manufacturer> CreateManufacturer()
         {
-            var manufacturer = new Manufacturer
+        
+            return await WithUnitOfWork((sp) =>
             {
-                Name = Guid.NewGuid().ToString(),
-                Description = Guid.NewGuid().ToString()
-            };
+                var manufacturer = new Manufacturer
+                {
+                    Name = Guid.NewGuid().ToString(),
+                    Description = Guid.NewGuid().ToString()
+                };
 
-            await Insert(manufacturer);
+                var repository = sp.GetRequiredService<IRepository<Manufacturer>>();
 
-            return manufacturer;
+                return repository.InsertAsync(manufacturer);
+            });
         }
     }
 }

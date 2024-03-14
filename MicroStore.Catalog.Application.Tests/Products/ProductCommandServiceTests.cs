@@ -1,11 +1,7 @@
 ﻿using FluentAssertions;
-using MicroStore.Catalog.Application.Operations.Etos;
-using MicroStore.Catalog.Application.Operations;
-using MicroStore.Catalog.Application.Products;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
-using MicroStore.Catalog.IntegrationEvents;
 using Volo.Abp.Domain.Entities;
 using MicroStore.Catalog.Application.Abstractions.Products;
 namespace MicroStore.Catalog.Application.Tests.Products
@@ -34,12 +30,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
                 product.AssertProductModel(model);
 
-                Assert.That(await TestHarness.Published.Any<ProductCreatedIntegrationEvent>());
-
-                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<ProductEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<ProductEto>>());
-
                 var elasticProduct = await FindElasticDoc<ElasticProduct>(val.Id);
 
                 elasticProduct.Should().NotBeNull();
@@ -65,12 +55,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 var product = await SingleAsync<Product>(x => x.Id == val.Id);
 
                 product.AssertProductModel(model);
-
-                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
 
                 var elasticProduct = await FindElasticDoc<ElasticProduct>(result.Value.Id);
 
@@ -118,11 +102,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
                 productImage.DisplayOrder.Should().Be(model.DisplayOrder);
 
-                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
             });
 
         }
@@ -167,12 +146,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
                 productImage.Image.Should().Be(model.Image);
 
                 productImage.DisplayOrder.Should().Be(model.DisplayOrder);
-
-                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
             });
 
         }
@@ -239,11 +212,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
                 productImage.Should().BeNull();
 
-                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
             });
 
 
@@ -297,11 +265,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
                 productSpecificationAttribute.Should().NotBeNull();
 
-                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
             });
 
   
@@ -348,11 +311,6 @@ namespace MicroStore.Catalog.Application.Tests.Products
 
                 productSpecificationAttribute.Should().BeNull();
 
-                Assert.That(await TestHarness.Published.Any<ProductUpdatedIntegerationEvent>());
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductEto>>());
             });
    
         }

@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.ProductTags;
-using MicroStore.Catalog.Application.Operations;
-using MicroStore.Catalog.Application.Operations.Etos;
-
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 
 namespace MicroStore.Catalog.Application.Tests.ProductTags
 {
@@ -35,10 +34,6 @@ namespace MicroStore.Catalog.Application.Tests.ProductTags
                 var productTag = await SingleAsync<Tag>(x => x.Id == val.Id);
 
                 productTag.AssertProductTagModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityCreatedEvent<ProductTagEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityCreatedEvent<ProductTagEto>>());
 
                 var elasticProductTag = await FindElasticDoc<ElasticTag>(val.Id);
 
@@ -81,10 +76,6 @@ namespace MicroStore.Catalog.Application.Tests.ProductTags
                 var productTag = await SingleAsync<Tag>(x => x.Id == val.Id);
 
                 productTag.AssertProductTagModel(model);
-
-                Assert.That(await TestHarness.Published.Any<EntityUpdatedEvent<ProductTagEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityUpdatedEvent<ProductTagEto>>());
 
                 var elasticProductTag = await FindElasticDoc<ElasticTag>(val.Id);
 
@@ -141,10 +132,6 @@ namespace MicroStore.Catalog.Application.Tests.ProductTags
 
                 productTag.Should().BeNull();
 
-                Assert.That(await TestHarness.Published.Any<EntityDeletedEvent<ProductTagEto>>());
-
-                Assert.That(await TestHarness.Consumed.Any<EntityDeletedEvent<ProductTagEto>>());
-
                 var elasticProductTag = await FindElasticDoc<ElasticTag>(fakeProductTag.Id);
 
                 elasticProductTag.Should().BeNull();
@@ -165,15 +152,19 @@ namespace MicroStore.Catalog.Application.Tests.ProductTags
 
         private async Task<Tag> CreateFakeProductTag()
         {
-            var productTag = new Tag
+     
+            return await WithUnitOfWork(async (sp) =>
             {
-                Name = Guid.NewGuid().ToString(),
-                Description = Guid.NewGuid().ToString(),
-            };
+                var productTag = new Tag
+                {
+                    Name = Guid.NewGuid().ToString(),
+                    Description = Guid.NewGuid().ToString(),
+                };
 
-            await Insert(productTag);
+                var repository = sp.GetRequiredService<IRepository<Tag>>();
 
-            return productTag;
+                return await repository.InsertAsync(productTag);
+            });
         }
 
         private ProductTagModel CreateFakeProductTagModel()

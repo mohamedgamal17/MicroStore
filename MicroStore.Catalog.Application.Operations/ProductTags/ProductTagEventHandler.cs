@@ -1,12 +1,11 @@
-﻿using MassTransit;
-using MicroStore.Catalog.Application.Operations.Etos;
+﻿using Elastic.Clients.Elasticsearch;
+using MassTransit;
+using MicroStore.Catalog.Application.Operations.Extensions;
 using MicroStore.Catalog.Domain.Entities;
-using Volo.Abp.BackgroundJobs;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-using Volo.Abp.ObjectMapping;
-
 namespace MicroStore.Catalog.Application.Operations.ProductTags
 {
     public class ProductTagEventHandler :
@@ -16,41 +15,87 @@ namespace MicroStore.Catalog.Application.Operations.ProductTags
         ITransientDependency
 
     {
-
-        private readonly IObjectMapper _objectMapper;
-        private readonly IPublishEndpoint _publishEndPoint;
-
-        public ProductTagEventHandler(IObjectMapper objectMapper, IPublishEndpoint publishEndPoint)
+        private readonly ElasticsearchClient _elasticsearchClient;
+        public ProductTagEventHandler(ElasticsearchClient elasticsearchClient)
         {
-            _objectMapper = objectMapper;
-            _publishEndPoint = publishEndPoint;
+            _elasticsearchClient = elasticsearchClient;
         }
-
         public async Task HandleEventAsync(EntityCreatedEventData<Tag> eventData)
         {
-            var eto = _objectMapper.Map<Tag, ProductTagEto>(eventData.Entity);
+            var elasticTag = PrepareElasticTag(eventData.Entity);
 
-            var distributedEvent = new EntityCreatedEvent<ProductTagEto>(eto);
+            var response = await _elasticsearchClient.IndexAsync(elasticTag);
 
-            await _publishEndPoint.Publish(distributedEvent);
+            response.ThrowIfFailure();
         }
-
         public async Task HandleEventAsync(EntityUpdatedEventData<Tag> eventData)
         {
-            var eto = _objectMapper.Map<Tag, ProductTagEto>(eventData.Entity);
+            var elasticTag = PrepareElasticTag(eventData.Entity);
 
-            var distributedEvent = new EntityUpdatedEvent<ProductTagEto>(eto);
+            var response = await _elasticsearchClient.IndexAsync(elasticTag);
 
-            await _publishEndPoint.Publish(distributedEvent);
+            var productQueryDescriptor = PrepareUpdateProductQueryDescriptor(elasticTag);
+
+            var updateResponse = await _elasticsearchClient.UpdateByQueryAsync(productQueryDescriptor);
+
+            updateResponse.ThrowIfFailure();
         }
-
         public async Task HandleEventAsync(EntityDeletedEventData<Tag> eventData)
         {
-            var eto = _objectMapper.Map<Tag, ProductTagEto>(eventData.Entity);
+            var response = await _elasticsearchClient.DeleteAsync<ElasticTag>(eventData.Entity.Id);
 
-            var distributedEvent = new EntityDeletedEvent<ProductTagEto>(eto);
+            response.ThrowIfFailure();
+        }
+        private ElasticTag PrepareElasticTag(Tag tag)
+        {
+            var elasticTag = new ElasticTag
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Description = tag.Description
+            };
 
-            await _publishEndPoint.Publish(distributedEvent);
+            return elasticTag;
+        }
+
+        private UpdateByQueryRequestDescriptor<ElasticProduct> PrepareUpdateProductQueryDescriptor(ElasticTag elasticEntity)
+        {
+            var queryDescriptor = new UpdateByQueryRequestDescriptor<ElasticProduct>(IndexName.From<ElasticProduct>())
+                .Script(new Script(new InlineScript
+                {
+                    Source = @"
+                            for(int i =0; i< ctx._source.tags.size(); i++)
+                            {
+                                if(ctx._source.tags[i].id == params.id)
+                                {
+                                    ctx._source.tags[i].name = params.name;
+                                    ctx._source.tags[i].description = params.description;
+                                    break;
+                                }
+                            }
+                        ",
+                    Params = new Dictionary<string, object>()
+                    {
+                        {"id",elasticEntity.Id },
+                        {"name",elasticEntity.Name },
+                        {"description",elasticEntity.Description }
+                    },
+
+                    Language = new ScriptLanguage("painless")
+                }))
+                .Query(desc => desc
+                    .Nested(nes => nes
+                    .Path(pt => pt.Categories)
+                    .Query(qr => qr
+                        .Match(mt => mt
+                            .Field(x => x.Categories.First().Id)
+                            .Query(elasticEntity.Id)
+                         )
+                    )
+                )
+            );
+
+            return queryDescriptor;
         }
     }
 }

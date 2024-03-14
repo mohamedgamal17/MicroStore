@@ -1,11 +1,10 @@
-﻿using MassTransit;
-using MicroStore.Catalog.Application.Operations.Etos;
+﻿using Elastic.Clients.Elasticsearch;
+using MicroStore.Catalog.Application.Operations.Extensions;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-using Volo.Abp.ObjectMapping;
-
 namespace MicroStore.Catalog.Application.Operations.ProductReviews
 {
     public class ProductReviewEventHandler :
@@ -14,41 +13,60 @@ namespace MicroStore.Catalog.Application.Operations.ProductReviews
         ILocalEventHandler<EntityDeletedEventData<ProductReview>>,
         ITransientDependency
     {
-        private readonly IObjectMapper _objectMapper;
 
-        private readonly IPublishEndpoint _publishEndPoint;
+        private readonly ElasticsearchClient _elasticsearchClient;
 
-        public ProductReviewEventHandler(IObjectMapper objectMapper, IPublishEndpoint publishEndPoint)
+        public ProductReviewEventHandler(ElasticsearchClient elasticsearchClient)
         {
-            _objectMapper = objectMapper;
-            _publishEndPoint = publishEndPoint;
+            _elasticsearchClient = elasticsearchClient;
         }
 
         public async Task HandleEventAsync(EntityCreatedEventData<ProductReview> eventData)
         {
-            var eto = _objectMapper.Map<ProductReview, ProductReviewEto>(eventData.Entity);
+            var elasticEntity = PrepareElasticProductReview(eventData.Entity);
 
-            var synchronizationEvent = new EntityCreatedEvent<ProductReviewEto>(eto);
+            var response = await _elasticsearchClient.IndexAsync(elasticEntity);
 
-            await _publishEndPoint.Publish(synchronizationEvent);
+            response.ThrowIfFailure();
         }
 
         public async Task HandleEventAsync(EntityUpdatedEventData<ProductReview> eventData)
         {
-            var eto = _objectMapper.Map<ProductReview, ProductReviewEto>(eventData.Entity);
+            var elasticEntity = PrepareElasticProductReview(eventData.Entity);
 
-            var synchronizationEvent = new EntityUpdatedEvent<ProductReviewEto>(eto);
+            var response = await _elasticsearchClient.IndexAsync(elasticEntity);
 
-            await _publishEndPoint.Publish(synchronizationEvent);
+            response.ThrowIfFailure();
         }
 
         public async Task HandleEventAsync(EntityDeletedEventData<ProductReview> eventData)
         {
-            var eto = _objectMapper.Map<ProductReview, ProductReviewEto>(eventData.Entity);
+            var response = await _elasticsearchClient.DeleteAsync<ElasticProductReview>(eventData.Entity.Id);
 
-            var synchronizationEvent = new EntityDeletedEvent<ProductReviewEto>(eto);
+            response.ThrowIfFailure();
+        }
 
-            await _publishEndPoint.Publish(synchronizationEvent);
+        private ElasticProductReview PrepareElasticProductReview(ProductReview productReview)
+        {
+            var elasticEntity = new ElasticProductReview
+            {
+                Id = productReview.Id,
+                Title = productReview.Title,
+                ProductId = productReview.ProductId,
+                Rating = productReview.Rating,
+                ReplayText = productReview.ReplayText,
+                ReviewText = productReview.ReviewText,
+                UserId = productReview.UserId,
+                CreationTime = productReview.CreationTime,
+                CreatorId = productReview.CreatorId?.ToString(),
+                LastModificationTime = productReview.LastModificationTime,
+                LastModifierId = productReview.LastModifierId.ToString(),
+                DeleterId = productReview.DeleterId?.ToString(),
+                DeletionTime = productReview.DeletionTime,
+                IsDeleted = productReview.IsDeleted
+            };
+
+            return elasticEntity;
         }
     }
 }

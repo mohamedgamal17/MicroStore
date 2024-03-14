@@ -1,12 +1,11 @@
-﻿using MassTransit;
-using MicroStore.Catalog.Application.Operations.Etos;
+﻿using Elastic.Clients.Elasticsearch;
+using MassTransit;
+using MicroStore.Catalog.Application.Operations.Extensions;
 using MicroStore.Catalog.Domain.Entities;
-using Volo.Abp.BackgroundJobs;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-using Volo.Abp.ObjectMapping;
-
 namespace MicroStore.Catalog.Application.Operations.SpecificationAttributes
 {
     public class SpecificationAttributeEventHandler :
@@ -16,41 +15,55 @@ namespace MicroStore.Catalog.Application.Operations.SpecificationAttributes
         ITransientDependency
 
     {
-        private readonly IObjectMapper _objectMapper;
 
-        private readonly IPublishEndpoint _publishEndPoint;
+        private readonly ElasticsearchClient _elasticsearchClient;
 
-        public SpecificationAttributeEventHandler(IObjectMapper objectMapper, IPublishEndpoint publishEndPoint)
+        public SpecificationAttributeEventHandler(ElasticsearchClient elasticsearchClient)
         {
-            _objectMapper = objectMapper;
-            _publishEndPoint = publishEndPoint;
+            _elasticsearchClient = elasticsearchClient;
         }
 
         public async Task HandleEventAsync(EntityCreatedEventData<SpecificationAttribute> eventData)
         {
-            var eto = _objectMapper.Map<SpecificationAttribute, SpecificationAttributeEto>(eventData.Entity);
+            var elasticEntity = PrepareElasticSpecificationAttribute(eventData.Entity);
 
-            var synchroinzationEvent = new EntityCreatedEvent<SpecificationAttributeEto>(eto);
+            var response = await _elasticsearchClient.IndexAsync(elasticEntity);
 
-            await _publishEndPoint.Publish(synchroinzationEvent);
+            response.ThrowIfFailure();
         }
 
         public async Task HandleEventAsync(EntityUpdatedEventData<SpecificationAttribute> eventData)
         {
-            var eto = _objectMapper.Map<SpecificationAttribute, SpecificationAttributeEto>(eventData.Entity);
+            var elasticEntity = PrepareElasticSpecificationAttribute(eventData.Entity);
 
-            var synchroinzationEvent = new EntityUpdatedEvent<SpecificationAttributeEto>(eto);
+            var response = await _elasticsearchClient.IndexAsync(elasticEntity);
 
-            await _publishEndPoint.Publish(synchroinzationEvent);
+            response.ThrowIfFailure();
         }
 
         public async Task HandleEventAsync(EntityDeletedEventData<SpecificationAttribute> eventData)
         {
-            var eto = _objectMapper.Map<SpecificationAttribute, SpecificationAttributeEto>(eventData.Entity);
+            var response = await _elasticsearchClient.DeleteAsync<ElasticSpecificationAttribute>(eventData.Entity.Id);
 
-            var synchroinzationEvent = new EntityDeletedEvent<SpecificationAttributeEto>(eto);
+            response.ThrowIfFailure();
+        }
 
-            await _publishEndPoint.Publish(synchroinzationEvent);
+        private ElasticSpecificationAttribute PrepareElasticSpecificationAttribute(SpecificationAttribute specificationAttribute)
+        {
+            var elasticEntity = new ElasticSpecificationAttribute
+            {
+                Id = specificationAttribute.Id,
+                Name = specificationAttribute.Name,
+                Description = specificationAttribute.Description,
+                Options = specificationAttribute.Options?.Select(x => new ElasticSpecificationAttributeOption
+                {
+                    Id = x.Id,
+                    Value = x.Name,
+                }).ToList()
+
+            };
+
+            return elasticEntity;
         }
     }
 }

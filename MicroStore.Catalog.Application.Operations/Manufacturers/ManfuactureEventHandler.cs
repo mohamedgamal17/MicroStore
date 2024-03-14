@@ -1,6 +1,8 @@
-﻿using MassTransit;
-using MicroStore.Catalog.Application.Operations.Etos;
+﻿using Elastic.Clients.Elasticsearch;
+using MassTransit;
+using MicroStore.Catalog.Application.Operations.Extensions;
 using MicroStore.Catalog.Domain.Entities;
+using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
@@ -14,40 +16,94 @@ namespace MicroStore.Catalog.Application.Operations.Manufacturers
         ITransientDependency
     {
 
-        private readonly IObjectMapper _objectMapper;
-        private readonly IPublishEndpoint _publishEndPoint;
+        private readonly ElasticsearchClient _elasticsearchClient;
 
-        public ManfuactureEventHandler(IObjectMapper objectMapper, IPublishEndpoint publishEndPoint)
+        public ManfuactureEventHandler(ElasticsearchClient elasticsearchClient)
         {
-            _objectMapper = objectMapper;
-            _publishEndPoint = publishEndPoint;
+            _elasticsearchClient = elasticsearchClient;
         }
 
         public async Task HandleEventAsync(EntityCreatedEventData<Manufacturer> eventData)
         {
-            var eto = _objectMapper.Map<Manufacturer, ManufacturerEto>(eventData.Entity);
+            var elasticManufacturer = PrepareElasticManufacturer(eventData.Entity);
 
-            var synchronizationEvent = new EntityCreatedEvent<ManufacturerEto>(eto);
- 
-            await _publishEndPoint.Publish(synchronizationEvent);
+            var response = await _elasticsearchClient.IndexAsync(elasticManufacturer);
+
+            response.ThrowIfFailure();
         }
 
         public async Task HandleEventAsync(EntityUpdatedEventData<Manufacturer> eventData)
         {
-            var eto = _objectMapper.Map<Manufacturer, ManufacturerEto>(eventData.Entity);
+            var elasticManufacturer = PrepareElasticManufacturer(eventData.Entity);
 
-            var synchronizationEvent = new EntityUpdatedEvent<ManufacturerEto>(eto);
+            var indexResponse = await _elasticsearchClient.IndexAsync(elasticManufacturer);
 
-            await _publishEndPoint.Publish(synchronizationEvent);
+            indexResponse.ThrowIfFailure();
+
+            var productQueryDescriptor = PrepareUpdateProductQueryDescriptor(elasticManufacturer);
+
+            var updateResponse = await _elasticsearchClient.UpdateByQueryAsync(productQueryDescriptor);
+
+            updateResponse.ThrowIfFailure();
         }
 
         public async Task HandleEventAsync(EntityDeletedEventData<Manufacturer> eventData)
         {
-            var eto = _objectMapper.Map<Manufacturer, ManufacturerEto>(eventData.Entity);
+            var response = await _elasticsearchClient.DeleteAsync<ElasticManufacturer>(eventData.Entity.Id);
 
-            var synchronizationEvent = new EntityDeletedEvent<ManufacturerEto>(eto);
+            response.ThrowIfFailure();
+        }
 
-            await _publishEndPoint.Publish(synchronizationEvent);
+        private ElasticManufacturer PrepareElasticManufacturer(Manufacturer manufacturer)
+        {
+            var elasticManufacturer = new ElasticManufacturer
+            {
+                Id = manufacturer.Id,
+                Name = manufacturer.Name,
+                Description = manufacturer.Description,
+                CreationTime = manufacturer.CreationTime,
+                CreatorId = manufacturer.CreatorId?.ToString(),
+                LastModifierId = manufacturer.LastModifierId?.ToString(),
+                LastModificationTime = manufacturer.LastModificationTime
+            };
+
+            return elasticManufacturer;
+        }
+
+        private UpdateByQueryRequestDescriptor<ElasticProduct> PrepareUpdateProductQueryDescriptor(ElasticManufacturer elasticEntity)
+        {
+            var queryDescriptor = new UpdateByQueryRequestDescriptor<ElasticProduct>(IndexName.From<ElasticProduct>())
+                .Script(new Script(new InlineScript
+                {
+                    Source = @"
+                            for(int i =0; i< ctx._source.manufacturers.size(); i++)
+                            {
+                                if(ctx._source.manufacturers[i].id == params.id)
+                                {
+                                    ctx._source.manufacturers[i].name = params.name;
+                                    ctx._source.manufacturers[i].description = params.description;
+                                }
+                            }
+                         ",
+                    Params = new Dictionary<string, object>()
+                    {
+                        {"id",elasticEntity.Id },
+                        {"name",elasticEntity.Name },
+                        {"description",elasticEntity.Description }
+                    },
+
+                    Language = new ScriptLanguage("painless")
+                }))
+                .Query(desc => desc
+                    .Nested(nes => nes
+                    .Path(pt => pt.Manufacturers)
+                    .Query(qr => qr
+                        .Term(mt => mt.Manufacturers.First().Id, elasticEntity.Id)
+                    )
+                )
+            );
+
+            return queryDescriptor;
         }
     }
 }
