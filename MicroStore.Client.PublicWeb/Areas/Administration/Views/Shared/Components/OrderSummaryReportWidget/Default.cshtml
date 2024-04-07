@@ -7,7 +7,9 @@
                 Model.SummaryReport.TotalUnShipped,
                 Model.SummaryReport.TotalUnApproved,
                 Model.SummaryReport.TotalUnfullfilled,
-                Model.SummaryReport.TotalUnShipped
+                Model.SummaryReport.TotalUnShipped,
+                Model.SummaryReport.TotalCompleted,
+                Model.SummaryReport.TotalCancelled
             };
 }
 
@@ -21,7 +23,7 @@
         </div>
     </abp-card-header>
     <abp-card-body>
-        <canvas id="order-summary" ></canvas>
+        <canvas id="order-summary"></canvas>
     </abp-card-body>
 </abp-card>
 
@@ -31,12 +33,14 @@
             'UnPayed',
             'UnApproved',
             'UnFullfilled',
-            'UnShipped'
+            'UnShipped',
+            'Completed',
+            'Cancelled',
         ],
         datasets: [
             {
                 data: @Html.Raw(Json.Serialize(data)),
-                backgroundColor: ['#f56954', '#3c8dbc', '#00c0ef', '#f39c12', ],
+                backgroundColor: ['#d2d6de', '#3c8dbc', '#00c0ef', '#f39c12', '#00a65a', '#f56954',],
             }
         ]
     }
