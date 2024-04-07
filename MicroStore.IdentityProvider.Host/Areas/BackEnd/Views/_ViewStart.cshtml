@@ -1,7 +1,7 @@
-﻿
-@using MicroStore.IdentityProvider.Host.Theming
+﻿@using MicroStore.IdentityProvider.Host.Theming
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @inject IThemeManager ThemeManager
+@inject UINotificationManager NotificationManager;
 @{
     Layout = ThemeManager.CurrentTheme.GetLayout(StandardApplicationLayout.Administration);
 }

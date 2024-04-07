@@ -15,16 +15,21 @@ namespace MicroStore.IdentityProvider.Host.Menus
 
         private Task ConfigureBackEndMenuAsync(MenuConfigurationContext context)
         {
-            context.Menu.AddItem(
-                 new ApplicationMenuItem("MicroStore.IdentityManagment", "Identity", icon: "nav-icon fas fa-book", requiredPermissionName: null)
+            context.Menu
+                 .AddItem(new ApplicationMenuItem("MicroStore.BackEnd.Dashboard", "Dashboard", url: "/BackEnd/Dashboard", icon: "nav-icon fas fa-desktop")
+                 )
+                .AddItem(
+
+                 new ApplicationMenuItem("MicroStore.IdentityManagment", "Identity", icon: "nav-icon fas fa-users", requiredPermissionName: null)
                        .AddItem(new ApplicationMenuItem("MicroStore.IdentityManagment.User", "Manage Users", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/User"))
                        .AddItem(new ApplicationMenuItem("MicroStore.IdentityManagment.Role", "Manage Roles", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/Role"))
               ).AddItem(
-                     new ApplicationMenuItem("MicroStore.IdentityServer", "Identity Server", icon: "nav-icon fas fa-book", requiredPermissionName: null)
+                     new ApplicationMenuItem("MicroStore.IdentityServer", "Identity Server", icon: "nav-icon fas fa-server", requiredPermissionName: null)
                            .AddItem(new ApplicationMenuItem("MicroStore.IdentityServer.Client", "Manage Clients", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/Client"))
                            .AddItem(new ApplicationMenuItem("MicroStore.IdentityServer.ApiResource", "Manage Api Resource", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/ApiResource"))
                            .AddItem(new ApplicationMenuItem("MicroStore.IdentityServer.ApiScope", "Manage Api Scope", icon: "far fa-dot-circle nav-icon", url: "/BackEnd/ApiScope"))
               );
+             
 
             return Task.CompletedTask;
         }

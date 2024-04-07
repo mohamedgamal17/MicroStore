@@ -1,17 +1,35 @@
-﻿@using MicroStore.AspNetCore.UI.Extensions
+﻿@using IdentityModel
+@using MicroStore.AspNetCore.UI.Extensions
+@using System.Security.Claims
 @model MicroStore.AspNetCore.UI.HtmlHelpers.TreeViewRoot
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
-<!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-
-    <!-- Sidebar -->
+    <a asp-action="Index" asp-controller="Dashboard" class="brand-link">
+        <img src="https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Micro store</span>
+    </a>
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 ">
- 
-            <div class=" text-center clearfix">
-                <a href="#" class="text-center text-lg">Micro Store Solution</a>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                @{
+                    var userImage = User.Claims.SingleOrDefault(x=> x.Type == "avatar")?.Value;
+
+                    if (string.IsNullOrEmpty(userImage))
+                    {
+                        userImage = "/images/user.png";
+                    }
+                }
+                <img src="@userImage" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                @{
+                    string givenName = User.Claims.Single(x => x.Type == JwtClaimTypes.GivenName).Value;
+                    string familyName = User.Claims.Single(x => x.Type == JwtClaimTypes.FamilyName).Value;
+                }
+                <a href="/Account/Manage" class="text-center text-lg">@string.Format("{0} {1}", givenName, familyName)</a>
+               
             </div>
         </div>
 
