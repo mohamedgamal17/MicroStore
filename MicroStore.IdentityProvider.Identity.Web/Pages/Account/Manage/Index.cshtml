@@ -16,9 +16,14 @@
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating form-group mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                <input asp-for="Input.GivenName" class="form-control" />
+                <label asp-for="Input.GivenName" class="form-label"></label>
+                <span asp-validation-for="Input.GivenName" class="text-danger"></span>
+            </div>
+            <div class="form-floating form-group mb-3">
+                <input asp-for="Input.FamilyName" class="form-control" />
+                <label asp-for="Input.FamilyName" class="form-label"></label>
+                <span asp-validation-for="Input.FamilyName" class="text-danger"></span>
             </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
