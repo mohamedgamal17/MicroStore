@@ -6,7 +6,6 @@ using MicroStore.Catalog.Entities.ElasticSearch;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-using Volo.Abp.ObjectMapping;
 namespace MicroStore.Catalog.Application.Operations.Manufacturers
 {
     public class ManfuactureEventHandler : 
