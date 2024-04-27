@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="IdentityModel" Version="6.0.0" />
 	<PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0" />
 	<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
@@ -37,7 +36,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using MicroStore.Catalog.Application.Abstractions.SpecificationAttributes;
 using MicroStore.Catalog.Application.Operations;
-using MicroStore.Catalog.Application.Operations.Etos;
 using MicroStore.Catalog.Application.Tests.Extensions;
 using MicroStore.Catalog.Domain.Entities;
 using MicroStore.Catalog.Entities.ElasticSearch;

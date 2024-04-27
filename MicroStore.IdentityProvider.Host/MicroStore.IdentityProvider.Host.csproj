@@ -13,31 +13,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.2.0" />
 
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.0" />
-
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.10" />
-
-
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.20" />
-
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.15" />
 		<PackageReference Include="Serilog.AspNetCore" Version="6.0.0" />
-
-
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.20">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Volo.Abp.Autofac" Version="6.0.2" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI" Version="6.0.2" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Bootstrap" Version="6.0.2" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="6.0.2" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="6.0.2" />
-		<PackageReference Include="Volo.Abp.AutoMapper" Version="6.0.2" />
-		<PackageReference Include="Volo.Abp.BlobStoring.Minio" Version="6.0.2" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
 	</ItemGroup>
 
