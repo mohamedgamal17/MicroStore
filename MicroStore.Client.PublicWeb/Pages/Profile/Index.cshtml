@@ -9,6 +9,7 @@
     ViewData["BreadCrumb.IsMainPage"] = false;
     ViewData["BreadCrumb.Title"] = "Profile";
     ViewData["BreadCrumb.Page"] = "Profile";
+    string userImage = string.IsNullOrEmpty(Model.UserProfile.Avatar) ? "/images/user.png" : Model.UserProfile.Avatar;
 }
 
 <section class="dashboard-section section-b-space user-dashboard-section">
@@ -18,12 +19,12 @@
                 <div class="dashboard-sidebar">
                     <div class="profile-top">
                         <div class="profile-image">
-                            <img src="../assets/images/avtar.jpg" alt="" class="img-fluid">
+                            <img src="@userImage" alt="" class="img-fluid" height="130" width="130">
                         </div>
                         <div class="profile-detail">
-                            <h5>@Model.Profile</h5>
+                            <h5>@(Model.UserProfile.FirstName + " " + Model.UserProfile.LastName)</h5>
                             <h6>
-                                @User.Claims.SingleOrDefault(x=> x.Type == ClaimTypes.Email)?.Value
+                                @User.Claims.SingleOrDefault(x=> x.Type == ClaimTypes.Name)?.Value
                             </h6>
                         </div>
                     </div>
