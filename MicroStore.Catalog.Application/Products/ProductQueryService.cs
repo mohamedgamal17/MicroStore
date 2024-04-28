@@ -250,11 +250,11 @@ namespace MicroStore.Catalog.Application.Products
                                         )
                                 ))
                          )
-                        .When(!string.IsNullOrEmpty(queryParams.Category), act => act
-                                .Nested(cf => cf.Path(p => p.Categories).Query(nqr => nqr
+                        .When(!string.IsNullOrEmpty(queryParams.Manufacturer), act => act
+                                .Nested(cf => cf.Path(p => p.Manufacturers).Query(nqr => nqr
                                     .Match(mt => mt
-                                        .Field(f => f.Categories.First().Name)
-                                        .Query(queryParams.Category!)
+                                        .Field(f => f.Manufacturers.First().Name)
+                                        .Query(queryParams.Manufacturer!)
                                         )
                                 ))
                             )
