@@ -190,7 +190,10 @@
                         <div class="product-tab-discription">
                             @if (Model.Product.LongDescription != null)
                             {
-                                @Html.Raw(Model.Product.LongDescription)
+                                <div>
+                                    @Html.Raw(Model.Product.LongDescription)
+                                </div>
+                               
                             }
                             else
                             {
