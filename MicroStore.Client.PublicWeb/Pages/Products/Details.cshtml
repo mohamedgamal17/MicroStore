@@ -216,8 +216,8 @@
                                                     @foreach (var review in Model.ProductReviews)
                                                     {
                                                         int ratingPercent = (int)(review.Rating * 100 / 5);
-                                                        string userImage = review.User.Avatar ?? "/images/user.png";
-                                                        string name = string.Format("{0} {1}", review.User.FirstName,                           review.User.LastName);
+                                                        string userImage = string.IsNullOrEmpty(review.User.Avatar) ? "/images/user.png" : review.User.Avatar;
+                                                        string name = string.Format("{0} {1}", review.User.FirstName,review.User.LastName);
 
                                                         <li style="display:block !important">
                                                             <div class="media">
@@ -263,13 +263,15 @@
                         @if (isUserReviewdProduct)
                         {
                             var userReview = Model.UserReviews.First();
+                            string userImage = string.IsNullOrEmpty(userReview.User.Avatar) ? "/images/user.png" : userReview.User.Avatar;
                             int ratingPercent = (int)(userReview.Rating * 100 / 5);
+                       
                             <div class="section-b-space blog-detail-page review-page">
                                 <div class="container">
                                     <ul class="comment-section">
                                         <li style="display:block !important">
                                             <div class="media"> 
-                                                <img src="/images/user.png" alt="placeholder image">
+                                                <img src="@userImage" alt="placeholder image">
                                                 <div class="media-body">
                                                     <h6> User</h6>
                                                     <div class="custom-rating">

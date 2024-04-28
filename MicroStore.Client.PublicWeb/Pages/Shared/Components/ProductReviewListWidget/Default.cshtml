@@ -11,7 +11,7 @@
                         @foreach (var review in Model.ProductReviews)
                         {
                             int ratingPercent = (int)(review.Rating * 100 / 5);
-                            string userImage = review.User.Avatar ?? "/images/user.png";
+                            string userImage = string.IsNullOrEmpty(review.User.Avatar) ? "/images/user.png" : review.User.Avatar;
                             string name = string.Format("{0} {1}", review.User.FirstName, review.User.LastName);
 
                             <li style="display:block !important">
