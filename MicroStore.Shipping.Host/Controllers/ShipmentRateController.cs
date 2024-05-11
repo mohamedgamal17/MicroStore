@@ -11,7 +11,7 @@ using MicroStore.Shipping.Domain.Security;
 namespace MicroStore.Shipping.Host.Controllers
 {
     [ApiController]
-    //[Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
+    [Authorize(Policy = ApplicationPolicies.RequireAuthenticatedUser)]
     [Route("api/rates")]
     public class ShipmentRateController : MicroStoreApiController
     {
