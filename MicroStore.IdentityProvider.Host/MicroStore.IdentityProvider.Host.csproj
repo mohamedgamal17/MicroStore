@@ -3,6 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>9efdc5da-8260-43d0-8e93-0b0d894c7ca7</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -15,6 +17,8 @@
 	<ItemGroup>
 
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.0" />
+
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
 		<PackageReference Include="Serilog.AspNetCore" Version="6.0.0" />
 		<PackageReference Include="Volo.Abp.Autofac" Version="6.0.2" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
