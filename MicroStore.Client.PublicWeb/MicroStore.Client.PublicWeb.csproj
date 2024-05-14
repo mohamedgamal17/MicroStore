@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>b307b528-fbde-4459-8de0-65e6910fe855</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,24 +15,28 @@
     <Compile Remove="Ex\**" />
     <Compile Remove="Logs\**" />
     <Compile Remove="wwwroot\css\frontend\**" />
+    <Compile Remove="wwwroot\libs\**" />
     <Content Remove="Areas\Administration\Components\Catalog\**" />
     <Content Remove="Areas\Administration\Views\Shared\Components\Catalog\**" />
     <Content Remove="Components\Purshase\**" />
     <Content Remove="Ex\**" />
     <Content Remove="Logs\**" />
     <Content Remove="wwwroot\css\frontend\**" />
+    <Content Remove="wwwroot\libs\**" />
     <EmbeddedResource Remove="Areas\Administration\Components\Catalog\**" />
     <EmbeddedResource Remove="Areas\Administration\Views\Shared\Components\Catalog\**" />
     <EmbeddedResource Remove="Components\Purshase\**" />
     <EmbeddedResource Remove="Ex\**" />
     <EmbeddedResource Remove="Logs\**" />
     <EmbeddedResource Remove="wwwroot\css\frontend\**" />
+    <EmbeddedResource Remove="wwwroot\libs\**" />
     <None Remove="Areas\Administration\Components\Catalog\**" />
     <None Remove="Areas\Administration\Views\Shared\Components\Catalog\**" />
     <None Remove="Components\Purshase\**" />
     <None Remove="Ex\**" />
     <None Remove="Logs\**" />
     <None Remove="wwwroot\css\frontend\**" />
+    <None Remove="wwwroot\libs\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +51,7 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="jQuery" Version="3.6.3" />
     <PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageReference Include="MimeMapping" Version="2.0.0" />
     <PackageReference Include="Minio" Version="6.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
@@ -55,10 +62,6 @@
     <PackageReference Include="Volo.Abp.Autofac" Version="6.0.2" />
     <PackageReference Include="Volo.Abp.AutoMapper" Version="6.0.2" />
 	<PackageReference Include="libphonenumber-csharp" Version="8.13.11" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\libs\" />
   </ItemGroup>
 
   <ItemGroup>
