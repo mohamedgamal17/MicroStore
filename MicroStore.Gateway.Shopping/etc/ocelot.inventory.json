@@ -5,8 +5,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7054
+          "Host": "{InventoryApi}"
         }
       ],
 

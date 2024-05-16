@@ -6,85 +6,68 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7092
+          "Host": "{ShippingApi}"
         }
       ],
-
       "Priority": 1,
-      "UpstreamPathTemplate": "/mvcgateway/billing/user/{everything}",
+      "UpstreamPathTemplate": "/mvcgateway/shipping/user/{everything}",
       "UpstreamHttpMethod": [ "GET" ],
-
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.read" ]
+        "AllowedScopes": [ "mvcgateway.shipping.read" ]
       },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
-
     },
-
     {
       "DownstreamPathTemplate": "/api/user/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7092
+          "Host": "{ShippingApi}"
         }
       ],
-
       "Priority": 1,
-      "UpstreamPathTemplate": "/mvcgateway/billing/user/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
-
+      "UpstreamPathTemplate": "/mvcgateway/shipping/user/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE", "PATCH" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mvcgateway.billing.write" ]
+         "AllowedScopes": [ "mvcgateway.shipping.write" ]
       },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
-
     },
 
     {
-      "DownstreamPathTemplate": "/api/systems",
+      "DownstreamPathTemplate": "/api/rates/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7092
+          "Host": "{ShippingApi}"
         }
       ],
-
-      "Priority": 0,
-      "UpstreamPathTemplate": "/mvcgateway/billing/systems",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/mvcgateway/shipping/rates/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
-
     },
-
 
     {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7092
+          "Host": "{ShippingApi}"
         }
       ],
-
-      "Priority": 0,
-      "UpstreamPathTemplate": "/mvcgateway/billing/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamPathTemplate": "/mvcgateway/shipping/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       },
@@ -94,7 +77,6 @@
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
-
-    }
+    }  
   ]
 }

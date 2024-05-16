@@ -5,8 +5,7 @@
       "DownstreeamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7188
+          "Host": "{CatalogApi}"
         }
       ],
       "Priority": 0,
@@ -21,8 +20,7 @@
       "DownstreeamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7188
+          "Host": "{CatalogApi}"
         }
       ],
       "Priority": 1,
@@ -41,8 +39,7 @@
       "DownstreeamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7188
+          "Host": "{CatalogApi}"
         }
       ],
       "Priority": 1,
@@ -56,9 +53,6 @@
       },
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
-      ],
-      "DelegatingHandlers": [
-        "DefaultTokenExchangeDelegatingHandler"
       ]
     },
 
@@ -67,8 +61,7 @@
       "DownstreeamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7188
+          "Host": "{CatalogApi}"
         }
       ],
 
@@ -83,8 +76,8 @@
       "DownstreeamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7188
+          "Host": "{CatalogApi}"
+
         }
       ],
 
@@ -100,5 +93,6 @@
         "DefaultTokenExchangeDelegatingHandler"
       ]
     }
-  ]
+  ],
+  
 }

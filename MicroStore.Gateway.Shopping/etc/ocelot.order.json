@@ -6,8 +6,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7226
+          "Host": "{OrderingApi}"
+   
         }
       ],
       "Priority": 1,
@@ -27,8 +27,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7226
+          "Host": "{OrderingApi}"
         }
 
       ],
@@ -49,8 +48,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7226
+          "Host": "{OrderingApi}"
         }
       ],
       "Priority": 0,

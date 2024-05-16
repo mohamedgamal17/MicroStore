@@ -5,8 +5,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7061
+          "Host": "{ProfilingApi}"
         }
       ],
       "Priority": 1,
@@ -26,8 +25,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7061
+          "Host": "{ProfilingApi}"
         }
 
       ],
@@ -47,8 +45,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7061
+          "Host": "{ProfilingApi}"
         }
       ],
       "Priority": 0,
@@ -63,8 +60,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7061
+          "Host": "{ProfilingApi}"
         }
       ],
       "Priority": 0,

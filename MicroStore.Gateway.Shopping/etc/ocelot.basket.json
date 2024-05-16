@@ -5,7 +5,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "{BasketApi}",
           "Port": 7268
         }
       ],
@@ -15,9 +15,6 @@
       "DelegatingHandlers": [
         "DefaultTokenExchangeDelegatingHandler"
       ]
-      //"AuthenticationOptions": {
-      //  "AuthenticationProviderKey": "Bearer"
-      //}
 
     }
   ]

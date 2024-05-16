@@ -22,13 +22,14 @@ Log.Logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 {
     config
         .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
         .AddJsonFile("appsettings.json", true, true)
         .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
-        .AddOcelot($"etc/{hostingContext.HostingEnvironment.EnvironmentName.ToLower()}", hostingContext.HostingEnvironment)
+        .AddOcelot($"etc", hostingContext.HostingEnvironment)
         .AddEnvironmentVariables();
 
 
@@ -58,6 +59,7 @@ builder.Services.AddProblemDetails(config =>
 });
 
 builder.Host.UseSerilog();
+
 
 var app = builder.Build();
 
