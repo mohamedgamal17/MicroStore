@@ -230,7 +230,7 @@ namespace MicroStore.Bff.Shopping
                             {
                                 AuthorizationUrl = new Uri(securityConfiguration.Jwt.AuthorizationEndPoint),
                                 TokenUrl = new Uri(securityConfiguration.Jwt.TokenEndPoint),
-                                Scopes = securityConfiguration.SwaggerClient.Scopes
+                                Scopes = securityConfiguration.SwaggerClient?.Scopes
                                 
                             },
 

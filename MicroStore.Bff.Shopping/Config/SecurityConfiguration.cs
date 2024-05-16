@@ -4,7 +4,7 @@
     {
         public JwtConfiguration Jwt { get; set; } = new JwtConfiguration();
         public JwtClientConfiguration DownStreamClient { get; set; } = new JwtClientConfiguration();
-        public JwtClientConfiguration? SwaggerClient { get; set; } 
+        public JwtClientConfiguration? SwaggerClient { get; set; } = new JwtClientConfiguration();
     }
 
     public class JwtConfiguration
