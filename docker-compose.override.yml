@@ -1,0 +1,221 @@
+version: '3.4'
+
+services:
+  microstore-basket-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - Redis__Configuration=redis
+      - Security__Jwt__Authority=https://microstore.identityprovider.host    
+      - Security__Jwt__Audience=api-basket   
+      - Security__Jwt__TokenEndPoint=https://microstore.identityprovider.host/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore.identityprovider.host/connect/authorize
+    ports:
+      - "5268:80"
+      - "7268:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+
+  microstore-catalog-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - MassTransit__Host=rabbitmq
+      - MassTransit__UserName=guest
+      - MassTransit__Password=guest
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MicroStore.EventCatalog;User Id=sa;Password=Pass@word
+      - ElasticSearch__Uri=http://elasticsearch
+      - Security__Jwt__Authority=https://microstore.identityprovider.host
+      - Security__Jwt__Audience=api-catalog   
+      - Security__Jwt__TokenEndPoint=https://microstore.identityprovider.host/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore.identityprovider.host/connect/authorize
+    ports:
+      - "5188:80"
+      - "7188:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-geographic-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MicroStore.GeographicDb;User Id=sa;Password=Pass@word    
+      - Security__Jwt__Authority=https://microstore-identityprovider-api
+      - Security__Jwt__Audience=api-geographic  
+      - Security__Jwt__TokenEndPoint=https://microstore-identityprovider-api/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore-identityprovider-api/connect/authorize
+    ports:
+      - "5056:80"
+      - "7018:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-inventory-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - MassTransit__Host=rabbitmq
+      - MassTransit__UserName=guest
+      - MassTransit__Password=guest
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Staging.MicroStore.InventoryDb;User Id=sa;Password=Pass@word
+      - Security__Jwt__Authority=https://microstore-identityprovider-api
+      - Security__Jwt__Audience=api-inventory  
+      - Security__Jwt__TokenEndPoint=https://microstore-identityprovider-api/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore-identityprovider-api/connect/authorize
+    ports:
+      - "5185:80"
+      - "7054:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-identityprovider-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Staging.MicroStore.IdentityProvider;User Id=sa;Password=Pass@word 
+    ports:
+      - "5002:80"
+      - "5001:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-ordering-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - MassTransit__Host=rabbitmq
+      - MassTransit__UserName=guest
+      - MassTransit__Password=guest
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Staging.MicroStore.OrderingDb;User Id=sa;Password=Pass@word
+      - Security__Jwt__Authority=https://microstore-identityprovider-api
+      - Security__Jwt__Audience=api-ordering  
+      - Security__Jwt__TokenEndPoint=https://microstore-identityprovider-api/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore-identityprovider-api/connect/authorize
+    ports:
+      - "5226:80"
+      - "7226:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-billing-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - MassTransit__Host=rabbitmq
+      - MassTransit__UserName=guest
+      - MassTransit__Password=guest
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MicroStore.PaymentDb;User Id=sa;Password=Pass@word
+      - Security__Jwt__Authority=https://microstore-identityprovider-api
+      - Security__Jwt__Audience=api-billing  
+      - Security__Jwt__TokenEndPoint=https://microstore-identityprovider-api/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore-identityprovider-api/connect/authorize
+    ports:
+      - "5092:80"
+      - "7092:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-profiling-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MicroStore.ProfilingDb;User Id=sa;Password=Pass@word
+      - Security__Jwt__Authority=https://microstore-identityprovider-api
+      - Security__Jwt__Audience=api-profiling 
+      - Security__Jwt__TokenEndPoint=https://microstore-identityprovider-api/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore-identityprovider-api/connect/authorize
+    ports:
+      - "5272:80"
+      - "7061:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-shipping-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MicroStore.ShippingDb;User Id=sa;Password=Pass@word
+      - Security__Jwt__Authority=https://microstore-identityprovider-api
+      - Security__Jwt__Audience=api-shipping 
+      - Security__Jwt__TokenEndPoint=https://microstore-identityprovider-api/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore-identityprovider-api/connect/authorize
+    ports:
+      - "5081:80"
+      - "7162:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-shopping-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - Security__Jwt__Authority=https://microstore-identityprovider-api
+      - Security__Jwt__Audience=api-gateway 
+      - Security__Jwt__TokenEndPoint=https://microstore-identityprovider-api/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore-identityprovider-api/connect/authorize
+      - Security__DownStreamClient__Id=gatewaytodownstreamtokenexchangeclient
+      - Security__DownStreamClient__Secret=07366033-d7d3-46e9-9a4f-1f85ee7c9d17
+      - Services__CatalogApi=https://microstore-catalog-api
+      - Services__BasketApi=https://microstore-basket-api
+      - Services__OrderingApi=https://microstore-ordering-api
+      - Services__BillingApi=https://microstore-billing-api
+      - Services__ShippingApi=https://microstore-shipping-api
+      - Services__InventoryApi=https://microstore-inventory-api
+      - Services__GeographicApi=https://microstore-geographic-api
+      - Services__ProfilingApi=https://microstore-profiling-api
+    ports:
+      - "5102:80"
+      - "7062:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-bffshopping-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - Security__Jwt__Authority=https://microstore-identityprovider-api
+      - Security__Jwt__Audience=bff-aggregator 
+      - Security__Jwt__TokenEndPoint=https://microstore-identityprovider-api/connect/token
+      - Security__Jwt__AuthorizationEndPoint=https://microstore-identityprovider-api/connect/authorize
+      - Security__DownStreamClient__Id=bffaggregatortodownstreamtokenexchangeclient
+      - Security__DownStreamClient__Secret=d8a595f2-db24-4156-ba92-6140a390dbdb
+      - Grpc__Catalog=https://microstore-catalog-api
+      - Grpc__Basket=https://microstore-basket-api
+      - Grpc__Ordering=https://microstore-ordering-api
+      - Grpc__Billing=https://microstore-billing-api
+      - Grpc__Shipping=https://microstore-shipping-api
+      - Grpc__Inventory=https://microstore-inventory-api
+      - Grpc__Geographic=https://microstore-geographic-api
+      - Grpc__Profiling=https://microstore-profiling-api
+    ports:
+      - "5139:80"
+      - "7100:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microstore-client-publicweb:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ShoppingApi=https://microstore-shopping-api/mvcgateway
+      - Security__Client__Authority=https://microstore-identityprovider-api
+      - Security__Client__ClientId=microstoreinteractiveclient
+      - Security__Client__ClientSecret=07366033-d7d3-46e9-9a4f-1f85ee7c9d17
+    ports:
+      - "5231:80"
+      - "7020:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

@@ -1,0 +1,217 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-latest 
+    container_name: sqlserver-2017
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+    volumes:
+      - microstore-sqlserver:/var/opt/mssql
+
+  
+  redis:
+    image : redis:7-alpine
+    container_name: redis
+    ports:
+      - "27017:27017"
+    volumes:
+      - microstore-redis:/data/db
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    
+
+  minio:
+    container_name: minio
+    image: quay.io/minio/minio
+    environment:
+      MINIO_ROOT_USER: 'admin'
+      MINIO_ROOT_PASSWORD: 'password'
+      MINIO_ADDRESS: ':9000'
+      MINIO_CONSOLE_ADDRESS: ':9001'
+    command: minio server /data
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+        - RABBITMQ_USER=guest
+        - RABBITMQ_PASSWORD=guest
+    volumes:
+      - microstore-rabbitmq:/var/lib/rabbitmq
+  
+  microstore-identityprovider-api:
+    image: ${DOCKER_REGISTRY-}microstoreidentityproviderhost
+    build:
+      context: .
+      dockerfile: MicroStore.IdentityProvider.Host/Dockerfile
+    depends_on:
+        - sqlserver
+        - rabbitmq  
+
+  microstore-basket-api:
+    image: ${DOCKER_REGISTRY-}microstoreshoppingcartapi
+    build:
+      context: .
+      dockerfile: MicroStore.ShoppingCart.Api/Dockerfile
+    depends_on:
+        - redis
+        - microstore-identityprovider-api
+  
+
+  microstore-catalog-api:
+    image: ${DOCKER_REGISTRY-}microstorecatalogapi
+    build:
+      context: .
+      dockerfile: MicroStore.Catalog.Api/Dockerfile
+    depends_on:
+      - elasticsearch
+      - sqlserver
+      - rabbitmq
+      - microstore-identityprovider-api
+
+  microstore-geographic-api:
+    image: ${DOCKER_REGISTRY-}microstoregeographichost
+    build:
+      context: .
+      dockerfile: MicroStore.Geographic.Host/Dockerfile
+    depends_on:
+      - sqlserver
+      - microstore-identityprovider-api
+
+  microstore-inventory-api:
+    image: ${DOCKER_REGISTRY-}microstoreinventoryhost
+    build:
+      context: .
+      dockerfile: MicroStore.Inventory.Host/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq
+      - microstore-identityprovider-api
+    networks: 
+        - microstore-network
+  microstore-ordering-api:
+    image: ${DOCKER_REGISTRY-}microstoreorderingapi
+    build:
+      context: .
+      dockerfile: MicroStore.Ordering.Api/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq
+      - microstore-identityprovider-api
+    networks: 
+       - microstore-network
+  microstore-billing-api:
+    image: ${DOCKER_REGISTRY-}microstorepaymentapihost
+    build:
+      context: .
+      dockerfile: MicroStore.Payment.Api.Host/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq
+      - microstore-identityprovider-api
+    networks: 
+        - microstore-network
+  microstore-profiling-api:
+    image: ${DOCKER_REGISTRY-}microstoreprofilinghost
+    build:
+      context: .
+      dockerfile: MicroStore.Profiling.Host/Dockerfile
+    depends_on:
+      - sqlserver
+      - microstore-identityprovider-api
+    networks: 
+        - microstore-network
+
+  microstore-shipping-api:
+    image: ${DOCKER_REGISTRY-}microstoreshippinghost
+    build:
+      context: .
+      dockerfile: MicroStore.Shipping.Host/Dockerfile
+    depends_on:
+      - sqlserver
+      - rabbitmq 
+      - microstore-identityprovider-api
+    networks: 
+        - microstore-network
+
+
+  microstore-shopping-api:
+    image: ${DOCKER_REGISTRY-}microstoregatewayshopping
+    build:
+      context: .
+      dockerfile: MicroStore.Gateway.Shopping/Dockerfile
+    depends_on:
+        - microstore-identityprovider-api
+        - microstore-catalog-api
+        - microstore-basket-api
+        - microstore-ordering-api
+        - microstore-billing-api
+        - microstore-inventory-api
+        - microstore-shipping-api
+        - microstore-profiling-api
+        - microstore-geographic-api
+    networks: 
+        - microstore-network
+
+  microstore-bffshopping-api:
+    image: ${DOCKER_REGISTRY-}microstorebffshopping
+    build:
+      context: .
+      dockerfile: MicroStore.Bff.Shopping/Dockerfile
+    depends_on:
+        - microstore-identityprovider-api
+        - microstore-catalog-api
+        - microstore-basket-api
+        - microstore-ordering-api
+        - microstore-billing-api
+        - microstore-inventory-api
+        - microstore-shipping-api
+        - microstore-profiling-api
+        - microstore-geographic-api
+    networks: 
+        - microstore-network
+
+
+  microstore-client-publicweb:
+    image: ${DOCKER_REGISTRY-}microstoreclientpublicweb
+    build:
+      context: .
+      dockerfile: MicroStore.Client.PublicWeb/Dockerfile
+    depends_on:
+        - microstore-shopping-api
+
+volumes:
+    microstore-sqlserver:
+    microstore-redis:
+    microstore-elasticsearch:
+    microstore-rabbitmq:
+    
+networks:
+  microstore-network:
+    external: true
+      
+  
+  
+  
+

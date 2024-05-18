@@ -1,0 +1,22 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "microstore.shoppingcart.api": "StartDebugging",
+        "microstore.catalog.api": "StartDebugging",
+        "microstore.geographic.host": "StartDebugging",
+        "microstore.inventory.host": "StartDebugging",
+        "microstore.identityprovider.host": "StartDebugging",
+        "microstore.ordering.api": "StartDebugging",
+        "microstore.payment.api.host": "StartDebugging",
+        "microstore.profiling.host": "StartDebugging",
+        "microstore.shipping.host": "StartDebugging",
+        "microstore.gateway.shopping": "StartDebugging",
+        "microstore.bff.shopping": "StartDebugging",
+        "microstore.client.publicweb": "StartDebugging"
+      }
+    }
+  }
+}
