@@ -78,7 +78,7 @@ namespace MicroStore.Client.PublicWeb
 
             context.Services.AddHttpContextAccessor();
 
-            context.Services.AddMicroStoreClinet()
+            context.Services.AddMicroStoreClinet(opt=> opt.BaseUrl = configuration.GetValue<string>("ShoppingApi"))
                 .AddUserAccessTokenHandler();
 
 
