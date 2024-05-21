@@ -53,10 +53,10 @@ namespace MicroStore.Shipping.Application
 
                 transitConfig.UsingRabbitMq((ctx, rabbitConfig) =>
                 {
-                    rabbitConfig.Host(configuration.GetValue<string>("MassTransitConfig:Host"), cfg =>
+                    rabbitConfig.Host(configuration.GetValue<string>("MassTransit:Host"), cfg =>
                     {
-                        cfg.Username(configuration.GetValue<string>("MassTransitConfig:UserName"));
-                        cfg.Password(configuration.GetValue<string>("MassTransitConfig:Password"));
+                        cfg.Username(configuration.GetValue<string>("MassTransit:UserName"));
+                        cfg.Password(configuration.GetValue<string>("MassTransit:Password"));
                     });
 
                     rabbitConfig.ConfigureEndpoints(ctx);

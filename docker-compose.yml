@@ -42,8 +42,8 @@ services:
     container_name: minio
     image: quay.io/minio/minio
     environment:
-      MINIO_ROOT_USER: 'admin'
-      MINIO_ROOT_PASSWORD: 'password'
+      MINIO_ROOT_USER: 'lRaT1da6PbUMv5XDeYPF'
+      MINIO_ROOT_PASSWORD: 'UJ640We4kNqXCjdi8HRIdwKCqakQy39Ch7oN7uOm'
       MINIO_ADDRESS: ':9000'
       MINIO_CONSOLE_ADDRESS: ':9001'
     command: minio server /data
@@ -108,8 +108,7 @@ services:
       - sqlserver
       - rabbitmq
       - microstore-identityprovider-api
-    networks: 
-        - microstore-network
+
   microstore-ordering-api:
     image: ${DOCKER_REGISTRY-}microstoreorderingapi
     build:
@@ -119,8 +118,7 @@ services:
       - sqlserver
       - rabbitmq
       - microstore-identityprovider-api
-    networks: 
-       - microstore-network
+
   microstore-billing-api:
     image: ${DOCKER_REGISTRY-}microstorepaymentapihost
     build:
@@ -130,8 +128,7 @@ services:
       - sqlserver
       - rabbitmq
       - microstore-identityprovider-api
-    networks: 
-        - microstore-network
+
   microstore-profiling-api:
     image: ${DOCKER_REGISTRY-}microstoreprofilinghost
     build:
@@ -140,8 +137,7 @@ services:
     depends_on:
       - sqlserver
       - microstore-identityprovider-api
-    networks: 
-        - microstore-network
+
 
   microstore-shipping-api:
     image: ${DOCKER_REGISTRY-}microstoreshippinghost
@@ -152,8 +148,7 @@ services:
       - sqlserver
       - rabbitmq 
       - microstore-identityprovider-api
-    networks: 
-        - microstore-network
+
 
 
   microstore-shopping-api:
@@ -171,8 +166,7 @@ services:
         - microstore-shipping-api
         - microstore-profiling-api
         - microstore-geographic-api
-    networks: 
-        - microstore-network
+
 
   microstore-bffshopping-api:
     image: ${DOCKER_REGISTRY-}microstorebffshopping
@@ -189,8 +183,7 @@ services:
         - microstore-shipping-api
         - microstore-profiling-api
         - microstore-geographic-api
-    networks: 
-        - microstore-network
+
 
 
   microstore-client-publicweb:
@@ -207,9 +200,7 @@ volumes:
     microstore-elasticsearch:
     microstore-rabbitmq:
     
-networks:
-  microstore-network:
-    external: true
+
       
   
   

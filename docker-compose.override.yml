@@ -143,6 +143,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
+      - MassTransit__Host=rabbitmq
+      - MassTransit__UserName=guest
+      - MassTransit__Password=guest
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MicroStore.ShippingDb;User Id=sa;Password=Pass@word
       - Security__Jwt__Authority=https://microstore-identityprovider-api
       - Security__Jwt__Audience=api-shipping 
@@ -210,6 +213,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ShoppingApi=https://microstore-shopping-api/mvcgateway
+      - S3ObjectProvider__EndPoint=minio:9000
+      - S3ObjectProvider__AccessKey=lRaT1da6PbUMv5XDeYPF
+      - S3ObjectProvider__SecretKey=UJ640We4kNqXCjdi8HRIdwKCqakQy39Ch7oN7uOm
       - Security__Client__Authority=https://microstore-identityprovider-api
       - Security__Client__ClientId=microstoreinteractiveclient
       - Security__Client__ClientSecret=07366033-d7d3-46e9-9a4f-1f85ee7c9d17
