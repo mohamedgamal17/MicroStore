@@ -30,7 +30,7 @@
                 {
                     <tr>
                         @{
-                            string thumbnail = item.Thumbnail ?? @"/user-content/no-image.png";
+                            string thumbnail = !string.IsNullOrEmpty(item.Thumbnail) ? item.Thumbnail : @"/user-content/no-image.png";
                         }
                         <td><img src="@thumbnail" style="width:150px ; height:150px;"/></td>
                         <td>@item.Name</td>
