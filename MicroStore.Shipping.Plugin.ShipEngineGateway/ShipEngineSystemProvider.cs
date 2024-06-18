@@ -245,30 +245,15 @@ namespace MicroStore.Shipping.Plugin.ShipEngineGateway
 
         private Dimensions ConvertDimension(MicroStore.Shipping.Domain.ValueObjects.Dimension dimension)
         {
+            var convertedDimensions = MicroStore.Shipping.Domain.ValueObjects.Dimension.ConvertToInch(dimension);
 
-            return dimension.Unit switch
+            return new Dimensions
             {
-                MicroStore.Shipping.Domain.ValueObjects.DimensionUnit.Inch => new Dimensions
-                {
-                    Height = dimension.Height,
-                    Length = dimension.Length,
-                    Width = dimension.Width,
-                    Unit = DimensionUnit.Inch
-
-                },
-
-                MicroStore.Shipping.Domain.ValueObjects.DimensionUnit.CentiMeter => new Dimensions
-                {
-                    Height = dimension.Height,
-                    Length = dimension.Length,
-                    Width = dimension.Width,
-                    Unit = DimensionUnit.Inch
-
-                },
-
-                _ => throw new InvalidOperationException("Unsupported dimension system unit")
+                Height = convertedDimensions.Height,
+                Length = convertedDimensions.Length,
+                Width = convertedDimensions.Width,
+                Unit = DimensionUnit.Inch
             };
-          
         }
 
         public Task<List<CarrierModel>> ListCarriers(CancellationToken cancellationToken = default)
