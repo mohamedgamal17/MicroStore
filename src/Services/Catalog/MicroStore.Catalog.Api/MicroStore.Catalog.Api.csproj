@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>688cdcfe-0f4b-4804-85e1-f698c4aa0949</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\product.proto" />
+    <None Remove="Protos\tag.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="6.0.2" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="6.0.2" />
+	<PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.177" />
+    <PackageReference Include="Google.Protobuf" Version="3.19.3" />
+	<PackageReference Include="Grpc.Tools" Version="2.42.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+		<Protobuf Include="Protos\category.proto" AdditionalImportDirs="\protos" GrpcServices="Server" />
+		<Protobuf Include="Protos\manufacturer.proto" AdditionalImportDirs="\protos" GrpcServices="Server" />
+		<Protobuf Include="Protos\product.proto" GrpcServices="Server" />
+		<Protobuf Include="Protos\tag.proto" GrpcServices="Server" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
+    <ProjectReference Include="..\MicroStore.Catalog.Application\MicroStore.Catalog.Application.csproj" />
+    <ProjectReference Include="..\MicroStore.Catalog.Infrastructure\MicroStore.Catalog.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

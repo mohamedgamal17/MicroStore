@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>b33dd597-b45a-4061-b509-ae0fcf6992ce</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\Billing\payment.proto" />
+    <None Remove="Protos\Billing\paymentsystem.proto" />
+    <None Remove="Protos\Catalog\category.proto" />
+    <None Remove="Protos\Catalog\manufacturer.proto" />
+    <None Remove="Protos\Catalog\product.proto" />
+    <None Remove="Protos\Catalog\tag.proto" />
+    <None Remove="Protos\country.proto" />
+    <None Remove="Protos\Inventory\inventoryitem.proto" />
+    <None Remove="Protos\Ordering\order.proto" />
+    <None Remove="Protos\Profiling\profile.proto" />
+    <None Remove="Protos\Shipping\address.proto" />
+    <None Remove="Protos\Shipping\rates.proto" />
+    <None Remove="Protos\Shipping\shipment.proto" />
+    <None Remove="Protos\Shipping\shipmentsystem.proto" />
+    <None Remove="Protos\ShoppingCart\basket.proto" />
+    <None Remove="Protos\stateProvince.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0" />
+	<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+    <PackageReference Include="Google.Protobuf" Version="3.25.2" />
+    <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.60.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.60.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.60.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\Billing\payment.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Billing\paymentsystem.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Catalog\category.proto" GrpcServices="Client">
+      <AdditionalImportDirs>\protos</AdditionalImportDirs>
+    </Protobuf>
+    <Protobuf Include="Protos\Catalog\manufacturer.proto" GrpcServices="Client">
+      <AdditionalImportDirs>\protos</AdditionalImportDirs>
+    </Protobuf>
+    <Protobuf Include="Protos\Catalog\product.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Catalog\tag.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Geographic\country.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Geographic\stateProvince.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Inventory\inventoryitem.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Ordering\order.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Profiling\profile.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Shipping\address.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Shipping\rates.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Shipping\shipment.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Shipping\shipmentsystem.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\ShoppingCart\basket.proto" GrpcServices="Client" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>da715377-102c-4e7a-9f8f-272de1752749</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\payment.proto" />
+    <None Remove="Protos\paymentsystem.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="6.0.2" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="6.0.2" />
+	<PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
+	<PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.177" />
+	<PackageReference Include="Google.Protobuf" Version="3.19.3" />
+	<PackageReference Include="Grpc.Tools" Version="2.42.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj" />
+    <ProjectReference Include="..\MicroStore.Payment.Application\MicroStore.Payment.Application.csproj" />
+    <ProjectReference Include="..\Plugins\MicroStore.Payment.Plugin.StripeGateway\MicroStore.Payment.Plugin.StripeGateway.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\payment.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\paymentsystem.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+</Project>

@@ -17,173 +17,167 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{A609
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{AE496456-9B24-4591-8F24-92C5868455F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Domain", "MicroStore.Catalog.Domain\MicroStore.Catalog.Domain.csproj", "{9F8DDB69-D2B0-490D-B65C-2F72AD0A8E72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Domain", "src\Services\Catalog\MicroStore.Catalog.Domain\MicroStore.Catalog.Domain.csproj", "{9F8DDB69-D2B0-490D-B65C-2F72AD0A8E72}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application", "MicroStore.Catalog.Application\MicroStore.Catalog.Application.csproj", "{9F319B3B-7D27-4F9A-B2A6-77B1C64053D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application", "src\Services\Catalog\MicroStore.Catalog.Application\MicroStore.Catalog.Application.csproj", "{9F319B3B-7D27-4F9A-B2A6-77B1C64053D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.IntegrationEvents", "MicroStore.Catalog.IntegrationEvents\MicroStore.Catalog.IntegrationEvents.csproj", "{EDF83FA4-2AD9-4075-9025-BD26696DFED3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.IntegrationEvents", "src\Services\Catalog\MicroStore.Catalog.IntegrationEvents\MicroStore.Catalog.IntegrationEvents.csproj", "{EDF83FA4-2AD9-4075-9025-BD26696DFED3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Infrastructure", "MicroStore.Catalog.Infrastructure\MicroStore.Catalog.Infrastructure.csproj", "{B00EF95A-845C-4797-8434-5ACA8FE3812D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Infrastructure", "src\Services\Catalog\MicroStore.Catalog.Infrastructure\MicroStore.Catalog.Infrastructure.csproj", "{B00EF95A-845C-4797-8434-5ACA8FE3812D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Api", "MicroStore.Catalog.Api\MicroStore.Catalog.Api.csproj", "{2EF24FB8-0673-426E-BC08-05CDDB9E77E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Api", "src\Services\Catalog\MicroStore.Catalog.Api\MicroStore.Catalog.Api.csproj", "{2EF24FB8-0673-426E-BC08-05CDDB9E77E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.TestBase", "MicroStore.TestBase\MicroStore.TestBase.csproj", "{04E9463B-B9C8-46F2-A3C9-764E576BEDF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.TestBase", "tests\MicroStore.TestBase\MicroStore.TestBase.csproj", "{04E9463B-B9C8-46F2-A3C9-764E576BEDF6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.IntegrationEvents", "MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj", "{1AE892A5-F10E-49BE-9160-809BA2BC1DE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.IntegrationEvents", "src\Services\Ordering\MicroStore.Ordering.IntegrationEvents\MicroStore.Ordering.IntegrationEvents.csproj", "{1AE892A5-F10E-49BE-9160-809BA2BC1DE7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingCart.Api", "MicroStore.ShoppingCart.Api\MicroStore.ShoppingCart.Api.csproj", "{ABE9A0E7-0AA4-4B53-8B55-90635A80EBE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingCart.Api", "src\Services\Basket\MicroStore.ShoppingCart.Api\MicroStore.ShoppingCart.Api.csproj", "{ABE9A0E7-0AA4-4B53-8B55-90635A80EBE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Application", "MicroStore.Ordering.Application\MicroStore.Ordering.Application.csproj", "{B877C33D-16C3-4758-9D37-5875671091CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Application", "src\Services\Ordering\MicroStore.Ordering.Application\MicroStore.Ordering.Application.csproj", "{B877C33D-16C3-4758-9D37-5875671091CD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{ACDA15E2-E062-4EF3-B006-68F0B13FBD3D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payment", "Payment", "{BE82F71D-DA9C-46FC-A017-01F36EEF8AA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.IntegrationEvents", "MicroStore.Inventory.IntegrationEvents\MicroStore.Inventory.IntegrationEvents.csproj", "{5D608908-B571-45E0-8151-D5C125D51502}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.IntegrationEvents", "src\Services\Inventory\MicroStore.Inventory.IntegrationEvents\MicroStore.Inventory.IntegrationEvents.csproj", "{5D608908-B571-45E0-8151-D5C125D51502}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.IntegrationEvents", "MicroStore.Payment.IntegrationEvents\MicroStore.Payment.IntegrationEvents.csproj", "{67054396-7FC9-4BBF-BCA1-4574BAD83492}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.IntegrationEvents", "src\Services\Payment\MicroStore.Payment.IntegrationEvents\MicroStore.Payment.IntegrationEvents.csproj", "{67054396-7FC9-4BBF-BCA1-4574BAD83492}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Infrastructure", "MicroStore.Ordering.Infrastructure\MicroStore.Ordering.Infrastructure.csproj", "{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Infrastructure", "src\Services\Ordering\MicroStore.Ordering.Infrastructure\MicroStore.Ordering.Infrastructure.csproj", "{4D80DBFF-6518-4F98-9CFA-93DE2FDD78AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ordering", "Ordering", "{5AB36143-A0FF-4821-8110-5DE09809C365}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Application.Tests", "MicroStore.Ordering.Application.Tests\MicroStore.Ordering.Application.Tests.csproj", "{E97936E3-4A9E-4681-AAE3-64B78EFAC525}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Application.Tests", "tests\Services\Ordering\MicroStore.Ordering.Application.Tests\MicroStore.Ordering.Application.Tests.csproj", "{E97936E3-4A9E-4681-AAE3-64B78EFAC525}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Api", "MicroStore.Ordering.Api\MicroStore.Ordering.Api.csproj", "{C3674191-4AE0-4481-AA61-5BEF1D8D7787}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Ordering.Api", "src\Services\Ordering\MicroStore.Ordering.Api\MicroStore.Ordering.Api.csproj", "{C3674191-4AE0-4481-AA61-5BEF1D8D7787}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{FE55EE22-4121-4575-AB3C-70E454F24B44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Domain", "MicroStore.Inventory.Domain\MicroStore.Inventory.Domain.csproj", "{A608AC45-4BBD-4B1E-8F29-C49CBD892094}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Domain", "src\Services\Inventory\MicroStore.Inventory.Domain\MicroStore.Inventory.Domain.csproj", "{A608AC45-4BBD-4B1E-8F29-C49CBD892094}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Application", "MicroStore.Inventory.Application\MicroStore.Inventory.Application.csproj", "{B3857DA6-52B2-48C2-B1CC-D600D900BB58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Application", "src\Services\Inventory\MicroStore.Inventory.Application\MicroStore.Inventory.Application.csproj", "{B3857DA6-52B2-48C2-B1CC-D600D900BB58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Application.Tests", "MicroStore.Inventory.Application.Tests\MicroStore.Inventory.Application.Tests.csproj", "{B68877CC-1044-40AC-A69A-E40020E6E080}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Application.Tests", "tests\Services\Inventory\MicroStore.Inventory.Application.Tests\MicroStore.Inventory.Application.Tests.csproj", "{B68877CC-1044-40AC-A69A-E40020E6E080}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Infrastructure", "MicroStore.Inventory.Infrastructure\MicroStore.Inventory.Infrastructure.csproj", "{C7D8AABD-7ABC-4760-B04F-80001ADB8D70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Infrastructure", "src\Services\Inventory\MicroStore.Inventory.Infrastructure\MicroStore.Inventory.Infrastructure.csproj", "{C7D8AABD-7ABC-4760-B04F-80001ADB8D70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Application", "MicroStore.Payment.Application\MicroStore.Payment.Application.csproj", "{2DFA10A5-87CA-4AC9-BB67-07E3AC186F65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Application", "src\Services\Payment\MicroStore.Payment.Application\MicroStore.Payment.Application.csproj", "{2DFA10A5-87CA-4AC9-BB67-07E3AC186F65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payment", "Payment", "{1A61AA0D-ECDB-4D54-B10B-C60EB411886D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Application.Tests", "MicroStore.Payment.Application.Tests\MicroStore.Payment.Application.Tests.csproj", "{42975F94-FC97-4A1B-8B98-8CE79CA141A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Application.Tests", "tests\Services\Payment\MicroStore.Payment.Application.Tests\MicroStore.Payment.Application.Tests.csproj", "{42975F94-FC97-4A1B-8B98-8CE79CA141A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Api.Host", "MicroStore.Payment.Api.Host\MicroStore.Payment.Api.Host.csproj", "{8A34A6F1-74CC-43E4-AF14-FBC9742B91D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Api.Host", "src\Services\Payment\MicroStore.Payment.Api.Host\MicroStore.Payment.Api.Host.csproj", "{8A34A6F1-74CC-43E4-AF14-FBC9742B91D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{A3C8A58C-1E7B-478D-9104-85613A663C75}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Plugin.StripeGateway", "MicroStore.Payment.Plugin.StripeGateway\MicroStore.Payment.Plugin.StripeGateway.csproj", "{ECC19BFD-7E36-4A04-8C3E-CFF3C9F0A1AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Plugin.StripeGateway", "src\Services\Payment\Plugins\MicroStore.Payment.Plugin.StripeGateway\MicroStore.Payment.Plugin.StripeGateway.csproj", "{ECC19BFD-7E36-4A04-8C3E-CFF3C9F0A1AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Tests", "MicroStore.Catalog.Application.Tests\MicroStore.Catalog.Application.Tests.csproj", "{44372A57-F999-4991-A35F-8B2D1933A66C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Tests", "tests\Services\Catalog\MicroStore.Catalog.Application.Tests\MicroStore.Catalog.Application.Tests.csproj", "{44372A57-F999-4991-A35F-8B2D1933A66C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{9A07EB2A-2770-43FF-99CD-672230FDC81E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shipping", "Shipping", "{B123002B-B59F-4949-9BD4-6647DF5CB284}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Domain", "MicroStore.Shipping.Domain\MicroStore.Shipping.Domain.csproj", "{6E55A7BC-A45E-469E-AFA3-7577A4D36FD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Domain", "src\Services\Shipping\MicroStore.Shipping.Domain\MicroStore.Shipping.Domain.csproj", "{6E55A7BC-A45E-469E-AFA3-7577A4D36FD6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Application", "MicroStore.Shipping.Application\MicroStore.Shipping.Application.csproj", "{231D9BC6-D028-4DC0-A30E-335F6CC7DB1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Application", "src\Services\Shipping\MicroStore.Shipping.Application\MicroStore.Shipping.Application.csproj", "{231D9BC6-D028-4DC0-A30E-335F6CC7DB1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Application.Abstraction", "MicroStore.Shipping.Application.Abstraction\MicroStore.Shipping.Application.Abstraction.csproj", "{FE44A65B-BB9A-43B9-A9C0-2C74D8AB682B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Application.Abstraction", "src\Services\Shipping\MicroStore.Shipping.Application.Abstraction\MicroStore.Shipping.Application.Abstraction.csproj", "{FE44A65B-BB9A-43B9-A9C0-2C74D8AB682B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shipping", "Shipping", "{BAFCA1F4-B57F-4D90-A82C-6D20724EA5DC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Application.Tests", "MicroStore.Shipping.Application.Tests\MicroStore.Shipping.Application.Tests.csproj", "{9F2F12B9-934B-49B2-9A0A-FAAECB54D8A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Application.Tests", "tests\Services\Shipping\MicroStore.Shipping.Application.Tests\MicroStore.Shipping.Application.Tests.csproj", "{9F2F12B9-934B-49B2-9A0A-FAAECB54D8A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{D31AA3F7-51D5-4409-8041-838571C621A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Plugin.ShipEngineGateway", "MicroStore.Shipping.Plugin.ShipEngineGateway\MicroStore.Shipping.Plugin.ShipEngineGateway.csproj", "{3FA7F969-BA76-47DE-A94E-AEF8A1688C76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Plugin.ShipEngineGateway", "src\Services\Shipping\Plugins\MicroStore.Shipping.Plugin.ShipEngineGateway\MicroStore.Shipping.Plugin.ShipEngineGateway.csproj", "{3FA7F969-BA76-47DE-A94E-AEF8A1688C76}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.IntegrationEvents", "MicroStore.Shipping.IntegrationEvents\MicroStore.Shipping.IntegrationEvents.csproj", "{EEAF6102-2C4F-4390-9210-5A92A25F31C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.IntegrationEvents", "src\Services\Shipping\MicroStore.Shipping.IntegrationEvents\MicroStore.Shipping.IntegrationEvents.csproj", "{EEAF6102-2C4F-4390-9210-5A92A25F31C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Infrastructure", "MicroStore.Shipping.Infrastructure\MicroStore.Shipping.Infrastructure.csproj", "{3CF302EE-588B-4ED5-9320-0D437DB6843B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Infrastructure", "src\Services\Shipping\MicroStore.Shipping.Infrastructure\MicroStore.Shipping.Infrastructure.csproj", "{3CF302EE-588B-4ED5-9320-0D437DB6843B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.AspNetCore", "MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj", "{C5FF3F31-7A0C-47D5-AFAF-7EF4929AE204}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.AspNetCore", "src\BuildingBlocks\MicroStore.BuildingBlocks.AspNetCore\MicroStore.BuildingBlocks.AspNetCore.csproj", "{C5FF3F31-7A0C-47D5-AFAF-7EF4929AE204}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Host", "MicroStore.Inventory.Host\MicroStore.Inventory.Host.csproj", "{A0F4BACF-A331-4810-9D9F-79FA727C9E75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Inventory.Host", "src\Services\Inventory\MicroStore.Inventory.Host\MicroStore.Inventory.Host.csproj", "{A0F4BACF-A331-4810-9D9F-79FA727C9E75}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Host", "MicroStore.Shipping.Host\MicroStore.Shipping.Host.csproj", "{CFD4D86C-AD15-4D8C-A020-D080A67F11F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Shipping.Host", "src\Services\Shipping\MicroStore.Shipping.Host\MicroStore.Shipping.Host.csproj", "{CFD4D86C-AD15-4D8C-A020-D080A67F11F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{BD70AA12-DA39-4282-A2B0-5D2BA8381915}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Gateway.Shopping", "MicroStore.Gateway.Shopping\MicroStore.Gateway.Shopping.csproj", "{278559FF-BA24-4960-952C-CAA8D04F2A2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Gateway.Shopping", "src\Gateways\MicroStore.Gateway.Shopping\MicroStore.Gateway.Shopping.csproj", "{278559FF-BA24-4960-952C-CAA8D04F2A2E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sdks", "Sdks", "{74C4E224-AF8E-4092-AE29-74429B032F88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingGateway.ClinetSdk", "MicroStore.ShoppingGateway.ClinetSdk\MicroStore.ShoppingGateway.ClinetSdk.csproj", "{E1C3CDD4-A7E5-48F2-9839-92CC68AAC5C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.ShoppingGateway.ClinetSdk", "src\Sdks\MicroStore.ShoppingGateway.ClinetSdk\MicroStore.ShoppingGateway.ClinetSdk.csproj", "{E1C3CDD4-A7E5-48F2-9839-92CC68AAC5C8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityProvider", "IdentityProvider", "{21827ADD-5DB2-467B-B2E3-A206CB003FA2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Host", "MicroStore.IdentityProvider.Host\MicroStore.IdentityProvider.Host.csproj", "{2ADD6386-78B3-428E-BAD9-EFF3908403CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Host", "src\Services\IdentityProvider\MicroStore.IdentityProvider.Host\MicroStore.IdentityProvider.Host.csproj", "{2ADD6386-78B3-428E-BAD9-EFF3908403CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityModule", "IdentityModule", "{78B1A32D-454C-417E-B843-84C1EBABAFFB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Application", "MicroStore.IdentityProvider.Identity.Application\MicroStore.IdentityProvider.Identity.Application.csproj", "{0D13D7DF-9A16-4FF8-A05A-923797D4E9A9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{78B1A32D-454C-417E-B843-84C1EBABAFFB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityProvider", "IdentityProvider", "{53F22E17-C08D-4A42-9996-A2549237A1B4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{33798677-D8A3-4294-A28A-C9C6DFE09D45}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OAuth", "OAuth", "{33E12BB6-BDE8-4E84-8226-D19679ECCA45}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Application.Tests", "MicroStore.IdentityProvider.Identity.Application.Tests\MicroStore.IdentityProvider.Identity.Application.Tests.csproj", "{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{2FB29A7D-6164-41A0-B908-307A7035265A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Infrastructure", "MicroStore.IdentityProvider.Identity.Infrastructure\MicroStore.IdentityProvider.Identity.Infrastructure.csproj", "{BABABB81-6742-4742-8744-FB8FEBD4262C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OAuth", "OAuth", "{AC79C94B-3DBE-4AF9-A22A-0EE770582052}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServerModule", "IdentityServerModule", "{33E12BB6-BDE8-4E84-8226-D19679ECCA45}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.IdentityServer.Application", "MicroStore.IdentityProvider.IdentityServer.Application\MicroStore.IdentityProvider.IdentityServer.Application.csproj", "{F55EE88D-49FF-4AC6-B0AA-07F0BA667B99}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.IdentityServer.Infrastructure", "MicroStore.IdentityProvider.IdentityServer.Infrastructure\MicroStore.IdentityProvider.IdentityServer.Infrastructure.csproj", "{58AC6291-1FF7-4BA7-88F1-3EBD9E1CE896}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityModule", "IdentityModule", "{2FB29A7D-6164-41A0-B908-307A7035265A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServerModule", "IdentityServerModule", "{AC79C94B-3DBE-4AF9-A22A-0EE770582052}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.IdentityServer.Application.Tests", "MicroStore.IdentityProvider.IdentityServer.Application.Tests\MicroStore.IdentityProvider.IdentityServer.Application.Tests.csproj", "{9AC1D401-9637-4774-87E4-05EF221923BB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Domain.Shared", "MicroStore.Payment.Domain.Shared\MicroStore.Payment.Domain.Shared.csproj", "{EBD18803-AB89-44EC-A092-4154CAD592E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Payment.Domain.Shared", "src\Services\Payment\MicroStore.Payment.Domain.Shared\MicroStore.Payment.Domain.Shared.csproj", "{EBD18803-AB89-44EC-A092-4154CAD592E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{7C2C78B5-11EA-44D9-AE23-C925B2D27C3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Client.PublicWeb", "MicroStore.Client.PublicWeb\MicroStore.Client.PublicWeb.csproj", "{C17B899B-56D1-4762-9673-168DD143FE80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Client.PublicWeb", "src\Clients\MicroStore.Client.PublicWeb\MicroStore.Client.PublicWeb.csproj", "{C17B899B-56D1-4762-9673-168DD143FE80}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geographic", "Geographic", "{58E8DC27-5B85-4415-B197-3EEE830AEB8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Application", "MicroStore.Geographic.Application\MicroStore.Geographic.Application.csproj", "{51E32C9B-9A71-470F-90A3-51490A000A4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Application", "src\Services\Geographic\MicroStore.Geographic.Application\MicroStore.Geographic.Application.csproj", "{51E32C9B-9A71-470F-90A3-51490A000A4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Geographic", "Geographic", "{180F0EAF-5EB7-4716-A3FF-0493B4500123}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Application.Tests", "MicroStore.Geographic.Application.Tests\MicroStore.Geographic.Application.Tests.csproj", "{43DE17E0-D1A6-4595-9020-1F98DB440B3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Application.Tests", "tests\Services\Geographic\MicroStore.Geographic.Application.Tests\MicroStore.Geographic.Application.Tests.csproj", "{43DE17E0-D1A6-4595-9020-1F98DB440B3A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Host", "MicroStore.Geographic.Host\MicroStore.Geographic.Host.csproj", "{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Geographic.Host", "src\Services\Geographic\MicroStore.Geographic.Host\MicroStore.Geographic.Host.csproj", "{47684EAA-80D3-4CB1-B110-2DE2F1B8036E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.AspNetCore.UI", "MicroStore.AspNetCore.UI\MicroStore.AspNetCore.UI.csproj", "{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.AspNetCore.UI", "src\BuildingBlocks\MicroStore.AspNetCore.UI\MicroStore.AspNetCore.UI.csproj", "{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Web", "MicroStore.IdentityProvider.Identity.Web\MicroStore.IdentityProvider.Identity.Web.csproj", "{204F0BCF-BEF4-4DC3-9CF7-5C6A2BB551C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Entities.ElasticSearch", "src\Services\Catalog\MicroStore.Catalog.Entities.ElasticSearch\MicroStore.Catalog.Entities.ElasticSearch.csproj", "{818348B7-83C2-4738-AC50-B5C4148247C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Domain.Shared", "MicroStore.IdentityProvider.Identity.Domain.Shared\MicroStore.IdentityProvider.Identity.Domain.Shared.csproj", "{C664DAAA-4D56-4DE7-9A0F-D3B279D898F7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.IdentityServer.Web", "MicroStore.IdentityProvider.IdentityServer.Web\MicroStore.IdentityProvider.IdentityServer.Web.csproj", "{65B47386-1F94-4D61-B42F-C5F71BB94FC4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Entities.ElasticSearch", "MicroStore.Catalog.Entities.ElasticSearch\MicroStore.Catalog.Entities.ElasticSearch.csproj", "{818348B7-83C2-4738-AC50-B5C4148247C5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Operations", "MicroStore.Catalog.Application.Operations\MicroStore.Catalog.Application.Operations.csproj", "{E8F6A07A-9D59-4DAE-81D4-10AA7B26F7C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Operations", "src\Services\Catalog\MicroStore.Catalog.Application.Operations\MicroStore.Catalog.Application.Operations.csproj", "{E8F6A07A-9D59-4DAE-81D4-10AA7B26F7C3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profiling", "Profiling", "{6656C087-47D6-4B1D-A6F9-38244CC40930}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Profiling.Application", "MicroStore.Profiling.Application\MicroStore.Profiling.Application.csproj", "{5359CEDC-DE44-4340-9B5D-4FAD466AA266}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Profiling.Application", "src\Services\Profiling\MicroStore.Profiling.Application\MicroStore.Profiling.Application.csproj", "{5359CEDC-DE44-4340-9B5D-4FAD466AA266}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profiling", "Profiling", "{8958E33E-C01C-47FC-8F98-B080EB58D96D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Profiling.Host", "src\Services\Profiling\MicroStore.Profiling.Host\MicroStore.Profiling.Host.csproj", "{17FC479A-6B07-42D8-ABB4-F93A821B36C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Profiling.Application.Tests", "MicroStore.Profiling.Application.Tests\MicroStore.Profiling.Application.Tests.csproj", "{8FD028FC-ECFF-411B-80B8-CE097BC6A655}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.Utils", "src\BuildingBlocks\MicroStore.BuildingBlocks.Utils\MicroStore.BuildingBlocks.Utils.csproj", "{9AED0E1E-DDB2-4BBB-A33F-45C2B6C0E556}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Profiling.Host", "MicroStore.Profiling.Host\MicroStore.Profiling.Host.csproj", "{17FC479A-6B07-42D8-ABB4-F93A821B36C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Abstractions", "src\Services\Catalog\MicroStore.Catalog.Application.Abstractions\MicroStore.Catalog.Application.Abstractions.csproj", "{CAAB8E18-43BC-4783-BB1F-5A4010224CC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.BuildingBlocks.Utils", "MicroStore.BuildingBlocks.Utils\MicroStore.BuildingBlocks.Utils.csproj", "{9AED0E1E-DDB2-4BBB-A33F-45C2B6C0E556}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Catalog.Application.Abstractions", "MicroStore.Catalog.Application.Abstractions\MicroStore.Catalog.Application.Abstractions.csproj", "{CAAB8E18-43BC-4783-BB1F-5A4010224CC4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Bff.Shopping", "MicroStore.Bff.Shopping\MicroStore.Bff.Shopping.csproj", "{ABB8081D-6C9C-421B-B592-7299C3A97CD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.Bff.Shopping", "src\Gateways\MicroStore.Bff.Shopping\MicroStore.Bff.Shopping.csproj", "{ABB8081D-6C9C-421B-B592-7299C3A97CD7}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{8AE32B7C-10A2-4957-904F-7DD524EE45DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Application", "src\Services\IdentityProvider\Identity\MicroStore.IdentityProvider.Identity.Application\MicroStore.IdentityProvider.Identity.Application.csproj", "{DEF1051D-2E43-4CF4-8B64-57F67BCBE833}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Domain.Shared", "src\Services\IdentityProvider\Identity\MicroStore.IdentityProvider.Identity.Domain.Shared\MicroStore.IdentityProvider.Identity.Domain.Shared.csproj", "{26847146-AE86-4942-8029-8CE6150FA8F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Infrastructure", "src\Services\IdentityProvider\Identity\MicroStore.IdentityProvider.Identity.Infrastructure\MicroStore.IdentityProvider.Identity.Infrastructure.csproj", "{F9392C8E-333B-475E-8995-7BBBF937375F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Web", "src\Services\IdentityProvider\Identity\MicroStore.IdentityProvider.Identity.Web\MicroStore.IdentityProvider.Identity.Web.csproj", "{BD064764-6D4B-40D0-AAD7-664E791C7956}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.OAuth.Application", "src\Services\IdentityProvider\OAuth\MicroStore.IdentityProvider.OAuth.Application\MicroStore.IdentityProvider.OAuth.Application.csproj", "{2368B63D-89A7-4CE3-8502-D7BF913956C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.OAuth.Infrastructure", "src\Services\IdentityProvider\OAuth\MicroStore.IdentityProvider.OAuth.Infrastructure\MicroStore.IdentityProvider.OAuth.Infrastructure.csproj", "{4A89D110-D890-47FE-A0D2-6BA0FEFBB950}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.OAuth.Web", "src\Services\IdentityProvider\OAuth\MicroStore.IdentityProvider.OAuth.Web\MicroStore.IdentityProvider.OAuth.Web.csproj", "{5270B09A-5C6B-4A52-B1FB-580BAF963F8D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.Identity.Application.Tests", "tests\Services\IdentityProvider\Identity\MicroStore.IdentityProvider.Identity.Application.Tests\MicroStore.IdentityProvider.Identity.Application.Tests.csproj", "{C0A6DE2C-7686-4411-B218-5AB8A8641A56}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroStore.IdentityProvider.OAuth.Application.Tests", "tests\Services\IdentityProvider\OAuth\MicroStore.IdentityProvider.OAuth.Application.Tests\MicroStore.IdentityProvider.OAuth.Application.Tests.csproj", "{72BE420F-6B33-472B-8262-7972BD79809D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -335,30 +329,6 @@ Global
 		{2ADD6386-78B3-428E-BAD9-EFF3908403CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ADD6386-78B3-428E-BAD9-EFF3908403CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ADD6386-78B3-428E-BAD9-EFF3908403CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D13D7DF-9A16-4FF8-A05A-923797D4E9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D13D7DF-9A16-4FF8-A05A-923797D4E9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D13D7DF-9A16-4FF8-A05A-923797D4E9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D13D7DF-9A16-4FF8-A05A-923797D4E9A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BABABB81-6742-4742-8744-FB8FEBD4262C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BABABB81-6742-4742-8744-FB8FEBD4262C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BABABB81-6742-4742-8744-FB8FEBD4262C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BABABB81-6742-4742-8744-FB8FEBD4262C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F55EE88D-49FF-4AC6-B0AA-07F0BA667B99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F55EE88D-49FF-4AC6-B0AA-07F0BA667B99}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F55EE88D-49FF-4AC6-B0AA-07F0BA667B99}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F55EE88D-49FF-4AC6-B0AA-07F0BA667B99}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58AC6291-1FF7-4BA7-88F1-3EBD9E1CE896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58AC6291-1FF7-4BA7-88F1-3EBD9E1CE896}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58AC6291-1FF7-4BA7-88F1-3EBD9E1CE896}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58AC6291-1FF7-4BA7-88F1-3EBD9E1CE896}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9AC1D401-9637-4774-87E4-05EF221923BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9AC1D401-9637-4774-87E4-05EF221923BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9AC1D401-9637-4774-87E4-05EF221923BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9AC1D401-9637-4774-87E4-05EF221923BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EBD18803-AB89-44EC-A092-4154CAD592E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EBD18803-AB89-44EC-A092-4154CAD592E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBD18803-AB89-44EC-A092-4154CAD592E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -383,18 +353,6 @@ Global
 		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{204F0BCF-BEF4-4DC3-9CF7-5C6A2BB551C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{204F0BCF-BEF4-4DC3-9CF7-5C6A2BB551C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{204F0BCF-BEF4-4DC3-9CF7-5C6A2BB551C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{204F0BCF-BEF4-4DC3-9CF7-5C6A2BB551C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C664DAAA-4D56-4DE7-9A0F-D3B279D898F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C664DAAA-4D56-4DE7-9A0F-D3B279D898F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C664DAAA-4D56-4DE7-9A0F-D3B279D898F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C664DAAA-4D56-4DE7-9A0F-D3B279D898F7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65B47386-1F94-4D61-B42F-C5F71BB94FC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65B47386-1F94-4D61-B42F-C5F71BB94FC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65B47386-1F94-4D61-B42F-C5F71BB94FC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65B47386-1F94-4D61-B42F-C5F71BB94FC4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{818348B7-83C2-4738-AC50-B5C4148247C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{818348B7-83C2-4738-AC50-B5C4148247C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{818348B7-83C2-4738-AC50-B5C4148247C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -407,10 +365,6 @@ Global
 		{5359CEDC-DE44-4340-9B5D-4FAD466AA266}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5359CEDC-DE44-4340-9B5D-4FAD466AA266}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5359CEDC-DE44-4340-9B5D-4FAD466AA266}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FD028FC-ECFF-411B-80B8-CE097BC6A655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FD028FC-ECFF-411B-80B8-CE097BC6A655}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FD028FC-ECFF-411B-80B8-CE097BC6A655}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FD028FC-ECFF-411B-80B8-CE097BC6A655}.Release|Any CPU.Build.0 = Release|Any CPU
 		{17FC479A-6B07-42D8-ABB4-F93A821B36C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17FC479A-6B07-42D8-ABB4-F93A821B36C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17FC479A-6B07-42D8-ABB4-F93A821B36C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -431,6 +385,42 @@ Global
 		{8AE32B7C-10A2-4957-904F-7DD524EE45DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AE32B7C-10A2-4957-904F-7DD524EE45DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AE32B7C-10A2-4957-904F-7DD524EE45DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEF1051D-2E43-4CF4-8B64-57F67BCBE833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEF1051D-2E43-4CF4-8B64-57F67BCBE833}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEF1051D-2E43-4CF4-8B64-57F67BCBE833}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEF1051D-2E43-4CF4-8B64-57F67BCBE833}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26847146-AE86-4942-8029-8CE6150FA8F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26847146-AE86-4942-8029-8CE6150FA8F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26847146-AE86-4942-8029-8CE6150FA8F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26847146-AE86-4942-8029-8CE6150FA8F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9392C8E-333B-475E-8995-7BBBF937375F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9392C8E-333B-475E-8995-7BBBF937375F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9392C8E-333B-475E-8995-7BBBF937375F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9392C8E-333B-475E-8995-7BBBF937375F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD064764-6D4B-40D0-AAD7-664E791C7956}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD064764-6D4B-40D0-AAD7-664E791C7956}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD064764-6D4B-40D0-AAD7-664E791C7956}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD064764-6D4B-40D0-AAD7-664E791C7956}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2368B63D-89A7-4CE3-8502-D7BF913956C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2368B63D-89A7-4CE3-8502-D7BF913956C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2368B63D-89A7-4CE3-8502-D7BF913956C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2368B63D-89A7-4CE3-8502-D7BF913956C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A89D110-D890-47FE-A0D2-6BA0FEFBB950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A89D110-D890-47FE-A0D2-6BA0FEFBB950}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A89D110-D890-47FE-A0D2-6BA0FEFBB950}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A89D110-D890-47FE-A0D2-6BA0FEFBB950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5270B09A-5C6B-4A52-B1FB-580BAF963F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5270B09A-5C6B-4A52-B1FB-580BAF963F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5270B09A-5C6B-4A52-B1FB-580BAF963F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5270B09A-5C6B-4A52-B1FB-580BAF963F8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0A6DE2C-7686-4411-B218-5AB8A8641A56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0A6DE2C-7686-4411-B218-5AB8A8641A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0A6DE2C-7686-4411-B218-5AB8A8641A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0A6DE2C-7686-4411-B218-5AB8A8641A56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72BE420F-6B33-472B-8262-7972BD79809D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72BE420F-6B33-472B-8262-7972BD79809D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72BE420F-6B33-472B-8262-7972BD79809D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72BE420F-6B33-472B-8262-7972BD79809D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -491,17 +481,10 @@ Global
 		{21827ADD-5DB2-467B-B2E3-A206CB003FA2} = {E9376157-31F1-4C37-8D19-6841506FBBC5}
 		{2ADD6386-78B3-428E-BAD9-EFF3908403CF} = {21827ADD-5DB2-467B-B2E3-A206CB003FA2}
 		{78B1A32D-454C-417E-B843-84C1EBABAFFB} = {21827ADD-5DB2-467B-B2E3-A206CB003FA2}
-		{0D13D7DF-9A16-4FF8-A05A-923797D4E9A9} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
 		{53F22E17-C08D-4A42-9996-A2549237A1B4} = {7107956E-BC05-4060-8D9C-563805110605}
-		{33798677-D8A3-4294-A28A-C9C6DFE09D45} = {53F22E17-C08D-4A42-9996-A2549237A1B4}
-		{1AED6CD3-6E5D-4E9A-9934-3D89A0F7EF40} = {2FB29A7D-6164-41A0-B908-307A7035265A}
-		{BABABB81-6742-4742-8744-FB8FEBD4262C} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
 		{33E12BB6-BDE8-4E84-8226-D19679ECCA45} = {21827ADD-5DB2-467B-B2E3-A206CB003FA2}
-		{F55EE88D-49FF-4AC6-B0AA-07F0BA667B99} = {33E12BB6-BDE8-4E84-8226-D19679ECCA45}
-		{58AC6291-1FF7-4BA7-88F1-3EBD9E1CE896} = {33E12BB6-BDE8-4E84-8226-D19679ECCA45}
-		{2FB29A7D-6164-41A0-B908-307A7035265A} = {33798677-D8A3-4294-A28A-C9C6DFE09D45}
-		{AC79C94B-3DBE-4AF9-A22A-0EE770582052} = {33798677-D8A3-4294-A28A-C9C6DFE09D45}
-		{9AC1D401-9637-4774-87E4-05EF221923BB} = {AC79C94B-3DBE-4AF9-A22A-0EE770582052}
+		{2FB29A7D-6164-41A0-B908-307A7035265A} = {53F22E17-C08D-4A42-9996-A2549237A1B4}
+		{AC79C94B-3DBE-4AF9-A22A-0EE770582052} = {53F22E17-C08D-4A42-9996-A2549237A1B4}
 		{EBD18803-AB89-44EC-A092-4154CAD592E8} = {BE82F71D-DA9C-46FC-A017-01F36EEF8AA4}
 		{7C2C78B5-11EA-44D9-AE23-C925B2D27C3C} = {AF77AF8F-E0C3-4D05-9D49-6989F522C59E}
 		{C17B899B-56D1-4762-9673-168DD143FE80} = {7C2C78B5-11EA-44D9-AE23-C925B2D27C3C}
@@ -511,19 +494,23 @@ Global
 		{43DE17E0-D1A6-4595-9020-1F98DB440B3A} = {180F0EAF-5EB7-4716-A3FF-0493B4500123}
 		{47684EAA-80D3-4CB1-B110-2DE2F1B8036E} = {58E8DC27-5B85-4415-B197-3EEE830AEB8D}
 		{C0D7CDC4-51AD-4C0A-9D70-A5318665F7DD} = {E667C85C-80E1-4045-88A8-3BC69F2253AE}
-		{204F0BCF-BEF4-4DC3-9CF7-5C6A2BB551C2} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
-		{C664DAAA-4D56-4DE7-9A0F-D3B279D898F7} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
-		{65B47386-1F94-4D61-B42F-C5F71BB94FC4} = {33E12BB6-BDE8-4E84-8226-D19679ECCA45}
 		{818348B7-83C2-4738-AC50-B5C4148247C5} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{E8F6A07A-9D59-4DAE-81D4-10AA7B26F7C3} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{6656C087-47D6-4B1D-A6F9-38244CC40930} = {E9376157-31F1-4C37-8D19-6841506FBBC5}
 		{5359CEDC-DE44-4340-9B5D-4FAD466AA266} = {6656C087-47D6-4B1D-A6F9-38244CC40930}
-		{8958E33E-C01C-47FC-8F98-B080EB58D96D} = {7107956E-BC05-4060-8D9C-563805110605}
-		{8FD028FC-ECFF-411B-80B8-CE097BC6A655} = {8958E33E-C01C-47FC-8F98-B080EB58D96D}
 		{17FC479A-6B07-42D8-ABB4-F93A821B36C7} = {6656C087-47D6-4B1D-A6F9-38244CC40930}
 		{9AED0E1E-DDB2-4BBB-A33F-45C2B6C0E556} = {E667C85C-80E1-4045-88A8-3BC69F2253AE}
 		{CAAB8E18-43BC-4783-BB1F-5A4010224CC4} = {A6099394-2440-4B3C-83E2-4D95E3C3652A}
 		{ABB8081D-6C9C-421B-B592-7299C3A97CD7} = {BD70AA12-DA39-4282-A2B0-5D2BA8381915}
+		{DEF1051D-2E43-4CF4-8B64-57F67BCBE833} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
+		{26847146-AE86-4942-8029-8CE6150FA8F5} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
+		{F9392C8E-333B-475E-8995-7BBBF937375F} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
+		{BD064764-6D4B-40D0-AAD7-664E791C7956} = {78B1A32D-454C-417E-B843-84C1EBABAFFB}
+		{2368B63D-89A7-4CE3-8502-D7BF913956C5} = {33E12BB6-BDE8-4E84-8226-D19679ECCA45}
+		{4A89D110-D890-47FE-A0D2-6BA0FEFBB950} = {33E12BB6-BDE8-4E84-8226-D19679ECCA45}
+		{5270B09A-5C6B-4A52-B1FB-580BAF963F8D} = {33E12BB6-BDE8-4E84-8226-D19679ECCA45}
+		{C0A6DE2C-7686-4411-B218-5AB8A8641A56} = {2FB29A7D-6164-41A0-B908-307A7035265A}
+		{72BE420F-6B33-472B-8262-7972BD79809D} = {AC79C94B-3DBE-4AF9-A22A-0EE770582052}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63B56346-08C2-4513-98F6-0FE8682E53C7}
