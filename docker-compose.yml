@@ -64,7 +64,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoreidentityproviderhost
     build:
       context: .
-      dockerfile: MicroStore.IdentityProvider.Host/Dockerfile
+      dockerfile: src/Services/IdentityProvider/MicroStore.IdentityProvider.Host/Dockerfile
     depends_on:
         - sqlserver
         - rabbitmq  
@@ -73,7 +73,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoreshoppingcartapi
     build:
       context: .
-      dockerfile: MicroStore.ShoppingCart.Api/Dockerfile
+      dockerfile: src/Services/Basket/MicroStore.ShoppingCart.Api/Dockerfile
     depends_on:
         - redis
         - microstore-identityprovider-api
@@ -83,7 +83,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstorecatalogapi
     build:
       context: .
-      dockerfile: MicroStore.Catalog.Api/Dockerfile
+      dockerfile: src/Services/Catalog/MicroStore.Catalog.Api/Dockerfile
     depends_on:
       - elasticsearch
       - sqlserver
@@ -94,7 +94,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoregeographichost
     build:
       context: .
-      dockerfile: MicroStore.Geographic.Host/Dockerfile
+      dockerfile: src/Services/Geographic/MicroStore.Geographic.Host/Dockerfile
     depends_on:
       - sqlserver
       - microstore-identityprovider-api
@@ -103,7 +103,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoreinventoryhost
     build:
       context: .
-      dockerfile: MicroStore.Inventory.Host/Dockerfile
+      dockerfile: src/Services/Inventory/MicroStore.Inventory.Host/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
@@ -113,7 +113,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoreorderingapi
     build:
       context: .
-      dockerfile: MicroStore.Ordering.Api/Dockerfile
+      dockerfile: src/Services/Ordering/MicroStore.Ordering.Api/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
@@ -123,7 +123,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstorepaymentapihost
     build:
       context: .
-      dockerfile: MicroStore.Payment.Api.Host/Dockerfile
+      dockerfile: src/Services/Payment/MicroStore.Payment.Api.Host/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq
@@ -133,7 +133,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoreprofilinghost
     build:
       context: .
-      dockerfile: MicroStore.Profiling.Host/Dockerfile
+      dockerfile: src/Services/Profiling/MicroStore.Profiling.Host/Dockerfile
     depends_on:
       - sqlserver
       - microstore-identityprovider-api
@@ -143,7 +143,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoreshippinghost
     build:
       context: .
-      dockerfile: MicroStore.Shipping.Host/Dockerfile
+      dockerfile: src/Services/Shipping/MicroStore.Shipping.Host/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq 
@@ -155,7 +155,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoregatewayshopping
     build:
       context: .
-      dockerfile: MicroStore.Gateway.Shopping/Dockerfile
+      dockerfile: src/Gateways/MicroStore.Gateway.Shopping/Dockerfile
     depends_on:
         - microstore-identityprovider-api
         - microstore-catalog-api
@@ -172,7 +172,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstorebffshopping
     build:
       context: .
-      dockerfile: MicroStore.Bff.Shopping/Dockerfile
+      dockerfile: src/Gateways/MicroStore.Bff.Shopping/Dockerfile
     depends_on:
         - microstore-identityprovider-api
         - microstore-catalog-api
@@ -190,7 +190,7 @@ services:
     image: ${DOCKER_REGISTRY-}microstoreclientpublicweb
     build:
       context: .
-      dockerfile: MicroStore.Client.PublicWeb/Dockerfile
+      dockerfile: src/Clients/MicroStore.Client.PublicWeb/Dockerfile
     depends_on:
         - microstore-shopping-api
 
